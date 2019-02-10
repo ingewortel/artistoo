@@ -14,7 +14,9 @@ This is a node.js module, which can also run in the browser.
 
 ## Browser examples
 
-'''examples/basic-potts-model.html''': a simple Ising model.
+We have the following examples for web-browser CPMs:
+
+* [A simple Ising model](examples/basic-potts-model.html)
 
 ## Node examples
 
