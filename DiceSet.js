@@ -4,7 +4,8 @@
 
 'use strict'
 
-function DiceSet() {
+// pass in RNG
+function DiceSet( mt ) {
 	// Use a hash map to check in constant time whether a pixel is at a cell border.
 	// Use Map() instead of object {} for speed.
 	this.indices = new Map() // {}
@@ -14,6 +15,8 @@ function DiceSet() {
 
 	// track the number of pixels currently present in the DiceSet.
 	this.length = 0
+
+	this.mt = mt
 }
 
 DiceSet.prototype = {
@@ -53,7 +56,7 @@ DiceSet.prototype = {
 		return this.indices.has(v) // (v in this.indices)
 	},
 	sample : function(){
-		return this.elements[Math.floor(Math.random()*this.length)]
+		return this.elements[Math.floor(this.mt.rnd()*this.length)]
 	}
 }
 

@@ -6,10 +6,7 @@
 
 let C, zoom=3, Cim, cid=0, w=200
 
-function timestep(){
-	// Update the grid with one MCS
-	C.monteCarloStep()
-
+function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "FFFFFF" )
 
@@ -18,6 +15,14 @@ function timestep(){
 
 	// The cell in red
 	Cim.drawCells( 1, "AA0000" )
+}
+
+function timestep(){
+	// Update the grid with one MCS
+	C.monteCarloStep()
+
+	draw()
+
 	let vol = C.getVolume(cid)
 
 	// If either the background or cell disappears: re-seed the grid randomly.
@@ -36,7 +41,7 @@ function seedGrid(){
 	// to either background or cell.
 	for( var i = 1 ; i < C.field_size.x ; i ++ ){
 		for( var j = 1 ; j < C.field_size.y ; j ++ ){	
-			if( Math.random() < 0.49 ){
+			if( C.random() < 0.49 ){
 				C.setpix( [ i, j, 0 ], cid )
 			} else {
 				if( C.pixt( [i,j,0] ) ){

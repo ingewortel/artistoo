@@ -5,11 +5,17 @@
 "use strict"
 
 import DiceSet from "./DiceSet.js"
+import MersenneTwister from 'mersennetwister'
 
 class CPM {
 
 	constructor( ndim, field_size, conf ){
-	
+		if( conf.seed ){
+			this.mt = new MersenneTwister( config.seed )
+		} else {
+			this.mt = new MersenneTwister( Math.floor(Math.random()*Number.MAX_SAFE_INTEGER) )
+		}
+
 		// Attributes based on input parameters
 		this.field_size = field_size			/* grid size ( Note: the grid will run from 0 to 
 								field_size pixels, so the actual size in pixels is
@@ -77,8 +83,8 @@ class CPM {
 		this.time = 0					// current system time in MCS
 	
 		// track border pixels for speed (see also the DiceSet data structure)
-		this.cellborderpixels = new DiceSet()
-		this.bgborderpixels = new DiceSet() 
+		this.cellborderpixels = new DiceSet( this.mt )
+		this.bgborderpixels = new DiceSet( this.mt ) 
 
 		// Attributes per pixel:
 		this.cellpixelsbirth = {}		// time the pixel was added to its current cell.
@@ -497,9 +503,13 @@ class CPM {
 
 	/* ------------- MATH HELPER FUNCTIONS --------------- */
 
+	random (){
+		return this.mt.rnd()
+	}
+
 	/* Random integer number between incl_min and incl_max */
 	ran (incl_min, incl_max) {
-		return Math.floor(Math.random() * (1.0 + incl_max - incl_min)) + incl_min
+		return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
 	}
 	/* dot product */
 	dot ( p1, p2 ){
@@ -905,7 +915,7 @@ class CPM {
 	/* Determine whether copy attempt will succeed depending on deltaH (stochastic). */
 	docopy ( deltaH ){
 		if( deltaH < 0 ) return true
-		return Math.random() < Math.exp( -deltaH / this.conf.T )
+		return this.random() < Math.exp( -deltaH / this.conf.T )
 	}
 	/* Change the pixel at position p (coordinates) into cellid t. 
 	Update cell perimeters with Pup (optional parameter).*/

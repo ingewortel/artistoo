@@ -1,4 +1,11 @@
 {
 	"name": "cpmjs",
-	"version": "0.9.0"
+	"version": "0.9.1",
+	"dependencies": {
+		"mersennetwister": "^0.2.3"
+	},
+	"devDependencies": {
+		"rollup-plugin-commonjs": "^9.2.0",
+		"rollup-plugin-node-resolve": "^4.0.0"
+	}
 }
