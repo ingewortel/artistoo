@@ -10,7 +10,7 @@ http://dx.doi.org/10.1371/journal.pcbi.1004280
 
 # How it works
 
-This is a node.js module, which can also run in the browser.
+This code has been ported over from our older "cpm" repository. This is now an ES6 module, which is compiled trough "rollup" for use in the browser. See the Makefile.
 
 ## Browser examples
 
