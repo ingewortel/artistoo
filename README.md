@@ -12,9 +12,9 @@ http://dx.doi.org/10.1371/journal.pcbi.1004280
 
 This is a node.js module, which can also run in the browser.
 
-## Browser example
+## Browser examples
 
-TBD
+'''examples/basic-potts-model.html''': a simple Ising model.
 
 ## Node examples
 
