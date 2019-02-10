@@ -11,7 +11,7 @@ class CPM {
 
 	constructor( ndim, field_size, conf ){
 		if( conf.seed ){
-			this.mt = new MersenneTwister( config.seed )
+			this.mt = new MersenneTwister( conf.seed )
 		} else {
 			this.mt = new MersenneTwister( Math.floor(Math.random()*Number.MAX_SAFE_INTEGER) )
 		}

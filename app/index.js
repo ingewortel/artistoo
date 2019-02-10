@@ -1,8 +1,10 @@
 
 import CPM from "../CPM.js"
-import CPMCanvas from "../CPMCanvas.js"
+import Canvas from "../Canvas.js"
+import Stats from "../Stats.js"
+import GridManipulator from "../GridManipulator.js"
 import CPMChemotaxis from "../CPMChemotaxis.js"
 
-export {CPM,CPMCanvas,CPMChemotaxis}
+export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator}
 
 

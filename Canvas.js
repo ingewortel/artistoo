@@ -3,7 +3,7 @@
 "use strict"
 
 // Constructor takes a CPM object C
-function CPMCanvas( C, options ){
+function Canvas( C, options ){
 	this.C = C
 	this.zoom = (options && options.zoom) || 1
 
@@ -37,7 +37,7 @@ function CPMCanvas( C, options ){
 }
 
 
-CPMCanvas.prototype = {
+Canvas.prototype = {
 
 
 	/* Several internal helper functions (used by drawing functions below) : */
@@ -218,5 +218,5 @@ CPMCanvas.prototype = {
 	}
 }
 
-export default CPMCanvas
+export default Canvas
 
