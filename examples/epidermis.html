@@ -4,17 +4,18 @@
 <script>
 "use strict"
 
-let C, zoom=3, Cim, cid=0, w=200
+let C, zoom=2, Cim, cid=0, w=300
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
-	Cim.clear( "FFFFFF" )
+	Cim.clear( "000000" )
 
 	// stroma cells in gray
 	Cim.drawStroma( "AAAAAA" )
 
 	// The cell in red
-	Cim.drawCells( 1, "AA0000" )
+	Cim.drawCells( 1, "CCCCCC" )
+	Cim.drawCellBorders(1, "DDDDDD" )
 }
 
 function timestep(){
@@ -33,21 +34,11 @@ function timestep(){
 }
 
 function seedGrid(){
-	// Create a cell (other than background)
-	if( !cid || !C.getVolume(cid) ){
-		cid = C.seedCellAt( 1, [2,2,0] )
-	}
-	// For all non-stromaborder pixels in the grid: assign it randomly
-	// to either background or cell.
-	for( var i = 1 ; i < C.field_size.x ; i ++ ){
-		for( var j = 1 ; j < C.field_size.y ; j ++ ){	
-			if( C.random() < 0.49 ){
-				C.setpix( [ i, j, 0 ], cid )
-			} else {
-				if( C.pixt( [i,j,0] ) ){
-				C.delpix( [ i, j, 0 ] )
-				}
-			}
+	// Seed epidermal cell layer
+	let step = 12
+	for( var i = 1 ; i < C.field_size.x ; i += step ){
+		for( var j = 1 ; j < C.field_size.y ; j += step ){
+			C.seedCellAt( 1, [i,j] )
 		}
 	}
 }
@@ -57,16 +48,18 @@ function initialize(){
 	C = new CPM.CPM( 2, {x: w, y:w}, {
 		seed : 1,
 		LAMBDA_CONNECTIVITY : [0,0],
-		LAMBDA_P : [0,0],
-		LAMBDA_V : [0,0],
+		LAMBDA_P : [0,2],
+		LAMBDA_V : [0,50],
 		LAMBDA_ACT : [0,0],
 		MAX_ACT : [0,0],
-		P : [0,700],
-		V : [0,1000],
-		J_T_STROMA : [NaN,100],
+		P : [0,145],
+		V : [0,152],
+		J_T_STROMA : [NaN,16],
 		J_T_ECM : [NaN,20],
-		J_T_T : [ [NaN,NaN], [NaN,100] ],
-		T : 0.01,
+		J_T_T : [ [NaN,NaN], 
+				[NaN,100] // epidermal cells
+		],
+		T : 20,
 		ACT_MEAN : "geometric"
 	})
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
@@ -76,7 +69,7 @@ function initialize(){
 }
 </script>
 </head>
-<body onload="initialize()" onclick="seedGrid()">
-<p>Basic Potts (=Ising) model. Click on canvas to reset simulation</p>
+<body onload="initialize()">
+<p>A layer of epidermal cells</p>
 </body>
 </html>
