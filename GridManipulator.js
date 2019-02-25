@@ -25,9 +25,9 @@ GridManipulator.prototype = {
 		}*/
 		this.C.setCellKind( t, 4 )
 	},
-	/* With a given probability, kill cells of kind [kind] that have a volume of
-	less than 80% of their target volume. */
-	doKilling : function( kind, probability ){
+	/* With a given [probability], kill cells of kind [kind] that have a volume of
+	less than [lowerbound] of their target volume. */
+	killTooSmallCells : function( kind, probability, lowerbound ){
 		var cp = this.cellpixels, C = this.C
 		var ids = Object.keys(cp)
 
@@ -35,7 +35,7 @@ GridManipulator.prototype = {
 		for( var i = 0 ;  i < ids.length ; i++ ){
 			var t = ids[i]
 			var k = C.cellKind(t)
-			if( k == kind && ( C.getVolume( t ) < C.conf.V[kind]*0.8 ) ){
+			if( k == kind && ( C.getVolume( t ) < C.conf.V[kind]*lowerbound ) ){
 				if( C.random() < probability ){
 					this.killCell( t )
 				}
@@ -112,68 +112,7 @@ GridManipulator.prototype = {
 			var id = ids[i]
 			var k = C.cellKind(id) 
 			if( k == kind && ( C.getVolume( id ) >= minvolume ) && C.random() < probability ){
-				var bxx = 0, bxy = 0, byy=0,
-					com = Cs.getCentroidOf( id ), cx, cy, x2, y2, side, T, D, x0, y0, x1, y1,
-					L2
-
-				// Loop over the pixels belonging to this cell
-				for( var j = 0 ; j < cp[id].length ; j ++ ){
-					cx = cp[id][j][0] - com[0] // x position rel to centroid
-					cy = cp[id][j][1] - com[1] // y position rel to centroid
-
-					// sum of squared distances:
-					bxx += cx*cx
-					bxy += cx*cy
-					byy += cy*cy
-				}
-
-				// This code computes a "dividing line", which is perpendicular to the longest
-				// axis of the cell.
-				if( bxy == 0 ){
-					x0 = 0
-					y0 = 0
-					x1 = 1
-					y1 = 0
-				} else {
-					T = bxx + byy
-					D = bxx*byy - 2*bxy
-					//L1 = T/2 + Math.sqrt(T*T/4 - D)
-					L2 = T/2 - Math.sqrt(T*T/4 - D)
-
-					x0 = 0
-					y0 = 0
-					x1 = L2 - byy
-					y1 = bxy
-				}
-
-				// create a new ID for the second cell
-				var nid = C.makeNewCellID( k )
-
-				// Loop over the pixels belonging to this cell
-				for( j = 0 ; j < cp[id].length ; j ++ ){
-
-					// coordinates of current cell relative to center of mass
-					x2 = cp[id][j][0]-com[0]
-					y2 = cp[id][j][1]-com[1]
-
-					// Depending on which side of the dividing line this pixel is,
-					// set it to the new type
-					side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0)
-					if( side > 0 ){
-						C.setpix( cp[id][j], nid ) 
-					}
-					// If a canvas is given as input, update the canvas drawing.
-					if( Cim ){
-						if( side > 0 ){
-							Cim.col("FF8800")
-							Cim.pxf( cp[id][j] )
-						} else {
-							Cim.col("0088FF")
-							Cim.pxf( cp[id][j] )
-						}
-						//console.log( side )
-					}
-				}
+				this.divideCell2D( id )
 			}
 		}
 	}

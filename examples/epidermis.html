@@ -8,13 +8,9 @@ let C, zoom=2, Cim, cid=0, w=300
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
-	Cim.clear( "000000" )
+	Cim.clear( "CCCCCC" )
 
-	// stroma cells in gray
-	Cim.drawStroma( "AAAAAA" )
-
-	// The cell in red
-	Cim.drawCells( 1, "CCCCCC" )
+	// Draw cell borders 
 	Cim.drawCellBorders(1, "DDDDDD" )
 }
 

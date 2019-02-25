@@ -91,7 +91,7 @@ Canvas.prototype = {
 
 	/* Use to draw the border of each cell on the grid in the color specified in "col"
 	(hex format). This function draws a line around the cell (rather than coloring the
-	outer pixels)*/
+	outer pixels). If [kind] is negative, simply draw all borders. */
 	drawCellBorders : function( kind, col ){
 		col = col || "000000"
 		var p, pc, pu, pd, pl, pr, i, pdraw
@@ -101,7 +101,7 @@ Canvas.prototype = {
 		// cst contains indices of pixels at the border of cells
 		var cst =  this.C.cellborderpixels.elements
 		for( i = 0 ; i < cst.length ; i ++ ){
-			if( this.C.cellKind(this.C.cellpixelstype[cst[i]]) == kind ){
+			if( kind < 0 || this.C.cellKind(this.C.cellpixelstype[cst[i]]) == kind ){
 				p = this.C.i2p( cst[i] )
 				pdraw = this.i2p( cst[i] )
 				pc = this.C.pixt( [p[0],p[1],0] )
