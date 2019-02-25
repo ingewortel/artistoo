@@ -5,7 +5,7 @@
 "use strict"
 
 let C, Cm, zoom=2, Cim, cid=0, w=200, J_TC_TUMOR = 100, burnin_time = 25,
-	cancer_cell_division_rate = 0.2, skin_cell_death_rate = 0.2,
+	cancer_cell_division_rate = 0.02, skin_cell_death_rate = 0.2,
 	skin_cell_min_volume = 0.8, homing_rate_t_cells = 0.2, max_nr_t_cells = 25
 
 function draw(){
@@ -55,8 +55,8 @@ function initialize(){
 	// Create a new CPM, canvas, and stats object
 	C = new CPM.CPMChemotaxis( 2, {x: w, y:w}, {
 		seed : 2,
-		LAMBDA_CONNECTIVITY : [0,0,0,0,0],
-		LAMBDA_CHEMOTAXIS : [0,0,0,0,0],
+		LAMBDA_CONNECTIVITY : [0,0,0,1000,0],
+		LAMBDA_CHEMOTAXIS : [0,0,400,0,0],
 		LAMBDA_P : [0,2,1,2,0],
 		LAMBDA_V : [0,50,50,50,50],
 		LAMBDA_ACT : [0,0,1000,0,0],
@@ -90,6 +90,6 @@ function initialize(){
 </script>
 </head>
 <body onload="initialize()">
-<p>A layer of epidermal cells</p>
+<p>A growing tumor being infiltrated by T cells</p>
 </body>
 </html>
