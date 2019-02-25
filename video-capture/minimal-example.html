@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<body>
+<script>
+// To capture video from canvas-based animation:
+// first run 'node video-capture-server.js' 
+
+// then you need to add 2 lines of code to your anim script
+
+
+// Line 1: open WebSocket to video capture server
+var frameCaptureSocket = new WebSocket("ws://localhost:1337")
+
+var i = 0
+function animstep(){
+	ctx.fillStyle="white"
+	ctx.fillRect(0,0,c.width,c.height)
+	ctx.fillStyle="black"
+	ctx.fillRect( i, i, 10, 10 )
+	// Line 2: send PNG to server
+	if( frameCaptureSocket.readyState==1 ) frameCaptureSocket.send( c.toDataURL() );
+	if( ++i < 100 ){
+		requestAnimationFrame( animstep )
+	}
+}
+var c = document.createElement("canvas")
+c.setAttribute("width",300)
+c.setAttribute("height",300)
+var ctx = c.getContext("2d")
+ctx.fillStyle="black"
+document.body.appendChild( c )
+animstep()
+</script>
+</body>
