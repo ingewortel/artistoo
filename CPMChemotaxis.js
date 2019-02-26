@@ -55,7 +55,6 @@ class CPMChemotaxis extends CPM {
 			norm1 += d1*d1
 			norm2 += d2*d2
 		}
-		if( norm1 == 0 || norm2 == 0 ) return 0
 		return r/Math.sqrt(norm1)/Math.sqrt(norm2)
 	}
 

@@ -117,7 +117,6 @@ Stats.prototype = {
 		var visited = {}, k=1, volume = {}, myself = this
 
 		var labelComponent = function(seed, k){
-			console.log("seeding at ", seed )
 			var q = [parseInt(seed)]
 			visited[q[0]] = 1
 			volume[k] = 0

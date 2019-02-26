@@ -5,7 +5,7 @@
 "use strict"
 
 import DiceSet from "./DiceSet.js"
-import MersenneTwister from 'mersennetwister'
+import MersenneTwister from "mersennetwister"
 
 class CPM {
 

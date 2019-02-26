@@ -2,7 +2,7 @@
     sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
     pixels at cell borders. */
 
-'use strict'
+"use strict"
 
 // pass in RNG
 function DiceSet( mt ) {

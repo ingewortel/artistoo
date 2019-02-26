@@ -83,7 +83,7 @@ GridManipulator.prototype = {
 		var nid = C.makeNewCellID( C.cellKind( id ) )
 
 		// Loop over the pixels belonging to this cell
-		let sidea = 0, sideb = 0
+		//let sidea = 0, sideb = 0
 		for( j = 0 ; j < cp[id].length ; j ++ ){
 			// coordinates of current cell relative to center of mass
 			x2 = cp[id][j][0]-com[0]
@@ -93,10 +93,10 @@ GridManipulator.prototype = {
 			// set it to the new type
 			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0)
 			if( side > 0 ){
-				sidea ++
+				//sidea ++
 				C.setpix( cp[id][j], nid ) 
 			} else {
-				sideb ++
+				//sideb ++
 			}
 		}
 		//console.log( sidea, sideb )
@@ -105,7 +105,7 @@ GridManipulator.prototype = {
 
 	/* With a given probability, let cells of kind [kind] divide. */
 	divideCells2D: function( kind, probability, minvolume=10 ){
-		var cp = this.cellpixels, C = this.C, Cs = this.Cs
+		var cp = this.cellpixels, C = this.C
 		var ids = Object.keys(cp)		
 		// loop over the cells
 		for( var i = 0 ;  i < ids.length ; i++ ){
