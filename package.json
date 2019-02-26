@@ -2,8 +2,10 @@
 	"name": "cpmjs",
 	"version": "0.9.1",
 	"dependencies": {
+		"canvas": "^2.0.1",
 		"mersennetwister": "^0.2.3",
-		"rollup": "^1.2.3"
+		"rollup": "^1.2.3",
+		"rollup-plugin-eslint": "^5.0.0"
 	},
 	"devDependencies": {
 		"rollup-plugin-commonjs": "^9.2.0",
