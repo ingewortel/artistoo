@@ -4,14 +4,11 @@
 <script>
 "use strict"
 
-let C, zoom=3, Cim, cid=0, w=200
+let C, zoom=1, Cim, cid=0, w=300
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "FFFFFF" )
-
-	// stroma cells in gray
-	Cim.drawStroma( "AAAAAA" )
 
 	// The cell in red
 	Cim.drawCells( 1, "AA0000" )
@@ -34,18 +31,16 @@ function timestep(){
 
 function seedGrid(){
 	// Create a cell (other than background)
-	if( !cid || !C.getVolume(cid) ){
-		cid = C.seedCellAt( 1, [2,2,0] )
-	}
+	cid = C.makeNewCellID(1)
 	// For all non-stromaborder pixels in the grid: assign it randomly
 	// to either background or cell.
-	for( var i = 1 ; i < C.field_size.x ; i ++ ){
-		for( var j = 1 ; j < C.field_size.y ; j ++ ){	
+	for( let i = 1 ; i < C.field_size.x ; i ++ ){
+		for( let j = 1 ; j < C.field_size.y ; j ++ ){	
 			if( C.random() < 0.49 ){
-				C.setpix( [ i, j, 0 ], cid )
+				C.setpix( [ i,j ], cid )
 			} else {
-				if( C.pixt( [i,j,0] ) ){
-				C.delpix( [ i, j, 0 ] )
+				if( C.pixt( [i,j] ) ){
+					C.delpix( [i,j] )
 				}
 			}
 		}
@@ -56,18 +51,8 @@ function initialize(){
 	// Create a new CPM, canvas, and stats object
 	C = new CPM.CPM( 2, {x: w, y:w}, {
 		seed : 1,
-		LAMBDA_CONNECTIVITY : [0,0],
-		LAMBDA_P : [0,0],
-		LAMBDA_V : [0,0],
-		LAMBDA_ACT : [0,0],
-		MAX_ACT : [0,0],
-		P : [0,700],
-		V : [0,1000],
-		J_T_STROMA : [NaN,100],
-		J_T_ECM : [NaN,20],
-		J_T_T : [ [NaN,NaN], [NaN,100] ],
+		J : [ [NaN,20], [20,100] ],
 		T : 0.01,
-		ACT_MEAN : "geometric"
 	})
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	// Start simulation

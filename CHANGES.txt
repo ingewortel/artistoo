@@ -1,0 +1,9 @@
+changes : 
+
+- ECM is no special thing anymore. By definition, we say that cell type 0 is the background / ECM.
+  This means we don't need to do anythin special with adhesion.
+
+- STROMA is not special anymore either. We will implement this by having a special hamiltonian
+  term (hard constraint) that causes all copy attempts into certain cell types to fail.
+
+- why is everything commented out in fmodx, fmody, fmodz? 

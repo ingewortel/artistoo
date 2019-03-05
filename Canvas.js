@@ -78,7 +78,7 @@ Canvas.prototype = {
 	},
 
 	i2p : function( i ){
-		var p = this.C.i2p( i ), dim
+		var p = this.C.grid.i2p( i ), dim
 		for( dim = 0; dim < p.length; dim++ ){
 			if( this.wrap[dim] != 0 ){
 				p[dim] = p[dim] % this.wrap[dim]
