@@ -6,11 +6,11 @@ let w = parseInt(process.argv[2]) || 100
 
 
 // Create a new CPM, canvas, and stats object
-let C = new CPM.CPM( 3, {x: w, y:w, z:w}, {
+let C = new CPM.CPM( [w,w,w], {
 	seed : 1,
-	J : [ [NaN,20], [20,100] ],
 	T : 0.01
 })
+C.addTerm( new CPM.Adhesion( { J:[ [NaN,20], [20,100] ] } ) )
 
 let cid = C.makeNewCellID(1)
 

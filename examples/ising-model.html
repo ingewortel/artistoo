@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="../build/cpm.js"></script>
+<script src="fpsmeter.min.js"></script>
+
 <script>
 "use strict"
 
-let C, zoom=1, Cim, cid=0, w=300
+let C, zoom=1, Cim, cid=0, w=200, meter
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
@@ -16,8 +18,9 @@ function draw(){
 
 function timestep(){
 	// Update the grid with one MCS
+	meter.tickStart()
 	C.monteCarloStep()
-
+	meter.tick()
 	draw()
 
 	let vol = C.getVolume(cid)
@@ -49,13 +52,14 @@ function seedGrid(){
 
 function initialize(){
 	// Create a new CPM, canvas, and stats object
-	C = new CPM.CPM( 2, {x: w, y:w}, {
+	C = new CPM.CPM( [w,w], {
 		seed : 1,
 		J : [ [NaN,20], [20,100] ],
 		T : 0.01,
 	})
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	// Start simulation
+	meter = new FPSMeter()
 	seedGrid()
 	timestep()
 }

@@ -12,9 +12,15 @@ var MersenneTwister = _interopDefault(require('mersennetwister'));
 
 // pass in RNG
 function DiceSet( mt ) {
+
 	// Use a hash map to check in constant time whether a pixel is at a cell border.
-	// Use Map() instead of object {} for speed.
-	this.indices = new Map(); // {}
+	// 
+	// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
+	// at least in nodejs. This is weird given that in vanilla objects, all keys are 
+	// converted to strings, which does not happen for Maps
+	// 
+	this.indices = {}; //new Map() // {}
+	//this.indices = {}
 
 	// Use an array for constant time random sampling of pixels at the border of cells.
 	this.elements = [];
@@ -27,39 +33,44 @@ function DiceSet( mt ) {
 
 DiceSet.prototype = {
 	insert : function( v ){
-		// Check whether value is defined and not already in the set.
-		if( typeof v == "undefined" ){
-			throw("attempting to insert undefined value!")
-		}
-		if( this.indices.has( v ) ){
+		if( this.indices[v] ){
 			return
 		}
 		// Add element to both the hash map and the array.
-		this.indices.set( v, this.length );
+		//this.indices.set( v, this.length )
+		this.indices[v] = this.length;
+	
 		this.elements.push( v );
 		this.length ++; 
 	},
 	remove : function( v ){
 		// Check whether element is present before it can be removed.
-		if( !this.indices.has( v ) ){
+		if( !this.indices[v] ){
 			return
 		}
 		/* The hash map gives the index in the array of the value to be removed.
 		The value is removed directly from the hash map, but from the array we
 		initially remove the last element, which we then substitute for the 
 		element that should be removed.*/
-		var i = this.indices.get(v);
-		this.indices.delete(v);
-		var e = this.elements.pop();
+		//const i = this.indices.get(v)
+		const i = this.indices[v];
+
+		//this.indices.delete(v)
+		delete this.indices[v];
+
+		const e = this.elements.pop();
 		this.length --;
 		if( e == v ){
 			return
 		}
 		this.elements[i] = e;
-		this.indices.set(e,i);
+
+		//this.indices.set(e,i)
+		this.indices[e] = i;
 	},
 	contains : function( v ){
-		return this.indices.has(v) // (v in this.indices)
+		//return this.indices.has(v)
+		return (v in this.indices)
 	},
 	sample : function(){
 		return this.elements[Math.floor(this.mt.rnd()*this.length)]
@@ -71,7 +82,7 @@ DiceSet.prototype = {
 
 class Grid2D {
 	constructor( field_size ){
-		this.field_size = field_size;
+		this.field_size = { x : field_size[0], y : field_size[1] };
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
@@ -157,7 +168,9 @@ class Grid2D {
 
 class Grid3D {
 	constructor( field_size ){
-		this.field_size = field_size;
+		this.field_size = { x : field_size[0],
+			y : field_size[1],
+			z : field_size[2] };
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
@@ -304,25 +317,24 @@ class Grid3D {
 */
 
 class CPM {
-
-	constructor( ndim, field_size, conf ){
-		if( conf.seed ){
-			this.mt = new MersenneTwister( conf.seed );
-		} else {
-			this.mt = new MersenneTwister( Math.floor(Math.random()*Number.MAX_SAFE_INTEGER) );
-		}
+	constructor( field_size, conf ){
+		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
+		this.mt = new MersenneTwister( seed );
 
 		// Attributes based on input parameters
-		this.ndim = ndim; // grid dimensions (2 or 3)
+		this.ndim = field_size.length; // grid dimensions (2 or 3)
+		if( this.ndim != 2 && this.ndim != 3 ){
+			throw("only 2D and 3D models are implemented!")
+		}
 		this.conf = conf; // input parameter settings; see documentation.
-		this.field_size = field_size;
 
 		// Some functions/attributes depend on ndim:
-		if( ndim == 2 ){
+		if( this.ndim == 2 ){
 			this.grid = new Grid2D(field_size);
 		} else {
 			this.grid = new Grid3D(field_size);
 		}
+		this.field_size = this.grid.field_size;
 
 		// Attributes of the current CPM as a whole:
 		this.nNeigh = this.grid.neighi(0).length; 	// neighbors per pixel (depends on ndim)
@@ -340,37 +352,21 @@ class CPM {
 		this.cellvolume = [];			
 		this.t2k = [];		// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
 		this.t2k[0] = 0;		// Background cell; there is just one cell of this type.
-		
-		// terms to use in the Hamiltonian
-		if( this.conf.TERMS ){
-			this.terms = this.conf.TERMS;
-		} else {
-			this.terms = ["adhesion"]; //,"connectivity"]
-		}
+
+		this.soft_constraints = [];
+		this.hard_constraints = [];
 	}
 
-
-
-	/* ------------- GETTING/SETTING PARAMETERS --------------- */
-
-	/* 	helper to get cell-dependent parameters from conf.
-		"name" is the parameter name, the 2nd/3rd arguments (optional) are
-		the celltypes (identities) to find parameter settings for. */
-	par( name ){
-		if( arguments.length == 2 ){
-			return this.conf[name][this.cellKind( arguments[1] ) ]
+	addTerm( t ){
+		if( t.CONSTRAINT_TYPE == "soft" ){
+			this.soft_constraints.push( t.deltaH.bind(t) );
 		}
-		if( arguments.length == 3 ){
-			return this.conf[name][this.cellKind(arguments[1] ) ][
-				this.cellKind( arguments[2] ) ]
+		if( t.CONSTRAINT_TYPE == "hard" ){
+			this.hard_constraints.push( t.fulfilled.bind(t) );
 		}
+		t.CPM = this;
 	}
-	
-	/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
-	J( t1, t2 ){
-		return this.par("J",t1,t2)
-	}
-	
+
 	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
 	pixt( p ){
 		return this.pixti( this.grid.p2i(p) )
@@ -406,45 +402,13 @@ class CPM {
 
 	/* ======= ADHESION ======= */
 
-	/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
-	 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
-	 */
-	H( i, tp ){
-
-		let r = 0, tn;
-		const N = this.grid.neighi( i );
-
-		// Loop over pixel neighbors
-		for( let j = 0 ; j < N.length ; j ++ ){
-			tn = this.pixti( N[j] );
-			if( tn != tp ) r += this.J( tn, tp );
-		}
-
-		return r
-	}
-	
-	deltaHadhesion ( sourcei, targeti, src_type, tgt_type ){
-		return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
-	}
-
 	// returns both change in hamiltonian and perimeter
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
-
-		
-		const terms = this.terms;
-		let dHlog = {}, currentterm;
+		const terms = this.soft_constraints;
 	
 		let r = 0.0;
 		for( let i = 0 ; i < terms.length ; i++ ){
-			currentterm = this["deltaH"+terms[i]].call( this,sourcei,targeti,src_type,tgt_type );
-			r += currentterm;
-			dHlog[terms[i]] = currentterm;
-		
-		}
-
-		if( ( this.logterms || 0 ) && this.time % 100 == 0 ){
-			// eslint-disable-next-line no-console
-			console.log( dHlog );
+			r += terms[i]( sourcei, targeti, src_type, tgt_type );
 		}
 
 		return r 
@@ -492,7 +456,7 @@ class CPM {
 
 				const hamiltonian = this.deltaH( p1i, p2i, src_type, tgt_type );
 
-				// probabilistic success of copy attempt        
+				// probabilistic success of copy attempt 
 				if( this.docopy( hamiltonian ) ){
 					this.setpixi( p2i, src_type );
 				}
@@ -562,7 +526,6 @@ class CPM {
 
 	/* Update border elements after a successful copy attempt. */
 	updateborderneari ( i ){
-
 		// neighborhood + pixel itself (in indices)
 		const Ni = this.grid.neighi(i);
 		Ni.push(i);
@@ -1697,6 +1660,42 @@ class Grid2D$1 {
 class Grid3D$1 {
 }
 
+/** 
+ * Implements the adhesion constraint of Potts models. 
+ */
+
+class Adhesion {
+	get CONSTRAINT_TYPE() {
+		return "soft"
+	}
+	constructor( conf ){
+		this.conf = conf;
+	}
+	set CPM(C){
+		this.C = C;
+	}
+	/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
+	J( t1, t2 ){
+		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+	}
+	/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
+	 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
+	 */
+	H( i, tp ){
+		let r = 0, tn;
+		/* eslint-disable */
+		const N = this.C.grid.neighi( i );
+		for( let j = 0 ; j < N.length ; j ++ ){
+			tn = this.C.pixti( N[j] );
+			if( tn != tp ) r += this.J( tn, tp );
+		}
+		return r
+	}
+	deltaH( sourcei, targeti, src_type, tgt_type ){
+		return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
+	}
+}
+
 exports.CPM = CPM;
 exports.CPMChemotaxis = CPMChemotaxis;
 exports.Stats = Stats;
@@ -1704,3 +1703,4 @@ exports.Canvas = Canvas;
 exports.GridManipulator = GridManipulator;
 exports.Grid2D = Grid2D$1;
 exports.Grid3D = Grid3D$1;
+exports.Adhesion = Adhesion;

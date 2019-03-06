@@ -6,11 +6,12 @@ let w = parseInt(process.argv[2]) || 500
 
 
 // Create a new CPM, canvas, and stats object
-let C = new CPM.CPM( 2, {x: w, y:w}, {
+let C = new CPM.CPM( [w,w], {
 	seed : 1,
-	J : [ [NaN,20], [20,100] ],
 	T : 0.01
 })
+
+C.addTerm( new CPM.Adhesion( { J:[ [NaN,20], [20,100] ] } ) )
 
 let cid = C.makeNewCellID(1)
 
@@ -25,8 +26,7 @@ for( let i = 0 ; i < C.field_size.x ; i ++ ){
 }
 
 console.time("execution")
-// burnin phase (let cells gain volume)
-for( i = 0 ; i < 10 ; i ++ ){
+for( i = 0 ; i < 50 ; i ++ ){
 	console.log(i)
 	C.monteCarloStep()
 }

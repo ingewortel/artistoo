@@ -3,7 +3,9 @@
 
 class Grid3D {
 	constructor( field_size ){
-		this.field_size = field_size
+		this.field_size = { x : field_size[0],
+			y : field_size[1],
+			z : field_size[2] }
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) )

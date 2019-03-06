@@ -10,25 +10,24 @@ import Grid2D from "./Grid2D.js"
 import Grid3D from "./Grid3D.js"
 
 class CPM {
-
-	constructor( ndim, field_size, conf ){
-		if( conf.seed ){
-			this.mt = new MersenneTwister( conf.seed )
-		} else {
-			this.mt = new MersenneTwister( Math.floor(Math.random()*Number.MAX_SAFE_INTEGER) )
-		}
+	constructor( field_size, conf ){
+		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER)
+		this.mt = new MersenneTwister( seed )
 
 		// Attributes based on input parameters
-		this.ndim = ndim // grid dimensions (2 or 3)
+		this.ndim = field_size.length // grid dimensions (2 or 3)
+		if( this.ndim != 2 && this.ndim != 3 ){
+			throw("only 2D and 3D models are implemented!")
+		}
 		this.conf = conf // input parameter settings; see documentation.
-		this.field_size = field_size
 
 		// Some functions/attributes depend on ndim:
-		if( ndim == 2 ){
+		if( this.ndim == 2 ){
 			this.grid = new Grid2D(field_size)
 		} else {
 			this.grid = new Grid3D(field_size)
 		}
+		this.field_size = this.grid.field_size
 
 		// Attributes of the current CPM as a whole:
 		this.nNeigh = this.grid.neighi(0).length 	// neighbors per pixel (depends on ndim)
@@ -46,37 +45,21 @@ class CPM {
 		this.cellvolume = []			
 		this.t2k = []		// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
 		this.t2k[0] = 0		// Background cell; there is just one cell of this type.
-		
-		// terms to use in the Hamiltonian
-		if( this.conf.TERMS ){
-			this.terms = this.conf.TERMS
-		} else {
-			this.terms = ["adhesion"] //,"connectivity"]
-		}
+
+		this.soft_constraints = []
+		this.hard_constraints = []
 	}
 
-
-
-	/* ------------- GETTING/SETTING PARAMETERS --------------- */
-
-	/* 	helper to get cell-dependent parameters from conf.
-		"name" is the parameter name, the 2nd/3rd arguments (optional) are
-		the celltypes (identities) to find parameter settings for. */
-	par( name ){
-		if( arguments.length == 2 ){
-			return this.conf[name][this.cellKind( arguments[1] ) ]
+	addTerm( t ){
+		if( t.CONSTRAINT_TYPE == "soft" ){
+			this.soft_constraints.push( t.deltaH.bind(t) )
 		}
-		if( arguments.length == 3 ){
-			return this.conf[name][this.cellKind(arguments[1] ) ][
-				this.cellKind( arguments[2] ) ]
+		if( t.CONSTRAINT_TYPE == "hard" ){
+			this.hard_constraints.push( t.fulfilled.bind(t) )
 		}
+		t.CPM = this
 	}
-	
-	/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
-	J( t1, t2 ){
-		return this.par("J",t1,t2)
-	}
-	
+
 	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
 	pixt( p ){
 		return this.pixti( this.grid.p2i(p) )
@@ -112,45 +95,13 @@ class CPM {
 
 	/* ======= ADHESION ======= */
 
-	/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
-	 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
-	 */
-	H( i, tp ){
-
-		let r = 0, tn
-		const N = this.grid.neighi( i )
-
-		// Loop over pixel neighbors
-		for( let j = 0 ; j < N.length ; j ++ ){
-			tn = this.pixti( N[j] )
-			if( tn != tp ) r += this.J( tn, tp )
-		}
-
-		return r
-	}
-	
-	deltaHadhesion ( sourcei, targeti, src_type, tgt_type ){
-		return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
-	}
-
 	// returns both change in hamiltonian and perimeter
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
-
-		
-		const terms = this.terms
-		let dHlog = {}, currentterm
+		const terms = this.soft_constraints
 	
 		let r = 0.0
 		for( let i = 0 ; i < terms.length ; i++ ){
-			currentterm = this["deltaH"+terms[i]].call( this,sourcei,targeti,src_type,tgt_type )
-			r += currentterm
-			dHlog[terms[i]] = currentterm
-		
-		}
-
-		if( ( this.logterms || 0 ) && this.time % 100 == 0 ){
-			// eslint-disable-next-line no-console
-			console.log( dHlog )
+			r += terms[i]( sourcei, targeti, src_type, tgt_type )
 		}
 
 		return r 
@@ -198,7 +149,7 @@ class CPM {
 
 				const hamiltonian = this.deltaH( p1i, p2i, src_type, tgt_type )
 
-				// probabilistic success of copy attempt        
+				// probabilistic success of copy attempt 
 				if( this.docopy( hamiltonian ) ){
 					this.setpixi( p2i, src_type )
 				}
@@ -268,7 +219,6 @@ class CPM {
 
 	/* Update border elements after a successful copy attempt. */
 	updateborderneari ( i ){
-
 		// neighborhood + pixel itself (in indices)
 		const Ni = this.grid.neighi(i)
 		Ni.push(i)

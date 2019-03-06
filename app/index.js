@@ -6,6 +6,9 @@ import GridManipulator from "../GridManipulator.js"
 import CPMChemotaxis from "../CPMChemotaxis.js"
 import { Grid2D, Grid3D } from "../Grid.js"
 
-export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator,Grid2D,Grid3D}
+import Adhesion from "../hamiltonian/Adhesion.js"
+
+export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator,Grid2D,Grid3D,
+	Adhesion}
 
 
