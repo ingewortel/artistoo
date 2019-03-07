@@ -1,12 +1,16 @@
 changes : 
 
 - ECM is no special thing anymore. By definition, we say that cell type 0 is the background / ECM.
-  This means we don't need to do anythin special with adhesion.
+  This means we don't need to do anything special with adhesion.
 
 - STROMA is not special anymore either. We will implement this by having a special hamiltonian
   term (hard constraint) that causes all copy attempts into certain cell types to fail.
+  (Or perhaps think about an even more efficient method where we no longer store cells 
+  bordering certain types)
 
 - why is everything commented out in fmodx, fmody, fmodz? I replaced this by x, y, z now
+  -> ok it seems the neighbourhood is now implemented differently, but there is a bug 
+  in 3D!
 
 - we don't actually need both bgborderpixels and cellborderpixels!
 
@@ -15,5 +19,6 @@ changes :
 
 - do NOT use "i" methods anymore from outside CPM !  
   (I wish I could make these private!)
+  -> instead, there are generator functions for cellpixels and cellborder pixels
 
 

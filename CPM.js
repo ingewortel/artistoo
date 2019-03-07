@@ -46,8 +46,8 @@ class CPM {
 
 		// Attributes per cell:
 		this.cellvolume = []			
-		this.t2k = []		// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
-		this.t2k[0] = 0		// Background cell; there is just one cell of this type.
+		this.t2k = []	// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
+		this.t2k[0] = 0	// Background cell; there is just one cell of this type.
 
 		this.soft_constraints = []
 		this.hard_constraints = []

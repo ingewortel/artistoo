@@ -83,7 +83,9 @@ DiceSet.prototype = {
 class Grid2D {
 	constructor( field_size, torus = true ){
 		this.field_size = { x : field_size[0], y : field_size[1] };
+		this.extents = field_size;
 		this.torus = torus;
+		
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
@@ -107,6 +109,40 @@ class Grid2D {
 		the wrapper function neighi, depending on this.ndim.
 
 	*/
+	neighisimple( i ){
+		let p = this.i2p(i);
+		let xx = [];
+		for( let d = 0 ; d <= 1 ; d ++ ){
+			if( p[d] == 0 ){
+				if( this.torus[d] ){
+					xx[d] = [p[d],this.extents[d]-1,p[d]+1];
+				} else {
+					xx[d] = [p[d],p[d]+1];
+				}
+			} else if( p[d] == this.extents[d]-1 ){
+				if( this.torus[d] ){
+					xx[d] = [p[d],p[d]-1,0];
+				} else {
+					xx[d] = [p[d],p[d]-1];
+				}
+			} else {
+				xx[d] = [p[d],p[d]-1,p[d]+1];
+			}
+		}
+
+		let r = [], first=true;
+		for( let x of xx[0] ){
+			for( let y of xx[1] ){
+				if( first ){
+					first = false; 
+				} else {
+					r.push( this.p2i( [x,y] ) );
+				}
+			}
+		}
+		return r
+	}
+
 	neighi( i ){	
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
@@ -156,7 +192,7 @@ class Grid2D {
 			bl += add; bm += add; br += add;
 		}
 		if( !this.torus ){
-			return [ tl, l, bl, tm, bm, tr, r, br ].filter(isFinite)	
+			return [ tl, l, bl, tm, bm, tr, r, br ].filter( isFinite )
 		} else {
 			return [ tl, l, bl, tm, bm, tr, r, br ]
 		}
@@ -296,8 +332,8 @@ class CPM {
 
 		// Attributes per cell:
 		this.cellvolume = [];			
-		this.t2k = [];		// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
-		this.t2k[0] = 0;		// Background cell; there is just one cell of this type.
+		this.t2k = [];	// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
+		this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
 
 		this.soft_constraints = [];
 		this.hard_constraints = [];
@@ -580,27 +616,65 @@ Canvas.prototype = {
 	pxf : function( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom );
 	},
-
+	pxfi : function( p ){
+		const dy = this.zoom*this.width;
+		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
+		const px = this.image_data.data;
+		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
+			for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
+				px[i+j+off] = this.col_r;
+				px[i+j+off + 1] = this.col_g;
+				px[i+j+off + 2] = this.col_b;
+				px[i+j+off + 3] = 255;
+			}
+		}
+	},
+	pxfir : function( p ){
+		const dy = this.zoom*this.width;
+		const off = (p[1]*dy + p[0])*4;
+		const px = this.image_data.data;
+		px[off] = this.col_r;
+		px[off + 1] = this.col_g;
+		px[off + 2] = this.col_b;
+		px[off + 3] = 255;
+	},
+	getImageData : function(){
+		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
+	},
+	putImageData : function(){
+		this.ctx.putImageData(this.image_data, 0, 0);
+	},
 	pxfnozoom : function( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 );
 	},
 	/* draw a line left (l), right (r), down (d), or up (u) of pixel p */
 	pxdrawl : function( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, this.zoom );
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*p[0],i] );
+		}
 	},
 	pxdrawr : function( p ){
-		this.ctx.fillRect( this.zoom*(p[0]+1), this.zoom*p[1], 1, this.zoom );
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*(p[0]+1),i] );
+		}
 	},
 	pxdrawd : function( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*(p[1]+1), this.zoom, 1 );
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*(p[1]+1)] );
+		}
 	},
 	pxdrawu : function( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, 1 );
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*p[1]] );
+		}
 	},
 
 	/* For easier color naming */
 	col : function( hex ){
 		this.ctx.fillStyle="#"+hex;
+		this.col_r = parseInt( hex.substr(0,2), 16 );
+		this.col_g = parseInt( hex.substr(2,2), 16 );
+		this.col_b = parseInt( hex.substr(4,2), 16 );
 	},
 	/* Color the whole grid in color [col] */
 	clear : function( col ){
@@ -632,15 +706,12 @@ Canvas.prototype = {
 		col = col || "000000";
 		let pc, pu, pd, pl, pr, pdraw;
 		this.col( col );
-		this.ctx.fillStyle="#"+col;
-
+		this.getImageData();
 		// cst contains indices of pixels at the border of cells
 		for( let x of this.C.cellBorderPixels() ){
-			/* eslint-disable */
 			let p = x[0];
 			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
 				pdraw = this.p2pdraw( p );
-
 
 				pc = this.C.pixt( [p[0],p[1]] );
 				pr = this.C.pixt( [p[0]+1,p[1]] );
@@ -663,6 +734,7 @@ Canvas.prototype = {
 			}
 
 		}
+		this.putImageData();
 	},
 	/* Use to show activity values of the act model using a color gradient, for
 	cells in the grid of cellkind "kind". */
@@ -698,11 +770,12 @@ Canvas.prototype = {
 	/* colors outer pixels of each cell */
 	drawOnCellBorders : function( col ){
 		col = col || "000000";
+		this.getImageData();
 		this.col( col );
-		this.ctx.fillStyle="#"+col;
 		for( let i of this.C.cellBorderPixels() ){
-			this.pxf( i[0] );
+			this.pxfi( i[0] );
 		}
+		this.putImageData();
 	},
 
 	/* Draw all cells of cellkind "kind" in color col (hex). col can also be a function that

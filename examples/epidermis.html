@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="../build/cpm.js"></script>
+<script src="fpsmeter.min.js"></script>
 <script>
 "use strict"
 
-let C, zoom=2, Cim, cid=0, w=300
+let C, zoom=1, Cim, cid=0, w=500, meter, t = 0
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "CCCCCC" )
 
 	// Draw cell borders 
-	Cim.drawCellBorders(1, "DDDDDD" )
+	Cim.drawCellBorders(1,"000000")
 }
 
 function timestep(){
 	// Update the grid with one MCS
 	C.monteCarloStep()
-
-	draw()
-
-	let vol = C.getVolume(cid)
-
-	// If either the background or cell disappears: re-seed the grid randomly.
-	if( vol==1 || vol==(C.field_size.x-1)*(C.field_size.y-1) ){
-		seedGrid()
+	meter.tick()
+	if( t % 5 == 0 ){
+		draw()
 	}
 	requestAnimationFrame( timestep )
+	t++
 }
 
 function seedGrid(){
@@ -34,14 +31,17 @@ function seedGrid(){
 	let step = 12
 	for( var i = 1 ; i < C.field_size.x ; i += step ){
 		for( var j = 1 ; j < C.field_size.y ; j += step ){
-			C.seedCellAt( 1, [i,j] )
+			let cid = C.makeNewCellID(1)
+			C.setpix( [i,j], cid )
+			//C.seedCellAt( 1, [i,j] )
 		}
 	}
 }
 
 function initialize(){
 	// Create a new CPM, canvas, and stats object
-	C = new CPM.CPM( 2, {x: w, y:w}, {
+	C = new CPM.CPM( [2*w,w], {
+		torus : true,
 		seed : 1,
 		LAMBDA_CONNECTIVITY : [0,0],
 		LAMBDA_P : [0,2],
@@ -50,15 +50,16 @@ function initialize(){
 		MAX_ACT : [0,0],
 		P : [0,145],
 		V : [0,152],
-		J_T_STROMA : [NaN,16],
-		J_T_ECM : [NaN,20],
-		J_T_T : [ [NaN,NaN], 
-				[NaN,100] // epidermal cells
+		J : [ [NaN,20], 
+			[20,100] // epidermal cells
 		],
 		T : 20,
 		ACT_MEAN : "geometric"
 	})
+	C.addTerm( new CPM.Adhesion(C.conf) )
+	C.addTerm( new CPM.VolumeConstraint(C.conf) )
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
+	meter = new FPSMeter({left:"auto", right:"5px"})
 	// Start simulation
 	seedGrid()
 	timestep()

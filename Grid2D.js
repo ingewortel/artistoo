@@ -4,7 +4,9 @@
 class Grid2D {
 	constructor( field_size, torus = true ){
 		this.field_size = { x : field_size[0], y : field_size[1] }
+		this.extents = field_size
 		this.torus = torus
+		
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) )
@@ -28,6 +30,40 @@ class Grid2D {
 		the wrapper function neighi, depending on this.ndim.
 
 	*/
+	neighisimple( i ){
+		let p = this.i2p(i)
+		let xx = []
+		for( let d = 0 ; d <= 1 ; d ++ ){
+			if( p[d] == 0 ){
+				if( this.torus[d] ){
+					xx[d] = [p[d],this.extents[d]-1,p[d]+1]
+				} else {
+					xx[d] = [p[d],p[d]+1]
+				}
+			} else if( p[d] == this.extents[d]-1 ){
+				if( this.torus[d] ){
+					xx[d] = [p[d],p[d]-1,0]
+				} else {
+					xx[d] = [p[d],p[d]-1]
+				}
+			} else {
+				xx[d] = [p[d],p[d]-1,p[d]+1]
+			}
+		}
+
+		let r = [], first=true
+		for( let x of xx[0] ){
+			for( let y of xx[1] ){
+				if( first ){
+					first = false 
+				} else {
+					r.push( this.p2i( [x,y] ) )
+				}
+			}
+		}
+		return r
+	}
+
 	neighi( i ){	
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
@@ -77,7 +113,7 @@ class Grid2D {
 			bl += add; bm += add; br += add
 		}
 		if( !this.torus ){
-			return [ tl, l, bl, tm, bm, tr, r, br ].filter(isFinite)	
+			return [ tl, l, bl, tm, bm, tr, r, br ].filter( isFinite )
 		} else {
 			return [ tl, l, bl, tm, bm, tr, r, br ]
 		}

@@ -44,27 +44,65 @@ Canvas.prototype = {
 	pxf : function( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom )
 	},
-
+	pxfi : function( p ){
+		const dy = this.zoom*this.width
+		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4
+		const px = this.image_data.data
+		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
+			for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
+				px[i+j+off] = this.col_r
+				px[i+j+off + 1] = this.col_g
+				px[i+j+off + 2] = this.col_b
+				px[i+j+off + 3] = 255
+			}
+		}
+	},
+	pxfir : function( p ){
+		const dy = this.zoom*this.width
+		const off = (p[1]*dy + p[0])*4
+		const px = this.image_data.data
+		px[off] = this.col_r
+		px[off + 1] = this.col_g
+		px[off + 2] = this.col_b
+		px[off + 3] = 255
+	},
+	getImageData : function(){
+		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom)
+	},
+	putImageData : function(){
+		this.ctx.putImageData(this.image_data, 0, 0)
+	},
 	pxfnozoom : function( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 )
 	},
 	/* draw a line left (l), right (r), down (d), or up (u) of pixel p */
 	pxdrawl : function( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, this.zoom )
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*p[0],i] )
+		}
 	},
 	pxdrawr : function( p ){
-		this.ctx.fillRect( this.zoom*(p[0]+1), this.zoom*p[1], 1, this.zoom )
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*(p[0]+1),i] )
+		}
 	},
 	pxdrawd : function( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*(p[1]+1), this.zoom, 1 )
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*(p[1]+1)] )
+		}
 	},
 	pxdrawu : function( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, 1 )
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*p[1]] )
+		}
 	},
 
 	/* For easier color naming */
 	col : function( hex ){
 		this.ctx.fillStyle="#"+hex
+		this.col_r = parseInt( hex.substr(0,2), 16 )
+		this.col_g = parseInt( hex.substr(2,2), 16 )
+		this.col_b = parseInt( hex.substr(4,2), 16 )
 	},
 	/* Color the whole grid in color [col] */
 	clear : function( col ){
@@ -96,15 +134,12 @@ Canvas.prototype = {
 		col = col || "000000"
 		let pc, pu, pd, pl, pr, pdraw
 		this.col( col )
-		this.ctx.fillStyle="#"+col
-
+		this.getImageData()
 		// cst contains indices of pixels at the border of cells
 		for( let x of this.C.cellBorderPixels() ){
-			/* eslint-disable */
 			let p = x[0]
 			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
 				pdraw = this.p2pdraw( p )
-
 
 				pc = this.C.pixt( [p[0],p[1]] )
 				pr = this.C.pixt( [p[0]+1,p[1]] )
@@ -127,6 +162,7 @@ Canvas.prototype = {
 			}
 
 		}
+		this.putImageData()
 	},
 	/* Use to show activity values of the act model using a color gradient, for
 	cells in the grid of cellkind "kind". */
@@ -162,11 +198,12 @@ Canvas.prototype = {
 	/* colors outer pixels of each cell */
 	drawOnCellBorders : function( col ){
 		col = col || "000000"
+		this.getImageData()
 		this.col( col )
-		this.ctx.fillStyle="#"+col
 		for( let i of this.C.cellBorderPixels() ){
-			this.pxf( i[0] )
+			this.pxfi( i[0] )
 		}
+		this.putImageData()
 	},
 
 	/* Draw all cells of cellkind "kind" in color col (hex). col can also be a function that
