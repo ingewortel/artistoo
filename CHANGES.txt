@@ -6,4 +6,14 @@ changes :
 - STROMA is not special anymore either. We will implement this by having a special hamiltonian
   term (hard constraint) that causes all copy attempts into certain cell types to fail.
 
-- why is everything commented out in fmodx, fmody, fmodz? 
+- why is everything commented out in fmodx, fmody, fmodz? I replaced this by x, y, z now
+
+- we don't actually need both bgborderpixels and cellborderpixels!
+
+- seeding cells etc. now done in a separate "Initializer" class
+
+
+- do NOT use "i" methods anymore from outside CPM !  
+  (I wish I could make these private!)
+
+

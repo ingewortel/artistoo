@@ -4,13 +4,17 @@ import Canvas from "../Canvas.js"
 import Stats from "../Stats.js"
 import GridManipulator from "../GridManipulator.js"
 import CPMChemotaxis from "../CPMChemotaxis.js"
-import { Grid2D, Grid3D } from "../Grid.js"
+import Grid2D from "../Grid2D.js"
+import Grid3D from "../Grid3D.js"
+import GridInitializer from "../GridInitializer.js"
+
 
 import Adhesion from "../hamiltonian/Adhesion.js"
 import VolumeConstraint from "../hamiltonian/VolumeConstraint.js"
+import HardVolumeRangeConstraint from "../hamiltonian/HardVolumeRangeConstraint.js"
 
 
 export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator,Grid2D,Grid3D,
-	Adhesion, VolumeConstraint}
+	Adhesion, VolumeConstraint, GridInitializer, HardVolumeRangeConstraint}
 
 

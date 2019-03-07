@@ -13,6 +13,9 @@ class CPM {
 	constructor( field_size, conf ){
 		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER)
 		this.mt = new MersenneTwister( seed )
+		if( !("torus" in conf) ){
+			conf["torus"] = true
+		}
 
 		// Attributes based on input parameters
 		this.ndim = field_size.length // grid dimensions (2 or 3)
@@ -23,9 +26,9 @@ class CPM {
 
 		// Some functions/attributes depend on ndim:
 		if( this.ndim == 2 ){
-			this.grid = new Grid2D(field_size)
+			this.grid = new Grid2D(field_size,conf.torus)
 		} else {
-			this.grid = new Grid3D(field_size)
+			this.grid = new Grid3D(field_size,conf.torus)
 		}
 		this.field_size = this.grid.field_size
 
@@ -36,10 +39,10 @@ class CPM {
 	
 		// track border pixels for speed (see also the DiceSet data structure)
 		this.cellborderpixels = new DiceSet( this.mt )
-		this.bgborderpixels = new DiceSet( this.mt ) 
 
 		// Attributes per pixel:
-		this.cellpixelstype = {}		// celltype (identity) of the current pixel.
+		// celltype (identity) of the current pixel.
+		this.cellpixelstype = new Uint16Array(this.grid.p2i(field_size))
 
 		// Attributes per cell:
 		this.cellvolume = []			
@@ -49,6 +52,23 @@ class CPM {
 		this.soft_constraints = []
 		this.hard_constraints = []
 	}
+
+	* cellPixels() {
+		for( let i = 0 ; i < this.cellpixelstype.length ; i ++ ){
+			if( this.cellpixelstype[i] != 0 ){
+				yield [this.grid.i2p(i),this.cellpixelstype[i]]
+			}
+		}
+	}
+
+	* cellBorderPixels() {
+		for( let i of this.cellborderpixels.elements ){
+			if( this.cellpixelstype[i] != 0 ){
+				yield [this.grid.i2p(i),this.cellpixelstype[i]]
+			}
+		}
+	}
+
 
 	addTerm( t ){
 		if( t.CONSTRAINT_TYPE == "soft" ){
@@ -97,15 +117,11 @@ class CPM {
 
 	// returns both change in hamiltonian and perimeter
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
-		const terms = this.soft_constraints
-	
 		let r = 0.0
-		for( let i = 0 ; i < terms.length ; i++ ){
-			r += terms[i]( sourcei, targeti, src_type, tgt_type )
+		for( let t of this.soft_constraints ){
+			r += t( sourcei, targeti, src_type, tgt_type )
 		}
-
-		return r 
-
+		return r
 	}
 	/* ------------- COPY ATTEMPTS --------------- */
 
@@ -123,38 +139,36 @@ class CPM {
 
 			// This is the expected time (in MCS) you would expect it to take to
 			// randomly draw another border pixel.
-			delta_t += 1./(this.bgborderpixels.length + this.cellborderpixels.length)
+			delta_t += 1./(this.cellborderpixels.length)
 
+			// sample a random pixel that borders at least 1 cell of another type
+			const src_i = this.cellborderpixels.sample()
+		
+			const N = this.grid.neighi( src_i )
+			const tgt_i = N[this.ran(0,N.length-1)]
+		
+			const src_type = this.pixti( src_i )
+			const tgt_type = this.pixti( tgt_i )
 
-			let p1i
-			// Randomly sample one of the CPM border pixels (the "source" (src)),
-			// and one of its neighbors (the "target" (tgt)).
-			if( this.ran( 0, this.bgborderpixels.length + this.cellborderpixels.length )
-				< this.bgborderpixels.length ){
-				p1i = this.bgborderpixels.sample()
-			} else {
-				p1i = this.cellborderpixels.sample()
-			}
-		
-			const N = this.grid.neighi( p1i )
-			const p2i = N[this.ran(0,N.length-1)]
-		
-			const src_type = this.pixti( p1i )
-			const tgt_type = this.pixti( p2i )
 
 			// only compute the Hamiltonian if source and target belong to a different cell,
 			// and do not allow a copy attempt into the stroma. Only continue if the copy attempt
 			// would result in a viable cell.
 			if( tgt_type >= 0 && src_type != tgt_type ){
-
-				const hamiltonian = this.deltaH( p1i, p2i, src_type, tgt_type )
-
-				// probabilistic success of copy attempt 
-				if( this.docopy( hamiltonian ) ){
-					this.setpixi( p2i, src_type )
+				let ok = true
+				for( let h of this.hard_constraints ){
+					if( !h( src_i, tgt_i, src_type, tgt_type ) ){
+						ok = false; break
+					}
+				}
+				if( ok ){
+					const hamiltonian = this.deltaH( src_i, tgt_i, src_type, tgt_type )
+					// probabilistic success of copy attempt 
+					if( this.docopy( hamiltonian ) ){
+						this.setpixi( tgt_i, src_type )
+					}
 				}
 			}
-
 		}
 
 		this.time++ // update time with one MCS.
@@ -167,100 +181,95 @@ class CPM {
 	}
 	/* Change the pixel at position p (coordinates) into cellid t. 
 	Update cell perimeters with Pup (optional parameter).*/
-	setpixi ( i, t ){
-		const t_old = this.cellpixelstype[i]
-		// Specific case: changing a pixel into background (t = 0) is done by delpix.
-		if( t == 0 ){
-			this.delpixi( i )
-		} else {
-			if( t_old > 0 ){
-				// also update volume of the old cell
-				// (unless it is background/stroma)
-				this.cellvolume[t_old] --
-				
-				// if this was the last pixel belonging to this cell, 
-				// remove the cell altogether.
-				if( this.cellvolume[t_old] == 0 ){
-					delete this.cellvolume[t_old]
-					delete this.t2k[t_old]
-				}
+	setpixi ( i, t ){		
+		const t_old = this.pixti(i)
+		if( t_old > 0 ){
+			// also update volume of the old cell
+			// (unless it is background/stroma)
+			this.cellvolume[t_old] --
+			
+			// if this was the last pixel belonging to this cell, 
+			// remove the cell altogether.
+			if( this.cellvolume[t_old] == 0 ){
+				delete this.cellvolume[t_old]
+				delete this.t2k[t_old]
 			}
-			// update volume of the new cell and cellid of the pixel.
-			this.cellpixelstype[i] = t
+		}
+		// update volume of the new cell and cellid of the pixel.
+		this.cellpixelstype[i] = t
+		if( t > 0 ){
 			this.cellvolume[t] ++
 		}
-		this.updateborderneari( i )
+		this.updateborderneari( i, t_old, t )
 	}
 	setpix ( p, t ){
 		this.setpixi( this.grid.p2i(p), t )
 	}
-	/* Change pixel at coordinates p/index i into background (t=0) */
-	delpixi ( i ){
-		const t = this.cellpixelstype[i]
-
-		// Reduce cell volume.
-		this.cellvolume[t] --
-
-		// remove this pixel from objects cellpixelsbirth / cellpixelstype
-		delete this.cellpixelstype[i]
-
-		// if this was the last pixel belonging to this cell, 
-		// remove the cell altogether.
-		if( this.cellvolume[t] == 0 ){
-			delete this.cellvolume[t]
-			delete this.t2k[t]
-		}
-
-	}
-
-	delpix ( p ){
-		this.delpixi( this.grid.p2i(p) )
-	}
 
 	/* Update border elements after a successful copy attempt. */
-	updateborderneari ( i ){
+	updateborderneari ( i, t_old, t_new ){
+		if( t_old == t_new ) return
+		
 		// neighborhood + pixel itself (in indices)
 		const Ni = this.grid.neighi(i)
-		Ni.push(i)
+		const Ti = Ni.map( j => this.pixti(j) )
+	
+		// first deal with i itself
+		let isborder = false, wasborder = false
+		for( let k of Ti ){
+			if( k != t_new ){
+				isborder = true; if(wasborder) break
+			}
+			if( k != t_old ){
+				wasborder = true; if(isborder) break
+			}
+		}
+		if( isborder ){
+			if( !wasborder ){
+				this.cellborderpixels.insert( i )
+			}
+		} else if( wasborder ) {
+			this.cellborderpixels.remove( i )
+		}
+
 		
+		// then deal with i's neighbours
 		for( let j = 0 ; j < Ni.length ; j ++ ){
-
-			i = Ni[j]
-			const t = this.pixti( i )
-
-			// stroma pixels are not stored
-			if( t < 0 ) continue
-			let isborder = false
-
-			// loop over neighborhood of the current pixel.
-			// if the pixel has any neighbors belonging to a different cell,
-			// it is a border pixel.			
-			const N = this.grid.neighi( Ni[j] )
-			for( let k = 0 ; k < N.length ; k ++ ){
-				if( this.pixti( N[k] ) != t ){
-					isborder = true; break
+			const i2 = Ni[j]
+			const t = Ti[j]
+			// different type from new pixel -> 
+			// must be a border now, no need to check further
+			if( t != t_new ){
+				// must have already been a border, unless 
+				// it had the same pixel type
+				if( t == t_old ){
+					let wasborder = false
+					const N = this.grid.neighi( i2 )
+					for( let k = 0 ; k < N.length ; k ++ ){
+						if( (N[k] != i) && (this.pixti( N[k] ) != t) ){
+							wasborder = true; break
+						}
+					}
+					if( !wasborder ){
+						this.cellborderpixels.insert( i2 )
+					}
 				}
-			}
-
-			// if current pixel is background, it should not be part of
-			// cellborderpixels (only for celltypes > 0). Whether it
-			// should be part of bgborderpixels depends on isborder.
-			if( t == 0 ){
-				this.cellborderpixels.remove( i )
-				if( isborder ){
-					this.bgborderpixels.insert( i )
-				} else {
-					this.bgborderpixels.remove( i )
-				}
-			// if current pixel is from a cell, this works the other way around.
 			} else {
-				this.bgborderpixels.remove( i )
-				if( isborder ){
-					this.cellborderpixels.insert( i )
-				} else {
-					this.cellborderpixels.remove( i )
+				// same type as new pixel, 
+				// so must have been a border pixel before
+				// (because t_new != t_old).
+				// check if still a border, if not remove
+				let isborder = false
+				const N = this.grid.neighi( i2 )
+				for( let k = 0 ; k < N.length ; k ++ ){
+					if( this.pixti( N[k] ) != t ){
+						isborder = true; break
+					}
 				}
-			}
+				if( !isborder ){
+					this.cellborderpixels.remove( i2 )
+				}
+			}	
 		}
 	}
 

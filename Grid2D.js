@@ -2,8 +2,9 @@
  *  and 3D grids. */
 
 class Grid2D {
-	constructor( field_size ){
+	constructor( field_size, torus = true ){
 		this.field_size = { x : field_size[0], y : field_size[1] }
+		this.torus = torus
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) )
@@ -13,7 +14,6 @@ class Grid2D {
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
 		
-		this.X_MASK = (1 << this.X_BITS)-1
 		this.Y_MASK = (1 << this.Y_BITS)-1
 
 		this.dy = 1 << this.Y_BITS // for neighborhoods based on pixel index
@@ -28,7 +28,7 @@ class Grid2D {
 		the wrapper function neighi, depending on this.ndim.
 
 	*/
-	neighi( i, torus = true ){	
+	neighi( i ){	
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
 		let tl, tm, tr, l, r, bl, bm, br
@@ -41,40 +41,46 @@ class Grid2D {
 		// indices accordingly
 		let add = NaN // if torus is false, return NaN for all neighbors that cross
 		// the border.
-		
+		// 
 		// left border
 		if( i < this.field_size.y ){
-			if( torus ){
+			if( this.torus ){
 				add = this.field_size.x * this.dy
 			}
 			tl += add; l += add; bl += add 	
 		}
 		
+		add = NaN
 		// right border
 		if( i >= this.dy*( this.field_size.x - 1 ) ){
-			if( torus ){
+			if( this.torus ){
 				add = -this.field_size.x * this.dy
 			}
 			tr += add; r += add; br += add
 		}
 
+		add = NaN
 		// top border
 		if( i % this.dy == 0 ){
-			if( torus ){
+			if( this.torus ){
 				add = this.field_size.y
 			}
 			tl += add; tm += add; tr += add	
 		}
 		
+		add = NaN
 		// bottom border
 		if( (i+1-this.field_size.y) % this.dy == 0 ){
-			if( torus ){
+			if( this.torus ){
 				add = -this.field_size.y
 			}
 			bl += add; bm += add; br += add
 		}
-		
-		return [ tl, l, bl, tm, bm, tr, r, br ]
+		if( !this.torus ){
+			return [ tl, l, bl, tm, bm, tr, r, br ].filter(isFinite)	
+		} else {
+			return [ tl, l, bl, tm, bm, tr, r, br ]
+		}
 	}
 	p2i ( p ){
 		return ( p[0] << this.Y_BITS ) + p[1]

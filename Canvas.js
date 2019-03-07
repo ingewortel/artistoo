@@ -77,8 +77,8 @@ Canvas.prototype = {
 		return this.ctx
 	},
 
-	i2p : function( i ){
-		var p = this.C.grid.i2p( i ), dim
+	p2pdraw : function( p ){
+		var dim
 		for( dim = 0; dim < p.length; dim++ ){
 			if( this.wrap[dim] != 0 ){
 				p[dim] = p[dim] % this.wrap[dim]
@@ -94,21 +94,24 @@ Canvas.prototype = {
 	outer pixels). If [kind] is negative, simply draw all borders. */
 	drawCellBorders : function( kind, col ){
 		col = col || "000000"
-		var p, pc, pu, pd, pl, pr, i, pdraw
+		let pc, pu, pd, pl, pr, pdraw
 		this.col( col )
 		this.ctx.fillStyle="#"+col
 
 		// cst contains indices of pixels at the border of cells
-		var cst =  this.C.cellborderpixels.elements
-		for( i = 0 ; i < cst.length ; i ++ ){
-			if( kind < 0 || this.C.cellKind(this.C.cellpixelstype[cst[i]]) == kind ){
-				p = this.C.i2p( cst[i] )
-				pdraw = this.i2p( cst[i] )
-				pc = this.C.pixt( [p[0],p[1],0] )
-				pr = this.C.pixt( [p[0]+1,p[1],0] )
-				pl = this.C.pixt( [p[0]-1,p[1],0] )		
-				pd = this.C.pixt( [p[0],p[1]+1,0] )
-				pu = this.C.pixt( [p[0],p[1]-1,0] )
+		for( let x of this.C.cellBorderPixels() ){
+			/* eslint-disable */
+			let p = x[0]
+			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+				pdraw = this.p2pdraw( p )
+
+
+				pc = this.C.pixt( [p[0],p[1]] )
+				pr = this.C.pixt( [p[0]+1,p[1]] )
+				pl = this.C.pixt( [p[0]-1,p[1]] )		
+				pd = this.C.pixt( [p[0],p[1]+1] )
+				pu = this.C.pixt( [p[0],p[1]-1] )
+
 				if( pc != pl  ){
 					this.pxdrawl( pdraw )
 				}
@@ -128,7 +131,6 @@ Canvas.prototype = {
 	/* Use to show activity values of the act model using a color gradient, for
 	cells in the grid of cellkind "kind". */
 	drawActivityValues : function( kind ){
-
 		// cst contains the pixel ids of all non-background/non-stroma cells in
 		// the grid. The function tohex is used to convert computed color gradients
 		// to the hex format.
@@ -156,14 +158,14 @@ Canvas.prototype = {
 			}
 		}
 	},
+
 	/* colors outer pixels of each cell */
 	drawOnCellBorders : function( col ){
 		col = col || "000000"
 		this.col( col )
 		this.ctx.fillStyle="#"+col
-		var cst =  this.C.cellborderpixels.elements, i
-		for( i = 0 ; i < cst.length ; i ++ ){
-			this.pxf( this.i2p( cst[i] ) )
+		for( let i of this.C.cellBorderPixels() ){
+			this.pxf( i[0] )
 		}
 	},
 
@@ -178,15 +180,13 @@ Canvas.prototype = {
 		}
 		// Object cst contains pixel index of all pixels belonging to non-background,
 		// non-stroma cells.
-		var cst = Object.keys( this.C.cellpixelstype ), i
-		var cellpixelsbyid = {}
-		for( i = 0 ; i < cst.length ; i ++ ){
-			let cid = this.C.cellpixelstype[cst[i]]
-			if( this.C.cellKind(cid) == kind ){
-				if( !cellpixelsbyid[cid] ){
-					cellpixelsbyid[cid] = []
+		let cellpixelsbyid = {}
+		for( let x of this.C.cellPixels() ){
+			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+				if( !cellpixelsbyid[x[1]] ){
+					cellpixelsbyid[x[1]] = []
 				}
-				cellpixelsbyid[cid].push( cst[i] )
+				cellpixelsbyid[x[1]].push( x[0] )
 			}
 		}
 		for( let cid of Object.keys( cellpixelsbyid ) ){
@@ -194,21 +194,8 @@ Canvas.prototype = {
 				this.col( col(cid) )
 			}
 			for( let cp of cellpixelsbyid[cid] ){
-				this.pxf( this.i2p( cp ) )
+				this.pxf( cp )
 			}
-		}
-	},
-
-	/* Draw all stroma pixels in color col (hex). */
-	drawStroma : function( col ){
-		col = col || "000000"
-		this.col( col )
-
-		// Loop over all stroma pixels. Object cst contains
-		// pixel index of all stroma pixels.
-		var cst = Object.keys( this.C.stromapixelstype ), i
-		for( i = 0 ; i < cst.length ; i ++ ){
-			this.pxf( this.i2p( cst[i] ) )
 		}
 	},
 

@@ -305,8 +305,9 @@ var CPM = (function (exports) {
 	 *  and 3D grids. */
 
 	class Grid2D {
-		constructor( field_size ){
+		constructor( field_size, torus = true ){
 			this.field_size = { x : field_size[0], y : field_size[1] };
+			this.torus = torus;
 			// Check that the grid size is not too big to store pixel ID in 32-bit number,
 			// and allow fast conversion of coordinates to unique ID numbers.
 			this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
@@ -316,7 +317,6 @@ var CPM = (function (exports) {
 				throw("Field size too large -- field cannot be represented as 32-bit number")
 			}
 			
-			this.X_MASK = (1 << this.X_BITS)-1;
 			this.Y_MASK = (1 << this.Y_BITS)-1;
 
 			this.dy = 1 << this.Y_BITS; // for neighborhoods based on pixel index
@@ -331,7 +331,7 @@ var CPM = (function (exports) {
 			the wrapper function neighi, depending on this.ndim.
 
 		*/
-		neighi( i, torus = true ){	
+		neighi( i ){	
 			// normal computation of neighbor indices (top left-middle-right, 
 			// left, right, bottom left-middle-right)
 			let tl, tm, tr, l, r, bl, bm, br;
@@ -344,40 +344,46 @@ var CPM = (function (exports) {
 			// indices accordingly
 			let add = NaN; // if torus is false, return NaN for all neighbors that cross
 			// the border.
-			
+			// 
 			// left border
 			if( i < this.field_size.y ){
-				if( torus ){
+				if( this.torus ){
 					add = this.field_size.x * this.dy;
 				}
 				tl += add; l += add; bl += add; 	
 			}
 			
+			add = NaN;
 			// right border
 			if( i >= this.dy*( this.field_size.x - 1 ) ){
-				if( torus ){
+				if( this.torus ){
 					add = -this.field_size.x * this.dy;
 				}
 				tr += add; r += add; br += add;
 			}
 
+			add = NaN;
 			// top border
 			if( i % this.dy == 0 ){
-				if( torus ){
+				if( this.torus ){
 					add = this.field_size.y;
 				}
 				tl += add; tm += add; tr += add;	
 			}
 			
+			add = NaN;
 			// bottom border
 			if( (i+1-this.field_size.y) % this.dy == 0 ){
-				if( torus ){
+				if( this.torus ){
 					add = -this.field_size.y;
 				}
 				bl += add; bm += add; br += add;
 			}
-			
-			return [ tl, l, bl, tm, bm, tr, r, br ]
+			if( !this.torus ){
+				return [ tl, l, bl, tm, bm, tr, r, br ].filter(isFinite)	
+			} else {
+				return [ tl, l, bl, tm, bm, tr, r, br ]
+			}
 		}
 		p2i ( p ){
 			return ( p[0] << this.Y_BITS ) + p[1]
@@ -391,10 +397,17 @@ var CPM = (function (exports) {
 	 *  and 3D grids. */
 
 	class Grid3D {
-		constructor( field_size ){
+		constructor( field_size, torus = true ){
 			this.field_size = { x : field_size[0],
 				y : field_size[1],
 				z : field_size[2] };
+			this.extents = field_size;
+			if( Array.isArray( torus ) ){
+				this.torus = torus;
+			} else {
+				this.torus = [torus, torus, torus];
+			}
+
 			// Check that the grid size is not too big to store pixel ID in 32-bit number,
 			// and allow fast conversion of coordinates to unique ID numbers.
 			this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
@@ -405,7 +418,6 @@ var CPM = (function (exports) {
 				throw("Field size too large -- field cannot be represented as 32-bit number")
 			}
 			
-			this.X_MASK = (1 << this.X_BITS)-1;
 			this.Y_MASK = (1 << this.Y_BITS)-1;
 			this.Z_MASK = (1 << this.Z_BITS)-1;
 
@@ -429,110 +441,41 @@ var CPM = (function (exports) {
 			return [i >> (this.Y_BITS + this.Z_BITS), 
 				( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 		}
-		neighi( i, torus = true ){
-		
-			const dy = this.dy, dz = this.dz;
-			const fsx = this.field_size.x, fsy = this.field_size.y, fsz = this.field_size.z;
-			
-			// normal computation of neighbor indices.
-			// first letter: U(upper), M(middle), B(bottom) layer
-			// second letter: l(left), m(middle), r(right)
-			// third letter: t(top), c(center), b(bottom)
-			
-			let Ult, Umt, Urt, Ulc, Umc, Urc, Ulb, Umb, Urb,
-				Mlt, Mmt, Mrt, Mlc, /*Mmc*/ Mrc, Mlb, Mmb, Mrb,
-				Blt, Bmt, Brt, Blc, Bmc, Brc, Blb, Bmb, Brb;
-			
-			Ult = i-1-dz-dy; Umt = i-1-dz; Urt = i-1-dz+dy;
-			Ulc = i-1-dy; Umc = i-1; Urc = i-1+dy;
-			Ulb = i-1+dz-dy; Umb = i-1+dz; Urb = i-1+dz+dy;
-			
-			Mlt = i-dz-dy; Mmt = i-dz; Mrt = i-dz+dy;
-			Mlc = i-dy; /*Mmc = i */ Mrc = i+dy;
-			Mlb = i+dz-dy; Mmb = i+dz; Mrb = i+dz+dy;
-			
-			Blt = i+1-dz-dy; Bmt = i+1-dz; Brt = i+1-dz+dy;
-			Blc = i+1-dy; Bmc = i+1; Brc = i+1+dy;
-			Blb = i+1+dz-dy; Bmb = i+1+dz; Brb = i+1+dz+dy;
-			
-			// Additions for up/down/left/right/front/back border "faces"
-			let add = NaN; // if torus is false, return NaN for all neighbors that cross
-			// the border.
-			
-			// back border
-			if( i < dz ){
-				if( torus ){
-					add = fsy*dz;
+		neighi( i ){
+			let p = this.i2p(i);
+
+			let xx = [];
+			for( let d = 0 ; d <= 2 ; d ++ ){
+				if( p[d] == 0 ){
+					if( this.torus[d] ){
+						xx[d] = [p[d],this.extents[d]-1,p[d]+1];
+					} else {
+						xx[d] = [p[d],p[d]+1];
+					}
+				} else if( p[d] == this.extents[d]-1 ){
+					if( this.torus[d] ){
+						xx[d] = [p[d],p[d]-1,0];
+					} else {
+						xx[d] = [p[d],p[d]-1];
+					}
+				} else {
+					xx[d] = [p[d],p[d]-1,p[d]+1];
 				}
-				Ult += add; Umt += add; Urt += add; 
-				Mlt += add; Mmt += add; Mrt += add;
-				Blt += add; Bmt += add; Brt += add;
 			}
-			
-			// front border
-			if( i >= dz*( fsy-1 ) ){
-				if( torus ){
-					add = -fsy*dz;
+
+			let r = [], first=true;
+			for( let x of xx[0] ){
+				for( let y of xx[1] ){
+					for( let z of xx[2] ){
+						if( first ){
+							first = false; 
+						} else {
+							r.push( this.p2i( [x,y,z] ) );
+						}
+					}
 				}
-				Ulb += add; Umb += add; Urb += add;
-				Mlb += add; Mmb += add; Mrb += add;
-				Blb += add; Bmb += add; Brb += add;		
 			}
-			
-			// left border
-			if( i%dz < dy ){
-				if( torus ){
-					add = fsx*dy;
-				}
-				Ult += add; Ulc += add; Ulb += add;
-				Mlt += add; Mlc += add; Mlb += add;
-				Blt += add; Blc += add; Blb += add;
-			}
-			
-			// right border
-			if( i%dz >= dy*( fsx-1 ) ){
-				if( torus ){
-					add = -fsx*dy;
-				}
-				Urt += add; Urc += add; Urb += add;
-				Mrt += add; Mrc += add; Mrb += add;
-				Brt += add; Brc += add; Brb += add;
-			}
-			
-			// upper border
-			if( ( i%dz )%dy == 0 ){
-				if( torus ){
-					add = fsz;
-				}
-				Ult += add; Umt += add; Urt += add;
-				Ulc += add; Umc += add;	Urc += add;
-				Ulb += add; Umb += add; Urb += add;
-			}
-			
-			// down border
-			if( ( i%dz )%dy == (fsz-1) ){
-				if( torus ){
-					add = -fsz;
-				}
-				Blt += add; Bmt += add; Brt += add;
-				Blc += add; Bmc += add; Brc += add;
-				Blb += add; Bmb += add; Brb += add;
-			}
-			
-			return [
-				Ult, Ulc, Ulb,
-				Umt, Umc, Umb,
-				Urt, Urc, Urb,
-				
-				Mlt, Mlc, Mlb,
-				Mmt, Mmb,
-				Mrt, Mrc, Mrb,
-				
-				Blt, Blc, Blb,
-				Bmt, Bmc, Bmb,
-				Brt, Brc, Brb		
-			
-			]
+			return r
 		}
 	}
 
@@ -544,6 +487,9 @@ var CPM = (function (exports) {
 		constructor( field_size, conf ){
 			let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
 			this.mt = new MersenneTwister( seed );
+			if( !("torus" in conf) ){
+				conf["torus"] = true;
+			}
 
 			// Attributes based on input parameters
 			this.ndim = field_size.length; // grid dimensions (2 or 3)
@@ -554,9 +500,9 @@ var CPM = (function (exports) {
 
 			// Some functions/attributes depend on ndim:
 			if( this.ndim == 2 ){
-				this.grid = new Grid2D(field_size);
+				this.grid = new Grid2D(field_size,conf.torus);
 			} else {
-				this.grid = new Grid3D(field_size);
+				this.grid = new Grid3D(field_size,conf.torus);
 			}
 			this.field_size = this.grid.field_size;
 
@@ -567,10 +513,10 @@ var CPM = (function (exports) {
 		
 			// track border pixels for speed (see also the DiceSet data structure)
 			this.cellborderpixels = new DiceSet( this.mt );
-			this.bgborderpixels = new DiceSet( this.mt ); 
 
 			// Attributes per pixel:
-			this.cellpixelstype = {};		// celltype (identity) of the current pixel.
+			// celltype (identity) of the current pixel.
+			this.cellpixelstype = new Uint16Array(this.grid.p2i(field_size));
 
 			// Attributes per cell:
 			this.cellvolume = [];			
@@ -580,6 +526,23 @@ var CPM = (function (exports) {
 			this.soft_constraints = [];
 			this.hard_constraints = [];
 		}
+
+		* cellPixels() {
+			for( let i = 0 ; i < this.cellpixelstype.length ; i ++ ){
+				if( this.cellpixelstype[i] != 0 ){
+					yield [this.grid.i2p(i),this.cellpixelstype[i]];
+				}
+			}
+		}
+
+		* cellBorderPixels() {
+			for( let i of this.cellborderpixels.elements ){
+				if( this.cellpixelstype[i] != 0 ){
+					yield [this.grid.i2p(i),this.cellpixelstype[i]];
+				}
+			}
+		}
+
 
 		addTerm( t ){
 			if( t.CONSTRAINT_TYPE == "soft" ){
@@ -628,15 +591,11 @@ var CPM = (function (exports) {
 
 		// returns both change in hamiltonian and perimeter
 		deltaH ( sourcei, targeti, src_type, tgt_type ){
-			const terms = this.soft_constraints;
-		
 			let r = 0.0;
-			for( let i = 0 ; i < terms.length ; i++ ){
-				r += terms[i]( sourcei, targeti, src_type, tgt_type );
+			for( let t of this.soft_constraints ){
+				r += t( sourcei, targeti, src_type, tgt_type );
 			}
-
-			return r 
-
+			return r
 		}
 		/* ------------- COPY ATTEMPTS --------------- */
 
@@ -654,38 +613,36 @@ var CPM = (function (exports) {
 
 				// This is the expected time (in MCS) you would expect it to take to
 				// randomly draw another border pixel.
-				delta_t += 1./(this.bgborderpixels.length + this.cellborderpixels.length);
+				delta_t += 1./(this.cellborderpixels.length);
 
+				// sample a random pixel that borders at least 1 cell of another type
+				const src_i = this.cellborderpixels.sample();
+			
+				const N = this.grid.neighi( src_i );
+				const tgt_i = N[this.ran(0,N.length-1)];
+			
+				const src_type = this.pixti( src_i );
+				const tgt_type = this.pixti( tgt_i );
 
-				let p1i;
-				// Randomly sample one of the CPM border pixels (the "source" (src)),
-				// and one of its neighbors (the "target" (tgt)).
-				if( this.ran( 0, this.bgborderpixels.length + this.cellborderpixels.length )
-					< this.bgborderpixels.length ){
-					p1i = this.bgborderpixels.sample();
-				} else {
-					p1i = this.cellborderpixels.sample();
-				}
-			
-				const N = this.grid.neighi( p1i );
-				const p2i = N[this.ran(0,N.length-1)];
-			
-				const src_type = this.pixti( p1i );
-				const tgt_type = this.pixti( p2i );
 
 				// only compute the Hamiltonian if source and target belong to a different cell,
 				// and do not allow a copy attempt into the stroma. Only continue if the copy attempt
 				// would result in a viable cell.
 				if( tgt_type >= 0 && src_type != tgt_type ){
-
-					const hamiltonian = this.deltaH( p1i, p2i, src_type, tgt_type );
-
-					// probabilistic success of copy attempt 
-					if( this.docopy( hamiltonian ) ){
-						this.setpixi( p2i, src_type );
+					let ok = true;
+					for( let h of this.hard_constraints ){
+						if( !h( src_i, tgt_i, src_type, tgt_type ) ){
+							ok = false; break
+						}
+					}
+					if( ok ){
+						const hamiltonian = this.deltaH( src_i, tgt_i, src_type, tgt_type );
+						// probabilistic success of copy attempt 
+						if( this.docopy( hamiltonian ) ){
+							this.setpixi( tgt_i, src_type );
+						}
 					}
 				}
-
 			}
 
 			this.time++; // update time with one MCS.
@@ -698,100 +655,95 @@ var CPM = (function (exports) {
 		}
 		/* Change the pixel at position p (coordinates) into cellid t. 
 		Update cell perimeters with Pup (optional parameter).*/
-		setpixi ( i, t ){
-			const t_old = this.cellpixelstype[i];
-			// Specific case: changing a pixel into background (t = 0) is done by delpix.
-			if( t == 0 ){
-				this.delpixi( i );
-			} else {
-				if( t_old > 0 ){
-					// also update volume of the old cell
-					// (unless it is background/stroma)
-					this.cellvolume[t_old] --;
-					
-					// if this was the last pixel belonging to this cell, 
-					// remove the cell altogether.
-					if( this.cellvolume[t_old] == 0 ){
-						delete this.cellvolume[t_old];
-						delete this.t2k[t_old];
-					}
+		setpixi ( i, t ){		
+			const t_old = this.pixti(i);
+			if( t_old > 0 ){
+				// also update volume of the old cell
+				// (unless it is background/stroma)
+				this.cellvolume[t_old] --;
+				
+				// if this was the last pixel belonging to this cell, 
+				// remove the cell altogether.
+				if( this.cellvolume[t_old] == 0 ){
+					delete this.cellvolume[t_old];
+					delete this.t2k[t_old];
 				}
-				// update volume of the new cell and cellid of the pixel.
-				this.cellpixelstype[i] = t;
+			}
+			// update volume of the new cell and cellid of the pixel.
+			this.cellpixelstype[i] = t;
+			if( t > 0 ){
 				this.cellvolume[t] ++;
 			}
-			this.updateborderneari( i );
+			this.updateborderneari( i, t_old, t );
 		}
 		setpix ( p, t ){
 			this.setpixi( this.grid.p2i(p), t );
 		}
-		/* Change pixel at coordinates p/index i into background (t=0) */
-		delpixi ( i ){
-			const t = this.cellpixelstype[i];
-
-			// Reduce cell volume.
-			this.cellvolume[t] --;
-
-			// remove this pixel from objects cellpixelsbirth / cellpixelstype
-			delete this.cellpixelstype[i];
-
-			// if this was the last pixel belonging to this cell, 
-			// remove the cell altogether.
-			if( this.cellvolume[t] == 0 ){
-				delete this.cellvolume[t];
-				delete this.t2k[t];
-			}
-
-		}
-
-		delpix ( p ){
-			this.delpixi( this.grid.p2i(p) );
-		}
 
 		/* Update border elements after a successful copy attempt. */
-		updateborderneari ( i ){
+		updateborderneari ( i, t_old, t_new ){
+			if( t_old == t_new ) return
+			
 			// neighborhood + pixel itself (in indices)
 			const Ni = this.grid.neighi(i);
-			Ni.push(i);
+			const Ti = Ni.map( j => this.pixti(j) );
+		
+			// first deal with i itself
+			let isborder = false, wasborder = false;
+			for( let k of Ti ){
+				if( k != t_new ){
+					isborder = true; if(wasborder) break
+				}
+				if( k != t_old ){
+					wasborder = true; if(isborder) break
+				}
+			}
+			if( isborder ){
+				if( !wasborder ){
+					this.cellborderpixels.insert( i );
+				}
+			} else if( wasborder ) {
+				this.cellborderpixels.remove( i );
+			}
+
 			
+			// then deal with i's neighbours
 			for( let j = 0 ; j < Ni.length ; j ++ ){
-
-				i = Ni[j];
-				const t = this.pixti( i );
-
-				// stroma pixels are not stored
-				if( t < 0 ) continue
-				let isborder = false;
-
-				// loop over neighborhood of the current pixel.
-				// if the pixel has any neighbors belonging to a different cell,
-				// it is a border pixel.			
-				const N = this.grid.neighi( Ni[j] );
-				for( let k = 0 ; k < N.length ; k ++ ){
-					if( this.pixti( N[k] ) != t ){
-						isborder = true; break
+				const i2 = Ni[j];
+				const t = Ti[j];
+				// different type from new pixel -> 
+				// must be a border now, no need to check further
+				if( t != t_new ){
+					// must have already been a border, unless 
+					// it had the same pixel type
+					if( t == t_old ){
+						let wasborder = false;
+						const N = this.grid.neighi( i2 );
+						for( let k = 0 ; k < N.length ; k ++ ){
+							if( (N[k] != i) && (this.pixti( N[k] ) != t) ){
+								wasborder = true; break
+							}
+						}
+						if( !wasborder ){
+							this.cellborderpixels.insert( i2 );
+						}
 					}
-				}
-
-				// if current pixel is background, it should not be part of
-				// cellborderpixels (only for celltypes > 0). Whether it
-				// should be part of bgborderpixels depends on isborder.
-				if( t == 0 ){
-					this.cellborderpixels.remove( i );
-					if( isborder ){
-						this.bgborderpixels.insert( i );
-					} else {
-						this.bgborderpixels.remove( i );
-					}
-				// if current pixel is from a cell, this works the other way around.
 				} else {
-					this.bgborderpixels.remove( i );
-					if( isborder ){
-						this.cellborderpixels.insert( i );
-					} else {
-						this.cellborderpixels.remove( i );
+					// same type as new pixel, 
+					// so must have been a border pixel before
+					// (because t_new != t_old).
+					// check if still a border, if not remove
+					let isborder = false;
+					const N = this.grid.neighi( i2 );
+					for( let k = 0 ; k < N.length ; k ++ ){
+						if( this.pixti( N[k] ) != t ){
+							isborder = true; break
+						}
 					}
-				}
+					if( !isborder ){
+						this.cellborderpixels.remove( i2 );
+					}
+				}	
 			}
 		}
 
@@ -885,8 +837,8 @@ var CPM = (function (exports) {
 			return this.ctx
 		},
 
-		i2p : function( i ){
-			var p = this.C.grid.i2p( i ), dim;
+		p2pdraw : function( p ){
+			var dim;
 			for( dim = 0; dim < p.length; dim++ ){
 				if( this.wrap[dim] != 0 ){
 					p[dim] = p[dim] % this.wrap[dim];
@@ -902,21 +854,24 @@ var CPM = (function (exports) {
 		outer pixels). If [kind] is negative, simply draw all borders. */
 		drawCellBorders : function( kind, col ){
 			col = col || "000000";
-			var p, pc, pu, pd, pl, pr, i, pdraw;
+			let pc, pu, pd, pl, pr, pdraw;
 			this.col( col );
 			this.ctx.fillStyle="#"+col;
 
 			// cst contains indices of pixels at the border of cells
-			var cst =  this.C.cellborderpixels.elements;
-			for( i = 0 ; i < cst.length ; i ++ ){
-				if( kind < 0 || this.C.cellKind(this.C.cellpixelstype[cst[i]]) == kind ){
-					p = this.C.i2p( cst[i] );
-					pdraw = this.i2p( cst[i] );
-					pc = this.C.pixt( [p[0],p[1],0] );
-					pr = this.C.pixt( [p[0]+1,p[1],0] );
-					pl = this.C.pixt( [p[0]-1,p[1],0] );		
-					pd = this.C.pixt( [p[0],p[1]+1,0] );
-					pu = this.C.pixt( [p[0],p[1]-1,0] );
+			for( let x of this.C.cellBorderPixels() ){
+				/* eslint-disable */
+				let p = x[0];
+				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+					pdraw = this.p2pdraw( p );
+
+
+					pc = this.C.pixt( [p[0],p[1]] );
+					pr = this.C.pixt( [p[0]+1,p[1]] );
+					pl = this.C.pixt( [p[0]-1,p[1]] );		
+					pd = this.C.pixt( [p[0],p[1]+1] );
+					pu = this.C.pixt( [p[0],p[1]-1] );
+
 					if( pc != pl  ){
 						this.pxdrawl( pdraw );
 					}
@@ -936,7 +891,6 @@ var CPM = (function (exports) {
 		/* Use to show activity values of the act model using a color gradient, for
 		cells in the grid of cellkind "kind". */
 		drawActivityValues : function( kind ){
-
 			// cst contains the pixel ids of all non-background/non-stroma cells in
 			// the grid. The function tohex is used to convert computed color gradients
 			// to the hex format.
@@ -964,14 +918,14 @@ var CPM = (function (exports) {
 				}
 			}
 		},
+
 		/* colors outer pixels of each cell */
 		drawOnCellBorders : function( col ){
 			col = col || "000000";
 			this.col( col );
 			this.ctx.fillStyle="#"+col;
-			var cst =  this.C.cellborderpixels.elements, i;
-			for( i = 0 ; i < cst.length ; i ++ ){
-				this.pxf( this.i2p( cst[i] ) );
+			for( let i of this.C.cellBorderPixels() ){
+				this.pxf( i[0] );
 			}
 		},
 
@@ -986,15 +940,13 @@ var CPM = (function (exports) {
 			}
 			// Object cst contains pixel index of all pixels belonging to non-background,
 			// non-stroma cells.
-			var cst = Object.keys( this.C.cellpixelstype ), i;
-			var cellpixelsbyid = {};
-			for( i = 0 ; i < cst.length ; i ++ ){
-				let cid = this.C.cellpixelstype[cst[i]];
-				if( this.C.cellKind(cid) == kind ){
-					if( !cellpixelsbyid[cid] ){
-						cellpixelsbyid[cid] = [];
+			let cellpixelsbyid = {};
+			for( let x of this.C.cellPixels() ){
+				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+					if( !cellpixelsbyid[x[1]] ){
+						cellpixelsbyid[x[1]] = [];
 					}
-					cellpixelsbyid[cid].push( cst[i] );
+					cellpixelsbyid[x[1]].push( x[0] );
 				}
 			}
 			for( let cid of Object.keys( cellpixelsbyid ) ){
@@ -1002,21 +954,8 @@ var CPM = (function (exports) {
 					this.col( col(cid) );
 				}
 				for( let cp of cellpixelsbyid[cid] ){
-					this.pxf( this.i2p( cp ) );
+					this.pxf( cp );
 				}
-			}
-		},
-
-		/* Draw all stroma pixels in color col (hex). */
-		drawStroma : function( col ){
-			col = col || "000000";
-			this.col( col );
-
-			// Loop over all stroma pixels. Object cst contains
-			// pixel index of all stroma pixels.
-			var cst = Object.keys( this.C.stromapixelstype ), i;
-			for( i = 0 ; i < cst.length ; i ++ ){
-				this.pxf( this.i2p( cst[i] ) );
 			}
 		},
 
@@ -1799,89 +1738,41 @@ var CPM = (function (exports) {
 
 	}
 
-	/** A class containing (mostly static) utility functions for dealing with 2D 
-	 *  and 3D grids. */
+	/* This class contains methods that should be executed once per monte carlo step.
+	   Examples are cell division, cell death etc.
+	 */
 
-	class Grid2D$1 {
-		constructor( field_size ){
-			this.field_size = field_size;
-			// Check that the grid size is not too big to store pixel ID in 32-bit number,
-			// and allow fast conversion of coordinates to unique ID numbers.
-			this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
-			this.Y_BITS = 1+Math.floor( Math.log2( this.field_size.y - 1 ) );
 
-			if( this.X_BITS + this.Y_BITS > 32 ){
-				throw("Field size too large -- field cannot be represented as 32-bit number")
-			}
-			
-			this.X_MASK = (1 << this.X_BITS)-1;
-			this.Y_MASK = (1 << this.Y_BITS)-1;
-
-			this.dy = 1 << this.Y_BITS; // for neighborhoods based on pixel index
-
-			this.midpoint = 			// middle pixel in the grid.
-				[ 	Math.round((this.field_size.x-1)/2),
-					Math.round((this.field_size.y-1)/2) ];
+	class GridInitializer {
+		constructor( C ){
+			this.C = C;
 		}
-
-		/*	Return array of indices of neighbor pixels of the pixel at 
-			index i. The separate 2D and 3D functions are called by
-			the wrapper function neighi, depending on this.ndim.
-
-		*/
-		neighi2D( i, torus = true ){
-		
-			// normal computation of neighbor indices (top left-middle-right, 
-			// left, right, bottom left-middle-right)
-			let tl, tm, tr, l, r, bl, bm, br;
-			
-			tl = i-1-this.dy; tm = i-1; tr = i-1+this.dy;
-			l = i-this.dy; r = i+this.dy;
-			bl = i+1-this.dy; bm = i+1; br = i+1+this.dy;
-			
-			// if pixel is part of one of the borders, adjust the 
-			// indices accordingly
-			let add = NaN; // if torus is false, return NaN for all neighbors that cross
-			// the border.
-			
-			// left border
-			if( i < this.field_size.y ){
-				if( torus ){
-					add = this.field_size.x * this.dy;
-				}
-				tl += add; l += add; bl += add; 	
-			}
-			
-			// right border
-			if( i >= this.dy*( this.field_size.x - 1 ) ){
-				if( torus ){
-					add = -this.field_size.x * this.dy;
-				}
-				tr += add; r += add; br += add;
-			}
-
-			// top border
-			if( i % this.dy == 0 ){
-				if( torus ){
-					add = this.field_size.y;
-				}
-				tl += add; tm += add; tr += add;	
-			}
-			
-			// bottom border
-			if( (i+1-this.field_size.y) % this.dy == 0 ){
-				if( torus ){
-					add = -this.field_size.y;
-				}
-				bl += add; bm += add; br += add;
-			}
-			
-			return [ tl, l, bl, tm, bm, tr, r, br ]
-
+		/* Seed a new cell of celltype "kind" onto position "p".*/
+		seedCellAt( kind, p ){
+			const newid = this.C.makeNewCellID( kind );
+			this.C.setpix( p, newid );
+			return newid
 		}
-	}
-
-	class Grid3D$1 {
+		seedCellsInCircle( kind, n, center, radius, max_attempts ){
+			if( !max_attempts ){
+				max_attempts = 10*n;
+			}
+			let C = this.C;
+			while( n > 0 ){
+				if( --max_attempts == 0 ){
+					throw("too many attempts to seed cells!")
+				}
+				let p = center.map( function(i){ return C.ran(Math.ceil(i-radius),Math.floor(i+radius)) } );
+				let d = 0;
+				for( let i = 0 ; i < p.length ; i ++ ){
+					d += (p[i]-center[i])*(p[i]-center[i]);
+				}
+				if( d < radius*radius ){
+					this.seedCellAt( kind, p );
+					n--;
+				}
+			}
+		}
 	}
 
 	/** 
@@ -1958,15 +1849,49 @@ var CPM = (function (exports) {
 		}
 	}
 
+	class HardConstraint {
+		get CONSTRAINT_TYPE() {
+			return "hard"
+		}
+		constructor( conf ){
+			this.conf = conf;
+		}
+		set CPM(C){
+			this.C = C;
+		}
+	}
+
+	/** 
+	 * Forbids that cells exceed or fall below a certain size range. 
+	 */
+
+	class HardVolumeRangeConstraint extends HardConstraint {
+		fulfilled( src_i, tgt_i, src_type, tgt_type ){
+			// volume gain of src cell
+			if( src_type != 0 && this.C.getVolume(src_type) + 1 > 
+				this.conf["LAMBDA_VRANGE_MAX"][this.C.cellKind(src_type)] ){
+				return false
+			}
+			// volume loss of tgt cell
+			if( tgt_type != 0 && this.C.getVolume(tgt_type) - 1 < 
+				this.conf["LAMBDA_VRANGE_MIN"][this.C.cellKind(tgt_type)] ){
+				return false
+			}
+			return true
+		}
+	}
+
 	exports.CPM = CPM;
 	exports.CPMChemotaxis = CPMChemotaxis;
 	exports.Stats = Stats;
 	exports.Canvas = Canvas;
 	exports.GridManipulator = GridManipulator;
-	exports.Grid2D = Grid2D$1;
-	exports.Grid3D = Grid3D$1;
+	exports.Grid2D = Grid2D;
+	exports.Grid3D = Grid3D;
 	exports.Adhesion = Adhesion;
 	exports.VolumeConstraint = VolumeConstraint;
+	exports.GridInitializer = GridInitializer;
+	exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 
 	return exports;
 
