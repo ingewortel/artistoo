@@ -77,32 +77,51 @@ DiceSet.prototype = {
 	}
 };
 
+class Grid {
+	constructor( field_size, torus = true ){
+		this.extents = field_size;
+		this.torus = torus;
+		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
+		this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) );
+		this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
+		this.Y_MASK = (1 << this.Y_BITS)-1;
+		this.dy = 1 << this.Y_BITS; // for neighborhoods based on pixel index
+	}
+
+	setpixi( i, t ){
+		this._pixels[i] = t;
+	}
+	pixti( i ){
+		return this._pixels[i]
+	}
+
+	* pixels() {
+		for( let i = 0 ; i < this._pixels.length ; i ++ ){
+			if( this._pixels[i] != 0 ){
+				yield [this.i2p(i),this._pixels[i]];
+			}
+		}
+	}
+}
+
 /** A class containing (mostly static) utility functions for dealing with 2D 
  *  and 3D grids. */
 
-class Grid2D {
-	constructor( field_size, torus = true ){
+class Grid2D extends Grid {
+	constructor( field_size, torus=true ){
+		super( field_size, torus );
 		this.field_size = { x : field_size[0], y : field_size[1] };
-		this.extents = field_size;
-		this.torus = torus;
-		
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
-		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
-		this.Y_BITS = 1+Math.floor( Math.log2( this.field_size.y - 1 ) );
-
 		if( this.X_BITS + this.Y_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
-		
-		this.Y_MASK = (1 << this.Y_BITS)-1;
-
-		this.dy = 1 << this.Y_BITS; // for neighborhoods based on pixel index
-
-		this.midpoint = 			// middle pixel in the grid.
-			[ 	Math.round((this.field_size.x-1)/2),
-				Math.round((this.field_size.y-1)/2) ];
+		// Attributes per pixel:
+		// celltype (identity) of the current pixel.
+		this._pixels = new Uint16Array(this.p2i(field_size));
 	}
+
+
 
 	/*	Return array of indices of neighbor pixels of the pixel at 
 		index i. The separate 2D and 3D functions are called by
@@ -208,38 +227,21 @@ class Grid2D {
 /** A class containing (mostly static) utility functions for dealing with 2D 
  *  and 3D grids. */
 
-class Grid3D {
+class Grid3D extends Grid {
 	constructor( field_size, torus = true ){
+		super( field_size, torus );
 		this.field_size = { x : field_size[0],
 			y : field_size[1],
 			z : field_size[2] };
-		this.extents = field_size;
-		if( Array.isArray( torus ) ){
-			this.torus = torus;
-		} else {
-			this.torus = [torus, torus, torus];
-		}
-
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
-		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) );
-		this.Y_BITS = 1+Math.floor( Math.log2( this.field_size.y - 1 ) );
 		this.Z_BITS = 1+Math.floor( Math.log2( this.field_size.z - 1 ) );
-
 		if( this.X_BITS + this.Y_BITS + this.Z_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
-		
-		this.Y_MASK = (1 << this.Y_BITS)-1;
 		this.Z_MASK = (1 << this.Z_BITS)-1;
-
-		this.dy = 1 << this.Y_BITS; // for neighborhoods based on pixel index
 		this.dz = 1 << ( this.Y_BITS + this.Z_BITS );
-
-		this.midpoint = 
-			[	Math.round((this.field_size.x-1)/2),
-				Math.round((this.field_size.y-1)/2),
-				Math.round((this.field_size.z-1)/2) ];
+		this._pixels = new Uint16Array(this.p2i(field_size));
 	}
 	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
 		Depending on this.ndim, the 2D or 3D version will be used by the 
@@ -259,13 +261,13 @@ class Grid3D {
 		let xx = [];
 		for( let d = 0 ; d <= 2 ; d ++ ){
 			if( p[d] == 0 ){
-				if( this.torus[d] ){
+				if( this.torus ){
 					xx[d] = [p[d],this.extents[d]-1,p[d]+1];
 				} else {
 					xx[d] = [p[d],p[d]+1];
 				}
 			} else if( p[d] == this.extents[d]-1 ){
-				if( this.torus[d] ){
+				if( this.torus ){
 					xx[d] = [p[d],p[d]-1,0];
 				} else {
 					xx[d] = [p[d],p[d]-1];
@@ -317,6 +319,8 @@ class CPM {
 			this.grid = new Grid3D(field_size,conf.torus);
 		}
 		this.field_size = this.grid.field_size;
+		this.cellPixels = this.grid.pixels.bind(this.grid);
+		this.pixti = this.grid.pixti.bind(this.grid);
 
 		// Attributes of the current CPM as a whole:
 		this.nNeigh = this.grid.neighi(0).length; 	// neighbors per pixel (depends on ndim)
@@ -325,10 +329,6 @@ class CPM {
 	
 		// track border pixels for speed (see also the DiceSet data structure)
 		this.cellborderpixels = new DiceSet( this.mt );
-
-		// Attributes per pixel:
-		// celltype (identity) of the current pixel.
-		this.cellpixelstype = new Uint16Array(this.grid.p2i(field_size));
 
 		// Attributes per cell:
 		this.cellvolume = [];			
@@ -339,22 +339,14 @@ class CPM {
 		this.hard_constraints = [];
 	}
 
-	* cellPixels() {
-		for( let i = 0 ; i < this.cellpixelstype.length ; i ++ ){
-			if( this.cellpixelstype[i] != 0 ){
-				yield [this.grid.i2p(i),this.cellpixelstype[i]];
-			}
-		}
-	}
-
 	* cellBorderPixels() {
 		for( let i of this.cellborderpixels.elements ){
-			if( this.cellpixelstype[i] != 0 ){
-				yield [this.grid.i2p(i),this.cellpixelstype[i]];
+			const t = this.grid.pixt(i);
+			if( t != 0 ){
+				yield [this.grid.i2p(i),t];
 			}
 		}
 	}
-
 
 	addTerm( t ){
 		if( t.CONSTRAINT_TYPE == "soft" ){
@@ -368,10 +360,7 @@ class CPM {
 
 	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
 	pixt( p ){
-		return this.pixti( this.grid.p2i(p) )
-	}
-	pixti( i ){
-		return this.cellpixelstype[i] || 0
+		return this.grid.pixti( this.grid.p2i(p) )
 	}
 
 	/* Get volume, or cellkind of the cell with type (identity) t */ 
@@ -433,8 +422,8 @@ class CPM {
 			const N = this.grid.neighi( src_i );
 			const tgt_i = N[this.ran(0,N.length-1)];
 		
-			const src_type = this.pixti( src_i );
-			const tgt_type = this.pixti( tgt_i );
+			const src_type = this.grid.pixti( src_i );
+			const tgt_type = this.grid.pixti( tgt_i );
 
 
 			// only compute the Hamiltonian if source and target belong to a different cell,
@@ -468,7 +457,7 @@ class CPM {
 	/* Change the pixel at position p (coordinates) into cellid t. 
 	Update cell perimeters with Pup (optional parameter).*/
 	setpixi ( i, t ){		
-		const t_old = this.pixti(i);
+		const t_old = this.grid.pixti(i);
 		if( t_old > 0 ){
 			// also update volume of the old cell
 			// (unless it is background/stroma)
@@ -482,7 +471,7 @@ class CPM {
 			}
 		}
 		// update volume of the new cell and cellid of the pixel.
-		this.cellpixelstype[i] = t;
+		this.grid.setpixi(i,t);
 		if( t > 0 ){
 			this.cellvolume[t] ++;
 		}
@@ -498,7 +487,7 @@ class CPM {
 		
 		// neighborhood + pixel itself (in indices)
 		const Ni = this.grid.neighi(i);
-		const Ti = Ni.map( j => this.pixti(j) );
+		const Ti = Ni.map( j => this.grid.pixti(j) );
 	
 		// first deal with i itself
 		let isborder = false, wasborder = false;
@@ -532,7 +521,7 @@ class CPM {
 					let wasborder = false;
 					const N = this.grid.neighi( i2 );
 					for( let k = 0 ; k < N.length ; k ++ ){
-						if( (N[k] != i) && (this.pixti( N[k] ) != t) ){
+						if( (N[k] != i) && (this.grid.pixti( N[k] ) != t) ){
 							wasborder = true; break
 						}
 					}
@@ -548,7 +537,7 @@ class CPM {
 				let isborder = false;
 				const N = this.grid.neighi( i2 );
 				for( let k = 0 ; k < N.length ; k ++ ){
-					if( this.pixti( N[k] ) != t ){
+					if( this.grid.pixti( N[k] ) != t ){
 						isborder = true; break
 					}
 				}

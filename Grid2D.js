@@ -1,29 +1,23 @@
 /** A class containing (mostly static) utility functions for dealing with 2D 
  *  and 3D grids. */
 
-class Grid2D {
-	constructor( field_size, torus = true ){
+import Grid from "./Grid.js"
+
+class Grid2D extends Grid {
+	constructor( field_size, torus=true ){
+		super( field_size, torus )
 		this.field_size = { x : field_size[0], y : field_size[1] }
-		this.extents = field_size
-		this.torus = torus
-		
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
-		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) )
-		this.Y_BITS = 1+Math.floor( Math.log2( this.field_size.y - 1 ) )
-
 		if( this.X_BITS + this.Y_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
-		
-		this.Y_MASK = (1 << this.Y_BITS)-1
-
-		this.dy = 1 << this.Y_BITS // for neighborhoods based on pixel index
-
-		this.midpoint = 			// middle pixel in the grid.
-			[ 	Math.round((this.field_size.x-1)/2),
-				Math.round((this.field_size.y-1)/2) ]
+		// Attributes per pixel:
+		// celltype (identity) of the current pixel.
+		this._pixels = new Uint16Array(this.p2i(field_size))
 	}
+
+
 
 	/*	Return array of indices of neighbor pixels of the pixel at 
 		index i. The separate 2D and 3D functions are called by

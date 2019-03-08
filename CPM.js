@@ -31,6 +31,8 @@ class CPM {
 			this.grid = new Grid3D(field_size,conf.torus)
 		}
 		this.field_size = this.grid.field_size
+		this.cellPixels = this.grid.pixels.bind(this.grid)
+		this.pixti = this.grid.pixti.bind(this.grid)
 
 		// Attributes of the current CPM as a whole:
 		this.nNeigh = this.grid.neighi(0).length 	// neighbors per pixel (depends on ndim)
@@ -39,10 +41,6 @@ class CPM {
 	
 		// track border pixels for speed (see also the DiceSet data structure)
 		this.cellborderpixels = new DiceSet( this.mt )
-
-		// Attributes per pixel:
-		// celltype (identity) of the current pixel.
-		this.cellpixelstype = new Uint16Array(this.grid.p2i(field_size))
 
 		// Attributes per cell:
 		this.cellvolume = []			
@@ -53,22 +51,14 @@ class CPM {
 		this.hard_constraints = []
 	}
 
-	* cellPixels() {
-		for( let i = 0 ; i < this.cellpixelstype.length ; i ++ ){
-			if( this.cellpixelstype[i] != 0 ){
-				yield [this.grid.i2p(i),this.cellpixelstype[i]]
-			}
-		}
-	}
-
 	* cellBorderPixels() {
 		for( let i of this.cellborderpixels.elements ){
-			if( this.cellpixelstype[i] != 0 ){
-				yield [this.grid.i2p(i),this.cellpixelstype[i]]
+			const t = this.grid.pixt(i)
+			if( t != 0 ){
+				yield [this.grid.i2p(i),t]
 			}
 		}
 	}
-
 
 	addTerm( t ){
 		if( t.CONSTRAINT_TYPE == "soft" ){
@@ -82,10 +72,7 @@ class CPM {
 
 	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
 	pixt( p ){
-		return this.pixti( this.grid.p2i(p) )
-	}
-	pixti( i ){
-		return this.cellpixelstype[i] || 0
+		return this.grid.pixti( this.grid.p2i(p) )
 	}
 
 	/* Get volume, or cellkind of the cell with type (identity) t */ 
@@ -147,8 +134,8 @@ class CPM {
 			const N = this.grid.neighi( src_i )
 			const tgt_i = N[this.ran(0,N.length-1)]
 		
-			const src_type = this.pixti( src_i )
-			const tgt_type = this.pixti( tgt_i )
+			const src_type = this.grid.pixti( src_i )
+			const tgt_type = this.grid.pixti( tgt_i )
 
 
 			// only compute the Hamiltonian if source and target belong to a different cell,
@@ -182,7 +169,7 @@ class CPM {
 	/* Change the pixel at position p (coordinates) into cellid t. 
 	Update cell perimeters with Pup (optional parameter).*/
 	setpixi ( i, t ){		
-		const t_old = this.pixti(i)
+		const t_old = this.grid.pixti(i)
 		if( t_old > 0 ){
 			// also update volume of the old cell
 			// (unless it is background/stroma)
@@ -196,7 +183,7 @@ class CPM {
 			}
 		}
 		// update volume of the new cell and cellid of the pixel.
-		this.cellpixelstype[i] = t
+		this.grid.setpixi(i,t)
 		if( t > 0 ){
 			this.cellvolume[t] ++
 		}
@@ -212,7 +199,7 @@ class CPM {
 		
 		// neighborhood + pixel itself (in indices)
 		const Ni = this.grid.neighi(i)
-		const Ti = Ni.map( j => this.pixti(j) )
+		const Ti = Ni.map( j => this.grid.pixti(j) )
 	
 		// first deal with i itself
 		let isborder = false, wasborder = false
@@ -246,7 +233,7 @@ class CPM {
 					let wasborder = false
 					const N = this.grid.neighi( i2 )
 					for( let k = 0 ; k < N.length ; k ++ ){
-						if( (N[k] != i) && (this.pixti( N[k] ) != t) ){
+						if( (N[k] != i) && (this.grid.pixti( N[k] ) != t) ){
 							wasborder = true; break
 						}
 					}
@@ -262,7 +249,7 @@ class CPM {
 				let isborder = false
 				const N = this.grid.neighi( i2 )
 				for( let k = 0 ; k < N.length ; k ++ ){
-					if( this.pixti( N[k] ) != t ){
+					if( this.grid.pixti( N[k] ) != t ){
 						isborder = true; break
 					}
 				}

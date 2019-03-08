@@ -1,38 +1,23 @@
 /** A class containing (mostly static) utility functions for dealing with 2D 
  *  and 3D grids. */
 
-class Grid3D {
+import Grid from "./Grid.js"
+
+class Grid3D extends Grid {
 	constructor( field_size, torus = true ){
+		super( field_size, torus )
 		this.field_size = { x : field_size[0],
 			y : field_size[1],
 			z : field_size[2] }
-		this.extents = field_size
-		if( Array.isArray( torus ) ){
-			this.torus = torus
-		} else {
-			this.torus = [torus, torus, torus]
-		}
-
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
-		this.X_BITS = 1+Math.floor( Math.log2( this.field_size.x - 1 ) )
-		this.Y_BITS = 1+Math.floor( Math.log2( this.field_size.y - 1 ) )
 		this.Z_BITS = 1+Math.floor( Math.log2( this.field_size.z - 1 ) )
-
 		if( this.X_BITS + this.Y_BITS + this.Z_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
-		
-		this.Y_MASK = (1 << this.Y_BITS)-1
 		this.Z_MASK = (1 << this.Z_BITS)-1
-
-		this.dy = 1 << this.Y_BITS // for neighborhoods based on pixel index
 		this.dz = 1 << ( this.Y_BITS + this.Z_BITS )
-
-		this.midpoint = 
-			[	Math.round((this.field_size.x-1)/2),
-				Math.round((this.field_size.y-1)/2),
-				Math.round((this.field_size.z-1)/2) ]
+		this._pixels = new Uint16Array(this.p2i(field_size))
 	}
 	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
 		Depending on this.ndim, the 2D or 3D version will be used by the 
@@ -52,13 +37,13 @@ class Grid3D {
 		let xx = []
 		for( let d = 0 ; d <= 2 ; d ++ ){
 			if( p[d] == 0 ){
-				if( this.torus[d] ){
+				if( this.torus ){
 					xx[d] = [p[d],this.extents[d]-1,p[d]+1]
 				} else {
 					xx[d] = [p[d],p[d]+1]
 				}
 			} else if( p[d] == this.extents[d]-1 ){
-				if( this.torus[d] ){
+				if( this.torus ){
 					xx[d] = [p[d],p[d]-1,0]
 				} else {
 					xx[d] = [p[d],p[d]-1]
@@ -67,7 +52,6 @@ class Grid3D {
 				xx[d] = [p[d],p[d]-1,p[d]+1]
 			}
 		}
-
 		let r = [], first=true
 		for( let x of xx[0] ){
 			for( let y of xx[1] ){
