@@ -5,6 +5,8 @@ yyyy-mm-dd Your Name <your@email.com>
 
 2019-03-08 Johannes Textor <johannes.textor@gmx.de>
 	* CPM.js : added listener stubs for pixel changes and MCS termination
+	* TestLogger.js : new file for simple logging of events, to check if
+	this works
 
 
 2019-03-08 Inge Wortel <ingewortel@gmail.com>
