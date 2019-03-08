@@ -184,7 +184,6 @@ class Grid2D extends Grid {
 			tl += add; l += add; bl += add; 	
 		}
 		
-		add = NaN;
 		// right border
 		if( i >= this.dy*( this.field_size.x - 1 ) ){
 			if( this.torus ){
@@ -193,7 +192,6 @@ class Grid2D extends Grid {
 			tr += add; r += add; br += add;
 		}
 
-		add = NaN;
 		// top border
 		if( i % this.dy == 0 ){
 			if( this.torus ){
@@ -202,7 +200,6 @@ class Grid2D extends Grid {
 			tl += add; tm += add; tr += add;	
 		}
 		
-		add = NaN;
 		// bottom border
 		if( (i+1-this.field_size.y) % this.dy == 0 ){
 			if( this.torus ){
@@ -1612,11 +1609,7 @@ class GridInitializer {
 	}
 }
 
-/** 
- * Implements the adhesion constraint of Potts models. 
- */
-
-class Adhesion {
+class SoftConstraint {
 	get CONSTRAINT_TYPE() {
 		return "soft"
 	}
@@ -1626,6 +1619,17 @@ class Adhesion {
 	set CPM(C){
 		this.C = C;
 	}
+	// eslint-disable-next-line no-unused-vars
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
+		throw("You need to implement the 'deltaH' method for this constraint!")
+	}
+}
+
+/** 
+ * Implements the adhesion constraint of Potts models. 
+ */
+
+class Adhesion extends SoftConstraint {
 	/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
 	J( t1, t2 ){
 		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
@@ -1652,16 +1656,7 @@ class Adhesion {
  * Implements the adhesion constraint of Potts models. 
  */
 
-class VolumeConstraint {
-	get CONSTRAINT_TYPE() {
-		return "soft"
-	}
-	constructor( conf ){
-		this.conf = conf;
-	}
-	set CPM(C){
-		this.C = C;
-	}
+class VolumeConstraint extends SoftConstraint {
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		// volume gain of src cell
 		let deltaH = this.volconstraint( 1, src_type ) - 
@@ -1695,6 +1690,10 @@ class HardConstraint {
 	}
 	set CPM(C){
 		this.C = C;
+	}
+	// eslint-disable-next-line no-unused-vars
+	fulfilled( src_i, tgt_i, src_type, tgt_type ){
+		throw("You need to implement the 'fulfilled' method for this constraint!")
 	}
 }
 

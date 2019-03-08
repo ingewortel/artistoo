@@ -9,6 +9,7 @@ class HardConstraint {
 	set CPM(C){
 		this.C = C
 	}
+	// eslint-disable-next-line no-unused-vars
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 		throw("You need to implement the 'fulfilled' method for this constraint!")
 	}
