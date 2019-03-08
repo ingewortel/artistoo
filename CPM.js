@@ -76,6 +76,9 @@ class CPM {
 			this.after_mcs_listeners.push( t.afterMCSListener.bind(t) )
 		}
 		t.CPM = this
+		if( typeof t["postAddition"] === "function" ){
+			t.postAddition()
+		}
 	}
 
 	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */

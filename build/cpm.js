@@ -584,6 +584,9 @@ var CPM = (function (exports) {
 				this.after_mcs_listeners.push( t.afterMCSListener.bind(t) );
 			}
 			t.CPM = this;
+			if( typeof t["postAddition"] === "function" ){
+				t.postAddition();
+			}
 		}
 
 		/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
@@ -1971,6 +1974,57 @@ var CPM = (function (exports) {
 		}
 	}
 
+	/** 
+	 * Implements the adhesion constraint of Potts models. 
+	 */
+
+	class PerimeterConstraint extends SoftConstraint {
+		constructor( conf ){
+			super( conf );
+		}
+		determinePerimeter( i, t_old, t ){
+			const Ni = this.C.grid.neighi( i );
+			let n = 0;
+			for( let i = 0 ; i < Ni.length ; i ++  ){
+				const nt = this.C.grid.pixti(Ni[i]);
+				console.log( nt );
+				if( nt != t ){
+					n ++; 
+				}
+				if( nt != 0 ){
+					if( nt != t && nt == t_old ){
+						this.cellperimetersperpixel[Ni[i]] ++;
+					}
+					if( nt == t && nt != t_old ){
+						this.cellperimetersperpixel[Ni[i]] --;
+					}
+				}
+			}
+			this.cellperimetersperpixel[i] = n;
+		}
+		postAddition(){
+			this.cellperimetersperpixel = new Uint16Array(this.C.grid.p2i(this.C.grid.extents));
+			this.cellperimeters = {};
+		}
+		afterMCSListener( ){
+			// eslint-disable-next-line
+			console.log( this.cellperimetersperpixel.length );
+			for( let i = 0 ; i < this.cellperimetersperpixel.length ; i ++ ){
+				if( this.cellperimetersperpixel[i] > 0 ){
+					// eslint-disable-next-line
+					console.log( i, this.cellperimetersperpixel[i] );
+				}
+			}
+		}
+		setpixListener( i, t_old, t ){
+			// eslint-disable-next-line
+			this.determinePerimeter( i, t_old, t );
+		}
+		deltaH( sourcei, targeti, src_type, tgt_type ){
+			return 0*sourcei + 0*targeti  + 0*src_type + 0*tgt_type
+		}
+	}
+
 	exports.CPM = CPM;
 	exports.CPMChemotaxis = CPMChemotaxis;
 	exports.Stats = Stats;
@@ -1983,6 +2037,7 @@ var CPM = (function (exports) {
 	exports.GridInitializer = GridInitializer;
 	exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 	exports.TestLogger = HardVolumeRangeConstraint$1;
+	exports.PerimeterConstraint = PerimeterConstraint;
 
 	return exports;
 
