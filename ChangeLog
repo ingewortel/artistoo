@@ -10,4 +10,4 @@ yyyy-mm-dd Your Name <your@email.com>
 	* hamiltonian/SoftConstraint.js ( deltaH ) : Disabled eslint error on unused variables
 	for this method. 
 	* hamiltonian/HardConstraint.js ( fulfilled ): Disabled eslint error on unused variables
-	for this method. 
+	for this  method. 
