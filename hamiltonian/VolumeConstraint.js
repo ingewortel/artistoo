@@ -2,16 +2,9 @@
  * Implements the adhesion constraint of Potts models. 
  */
 
-class VolumeConstraint {
-	get CONSTRAINT_TYPE() {
-		return "soft"
-	}
-	constructor( conf ){
-		this.conf = conf
-	}
-	set CPM(C){
-		this.C = C
-	}
+import SoftConstraint from "./SoftConstraint.js"
+
+class VolumeConstraint extends SoftConstraint {
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		// volume gain of src cell
 		let deltaH = this.volconstraint( 1, src_type ) - 

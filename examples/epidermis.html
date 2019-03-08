@@ -5,14 +5,14 @@
 <script>
 "use strict"
 
-let C, zoom=1, Cim, cid=0, w=500, meter, t = 0
+let C, zoom=1, Cim, cid=0, w=600, meter, t = 0
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "CCCCCC" )
 
 	// Draw cell borders 
-	Cim.drawCellBorders(1,"000000")
+	Cim.drawOnCellBorders("000000")
 }
 
 function timestep(){
@@ -40,7 +40,7 @@ function seedGrid(){
 
 function initialize(){
 	// Create a new CPM, canvas, and stats object
-	C = new CPM.CPM( [2*w,w], {
+	C = new CPM.CPM( [w,w], {
 		torus : true,
 		seed : 1,
 		LAMBDA_CONNECTIVITY : [0,0],

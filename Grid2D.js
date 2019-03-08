@@ -80,7 +80,6 @@ class Grid2D extends Grid {
 			tl += add; l += add; bl += add 	
 		}
 		
-		add = NaN
 		// right border
 		if( i >= this.dy*( this.field_size.x - 1 ) ){
 			if( this.torus ){
@@ -89,7 +88,6 @@ class Grid2D extends Grid {
 			tr += add; r += add; br += add
 		}
 
-		add = NaN
 		// top border
 		if( i % this.dy == 0 ){
 			if( this.torus ){
@@ -98,7 +96,6 @@ class Grid2D extends Grid {
 			tl += add; tm += add; tr += add	
 		}
 		
-		add = NaN
 		// bottom border
 		if( (i+1-this.field_size.y) % this.dy == 0 ){
 			if( this.torus ){

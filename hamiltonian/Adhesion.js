@@ -2,16 +2,9 @@
  * Implements the adhesion constraint of Potts models. 
  */
 
-class Adhesion {
-	get CONSTRAINT_TYPE() {
-		return "soft"
-	}
-	constructor( conf ){
-		this.conf = conf
-	}
-	set CPM(C){
-		this.C = C
-	}
+import SoftConstraint from "./SoftConstraint.js"
+
+class Adhesion extends SoftConstraint {
 	/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
 	J( t1, t2 ){
 		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]

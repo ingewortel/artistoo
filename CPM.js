@@ -53,7 +53,7 @@ class CPM {
 
 	* cellBorderPixels() {
 		for( let i of this.cellborderpixels.elements ){
-			const t = this.grid.pixt(i)
+			const t = this.pixt(i)
 			if( t != 0 ){
 				yield [this.grid.i2p(i),t]
 			}

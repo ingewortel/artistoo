@@ -9,6 +9,9 @@ class HardConstraint {
 	set CPM(C){
 		this.C = C
 	}
+	fulfilled( src_i, tgt_i, src_type, tgt_type ){
+		throw("You need to implement the 'fulfilled' method for this constraint!")
+	}
 }
 
 export default HardConstraint

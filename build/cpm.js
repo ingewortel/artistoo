@@ -500,7 +500,6 @@ var CPM = (function (exports) {
 					xx[d] = [p[d],p[d]-1,p[d]+1];
 				}
 			}
-
 			let r = [], first=true;
 			for( let x of xx[0] ){
 				for( let y of xx[1] ){
@@ -565,7 +564,7 @@ var CPM = (function (exports) {
 
 		* cellBorderPixels() {
 			for( let i of this.cellborderpixels.elements ){
-				const t = this.grid.pixt(i);
+				const t = this.pixt(i);
 				if( t != 0 ){
 					yield [this.grid.i2p(i),t];
 				}
