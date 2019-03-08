@@ -1,0 +1,13 @@
+### CHANGELOG FORMAT:
+yyyy-mm-dd Your Name <your@email.com>
+	* file ( method in file ) : changes.
+###
+
+2019-03-08 Inge Wortel <ingewortel@gmail.com>
+	* Makefile : changed call to rollup to a direct call to the rollup binary in 
+	node_modules, so it doesn't require a global install.
+	* hamiltonian/SoftConstraint.js : fixed typo in filename. 
+	* hamiltonian/SoftConstraint.js ( deltaH ) : Disabled eslint error on unused variables
+	for this method. 
+	* hamiltonian/HardConstraint.js ( fulfilled ): Disabled eslint error on unused variables
+	for this method. 
