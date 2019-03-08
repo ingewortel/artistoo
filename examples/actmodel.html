@@ -6,13 +6,16 @@
 <script>
 "use strict"
 
-let C, zoom=1, Cim, cid=0, w=200, meter
+let C, zoom=2, Cim, cid=0, w=200, meter
+let A = new CPM.ActivityConstraint( { MAX_ACT : [0,10],
+		LAMBDA_ACT: [0,100], ACT_MEAN: "geometric" } )
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "FFFFFF" )
 	// The cell in red
 	Cim.drawCells( 1, "AA0000" )
+	Cim.drawActivityValues( 1, A )
 }
 
 function timestep(){
@@ -31,9 +34,11 @@ function initialize(){
 		T : 10
 	})
 
-	C.addTerm( new CPM.VolumeConstraint( { V: [0,100], 
+	C.addTerm( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,5] } ) )
 	C.addTerm( new CPM.Adhesion( { J: [[0,10], [10,0]] } ) )
+	C.addTerm( A )
+
 
 
 	let cid = C.makeNewCellID(1)
