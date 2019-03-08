@@ -557,6 +557,8 @@ var CPM = (function (exports) {
 
 			this.soft_constraints = [];
 			this.hard_constraints = [];
+			this.setpix_listeners = [];
+			this.after_mcs_listeners = [];
 		}
 
 		* cellBorderPixels() {
@@ -574,6 +576,12 @@ var CPM = (function (exports) {
 			}
 			if( t.CONSTRAINT_TYPE == "hard" ){
 				this.hard_constraints.push( t.fulfilled.bind(t) );
+			}
+			if( typeof t["setpixListener"] === "function" ){
+				this.setpix_listeners.push( t.setpixListener.bind(t) );
+			}
+			if( typeof t["afterMCSListener"] === "function" ){
+				this.after_mcs_listeners.push( t.afterMCSListener.bind(t) );
 			}
 			t.CPM = this;
 		}
@@ -665,8 +673,10 @@ var CPM = (function (exports) {
 					}
 				}
 			}
-
 			this.time++; // update time with one MCS.
+			for( let l of this.after_mcs_listeners ){
+				l();
+			}
 		}	
 
 		/* Determine whether copy attempt will succeed depending on deltaH (stochastic). */
@@ -696,6 +706,9 @@ var CPM = (function (exports) {
 				this.cellvolume[t] ++;
 			}
 			this.updateborderneari( i, t_old, t );
+			for( let l of this.setpix_listeners ){
+				l( i, t_old, t );
+			}
 		}
 		setpix ( p, t ){
 			this.setpixi( this.grid.p2i(p), t );
@@ -1941,6 +1954,23 @@ var CPM = (function (exports) {
 		}
 	}
 
+	/** 
+	 * Forbids that cells exceed or fall below a certain size range. 
+	 */
+
+	class HardVolumeRangeConstraint$1 extends HardConstraint {	
+		get CONSTRAINT_TYPE() {
+			return "none"
+		}
+		/* eslint-disable */
+		setpixListener( i, t_old, t ){
+			console.log( i, t_old, t );
+		}
+		afterMCSListener( ){
+			console.log( "the time is now: ", this.C.time );
+		}
+	}
+
 	exports.CPM = CPM;
 	exports.CPMChemotaxis = CPMChemotaxis;
 	exports.Stats = Stats;
@@ -1952,6 +1982,7 @@ var CPM = (function (exports) {
 	exports.VolumeConstraint = VolumeConstraint;
 	exports.GridInitializer = GridInitializer;
 	exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
+	exports.TestLogger = HardVolumeRangeConstraint$1;
 
 	return exports;
 

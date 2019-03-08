@@ -9,6 +9,7 @@ C = new CPM.CPM( [w, w, 2], {
 	torus: false
 })
 C.addTerm( new CPM.HardVolumeRangeConstraint( C.conf ) )
+C.addTerm( new CPM.TestLogger( C.conf ) )
 let Ci = new CPM.GridInitializer( C )
 Ci.seedCellAt( 1, [C.field_size.x/2,C.field_size.y/2,C.field_size.z/2] )	
 

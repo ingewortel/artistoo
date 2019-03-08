@@ -49,6 +49,8 @@ class CPM {
 
 		this.soft_constraints = []
 		this.hard_constraints = []
+		this.setpix_listeners = []
+		this.after_mcs_listeners = []
 	}
 
 	* cellBorderPixels() {
@@ -66,6 +68,12 @@ class CPM {
 		}
 		if( t.CONSTRAINT_TYPE == "hard" ){
 			this.hard_constraints.push( t.fulfilled.bind(t) )
+		}
+		if( typeof t["setpixListener"] === "function" ){
+			this.setpix_listeners.push( t.setpixListener.bind(t) )
+		}
+		if( typeof t["afterMCSListener"] === "function" ){
+			this.after_mcs_listeners.push( t.afterMCSListener.bind(t) )
 		}
 		t.CPM = this
 	}
@@ -157,8 +165,10 @@ class CPM {
 				}
 			}
 		}
-
 		this.time++ // update time with one MCS.
+		for( let l of this.after_mcs_listeners ){
+			l()
+		}
 	}	
 
 	/* Determine whether copy attempt will succeed depending on deltaH (stochastic). */
@@ -188,6 +198,9 @@ class CPM {
 			this.cellvolume[t] ++
 		}
 		this.updateborderneari( i, t_old, t )
+		for( let l of this.setpix_listeners ){
+			l( i, t_old, t )
+		}
 	}
 	setpix ( p, t ){
 		this.setpixi( this.grid.p2i(p), t )
