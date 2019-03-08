@@ -166,30 +166,30 @@ Canvas.prototype = {
 	},
 	/* Use to show activity values of the act model using a color gradient, for
 	cells in the grid of cellkind "kind". */
-	drawActivityValues : function( kind ){
+	drawActivityValues : function( kind, Aobject ){
 		// cst contains the pixel ids of all non-background/non-stroma cells in
 		// the grid. The function tohex is used to convert computed color gradients
 		// to the hex format.
-		var cst = Object.keys( this.C.cellpixelstype ), ii, sigma, a,
+		var  ii, sigma, a,
 			tohex = function(a) { a = parseInt(255*a).toString(16) 
-				return  ("00".substring(0,2-a.length))+a }, i
+				return  ("00".substring(0,2-a.length))+a }
 
 		// loop over all pixels belonging to non-background, non-stroma
-		for( i = 0 ; i < cst.length ; i ++ ){
-			ii = cst[i]
-			sigma = this.C.cellpixelstype[ii]
+		for( let x of this.C.cellPixels() ){
+			ii = x[0]
+			sigma = x[1]
 
 			// For all pixels that belong to the current kind, compute
 			// color based on activity values, convert to hex, and draw.
 			if( this.C.cellKind(sigma) == kind ){
-				a = this.C.pxact( ii )/this.C.par("MAX_ACT",sigma)
+				a = Aobject.pxact( this.C.grid.p2i( ii ) )/Aobject.conf["MAX_ACT"][sigma]
 				if( a > 0 ){
 					if( a > 0.5 ){
 						this.col( "FF"+tohex(2-2*a)+"00" )
 					} else {
 						this.col( tohex(2*a)+"FF00" )
 					} 
-					this.pxf( this.i2p( ii ) )
+					this.pxf( ii )
 				}
 			}
 		}

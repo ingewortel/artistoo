@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="../build/cpm.js"></script>
-<style type="text/css">
-canvas{ border: 1px solid black }
-</style>
-
 <script src="fpsmeter.min.js"></script>
 
 <script>
 "use strict"
 
-let C, zoom=2, Cim, cid=0, w=200, meter, t = 2000
+let C, zoom=2, Cim, cid=0, w=200, meter
+let A = new CPM.ActivityConstraint( { MAX_ACT : [0,10],
+		LAMBDA_ACT: [0,100], ACT_MEAN: "geometric" } )
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "FFFFFF" )
 	// The cell in red
-	Cim.drawCells( 1, "00FF00" )
-	// activity values on top of cell
+	Cim.drawCells( 1, "AA0000" )
 	Cim.drawActivityValues( 1, A )
 }
 
@@ -27,38 +24,34 @@ function timestep(){
 	C.monteCarloStep()
 	meter.tick()
 	draw()
-	if( t-- > 0 ){
-		requestAnimationFrame( timestep )
-	}
+	requestAnimationFrame( timestep )
 }
 
-let A
 
 function initialize(){
 	C = new CPM.CPM( [w,w], {
 		seed : 1,
-		T : 20
+		T : 10
 	})
-	C.addTerm( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
+
 	C.addTerm( new CPM.VolumeConstraint( { V: [0,500], 
-		LAMBDA_V: [0,50] } ) )
-	C.addTerm( new CPM.PerimeterConstraint( { P: [0,340], 
-		LAMBDA_P: [0,2] } ) )
-	A = new CPM.ActivityConstraint( { MAX_ACT : [0,100],
-		LAMBDA_ACT: [0,500], ACT_MEAN: "geometric" } )
+		LAMBDA_V: [0,5] } ) )
+	C.addTerm( new CPM.Adhesion( { J: [[0,10], [10,0]] } ) )
 	C.addTerm( A )
+
+
 
 	let cid = C.makeNewCellID(1)
 	C.setpix( C.grid.midpoint, cid )
 
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	// Start simulation
-	meter = new FPSMeter({left:"auto", right:"5px"})
+	meter = new FPSMeter()
 	timestep()
 }
 </script>
 </head>
-<body onload="initialize()">
-<p>A single moving cell.</p>
+<body onload="initialize()" onclick="seedGrid()">
+<p>Basic Potts (=Ising) model. Click on canvas to reset simulation</p>
 </body>
 </html>

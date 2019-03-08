@@ -33,6 +33,7 @@ class CPM {
 		this.field_size = this.grid.field_size
 		this.cellPixels = this.grid.pixels.bind(this.grid)
 		this.pixti = this.grid.pixti.bind(this.grid)
+		this.neighi = this.grid.neighi.bind(this.grid)
 
 		// Attributes of the current CPM as a whole:
 		this.nNeigh = this.grid.neighi(0).length 	// neighbors per pixel (depends on ndim)
