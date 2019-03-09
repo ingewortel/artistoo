@@ -14,7 +14,7 @@ import VolumeConstraint from "../hamiltonian/VolumeConstraint.js"
 import HardVolumeRangeConstraint from "../hamiltonian/HardVolumeRangeConstraint.js"
 import TestLogger from "../hamiltonian/TestLogger.js"
 import PerimeterConstraint from "../hamiltonian/PerimeterConstraint.js"
-import ActivityConstraint from "../hamiltonian/ActivityConstraint.js"
+import ActivityConstraint from "../hamiltonian/ActivityConstraint2.js"
 
 export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator,Grid2D,Grid3D,
 	Adhesion, VolumeConstraint, GridInitializer, HardVolumeRangeConstraint, TestLogger,
