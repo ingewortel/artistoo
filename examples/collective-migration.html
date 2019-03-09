@@ -12,11 +12,13 @@ visualizations. */
 
 
 let C,Cim,t=0, burnin_time=50, maxtime=500000, meter, A
+	let cells = []
 
 function seedCell( k ){
 	let x = C.ran(0,249), y = C.ran(0,249)
 	let cid = C.makeNewCellID( k )
 	C.setpix( [x,y], cid )
+	cells.push(cid)
 }
 
 function initialize(){
@@ -34,7 +36,7 @@ function initialize(){
 		J : [ [0,20], [20,0] ],
 		T : 20,
 		ACT_MEAN : "geometric",
-		torus : false
+		torus : true
 	})
 	C.add( new CPM.Adhesion( C.conf ) )
 	C.add( new CPM.VolumeConstraint( C.conf ) )
@@ -59,49 +61,46 @@ function seedCells( ncells ){
 	for( let i = 0; i < burnin_time; i++ ){
 		C.monteCarloStep()
 	}
-	C.stop = true
-	requestAnimationFrame( timestep )
+	if( C.stop ){
+		draw()
+	}
 }
 
 function killCell(){
-	var cpi = Cs.cellpixelsi()
-	var types = Object.keys( cpi )
-	const t = types[ types.length - 1 ]
-	for( let i = 0; i < cpi[t].length; i++ ){
-		C.delpixi(cpi[t][i])
+	if( cells.length > 0 ){
+		var t = cells.pop()
 	}
-	requestAnimationFrame( timestep )
+	for( let cp of C.cellPixels() ){
+		if( cp[1] == t ){
+			C.setpix( cp[0], 0 )
+		}
+	}
 }
 
 function killAllCells(){
-	var cpi = Cs.cellpixelsi()
-	var types = Object.keys( cpi )
-	for( let t = types.length - 1; t >0; t-- ){
-		for( let i = 0; i < cpi[t].length; i++ ){
-			C.delpixi(cpi[t][i])
-		}
+	if( cells.length == 0 ) return
+	for( let cp of C.cellPixels() ){
+		C.setpix( cp[0], 0 )
 	}
-	killCell()
-
-	requestAnimationFrame( timestep )
+	cells = []
 }
 
 
+function draw(){
+	// Clear the canvas (white), and draw the stroma border in gray
+	Cim.clear( "eaecef" )
+	// Draw celltype 1 black with activity values
+	Cim.drawCells( 1, "000000")
+	Cim.drawActivityValues( 1, A )
+}
+
 // Continue until the maximum simulation time is reached. 
 function timestep(){
-
 	// Update the grid with one MCS
 	for( let i = 0; i < C.rate; i++ ){
 		C.monteCarloStep()
 	}
-	
-	// Clear the canvas (white), and draw the stroma border in gray
-	Cim.clear( "eaecef" )
-
-	// Draw celltype 1 black with activity values
-	Cim.drawCells( 1, "000000")
-	Cim.drawActivityValues( 1, A )
-
+	draw()
 	meter.tick()
 
 	if( t++ < maxtime && !C.stop ){
