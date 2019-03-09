@@ -963,15 +963,17 @@ var CPM = (function (exports) {
 		},
 		/* Use to show activity values of the act model using a color gradient, for
 		cells in the grid of cellkind "kind". */
-		drawActivityValues : function( kind, Aobject ){
+		drawActivityValues : function( kind, A ){
 			// cst contains the pixel ids of all non-background/non-stroma cells in
 			// the grid. The function tohex is used to convert computed color gradients
 			// to the hex format.
-			var  ii, sigma, a,
-				tohex = function(a) { a = parseInt(255*a).toString(16); 
-					return  ("00".substring(0,2-a.length))+a };
+			var ii, sigma, a;
 
 			// loop over all pixels belonging to non-background, non-stroma
+			this.col("FF0000");
+			this.getImageData();
+			this.col_b = 0;
+			//this.col_g = 0
 			for( let x of this.C.cellPixels() ){
 				ii = x[0];
 				sigma = x[1];
@@ -979,17 +981,20 @@ var CPM = (function (exports) {
 				// For all pixels that belong to the current kind, compute
 				// color based on activity values, convert to hex, and draw.
 				if( this.C.cellKind(sigma) == kind ){
-					a = Aobject.pxact( this.C.grid.p2i( ii ) )/Aobject.conf["MAX_ACT"][kind];
+					a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][kind];
 					if( a > 0 ){
 						if( a > 0.5 ){
-							this.col( "FF"+tohex(2-2*a)+"00" );
+							this.col_r = 255;
+							this.col_g = (2-2*a)*255;
 						} else {
-							this.col( tohex(2*a)+"FF00" );
-						} 
-						this.pxf( ii );
+							this.col_r = (2*a)*255;
+							this.col_g = 255;
+						}
+						this.pxfi( ii );
 					}
 				}
 			}
+			this.putImageData();
 		},
 
 		/* colors outer pixels of each cell */
