@@ -979,7 +979,7 @@ var CPM = (function (exports) {
 				// For all pixels that belong to the current kind, compute
 				// color based on activity values, convert to hex, and draw.
 				if( this.C.cellKind(sigma) == kind ){
-					a = Aobject.pxact( this.C.grid.p2i( ii ) )/Aobject.conf["MAX_ACT"][sigma];
+					a = Aobject.pxact( this.C.grid.p2i( ii ) )/Aobject.conf["MAX_ACT"][kind];
 					if( a > 0 ){
 						if( a > 0.5 ){
 							this.col( "FF"+tohex(2-2*a)+"00" );
