@@ -558,35 +558,35 @@ var CPM = (function (exports) {
 
 			this.soft_constraints = [];
 			this.hard_constraints = [];
-			this.setpix_listeners = [];
-			this.after_mcs_listeners = [];
+			this.post_setpix_listeners = [];
+			this.post_mcs_listeners = [];
 		}
 
 		* cellBorderPixels() {
 			for( let i of this.cellborderpixels.elements ){
-				const t = this.pixt(i);
+				const t = this.pixti(i);
 				if( t != 0 ){
 					yield [this.grid.i2p(i),t];
 				}
 			}
 		}
 
-		addTerm( t ){
-			if( t.CONSTRAINT_TYPE == "soft" ){
-				this.soft_constraints.push( t.deltaH.bind(t) );
+		add( t ){
+			if( "CONSTRAINT_TYPE" in t ){
+				switch( t.CONSTRAINT_TYPE ){
+				case "soft": this.soft_constraints.push( t.deltaH.bind(t) );break
+				case "hard": this.hard_constraints.push( t.fulfilled.bind(t) ); break
+				}
 			}
-			if( t.CONSTRAINT_TYPE == "hard" ){
-				this.hard_constraints.push( t.fulfilled.bind(t) );
+			if( typeof t["postSetpixListener"] === "function" ){
+				this.post_setpix_listeners.push( t.postSetpixListener.bind(t) );
 			}
-			if( typeof t["setpixListener"] === "function" ){
-				this.setpix_listeners.push( t.setpixListener.bind(t) );
-			}
-			if( typeof t["afterMCSListener"] === "function" ){
-				this.after_mcs_listeners.push( t.afterMCSListener.bind(t) );
+			if( typeof t["postMCSListener"] === "function" ){
+				this.post_mcs_listeners.push( t.postMCSListener.bind(t) );
 			}
 			t.CPM = this;
-			if( typeof t["postAddition"] === "function" ){
-				t.postAddition();
+			if( typeof t["postAdd"] === "function" ){
+				t.postAdd();
 			}
 		}
 
@@ -678,7 +678,7 @@ var CPM = (function (exports) {
 				}
 			}
 			this.time++; // update time with one MCS.
-			for( let l of this.after_mcs_listeners ){
+			for( let l of this.post_mcs_listeners ){
 				l();
 			}
 		}	
@@ -710,7 +710,7 @@ var CPM = (function (exports) {
 				this.cellvolume[t] ++;
 			}
 			this.updateborderneari( i, t_old, t );
-			for( let l of this.setpix_listeners ){
+			for( let l of this.post_setpix_listeners ){
 				l( i, t_old, t );
 			}
 		}
@@ -845,27 +845,26 @@ var CPM = (function (exports) {
 		pxfi : function( p ){
 			const dy = this.zoom*this.width;
 			const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
-			const px = this.image_data.data;
 			for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
 				for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
-					px[i+j+off] = this.col_r;
-					px[i+j+off + 1] = this.col_g;
-					px[i+j+off + 2] = this.col_b;
-					px[i+j+off + 3] = 255;
+					this.px[i+j+off] = this.col_r;
+					this.px[i+j+off + 1] = this.col_g;
+					this.px[i+j+off + 2] = this.col_b;
+					this.px[i+j+off + 3] = 255;
 				}
 			}
 		},
 		pxfir : function( p ){
 			const dy = this.zoom*this.width;
 			const off = (p[1]*dy + p[0])*4;
-			const px = this.image_data.data;
-			px[off] = this.col_r;
-			px[off + 1] = this.col_g;
-			px[off + 2] = this.col_b;
-			px[off + 3] = 255;
+			this.px[off] = this.col_r;
+			this.px[off + 1] = this.col_g;
+			this.px[off + 2] = this.col_b;
+			this.px[off + 3] = 255;
 		},
 		getImageData : function(){
 			this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
+			this.px = this.image_data.data;
 		},
 		putImageData : function(){
 			this.ctx.putImageData(this.image_data, 0, 0);
@@ -1024,14 +1023,16 @@ var CPM = (function (exports) {
 					cellpixelsbyid[x[1]].push( x[0] );
 				}
 			}
+			this.getImageData();
 			for( let cid of Object.keys( cellpixelsbyid ) ){
 				if( typeof col == "function" ){
 					this.col( col(cid) );
 				}
 				for( let cp of cellpixelsbyid[cid] ){
-					this.pxf( cp );
+					this.pxfi( cp );
 				}
 			}
+			this.putImageData();
 		},
 
 		/* Draw grid to the png file "fname". */
@@ -1850,15 +1851,21 @@ var CPM = (function (exports) {
 		}
 	}
 
-	class SoftConstraint {
+	class Constraint {
 		get CONSTRAINT_TYPE() {
-			return "soft"
+			throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
 		}
 		constructor( conf ){
 			this.conf = conf;
 		}
 		set CPM(C){
 			this.C = C;
+		}
+	}
+
+	class SoftConstraint extends Constraint {
+		get CONSTRAINT_TYPE() {
+			return "soft"
 		}
 		// eslint-disable-next-line no-unused-vars
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
@@ -1982,6 +1989,7 @@ var CPM = (function (exports) {
 	class PerimeterConstraint extends SoftConstraint {
 		constructor( conf ){
 			super( conf );
+			this.cellperimeters = {};
 		}
 		determinePerimeter( i, t_old, t_new ){
 			if( t_old == t_new ){ return }
@@ -2014,20 +2022,7 @@ var CPM = (function (exports) {
 				this.cellperimeters[t_new] += n_new;
 			}
 		}
-		postAddition(){
-			this.cellperimeters = {};
-		}
-		afterMCSListener( ){
-			// eslint-disable-next-line
-			//console.log( this.cellperimeters )
-			/*for( let i = 0 ; i < this.cellperimetersperpixel.length ; i ++ ){
-				if( this.cellperimetersperpixel[i] > 0 ){
-					// eslint-disable-next-line
-					console.log( i, this.cellperimetersperpixel[i] )
-				}
-			}*/
-		}
-		setpixListener( i, t_old, t ){
+		postSetpixListener( i, t_old, t ){
 			this.determinePerimeter( i, t_old, t );
 		}
 		deltaH( sourcei, targeti, src_type, tgt_type ){
@@ -2090,7 +2085,6 @@ var CPM = (function (exports) {
 	 */
 
 	class ActivityConstraint extends SoftConstraint {
-
 		constructor( conf ){
 			super( conf );
 
@@ -2104,7 +2098,6 @@ var CPM = (function (exports) {
 			}
 			
 		}
-		
 		/* ======= ACT MODEL ======= */
 
 		/* Act model : compute local activity values within cell around pixel i.
@@ -2112,8 +2105,6 @@ var CPM = (function (exports) {
 		 * or geometric (activityAtGeom) mean of the activities of the neighbors
 		 * of pixel i.
 		 */
-
-
 		/* Hamiltonian computation */ 
 		deltaH ( sourcei, targeti, src_type, tgt_type ){
 
@@ -2221,7 +2212,7 @@ var CPM = (function (exports) {
 			return (age > actmax) ? 0 : actmax-age
 		}
 		/* eslint-disable no-unused-vars*/
-		setpixListener( i, t_old, t ){
+		postSetpixListener( i, t_old, t ){
 			this.cellpixelsbirth[i] = this.C.time;
 		}
 

@@ -50,35 +50,35 @@ class CPM {
 
 		this.soft_constraints = []
 		this.hard_constraints = []
-		this.setpix_listeners = []
-		this.after_mcs_listeners = []
+		this.post_setpix_listeners = []
+		this.post_mcs_listeners = []
 	}
 
 	* cellBorderPixels() {
 		for( let i of this.cellborderpixels.elements ){
-			const t = this.pixt(i)
+			const t = this.pixti(i)
 			if( t != 0 ){
 				yield [this.grid.i2p(i),t]
 			}
 		}
 	}
 
-	addTerm( t ){
-		if( t.CONSTRAINT_TYPE == "soft" ){
-			this.soft_constraints.push( t.deltaH.bind(t) )
+	add( t ){
+		if( "CONSTRAINT_TYPE" in t ){
+			switch( t.CONSTRAINT_TYPE ){
+			case "soft": this.soft_constraints.push( t.deltaH.bind(t) );break
+			case "hard": this.hard_constraints.push( t.fulfilled.bind(t) ); break
+			}
 		}
-		if( t.CONSTRAINT_TYPE == "hard" ){
-			this.hard_constraints.push( t.fulfilled.bind(t) )
+		if( typeof t["postSetpixListener"] === "function" ){
+			this.post_setpix_listeners.push( t.postSetpixListener.bind(t) )
 		}
-		if( typeof t["setpixListener"] === "function" ){
-			this.setpix_listeners.push( t.setpixListener.bind(t) )
-		}
-		if( typeof t["afterMCSListener"] === "function" ){
-			this.after_mcs_listeners.push( t.afterMCSListener.bind(t) )
+		if( typeof t["postMCSListener"] === "function" ){
+			this.post_mcs_listeners.push( t.postMCSListener.bind(t) )
 		}
 		t.CPM = this
-		if( typeof t["postAddition"] === "function" ){
-			t.postAddition()
+		if( typeof t["postAdd"] === "function" ){
+			t.postAdd()
 		}
 	}
 
@@ -170,7 +170,7 @@ class CPM {
 			}
 		}
 		this.time++ // update time with one MCS.
-		for( let l of this.after_mcs_listeners ){
+		for( let l of this.post_mcs_listeners ){
 			l()
 		}
 	}	
@@ -202,7 +202,7 @@ class CPM {
 			this.cellvolume[t] ++
 		}
 		this.updateborderneari( i, t_old, t )
-		for( let l of this.setpix_listeners ){
+		for( let l of this.post_setpix_listeners ){
 			l( i, t_old, t )
 		}
 	}

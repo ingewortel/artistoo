@@ -10,52 +10,57 @@ canvas{ border: 1px solid black }
 <script>
 "use strict"
 
-let C, zoom=2, Cim, cid=0, w=200, meter, t = 2000
+let zoom=1, w = 250, t = 2000
 
-function draw(){
-	// Clear the canvas (in the backgroundcolor white), and redraw:
-	Cim.clear( "FFFFFF" )
-	// The cell in red
-	Cim.drawCells( 1, "00FF00" )
-	// activity values on top of cell
-	Cim.drawActivityValues( 1, A )
-}
 
+let C,meter
 function timestep(){
-	// Update the grid with one MCS
 	meter.tickStart()
 	C.monteCarloStep()
 	meter.tick()
-	draw()
 	if( t-- > 0 ){
 		requestAnimationFrame( timestep )
 	}
 }
-
-let A
-
 function initialize(){
-	C = new CPM.CPM( [w,w], {
-		seed : 1,
+	C = setupCPM({zoom:zoom,w:w})
+	timestep()
+}
+
+function setupCPM(conf){
+	const zoom = conf.zoom || 1
+	const w = conf.w || 200
+	let C = new CPM.CPM( [w,w], {
 		T : 20
 	})
-	C.addTerm( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
-	C.addTerm( new CPM.VolumeConstraint( { V: [0,500], 
+	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
+	C.add( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,50] } ) )
-	C.addTerm( new CPM.PerimeterConstraint( { P: [0,340], 
+	C.add( new CPM.PerimeterConstraint( { P: [0,340], 
 		LAMBDA_P: [0,2] } ) )
-	A = new CPM.ActivityConstraint( { MAX_ACT : [0,100],
+	const A = new CPM.ActivityConstraint( { MAX_ACT : [0,100],
 		LAMBDA_ACT: [0,500], ACT_MEAN: "geometric" } )
-	C.addTerm( A )
+	C.add( A )
+	let Cim = new CPM.Canvas( C, {zoom:zoom} )
+
+	C.add( { postMCSListener : function(){
+		// Clear the canvas (in the backgroundcolor white), and redraw:
+		Cim.clear( "FFFFFF" )
+		// The cell in red
+		Cim.drawCells( 1, "00FF00" )
+		// activity values on top of cell
+		Cim.drawActivityValues( 1, A )
+		Cim.drawCellBorders( 1, "000000" )
+	}} )
 
 	let cid = C.makeNewCellID(1)
 	C.setpix( C.grid.midpoint, cid )
 
-	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	// Start simulation
 	meter = new FPSMeter({left:"auto", right:"5px"})
-	timestep()
+	return C
 }
+
 </script>
 </head>
 <body onload="initialize()">

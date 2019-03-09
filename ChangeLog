@@ -3,6 +3,13 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-03-09 Johannes Textor <johannes.textor@gmx.de>
+	* hamiltonian/Constraint.js : new base class for all constraints
+	* CPM.js: renamed addTerm to simply "add" -- we may want to add other
+	things like loggers, trackers, drawing functions. Also fixed bug in
+	cellBorderPixels
+	* hamiltonian/PersistenceConstraint.js : works now
+
 2019-03-08 Inge Wortel <ingewortel@gmail.com>
 	* CPM.js : wrapped grid.neighi as an internal function here.
 	* hamiltonian/ActivityConstraint.js : Added this file.

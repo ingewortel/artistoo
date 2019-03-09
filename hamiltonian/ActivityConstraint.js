@@ -10,7 +10,6 @@
 import SoftConstraint from "./SoftConstraint.js"
 
 class ActivityConstraint extends SoftConstraint {
-
 	constructor( conf ){
 		super( conf )
 
@@ -24,7 +23,6 @@ class ActivityConstraint extends SoftConstraint {
 		}
 		
 	}
-	
 	/* ======= ACT MODEL ======= */
 
 	/* Act model : compute local activity values within cell around pixel i.
@@ -32,8 +30,6 @@ class ActivityConstraint extends SoftConstraint {
 	 * or geometric (activityAtGeom) mean of the activities of the neighbors
 	 * of pixel i.
 	 */
-
-
 	/* Hamiltonian computation */ 
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 
@@ -141,7 +137,7 @@ class ActivityConstraint extends SoftConstraint {
 		return (age > actmax) ? 0 : actmax-age
 	}
 	/* eslint-disable no-unused-vars*/
-	setpixListener( i, t_old, t ){
+	postSetpixListener( i, t_old, t ){
 		this.cellpixelsbirth[i] = this.C.time
 	}
 
@@ -149,16 +145,3 @@ class ActivityConstraint extends SoftConstraint {
 }
 
 export default ActivityConstraint
-
-
-	
-
-
-	
-
-
-	
-	
-	
-	
-	

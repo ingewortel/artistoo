@@ -7,6 +7,7 @@ import SoftConstraint from "./SoftConstraint.js"
 class PerimeterConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf )
+		this.cellperimeters = {}
 	}
 	determinePerimeter( i, t_old, t_new ){
 		if( t_old == t_new ){ return }
@@ -39,20 +40,7 @@ class PerimeterConstraint extends SoftConstraint {
 			this.cellperimeters[t_new] += n_new
 		}
 	}
-	postAddition(){
-		this.cellperimeters = {}
-	}
-	afterMCSListener( ){
-		// eslint-disable-next-line
-		//console.log( this.cellperimeters )
-		/*for( let i = 0 ; i < this.cellperimetersperpixel.length ; i ++ ){
-			if( this.cellperimetersperpixel[i] > 0 ){
-				// eslint-disable-next-line
-				console.log( i, this.cellperimetersperpixel[i] )
-			}
-		}*/
-	}
-	setpixListener( i, t_old, t ){
+	postSetpixListener( i, t_old, t ){
 		this.determinePerimeter( i, t_old, t )
 	}
 	deltaH( sourcei, targeti, src_type, tgt_type ){

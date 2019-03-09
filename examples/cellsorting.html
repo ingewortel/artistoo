@@ -14,8 +14,8 @@ canvas{ border: 1px solid black }
 /* The classic cell sorting simulation */
 
 
-let C,Cim,t = 0, maxtime = 1000, w = 200,
-	r = 27,
+let C,Cim,t = 0, maxtime = 20000, w = 210,
+	zoom=3
 	meter
 
 function initialize(){
@@ -23,20 +23,20 @@ function initialize(){
 	// Create a CPM object
 	C = new CPM.CPM( [w, w], {
 		LAMBDA_V : [0,25,25],
-		V : [0,200,200],
+		V : [0,25,25],
 		J : [ [NaN, 12, 6], [12, 6, 16], [6, 16, 6] ],
-		T : 2,
+		T : 15,
 	})
 
-        C.addTerm( new CPM.VolumeConstraint( C.conf ) )
-        C.addTerm( new CPM.Adhesion( C.conf ) )
+        C.add( new CPM.VolumeConstraint( C.conf ) )
+        C.add( new CPM.Adhesion( C.conf ) )
 
 	// Create a canvas to draw on
-	Cim = new CPM.Canvas( C, {zoom:1} )
+	Cim = new CPM.Canvas( C, {zoom:zoom} )
 
 	let Ci = new CPM.GridInitializer( C )
-	Ci.seedCellsInCircle( 1, 50, [w/2,w/2], w/3 )
-	Ci.seedCellsInCircle( 2, 50, [w/2,w/2], w/3 )
+	Ci.seedCellsInCircle( 1, 500, [w/2,w/2], w/3 )
+	Ci.seedCellsInCircle( 2, 500, [w/2,w/2], w/3 )
 	
 	C.conf.LAMBDA_V = [0,2,2]
 	meter = new FPSMeter({left:"auto", right:"5px"})
@@ -49,7 +49,13 @@ function timestep(){
 	meter.tick()
 	// Update the grid with one MCS
 	C.monteCarloStep()
-	if( t % 10 == 0 ){
+	//C.monteCarloStep()
+	//C.monteCarloStep()
+	//C.monteCarloStep()
+	//C.monteCarloStep()
+
+
+	if( t % 2 == 0 ){
 		// Clear the canvas (white)
 		Cim.clear( "FFFFFF" )
 
@@ -60,7 +66,7 @@ function timestep(){
 		Cim.drawCells( 2, "FF0000")
 
 		// Draw the borders of each cell
-		Cim.drawOnCellBorders( "FFFFFF" )
+		//Cim.drawCellBorders( -1, "CCCCCC" )
 	}
 
 	if( t++ < maxtime ){

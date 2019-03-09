@@ -47,27 +47,26 @@ Canvas.prototype = {
 	pxfi : function( p ){
 		const dy = this.zoom*this.width
 		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4
-		const px = this.image_data.data
 		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
 			for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
-				px[i+j+off] = this.col_r
-				px[i+j+off + 1] = this.col_g
-				px[i+j+off + 2] = this.col_b
-				px[i+j+off + 3] = 255
+				this.px[i+j+off] = this.col_r
+				this.px[i+j+off + 1] = this.col_g
+				this.px[i+j+off + 2] = this.col_b
+				this.px[i+j+off + 3] = 255
 			}
 		}
 	},
 	pxfir : function( p ){
 		const dy = this.zoom*this.width
 		const off = (p[1]*dy + p[0])*4
-		const px = this.image_data.data
-		px[off] = this.col_r
-		px[off + 1] = this.col_g
-		px[off + 2] = this.col_b
-		px[off + 3] = 255
+		this.px[off] = this.col_r
+		this.px[off + 1] = this.col_g
+		this.px[off + 2] = this.col_b
+		this.px[off + 3] = 255
 	},
 	getImageData : function(){
 		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom)
+		this.px = this.image_data.data
 	},
 	putImageData : function(){
 		this.ctx.putImageData(this.image_data, 0, 0)
@@ -226,14 +225,16 @@ Canvas.prototype = {
 				cellpixelsbyid[x[1]].push( x[0] )
 			}
 		}
+		this.getImageData()
 		for( let cid of Object.keys( cellpixelsbyid ) ){
 			if( typeof col == "function" ){
 				this.col( col(cid) )
 			}
 			for( let cp of cellpixelsbyid[cid] ){
-				this.pxf( cp )
+				this.pxfi( cp )
 			}
 		}
+		this.putImageData()
 	},
 
 	/* Draw grid to the png file "fname". */
