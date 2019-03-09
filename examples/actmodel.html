@@ -7,14 +7,14 @@
 "use strict"
 
 let C, zoom=2, Cim, cid=0, w=200, meter
-let A = new CPM.ActivityConstraint( { MAX_ACT : [0,10],
-		LAMBDA_ACT: [0,100], ACT_MEAN: "geometric" } )
+let A = new CPM.ActivityConstraint( { MAX_ACT : [0,30],
+		LAMBDA_ACT: [0,300], ACT_MEAN: "geometric" } )
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "FFFFFF" )
 	// The cell in red
-	Cim.drawCells( 1, "AA0000" )
+	Cim.drawCells( 1, "000000" )
 	Cim.drawActivityValues( 1, A )
 }
 
@@ -34,11 +34,12 @@ function initialize(){
 		T : 10
 	})
 
-	C.addTerm( new CPM.VolumeConstraint( { V: [0,500], 
+	C.add( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,5] } ) )
-	C.addTerm( new CPM.Adhesion( { J: [[0,10], [10,0]] } ) )
-	C.addTerm( A )
-
+	C.add( new CPM.Adhesion( { J: [[0,10], [10,0]] } ) )
+	C.add( A )
+	C.add( new CPM.PerimeterConstraint( { P: [0,260],
+		LAMBDA_P: [0,2] } ) )
 
 
 	let cid = C.makeNewCellID(1)
@@ -51,7 +52,7 @@ function initialize(){
 }
 </script>
 </head>
-<body onload="initialize()" onclick="seedGrid()">
-<p>Basic Potts (=Ising) model. Click on canvas to reset simulation</p>
+<body onload="initialize()">
+<h1>Basic Act model.</h1>
 </body>
 </html>

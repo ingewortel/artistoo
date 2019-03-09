@@ -3,6 +3,18 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-03-09 Inge Wortel <ingewortel@gmail.com>
+	* hamiltonian/ActivityConstraint2.js : Added new implementation of the activity
+	constraint that directly tracks activity values in an object instead of their birth
+	time. This implementation should be more efficient because pixels are removed once
+	their activity reaches zero.
+		!!! We may want to make a test that checks if two implementations do the same
+		thing?
+	* app/index.js : use ActivityConstraint2.js instead of ActivityConstraint.js for
+	the build.
+	* examples/actmodel.html : fixed bug because of change in CPM.js file. Added a 
+	perimeter constraint to the cell.
+
 2019-03-09 Johannes Textor <johannes.textor@gmx.de>
 	* hamiltonian/Constraint.js : new base class for all constraints
 	* CPM.js: renamed addTerm to simply "add" -- we may want to add other
