@@ -5,21 +5,21 @@
 <script>
 "use strict"
 
-let C, zoom=1, Cim, cid=0, w=600, meter, t = 0
+let C, zoom=2, Cim, cid=0, w=250, meter, t = 0
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "CCCCCC" )
 
 	// Draw cell borders 
-	Cim.drawOnCellBorders("000000")
+	Cim.drawCellBorders(1,"000000")
 }
 
 function timestep(){
 	// Update the grid with one MCS
 	C.monteCarloStep()
 	meter.tick()
-	if( t % 5 == 0 ){
+	if( t % 2 == 0 ){
 		draw()
 	}
 	requestAnimationFrame( timestep )
@@ -56,8 +56,9 @@ function initialize(){
 		T : 20,
 		ACT_MEAN : "geometric"
 	})
-	C.addTerm( new CPM.Adhesion(C.conf) )
-	C.addTerm( new CPM.VolumeConstraint(C.conf) )
+	C.add( new CPM.Adhesion(C.conf) )
+	C.add( new CPM.VolumeConstraint(C.conf) )
+	C.add( new CPM.PerimeterConstraint(C.conf) )
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	meter = new FPSMeter({left:"auto", right:"5px"})
 	// Start simulation

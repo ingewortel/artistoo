@@ -3,6 +3,10 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-03-09 Johannes Textor <johannes.textor@gmx.de>
+	* examples/ : changed all examples to new syntax, added perimeter
+	constraint where missing
+
 2019-03-09 Inge Wortel <ingewortel@gmail.com>
 	* hamiltonian/ActivityConstraint2.js : Added new implementation of the activity
 	constraint that directly tracks activity values in an object instead of their birth

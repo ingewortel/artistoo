@@ -6,7 +6,7 @@
 <script>
 "use strict"
 
-let C, zoom=1, Cim, cid=0, w=200, meter
+let C, zoom=1, Cim, cid=0, w=400, meter
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
@@ -43,7 +43,7 @@ function seedGrid(){
 				C.setpix( [ i,j ], cid )
 			} else {
 				if( C.pixt( [i,j] ) ){
-					C.delpix( [i,j] )
+					C.setpix( [i,j], 0 )
 				}
 			}
 		}
@@ -57,9 +57,10 @@ function initialize(){
 		J : [ [NaN,20], [20,100] ],
 		T : 0.01,
 	})
+	C.add( new CPM.Adhesion( C.conf ) )
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	// Start simulation
-	meter = new FPSMeter()
+	meter = new FPSMeter({left:"auto", right:"5px"})
 	seedGrid()
 	timestep()
 }

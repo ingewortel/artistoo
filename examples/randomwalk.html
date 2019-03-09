@@ -28,7 +28,7 @@ function initialize(){
 		torus : false
 	})
 
-        C.addTerm( new CPM.HardVolumeRangeConstraint( C.conf ) )
+        C.add( new CPM.HardVolumeRangeConstraint( C.conf ) )
 
 	// Create a canvas to draw on
 	Cim = new CPM.Canvas( C, {zoom:4} )
