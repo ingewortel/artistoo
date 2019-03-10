@@ -3,6 +3,13 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-03-10 Johannes Textor <johannes.textor@gmx.de>
+	* examples-node/ : changed all examples to new syntax
+	* benchmarks/ : new folder with simple scripts for benchmarking the
+	framework
+	* CPM.js : simplified border updating code, yields ~3-4fold speedup
+	for 3D simulations.
+
 2019-03-09 Johannes Textor <johannes.textor@gmx.de>
 	* examples/ : changed all examples to new syntax, added perimeter
 	constraint where missing

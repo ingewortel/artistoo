@@ -1,0 +1,10 @@
+1000x1000 model, collective migration large Act cells, torus, 100 MCS
+execution: 10053.354ms
+1000x1000 model, mix T cells and epidermal cells, torus, 100 MCS
+execution: 18004.074ms
+1000x1000 model, small epidermal cells (only volume constraint), torus, 100 MCS
+execution: 12699.225ms
+100x100x100 3D Ising model, torus, 5 MCS
+execution: 20749.779ms
+1000x1000 2D Ising model, torus, 20 MCS
+execution: 6762.638ms

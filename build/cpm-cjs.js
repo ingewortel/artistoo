@@ -324,7 +324,8 @@ class CPM {
 		this.extents = this.grid.extents;
 
 		// Attributes of the current CPM as a whole:
-		this.nNeigh = this.grid.neighi(0).length; 	// neighbors per pixel (depends on ndim)
+		this.nNeigh = this.grid.neighi(
+			this.grid.p2i(this.midpoint)).length; // neighbors per pixel (depends on ndim)
 		this.nr_cells = 0;				// number of cells currently in the grid
 		this.time = 0;					// current system time in MCS
 	
@@ -340,6 +341,7 @@ class CPM {
 		this.hard_constraints = [];
 		this.post_setpix_listeners = [];
 		this.post_mcs_listeners = [];
+		this._neighbours = new Uint16Array(this.grid.p2i(field_size));
 	}
 
 	* cellBorderPixels() {
@@ -428,20 +430,19 @@ class CPM {
 			// randomly draw another border pixel.
 			delta_t += 1./(this.cellborderpixels.length);
 
-			// sample a random pixel that borders at least 1 cell of another type
-			const src_i = this.cellborderpixels.sample();
-		
-			const N = this.grid.neighi( src_i );
-			const tgt_i = N[this.ran(0,N.length-1)];
+			// sample a random pixel that borders at least 1 cell of another type,
+			// and pick a random neighbour of tha pixel
+			const tgt_i = this.cellborderpixels.sample();
+			const Ni = this.grid.neighi( tgt_i );
+			const src_i = Ni[this.ran(0,Ni.length-1)];
 		
 			const src_type = this.grid.pixti( src_i );
 			const tgt_type = this.grid.pixti( tgt_i );
 
-
 			// only compute the Hamiltonian if source and target belong to a different cell,
 			// and do not allow a copy attempt into the stroma. Only continue if the copy attempt
 			// would result in a viable cell.
-			if( tgt_type >= 0 && src_type != tgt_type ){
+			if( tgt_type != src_type ){
 				let ok = true;
 				for( let h of this.hard_constraints ){
 					if( !h( src_i, tgt_i, src_type, tgt_type ) ){
@@ -455,7 +456,7 @@ class CPM {
 						this.setpixi( tgt_i, src_type );
 					}
 				}
-			}
+			} 
 		}
 		this.time++; // update time with one MCS.
 		for( let l of this.post_mcs_listeners ){
@@ -501,67 +502,31 @@ class CPM {
 	/* Update border elements after a successful copy attempt. */
 	updateborderneari ( i, t_old, t_new ){
 		if( t_old == t_new ) return
-		
-		// neighborhood + pixel itself (in indices)
-		const Ni = this.grid.neighi(i);
-		const Ti = Ni.map( j => this.grid.pixti(j) );
-	
-		// first deal with i itself
-		let isborder = false, wasborder = false;
-		for( let k of Ti ){
-			if( k != t_new ){
-				isborder = true; if(wasborder) break
+		const Ni = this.grid.neighi( i );
+		const wasborder = this._neighbours[i] > 0; 
+		this._neighbours[i] = 0;
+		for( let ni of Ni  ){
+			const nt = this.grid.pixti(ni);
+			if( nt != t_new ){
+				this._neighbours[i] ++; 
 			}
-			if( k != t_old ){
-				wasborder = true; if(isborder) break
+			if( nt == t_old ){
+				if( this._neighbours[ni] ++ == 0 ){
+					this.cellborderpixels.insert( ni );
+				}
 			}
-		}
-		if( isborder ){
-			if( !wasborder ){
-				this.cellborderpixels.insert( i );
+			if( nt == t_new ){
+				if( --this._neighbours[ni] == 0 ){
+					this.cellborderpixels.remove( ni );
+				}
 			}
-		} else if( wasborder ) {
-			this.cellborderpixels.remove( i );
 		}
 
-		
-		// then deal with i's neighbours
-		for( let j = 0 ; j < Ni.length ; j ++ ){
-			const i2 = Ni[j];
-			const t = Ti[j];
-			// different type from new pixel -> 
-			// must be a border now, no need to check further
-			if( t != t_new ){
-				// must have already been a border, unless 
-				// it had the same pixel type
-				if( t == t_old ){
-					let wasborder = false;
-					const N = this.grid.neighi( i2 );
-					for( let k = 0 ; k < N.length ; k ++ ){
-						if( (N[k] != i) && (this.grid.pixti( N[k] ) != t) ){
-							wasborder = true; break
-						}
-					}
-					if( !wasborder ){
-						this.cellborderpixels.insert( i2 );
-					}
-				}
-			} else {
-				// same type as new pixel, 
-				// so must have been a border pixel before
-				// (because t_new != t_old).
-				// check if still a border, if not remove
-				let isborder = false;
-				const N = this.grid.neighi( i2 );
-				for( let k = 0 ; k < N.length ; k ++ ){
-					if( this.grid.pixti( N[k] ) != t ){
-						isborder = true; break
-					}
-				}
-				if( !isborder ){
-					this.cellborderpixels.remove( i2 );
-				}
-			}	
+		if( !wasborder && this._neighbours[i] > 0 ){
+			this.cellborderpixels.insert( i );
+		}
+		if( wasborder &&  this._neighbours[i] == 0 ){
+			this.cellborderpixels.remove( i );
 		}
 	}
 
