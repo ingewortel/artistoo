@@ -2,42 +2,30 @@
 
 let CPM = require("../build/cpm-cjs.js")
 
-let w = parseInt(process.argv[2]) || 500
+let w = parseInt(process.argv[2]) || 1000
 
 // Create a new CPM, canvas, and stats object
 let C = new CPM.CPM( [w,w], {
 	seed : 1,
-	T : 0.01
+	T : 2
 })
 
-let P = new CPM.PerimeterConstraint( { P: [0,200], 
-	LAMBDA_P: [0,5] } )
-C.addTerm( new CPM.VolumeConstraint( { V: [0,100], 
+C.add( new CPM.VolumeConstraint( { V: [0,100], 
 	LAMBDA_V: [0,5] } ) )
-C.addTerm( P )
+C.add( new CPM.PerimeterConstraint( { P: [0,200], 
+	LAMBDA_P: [0,5] } ) )
 
-console.log( P.cellperimeters )
-
-let cid = C.makeNewCellID(1)
-C.setpix( C.grid.midpoint, cid )
-C.setpix( [C.grid.midpoint[0],C.grid.midpoint[1]+1], cid )
-
-for( let c of C.cellPixels() ){
-	console.log( c )
-}
-
-console.log( P.cellperimeters )
+new CPM.GridInitializer(C).seedCell(1)
 
 
-console.time("execution")
-for( i = 0 ; i < 50 ; i ++ ){
-	console.log(i)
+console.time("executing 1000 MCS")
+for( i = 0 ; i < 1000 ; i ++ ){
 	C.monteCarloStep()
 }
-console.timeEnd("execution")
+console.timeEnd("executing 1000 MCS")
 
 let Cim = new CPM.Canvas( C )
 Cim.clear( "FFFFFF" )
 Cim.drawCells( 1, "CCCCCC" )
-Cim.writePNG( "ising.png" )
+Cim.writePNG( "output/singlecell.png" )
 

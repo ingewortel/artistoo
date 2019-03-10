@@ -11,7 +11,7 @@ let C = new CPM.CPM( [w,w], {
 	T : 10
 })
 
-C.addTerm( new CPM.Adhesion( { J:[ [NaN,1], [1,1] ] } ) )
+C.add( new CPM.Adhesion( { J:[ [NaN,1], [1,1] ] } ) )
 
 let cid = C.makeNewCellID(1)
 
@@ -35,5 +35,6 @@ console.timeEnd("execution")
 let Cim = new CPM.Canvas( C )
 Cim.clear( "FFFFFF" )
 Cim.drawCells( 1, "CCCCCC" )
-Cim.writePNG( "ising.png" )
+Cim.writePNG( "output/ising.png" )
+
 

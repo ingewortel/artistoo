@@ -314,10 +314,14 @@ class CPM {
 		} else {
 			this.grid = new Grid3D(field_size,conf.torus);
 		}
+		// Pull up some things from the grid object so we don't have to access it
+		// from the outside
+		this.midpoint = this.grid.midpoint;
 		this.field_size = this.grid.field_size;
 		this.cellPixels = this.grid.pixels.bind(this.grid);
 		this.pixti = this.grid.pixti.bind(this.grid);
 		this.neighi = this.grid.neighi.bind(this.grid);
+		this.extents = this.grid.extents;
 
 		// Attributes of the current CPM as a whole:
 		this.nNeigh = this.grid.neighi(0).length; 	// neighbors per pixel (depends on ndim)
@@ -741,10 +745,8 @@ Canvas.prototype = {
 	cells in the grid of cellkind "kind". */
 	drawActivityValues : function( kind, A ){
 		// cst contains the pixel ids of all non-background/non-stroma cells in
-		// the grid. The function tohex is used to convert computed color gradients
-		// to the hex format.
-		var ii, sigma, a;
-
+		// the grid. 
+		let ii, sigma, a;
 		// loop over all pixels belonging to non-background, non-stroma
 		this.col("FF0000");
 		this.getImageData();
@@ -1604,13 +1606,30 @@ class GridInitializer {
 	constructor( C ){
 		this.C = C;
 	}
+	/* Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
+	 * Try a specified number of times, then give up if grid is too full. 
+	 * The first cell will always be seeded at the midpoint of the grid. */
+	seedCell( kind, max_attempts = 10000 ){
+		let p = this.C.midpoint;
+		while( this.C.pixt( p ) != 0 && max_attempts-- > 0 ){
+			for( let i = 0 ; i < p.length ; i ++ ){
+				p[i] = this.C.ran(0,this.C.extents[i]-1);
+			}
+		}
+		if( this.C.pixt(p) != 0 ){
+			return 0 // failed
+		}
+		const newid = this.C.makeNewCellID( kind );
+		this.C.setpix( p, newid );
+		return newid
+	}
 	/* Seed a new cell of celltype "kind" onto position "p".*/
 	seedCellAt( kind, p ){
 		const newid = this.C.makeNewCellID( kind );
 		this.C.setpix( p, newid );
 		return newid
 	}
-	seedCellsInCircle( kind, n, center, radius, max_attempts ){
+	seedCellsInCircle( kind, n, center, radius, max_attempts = 10000 ){
 		if( !max_attempts ){
 			max_attempts = 10*n;
 		}

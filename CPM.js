@@ -30,10 +30,14 @@ class CPM {
 		} else {
 			this.grid = new Grid3D(field_size,conf.torus)
 		}
+		// Pull up some things from the grid object so we don't have to access it
+		// from the outside
+		this.midpoint = this.grid.midpoint
 		this.field_size = this.grid.field_size
 		this.cellPixels = this.grid.pixels.bind(this.grid)
 		this.pixti = this.grid.pixti.bind(this.grid)
 		this.neighi = this.grid.neighi.bind(this.grid)
+		this.extents = this.grid.extents
 
 		// Attributes of the current CPM as a whole:
 		this.nNeigh = this.grid.neighi(0).length 	// neighbors per pixel (depends on ndim)

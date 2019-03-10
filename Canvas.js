@@ -167,12 +167,8 @@ Canvas.prototype = {
 	cells in the grid of cellkind "kind". */
 	drawActivityValues : function( kind, A ){
 		// cst contains the pixel ids of all non-background/non-stroma cells in
-		// the grid. The function tohex is used to convert computed color gradients
-		// to the hex format.
-		var  ii, sigma, a,
-			tohex = function(a) { a = parseInt(255*a).toString(16) 
-				return  ("00".substring(0,2-a.length))+a }
-
+		// the grid. 
+		let ii, sigma, a
 		// loop over all pixels belonging to non-background, non-stroma
 		this.col("FF0000")
 		this.getImageData()

@@ -10,7 +10,7 @@ let C = new CPM.CPM( [w,w,w], {
 	seed : 1,
 	T : 0.01
 })
-C.addTerm( new CPM.Adhesion( { J:[ [NaN,20], [20,100] ] } ) )
+C.add( new CPM.Adhesion( { J:[ [NaN,20], [20,100] ] } ) )
 
 let cid = C.makeNewCellID(1)
 
@@ -33,7 +33,6 @@ for( i = 0 ; i < 10 ; i ++ ){
 	C.monteCarloStep()
 }
 console.timeEnd("execution")
-console.log( C.cellvolume )
 
 const {createCanvas} = require("canvas")
 let el = createCanvas( w, w )
