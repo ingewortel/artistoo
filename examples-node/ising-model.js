@@ -26,7 +26,7 @@ for( let i = 0 ; i < C.field_size.x ; i ++ ){
 }
 
 console.time("execution")
-for( i = 0 ; i < 20 ; i ++ ){
+for( i = 0 ; i < 50 ; i ++ ){
 	console.log(i)
 	C.monteCarloStep()
 }

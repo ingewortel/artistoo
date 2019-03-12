@@ -15,7 +15,8 @@ import HardVolumeRangeConstraint from "../hamiltonian/HardVolumeRangeConstraint.
 import TestLogger from "../hamiltonian/TestLogger.js"
 import PerimeterConstraint from "../hamiltonian/PerimeterConstraint.js"
 import ActivityConstraint from "../hamiltonian/ActivityConstraint2.js"
+import PreferredDirectionConstraint from "../hamiltonian/PreferredDirectionConstraint.js"
 
 export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator,Grid2D,Grid3D,
 	Adhesion, VolumeConstraint, GridInitializer, HardVolumeRangeConstraint, TestLogger,
-	ActivityConstraint, PerimeterConstraint}
+	ActivityConstraint, PerimeterConstraint, PreferredDirectionConstraint}

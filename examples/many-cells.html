@@ -10,7 +10,7 @@ canvas{ border: 1px solid black }
 <script>
 "use strict"
 
-let zoom=1, w = 250, t = 5000
+let zoom=1, w = 250, t = 5000, ncells = 100
 
 
 let C,meter
@@ -37,7 +37,10 @@ function setupCPM(conf){
 	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
 	C.add( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,50] } ) )
-	
+	let pdc = new CPM.PreferredDirectionConstraint( 
+		{LAMBDA_DIR: [0,100], PERSIST: [0,.9] } ) 
+	C.add( pdc )
+
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 
 	C.add( { postMCSListener : function(){
@@ -51,7 +54,11 @@ function setupCPM(conf){
 	}} )
 
 	let Gi = new CPM.GridInitializer(C)
-	Gi.seedCell(1)
+	for( let i = 0 ; i < ncells ; i ++ ){
+		Gi.seedCell(1)
+		//let cid = C.makeNewCellID(1)
+		//C.setpix( C.grid.midpoint, cid )
+	}
 
 	// Start simulation
 	meter = new FPSMeter({left:"auto", right:"5px"})
@@ -61,6 +68,6 @@ function setupCPM(conf){
 </script>
 </head>
 <body onload="initialize()">
-<p>A single CPM cell.</p>
+<p>Many moving cells.</p>
 </body>
 </html>

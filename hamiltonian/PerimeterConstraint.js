@@ -9,7 +9,7 @@ class PerimeterConstraint extends SoftConstraint {
 		super( conf )
 		this.cellperimeters = {}
 	}
-	determinePerimeter( i, t_old, t_new ){
+	postSetpixListener( i, t_old, t_new ){
 		if( t_old == t_new ){ return }
 		const Ni = this.C.neighi( i )
 		let n_new = 0, n_old = 0
@@ -39,9 +39,6 @@ class PerimeterConstraint extends SoftConstraint {
 			}
 			this.cellperimeters[t_new] += n_new
 		}
-	}
-	postSetpixListener( i, t_old, t ){
-		this.determinePerimeter( i, t_old, t )
 	}
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		if( src_type == tgt_type ){
