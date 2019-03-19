@@ -10,7 +10,7 @@ canvas{ border: 1px solid black }
 <script>
 "use strict"
 
-let zoom=2, w = 40, t = 5000, ncells = 2
+let zoom=2, w = 100, t = 5000, ncells = 4 
 
 
 let C,meter
@@ -40,7 +40,7 @@ function setupCPM(conf){
 	C.add( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,50] } ) )
 	pdc = new CPM.PreferredDirectionConstraint( 
-		{LAMBDA_DIR: [0,1], PERSIST: [0,.9] } ) 
+		{LAMBDA_DIR: [0,100], PERSIST: [0,.9] } ) 
 	C.add( pdc )
 	C.add( Cs )
 ;
@@ -57,7 +57,8 @@ function setupCPM(conf){
 		let ctx = Cim.context()
 		ctx.beginPath()
 		ctx.lineWidth = 2*zoom
-		for( let i of Object.keys(pdc.celldirections) ){
+		for( let i of C.cellIDs() ){
+			if( i == 0 ) continue
 			//console.log( pdc.cellcentroidlists[i][0])
 			//console.log( pdc.cellcentroidlists[i][0]*zoom,
 			//	pdc.cellcentroidlists[i][1]*zoom,
@@ -66,11 +67,13 @@ function setupCPM(conf){
 			//	pdc.cellcentroids[i][1]*zoom,
 			//	zoom, zoom
 		       	//)
-			ctx.moveTo( pdc.cellcentroids[i][0]*zoom,
-				pdc.cellcentroids[i][1]*zoom,
+			let cc = Cs.centroidWithTorus(i)
+			ctx.moveTo( 
+				cc[0]*zoom,
+				cc[1]*zoom,
 		       	)
-			ctx.lineTo( (pdc.cellcentroids[i][0]+10*pdc.celldirections[i][0])*zoom,
-				(pdc.cellcentroids[i][1]+10*pdc.celldirections[i][1])*zoom,
+			ctx.lineTo( (cc[0]+10*pdc.celldirections[i][0])*zoom,
+				(cc[1]+10*pdc.celldirections[i][1])*zoom,
 		       	)
 		}
 		ctx.stroke()
