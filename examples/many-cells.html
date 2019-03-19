@@ -10,7 +10,7 @@ canvas{ border: 1px solid black }
 <script>
 "use strict"
 
-let zoom=1, w = 250, t = 5000, ncells = 100
+let zoom=2, w = 40, t = 5000, ncells = 2
 
 
 let C,meter
@@ -27,20 +27,23 @@ function initialize(){
 	timestep()
 }
 
+let pdc, Cs
 function setupCPM(conf){
 	const zoom = conf.zoom || 1
 	const w = conf.w || 200
 	let C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : false
+		torus : true
 	})
+	Cs = new CPM.PostMCSStats()
 	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
 	C.add( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,50] } ) )
-	let pdc = new CPM.PreferredDirectionConstraint( 
-		{LAMBDA_DIR: [0,100], PERSIST: [0,.9] } ) 
+	pdc = new CPM.PreferredDirectionConstraint( 
+		{LAMBDA_DIR: [0,1], PERSIST: [0,.9] } ) 
 	C.add( pdc )
-
+	C.add( Cs )
+;
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 
 	C.add( { postMCSListener : function(){
@@ -51,6 +54,26 @@ function setupCPM(conf){
 		// activity values on top of cell
 		//Cim.drawActivityValues( 1, A )
 		Cim.drawCellBorders( 1, "000000" )
+		let ctx = Cim.context()
+		ctx.beginPath()
+		ctx.lineWidth = 2*zoom
+		for( let i of Object.keys(pdc.celldirections) ){
+			//console.log( pdc.cellcentroidlists[i][0])
+			//console.log( pdc.cellcentroidlists[i][0]*zoom,
+			//	pdc.cellcentroidlists[i][1]*zoom,
+			//	zoom, zoom )
+			//ctx.fillRect( pdc.cellcentroids[i][0]*zoom,
+			//	pdc.cellcentroids[i][1]*zoom,
+			//	zoom, zoom
+		       	//)
+			ctx.moveTo( pdc.cellcentroids[i][0]*zoom,
+				pdc.cellcentroids[i][1]*zoom,
+		       	)
+			ctx.lineTo( (pdc.cellcentroids[i][0]+10*pdc.celldirections[i][0])*zoom,
+				(pdc.cellcentroids[i][1]+10*pdc.celldirections[i][1])*zoom,
+		       	)
+		}
+		ctx.stroke()
 	}} )
 
 	let Gi = new CPM.GridInitializer(C)

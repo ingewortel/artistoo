@@ -31,19 +31,19 @@ class Grid3D extends Grid {
 		return [i >> (this.Y_BITS + this.Z_BITS), 
 			( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 	}
-	neighi( i ){
+	neighi( i, torus = this.torus ){
 		let p = this.i2p(i)
 
 		let xx = []
 		for( let d = 0 ; d <= 2 ; d ++ ){
 			if( p[d] == 0 ){
-				if( this.torus ){
+				if( torus ){
 					xx[d] = [p[d],this.extents[d]-1,p[d]+1]
 				} else {
 					xx[d] = [p[d],p[d]+1]
 				}
 			} else if( p[d] == this.extents[d]-1 ){
-				if( this.torus ){
+				if( torus ){
 					xx[d] = [p[d],p[d]-1,0]
 				} else {
 					xx[d] = [p[d],p[d]-1]

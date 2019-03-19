@@ -2,18 +2,17 @@
     the centroids of all cells (which is actually the only thing that's implemented
     so far) */
 
-function Stats( C ){
-	this.C = C
-	this.ndim = this.C.ndim
-}
-
-Stats.prototype = {
+class Stats {
+	constructor( C ){
+		this.C = C
+		this.ndim = this.C.ndim
+	}
 
 	// ------------  FRC NETWORK 
 
 	// for simulation on FRC network. Returns all cells that are in contact with
 	// a stroma cell.
-	cellsOnNetwork : function(){
+	cellsOnNetwork(){
 		var px = this.C.cellborderpixels.elements, i,j, N, r = {}, t
 		for( i = 0 ; i < px.length ; i ++ ){
 			t = this.C.pixti( px[i] )
@@ -26,14 +25,14 @@ Stats.prototype = {
 			}
 		}
 		return r
-	},
+	}
 	
 	
 	// ------------  CELL LENGTH IN ONE DIMENSION
 	// (this does not work with a grid torus).
 		
 	// For computing mean and variance with online algorithm
-	updateOnline : function( aggregate, value ){
+	updateOnline( aggregate, value ){
 		
 		var delta, delta2
 
@@ -44,13 +43,14 @@ Stats.prototype = {
 		aggregate.sqd += delta*delta2
 
 		return aggregate
-	},
-	newOnline : function(){
+	}
+
+	newOnline(){
 		return( { count : 0, mean : 0, sqd : 0 } ) 
-	},
+	}
 	// return mean and variance of coordinates in a given dimension for cell t
 	// (dimension as 0,1, or 2)
-	cellStats : function( t, dim ){
+	cellStats( t, dim ){
 
 		var aggregate, cpt, j, stats
 
@@ -72,19 +72,21 @@ Stats.prototype = {
 		// get mean and variance
 		stats = { mean : aggregate.mean, variance : aggregate.sqd / ( aggregate.count - 1 ) }
 		return stats
-	},
+	}
+
 	// get the length (variance) of cell in a given dimension
 	// does not work with torus!
-	getLengthOf : function( t, dim ){
+	getLengthOf( t, dim ){
 		
 		// get mean and sd in x direction
 		var stats = this.cellStats( t, dim )
 		return stats.variance
 
-	},
+	}
+
 	// get the range of coordinates in dim for cell t
 	// does not work with torus!
-	getRangeOf : function( t, dim ){
+	getRangeOf( t, dim ){
 
 		var minc, maxc, cpt, j
 
@@ -105,13 +107,13 @@ Stats.prototype = {
 		
 		return( maxc - minc )		
 
-	},
+	}
 	
 	// ------------  CONNECTEDNESS OF CELLS
 	// ( compatible with torus )
 	
 	// Compute connected components of the cell ( to check connectivity )
-	getConnectedComponentOfCell : function( t, cellindices ){
+	getConnectedComponentOfCell( t, cellindices ){
 		if( cellindices.length == 0 ){ return }
 
 		var visited = {}, k=1, volume = {}, myself = this
@@ -142,8 +144,9 @@ Stats.prototype = {
 		}
 
 		return volume
-	},
-	getConnectedComponents : function(){
+	}
+
+	getConnectedComponents(){
 	
 		let cpi
 	
@@ -159,10 +162,10 @@ Stats.prototype = {
 			volumes[tx[i]] = this.getConnectedComponentOfCell( tx[i], cpi[tx[i]] )
 		}
 		return volumes
-	},	
+	}
 	
 	// Compute probabilities that two pixels taken at random come from the same cell.
-	getConnectedness : function(){
+	getConnectedness(){
 	
 		let cpi
 	
@@ -185,13 +188,13 @@ Stats.prototype = {
 			}
 		}
 		return r
-	},	
+	}	
 	
 	// ------------  PROTRUSION ANALYSIS: PERCENTAGE ACTIVE / ORDER INDEX 
 	// ( compatible with torus )
 	
 	// Compute percentage of pixels with activity > threshold
-	getPercentageActOfCell : function( t, cellindices, threshold ){
+	getPercentageActOfCell( t, cellindices, threshold ){
 		if( cellindices.length == 0 ){ return }
 		var i, count = 0
 
@@ -202,8 +205,9 @@ Stats.prototype = {
 		}
 		return 100*(count/cellindices.length)
 	
-	},
-	getPercentageAct : function( threshold ){
+	}
+
+	getPercentageAct( threshold ){
 	
 		let cpi
 	
@@ -220,9 +224,10 @@ Stats.prototype = {
 		}
 		return activities
 	
-	},
+	}
+
 	// Computing an order index of the activity gradients within the cell.
-	getGradientAt : function( t, i ){
+	getGradientAt( t, i ){
 	
 		var gradient = []
 		
@@ -261,9 +266,10 @@ Stats.prototype = {
 		
 		return gradient
 		
-	},
+	}
+
 	// compute the norm of a vector (in array form)
-	norm : function( v ){
+	norm( v ){
 		var i
 		var norm = 0
 		for( i = 0; i < v.length; i++ ){
@@ -271,8 +277,9 @@ Stats.prototype = {
 		}
 		norm = Math.sqrt( norm )
 		return norm
-	},
-	getOrderIndexOfCell : function( t, cellindices ){
+	}
+
+	getOrderIndexOfCell( t, cellindices ){
 	
 		if( cellindices.length == 0 ){ return }
 		
@@ -300,8 +307,9 @@ Stats.prototype = {
 		// finally, return the norm of this summed vector
 		var orderindex = this.norm( gradientsum )
 		return orderindex	
-	},
-	getOrderIndices : function( ){
+	}
+
+	getOrderIndices( ){
 		var cpi = this.cellborderpixelsi()
 		var tx = Object.keys( cpi ), i, orderindices = {}
 		for( i = 0 ; i < tx.length ; i ++ ){
@@ -309,7 +317,7 @@ Stats.prototype = {
 		}
 		return orderindices
 	
-	},
+	}
 	
 	// ------------  CENTROIDS
 	// ( compatible with torus )
@@ -322,44 +330,40 @@ Stats.prototype = {
 	// separately if they cross the grid borders. 
 	
 	// Return connected components of the cell ( to compute centroids )
-	returnConnectedComponentOfCell : function( t, cellindices ){
-		if( cellindices.length == 0 ){ return }
+	static returnConnectedComponentOfCell( C, i ){
 
-		var visited = {}, k=1, pixels = {}, myself = this
+		let visited = {}, k=1, pixels = {}
 
 		var labelComponent = function(seed, k){
 			var q = [parseInt(seed)]
 			visited[q[0]] = 1
 			pixels[k] = []
 			while( q.length > 0 ){
-				var e = parseInt(q.pop())
-				pixels[k].push( myself.C.i2p(e) )
-				var ne = myself.C.neighi( e, false )
-				for( var i = 0 ; i < ne.length ; i ++ ){
-					if( !isNaN( ne[i] ) ){
-						if( myself.C.pixti( ne[i] ) == t &&
-							!visited.hasOwnProperty(ne[i]) ){
-							q.push(ne[i])
-							visited[ne[i]]=1
-						}
-					
+				let e = parseInt(q.pop())
+				pixels[k].push( C.i2p(e) )
+				let ne = C.neighi( e, false )
+				for( let i = 0 ; i < ne.length ; i ++ ){
+					if( C.pixti( ne[i] ) == t &&
+						!(ne[i] in visited) ){
+						q.push(ne[i])
+						visited[ne[i]]=1
 					}
-
 				}
 			}
 		}
 
-		for( var i = 0 ; i < cellindices.length ; i ++ ){
-			if( !visited.hasOwnProperty( cellindices[i] ) ){
+		for( let i = 0 ; i < cellindices.length ; i ++ ){
+			if( !(cellindices[i] in visited) ){
 				labelComponent( cellindices[i], k )
 				k++
 			}
 		}
 
 		return pixels
-	},
+	}
+
 	// converts an array of pixel coordinates to its centroid
-	pixelsToCentroid : function( cellpixels ){
+	pixelsToCentroid( cellpixels ){
 		let cvec, j
 
 		// fill the array cvec with zeros first
@@ -379,10 +383,10 @@ Stats.prototype = {
 		}
 
 		return cvec
-	},
+	}
 
 	// computes the centroid of a cell when grid has a torus.
-	getCentroidOfCellWithTorus : function( t, cellindices ){
+	getCentroidOfCellWithTorus( t, cellindices ){
 		
 		if( cellindices.length == 0 ){ return }
 		
@@ -430,9 +434,10 @@ Stats.prototype = {
 		}
 
 		return centroid		
-	},	
+	}
+
 	// center of mass of cell t; cellpixels object can be given as the second argument
-	getCentroidOf : function( t ){
+	getCentroidOf( t ){
 		var cvec, cpt
 		if( arguments.length == 2 ){
 			cpt = arguments[1]
@@ -443,9 +448,10 @@ Stats.prototype = {
 		cvec = this.getCentroidOfCellWithTorus( t, cpt[t] )
 
 		return cvec
-	},
+	}
+
 	// center of mass (return)
-	getCentroids : function(){
+	getCentroids(){
 		
 		let cpi
 	
@@ -470,9 +476,10 @@ Stats.prototype = {
 			r.push( current )
 		}
 		return r
-	},
+	}
+
 	// center of mass (print to console)
-	centroids : function(){
+	centroids(){
 		var cp = this.cellpixelsi()
 		var tx = Object.keys( cp )	
 		var cvec, i
@@ -490,12 +497,12 @@ Stats.prototype = {
 			)
 
 		}
-	},
+	}
 
 	// returns a list of all cell ids of the cells that border to "cell" and are of a different type
 	// a dictionairy with keys = neighbor cell ids, and 
 	// values = number of "cell"-pixels the neighbor cell borders to
-	cellNeighborsList : function( cell, cbpi ) {
+	cellNeighborsList( cell, cbpi ) {
 		if (!cbpi) {
 			cbpi = this.cellborderpixelsi()[cell]
 		} else {
@@ -518,51 +525,14 @@ Stats.prototype = {
 			}
 		}
 		return neigh_cell_amountborder
-	},
+	}
 
 	// ------------ HELPER FUNCTIONS
 	
-	// returns an object with a key for each celltype (identity). 
-	// The corresponding value is an array of pixel coordinates per cell.
-	cellpixels : function(){
-		var cp = {}
-		var px = Object.keys( this.C.cellpixelstype ), t, i
-		for( i = 0 ; i < px.length ; i ++ ){
-			t = this.C.cellpixelstype[px[i]]
-			if( !(t in cp ) ){
-				cp[t] = []
-			}
-			cp[t].push( this.C.i2p( px[i] ) )
-		}
-		return cp
-	},
-
-	cellpixelsi : function(){
-		var cp = {}
-		var px = Object.keys( this.C.cellpixelstype ), t, i
-		for( i = 0 ; i < px.length ; i ++ ){
-			t = this.C.cellpixelstype[px[i]]
-			if( !(t in cp ) ){
-				cp[t] = []
-			}
-			cp[t].push( px[i] )
-		}
-		return cp
-	},
-  
-	cellborderpixelsi : function(){
-		let cp = {}, t
-		const px = this.C.cellborderpixels.elements
-		for( let i = 0; i < px.length; i++ ){
-			t = this.C.cellpixelstype[px[i]]
-			if( !(t in cp ) ){
-				cp[t] = []
-			}
-			cp[t].push( px[i] )
-		}
-		return cp		
-	}
-
+	// TODO all helper functions have been removed from this class.
+	// We should only access cellpixels through the "official" interface
+	// in the CPM class.
+	
 }
 
 

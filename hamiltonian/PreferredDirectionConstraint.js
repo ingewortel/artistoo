@@ -60,6 +60,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		for( let i = 0 ; i < a.length ; i ++ ){
 			norm += a[i]*a[i]
 		}
+		norm = Math.sqrt(norm)
 		for( let i = 0 ; i < a.length ; i ++ ){
 			a[i] /= norm
 		}

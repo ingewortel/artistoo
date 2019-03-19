@@ -60,11 +60,29 @@ class CPM {
 		this._neighbours = new Uint16Array(this.grid.p2i(field_size))
 	}
 
+	neigh(p, torus=this.conf.torus){
+		let g = this.grid
+		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+	}
+
+	* cellIDs() {
+		yield* Object.keys( this.t2k )
+	}
+
 	* cellBorderPixels() {
 		for( let i of this.cellborderpixels.elements ){
 			const t = this.pixti(i)
 			if( t != 0 ){
 				yield [this.grid.i2p(i),t]
+			}
+		}
+	}
+
+	* cellBorderPixelIndices() {
+		for( let i of this.cellborderpixels.elements ){
+			const t = this.pixti(i)
+			if( t != 0 ){
+				yield [i,t]
 			}
 		}
 	}

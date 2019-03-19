@@ -58,7 +58,7 @@ class Grid2D extends Grid {
 		return r
 	}
 
-	neighi( i ){	
+	neighi( i, torus = this.torus ){	
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
 		let tl, tm, tr, l, r, bl, bm, br
@@ -74,7 +74,7 @@ class Grid2D extends Grid {
 		// 
 		// left border
 		if( i < this.field_size.y ){
-			if( this.torus ){
+			if( torus ){
 				add = this.field_size.x * this.dy
 			}
 			tl += add; l += add; bl += add 	
@@ -82,7 +82,7 @@ class Grid2D extends Grid {
 		
 		// right border
 		if( i >= this.dy*( this.field_size.x - 1 ) ){
-			if( this.torus ){
+			if( torus ){
 				add = -this.field_size.x * this.dy
 			}
 			tr += add; r += add; br += add
@@ -90,7 +90,7 @@ class Grid2D extends Grid {
 
 		// top border
 		if( i % this.dy == 0 ){
-			if( this.torus ){
+			if( torus ){
 				add = this.field_size.y
 			}
 			tl += add; tm += add; tr += add	
@@ -98,12 +98,12 @@ class Grid2D extends Grid {
 		
 		// bottom border
 		if( (i+1-this.field_size.y) % this.dy == 0 ){
-			if( this.torus ){
+			if( torus ){
 				add = -this.field_size.y
 			}
 			bl += add; bm += add; br += add
 		}
-		if( !this.torus ){
+		if( !torus ){
 			return [ tl, l, bl, tm, bm, tr, r, br ].filter( isFinite )
 		} else {
 			return [ tl, l, bl, tm, bm, tr, r, br ]

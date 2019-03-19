@@ -2,6 +2,7 @@
 import CPM from "../CPM.js"
 import Canvas from "../Canvas.js"
 import Stats from "../Stats.js"
+import PostMCSStats from "../stats/PostMCSStats.js"
 import GridManipulator from "../GridManipulator.js"
 import CPMChemotaxis from "../CPMChemotaxis.js"
 import Grid2D from "../Grid2D.js"
@@ -19,4 +20,5 @@ import PreferredDirectionConstraint from "../hamiltonian/PreferredDirectionConst
 
 export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator,Grid2D,Grid3D,
 	Adhesion, VolumeConstraint, GridInitializer, HardVolumeRangeConstraint, TestLogger,
-	ActivityConstraint, PerimeterConstraint, PreferredDirectionConstraint}
+	ActivityConstraint, PerimeterConstraint, PreferredDirectionConstraint,
+	PostMCSStats }
