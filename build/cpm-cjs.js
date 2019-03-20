@@ -1128,185 +1128,6 @@ class Stats {
 	
 	}
 	
-	// ------------  CENTROIDS
-	// ( compatible with torus )
-	//
-	// computation of cell centroid is more complicated when the grid is a torus.
-	// We compute connected components of the cell with the option torus = false in
-	// the computation of neighbourhoods, which means that pixels crossing the border
-	// are not considered neighbours (see CPM.js ). We then compute the total centroid as
-	// a weighted average of the centroids of the connected components, which we correct
-	// separately if they cross the grid borders. 
-	
-	// Return connected components of the cell ( to compute centroids )
-	static returnConnectedComponentOfCell( C, i ){
-
-		let visited = {}, k=1, pixels = {};
-
-		var labelComponent = function(seed, k){
-			var q = [parseInt(seed)];
-			visited[q[0]] = 1;
-			pixels[k] = [];
-			while( q.length > 0 ){
-				let e = parseInt(q.pop());
-				pixels[k].push( C.i2p(e) );
-				let ne = C.neighi( e, false );
-				for( let i = 0 ; i < ne.length ; i ++ ){
-					if( C.pixti( ne[i] ) == t &&
-						!(ne[i] in visited) ){
-						q.push(ne[i]);
-						visited[ne[i]]=1;
-					}
-				}
-			}
-		};
-
-		for( let i = 0 ; i < cellindices.length ; i ++ ){
-			if( !(cellindices[i] in visited) ){
-				labelComponent( cellindices[i], k );
-				k++;
-			}
-		}
-
-		return pixels
-	}
-
-	// converts an array of pixel coordinates to its centroid
-	pixelsToCentroid( cellpixels ){
-		let cvec, j;
-
-		// fill the array cvec with zeros first
-		cvec = Array.apply(null, Array(this.ndim)).map(Number.prototype.valueOf,0);
-
-		// loop over pixels to sum up coordinates
-		for( j = 0; j < cellpixels.length; j++ ){
-			// loop over coordinates x,y,z
-			for( let dim = 0; dim < this.ndim; dim++ ){
-				cvec[dim] += cellpixels[j][dim];
-			}		
-		}
-
-		// divide to get mean
-		for( let dim = 0; dim < this.ndim; dim++ ){
-			cvec[dim] /= j;
-		}
-
-		return cvec
-	}
-
-	// computes the centroid of a cell when grid has a torus.
-	getCentroidOfCellWithTorus( t, cellindices ){
-		
-		if( cellindices.length == 0 ){ return }
-		
-		// get the connected components and the pixels in it
-		let ccpixels = this.returnConnectedComponentOfCell( t, cellindices );
-		
-		// centroid of the first component
-		let c = Object.keys( ccpixels );
-		let centroid0 = this.pixelsToCentroid( ccpixels[ c[0] ] );
-
-		// loop over the connected components to compute a weighted sum of their 
-		// centroids.
-		let n = 0, 
-			centroid = Array.apply(null, Array(this.ndim)).map(Number.prototype.valueOf,0);
-		const fs = [ this.C.field_size.x, this.C.field_size.y, this.C.field_size.z ];
-		for( let j = 0; j < c.length; j++ ){
-		
-			let centroidc, nc, d;
-			centroidc = this.pixelsToCentroid( ccpixels[ c[j] ] );
-			nc = ccpixels[ c[j] ].length;
-			n += nc;
-			
-			// compute weighted sum. 
-			for( d = 0; d < this.ndim; d++ ){
-			
-				// If centroid is more than half the field size away
-				// from the first centroid0, it crosses the border, so we 
-				// first correct its coordinates.
-				if( centroidc[d] - centroid0[d] > fs[d]/2 ){
-					centroidc[d] -= fs[d];
-				}
-				if( centroidc[d] - centroid0[d] < -fs[d]/2 ){
-					centroidc[d] += fs[d];
-				}
-				
-				centroid[d] += centroidc[d] * nc;
-			}
-			
-		}
-		
-		// divide by the total n to get the mean
-		let d;
-		for( d = 0; d < this.ndim; d++ ){
-			centroid[d] /= n;
-		}
-
-		return centroid		
-	}
-
-	// center of mass of cell t; cellpixels object can be given as the second argument
-	getCentroidOf( t ){
-		var cvec, cpt;
-		if( arguments.length == 2 ){
-			cpt = arguments[1];
-		} else {
-			cpt = this.cellpixelsi();
-		}
-		
-		cvec = this.getCentroidOfCellWithTorus( t, cpt[t] );
-
-		return cvec
-	}
-
-	// center of mass (return)
-	getCentroids(){
-		
-		let cpi;
-	
-		if( arguments.length == 1 ){
-			cpi = arguments[0];
-		} else {
-			cpi = this.cellpixelsi();
-		}
-	
-		const tx = Object.keys( cpi );
-		let cvec, r = [], current, i;
-
-		// loop over the cells in tx to get their centroids
-		for( i = 0; i < tx.length; i++ ){
-			cvec = this.getCentroidOf( tx[i], cpi[tx[i]] );
-
-			// output depending on ndim
-			current = { id : tx[i], x : cvec[0], y : cvec[1] };
-			if( this.ndim == 3 ){
-				current["z"] = cvec[2];			
-			}
-			r.push( current );
-		}
-		return r
-	}
-
-	// center of mass (print to console)
-	centroids(){
-		var cp = this.cellpixelsi();
-		var tx = Object.keys( cp );	
-		var cvec, i;
-
-		// loop over the cells in tx to get their centroids
-		for( i = 0; i < tx.length; i++ ){
-			cvec = this.getCentroidOf( tx[i], cp[tx[i]] );
-
-			// eslint-disable-next-line no-console
-			console.log( 
-				tx[i] + "\t" +
-				this.C.time + "\t" +
-				this.C.time + "\t" +
-				cvec.join("\t")
-			);
-
-		}
-	}
 
 	// returns a list of all cell ids of the cells that border to "cell" and are of a different type
 	// a dictionairy with keys = neighbor cell ids, and 
@@ -1353,6 +1174,10 @@ class PostMCSStats {
 	}
 	set CPM( C ){
 		this.C = C;
+		this.halfsize = new Array(C.ndim).fill(0);
+		for( let i = 0 ; i < C.ndim ; i ++ ){
+			this.halfsize[i] = C.extents[i]/2;
+		}
 	}
 	postMCSListener(){
 		if( this.conf.trackpixels ){
@@ -1366,7 +1191,11 @@ class PostMCSStats {
 		}
 	}
 	/* Return an array with the pixel coordinates of each connected
-	 * component for the cell with type t */
+	 * component for the cell with type t
+	 *
+	 * TODO this function appears to be extremely slow. 
+	 * Avoid calling this at all costs 
+	 * if possible. */
 	connectedComponentsOfCell( t, torus ){
 		let visited = {}, k=0, pixels = [], C = this.C;
 		let labelComponent = function(seed, k){
@@ -1376,7 +1205,7 @@ class PostMCSStats {
 			while( q.length > 0 ){
 				let e = q.pop();
 				pixels[k].push( C.grid.i2p(e) );
-				let ne = C.neighi( e, torus );
+				let ne = C.grid.neighi( e, torus );
 				for( let i = 0 ; i < ne.length ; i ++ ){
 					if( C.pixti( ne[i] ) == t &&
 						!(ne[i] in visited) ){
@@ -1395,33 +1224,69 @@ class PostMCSStats {
 		}
 		return pixels
 	}
-	// converts an array of pixel coordinates to its centroid
+	/* converts an array of pixel coordinates to its centroid.
+	Includes a correction for pixels that are "too far apart", such
+	   that meaningful centroids will be computed if the cell resides on 
+	 a torus grid. */
 	pixelsToCentroid( pixels ){
-		let cvec, j;
-		// fill the array cvec with zeros first
-		cvec = new Array(this.C.ndim).fill(0);
-		// loop over pixels to sum up coordinates
-		for( j = 0.; j < pixels.length; j++ ){
-			// loop over coordinates x,y,z
-			for( let dim = 0; dim < this.C.ndim; dim++ ){
-				cvec[dim] += pixels[j][dim];
-			}	
-		}
-		// divide to get mean
-		for( let dim = 0; dim < this.C.ndim; dim++ ){
-			cvec[dim] /= j;
+		let cvec = new Array(this.C.ndim).fill(0);
+		for( let dim = 0 ; dim < this.C.ndim ; dim ++ ){
+			let mi = 0.;
+			// compute mean per dimension with online algorithm
+			for( let j = 0 ; j < pixels.length ; j ++ ){
+				let dx = pixels[j][dim] - mi;
+				mi += dx/(j+1);
+			}
+			cvec[dim] = mi;
 		}
 		return cvec
 	}
+	/*
+	 * Computes a simple cell centroid.
+	 */
 	centroid( t ){
-		if( this.C.torus ){
-			return this.centroidWithTorus( t )
-		} else {
-			return this.pixelsToCentroid( this.cellpixels[t] )
-		}
+		return this.pixelsToCentroid( this.cellpixels[t] )
 	}
-	// computes the centroid of a cell when grid has a torus.
-	centroidWithTorus( t ){
+
+	/*
+	 * Computes the centroid of a cell when grid has a torus.
+	 * Assumption: cell pixels never extend for more than half the
+	 * size of the grid.
+	 */
+	centroidWithTorusCorrection( t ){
+		const pixels = this.cellpixels[t];
+		let cvec = new Array(this.C.ndim).fill(0);
+		for( let dim = 0 ; dim < this.C.ndim ; dim ++ ){
+			let mi = 0.;
+			const hsi = this.halfsize[dim], si = this.C.extents[dim];
+			// compute mean per dimension with online algorithm
+			for( let j = 0 ; j < pixels.length ; j ++ ){
+				let dx = pixels[j][dim] - mi;
+				if( j > 0 ){
+					if( dx > hsi ){
+						dx -= si;
+					} else if( dx < -hsi ){
+						dx += si;
+					}
+				}
+				mi += dx/(j+1);
+			}
+			if( mi < 0 ){
+				mi += si;
+			} else if( mi > si ){
+				mi -= si;
+			}
+			cvec[dim] = mi;
+		}
+		return cvec
+	}
+
+
+	/*
+	 * Computes the centroid of a cell when grid has a torus.
+	 * This is an older, slower implementation based on connected
+	 * components. */
+	centroidWithTorusSlow( t ){
 		// get the connected components and the pixels in it
 		let ccpixels = this.connectedComponentsOfCell( t, false );
 	
@@ -2118,53 +1983,37 @@ class ActivityConstraint extends SoftConstraint {
 class PreferredDirectionConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf );
-		this.cellcentroids = {};
 		this.cellcentroidlists = {};
-		this.celldirections = {}; 
+		this.celldirections = {};
+		this.Cs = conf.pixeltracker;
+	}
+	set CPM(C){
+		this.halfsize = new Array(C.ndim).fill(0);
+		this.C = C;
+		for( let i = 0 ; i < C.ndim ; i ++ ){
+			this.halfsize[i] = C.extents[i]/2;
+		}
+
 	}
 	deltaH ( sourcei, targeti, src_type ) {
 		if( src_type == 0 || !(src_type in this.celldirections) ) return 0
-		const src_kind = this.C.cellKind(src_type);
-		let ld = this.conf["LAMBDA_DIR"][src_kind];
 		let b = this.celldirections[src_type];
 		let p1 = this.C.grid.i2p(sourcei), p2 = this.C.grid.i2p(targeti);
-
 		let a = [];
 		for( let i = 0 ; i < p1.length ; i ++ ){
 			a[i] = p2[i]-p1[i];
+			if( a[i] > this.halfsize[i] ){
+				a[i] -= this.C.extents[i];
+			} else if( a[i] < -this.halfsize[i] ){
+				a[i] += this.C.extents[i];
+			}
 		}
 
 		let dp = 0;
 		for( let i = 0 ; i < a.length ; i ++ ){
 			dp += a[i]*b[i];
 		}
-
-		return -ld * dp
-	}
-	postSetpixListener( i, t_old, t_new ){
-		let p = this.C.grid.i2p(i);
-		if( t_new != 0 && !(t_new in this.cellcentroids ) ){
-			this.cellcentroids[t_new] = [0,0];
-			let rang = this.C.random()*Math.PI*2;
-			this.celldirections[t_new] = [Math.cos(rang),Math.sin(rang)];
-		}
-
-		for( let i = 0 ; i < p.length ; i ++ ){
-			if( t_new != 0 ){
-				this.cellcentroids[t_new][i] +=
-					(p[i]-this.cellcentroids[t_new][i])/
-					this.C.getVolume(t_new);
-			}
-			if( t_old != 0 ){
-				let vv = this.C.getVolume(t_old);
-				if( vv == 0 ){
-					delete this.cellcentroids[t_old];
-				}
-				this.cellcentroids[t_old][i] -=
-					(p[i]-this.cellcentroids[t_old][i])/
-					(vv+1);
-			}
-		}
+		return - dp
 	}
 	normalize( a ){
 		let norm = 0;
@@ -2175,30 +2024,39 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		for( let i = 0 ; i < a.length ; i ++ ){
 			a[i] /= norm;
 		}
-		return a
 	}
 	postMCSListener(){
-		for( let i of Object.keys( this.cellcentroidlists ) ){
-			if( !(i in this.cellcentroids ) ){
-				delete this.cellcentroidlists[i];
+		for( let t of this.C.cellIDs() ){
+			const k = this.C.cellKind(t);
+			let ld = this.conf["LAMBDA_DIR"][k];
+			if( ld == 0 ){
+				delete this.cellcentroidlists[t];
+				delete this.celldirections[t];
+				continue
+			} 
+			if( !(t in this.cellcentroidlists ) ){
+				this.cellcentroidlists[t] = [];
+				let rang = this.C.random()*Math.PI*2;
+				this.celldirections[t] = [Math.cos(rang),Math.sin(rang)];
 			}
-		}
-		for( let i of Object.keys( this.cellcentroids ) ){
-			if( !(i in this.cellcentroidlists ) ){
-				this.cellcentroidlists[i] = [];
-			}
-			this.cellcentroidlists[i].unshift(this.cellcentroids[i].slice(0));
-			if( this.cellcentroidlists[i].length == 10 ){
-				let l = this.cellcentroidlists[i].pop(), d = [];
+			let ci = this.Cs.centroid( t );
+			this.cellcentroidlists[t].unshift(ci);
+			if( this.cellcentroidlists[t].length == 10 ){
+				let l = this.cellcentroidlists[t].pop(), dx = [];
 				for( let j = 0 ; j < l.length ; j ++ ){
-					d[j] = this.cellcentroids[i][j] - l[j];
+					dx[j] = ci[j] - l[j];
 				}
-				let per = this.conf["PERSIST"][this.C.cellKind(i)];
-				d = this.normalize(d);
-				for( let j = 0 ; j < d.length ; j ++ ){
-					d[j] = (1-per)*d[j] + per*this.celldirections[i][j];
+				let per = this.conf["PERSIST"][this.C.cellKind(t)];
+				this.normalize(dx);
+				this.normalize(this.celldirections[t]);
+				for( let j = 0 ; j < dx.length ; j ++ ){
+					dx[j] = (1-per)*dx[j] + per*this.celldirections[t][j];
 				}
-				this.celldirections[i] = this.normalize(d);
+				this.normalize(dx);
+				for( let j = 0 ; j < dx.length ; j ++ ){
+					dx[j] *= ld;
+				}
+				this.celldirections[t] = dx;
 			}
 		}
 	}

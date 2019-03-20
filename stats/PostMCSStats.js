@@ -8,6 +8,10 @@ class PostMCSStats {
 	}
 	set CPM( C ){
 		this.C = C
+		this.halfsize = new Array(C.ndim).fill(0)
+		for( let i = 0 ; i < C.ndim ; i ++ ){
+			this.halfsize[i] = C.extents[i]/2
+		}
 	}
 	postMCSListener(){
 		if( this.conf.trackpixels ){
@@ -21,7 +25,11 @@ class PostMCSStats {
 		}
 	}
 	/* Return an array with the pixel coordinates of each connected
-	 * component for the cell with type t */
+	 * component for the cell with type t
+	 *
+	 * TODO this function appears to be extremely slow. 
+	 * Avoid calling this at all costs 
+	 * if possible. */
 	connectedComponentsOfCell( t, torus ){
 		let visited = {}, k=0, pixels = [], C = this.C
 		let labelComponent = function(seed, k){
@@ -31,7 +39,7 @@ class PostMCSStats {
 			while( q.length > 0 ){
 				let e = q.pop()
 				pixels[k].push( C.grid.i2p(e) )
-				let ne = C.neighi( e, torus )
+				let ne = C.grid.neighi( e, torus )
 				for( let i = 0 ; i < ne.length ; i ++ ){
 					if( C.pixti( ne[i] ) == t &&
 						!(ne[i] in visited) ){
@@ -50,33 +58,69 @@ class PostMCSStats {
 		}
 		return pixels
 	}
-	// converts an array of pixel coordinates to its centroid
+	/* converts an array of pixel coordinates to its centroid.
+	Includes a correction for pixels that are "too far apart", such
+	   that meaningful centroids will be computed if the cell resides on 
+	 a torus grid. */
 	pixelsToCentroid( pixels ){
-		let cvec, j
-		// fill the array cvec with zeros first
-		cvec = new Array(this.C.ndim).fill(0)
-		// loop over pixels to sum up coordinates
-		for( j = 0.; j < pixels.length; j++ ){
-			// loop over coordinates x,y,z
-			for( let dim = 0; dim < this.C.ndim; dim++ ){
-				cvec[dim] += pixels[j][dim]
-			}	
-		}
-		// divide to get mean
-		for( let dim = 0; dim < this.C.ndim; dim++ ){
-			cvec[dim] /= j
+		let cvec = new Array(this.C.ndim).fill(0)
+		for( let dim = 0 ; dim < this.C.ndim ; dim ++ ){
+			let mi = 0.
+			// compute mean per dimension with online algorithm
+			for( let j = 0 ; j < pixels.length ; j ++ ){
+				let dx = pixels[j][dim] - mi
+				mi += dx/(j+1)
+			}
+			cvec[dim] = mi
 		}
 		return cvec
 	}
+	/*
+	 * Computes a simple cell centroid.
+	 */
 	centroid( t ){
-		if( this.C.torus ){
-			return this.centroidWithTorus( t )
-		} else {
-			return this.pixelsToCentroid( this.cellpixels[t] )
-		}
+		return this.pixelsToCentroid( this.cellpixels[t] )
 	}
-	// computes the centroid of a cell when grid has a torus.
-	centroidWithTorus( t ){
+
+	/*
+	 * Computes the centroid of a cell when grid has a torus.
+	 * Assumption: cell pixels never extend for more than half the
+	 * size of the grid.
+	 */
+	centroidWithTorusCorrection( t ){
+		const pixels = this.cellpixels[t]
+		let cvec = new Array(this.C.ndim).fill(0)
+		for( let dim = 0 ; dim < this.C.ndim ; dim ++ ){
+			let mi = 0.
+			const hsi = this.halfsize[dim], si = this.C.extents[dim]
+			// compute mean per dimension with online algorithm
+			for( let j = 0 ; j < pixels.length ; j ++ ){
+				let dx = pixels[j][dim] - mi
+				if( j > 0 ){
+					if( dx > hsi ){
+						dx -= si
+					} else if( dx < -hsi ){
+						dx += si
+					}
+				}
+				mi += dx/(j+1)
+			}
+			if( mi < 0 ){
+				mi += si
+			} else if( mi > si ){
+				mi -= si
+			}
+			cvec[dim] = mi
+		}
+		return cvec
+	}
+
+
+	/*
+	 * Computes the centroid of a cell when grid has a torus.
+	 * This is an older, slower implementation based on connected
+	 * components. */
+	centroidWithTorusSlow( t ){
 		// get the connected components and the pixels in it
 		let ccpixels = this.connectedComponentsOfCell( t, false )
 	

@@ -10,7 +10,7 @@ canvas{ border: 1px solid black }
 <script>
 "use strict"
 
-let zoom=2, w = 100, t = 5000, ncells = 4 
+let zoom=2, w = 200, t = 5000, ncells = 50
 
 
 let C,meter
@@ -30,20 +30,21 @@ function initialize(){
 let pdc, Cs
 function setupCPM(conf){
 	const zoom = conf.zoom || 1
-	const w = conf.w || 200
+	const w = conf.w || 40
 	let C = new CPM.CPM( [w,w], {
 		T : 20,
 		torus : true
 	})
 	Cs = new CPM.PostMCSStats()
+	C.add( Cs )
+
 	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
 	C.add( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,50] } ) )
 	pdc = new CPM.PreferredDirectionConstraint( 
-		{LAMBDA_DIR: [0,100], PERSIST: [0,.9] } ) 
+		{LAMBDA_DIR: [0,100], PERSIST: [0,.99], pixeltracker: Cs } ) 
 	C.add( pdc )
-	C.add( Cs )
-;
+
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 
 	C.add( { postMCSListener : function(){
@@ -67,13 +68,13 @@ function setupCPM(conf){
 			//	pdc.cellcentroids[i][1]*zoom,
 			//	zoom, zoom
 		       	//)
-			let cc = Cs.centroidWithTorus(i)
+			//let cc = Cs.centroidWithTorus(i)
 			ctx.moveTo( 
-				cc[0]*zoom,
-				cc[1]*zoom,
+				pdc.cellcentroidlists[i][0][0]*zoom,
+				pdc.cellcentroidlists[i][0][1]*zoom,
 		       	)
-			ctx.lineTo( (cc[0]+10*pdc.celldirections[i][0])*zoom,
-				(cc[1]+10*pdc.celldirections[i][1])*zoom,
+			ctx.lineTo( (pdc.cellcentroidlists[i][0][0]+.1*pdc.celldirections[i][0])*zoom,
+				(pdc.cellcentroidlists[i][0][1]+.1*pdc.celldirections[i][1])*zoom,
 		       	)
 		}
 		ctx.stroke()
@@ -94,6 +95,6 @@ function setupCPM(conf){
 </script>
 </head>
 <body onload="initialize()">
-<p>Many moving cells.</p>
+<p>Many moving cells with an imposed persistence constraint.</p>
 </body>
 </html>

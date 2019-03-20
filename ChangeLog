@@ -3,6 +3,24 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-03-20 Johannes Textor <johannes.textor@gmx.de>
+	* stats/PostMCSStats.js : new class for parameters that can be
+	computed after each Monte Carlo steps. Includes an event listener that
+	converts the CPM class's internal pixel representation to a more
+	convenient format allowing direct access to cell pixels. This should
+	prevent us from calling this method over and over again like in
+	previous versions.
+	Moreover, I have improved the centroid computation when there is a
+	torus. There is now a simpler algorithm that relies on the same
+	assumption and does not require us to compute connected components.
+	I removed all methods that now have an implementation in this file
+	from Stats.js and TODO: Stats.js should no longer exist in the future.
+	* hamiltonian/PreferredDirectionConstraint : new constraint that
+	implements Beltman-style direcetional persistence. Includes a
+	parameter that controls the amount of angular diffusion.
+	* examples/many-cells.html : new example showcasing the persistent
+	direction constraint
+
 2019-03-10 Johannes Textor <johannes.textor@gmx.de>
 	* examples-node/ : changed all examples to new syntax
 	* benchmarks/ : new folder with simple scripts for benchmarking the
