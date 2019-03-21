@@ -2251,8 +2251,8 @@ var CPM = (function (exports) {
 		}
 		// this function samples a random number from a normal distribution
 		sampleNorm (mu=0, sigma=1) {
-			let u1 = Math.random();
-			let u2 = Math.random();
+			let u1 = this.C.random();
+			let u2 = this.C.random();
 			let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(Math.PI*2 * u2);
 			return z0 * sigma + mu
 		}
@@ -2262,6 +2262,7 @@ var CPM = (function (exports) {
 			while(n-- > 0){
 				dir.push(this.sampleNorm());
 			}
+			this.normalize(dir);
 			return dir
 		}
 		postMCSListener(){
@@ -2277,7 +2278,7 @@ var CPM = (function (exports) {
 					this.cellcentroidlists[t] = [];
 					// this will work for all numbers of dimensions
 					this.celldirections[t] = this.randDir(this.C.ndim);
-					this.normalize(this.celldirections[t]);
+					console.log(this.celldirections[t]);
 					// let rang = this.C.random()*Math.PI*2
 					// this.celldirections[t] = [Math.cos(rang),Math.sin(rang)]
 				}
