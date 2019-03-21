@@ -33,7 +33,7 @@ function setupCPM(conf){
 	const w = conf.w || 40
 	let C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : true
+		torus : false 
 	})
 	Cs = new CPM.PostMCSStats()
 	C.add( Cs )
@@ -42,7 +42,7 @@ function setupCPM(conf){
 	C.add( new CPM.VolumeConstraint( { V: [0,500], 
 		LAMBDA_V: [0,50] } ) )
 	pdc = new CPM.PreferredDirectionConstraint( 
-		{LAMBDA_DIR: [0,100], PERSIST: [0,.99], pixeltracker: Cs } ) 
+		{LAMBDA_DIR: [0,100], PERSIST: [0,.7], pixeltracker: Cs } ) 
 	C.add( pdc )
 
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )

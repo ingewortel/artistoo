@@ -2263,7 +2263,7 @@ var CPM = (function (exports) {
 					let rang = this.C.random()*Math.PI*2;
 					this.celldirections[t] = [Math.cos(rang),Math.sin(rang)];
 				}
-				let ci = this.Cs.centroid( t );
+				let ci = this.Cs.centroidWithTorusCorrection( t );
 				this.cellcentroidlists[t].unshift(ci);
 				if( this.cellcentroidlists[t].length == 10 ){
 					let l = this.cellcentroidlists[t].pop(), dx = [];
