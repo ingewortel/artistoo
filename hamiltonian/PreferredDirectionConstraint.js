@@ -78,10 +78,6 @@ class PreferredDirectionConstraint extends SoftConstraint {
 				this.cellcentroidlists[t] = []
 				// this will work for all numbers of dimensions
 				this.celldirections[t] = this.randDir(this.C.ndim)
-<<<<<<< HEAD
-=======
-				console.log(this.celldirections[t])
->>>>>>> fdfe526dea4394cdcd0cf3f1d8269d6f394b1626
 				// let rang = this.C.random()*Math.PI*2
 				// this.celldirections[t] = [Math.cos(rang),Math.sin(rang)]
 			}

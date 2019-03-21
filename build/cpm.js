@@ -2278,7 +2278,6 @@ var CPM = (function (exports) {
 					this.cellcentroidlists[t] = [];
 					// this will work for all numbers of dimensions
 					this.celldirections[t] = this.randDir(this.C.ndim);
-					console.log(this.celldirections[t]);
 					// let rang = this.C.random()*Math.PI*2
 					// this.celldirections[t] = [Math.cos(rang),Math.sin(rang)]
 				}
