@@ -10,47 +10,42 @@
 		}
 	</style>
 
-  <script src="../build/cpm.js"></script>
-  <script src="fpsmeter.min.js"></script>
-	<script type="text/javascript" src="../viz/three.min.js"></script>
-	<script type="text/javascript" src="../viz/TrackballControls.js"></script>
-	<script type="text/javascript" src="../viz/viz.js"></script>
-	<script type="text/javascript">
+<script src="../build/cpm.js"></script>
+<script src="fpsmeter.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
+<script type="text/javascript" src="../viz/TrackballControls.js"></script>
+<script type="text/javascript" src="../viz/viz.js"></script>
+<script type="text/javascript">
 
-  /* Optional: set some parameters via the url */
-	var urlParams = new URLSearchParams(window.location.search)
-	var dim = urlParams.get("dim") || 3
-	var mesh_step = parseInt(urlParams.get("meshStep")) || 15
+	// Optional: set some parameters via the url
+var urlParams = new URLSearchParams(window.location.search)
+var mesh_step = parseInt(urlParams.get("meshStep")) || 15
+let ncells = parseInt(urlParams.get("ncells")) || 1
 
-	/* Global variables that are not model parameters
-		stopit tracks whether the simulation is running.
-	*/
-	var stopit = 0,	// track whether the simulation is running (start/stop button)
-		ADD_FRCS = 0,	// if ADD_FRCS = 0, draw the grid
-		frc_rotate = 0,	// used in combination with the "rot" button to rotate camera.
-		draw_each = 1,	// Time resolution of drawing the grid (in combi with draw_clock)
-		draw_clock = 0	// The drawing clock starts at 0
+/* Global variables that are not model parameters
+	stopit tracks whether the simulation is running.
+*/
+let stopit = 0// track whether the simulation is running (start/stop button)
 
-	var WS_SERVER="ws://192.168.1.19:1337"
 
-  let zoom=1, w = 50, t = 5000, ncells = 5
+let zoom=1, w = 50, t = 5000
+let C,meter
 
-  let C,meter
+function initialize(){
+	C = setupCPM({zoom:zoom,w:w})
+	init3d( 500, 500, C )
+}
 
-  function initialize(){
-  	C = setupCPM({zoom:zoom,w:w})
-    init3d( 500, 500, C )
-  }
+function mainloop(){
+	C.monteCarloStep()
+}
 
-  function mainloop(){
-    C.monteCarloStep()
-  }
+let pdc, Cs
 
-  let pdc, Cs
-  function setupCPM(conf){
+function setupCPM(conf){
   	const zoom = conf.zoom || 1
   	const w = conf.w || 40
-    const dimension = 3
+	const dimension = 3
   	C = new CPM.CPM( [w,w,w], {
   		T : 20,
   		torus : true
@@ -61,50 +56,27 @@
   	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
   	C.add( new CPM.VolumeConstraint( { V: [0,500],
   		LAMBDA_V: [0,50] } ) )
-    // C.add( new CPM.ActivityConstraint( { LAMBDA_ACT: [0,800], MAX_ACT: [0,40] } ) )
   	pdc = new CPM.PreferredDirectionConstraint(
   		{LAMBDA_DIR: [0,300], PERSIST: [0,0.8], pixeltracker: Cs } )
   	C.add( pdc )
 
   	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 
-    C.add( { postMCSListener : function(){
-      // time now
-      var t0 = performance.now()
-      // rotate the viewpoint
-  		if( frc_rotate > 0 ){
-  			controls && (controls.enabled= false)
-  			frc_rotate --;
-  			// frcNet.rotation.x = Math.PI*2*frc_rotate/360
-  			camera.position.y = y2+1.26*x2*2*Math.sin( Math.PI*2*frc_rotate/360 )
-  			camera.position.z = z2+1.26*x2*2*Math.cos( Math.PI*2*frc_rotate/360 )
-  			camera.lookAt( new THREE.Vector3( x2, y2, z2 ) )
-  			if( frc_rotate == 0 ){
-  				TAKE_SHOT = 0
-  				// controls.enabled= true
-  			}
-  		}
-
-  		var t1 = performance.now()-t0;
-  		//$id('logger').innerHTML = Math.round(t1)+"ms "
-  		//$id('logger').innerHTML = Cs.cellsOnNetwork().join(",") // Math.round(t1)+"ms "+
-  		//	C.cellvolume[1] + " " + C.cellvolume[2]
-
+	C.add( { postMCSListener : function(){
   		// Display every 'draw_each' steps.
-  		if( ( draw_clock ++ % draw_each == 0 ) || stopit == 1 ){
-  			dim == 3 ? render3d() : render2d()
-  		}
-  		dim == 3 && controls && controls.update()
+		render3d()
+		controls && controls.update()
   		if( C.time > 5000 ){
   			stopit = 1
   			C.time = 0
   		}
+		meter.tick()
   		if( !stopit  ){
   			requestAnimationFrame( mainloop )
   		}
   	}} )
 
-    let Gi = new CPM.GridInitializer(C)
+	let Gi = new CPM.GridInitializer(C)
   	for( let i = 0 ; i < ncells ; i ++ ){
   		Gi.seedCell(1)
   	}
@@ -112,34 +84,16 @@
   	// Start simulation
   	meter = new FPSMeter({left:"auto", right:"5px"})
   	return C
+}
 
-  }
+function startanim(){
+	stopit=0
+	requestAnimationFrame( mainloop )
+}
 
-  function startanim(){
-		frameCaptureSocket = new WebSocket(WS_SERVER)
-		frameCaptureSocket.onclose = function(e){
-			console.log( e )
-		}
-		stopit=0
-		requestAnimationFrame( mainloop )
-	}
-
-	function stopanim(){
-		frameCaptureSocket.close()
-		stopit=1
-	}
-
-	function networkExtents( pad ){
-		var x_max = 0, y_max = 0, z_max = 0;
-		for( var i = 0 ; i < edges.length ; i ++ ){
-			for( var j = 2 ; j < edges[i].length ; j ++ ){
-				x_max = Math.max( x_max, edges[i][j][0] )
-				y_max = Math.max( y_max, edges[i][j][1] )
-				z_max = Math.max( z_max, edges[i][j][2] )
-			}
-		}
-		return { x : Math.ceil(x_max)+pad, y : Math.ceil(y_max)+pad, z : Math.ceil(z_max)+pad }
-	}
+function stopanim(){
+	stopit=1
+}
 
 </script>
 </head>

@@ -31,7 +31,7 @@ function makevoxel( voxset ){
 
 // Initialize a movie frame of w x h pixels
 function init3d( w, h, C ){
-	var i, j, p, draw_grid = ADD_FRCS==0, x2 = C.field_size.x/2,
+	var i, j, p, draw_grid = 1, x2 = C.field_size.x/2,
 		y2 = C.field_size.y/2, z2 = C.field_size.z/2
 
 	container = document.getElementById( 'stage' )
@@ -73,7 +73,7 @@ function init3d( w, h, C ){
 			geometry.vertices.push( new THREE.Vector3( i, 0, size ) );
 		}
 		var material = new THREE.LineBasicMaterial( { color: gridColor , opacity: 0.4, transparent: true } );
-		var line = new THREE.Line( geometry, material, THREE.LinePieces );
+		var line = new THREE.LineSegments( geometry, material );
 		scene.add( line );
 		geometry = new THREE.Geometry();
 		for ( i = 0; i <= size; i += step ) {
@@ -83,7 +83,7 @@ function init3d( w, h, C ){
 			geometry.vertices.push( new THREE.Vector3( 0, i, size ) );
 		}
 		material = new THREE.LineBasicMaterial( { color: gridColor, opacity: 0.4, transparent: true } );
-		line = new THREE.Line( geometry, material, THREE.LinePieces );
+		line = new THREE.LineSegments( geometry, material );
 		scene.add( line );
 		geometry = new THREE.Geometry();
 		for ( i = 0; i <= size; i += step ) {
@@ -93,7 +93,7 @@ function init3d( w, h, C ){
 			geometry.vertices.push( new THREE.Vector3( i, size, 0 ) );
 		}
 		material = new THREE.LineBasicMaterial( { color: gridColor, opacity: 0.4, transparent: true } );
-		line = new THREE.Line( geometry, material, THREE.LinePieces );
+		line = new THREE.LineSegments( geometry, material );
 		scene.add( line );
 	}
 
@@ -129,7 +129,7 @@ function render3d( max_cells ) {
 	var cp = C.cellborderpixels.elements
 	// var con = Cs.cellsOnNetwork()
 
-	while( cellvoxels.length < cp.length /*+ bgborderpixels.length*/  ){
+	while( cellvoxels.length < cp.length  ){
 		makevoxel()
 	}
 
@@ -155,50 +155,13 @@ function render3d( max_cells ) {
 
 		cellvoxels[i].material.color.setHex( cellBasicColor )
 		cellvoxels[i].material.opacity=0.15
-		//cellvoxels[i].material.color.setHex( (con[t] || !ADD_FRCS) ?
-		//	tcellOnColor : tcellOffColor )
-		// cellvoxels[i].material.opacity = con[t] ? .6 : .3
-		// 0x00033F << (5*C.cellpixelstype[cp[i]]) + 0x0000FF) % 0xFFFFFF
 	}
-
-	/*for( ; i < cp.length + bgborderpixels.length ; i ++ ){
-		var p = i2p( bgborderpixels[i-cp.length] )
-		cellvoxels[i].visible = true
-		cellvoxels[i].position.x = voxel_scale*p[0]
-		cellvoxels[i].position.y = voxel_scale*p[1]
-		cellvoxels[i].position.z = voxel_scale*p[2]
-		cellvoxels[i].material.color.setHex( 0X000000 )
-		cellvoxels[i].material.transparent=true
-		cellvoxels[i].material.opacity=0.2
-	}*/
 
 	for( ; i < cellvoxels.length ; i ++ ){
 		cellvoxels[i].visible = false
 	}
 
-	// paint stromavoxels
-	// var sp = Object.keys(C.stromapixelstype)
-	// while( stromavoxels.length < sp.length ){
-	// 	makevoxel(stromavoxels)
-	// }
-	// for( let i = 0 ; i < sp.length ; i ++ ){
-	// 	var p = C.i2p( sp[i] )
-	// 	stromavoxels[i].visible = true
-	// 	stromavoxels[i].position.x = p[0]
-	// 	stromavoxels[i].position.y = p[1]
-	// 	stromavoxels[i].position.z = p[2]
-	// 	stromavoxels[i].material.color.setHex( 0x0000FF )
-	// 	stromavoxels[i].material.opacity=.2
-	// }
-
 	renderer.render( scene, camera )
-	if( typeof TAKE_SHOT !== "undefined" && TAKE_SHOT==1 ){
-		var x = renderer.domElement.toDataURL()
-		if( frameCaptureSocket.readyState==1 ){
-			frameCaptureSocket.send( x );
-		}
-		// TAKE_SHOT = 0
-	}
 }
 
 var ctx, canvas
