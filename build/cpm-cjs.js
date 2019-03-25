@@ -5,6 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var MersenneTwister = _interopDefault(require('mersennetwister'));
+var math = _interopDefault(require('mathjs'));
 
 /** This class implements a data structure with constant-time insertion, deletion, and random
     sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
@@ -2092,31 +2093,30 @@ class PreferredDirectionConstraint extends SoftConstraint {
 
 class ChemotaxisConstraint extends SoftConstraint {
 
-  nmod(x, N) {
-  	return ((x % N) + N) % N
-  }
-
-  t21(x,y,N){
-  	return this.nmod(y,N)*N+this.nmod(x,N)
-  }
-
-	constructor( conf ){
-    super(conf);
-    this.conf = conf;
-		this.size = conf["FIELD_SIZE"];
-    this.math = conf["MATHOBJ"];
-		this.resolutionDecrease = conf["RESOLUTION_DECREASE"];
+	set CPM(C){
+		this.C = C;
+		if( C.ndim > 2 ){ 
+			throw("only works for 2-dimensional CPMs!")
+		}
+		if( C.field_size.x != C.field_size.y ){ 
+			throw("only works for square CPMs!")
+		}
+		this.size = C.field_size.x;
 		this.newSize = this.size/this.resolutionDecrease;
-    this.DPerMCS = conf["DIFFUSION_PER_MCS"];
-    this.D = conf["D"];
-		this.D /= this.DPerMCS;
-		this.dx = conf["MM_PER_PIXEL"] * this.resolutionDecrease;
-		this.dt = conf["SECOND_PER_MCS"] / 60;
-		this.secretion = conf["SECRETION"];
-		this.decay = conf["DECAY"];
+		this.initializeField();
+	}
 
+	nmod(x, N) {
+		return ((x % N) + N) % N
+	}
+
+	t21(x,y,N){
+		return this.nmod(y,N)*N+this.nmod(x,N)
+	}
+
+	initializeField(){
 		// prepare laplacian matrix
-		this.L = this.math.multiply( this.math.identity( (this.newSize)*(this.newSize), (this.newSize)*(this.newSize), "sparse" ), -4 );
+		this.L = math.multiply( math.identity( (this.newSize)*(this.newSize), (this.newSize)*(this.newSize), "sparse" ), -4 );
 		for( let x = 0 ; x < (this.newSize) ; x ++ ){
 			for( let y = 0 ; y < (this.newSize); y ++ ){
 				let i = this.t21(x,y,(this.newSize));
@@ -2128,9 +2128,9 @@ class ChemotaxisConstraint extends SoftConstraint {
 		}
 
     // scale matrix to diffusion coefficient & spatiotemporal step
-		this.A = this.math.multiply( this.L, this.D * this.dt / this.dx / this.dx );
-		this.chemokinelevel = this.math.zeros((this.newSize)*(this.newSize),1);
-		this.chemokinereal = this.math.zeros(this.size*this.size,1);
+		this.A = math.multiply( this.L, this.D * this.dt / this.dx / this.dx );
+		this.chemokinelevel = math.zeros((this.newSize)*(this.newSize),1);
+		this.chemokinereal = math.zeros(this.size*this.size,1);
 
 		// create list for faster interpolation
 		this.interpolatelist = [[]];
@@ -2139,13 +2139,27 @@ class ChemotaxisConstraint extends SoftConstraint {
 	    for (var y = 0; y < this.size; y++) {
 				let xplus = x/this.resolutionDecrease + 0.001;
 				let yplus = y/this.resolutionDecrease + 0.001;
-				let p1 = Math.abs((x/this.resolutionDecrease - this.math.floor(xplus)) * (y/this.resolutionDecrease - this.math.floor(yplus)));
-				let p2 = Math.abs((x/this.resolutionDecrease - this.math.floor(xplus)) * (this.math.ceil(yplus) - y/this.resolutionDecrease));
-				let p3 = Math.abs((this.math.ceil(xplus) - x/this.resolutionDecrease) * (y/this.resolutionDecrease - this.math.floor(yplus)));
-				let p4 = Math.abs((this.math.ceil(xplus) - x/this.resolutionDecrease) * (this.math.ceil(yplus) - y/this.resolutionDecrease));
+				let p1 = Math.abs((x/this.resolutionDecrease - math.floor(xplus)) * (y/this.resolutionDecrease - math.floor(yplus)));
+				let p2 = Math.abs((x/this.resolutionDecrease - math.floor(xplus)) * (math.ceil(yplus) - y/this.resolutionDecrease));
+				let p3 = Math.abs((math.ceil(xplus) - x/this.resolutionDecrease) * (y/this.resolutionDecrease - math.floor(yplus)));
+				let p4 = Math.abs((math.ceil(xplus) - x/this.resolutionDecrease) * (math.ceil(yplus) - y/this.resolutionDecrease));
 				this.interpolatelist[x].push([p1, p2, p3, p4]);
 			}
 		}
+
+	}
+
+	constructor( conf ){
+		super(conf);
+		this.conf = conf;
+		this.resolutionDecrease = conf["RESOLUTION_DECREASE"];
+		this.DPerMCS = conf["DIFFUSION_PER_MCS"];
+		this.D = conf["D"];
+		this.D /= this.DPerMCS;
+		this.dx = conf["MM_PER_PIXEL"] * this.resolutionDecrease;
+		this.dt = conf["SECOND_PER_MCS"] / 60;
+		this.secretion = conf["SECRETION"];
+		this.decay = conf["DECAY"];
 	}
 
   // at every pixel occupied by an infected cell, secrete (secretion rate/(resolutionDecrease^2)) chemokine
@@ -2153,7 +2167,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 		for (var x = 0; x < this.size; x++) {
 	    for (var y = 0; y < this.size; y++) {
 				if (this.C.t2k[this.C.pixti(this.C.grid.p2i([x,y]))] == this.conf["SECRETOR"]) {
-					let index = [this.t21(this.math.floor(x/this.resolutionDecrease),this.math.floor(y/this.resolutionDecrease),(this.newSize)),0];
+					let index = [this.t21(math.floor(x/this.resolutionDecrease),math.floor(y/this.resolutionDecrease),(this.newSize)),0];
           this.chemokinelevel.set(index, this.chemokinelevel.get(index) + (this.secretion/(this.resolutionDecrease*this.resolutionDecrease)) * this.dt);
         }
 			}
@@ -2162,7 +2176,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 
 	// perform diffusion
 	updateValues () {
-		this.chemokinelevel = this.math.add( this.math.multiply( this.A, this.chemokinelevel ), this.chemokinelevel );
+		this.chemokinelevel = math.add( math.multiply( this.A, this.chemokinelevel ), this.chemokinelevel );
 	}
 
 	// interpolate between the grid points in the diffusion grid to obtain a more accurate chemokine value for the main grid
@@ -2183,8 +2197,8 @@ class ChemotaxisConstraint extends SoftConstraint {
 	// updates the main grid with interpolated values of the chemokine grid
 	updateGrid () {
     // reshapes the lists in matrice for easy matrix interpolation
-		let chemokineMatrix = this.math.reshape(this.chemokinelevel, [(this.newSize), (this.newSize)]);
-		this.chemokinereal = this.math.reshape(this.chemokinereal, [this.size, this.size]);
+		let chemokineMatrix = math.reshape(this.chemokinelevel, [(this.newSize), (this.newSize)]);
+		this.chemokinereal = math.reshape(this.chemokinereal, [this.size, this.size]);
 
     // update chemokinereal by interpolating chemokinelevel
 		for (var x = 0; x < this.size; x++) {
@@ -2197,19 +2211,22 @@ class ChemotaxisConstraint extends SoftConstraint {
 		}
 
     // reshapes the matrices back into lists
-		this.chemokinereal = this.math.reshape(this.chemokinereal, [this.size*this.size, 1]);
-		this.chemokinelevel = this.math.reshape(this.chemokinelevel, [(this.newSize)*(this.newSize), 1]);
+		this.chemokinereal = math.reshape(this.chemokinereal, [this.size*this.size, 1]);
+		this.chemokinelevel = math.reshape(this.chemokinelevel, [(this.newSize)*(this.newSize), 1]);
 	}
 
 	// removes a percentage of the chemokine
 	removeChemokine () {
-		this.chemokinelevel = this.math.multiply(this.chemokinelevel, 1 - this.decay * this.dt);
+		this.chemokinelevel = math.multiply(this.chemokinelevel, 1 - this.decay * this.dt);
 	}
 
   postMCSListener(){
     // Chemokine is produced by all chemokine grid lattice sites
 		this.produceChemokine();
-		// Every MCS, the chemokine diffuses 10 times
+
+	  console.time("postmcs");
+
+	  // Every MCS, the chemokine diffuses 10 times
 		for(let i = 0; i < this.DPerMCS; i++) {
 			this.updateValues();
 		}
@@ -2217,6 +2234,8 @@ class ChemotaxisConstraint extends SoftConstraint {
 		this.updateGrid();
 		// Chemokine decays
 		this.removeChemokine();
+		console.timeEnd("postmcs");
+
   }
 
   /* To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
@@ -2251,15 +2270,19 @@ class ChemotaxisConstraint extends SoftConstraint {
 	}
 
 	deltaH( sourcei, targeti, src_type, tgt_type ){
-		let gradientvec2 = this.computeGradient( this.C.grid.i2p(sourcei), this.chemokinereal );
-		let bias = this.linAttractor( this.C.grid.i2p(sourcei), this.C.grid.i2p(targeti), gradientvec2 );
-    let lambdachem;
+		let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti );
+		return 0
+		/*let gradientvec2 = 
+			this.computeGradient( this.C.grid.i2p(sourcei), this.chemokinereal )
+		let bias = 
+			this.linAttractor( this.C.grid.i2p(sourcei), this.C.grid.i2p(targeti), gradientvec2 )
+ 		let lambdachem
 		if( src_type != 0 ){
-			lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.t2k[src_type]];
+			lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.t2k[src_type]]
 		} else {
-			lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.t2k[tgt_type]];
+			lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.t2k[tgt_type]]
 		}
-		return -bias*lambdachem
+		return -bias*lambdachem*/
 	}
 }
 

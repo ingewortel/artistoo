@@ -12,7 +12,7 @@ canvas{ border: 1px solid black }
 <script>
 "use strict"
 
-let zoom=4, w = 200, t = 500, n1 = 10, n2 = 2, n3 = 10, n4 = 2
+let zoom=1, w = 200, t = 500, n1 = 10, n2 = 2, n3 = 10, n4 = 2
 
 let C,meter
 function timestep(){
@@ -46,14 +46,27 @@ function setupCPM(conf){
 		LAMBDA_V: [0,50,50,50,50] } ) )
 	C.add( new CPM.PerimeterConstraint( { P: [0,100,200,100,200],
 		LAMBDA_P: [0,2,2,2,2] } ) )
-	chem12 = new CPM.ChemotaxisConstraint (
-		{FIELD_SIZE: C.grid.field_size.x, MATHOBJ: math, SECRETOR: 2, RESOLUTION_DECREASE: 10, MM_PER_PIXEL: .38/600, SECOND_PER_MCS: 1,
-		D: 6.2 * Math.pow(10, -5), DIFFUSION_PER_MCS: 10, SECRETION: 100, DECAY: .1, LAMBDA_CHEMOTAXIS: [0,500,0,0,0] } )
-	chem34 = new CPM.ChemotaxisConstraint (
-		{FIELD_SIZE: C.grid.field_size.x, MATHOBJ: math, SECRETOR: 4, RESOLUTION_DECREASE: 10, MM_PER_PIXEL: .38/600, SECOND_PER_MCS: 1,
-		D: 6.2 * Math.pow(10, -5), DIFFUSION_PER_MCS: 10, SECRETION: 100, DECAY: .1, LAMBDA_CHEMOTAXIS: [0,0,0,500,0] } )
+	chem12 = new CPM.ChemotaxisConstraint ({ 
+		MATHOBJ: math, SECRETOR: 2, 
+			RESOLUTION_DECREASE: 10, 
+			MM_PER_PIXEL: .38/600, 
+			SECOND_PER_MCS: 1,
+			D: 6.2 * Math.pow(10, -5),
+			DIFFUSION_PER_MCS: 10, SECRETION: 100, 
+			DECAY: .1, LAMBDA_CHEMOTAXIS: [0,500,0,0,0] } )
+	chem34 = new CPM.ChemotaxisConstraint ( { 
+			MATHOBJ: math, SECRETOR: 4, 
+			RESOLUTION_DECREASE: 10, 
+			MM_PER_PIXEL: .38/600, 
+			SECOND_PER_MCS: 1,
+		D: 6.2 * Math.pow(10, -5), 
+			DIFFUSION_PER_MCS: 10, 
+			SECRETION: 100, 
+			DECAY: .1, 
+			LAMBDA_CHEMOTAXIS: [0,0,0,500,0] 
+		} )
 	C.add( chem12 )
-	C.add( chem34 )
+	//C.add( chem34 )
 
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 
