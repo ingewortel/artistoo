@@ -33,7 +33,7 @@
 
 	var WS_SERVER="ws://192.168.1.19:1337"
 
-  let zoom=1, w = 50, t = 5000, ncells = 5
+  let zoom=1, w = 50, t = 5000, ncells = 1
 
   let C,meter
 
@@ -99,6 +99,7 @@
   			stopit = 1
   			C.time = 0
   		}
+	    	meter.tick()
   		if( !stopit  ){
   			requestAnimationFrame( mainloop )
   		}
