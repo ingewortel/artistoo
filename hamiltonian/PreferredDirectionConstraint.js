@@ -85,8 +85,14 @@ class PreferredDirectionConstraint extends SoftConstraint {
 			this.cellcentroidlists[t].unshift(ci)
 			if( this.cellcentroidlists[t].length == 10 ){
 				let l = this.cellcentroidlists[t].pop(), dx = []
+				let dxnorm = 0
 				for( let j = 0 ; j < l.length ; j ++ ){
 					dx[j] = ci[j] - l[j]
+					if( dx[j] > this.halfsize[j] ){
+						dx[j] -= this.C.extents[j]
+					} else if( dx[j] < -this.halfsize[j] ){
+						dx[j] += this.C.extents[j]
+					}
 				}
 				let per = this.conf["PERSIST"][this.C.cellKind(t)]
 				this.normalize(dx)
