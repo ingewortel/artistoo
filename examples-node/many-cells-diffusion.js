@@ -6,7 +6,9 @@ let zoom=4, w = 200, t = 100, n1 = 10, n2 = 2, n3 = 10, n4 = 2
 let C
 function timestep(){
 	while( t-- > 0){
+		console.time("mcs")
 		C.monteCarloStep()
+		console.timeEnd("mcs")
 	}
 }
 
@@ -43,34 +45,37 @@ function setupCPM(conf){
 
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 
-	// C.add( { postMCSListener : function(){
-	// 	// Clear the canvas (in the backgroundcolor white), and redraw:
-	// 	Cim.clear( "FFFFFF" )
-	// 	// draw the cells
-	// 	Cim.drawCells( 1, "ff0000" )
-	// 	Cim.drawCells( 2, "880000" )
-	// 	Cim.drawCells( 3, "0000ff" )
-	// 	Cim.drawCells( 4, "000088" )
-	// 	// draw cell borders
-	// 	Cim.drawCellBorders( 1, "000000" )
-	// 	Cim.drawCellBorders( 2, "000000" )
-	// 	Cim.drawCellBorders( 3, "000000" )
-	// 	Cim.drawCellBorders( 4, "000000" )
-	// }} )
-	//
-	// let Gi = new CPM.GridInitializer(C)
-	// for( let i = 0 ; i < n1 ; i ++ ){
-	// 	Gi.seedCell(1)
-	// }
-	// for( let i = 0 ; i < n2 ; i ++ ){
-	// 	Gi.seedCell(2)
-	// }
-	// for( let i = 0 ; i < n3 ; i ++ ){
-	// 	Gi.seedCell(3)
-	// }
-	// for( let i = 0 ; i < n4 ; i ++ ){
-	// 	Gi.seedCell(4)
-	// }
+	C.add( { postMCSListener : function(){
+		if( C.time % 50 != 0 ) return
+		
+	 	// Clear the canvas (in the backgroundcolor white), and redraw:
+	 	Cim.clear( "FFFFFF" )
+		// draw the cells
+	 	Cim.drawCells( 1, "ff0000" )
+		Cim.drawCells( 2, "880000" )
+	 	Cim.drawCells( 3, "0000ff" )
+	 	Cim.drawCells( 4, "000088" )
+		// draw cell borders
+	 	Cim.drawCellBorders( 1, "000000" )
+	 	Cim.drawCellBorders( 2, "000000" )
+	 	Cim.drawCellBorders( 3, "000000" )
+	 	Cim.drawCellBorders( 4, "000000" )
+		Cim.writePNG( "output/diffusion.png" )
+	}} )
+
+	let Gi = new CPM.GridInitializer(C)
+	for( let i = 0 ; i < n1 ; i ++ ){
+	 	Gi.seedCell(1)
+	}
+	for( let i = 0 ; i < n2 ; i ++ ){
+		Gi.seedCell(2)
+	}
+	for( let i = 0 ; i < n3 ; i ++ ){
+		Gi.seedCell(3)
+	}
+	for( let i = 0 ; i < n4 ; i ++ ){
+		Gi.seedCell(4)
+	}
 
 	// Start simulation
 	return C
