@@ -33,6 +33,7 @@
 
 
 import SoftConstraint from "./SoftConstraint.js"
+import Grid2D from "../Grid2D.js"
 import math from "mathjs"
 
 class ChemotaxisConstraint extends SoftConstraint {
@@ -46,8 +47,9 @@ class ChemotaxisConstraint extends SoftConstraint {
 			throw("only works for square CPMs!")
 		}
 		this.size = C.field_size.x
-		this.newSize = this.size/this.resolutionDecrease
+		this.newSize = Math.ceil(this.size/this.resolutionDecrease)
 		this.initializeField()
+		this.chemoGrid = new Grid2D([this.size,this.size], C.torus, "Float32")
 	}
 
 	nmod(x, N) {
@@ -71,16 +73,15 @@ class ChemotaxisConstraint extends SoftConstraint {
 			}
 		}
 
-    // scale matrix to diffusion coefficient & spatiotemporal step
+		// scale matrix to diffusion coefficient & spatiotemporal step
 		this.A = math.multiply( this.L, this.D * this.dt / this.dx / this.dx )
 		this.chemokinelevel = math.zeros((this.newSize)*(this.newSize),1)
-		this.chemokinereal = math.zeros(this.size*this.size,1)
 
 		// create list for faster interpolation
 		this.interpolatelist = [[]]
 		for (var x = 0; x < this.size; x++) {
 			this.interpolatelist.push([])
-	    for (var y = 0; y < this.size; y++) {
+			for (var y = 0; y < this.size; y++) {
 				let xplus = x/this.resolutionDecrease + 0.001
 				let yplus = y/this.resolutionDecrease + 0.001
 				let p1 = Math.abs((x/this.resolutionDecrease - math.floor(xplus)) * (y/this.resolutionDecrease - math.floor(yplus)))
@@ -106,14 +107,14 @@ class ChemotaxisConstraint extends SoftConstraint {
 		this.decay = conf["DECAY"]
 	}
 
-  // at every pixel occupied by an infected cell, secrete (secretion rate/(resolutionDecrease^2)) chemokine
+	// at every pixel occupied by an infected cell, secrete (secretion rate/(resolutionDecrease^2)) chemokine
 	produceChemokine () {
 		for (var x = 0; x < this.size; x++) {
-	    for (var y = 0; y < this.size; y++) {
+			for (var y = 0; y < this.size; y++) {
 				if (this.C.t2k[this.C.pixti(this.C.grid.p2i([x,y]))] == this.conf["SECRETOR"]) {
 					let index = [this.t21(math.floor(x/this.resolutionDecrease),math.floor(y/this.resolutionDecrease),(this.newSize)),0]
-          this.chemokinelevel.set(index, this.chemokinelevel.get(index) + (this.secretion/(this.resolutionDecrease*this.resolutionDecrease)) * this.dt)
-        }
+					this.chemokinelevel.set(index, this.chemokinelevel.get(index) + (this.secretion/(this.resolutionDecrease*this.resolutionDecrease)) * this.dt)
+				}
 			}
 		}
 	}
@@ -140,22 +141,21 @@ class ChemotaxisConstraint extends SoftConstraint {
 
 	// updates the main grid with interpolated values of the chemokine grid
 	updateGrid () {
-    // reshapes the lists in matrice for easy matrix interpolation
+		// reshapes the lists in matrice for easy matrix interpolation
 		let chemokineMatrix = math.reshape(this.chemokinelevel, [(this.newSize), (this.newSize)])
-		this.chemokinereal = math.reshape(this.chemokinereal, [this.size, this.size])
-
-    // update chemokinereal by interpolating chemokinelevel
-		for (var x = 0; x < this.size; x++) {
-	    for (var y = 0; y < this.size; y++) {
-				let scalex = x/this.resolutionDecrease
+		let mv = 0.
+		for (let x = 0; x < this.size; x++) {
+			let scalex = x/this.resolutionDecrease
+			for (let y = 0; y < this.size; y++) {
 				let scaley = y/this.resolutionDecrease
 				let value = this.interpolate(scalex, scaley, chemokineMatrix)
-				this.chemokinereal.set([x,y], value)
+				this.chemoGrid.setpix( [y,x], value ) 
+				if( value > mv ){
+					mv = value
+				}
 			}
 		}
-
-    // reshapes the matrices back into lists
-		this.chemokinereal = math.reshape(this.chemokinereal, [this.size*this.size, 1])
+		this.maxChemokineValue = mv
 		this.chemokinelevel = math.reshape(this.chemokinelevel, [(this.newSize)*(this.newSize), 1])
 	}
 
@@ -164,10 +164,10 @@ class ChemotaxisConstraint extends SoftConstraint {
 		this.chemokinelevel = math.multiply(this.chemokinelevel, 1 - this.decay * this.dt)
 	}
 
- 	postMCSListener(){
+	postMCSListener(){
 		// Chemokine is produced by all chemokine grid lattice sites
 		this.produceChemokine()
-	  	// Every MCS, the chemokine diffuses 10 times
+		// Every MCS, the chemokine diffuses 10 times
 		for(let i = 0; i < this.DPerMCS; i++) {
 			this.updateValues()
 		}
@@ -198,22 +198,21 @@ class ChemotaxisConstraint extends SoftConstraint {
 	}
 
 	// computes the chemokine gradient at lattice site source
-	computeGradient ( source, chemokinelevel ) {
+	computeGradient ( source ) {
 		let gradient = [0, 0]
-		for ( let i = -1; i < 2; i++ ) {
-			for ( let j = -1; j < 2; j++ ) {
-				//gradient is - for all dimensions - the sum of the directions*chemokine_level of all neighbors
-				gradient[0] += i * (chemokinelevel.get([this.t21((source[0]+i)%(this.size-1)+1, (source[1]+j)%(this.size-1)+1,this.size),0]) - chemokinelevel.get([this.t21(source[0], source[1],this.size),0]))
-				gradient[1] += j * (chemokinelevel.get([this.t21((source[0]+i)%(this.size-1)+1, (source[1]+j)%(this.size -1)+1,this.size),0]) - chemokinelevel.get([this.t21(source[0], source[1],this.size),0]))
-			}
-		}
-		return gradient
+		let tsource = this.chemoGrid.pixt( source )
+		let xr = (source[0]+1) % (this.size-1)+1, xl = (source[0]-1) % (this.size-1)+1
+		let yu = (source[1]+1) % (this.size-1)+1, yd = (source[1]-1) % (this.size-1)+1
+		return [
+			(this.chemoGrid.pixt( [xr,source[1]] ) - this.chemoGrid.pixt( [xl,source[1]] )),
+			(this.chemoGrid.pixt( [source[0],yu] ) - this.chemoGrid.pixt( [source[0],yd] ))
+			]
 	}
 
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		//let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti )
 		let gradientvec2 = 
-			this.computeGradient( this.C.grid.i2p(sourcei), this.chemokinereal )
+			this.computeGradient( this.C.grid.i2p(sourcei) )
 		let bias = 
 			this.linAttractor( this.C.grid.i2p(sourcei), this.C.grid.i2p(targeti), gradientvec2 )
  		let lambdachem

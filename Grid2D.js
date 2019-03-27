@@ -4,7 +4,7 @@
 import Grid from "./Grid.js"
 
 class Grid2D extends Grid {
-	constructor( field_size, torus=true ){
+	constructor( field_size, torus=true, datatype="Uint16" ){
 		super( field_size, torus )
 		this.field_size = { x : field_size[0], y : field_size[1] }
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
@@ -14,10 +14,14 @@ class Grid2D extends Grid {
 		}
 		// Attributes per pixel:
 		// celltype (identity) of the current pixel.
-		this._pixels = new Uint16Array(this.p2i(field_size))
+		if( datatype == "Uint16" ){
+			this._pixels = new Uint16Array(this.p2i(field_size))
+		} else if( datatype == "Float32" ){
+			this._pixels = new Float32Array(this.p2i(field_size))
+		} else {
+			throw("unsupported datatype: " + datatype)
+		}
 	}
-
-
 
 	/*	Return array of indices of neighbor pixels of the pixel at 
 		index i. The separate 2D and 3D functions are called by

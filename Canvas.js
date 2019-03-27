@@ -126,6 +126,21 @@ Canvas.prototype = {
 
 	/* DRAWING FUNCTIONS ---------------------- */
 
+	drawChemokine : function( cc ){
+		let dy = this.zoom*this.width
+		this.getImageData()
+		for( let i = 0 ; i < cc.chemoGrid.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.chemoGrid.extents[1] ; j ++ ){
+				const off = (j*dy + i)*4
+				this.px[off] = 255
+				this.px[off + 1] = 0
+				this.px[off + 2] = 0
+				this.px[off + 3] = 255*(cc.chemoGrid.pixt( [i,j] )/cc.maxChemokineValue)
+			}
+		}
+		this.putImageData()
+	},
+
 	/* Use to draw the border of each cell on the grid in the color specified in "col"
 	(hex format). This function draws a line around the cell (rather than coloring the
 	outer pixels). If [kind] is negative, simply draw all borders. */

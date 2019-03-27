@@ -10,9 +10,17 @@ class Grid {
 		this.dy = 1 << this.Y_BITS // for neighborhoods based on pixel index
 	}
 
+	setpix( p, t ){
+		this._pixels[this.p2i(p)] = t
+	}
 	setpixi( i, t ){
 		this._pixels[i] = t
 	}
+
+	pixt( p ){
+		return this._pixels[this.p2i(p)]
+	}
+
 	pixti( i ){
 		return this._pixels[i]
 	}
