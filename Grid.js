@@ -32,6 +32,15 @@ class Grid {
 			}
 		}
 	}
+
+	gradienti( i ){
+		throw("method 'gradienti' not implemented!"+i)
+	}
+
+	gradient( p ){
+		return this.gradienti( this.p2i( p ) )
+	}
+
 }
 
 export default Grid

@@ -172,15 +172,13 @@ class ChemotaxisConstraint extends SoftConstraint {
 			this.updateValues()
 		}
 		// Updates the main grid with interpolated values of the chemokine grid
-		console.time("postmcs")
-	  	this.updateGrid()
-	 	console.timeEnd("postmcs")
+		this.updateGrid()
 		// Chemokine decays
 		this.removeChemokine()
 	}
 
-  	/* To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
-	This implements a linear gradient rather than a radial one as with pointAttractor. */
+	/* To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
+	 * This implements a linear gradient rather than a radial one as with pointAttractor. */
 	linAttractor ( p1, p2, dir ){
 		let r = 0., norm1 = 0, norm2 = 0, d1 = 0., d2 = 0.
 		// loops over the coordinates x,y,(z)
@@ -197,25 +195,13 @@ class ChemotaxisConstraint extends SoftConstraint {
 		return r/Math.sqrt(norm1)/Math.sqrt(norm2)
 	}
 
-	// computes the chemokine gradient at lattice site source
-	computeGradient ( source ) {
-		let gradient = [0, 0]
-		let tsource = this.chemoGrid.pixt( source )
-		let xr = (source[0]+1) % (this.size-1)+1, xl = (source[0]-1) % (this.size-1)+1
-		let yu = (source[1]+1) % (this.size-1)+1, yd = (source[1]-1) % (this.size-1)+1
-		return [
-			(this.chemoGrid.pixt( [xr,source[1]] ) - this.chemoGrid.pixt( [xl,source[1]] )),
-			(this.chemoGrid.pixt( [source[0],yu] ) - this.chemoGrid.pixt( [source[0],yd] ))
-			]
-	}
-
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		//let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti )
 		let gradientvec2 = 
-			this.computeGradient( this.C.grid.i2p(sourcei) )
+			this.chemoGrid.gradienti( sourcei )
 		let bias = 
 			this.linAttractor( this.C.grid.i2p(sourcei), this.C.grid.i2p(targeti), gradientvec2 )
- 		let lambdachem
+		let lambdachem
 		if( src_type != 0 ){
 			lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.t2k[src_type]]
 		} else {

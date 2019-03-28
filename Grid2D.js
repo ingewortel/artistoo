@@ -119,6 +119,41 @@ class Grid2D extends Grid {
 	i2p ( i ){
 		return [i >> this.Y_BITS, i & this.Y_MASK]
 	}
+	gradienti( i ){
+		let t = i-1, b = i+1, l = i-this.dy, r = i+this.dy, torus = this.torus
+		// left border
+		if( i < this.extents[1] ){
+			if( torus ){
+				l += this.extents[0] * this.dy
+			}
+		}
+		
+		// right border
+		if( i >= this.dy*( this.extents[0] - 1 ) ){
+			if( torus ){
+				r -= this.extents[0] * this.dy
+			}
+		}
+
+		// top border
+		if( i % this.dy == 0 ){
+			if( torus ){
+				t += this.extents[1]
+			}
+		}
+		
+		// bottom border
+		if( (i+1-this.field_size.y) % this.dy == 0 ){
+			if( torus ){
+				b -= this.extents[1]
+			}
+		}
+
+		return [
+			this._pixels[r]-this._pixels[l],
+			this._pixels[b]-this._pixels[t]
+		]
+	}
 }
 
 export default Grid2D 
