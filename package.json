@@ -2,6 +2,7 @@
 	"name": "cpmjs",
 	"version": "0.9.1",
 	"dependencies": {
+		"braces": "^3.0.2",
 		"canvas": "^2.0.1",
 		"mathjs": "^5.8.0",
 		"mersennetwister": "^0.2.3",
