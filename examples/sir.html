@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="../build/cpm.js"></script>
+<script src="fpsmeter.min.js"></script>
+<style type="text/css">
+	canvas{ border: 1px solid black}
+</style>
+
+<script>
+"use strict"
+
+let C, zoom=2, Cim, cid=0, w=200, meter,
+	infected, resistant, ts
+
+var r_i = 0.1, r_r = 0.01
+
+function draw(){
+	// Clear the canvas (in the backgroundcolor white), and redraw:
+	Cim.clear( "FFFFFF" )
+
+	// The cell in red
+	Cim.drawCells( 1, "AA0000" )
+	Cim.drawCells( 2, "AAAAAA" )
+}
+
+
+let running = 1
+function toggleAnim(){
+	running = 1 - running
+}
+
+function timestep(){
+	if( running ){
+		// Update the grid with one MCS
+		meter.tickStart()
+		C.monteCarloStep()
+		meter.tick()
+		draw()
+	}
+	ts = requestAnimationFrame( timestep )
+}
+
+function seedGrid(){
+	// Create a cell (other than background)
+	infected = C.makeNewCellID(1)
+	resistant = C.makeNewCellID(2)
+	C.setpix( C.midpoint, infected )
+}
+
+function initialize(){
+	// Create a new CPM, canvas, and stats object
+	C = new CPM.CPM( [w,w], {
+		J : [ [NaN,20], [20,100] ],
+		T : 0.01,
+	})
+	C.add({
+		CONSTRAINT_TYPE : "hard",
+		fulfilled : function(  sourcei, targeti, src_type, tgt_type ){
+			if( tgt_type == infected ){
+				return false
+			}
+			return true
+		}
+	})
+	C.add({
+		CONSTRAINT_TYPE : "soft",
+		deltaH : function(  sourcei, targeti, src_type, tgt_type ){
+			if( src_type == infected && tgt_type == 0 && C.random() < r_i ){
+				return -1000
+			}	
+			return 1000000
+		}
+	})
+	C.add({
+		postMCSListener : function(){
+			for( let [p,i] of C.cellPixels() ){
+				if( i == infected ){
+					console.log( " try " )
+				}
+				if( i == infected && C.random() < r_r ){
+					C.setpix( p, resistant )
+				}
+			}
+		}
+	})
+
+
+	//C.add( new CPM.Adhesion( C.conf ) )
+	if( !Cim ){
+		Cim = new CPM.Canvas( C, {zoom:zoom} )
+	} else {
+		Cim.C = C
+	}
+	Cim.el.onclick = toggleAnim
+	// Start simulation
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	seedGrid()
+	cancelAnimationFrame( ts )
+	timestep()
+}
+</script>
+</head>
+<body>
+<p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to reset simulation.</p>
+<p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
+<p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>
+<p><button onclick="initialize()">run</button></p>
+</body>
+</html>
