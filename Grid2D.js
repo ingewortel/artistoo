@@ -15,9 +15,9 @@ class Grid2D extends Grid {
 		// Attributes per pixel:
 		// celltype (identity) of the current pixel.
 		if( datatype == "Uint16" ){
-			this._pixels = new Uint16Array(this.p2i(field_size))
+			this._pixels = new Uint16Array(this.p2i(this.extents))
 		} else if( datatype == "Float32" ){
-			this._pixels = new Float32Array(this.p2i(field_size))
+			this._pixels = new Float32Array(this.p2i(this.extents))
 		} else {
 			throw("unsupported datatype: " + datatype)
 		}
@@ -67,9 +67,9 @@ class Grid2D extends Grid {
 		// left, right, bottom left-middle-right)
 		let tl, tm, tr, l, r, bl, bm, br
 		
-		tl = i-1-this.dy; tm = i-1; tr = i-1+this.dy
-		l = i-this.dy; r = i+this.dy
-		bl = i+1-this.dy; bm = i+1; br = i+1+this.dy
+		tl = i-1-this.Y_STEP; tm = i-1; tr = i-1+this.Y_STEP
+		l = i-this.Y_STEP; r = i+this.Y_STEP
+		bl = i+1-this.Y_STEP; bm = i+1; br = i+1+this.Y_STEP
 		
 		// if pixel is part of one of the borders, adjust the 
 		// indices accordingly
@@ -77,33 +77,33 @@ class Grid2D extends Grid {
 		// the border.
 		// 
 		// left border
-		if( i < this.field_size.y ){
+		if( i < this.extents[1] ){
 			if( torus ){
-				add = this.field_size.x * this.dy
+				add = this.extents[0] * this.Y_STEP
 			}
 			tl += add; l += add; bl += add 	
 		}
 		
 		// right border
-		if( i >= this.dy*( this.field_size.x - 1 ) ){
+		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				add = -this.field_size.x * this.dy
+				add = -this.field_size.x * this.Y_STEP
 			}
 			tr += add; r += add; br += add
 		}
 
 		// top border
-		if( i % this.dy == 0 ){
+		if( i % this.Y_STEP == 0 ){
 			if( torus ){
-				add = this.field_size.y
+				add = this.extents[1]
 			}
 			tl += add; tm += add; tr += add	
 		}
 		
 		// bottom border
-		if( (i+1-this.field_size.y) % this.dy == 0 ){
+		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
 			if( torus ){
-				add = -this.field_size.y
+				add = -this.extents[1]
 			}
 			bl += add; bm += add; br += add
 		}
@@ -129,21 +129,21 @@ class Grid2D extends Grid {
 		}
 		
 		// right border
-		if( i >= this.dy*( this.extents[0] - 1 ) ){
+		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
 				r -= this.extents[0] * this.Y_STEP
 			}
 		}
 
 		// top border
-		if( i % this.dy == 0 ){
+		if( i % this.Y_STEP == 0 ){
 			if( torus ){
 				t += this.extents[1]
 			}
 		}
 		
 		// bottom border
-		if( (i+1-this.field_size.y) % this.dy == 0 ){
+		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
 			if( torus ){
 				b -= this.extents[1]
 			}
