@@ -5,28 +5,28 @@
 "use strict"
 
 // pass in RNG
-function DiceSet( mt ) {
+class DiceSet{
+	constructor( mt ) {
 
-	// Use a hash map to check in constant time whether a pixel is at a cell border.
-	// 
-	// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
-	// at least in nodejs. This is weird given that in vanilla objects, all keys are 
-	// converted to strings, which does not happen for Maps
-	// 
-	this.indices = {} //new Map() // {}
-	//this.indices = {}
+		// Use a hash map to check in constant time whether a pixel is at a cell border.
+		// 
+		// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
+		// at least in nodejs. This is weird given that in vanilla objects, all keys are 
+		// converted to strings, which does not happen for Maps
+		// 
+		this.indices = {} //new Map() // {}
+		//this.indices = {}
 
-	// Use an array for constant time random sampling of pixels at the border of cells.
-	this.elements = []
+		// Use an array for constant time random sampling of pixels at the border of cells.
+		this.elements = []
 
-	// track the number of pixels currently present in the DiceSet.
-	this.length = 0
+		// track the number of pixels currently present in the DiceSet.
+		this.length = 0
 
-	this.mt = mt
-}
+		this.mt = mt
+	}
 
-DiceSet.prototype = {
-	insert : function( v ){
+	insert( v ){
 		if( this.indices[v] ){
 			return
 		}
@@ -36,8 +36,9 @@ DiceSet.prototype = {
 	
 		this.elements.push( v )
 		this.length ++ 
-	},
-	remove : function( v ){
+	}
+
+	remove( v ){
 		// Check whether element is present before it can be removed.
 		if( !this.indices[v] ){
 			return
@@ -61,12 +62,14 @@ DiceSet.prototype = {
 
 		//this.indices.set(e,i)
 		this.indices[e] = i
-	},
-	contains : function( v ){
+	}
+
+	contains( v ){
 		//return this.indices.has(v)
 		return (v in this.indices)
-	},
-	sample : function(){
+	}
+
+	sample(){
 		return this.elements[Math.floor(this.mt.rnd()*this.length)]
 	}
 }
