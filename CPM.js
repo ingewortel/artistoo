@@ -153,6 +153,9 @@ class CPM {
 		2) Compute the change in Hamiltonian for the suggested copy attempt.
 		3) With a probability depending on this change, decline or accept the 
 		   copy attempt and update the grid accordingly. 
+
+		TODO it is quite confusing that the "cellborderpixels" array also
+		contains border pixels of the background.
 	*/
 	
 	monteCarloStep (){

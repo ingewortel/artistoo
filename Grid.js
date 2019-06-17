@@ -25,6 +25,8 @@ class Grid {
 		return this._pixels[i]
 	}
 
+	/** TODO do this smarter. It should not be necessary to loop over
+	 * non-existing pixels. */
 	* pixels() {
 		for( let i = 0 ; i < this._pixels.length ; i ++ ){
 			if( this._pixels[i] != 0 ){
