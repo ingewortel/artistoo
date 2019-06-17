@@ -5,7 +5,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var MersenneTwister = _interopDefault(require('mersennetwister'));
-var math = _interopDefault(require('mathjs'));
 
 /** This class implements a data structure with constant-time insertion, deletion, and random
     sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
@@ -85,10 +84,9 @@ class Grid {
 		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
 		this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) );
 		this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
-		this.Y_MASK = (1 << this.Y_BITS)-1;
-		this.dy = 1 << this.Y_BITS; // for neighborhoods based on pixel index
+		this.Y_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
+		this.Y_MASK = this.Y_STEP-1;
 	}
-
 	setpix( p, t ){
 		this._pixels[this.p2i(p)] = t;
 	}
@@ -104,6 +102,8 @@ class Grid {
 		return this._pixels[i]
 	}
 
+	/** TODO do this smarter. It should not be necessary to loop over
+	 * non-existing pixels. */
 	* pixels() {
 		for( let i = 0 ; i < this._pixels.length ; i ++ ){
 			if( this._pixels[i] != 0 ){
@@ -113,7 +113,7 @@ class Grid {
 	}
 
 	gradienti( i ){
-		throw("method 'gradienti' not implemented!"+i)
+		throw("method 'gradienti' not implemented! "+i)
 	}
 
 	gradient( p ){
@@ -242,18 +242,18 @@ class Grid2D extends Grid {
 		return [i >> this.Y_BITS, i & this.Y_MASK]
 	}
 	gradienti( i ){
-		let t = i-1, b = i+1, l = i-this.dy, r = i+this.dy, torus = this.torus;
+		let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus;
 		// left border
 		if( i < this.extents[1] ){
 			if( torus ){
-				l += this.extents[0] * this.dy;
+				l += this.extents[0] * this.Y_STEP;
 			}
 		}
 		
 		// right border
 		if( i >= this.dy*( this.extents[0] - 1 ) ){
 			if( torus ){
-				r -= this.extents[0] * this.dy;
+				r -= this.extents[0] * this.Y_STEP;
 			}
 		}
 
@@ -494,6 +494,9 @@ class CPM {
 		2) Compute the change in Hamiltonian for the suggested copy attempt.
 		3) With a probability depending on this change, decline or accept the 
 		   copy attempt and update the grid accordingly. 
+
+		TODO it is quite confusing that the "cellborderpixels" array also
+		contains border pixels of the background.
 	*/
 	
 	monteCarloStep (){
@@ -620,49 +623,47 @@ class CPM {
 
 /** Class for taking a CPM grid and displaying it in either browser or with nodejs. */
 
-// Constructor takes a CPM object C
-function Canvas( C, options ){
-	this.C = C;
-	this.zoom = (options && options.zoom) || 1;
+class Canvas {
+	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
+	constructor( C, options ){
+		this.C = C;
+		this.zoom = (options && options.zoom) || 1;
+		this.wrap = (options && options.wrap) || [0,0,0];
+		this.width = this.wrap[0];
+		this.height = this.wrap[1];
 
-	this.wrap = (options && options.wrap) || [0,0,0];
-	this.width = this.wrap[0];
-	this.height = this.wrap[1];
+		if( this.width == 0 || this.C.field_size.x < this.width ){
+			this.width = this.C.field_size.x;
+		}
+		if( this.height == 0 || this.C.field_size.y < this.height ){
+			this.height = this.C.field_size.y;
+		}
 
-	if( this.width == 0 || this.C.field_size.x < this.width ){
-		this.width = this.C.field_size.x;
+		if( typeof document !== "undefined" ){
+			this.el = document.createElement("canvas");
+			this.el.width = this.width*this.zoom;
+			this.el.height = this.height*this.zoom;//C.field_size.y*this.zoom
+			var parent_element = (options && options.parentElement) || document.body;
+			parent_element.appendChild( this.el );
+		} else {
+			const {createCanvas} = require("canvas");
+			this.el = createCanvas( this.width*this.zoom,
+				this.height*this.zoom );
+			this.fs = require("fs");
+		}
+
+		this.ctx = this.el.getContext("2d");
+		this.ctx.lineWidth = .2;
+		this.ctx.lineCap="butt";
 	}
-	if( this.height == 0 || this.C.field_size.y < this.height ){
-		this.height = this.C.field_size.y;
-	}
-
-	if( typeof document !== "undefined" ){
-		this.el = document.createElement("canvas");
-		this.el.width = this.width*this.zoom;
-		this.el.height = this.height*this.zoom;//C.field_size.y*this.zoom
-		var parent_element = (options && options.parentElement) || document.body;
-		parent_element.appendChild( this.el );
-	} else {
-		const {createCanvas} = require("canvas");
-		this.el = createCanvas( this.width*this.zoom,
-			this.height*this.zoom );
-		this.fs = require("fs");
-	}
-
-	this.ctx = this.el.getContext("2d");
-	this.ctx.lineWidth = .2;
-	this.ctx.lineCap="butt";
-}
-
-
-Canvas.prototype = {
 
 
 	/* Several internal helper functions (used by drawing functions below) : */
-	pxf : function( p ){
+	pxf( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom );
-	},
-	pxfi : function( p ){
+	}
+
+	pxfi( p ){
 		const dy = this.zoom*this.width;
 		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
 		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
@@ -673,66 +674,75 @@ Canvas.prototype = {
 				this.px[i+j+off + 3] = 255;
 			}
 		}
-	},
-	pxfir : function( p ){
+	}
+
+	pxfir( p ){
 		const dy = this.zoom*this.width;
 		const off = (p[1]*dy + p[0])*4;
 		this.px[off] = this.col_r;
 		this.px[off + 1] = this.col_g;
 		this.px[off + 2] = this.col_b;
 		this.px[off + 3] = 255;
-	},
-	getImageData : function(){
+	}
+
+	getImageData(){
 		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
 		this.px = this.image_data.data;
-	},
-	putImageData : function(){
+	}
+
+	putImageData(){
 		this.ctx.putImageData(this.image_data, 0, 0);
-	},
-	pxfnozoom : function( p ){
+	}
+
+	pxfnozoom( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 );
-	},
+	}
+
 	/* draw a line left (l), right (r), down (d), or up (u) of pixel p */
-	pxdrawl : function( p ){
+	pxdrawl( p ){
 		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
 			this.pxfir( [this.zoom*p[0],i] );
 		}
-	},
-	pxdrawr : function( p ){
+	}
+
+	pxdrawr( p ){
 		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
 			this.pxfir( [this.zoom*(p[0]+1),i] );
 		}
-	},
-	pxdrawd : function( p ){
+	}
+
+	pxdrawd( p ){
 		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
 			this.pxfir( [i,this.zoom*(p[1]+1)] );
 		}
-	},
-	pxdrawu : function( p ){
+	}
+
+	pxdrawu( p ){
 		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
 			this.pxfir( [i,this.zoom*p[1]] );
 		}
-	},
+	}
 
 	/* For easier color naming */
-	col : function( hex ){
+	col( hex ){
 		this.ctx.fillStyle="#"+hex;
 		this.col_r = parseInt( hex.substr(0,2), 16 );
 		this.col_g = parseInt( hex.substr(2,2), 16 );
 		this.col_b = parseInt( hex.substr(4,2), 16 );
-	},
+	}
+
 	/* Color the whole grid in color [col] */
-	clear : function( col ){
+	clear( col ){
 		col = col || "000000";
 		this.ctx.fillStyle="#"+col;
 		this.ctx.fillRect( 0,0, this.el.width, this.el.height );
-	},
+	}
 
-	context : function(){
+	context(){
 		return this.ctx
-	},
+	}
 
-	p2pdraw : function( p ){
+	p2pdraw( p ){
 		var dim;
 		for( dim = 0; dim < p.length; dim++ ){
 			if( this.wrap[dim] != 0 ){
@@ -740,11 +750,11 @@ Canvas.prototype = {
 			}
 		}
 		return p
-	},
+	}
 
 	/* DRAWING FUNCTIONS ---------------------- */
 
-	drawChemokine : function( cc ){
+	drawChemokine( cc ){
 		let dy = this.zoom*this.width;
 		this.getImageData();
 		for( let i = 0 ; i < cc.chemoGrid.extents[0] ; i ++ ){
@@ -757,12 +767,12 @@ Canvas.prototype = {
 			}
 		}
 		this.putImageData();
-	},
+	}
 
 	/* Use to draw the border of each cell on the grid in the color specified in "col"
 	(hex format). This function draws a line around the cell (rather than coloring the
 	outer pixels). If [kind] is negative, simply draw all borders. */
-	drawCellBorders : function( kind, col ){
+	drawCellBorders( kind, col ){
 		col = col || "000000";
 		let pc, pu, pd, pl, pr, pdraw;
 		this.col( col );
@@ -795,10 +805,11 @@ Canvas.prototype = {
 
 		}
 		this.putImageData();
-	},
+	}
+
 	/* Use to show activity values of the act model using a color gradient, for
 	cells in the grid of cellkind "kind". */
-	drawActivityValues : function( kind, A ){
+	drawActivityValues( kind, A ){
 		// cst contains the pixel ids of all non-background/non-stroma cells in
 		// the grid. 
 		let ii, sigma, a;
@@ -828,10 +839,10 @@ Canvas.prototype = {
 			}
 		}
 		this.putImageData();
-	},
+	}
 
 	/* colors outer pixels of each cell */
-	drawOnCellBorders : function( col ){
+	drawOnCellBorders( col ){
 		col = col || "000000";
 		this.getImageData();
 		this.col( col );
@@ -839,11 +850,11 @@ Canvas.prototype = {
 			this.pxfi( i[0] );
 		}
 		this.putImageData();
-	},
+	}
 
 	/* Draw all cells of cellkind "kind" in color col (hex). col can also be a function that
 	 * returns a hex value for a cell id. */
-	drawCells : function( kind, col ){
+	drawCells( kind, col ){
 		if( ! col ){
 			col = "000000";
 		}
@@ -871,13 +882,13 @@ Canvas.prototype = {
 			}
 		}
 		this.putImageData();
-	},
+	}
 
 	/* Draw grid to the png file "fname". */
-	writePNG : function( fname ){
+	writePNG( fname ){
 		this.fs.writeFileSync(fname, this.el.toBuffer());
 	}
-};
+}
 
 /** Class for outputting various statistics from a CPM simulation, as for instance
     the centroids of all cells (which is actually the only thing that's implemented
@@ -2167,186 +2178,6 @@ class PreferredDirectionConstraint extends SoftConstraint {
 	}
 }
 
-/**
- * Implements the chemotaxis constraint of Potts models.
- * At the moment, this only works for 2d-CPMs modeled as a torus
- */
-
-class ChemotaxisConstraint extends SoftConstraint {
-
-	set CPM(C){
-		this.C = C;
-		if( C.ndim > 2 ){ 
-			throw("only works for 2-dimensional CPMs!")
-		}
-		if( C.field_size.x != C.field_size.y ){ 
-			throw("only works for square CPMs!")
-		}
-		this.size = C.field_size.x;
-		this.newSize = Math.ceil(this.size/this.resolutionDecrease);
-		this.initializeField();
-		this.chemoGrid = new Grid2D([this.size,this.size], C.torus, "Float32");
-	}
-
-	nmod(x, N) {
-		return ((x % N) + N) % N
-	}
-
-	t21(x,y,N){
-		return this.nmod(y,N)*N+this.nmod(x,N)
-	}
-
-	initializeField(){
-		// prepare laplacian matrix
-		this.L = math.multiply( math.identity( (this.newSize)*(this.newSize), (this.newSize)*(this.newSize), "sparse" ), -4 );
-		for( let x = 0 ; x < (this.newSize) ; x ++ ){
-			for( let y = 0 ; y < (this.newSize); y ++ ){
-				let i = this.t21(x,y,(this.newSize));
-				this.L.set([i,this.t21(this.nmod(x-1,(this.newSize)),y,(this.newSize))],1);
-				this.L.set([i,this.t21(this.nmod(x+1,(this.newSize)),y,(this.newSize))],1);
-				this.L.set([i,this.t21(x,this.nmod(y-1,(this.newSize)),(this.newSize))],1);
-				this.L.set([i,this.t21(x,this.nmod(y+1,(this.newSize)),(this.newSize))],1);
-			}
-		}
-
-		// scale matrix to diffusion coefficient & spatiotemporal step
-		this.A = math.multiply( this.L, this.D * this.dt / this.dx / this.dx );
-		this.chemokinelevel = math.zeros((this.newSize)*(this.newSize),1);
-
-		// create list for faster interpolation
-		this.interpolatelist = [[]];
-		for (var x = 0; x < this.size; x++) {
-			this.interpolatelist.push([]);
-			for (var y = 0; y < this.size; y++) {
-				let xplus = x/this.resolutionDecrease + 0.001;
-				let yplus = y/this.resolutionDecrease + 0.001;
-				let p1 = Math.abs((x/this.resolutionDecrease - math.floor(xplus)) * (y/this.resolutionDecrease - math.floor(yplus)));
-				let p2 = Math.abs((x/this.resolutionDecrease - math.floor(xplus)) * (math.ceil(yplus) - y/this.resolutionDecrease));
-				let p3 = Math.abs((math.ceil(xplus) - x/this.resolutionDecrease) * (y/this.resolutionDecrease - math.floor(yplus)));
-				let p4 = Math.abs((math.ceil(xplus) - x/this.resolutionDecrease) * (math.ceil(yplus) - y/this.resolutionDecrease));
-				this.interpolatelist[x].push([p1, p2, p3, p4]);
-			}
-		}
-
-	}
-
-	constructor( conf ){
-		super(conf);
-		this.conf = conf;
-		this.resolutionDecrease = conf["RESOLUTION_DECREASE"];
-		this.DPerMCS = conf["DIFFUSION_PER_MCS"];
-		this.D = conf["D"];
-		this.D /= this.DPerMCS;
-		this.dx = conf["MM_PER_PIXEL"] * this.resolutionDecrease;
-		this.dt = conf["SECOND_PER_MCS"] / 60;
-		this.secretion = conf["SECRETION"];
-		this.decay = conf["DECAY"];
-	}
-
-	// at every pixel occupied by an infected cell, secrete (secretion rate/(resolutionDecrease^2)) chemokine
-	produceChemokine () {
-		for (var x = 0; x < this.size; x++) {
-			for (var y = 0; y < this.size; y++) {
-				if (this.C.t2k[this.C.pixti(this.C.grid.p2i([x,y]))] == this.conf["SECRETOR"]) {
-					let index = [this.t21(math.floor(x/this.resolutionDecrease),math.floor(y/this.resolutionDecrease),(this.newSize)),0];
-					this.chemokinelevel.set(index, this.chemokinelevel.get(index) + (this.secretion/(this.resolutionDecrease*this.resolutionDecrease)) * this.dt);
-				}
-			}
-		}
-	}
-
-	// perform diffusion
-	updateValues () {
-		this.chemokinelevel = math.add( math.multiply( this.A, this.chemokinelevel ), this.chemokinelevel );
-	}
-
-	// interpolate between the grid points in the diffusion grid to obtain a more accurate chemokine value for the main grid
-	interpolate(x, y, c) {
-		let xplus = x + 0.001;
-		let yplus = y + 0.001;
-		let cx = this.nmod(((xplus) << 0)+1,this.newSize);
-		let fx = this.nmod((xplus) << 0,this.newSize);
-		let cy = this.nmod(((yplus) << 0)+1,this.newSize);
-		let fy = this.nmod((yplus) << 0,this.newSize);
-		let p1 = c.get([cx, cy]) * this.interpolatelist[x*this.resolutionDecrease][y*this.resolutionDecrease][0];
-		let p2 = c.get([cx, fy]) * this.interpolatelist[x*this.resolutionDecrease][y*this.resolutionDecrease][1];
-		let p3 = c.get([fx, cy]) * this.interpolatelist[x*this.resolutionDecrease][y*this.resolutionDecrease][2];
-		let p4 = c.get([fx, fy]) * this.interpolatelist[x*this.resolutionDecrease][y*this.resolutionDecrease][3];
-		return (p1+p2+p3+p4)
-	}
-
-	// updates the main grid with interpolated values of the chemokine grid
-	updateGrid () {
-		// reshapes the lists in matrice for easy matrix interpolation
-		let chemokineMatrix = math.reshape(this.chemokinelevel, [(this.newSize), (this.newSize)]);
-		let mv = 0.;
-		for (let x = 0; x < this.size; x++) {
-			let scalex = x/this.resolutionDecrease;
-			for (let y = 0; y < this.size; y++) {
-				let scaley = y/this.resolutionDecrease;
-				let value = this.interpolate(scalex, scaley, chemokineMatrix);
-				this.chemoGrid.setpix( [y,x], value ); 
-				if( value > mv ){
-					mv = value;
-				}
-			}
-		}
-		this.maxChemokineValue = mv;
-		this.chemokinelevel = math.reshape(this.chemokinelevel, [(this.newSize)*(this.newSize), 1]);
-	}
-
-	// removes a percentage of the chemokine
-	removeChemokine () {
-		this.chemokinelevel = math.multiply(this.chemokinelevel, 1 - this.decay * this.dt);
-	}
-
-	postMCSListener(){
-		// Chemokine is produced by all chemokine grid lattice sites
-		this.produceChemokine();
-		// Every MCS, the chemokine diffuses 10 times
-		for(let i = 0; i < this.DPerMCS; i++) {
-			this.updateValues();
-		}
-		// Updates the main grid with interpolated values of the chemokine grid
-		this.updateGrid();
-		// Chemokine decays
-		this.removeChemokine();
-	}
-
-	/* To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
-	 * This implements a linear gradient rather than a radial one as with pointAttractor. */
-	linAttractor ( p1, p2, dir ){
-		let r = 0., norm1 = 0, norm2 = 0, d1 = 0., d2 = 0.;
-		// loops over the coordinates x,y,(z)
-		for( let i = 0; i < p1.length ; i++ ){
-			// direction of the copy attempt on this coordinate is from p1 to p2
-			d1 = p2[i] - p1[i];
-			// direction of the gradient
-			d2 = dir[i];
-			r += d1 * d2;
-			norm1 += d1*d1;
-			norm2 += d2*d2;
-		}
-		if ( norm2 == 0 ) { return 0 }
-		return r/Math.sqrt(norm1)/Math.sqrt(norm2)
-	}
-
-	deltaH( sourcei, targeti, src_type, tgt_type ){
-		//let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti )
-		let gradientvec2 = 
-			this.chemoGrid.gradienti( sourcei );
-		let bias = 
-			this.linAttractor( this.C.grid.i2p(sourcei), this.C.grid.i2p(targeti), gradientvec2 );
-		let lambdachem;
-		if( src_type != 0 ){
-			lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.t2k[src_type]];
-		} else {
-			lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.t2k[tgt_type]];
-		}
-		return -bias*lambdachem
-	}
-}
-
 exports.CPM = CPM;
 exports.CPMChemotaxis = CPMChemotaxis;
 exports.Stats = Stats;
@@ -2363,4 +2194,3 @@ exports.ActivityConstraint = ActivityConstraint;
 exports.PerimeterConstraint = PerimeterConstraint;
 exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
 exports.PostMCSStats = PostMCSStats;
-exports.ChemotaxisConstraint = ChemotaxisConstraint;

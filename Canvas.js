@@ -2,49 +2,47 @@
 
 "use strict"
 
-// Constructor takes a CPM object C
-function Canvas( C, options ){
-	this.C = C
-	this.zoom = (options && options.zoom) || 1
+class Canvas {
+	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
+	constructor( C, options ){
+		this.C = C
+		this.zoom = (options && options.zoom) || 1
+		this.wrap = (options && options.wrap) || [0,0,0]
+		this.width = this.wrap[0]
+		this.height = this.wrap[1]
 
-	this.wrap = (options && options.wrap) || [0,0,0]
-	this.width = this.wrap[0]
-	this.height = this.wrap[1]
+		if( this.width == 0 || this.C.field_size.x < this.width ){
+			this.width = this.C.field_size.x
+		}
+		if( this.height == 0 || this.C.field_size.y < this.height ){
+			this.height = this.C.field_size.y
+		}
 
-	if( this.width == 0 || this.C.field_size.x < this.width ){
-		this.width = this.C.field_size.x
+		if( typeof document !== "undefined" ){
+			this.el = document.createElement("canvas")
+			this.el.width = this.width*this.zoom
+			this.el.height = this.height*this.zoom//C.field_size.y*this.zoom
+			var parent_element = (options && options.parentElement) || document.body
+			parent_element.appendChild( this.el )
+		} else {
+			const {createCanvas} = require("canvas")
+			this.el = createCanvas( this.width*this.zoom,
+				this.height*this.zoom )
+			this.fs = require("fs")
+		}
+
+		this.ctx = this.el.getContext("2d")
+		this.ctx.lineWidth = .2
+		this.ctx.lineCap="butt"
 	}
-	if( this.height == 0 || this.C.field_size.y < this.height ){
-		this.height = this.C.field_size.y
-	}
-
-	if( typeof document !== "undefined" ){
-		this.el = document.createElement("canvas")
-		this.el.width = this.width*this.zoom
-		this.el.height = this.height*this.zoom//C.field_size.y*this.zoom
-		var parent_element = (options && options.parentElement) || document.body
-		parent_element.appendChild( this.el )
-	} else {
-		const {createCanvas} = require("canvas")
-		this.el = createCanvas( this.width*this.zoom,
-			this.height*this.zoom )
-		this.fs = require("fs")
-	}
-
-	this.ctx = this.el.getContext("2d")
-	this.ctx.lineWidth = .2
-	this.ctx.lineCap="butt"
-}
-
-
-Canvas.prototype = {
 
 
 	/* Several internal helper functions (used by drawing functions below) : */
-	pxf : function( p ){
+	pxf( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom )
-	},
-	pxfi : function( p ){
+	}
+
+	pxfi( p ){
 		const dy = this.zoom*this.width
 		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4
 		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
@@ -55,66 +53,75 @@ Canvas.prototype = {
 				this.px[i+j+off + 3] = 255
 			}
 		}
-	},
-	pxfir : function( p ){
+	}
+
+	pxfir( p ){
 		const dy = this.zoom*this.width
 		const off = (p[1]*dy + p[0])*4
 		this.px[off] = this.col_r
 		this.px[off + 1] = this.col_g
 		this.px[off + 2] = this.col_b
 		this.px[off + 3] = 255
-	},
-	getImageData : function(){
+	}
+
+	getImageData(){
 		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom)
 		this.px = this.image_data.data
-	},
-	putImageData : function(){
+	}
+
+	putImageData(){
 		this.ctx.putImageData(this.image_data, 0, 0)
-	},
-	pxfnozoom : function( p ){
+	}
+
+	pxfnozoom( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 )
-	},
+	}
+
 	/* draw a line left (l), right (r), down (d), or up (u) of pixel p */
-	pxdrawl : function( p ){
+	pxdrawl( p ){
 		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
 			this.pxfir( [this.zoom*p[0],i] )
 		}
-	},
-	pxdrawr : function( p ){
+	}
+
+	pxdrawr( p ){
 		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
 			this.pxfir( [this.zoom*(p[0]+1),i] )
 		}
-	},
-	pxdrawd : function( p ){
+	}
+
+	pxdrawd( p ){
 		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
 			this.pxfir( [i,this.zoom*(p[1]+1)] )
 		}
-	},
-	pxdrawu : function( p ){
+	}
+
+	pxdrawu( p ){
 		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
 			this.pxfir( [i,this.zoom*p[1]] )
 		}
-	},
+	}
 
 	/* For easier color naming */
-	col : function( hex ){
+	col( hex ){
 		this.ctx.fillStyle="#"+hex
 		this.col_r = parseInt( hex.substr(0,2), 16 )
 		this.col_g = parseInt( hex.substr(2,2), 16 )
 		this.col_b = parseInt( hex.substr(4,2), 16 )
-	},
+	}
+
 	/* Color the whole grid in color [col] */
-	clear : function( col ){
+	clear( col ){
 		col = col || "000000"
 		this.ctx.fillStyle="#"+col
 		this.ctx.fillRect( 0,0, this.el.width, this.el.height )
-	},
+	}
 
-	context : function(){
+	context(){
 		return this.ctx
-	},
+	}
 
-	p2pdraw : function( p ){
+	p2pdraw( p ){
 		var dim
 		for( dim = 0; dim < p.length; dim++ ){
 			if( this.wrap[dim] != 0 ){
@@ -122,11 +129,11 @@ Canvas.prototype = {
 			}
 		}
 		return p
-	},
+	}
 
 	/* DRAWING FUNCTIONS ---------------------- */
 
-	drawChemokine : function( cc ){
+	drawChemokine( cc ){
 		let dy = this.zoom*this.width
 		this.getImageData()
 		for( let i = 0 ; i < cc.chemoGrid.extents[0] ; i ++ ){
@@ -139,12 +146,12 @@ Canvas.prototype = {
 			}
 		}
 		this.putImageData()
-	},
+	}
 
 	/* Use to draw the border of each cell on the grid in the color specified in "col"
 	(hex format). This function draws a line around the cell (rather than coloring the
 	outer pixels). If [kind] is negative, simply draw all borders. */
-	drawCellBorders : function( kind, col ){
+	drawCellBorders( kind, col ){
 		col = col || "000000"
 		let pc, pu, pd, pl, pr, pdraw
 		this.col( col )
@@ -177,10 +184,11 @@ Canvas.prototype = {
 
 		}
 		this.putImageData()
-	},
+	}
+
 	/* Use to show activity values of the act model using a color gradient, for
 	cells in the grid of cellkind "kind". */
-	drawActivityValues : function( kind, A ){
+	drawActivityValues( kind, A ){
 		// cst contains the pixel ids of all non-background/non-stroma cells in
 		// the grid. 
 		let ii, sigma, a
@@ -210,10 +218,10 @@ Canvas.prototype = {
 			}
 		}
 		this.putImageData()
-	},
+	}
 
 	/* colors outer pixels of each cell */
-	drawOnCellBorders : function( col ){
+	drawOnCellBorders( col ){
 		col = col || "000000"
 		this.getImageData()
 		this.col( col )
@@ -221,11 +229,11 @@ Canvas.prototype = {
 			this.pxfi( i[0] )
 		}
 		this.putImageData()
-	},
+	}
 
 	/* Draw all cells of cellkind "kind" in color col (hex). col can also be a function that
 	 * returns a hex value for a cell id. */
-	drawCells : function( kind, col ){
+	drawCells( kind, col ){
 		if( ! col ){
 			col = "000000"
 		}
@@ -253,10 +261,10 @@ Canvas.prototype = {
 			}
 		}
 		this.putImageData()
-	},
+	}
 
 	/* Draw grid to the png file "fname". */
-	writePNG : function( fname ){
+	writePNG( fname ){
 		this.fs.writeFileSync(fname, this.el.toBuffer())
 	}
 }

@@ -120,18 +120,18 @@ class Grid2D extends Grid {
 		return [i >> this.Y_BITS, i & this.Y_MASK]
 	}
 	gradienti( i ){
-		let t = i-1, b = i+1, l = i-this.dy, r = i+this.dy, torus = this.torus
+		let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus
 		// left border
 		if( i < this.extents[1] ){
 			if( torus ){
-				l += this.extents[0] * this.dy
+				l += this.extents[0] * this.Y_STEP
 			}
 		}
 		
 		// right border
 		if( i >= this.dy*( this.extents[0] - 1 ) ){
 			if( torus ){
-				r -= this.extents[0] * this.dy
+				r -= this.extents[0] * this.Y_STEP
 			}
 		}
 
