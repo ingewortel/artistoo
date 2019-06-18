@@ -1079,7 +1079,7 @@ var CPM = (function (exports) {
 
 		/* DRAWING FUNCTIONS ---------------------- */
 
-		drawChemokine( cc ){
+		drawField( cc ){
 			if( !cc ){
 				cc = this.grid;
 			}
