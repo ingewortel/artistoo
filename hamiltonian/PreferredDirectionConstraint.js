@@ -73,7 +73,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 			const k = this.C.cellKind(t)
 			let ld = this.conf["LAMBDA_DIR"][k]
 			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][k] ? 
-					this.conf["DELTA_T"][k] : 10
+				this.conf["DELTA_T"][k] : 10
 			if( ld == 0 ){
 				delete this.cellcentroidlists[t]
 				delete this.celldirections[t]

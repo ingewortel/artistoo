@@ -42,6 +42,18 @@ class Grid {
 		return this.gradienti( this.p2i( p ) )
 	}
 
+	laplacian( p ){
+		return this.laplaciani( this.p2i( p ) )
+	}
+
+	laplaciani( i ){
+		let L = 0, n = 0
+		for( let x of this.neighNeumanni(i) ){
+			L += this.pixti( x ); n ++
+		} 
+		return L - n * this.pixti( i )
+	}
+
 }
 
 export default Grid

@@ -53,7 +53,7 @@ function seedGrid(){
 
 function initialize(){
 	// Create a new CPM, canvas, and stats object
-	C = new CPM.CPMChemotaxis( 2, {x: w, y:w}, {
+	C = new CPM.CPMChemotaxis( [w,w], {
 		seed : 2,
 		LAMBDA_CONNECTIVITY : [0,0,0,1000,0],
 		LAMBDA_CHEMOTAXIS : [0,0,400,0,0],

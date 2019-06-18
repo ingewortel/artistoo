@@ -2,26 +2,35 @@
 
 "use strict"
 
+import CPM from "./CPM.js"
+import Grid2D from "./Grid2D.js"
+
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
 	constructor( C, options ){
-		this.C = C
+		if( C instanceof CPM ){
+			this.C = C
+			this.extents = C.extents
+		} else if( C instanceof Grid2D ){
+			this.grid = C
+			this.extents = C.extents
+		}
 		this.zoom = (options && options.zoom) || 1
 		this.wrap = (options && options.wrap) || [0,0,0]
 		this.width = this.wrap[0]
 		this.height = this.wrap[1]
 
-		if( this.width == 0 || this.C.field_size.x < this.width ){
-			this.width = this.C.field_size.x
+		if( this.width == 0 || this.extents[0] < this.width ){
+			this.width = this.extents[0]
 		}
-		if( this.height == 0 || this.C.field_size.y < this.height ){
-			this.height = this.C.field_size.y
+		if( this.height == 0 || this.extents[1] < this.height ){
+			this.height = this.extents[1]
 		}
 
 		if( typeof document !== "undefined" ){
 			this.el = document.createElement("canvas")
 			this.el.width = this.width*this.zoom
-			this.el.height = this.height*this.zoom//C.field_size.y*this.zoom
+			this.el.height = this.height*this.zoom//extents[1]*this.zoom
 			var parent_element = (options && options.parentElement) || document.body
 			parent_element.appendChild( this.el )
 		} else {
@@ -134,15 +143,22 @@ class Canvas {
 	/* DRAWING FUNCTIONS ---------------------- */
 
 	drawChemokine( cc ){
-		let dy = this.zoom*this.width
+		if( !cc ){
+			cc = this.grid
+		}
+		let maxval = 0
+		for( let p of cc.pixels() ){
+			if( maxval < p[1] ){
+				maxval = p[1]
+			}
+		}
 		this.getImageData()
-		for( let i = 0 ; i < cc.chemoGrid.extents[0] ; i ++ ){
-			for( let j = 0 ; j < cc.chemoGrid.extents[1] ; j ++ ){
-				const off = (j*dy + i)*4
-				this.px[off] = 255
-				this.px[off + 1] = 0
-				this.px[off + 2] = 0
-				this.px[off + 3] = 255*(cc.chemoGrid.pixt( [i,j] )/cc.maxChemokineValue)
+		this.col_g = 0
+		this.col_b = 0
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				this.col_r =  255*(cc.pixt( [i,j] )/maxval)
+				this.pxfi([i,j])
 			}
 		}
 		this.putImageData()

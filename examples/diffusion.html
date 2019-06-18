@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="../build/cpm.js"></script>
+<style type="text/css">
+	canvas{ border: 1px solid black}
+</style>
+</head>
+<body>
+<script>
+"use strict"
+
+let w = 51
+
+var g1 = new CPM.Grid2D([w,w], true, "Float32"),
+	g2 = new CPM.Grid2D([w,w], true, "Float32")
+
+/*for( let i = 0 ; i < g.extents[0] ; i ++ ){
+	for( let j = 0 ; j < g.extents[1] ; j ++ ){
+		g.setpix( [i,j], Math.sqrt( (i-(w-1)/2)*(i-(w-1)/2) + (j-(w-1)/2)*(j-(w-1)/2) ) )
+	}
+}*/
+
+var c = new CPM.Canvas(g1,{zoom:5})
+g1.setpix( [25,25], 1 )
+c.drawChemokine( g1 )
+for( let i = 0 ; i < 1000 ; i ++ ){
+	for( let p1 of g1.pixels() ){
+		g2.setpix( p1[0], p1[1] + 0.1 * g1.laplacian(p1[0]) )
+	}
+	[g2, g1] = [g1, g2]
+}
+c.drawChemokine( g2 )
+
+
+/*
+for( let i = 0 ; i < 100 ; i ++ ){
+	for( let p1 of g1.pixels() ){
+		g2.setpix( p1[1] + 0.1 * g1.laplacian(p1[0]) )
+	}
+	[g2, g1] = [g1, g2]
+	c.drawChemokine( g1 )
+}
+*/
+
+
+</script>
+</body>
+</html>

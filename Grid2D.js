@@ -23,6 +23,19 @@ class Grid2D extends Grid {
 		}
 	}
 
+
+	* pixels() {
+		let ii = 0, c = 0
+		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			for( let j = 0 ; j < this.extents[1] ; j ++ ){
+				yield [[i,j], this._pixels[ii]]
+				ii ++
+			}
+			c += this.Y_STEP
+			ii = c
+		}
+	}
+
 	/*	Return array of indices of neighbor pixels of the pixel at 
 		index i. The separate 2D and 3D functions are called by
 		the wrapper function neighi, depending on this.ndim.
@@ -60,6 +73,54 @@ class Grid2D extends Grid {
 			}
 		}
 		return r
+	}
+
+	* neighNeumanni( i, torus = this.torus ){
+		// normal computation of neighbor indices (top left-middle-right, 
+		// left, right, bottom left-middle-right)
+		let t = i-1, l = i-this.Y_STEP, r = i+this.Y_STEP, b = i+1
+		
+		// if pixel is part of one of the borders, adjust the 
+		// indices accordingly
+		// if torus is false, return NaN for all neighbors that cross
+		// the border.
+
+		// left border
+		if( i < this.extents[1] ){
+			if( torus ){
+				l += this.extents[0] * this.Y_STEP
+				yield l
+			} 
+		} else {
+			yield l
+		}
+		// right border
+		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+			if( torus ){
+				r -= this.field_size.x * this.Y_STEP
+				yield r
+			}
+		} else {
+			yield r
+		}
+		// top border
+		if( i % this.Y_STEP == 0 ){
+			if( torus ){
+				t += this.extents[1]
+				yield t
+			} 
+		} else {
+			yield t
+		}
+		// bottom border
+		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+			if( torus ){
+				b -= this.extents[1]
+				yield b
+			} 
+		} else {
+			yield b
+		}
 	}
 
 	neighi( i, torus = this.torus ){	
@@ -121,37 +182,56 @@ class Grid2D extends Grid {
 	}
 	gradienti( i ){
 		let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus
-		// left border
-		if( i < this.extents[1] ){
+		
+		let dx=0
+		if( i < this.extents[1] ){ // left border
 			if( torus ){
 				l += this.extents[0] * this.Y_STEP
+				dx = ((this._pixels[r]-this._pixels[i])+
+					(this._pixels[i]-this._pixels[l]))/2
+			} else {
+				dx = this._pixels[r]-this._pixels[i]
 			}
-		}
-		
-		// right border
-		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
-			if( torus ){
-				r -= this.extents[0] * this.Y_STEP
+		} else { 
+			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){ // right border
+				if( torus ){
+					r -= this.extents[0] * this.Y_STEP
+					dx = ((this._pixels[r]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[l]))/2
+				} else {
+					dx = this._pixels[i]-this._pixels[l]
+				}
+			} else {
+				dx = ((this._pixels[r]-this._pixels[i])+
+					(this._pixels[i]-this._pixels[l]))/2
 			}
 		}
 
-		// top border
-		if( i % this.Y_STEP == 0 ){
+		let dy=0
+		if( i % this.Y_STEP == 0 ){ // top border
 			if( torus ){
 				t += this.extents[1]
+				dy = ((this._pixels[b]-this._pixels[i])+
+					(this._pixels[i]-this._pixels[t]))/2
+			}	else {
+				dy = this._pixels[b]-this._pixels[i]
+			}
+		} else { 
+			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){ // bottom border
+				if( torus ){
+					b -= this.extents[1]
+					dy = ((this._pixels[b]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[t]))/2
+				} else {
+					dy = this._pixels[i]-this._pixels[t]
+				}
+			} else {
+				dy = ((this._pixels[b]-this._pixels[i])+
+					(this._pixels[i]-this._pixels[t]))/2
 			}
 		}
-		
-		// bottom border
-		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
-			if( torus ){
-				b -= this.extents[1]
-			}
-		}
-
 		return [
-			this._pixels[r]-this._pixels[l],
-			this._pixels[b]-this._pixels[t]
+			dx, dy
 		]
 	}
 }

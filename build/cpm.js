@@ -6,28 +6,28 @@ var CPM = (function (exports) {
 	    pixels at cell borders. */
 
 	// pass in RNG
-	function DiceSet( mt ) {
+	class DiceSet{
+		constructor( mt ) {
 
-		// Use a hash map to check in constant time whether a pixel is at a cell border.
-		// 
-		// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
-		// at least in nodejs. This is weird given that in vanilla objects, all keys are 
-		// converted to strings, which does not happen for Maps
-		// 
-		this.indices = {}; //new Map() // {}
-		//this.indices = {}
+			// Use a hash map to check in constant time whether a pixel is at a cell border.
+			// 
+			// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
+			// at least in nodejs. This is weird given that in vanilla objects, all keys are 
+			// converted to strings, which does not happen for Maps
+			// 
+			this.indices = {}; //new Map() // {}
+			//this.indices = {}
 
-		// Use an array for constant time random sampling of pixels at the border of cells.
-		this.elements = [];
+			// Use an array for constant time random sampling of pixels at the border of cells.
+			this.elements = [];
 
-		// track the number of pixels currently present in the DiceSet.
-		this.length = 0;
+			// track the number of pixels currently present in the DiceSet.
+			this.length = 0;
 
-		this.mt = mt;
-	}
+			this.mt = mt;
+		}
 
-	DiceSet.prototype = {
-		insert : function( v ){
+		insert( v ){
 			if( this.indices[v] ){
 				return
 			}
@@ -37,8 +37,9 @@ var CPM = (function (exports) {
 		
 			this.elements.push( v );
 			this.length ++; 
-		},
-		remove : function( v ){
+		}
+
+		remove( v ){
 			// Check whether element is present before it can be removed.
 			if( !this.indices[v] ){
 				return
@@ -62,15 +63,17 @@ var CPM = (function (exports) {
 
 			//this.indices.set(e,i)
 			this.indices[e] = i;
-		},
-		contains : function( v ){
+		}
+
+		contains( v ){
 			//return this.indices.has(v)
 			return (v in this.indices)
-		},
-		sample : function(){
+		}
+
+		sample(){
 			return this.elements[Math.floor(this.mt.rnd()*this.length)]
 		}
-	};
+	}
 
 	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -344,6 +347,18 @@ var CPM = (function (exports) {
 			return this.gradienti( this.p2i( p ) )
 		}
 
+		laplacian( p ){
+			return this.laplaciani( this.p2i( p ) )
+		}
+
+		laplaciani( i ){
+			let L = 0, n = 0;
+			for( let x of this.neighNeumanni(i) ){
+				L += this.pixti( x ); n ++;
+			} 
+			return L - n * this.pixti( i )
+		}
+
 	}
 
 	/** A class containing (mostly static) utility functions for dealing with 2D 
@@ -361,11 +376,24 @@ var CPM = (function (exports) {
 			// Attributes per pixel:
 			// celltype (identity) of the current pixel.
 			if( datatype == "Uint16" ){
-				this._pixels = new Uint16Array(this.p2i(field_size));
+				this._pixels = new Uint16Array(this.p2i(this.extents));
 			} else if( datatype == "Float32" ){
-				this._pixels = new Float32Array(this.p2i(field_size));
+				this._pixels = new Float32Array(this.p2i(this.extents));
 			} else {
 				throw("unsupported datatype: " + datatype)
+			}
+		}
+
+
+		* pixels() {
+			let ii = 0, c = 0;
+			for( let i = 0 ; i < this.extents[0] ; i ++ ){
+				for( let j = 0 ; j < this.extents[1] ; j ++ ){
+					yield [[i,j], this._pixels[ii]];
+					ii ++;
+				}
+				c += this.Y_STEP;
+				ii = c;
 			}
 		}
 
@@ -408,14 +436,62 @@ var CPM = (function (exports) {
 			return r
 		}
 
+		* neighNeumanni( i, torus = this.torus ){
+			// normal computation of neighbor indices (top left-middle-right, 
+			// left, right, bottom left-middle-right)
+			let t = i-1, l = i-this.Y_STEP, r = i+this.Y_STEP, b = i+1;
+			
+			// if pixel is part of one of the borders, adjust the 
+			// indices accordingly
+			// if torus is false, return NaN for all neighbors that cross
+			// the border.
+
+			// left border
+			if( i < this.extents[1] ){
+				if( torus ){
+					l += this.extents[0] * this.Y_STEP;
+					yield l;
+				} 
+			} else {
+				yield l;
+			}
+			// right border
+			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+				if( torus ){
+					r -= this.field_size.x * this.Y_STEP;
+					yield r;
+				}
+			} else {
+				yield r;
+			}
+			// top border
+			if( i % this.Y_STEP == 0 ){
+				if( torus ){
+					t += this.extents[1];
+					yield t;
+				} 
+			} else {
+				yield t;
+			}
+			// bottom border
+			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+				if( torus ){
+					b -= this.extents[1];
+					yield b;
+				} 
+			} else {
+				yield b;
+			}
+		}
+
 		neighi( i, torus = this.torus ){	
 			// normal computation of neighbor indices (top left-middle-right, 
 			// left, right, bottom left-middle-right)
 			let tl, tm, tr, l, r, bl, bm, br;
 			
-			tl = i-1-this.dy; tm = i-1; tr = i-1+this.dy;
-			l = i-this.dy; r = i+this.dy;
-			bl = i+1-this.dy; bm = i+1; br = i+1+this.dy;
+			tl = i-1-this.Y_STEP; tm = i-1; tr = i-1+this.Y_STEP;
+			l = i-this.Y_STEP; r = i+this.Y_STEP;
+			bl = i+1-this.Y_STEP; bm = i+1; br = i+1+this.Y_STEP;
 			
 			// if pixel is part of one of the borders, adjust the 
 			// indices accordingly
@@ -423,33 +499,33 @@ var CPM = (function (exports) {
 			// the border.
 			// 
 			// left border
-			if( i < this.field_size.y ){
+			if( i < this.extents[1] ){
 				if( torus ){
-					add = this.field_size.x * this.dy;
+					add = this.extents[0] * this.Y_STEP;
 				}
 				tl += add; l += add; bl += add; 	
 			}
 			
 			// right border
-			if( i >= this.dy*( this.field_size.x - 1 ) ){
+			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
 				if( torus ){
-					add = -this.field_size.x * this.dy;
+					add = -this.field_size.x * this.Y_STEP;
 				}
 				tr += add; r += add; br += add;
 			}
 
 			// top border
-			if( i % this.dy == 0 ){
+			if( i % this.Y_STEP == 0 ){
 				if( torus ){
-					add = this.field_size.y;
+					add = this.extents[1];
 				}
 				tl += add; tm += add; tr += add;	
 			}
 			
 			// bottom border
-			if( (i+1-this.field_size.y) % this.dy == 0 ){
+			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
 				if( torus ){
-					add = -this.field_size.y;
+					add = -this.extents[1];
 				}
 				bl += add; bm += add; br += add;
 			}
@@ -467,37 +543,56 @@ var CPM = (function (exports) {
 		}
 		gradienti( i ){
 			let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus;
-			// left border
-			if( i < this.extents[1] ){
+			
+			let dx=0;
+			if( i < this.extents[1] ){ // left border
 				if( torus ){
 					l += this.extents[0] * this.Y_STEP;
+					dx = ((this._pixels[r]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[l]))/2;
+				} else {
+					dx = this._pixels[r]-this._pixels[i];
 				}
-			}
-			
-			// right border
-			if( i >= this.dy*( this.extents[0] - 1 ) ){
-				if( torus ){
-					r -= this.extents[0] * this.Y_STEP;
+			} else { 
+				if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){ // right border
+					if( torus ){
+						r -= this.extents[0] * this.Y_STEP;
+						dx = ((this._pixels[r]-this._pixels[i])+
+							(this._pixels[i]-this._pixels[l]))/2;
+					} else {
+						dx = this._pixels[i]-this._pixels[l];
+					}
+				} else {
+					dx = ((this._pixels[r]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[l]))/2;
 				}
 			}
 
-			// top border
-			if( i % this.dy == 0 ){
+			let dy=0;
+			if( i % this.Y_STEP == 0 ){ // top border
 				if( torus ){
 					t += this.extents[1];
+					dy = ((this._pixels[b]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[t]))/2;
+				}	else {
+					dy = this._pixels[b]-this._pixels[i];
+				}
+			} else { 
+				if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){ // bottom border
+					if( torus ){
+						b -= this.extents[1];
+						dy = ((this._pixels[b]-this._pixels[i])+
+							(this._pixels[i]-this._pixels[t]))/2;
+					} else {
+						dy = this._pixels[i]-this._pixels[t];
+					}
+				} else {
+					dy = ((this._pixels[b]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[t]))/2;
 				}
 			}
-			
-			// bottom border
-			if( (i+1-this.field_size.y) % this.dy == 0 ){
-				if( torus ){
-					b -= this.extents[1];
-				}
-			}
-
 			return [
-				this._pixels[r]-this._pixels[l],
-				this._pixels[b]-this._pixels[t]
+				dx, dy
 			]
 		}
 	}
@@ -850,23 +945,29 @@ var CPM = (function (exports) {
 	class Canvas {
 		/* The Canvas constructor accepts a CPM object C or a Grid2D object */
 		constructor( C, options ){
-			this.C = C;
+			if( C instanceof CPM ){
+				this.C = C;
+				this.extents = C.extents;
+			} else if( C instanceof Grid2D ){
+				this.grid = C;
+				this.extents = C.extents;
+			}
 			this.zoom = (options && options.zoom) || 1;
 			this.wrap = (options && options.wrap) || [0,0,0];
 			this.width = this.wrap[0];
 			this.height = this.wrap[1];
 
-			if( this.width == 0 || this.C.field_size.x < this.width ){
-				this.width = this.C.field_size.x;
+			if( this.width == 0 || this.extents[0] < this.width ){
+				this.width = this.extents[0];
 			}
-			if( this.height == 0 || this.C.field_size.y < this.height ){
-				this.height = this.C.field_size.y;
+			if( this.height == 0 || this.extents[1] < this.height ){
+				this.height = this.extents[1];
 			}
 
 			if( typeof document !== "undefined" ){
 				this.el = document.createElement("canvas");
 				this.el.width = this.width*this.zoom;
-				this.el.height = this.height*this.zoom;//C.field_size.y*this.zoom
+				this.el.height = this.height*this.zoom;//extents[1]*this.zoom
 				var parent_element = (options && options.parentElement) || document.body;
 				parent_element.appendChild( this.el );
 			} else {
@@ -979,15 +1080,22 @@ var CPM = (function (exports) {
 		/* DRAWING FUNCTIONS ---------------------- */
 
 		drawChemokine( cc ){
-			let dy = this.zoom*this.width;
+			if( !cc ){
+				cc = this.grid;
+			}
+			let maxval = 0;
+			for( let p of cc.pixels() ){
+				if( maxval < p[1] ){
+					maxval = p[1];
+				}
+			}
 			this.getImageData();
-			for( let i = 0 ; i < cc.chemoGrid.extents[0] ; i ++ ){
-				for( let j = 0 ; j < cc.chemoGrid.extents[1] ; j ++ ){
-					const off = (j*dy + i)*4;
-					this.px[off] = 255;
-					this.px[off + 1] = 0;
-					this.px[off + 2] = 0;
-					this.px[off + 3] = 255*(cc.chemoGrid.pixt( [i,j] )/cc.maxChemokineValue);
+			this.col_g = 0;
+			this.col_b = 0;
+			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+					this.col_r =  255*(cc.pixt( [i,j] )/maxval);
+					this.pxfi([i,j]);
 				}
 			}
 			this.putImageData();
@@ -1769,9 +1877,9 @@ var CPM = (function (exports) {
 
 	class CPMChemotaxis extends CPM {
 
-		constructor( ndim, field_size, conf ) {
+		constructor( extents, conf ) {
 			// call the parent (CPM) constructor
-			super( ndim, field_size, conf );
+			super( extents, conf );
 			// make sure "chemotaxis" is included in list of terms
 			if( this.terms.indexOf( "chemotaxis" ) == -1 ){	
 				this.terms.push( "chemotaxis" );
@@ -2356,7 +2464,7 @@ var CPM = (function (exports) {
 				const k = this.C.cellKind(t);
 				let ld = this.conf["LAMBDA_DIR"][k];
 				let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][k] ? 
-						this.conf["DELTA_T"][k] : 10;
+					this.conf["DELTA_T"][k] : 10;
 				if( ld == 0 ){
 					delete this.cellcentroidlists[t];
 					delete this.celldirections[t];

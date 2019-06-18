@@ -10,9 +10,9 @@ import CPM from "./CPM.js"
 
 class CPMChemotaxis extends CPM {
 
-	constructor( ndim, field_size, conf ) {
+	constructor( extents, conf ) {
 		// call the parent (CPM) constructor
-		super( ndim, field_size, conf )
+		super( extents, conf )
 		// make sure "chemotaxis" is included in list of terms
 		if( this.terms.indexOf( "chemotaxis" ) == -1 ){	
 			this.terms.push( "chemotaxis" )
