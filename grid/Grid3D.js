@@ -16,7 +16,7 @@ class Grid3D extends Grid {
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
 		this.Z_MASK = (1 << this.Z_BITS)-1
-		this.dz = 1 << ( this.Y_BITS + this.Z_BITS )
+		this.Z_STEP = 1 << ( this.Y_BITS + this.Z_BITS )
 		this._pixels = new Uint16Array(this.p2i(field_size))
 	}
 	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
@@ -31,6 +31,41 @@ class Grid3D extends Grid {
 		return [i >> (this.Y_BITS + this.Z_BITS), 
 			( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 	}
+
+	* pixelsi() {
+		let ii = 0, c = 0
+		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			for( let j = 0 ; j < this.extents[1] ; j ++ ){
+				let d = 0
+				for( let k = 0 ; k < this.extents[2] ; k ++ ){
+					yield ii
+					ii++
+				}
+				d += this.Z_STEP
+				ii = c + d
+			}
+			c += this.Y_STEP
+			ii = c
+		}
+	}
+
+	* pixels() {
+		let ii = 0, c = 0
+		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			for( let j = 0 ; j < this.extents[1] ; j ++ ){
+				let d = 0
+				for( let k = 0 ; k < this.extents[2] ; k ++ ){
+					yield [[i,j,k], this._pixels[ii]]
+					ii++
+				}
+				d += this.Z_STEP
+				ii = c + d
+			}
+			c += this.Y_STEP
+			ii = c
+		}
+	}
+
 	neighi( i, torus = this.torus ){
 		let p = this.i2p(i)
 

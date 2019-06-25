@@ -23,6 +23,17 @@ class Grid2D extends Grid {
 		}
 	}
 
+	* pixelsi() {
+		let ii = 0, c = 0
+		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			for( let j = 0 ; j < this.extents[1] ; j ++ ){
+				yield ii
+				ii ++
+			}
+			c += this.Y_STEP
+			ii = c
+		}
+	}
 
 	* pixels() {
 		let ii = 0, c = 0

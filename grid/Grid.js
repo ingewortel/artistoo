@@ -9,9 +9,11 @@ class Grid {
 		this.Y_STEP = 1 << this.Y_BITS // for neighborhoods based on pixel index
 		this.Y_MASK = this.Y_STEP-1
 	}
+
 	setpix( p, t ){
 		this._pixels[this.p2i(p)] = t
 	}
+
 	setpixi( i, t ){
 		this._pixels[i] = t
 	}
@@ -24,13 +26,23 @@ class Grid {
 		return this._pixels[i]
 	}
 
-	/** TODO do this smarter. It should not be necessary to loop over
-	 * non-existing pixels. */
 	* pixels() {
-		for( let i = 0 ; i < this._pixels.length ; i ++ ){
-			if( this._pixels[i] != 0 ){
-				yield [this.i2p(i),this._pixels[i]]
-			}
+		//throw("Iterator 'pixels' not implemented!")
+		yield undefined
+	}
+
+	* pixelsi() {
+		//throw("Iterator 'pixelsi' not implemented!")
+		yield undefined
+	}
+
+	pixelsbuffer() {
+		if( this._pixels instanceof Uint16Array ){
+			this._pixelsbuffer = new Uint16Array(this._pixels.length)
+		} else if( this._pixels instanceof Float32Array ){
+			this._pixelsbuffer = new Float32Array(this._pixels.length)
+		} else {
+			throw("unsupported datatype: " + (typeof this._pixels))
 		}
 	}
 
@@ -52,6 +64,14 @@ class Grid {
 			L += this.pixti( x ); n ++
 		} 
 		return L - n * this.pixti( i )
+	}
+
+	diffusion( D ){
+		if( ! this._pixelsbuffer ) this.pixelsbuffer()
+		for( let i of this.pixelsi() ){
+			this._pixelsbuffer[i] = this.pixti( i ) + D * this.laplaciani( i )
+		}
+		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer]
 	}
 
 }
