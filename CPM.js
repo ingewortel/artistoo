@@ -6,8 +6,8 @@
 
 import DiceSet from "./DiceSet.js"
 import MersenneTwister from "mersennetwister"
-import Grid2D from "./Grid2D.js"
-import Grid3D from "./Grid3D.js"
+import Grid2D from "./grid/Grid2D.js"
+import Grid3D from "./grid/Grid3D.js"
 
 class CPM {
 	constructor( field_size, conf ){

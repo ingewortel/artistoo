@@ -3,7 +3,7 @@
 "use strict"
 
 import CPM from "./CPM.js"
-import Grid2D from "./Grid2D.js"
+import Grid2D from "./grid/Grid2D.js"
 
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */

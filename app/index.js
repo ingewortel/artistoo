@@ -5,9 +5,9 @@ import Stats from "../Stats.js"
 import PostMCSStats from "../stats/PostMCSStats.js"
 import GridManipulator from "../GridManipulator.js"
 import CPMChemotaxis from "../CPMChemotaxis.js"
-import Grid2D from "../Grid2D.js"
-import Grid3D from "../Grid3D.js"
-import GridInitializer from "../GridInitializer.js"
+import Grid2D from "../grid/Grid2D.js"
+import Grid3D from "../grid/Grid3D.js"
+import GridInitializer from "../grid/GridInitializer.js"
 
 
 import Adhesion from "../hamiltonian/Adhesion.js"
