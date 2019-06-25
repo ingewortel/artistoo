@@ -9,38 +9,28 @@
 <script>
 "use strict"
 
-let w = 51
+let w = 61, m = (w-1)/2, D = 0.1545706
 
 var g1 = new CPM.Grid2D([w,w], true, "Float32"),
 	g2 = new CPM.Grid2D([w,w], true, "Float32")
 
-/*for( let i = 0 ; i < g.extents[0] ; i ++ ){
-	for( let j = 0 ; j < g.extents[1] ; j ++ ){
-		g.setpix( [i,j], Math.sqrt( (i-(w-1)/2)*(i-(w-1)/2) + (j-(w-1)/2)*(j-(w-1)/2) ) )
-	}
-}*/
-
 var c = new CPM.Canvas(g1,{zoom:5})
-g1.setpix( [25,25], 1 )
-c.drawChemokine( g1 )
-for( let i = 0 ; i < 1000 ; i ++ ){
+g1.setpix( [m,m], 1 )
+for( let i = 0 ; i < 200 ; i ++ ){
 	for( let p1 of g1.pixels() ){
-		g2.setpix( p1[0], p1[1] + 0.1 * g1.laplacian(p1[0]) )
+		g2.setpix( p1[0], p1[1] + D * g1.laplacian(p1[0]) )
 	}
 	[g2, g1] = [g1, g2]
-}
-c.drawChemokine( g2 )
-
-
-/*
-for( let i = 0 ; i < 100 ; i ++ ){
-	for( let p1 of g1.pixels() ){
-		g2.setpix( p1[1] + 0.1 * g1.laplacian(p1[0]) )
+	let s = 0
+	for( let x = 0 ; x < w ; x ++ ){
+		for( let y = 0 ; y < w ; y ++ ){
+			s += ((x-m)*(x-m)+(y-m)*(y-m))*(0.38*0.38/60./60.)*g1.pixt( [x,y] )
+		}
 	}
-	[g2, g1] = [g1, g2]
-	c.drawChemokine( g1 )
+	console.log( i, s, 4 * 6.2 * 1E-5 * (i/10) )
 }
-*/
+c.drawField( g2 )
+
 
 
 </script>
