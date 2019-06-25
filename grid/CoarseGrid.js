@@ -1,22 +1,33 @@
 /* This class encapsulates a lower-resolution grid and makes it
    visible as a higher-resolution grid. Only exact subsampling by
    a constant factor per dimension is supported. 
-
-	TODO not all methods of the base Grid class are supported yet.
-	Since this is mainly supposed to support diffusion grids, 
-	we have now focused on those methods that are necessary to
-	support diffusion.
 	*/
 
-class CoarseGrid extends Grid {
-	constructor( grid, downsample = 2 ){
-		let i = 0
-		for( ; i < grid.extents.length ; i++ ){
-			if( grid.extents[i] % downsample != 0 ){
-				throw( "Dimensionality of grid does not match along dimension ",i )
-			}
+class CoarseGrid {
+	constructor( grid, upscale = 2 ){
+		this.extents = new Array( grid.extents.length )
+		for( let i = 0 ; i < grid.extents.length ; i++ ){
+			this.extents[i] = upscale * grid.extents[i]
 		}
 		this.grid = grid
+		this.upscale = upscale
 	}
 
+	pixt( p ){
+		let ps = new Array( p.length )
+		for( let i = 0 ; i < p.length ; i ++ ){
+			ps[i] = ~~(p[i]/this.upscale)
+		}
+		return this.grid.pixt(ps)
+	}
+
+	gradient( p ){
+		let ps = new Array( p.length )
+		for( let i = 0 ; i < p.length ; i ++ ){
+			ps[i] = ~~(p[i]/this.upscale)
+		}
+		return this.grid.gradient( ps )
+	}
 }
+
+export default CoarseGrid

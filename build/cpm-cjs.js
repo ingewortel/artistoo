@@ -90,9 +90,11 @@ class Grid {
 		this.Y_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
 		this.Y_MASK = this.Y_STEP-1;
 	}
+
 	setpix( p, t ){
 		this._pixels[this.p2i(p)] = t;
 	}
+
 	setpixi( i, t ){
 		this._pixels[i] = t;
 	}
@@ -105,13 +107,23 @@ class Grid {
 		return this._pixels[i]
 	}
 
-	/** TODO do this smarter. It should not be necessary to loop over
-	 * non-existing pixels. */
 	* pixels() {
-		for( let i = 0 ; i < this._pixels.length ; i ++ ){
-			if( this._pixels[i] != 0 ){
-				yield [this.i2p(i),this._pixels[i]];
-			}
+		//throw("Iterator 'pixels' not implemented!")
+		yield undefined;
+	}
+
+	* pixelsi() {
+		//throw("Iterator 'pixelsi' not implemented!")
+		yield undefined;
+	}
+
+	pixelsbuffer() {
+		if( this._pixels instanceof Uint16Array ){
+			this._pixelsbuffer = new Uint16Array(this._pixels.length);
+		} else if( this._pixels instanceof Float32Array ){
+			this._pixelsbuffer = new Float32Array(this._pixels.length);
+		} else {
+			throw("unsupported datatype: " + (typeof this._pixels))
 		}
 	}
 
@@ -133,6 +145,14 @@ class Grid {
 			L += this.pixti( x ); n ++;
 		} 
 		return L - n * this.pixti( i )
+	}
+
+	diffusion( D ){
+		if( ! this._pixelsbuffer ) this.pixelsbuffer();
+		for( let i of this.pixelsi() ){
+			this._pixelsbuffer[i] = this.pixti( i ) + D * this.laplaciani( i );
+		}
+		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];
 	}
 
 }
@@ -160,6 +180,17 @@ class Grid2D extends Grid {
 		}
 	}
 
+	* pixelsi() {
+		let ii = 0, c = 0;
+		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			for( let j = 0 ; j < this.extents[1] ; j ++ ){
+				yield ii;
+				ii ++;
+			}
+			c += this.Y_STEP;
+			ii = c;
+		}
+	}
 
 	* pixels() {
 		let ii = 0, c = 0;
@@ -389,7 +420,7 @@ class Grid3D extends Grid {
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
 		this.Z_MASK = (1 << this.Z_BITS)-1;
-		this.dz = 1 << ( this.Y_BITS + this.Z_BITS );
+		this.Z_STEP = 1 << ( this.Y_BITS + this.Z_BITS );
 		this._pixels = new Uint16Array(this.p2i(field_size));
 	}
 	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
@@ -404,6 +435,41 @@ class Grid3D extends Grid {
 		return [i >> (this.Y_BITS + this.Z_BITS), 
 			( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 	}
+
+	* pixelsi() {
+		let ii = 0, c = 0;
+		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			for( let j = 0 ; j < this.extents[1] ; j ++ ){
+				let d = 0;
+				for( let k = 0 ; k < this.extents[2] ; k ++ ){
+					yield ii;
+					ii++;
+				}
+				d += this.Z_STEP;
+				ii = c + d;
+			}
+			c += this.Y_STEP;
+			ii = c;
+		}
+	}
+
+	* pixels() {
+		let ii = 0, c = 0;
+		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			for( let j = 0 ; j < this.extents[1] ; j ++ ){
+				let d = 0;
+				for( let k = 0 ; k < this.extents[2] ; k ++ ){
+					yield [[i,j,k], this._pixels[ii]];
+					ii++;
+				}
+				d += this.Z_STEP;
+				ii = c + d;
+			}
+			c += this.Y_STEP;
+			ii = c;
+		}
+	}
+
 	neighi( i, torus = this.torus ){
 		let p = this.i2p(i);
 
@@ -716,6 +782,38 @@ class CPM {
 
 }
 
+/* This class encapsulates a lower-resolution grid and makes it
+   visible as a higher-resolution grid. Only exact subsampling by
+   a constant factor per dimension is supported. 
+	*/
+
+class CoarseGrid {
+	constructor( grid, upscale = 2 ){
+		this.extents = new Array( grid.extents.length );
+		for( let i = 0 ; i < grid.extents.length ; i++ ){
+			this.extents[i] = upscale * grid.extents[i];
+		}
+		this.grid = grid;
+		this.upscale = upscale;
+	}
+
+	pixt( p ){
+		let ps = new Array( p.length );
+		for( let i = 0 ; i < p.length ; i ++ ){
+			ps[i] = ~~(p[i]/this.upscale);
+		}
+		return this.grid.pixt(ps)
+	}
+
+	gradient( p ){
+		let ps = new Array( p.length );
+		for( let i = 0 ; i < p.length ; i ++ ){
+			ps[i] = ~~(p[i]/this.upscale);
+		}
+		return this.grid.gradient( ps )
+	}
+}
+
 /** Class for taking a CPM grid and displaying it in either browser or with nodejs. */
 
 class Canvas {
@@ -724,7 +822,7 @@ class Canvas {
 		if( C instanceof CPM ){
 			this.C = C;
 			this.extents = C.extents;
-		} else if( C instanceof Grid2D ){
+		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
 			this.grid = C;
 			this.extents = C.extents;
 		}
@@ -860,9 +958,12 @@ class Canvas {
 			cc = this.grid;
 		}
 		let maxval = 0;
-		for( let p of cc.pixels() ){
-			if( maxval < p[1] ){
-				maxval = p[1];
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				let p = cc.pixt([i,j]);
+				if( maxval < p ){
+					maxval = p;
+				}
 			}
 		}
 		this.getImageData();
@@ -2286,6 +2387,51 @@ class PreferredDirectionConstraint extends SoftConstraint {
 	}
 }
 
+class ChemotaxisConstraint extends SoftConstraint {
+	set CPM(C){
+		this.C = C;
+	}
+
+	constructor( conf ){
+		super( conf );
+		this.conf = conf;
+		this.field = conf.field;
+	}
+
+        /* To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
+         * This implements a linear gradient rather than a radial one as with pointAttractor. */
+        linAttractor ( p1, p2, dir ){
+                let r = 0., d1 = 0., d2 = 0., norm1 = 0., norm2 = 0.;
+                // loops over the coordinates x,y,(z)
+                for( let i = 0; i < p1.length ; i++ ){
+                        // direction of the copy attempt on this coordinate is from p1 to p2
+                        d1 = p2[i] - p1[i];
+			norm1 += d1 * d1;
+                        // direction of the gradient
+                        d2 = dir[i];
+                        r += d1 * d2;
+			norm2 += d2 * d2;
+                }
+		if( norm2 < 1e-40 ) return 0
+                return r / Math.sqrt( norm1 ) / Math.sqrt( norm2 )
+        }
+
+	deltaH( sourcei, targeti, src_type, tgt_type ){
+		let sp = this.C.grid.i2p( sourcei );
+		let gradientvec = this.field.gradient( sp );
+                let bias = 
+                        this.linAttractor( sp, 
+				this.C.grid.i2p(targeti), gradientvec );
+                let lambdachem;
+                if( src_type != 0 ){
+                        lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.cellKind(src_type)];
+                } else {
+                        lambdachem = this.conf["LAMBDA_CHEMOTAXIS"][this.C.cellKind(tgt_type)];
+                }
+                return -bias*lambdachem
+	}
+}
+
 exports.CPM = CPM;
 exports.CPMChemotaxis = CPMChemotaxis;
 exports.Stats = Stats;
@@ -2302,3 +2448,5 @@ exports.ActivityConstraint = ActivityConstraint;
 exports.PerimeterConstraint = PerimeterConstraint;
 exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
 exports.PostMCSStats = PostMCSStats;
+exports.CoarseGrid = CoarseGrid;
+exports.ChemotaxisConstraint = ChemotaxisConstraint;

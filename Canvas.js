@@ -4,6 +4,7 @@
 
 import CPM from "./CPM.js"
 import Grid2D from "./grid/Grid2D.js"
+import CoarseGrid from "./grid/CoarseGrid.js"
 
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
@@ -11,7 +12,7 @@ class Canvas {
 		if( C instanceof CPM ){
 			this.C = C
 			this.extents = C.extents
-		} else if( C instanceof Grid2D ){
+		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
 			this.grid = C
 			this.extents = C.extents
 		}
@@ -147,9 +148,12 @@ class Canvas {
 			cc = this.grid
 		}
 		let maxval = 0
-		for( let p of cc.pixels() ){
-			if( maxval < p[1] ){
-				maxval = p[1]
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				let p = cc.pixt([i,j])
+				if( maxval < p ){
+					maxval = p
+				}
 			}
 		}
 		this.getImageData()
