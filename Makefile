@@ -5,5 +5,5 @@ build/cpm.js: app/index.js CPM.js DiceSet.js CPMChemotaxis.js Stats.js GridManip
 	hamiltonian/Adhesion.js hamiltonian/HardVolumeRangeConstraint.js \
 	hamiltonian/PerimeterConstraint.js hamiltonian/ActivityConstraint.js \
 	hamiltonian/PreferredDirectionConstraint.js stats/PostMCSStats.js \
-	hamiltonian/ChemotaxisConstraint.js
+	hamiltonian/ChemotaxisConstraint.js hamiltonian/BarrierConstraint.js 
 	node_modules/rollup/bin/rollup -c

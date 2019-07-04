@@ -2113,6 +2113,46 @@ var CPM = (function (exports) {
 				}
 			}
 		}
+		/* Add an entire plane to an array of pixel coordinates. This array is given 
+		as first argument but can be empty. The plane is specified by setting the x/y/z
+		coordinate (coded by coord = 0/1/2 for x/y/z) to a fixed value [coordvalue], while
+		letting the other coordinates range from their min value 0 to their max value. */
+		makePlane ( voxels, coord, coordvalue ){
+			let x,y,z;
+			let minc = [0,0,0];
+			let maxc = [this.C.field_size.x-1, this.C.field_size.y-1, 0];
+			if( this.C.ndim == 3 ){ maxc[2] = this.C.field_size.z-1; }
+			minc[coord] = coordvalue;
+			maxc[coord] = coordvalue;
+
+			// For every coordinate x,y,z, loop over all possible values from min to max.
+			// one of these loops will have only one iteration because min = max = coordvalue.
+			for( x = minc[0]; x <= maxc[0]; x++ ){
+				for( y = minc[1]; y<=maxc[1]; y++ ){
+					for( z = minc[2]; z<=maxc[2]; z++ ){
+						if( this.C.ndim == 3 ){
+							voxels.push( [x,y,z] );	
+						} else {
+							//console.log(x,y)
+							voxels.push( [x,y] );
+						}
+					}
+				}
+			}
+
+			return voxels
+		}
+		/* Convert all pixels in a given array to a specific cellkind */
+			/* Change the pixels defined by voxels (array of coordinates p) into
+		   the given cellkind. */
+		changeKind ( voxels, cellkind ){
+			
+			let newid = this.C.makeNewCellID( cellkind );
+			for( let p of voxels ){
+				this.C.setpix( p, newid );
+			}
+			
+		}
 	}
 
 	class Constraint {
@@ -2656,6 +2696,26 @@ var CPM = (function (exports) {
 		}
 	}
 
+	/** 
+	 * Allows a "barrier" celltype from and into which copy attempts are forbidden. 
+	 */
+
+	class BarrierConstraint extends HardConstraint {
+		fulfilled( src_i, tgt_i, src_type, tgt_type ){
+		
+			// Fulfilled = false when either src or tgt pixel is of the barrier cellkind	
+			if( this.conf["IS_BARRIER"][this.C.cellKind( src_type ) ] ){
+				return false
+			}
+
+			if( this.conf["IS_BARRIER"][this.C.cellKind( tgt_type ) ] ){
+				return false
+			}
+
+			return true
+		}
+	}
+
 	exports.CPM = CPM;
 	exports.CPMChemotaxis = CPMChemotaxis;
 	exports.Stats = Stats;
@@ -2674,6 +2734,7 @@ var CPM = (function (exports) {
 	exports.PostMCSStats = PostMCSStats;
 	exports.CoarseGrid = CoarseGrid;
 	exports.ChemotaxisConstraint = ChemotaxisConstraint;
+	exports.BarrierConstraint = BarrierConstraint;
 
 	return exports;
 

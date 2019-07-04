@@ -2,6 +2,16 @@
 yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
+2019-07-04 Inge Wortel <ingewortel@gmail.com>
+	* hamiltonian/BarrierConstraint.js : new hard constraint to replace
+	the "stroma" celltype in the previous version. Basically, this 
+	constraint sets one cellkind as "barrier" cellkind. Copy attempts
+	from or into pixels with this cellkind are forbidden. Which cellkinds
+	are barrier are defined in the conf object in the IS_BARRIER array,
+	with a boolean value for each cellkind.
+	* grid/gridInitializer.js : added functions to define a plane on
+	the grid and to set all pixels in that plane to a certain cellkind.
+	This can be used to build microchannels, for example.
 
 2019-03-20 Johannes Textor <johannes.textor@gmx.de>
 	* stats/PostMCSStats.js : new class for parameters that can be

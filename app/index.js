@@ -10,7 +10,6 @@ import Grid3D from "../grid/Grid3D.js"
 import GridInitializer from "../grid/GridInitializer.js"
 import CoarseGrid from "../grid/CoarseGrid.js"
 
-
 import Adhesion from "../hamiltonian/Adhesion.js"
 import VolumeConstraint from "../hamiltonian/VolumeConstraint.js"
 import HardVolumeRangeConstraint from "../hamiltonian/HardVolumeRangeConstraint.js"
@@ -19,9 +18,11 @@ import PerimeterConstraint from "../hamiltonian/PerimeterConstraint.js"
 import ActivityConstraint from "../hamiltonian/ActivityConstraint2.js"
 import PreferredDirectionConstraint from "../hamiltonian/PreferredDirectionConstraint.js"
 import ChemotaxisConstraint from "../hamiltonian/ChemotaxisConstraint.js"
+import BarrierConstraint from "../hamiltonian/BarrierConstraint.js"
+
 
 export {CPM,CPMChemotaxis,Stats,Canvas,GridManipulator,Grid2D,Grid3D,
 	Adhesion, VolumeConstraint, GridInitializer, HardVolumeRangeConstraint, TestLogger,
 	ActivityConstraint, PerimeterConstraint, PreferredDirectionConstraint,
-	PostMCSStats,CoarseGrid, ChemotaxisConstraint }
+	PostMCSStats,CoarseGrid, ChemotaxisConstraint, BarrierConstraint }
 
