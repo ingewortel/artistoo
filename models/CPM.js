@@ -6,6 +6,7 @@
 
 import GridBasedModel from "./GridBasedModel.js"
 import DiceSet from "../DiceSet.js"
+import Constraint from "../hamiltonian/Constraint.js"
 
 class CPM extends GridBasedModel {
 	constructor( field_size, conf ){
@@ -25,6 +26,8 @@ class CPM extends GridBasedModel {
 		this.hard_constraints = []
 		this.post_setpix_listeners = []
 		this.post_mcs_listeners = []
+		this.stats = []
+		this.stat_values = {}
 		this._neighbours = new Uint16Array(this.grid.p2i(field_size))
 	}
 
@@ -63,10 +66,26 @@ class CPM extends GridBasedModel {
 		}
 	}
 
+	getStat( s ){
+		/* Instantiate stats class if it doesn't exist yet and bind to this model */
+		if( !(s.name in this.stats) ){
+			let t = new s()
+			this.stats[s.name] = t
+			t.model = this
+			
+		}
+		/* Cache stat value if it hasn't been done yet */
+		if( !(s.name in this.stat_values) ){
+			this.stat_values[s.name] = this.stats[s.name].compute()
+		}
+		/* Return cached value */
+		return this.stat_values[s.name]
+	}
+
 	add( t ){
-		if( "CONSTRAINT_TYPE" in t ){
+		if( t instanceof Constraint ){
 			switch( t.CONSTRAINT_TYPE ){
-			case "soft": this.soft_constraints.push( t.deltaH.bind(t) );break
+			case "soft": this.soft_constraints.push( t.deltaH.bind(t) ) ;break
 			case "hard": this.hard_constraints.push( t.fulfilled.bind(t) ); break
 			}
 		}
@@ -176,6 +195,7 @@ class CPM extends GridBasedModel {
 			} 
 		}
 		this.time++ // update time with one MCS.
+		this.stat_values = {} // invalidate stat value cache
 		for( let l of this.post_mcs_listeners ){
 			l()
 		}
@@ -212,6 +232,7 @@ class CPM extends GridBasedModel {
 			l( i, t_old, t )
 		}
 	}
+
 	setpix ( p, t ){
 		this.setpixi( this.grid.p2i(p), t )
 	}

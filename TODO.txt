@@ -2,3 +2,4 @@
 
 - Finish implementation of chemotaxis constraint
 
+- Should it be possible to call stats not every timestep, but at defined or entirely custom intervals?

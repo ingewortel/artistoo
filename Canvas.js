@@ -5,6 +5,7 @@
 import GridBasedModel from "./models/GridBasedModel.js"
 import Grid2D from "./grid/Grid2D.js"
 import CoarseGrid from "./grid/CoarseGrid.js"
+import PixelsByCell from "./stats/PixelsByCell.js"
 
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
@@ -262,22 +263,27 @@ class Canvas {
 		}
 		// Object cst contains pixel index of all pixels belonging to non-background,
 		// non-stroma cells.
-		let cellpixelsbyid = {}
-		for( let x of this.C.pixels() ){
+
+		let cellpixelsbyid = this.C.getStat( PixelsByCell )
+
+		/*for( let x of this.C.pixels() ){
 			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
 				if( !cellpixelsbyid[x[1]] ){
 					cellpixelsbyid[x[1]] = []
 				}
 				cellpixelsbyid[x[1]].push( x[0] )
 			}
-		}
+		}*/
+
 		this.getImageData()
 		for( let cid of Object.keys( cellpixelsbyid ) ){
-			if( typeof col == "function" ){
-				this.col( col(cid) )
-			}
-			for( let cp of cellpixelsbyid[cid] ){
-				this.pxfi( cp )
+			if( kind < 0 || this.C.cellKind(cid) == kind ){
+				if( typeof col == "function" ){
+					this.col( col(cid) )
+				}
+				for( let cp of cellpixelsbyid[cid] ){
+					this.pxfi( cp )
+				}
 			}
 		}
 		this.putImageData()

@@ -840,6 +840,18 @@ var CPM = (function (exports) {
 		}
 	}
 
+	class Constraint {
+		get CONSTRAINT_TYPE() {
+			throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
+		}
+		constructor( conf ){
+			this.conf = conf;
+		}
+		set CPM(C){
+			this.C = C;
+		}
+	}
+
 	/** The core CPM class. Can be used for two- or 
 	 * three-dimensional simulations. 
 	*/
@@ -862,6 +874,8 @@ var CPM = (function (exports) {
 			this.hard_constraints = [];
 			this.post_setpix_listeners = [];
 			this.post_mcs_listeners = [];
+			this.stats = [];
+			this.stat_values = {};
 			this._neighbours = new Uint16Array(this.grid.p2i(field_size));
 		}
 
@@ -900,10 +914,26 @@ var CPM = (function (exports) {
 			}
 		}
 
+		getStat( s ){
+			/* Instantiate stats class if it doesn't exist yet and bind to this model */
+			if( !(s.name in this.stats) ){
+				let t = new s();
+				this.stats[s.name] = t;
+				t.model = this;
+				
+			}
+			/* Cache stat value if it hasn't been done yet */
+			if( !(s.name in this.stat_values) ){
+				this.stat_values[s.name] = this.stats[s.name].compute();
+			}
+			/* Return cached value */
+			return this.stat_values[s.name]
+		}
+
 		add( t ){
-			if( "CONSTRAINT_TYPE" in t ){
+			if( t instanceof Constraint ){
 				switch( t.CONSTRAINT_TYPE ){
-				case "soft": this.soft_constraints.push( t.deltaH.bind(t) );break
+				case "soft": this.soft_constraints.push( t.deltaH.bind(t) ) ;break
 				case "hard": this.hard_constraints.push( t.fulfilled.bind(t) ); break
 				}
 			}
@@ -1013,6 +1043,7 @@ var CPM = (function (exports) {
 				} 
 			}
 			this.time++; // update time with one MCS.
+			this.stat_values = {}; // invalidate stat value cache
 			for( let l of this.post_mcs_listeners ){
 				l();
 			}
@@ -1049,6 +1080,7 @@ var CPM = (function (exports) {
 				l( i, t_old, t );
 			}
 		}
+
 		setpix ( p, t ){
 			this.setpixi( this.grid.p2i(p), t );
 		}
@@ -1132,6 +1164,36 @@ var CPM = (function (exports) {
 				ps[i] = ~~(p[i]/this.upscale);
 			}
 			return this.grid.gradient( ps )
+		}
+	}
+
+	class Stat {
+		// Although Stats do have a 'conf' object, they should not 
+		// really be configurable in the sense that they should always
+		// provide an expected output. The 'conf' object is mainly intended
+		// to provide an option to configure logging / debugging output. That
+		// is not implemented yet.
+		constructor( conf ){
+			this.conf = conf || {};
+		}
+		set model( M ){
+			this.M = M;
+		}
+		compute(){
+			throw("compute method not implemented for subclass of Stat")
+		}
+	}
+
+	class PixelsByCell extends Stat {
+		compute(){
+			let cellpixels = { 0 : [] };
+			for( let i of this.M.cellIDs() ){
+				cellpixels[i] = [];
+			}
+			for( let [p,i] of this.M.pixels() ){
+				cellpixels[i].push( p );
+			}
+			return cellpixels
 		}
 	}
 
@@ -1393,22 +1455,27 @@ var CPM = (function (exports) {
 			}
 			// Object cst contains pixel index of all pixels belonging to non-background,
 			// non-stroma cells.
-			let cellpixelsbyid = {};
-			for( let x of this.C.pixels() ){
+
+			let cellpixelsbyid = this.C.getStat( PixelsByCell );
+
+			/*for( let x of this.C.pixels() ){
 				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
 					if( !cellpixelsbyid[x[1]] ){
-						cellpixelsbyid[x[1]] = [];
+						cellpixelsbyid[x[1]] = []
 					}
-					cellpixelsbyid[x[1]].push( x[0] );
+					cellpixelsbyid[x[1]].push( x[0] )
 				}
-			}
+			}*/
+
 			this.getImageData();
 			for( let cid of Object.keys( cellpixelsbyid ) ){
-				if( typeof col == "function" ){
-					this.col( col(cid) );
-				}
-				for( let cp of cellpixelsbyid[cid] ){
-					this.pxfi( cp );
+				if( kind < 0 || this.C.cellKind(cid) == kind ){
+					if( typeof col == "function" ){
+						this.col( col(cid) );
+					}
+					for( let cp of cellpixelsbyid[cid] ){
+						this.pxfi( cp );
+					}
 				}
 			}
 			this.putImageData();
@@ -2107,18 +2174,6 @@ var CPM = (function (exports) {
 		}
 	}
 
-	class Constraint {
-		get CONSTRAINT_TYPE() {
-			throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
-		}
-		constructor( conf ){
-			this.conf = conf;
-		}
-		set CPM(C){
-			this.C = C;
-		}
-	}
-
 	class SoftConstraint extends Constraint {
 		get CONSTRAINT_TYPE() {
 			return "soft"
@@ -2670,6 +2725,7 @@ var CPM = (function (exports) {
 	exports.CoarseGrid = CoarseGrid;
 	exports.ChemotaxisConstraint = ChemotaxisConstraint;
 	exports.BarrierConstraint = BarrierConstraint;
+	exports.PixelsByCell = PixelsByCell;
 
 	return exports;
 
