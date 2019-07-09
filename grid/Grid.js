@@ -10,6 +10,11 @@ class Grid {
 		this.Y_MASK = this.Y_STEP-1
 	}
 
+	neigh(p, torus = this.torus){
+		let g = this
+		return g.neighi( this.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+	}
+
 	setpix( p, t ){
 		this._pixels[this.p2i(p)] = t
 	}
@@ -72,6 +77,15 @@ class Grid {
 			this._pixelsbuffer[i] = this.pixti( i ) + D * this.laplaciani( i )
 		}
 		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer]
+	}
+
+	applyLocally( f ){
+		if( ! this._pixelsbuffer ) this.pixelsbuffer()
+		for( let i of this.pixelsi() ){
+			let p = this.i2p(i)
+			this._pixelsbuffer[i] = f( p, this.neigh(p) ) 
+		}
+		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer]		
 	}
 
 	multiplyBy( r ){

@@ -4,9 +4,8 @@
 import Grid from "./Grid.js"
 
 class Grid2D extends Grid {
-	constructor( field_size, torus=true, datatype="Uint16" ){
-		super( field_size, torus )
-		this.field_size = { x : field_size[0], y : field_size[1] }
+	constructor( extents, torus=true, datatype="Uint16" ){
+		super( extents, torus )
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		if( this.X_BITS + this.Y_BITS > 32 ){
@@ -108,7 +107,7 @@ class Grid2D extends Grid {
 		// right border
 		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				r -= this.field_size.x * this.Y_STEP
+				r -= this.extents[0] * this.Y_STEP
 				yield r
 			}
 		} else {
@@ -159,7 +158,7 @@ class Grid2D extends Grid {
 		// right border
 		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				add = -this.field_size.x * this.Y_STEP
+				add = -this.extents[0] * this.Y_STEP
 			}
 			tr += add; r += add; br += add
 		}

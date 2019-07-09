@@ -2,14 +2,14 @@
 
 "use strict"
 
-import CPM from "./models/CPM.js"
+import GridBasedModel from "./models/GridBasedModel.js"
 import Grid2D from "./grid/Grid2D.js"
 import CoarseGrid from "./grid/CoarseGrid.js"
 
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
 	constructor( C, options ){
-		if( C instanceof CPM ){
+		if( C instanceof GridBasedModel ){
 			this.C = C
 			this.extents = C.extents
 		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
@@ -263,7 +263,7 @@ class Canvas {
 		// Object cst contains pixel index of all pixels belonging to non-background,
 		// non-stroma cells.
 		let cellpixelsbyid = {}
-		for( let x of this.C.cellPixels() ){
+		for( let x of this.C.pixels() ){
 			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
 				if( !cellpixelsbyid[x[1]] ){
 					cellpixelsbyid[x[1]] = []

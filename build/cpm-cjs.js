@@ -17,6 +17,11 @@ class Grid {
 		this.Y_MASK = this.Y_STEP-1;
 	}
 
+	neigh(p, torus = this.torus){
+		let g = this;
+		return g.neighi( this.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+	}
+
 	setpix( p, t ){
 		this._pixels[this.p2i(p)] = t;
 	}
@@ -81,6 +86,15 @@ class Grid {
 		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];
 	}
 
+	applyLocally( f ){
+		if( ! this._pixelsbuffer ) this.pixelsbuffer();
+		for( let i of this.pixelsi() ){
+			let p = this.i2p(i);
+			this._pixelsbuffer[i] = f( p, this.neigh(p) ); 
+		}
+		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];		
+	}
+
 	multiplyBy( r ){
 		for( let i of this.pixelsi() ){
 			this._pixels[i] *= r; 
@@ -93,9 +107,8 @@ class Grid {
  *  and 3D grids. */
 
 class Grid2D extends Grid {
-	constructor( field_size, torus=true, datatype="Uint16" ){
-		super( field_size, torus );
-		this.field_size = { x : field_size[0], y : field_size[1] };
+	constructor( extents, torus=true, datatype="Uint16" ){
+		super( extents, torus );
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		if( this.X_BITS + this.Y_BITS > 32 ){
@@ -197,7 +210,7 @@ class Grid2D extends Grid {
 		// right border
 		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				r -= this.field_size.x * this.Y_STEP;
+				r -= this.extents[0] * this.Y_STEP;
 				yield r;
 			}
 		} else {
@@ -248,7 +261,7 @@ class Grid2D extends Grid {
 		// right border
 		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				add = -this.field_size.x * this.Y_STEP;
+				add = -this.extents[0] * this.Y_STEP;
 			}
 			tr += add; r += add; br += add;
 		}
@@ -334,18 +347,6 @@ class Grid2D extends Grid {
 			dx, dy
 		]
 	}
-}
-
-/** The core CPM class. Can be used for two- or 
- * three-dimensional simulations. 
-*/
-
-class CA extends Grid2D {
-	constructor( extents, conf ){
-		super( extents, conf );
-	}
-
-
 }
 
 /** A class containing (mostly static) utility functions for dealing with 2D 
@@ -457,7 +458,7 @@ class Grid3D extends Grid {
 
 class GridBasedModel {
 
-	constructor( field_size, conf ){
+	constructor( extents, conf ){
 		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
 		this.mt = new MersenneTwister( seed );
 		if( !("torus" in conf) ){
@@ -465,7 +466,7 @@ class GridBasedModel {
 		}
 
 		// Attributes based on input parameters
-		this.ndim = field_size.length; // grid dimensions (2 or 3)
+		this.ndim = extents.length; // grid dimensions (2 or 3)
 		if( this.ndim != 2 && this.ndim != 3 ){
 			throw("only 2D and 3D models are implemented!")
 		}
@@ -473,9 +474,9 @@ class GridBasedModel {
 
 		// Some functions/attributes depend on ndim:
 		if( this.ndim == 2 ){
-			this.grid = new Grid2D(field_size,conf.torus);
+			this.grid = new Grid2D(extents,conf.torus);
 		} else {
-			this.grid = new Grid3D(field_size,conf.torus);
+			this.grid = new Grid3D(extents,conf.torus);
 		}
 		// Pull up some things from the grid object so we don't have to access it
 		// from the outside
@@ -485,6 +486,10 @@ class GridBasedModel {
 		this.pixti = this.grid.pixti.bind(this.grid);
 		this.neighi = this.grid.neighi.bind(this.grid);
 		this.extents = this.grid.extents;
+	}
+
+	cellKind( t ){
+		return t 
 	}
 
 	/* Get neighbourhood of position p */
@@ -519,6 +524,21 @@ class GridBasedModel {
 	
 	timeStep (){
 		throw("implemented in subclasses")
+	}
+}
+
+/** The core CPM class. Can be used for two- or 
+ * three-dimensional simulations. 
+*/
+
+class CA extends GridBasedModel {
+	constructor( extents, conf ){
+		super( extents, conf );
+		this.updateRule = conf["UPDATE_RULE"].bind(this);
+	}
+
+	timeStep(){
+		this.grid.applyLocally( this.updateRule );
 	}
 }
 
@@ -684,6 +704,7 @@ class CPM extends GridBasedModel {
 	getVolume( t ){
 		return this.cellvolume[t]
 	}
+
 	cellKind( t ){
 		return this.t2k[ t ]
 	}
@@ -895,7 +916,7 @@ class CoarseGrid {
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
 	constructor( C, options ){
-		if( C instanceof CPM ){
+		if( C instanceof GridBasedModel ){
 			this.C = C;
 			this.extents = C.extents;
 		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
@@ -1149,7 +1170,7 @@ class Canvas {
 		// Object cst contains pixel index of all pixels belonging to non-background,
 		// non-stroma cells.
 		let cellpixelsbyid = {};
-		for( let x of this.C.cellPixels() ){
+		for( let x of this.C.pixels() ){
 			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
 				if( !cellpixelsbyid[x[1]] ){
 					cellpixelsbyid[x[1]] = [];
@@ -2408,6 +2429,7 @@ class BarrierConstraint extends HardConstraint {
 
 exports.CA = CA;
 exports.CPM = CPM;
+exports.GridBasedModel = GridBasedModel;
 exports.Stats = Stats;
 exports.Canvas = Canvas;
 exports.GridManipulator = GridManipulator;

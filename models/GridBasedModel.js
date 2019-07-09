@@ -10,7 +10,7 @@ import Grid3D from "../grid/Grid3D.js"
 
 class GridBasedModel {
 
-	constructor( field_size, conf ){
+	constructor( extents, conf ){
 		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER)
 		this.mt = new MersenneTwister( seed )
 		if( !("torus" in conf) ){
@@ -18,7 +18,7 @@ class GridBasedModel {
 		}
 
 		// Attributes based on input parameters
-		this.ndim = field_size.length // grid dimensions (2 or 3)
+		this.ndim = extents.length // grid dimensions (2 or 3)
 		if( this.ndim != 2 && this.ndim != 3 ){
 			throw("only 2D and 3D models are implemented!")
 		}
@@ -26,9 +26,9 @@ class GridBasedModel {
 
 		// Some functions/attributes depend on ndim:
 		if( this.ndim == 2 ){
-			this.grid = new Grid2D(field_size,conf.torus)
+			this.grid = new Grid2D(extents,conf.torus)
 		} else {
-			this.grid = new Grid3D(field_size,conf.torus)
+			this.grid = new Grid3D(extents,conf.torus)
 		}
 		// Pull up some things from the grid object so we don't have to access it
 		// from the outside
@@ -38,6 +38,10 @@ class GridBasedModel {
 		this.pixti = this.grid.pixti.bind(this.grid)
 		this.neighi = this.grid.neighi.bind(this.grid)
 		this.extents = this.grid.extents
+	}
+
+	cellKind( t ){
+		return t 
 	}
 
 	/* Get neighbourhood of position p */

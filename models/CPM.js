@@ -91,6 +91,7 @@ class CPM extends GridBasedModel {
 	getVolume( t ){
 		return this.cellvolume[t]
 	}
+
 	cellKind( t ){
 		return this.t2k[ t ]
 	}

@@ -1,6 +1,7 @@
 
 import CA from "../models/CA.js"
 import CPM from "../models/CPM.js"
+import GridBasedModel from "../models/GridBasedModel.js"
 import Canvas from "../Canvas.js"
 import Stats from "../Stats.js"
 import PostMCSStats from "../stats/PostMCSStats.js"
@@ -21,7 +22,7 @@ import PreferredDirectionConstraint from "../hamiltonian/PreferredDirectionConst
 import ChemotaxisConstraint from "../hamiltonian/ChemotaxisConstraint.js"
 import BarrierConstraint from "../hamiltonian/BarrierConstraint.js"
 
-export {CA, CPM, Stats, Canvas, GridManipulator, Grid2D, Grid3D,
+export {CA, CPM, GridBasedModel, Stats, Canvas, GridManipulator, Grid2D, Grid3D,
 	Adhesion, VolumeConstraint, HardVolumeRangeConstraint, TestLogger,
 	ActivityConstraint, PerimeterConstraint, PreferredDirectionConstraint,
 	PostMCSStats,CoarseGrid, ChemotaxisConstraint, BarrierConstraint }

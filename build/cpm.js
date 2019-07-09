@@ -1,348 +1,6 @@
 var CPM = (function (exports) {
 	'use strict';
 
-	class Grid {
-		constructor( field_size, torus = true ){
-			this.extents = field_size;
-			this.torus = torus;
-			this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
-			this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) );
-			this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
-			this.Y_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
-			this.Y_MASK = this.Y_STEP-1;
-		}
-
-		setpix( p, t ){
-			this._pixels[this.p2i(p)] = t;
-		}
-
-		setpixi( i, t ){
-			this._pixels[i] = t;
-		}
-
-		pixt( p ){
-			return this._pixels[this.p2i(p)]
-		}
-
-		pixti( i ){
-			return this._pixels[i]
-		}
-
-		* pixels() {
-			//throw("Iterator 'pixels' not implemented!")
-			yield undefined;
-		}
-
-		* pixelsi() {
-			//throw("Iterator 'pixelsi' not implemented!")
-			yield undefined;
-		}
-
-		pixelsbuffer() {
-			if( this._pixels instanceof Uint16Array ){
-				this._pixelsbuffer = new Uint16Array(this._pixels.length);
-			} else if( this._pixels instanceof Float32Array ){
-				this._pixelsbuffer = new Float32Array(this._pixels.length);
-			} else {
-				throw("unsupported datatype: " + (typeof this._pixels))
-			}
-		}
-
-		gradienti( i ){
-			throw("method 'gradienti' not implemented! "+i)
-		}
-
-		gradient( p ){
-			return this.gradienti( this.p2i( p ) )
-		}
-
-		laplacian( p ){
-			return this.laplaciani( this.p2i( p ) )
-		}
-
-		laplaciani( i ){
-			let L = 0, n = 0;
-			for( let x of this.neighNeumanni(i) ){
-				L += this.pixti( x ); n ++;
-			} 
-			return L - n * this.pixti( i )
-		}
-
-		diffusion( D ){
-			if( ! this._pixelsbuffer ) this.pixelsbuffer();
-			for( let i of this.pixelsi() ){
-				this._pixelsbuffer[i] = this.pixti( i ) + D * this.laplaciani( i );
-			}
-			[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];
-		}
-
-		multiplyBy( r ){
-			for( let i of this.pixelsi() ){
-				this._pixels[i] *= r; 
-			}
-		}
-
-	}
-
-	/** A class containing (mostly static) utility functions for dealing with 2D 
-	 *  and 3D grids. */
-
-	class Grid2D extends Grid {
-		constructor( field_size, torus=true, datatype="Uint16" ){
-			super( field_size, torus );
-			this.field_size = { x : field_size[0], y : field_size[1] };
-			// Check that the grid size is not too big to store pixel ID in 32-bit number,
-			// and allow fast conversion of coordinates to unique ID numbers.
-			if( this.X_BITS + this.Y_BITS > 32 ){
-				throw("Field size too large -- field cannot be represented as 32-bit number")
-			}
-			// Attributes per pixel:
-			// celltype (identity) of the current pixel.
-			if( datatype == "Uint16" ){
-				this._pixels = new Uint16Array(this.p2i(this.extents));
-			} else if( datatype == "Float32" ){
-				this._pixels = new Float32Array(this.p2i(this.extents));
-			} else {
-				throw("unsupported datatype: " + datatype)
-			}
-		}
-
-		* pixelsi() {
-			let ii = 0, c = 0;
-			for( let i = 0 ; i < this.extents[0] ; i ++ ){
-				for( let j = 0 ; j < this.extents[1] ; j ++ ){
-					yield ii;
-					ii ++;
-				}
-				c += this.Y_STEP;
-				ii = c;
-			}
-		}
-
-		* pixels() {
-			let ii = 0, c = 0;
-			for( let i = 0 ; i < this.extents[0] ; i ++ ){
-				for( let j = 0 ; j < this.extents[1] ; j ++ ){
-					yield [[i,j], this._pixels[ii]];
-					ii ++;
-				}
-				c += this.Y_STEP;
-				ii = c;
-			}
-		}
-
-		/*	Return array of indices of neighbor pixels of the pixel at 
-			index i. The separate 2D and 3D functions are called by
-			the wrapper function neighi, depending on this.ndim.
-
-		*/
-		neighisimple( i ){
-			let p = this.i2p(i);
-			let xx = [];
-			for( let d = 0 ; d <= 1 ; d ++ ){
-				if( p[d] == 0 ){
-					if( this.torus[d] ){
-						xx[d] = [p[d],this.extents[d]-1,p[d]+1];
-					} else {
-						xx[d] = [p[d],p[d]+1];
-					}
-				} else if( p[d] == this.extents[d]-1 ){
-					if( this.torus[d] ){
-						xx[d] = [p[d],p[d]-1,0];
-					} else {
-						xx[d] = [p[d],p[d]-1];
-					}
-				} else {
-					xx[d] = [p[d],p[d]-1,p[d]+1];
-				}
-			}
-
-			let r = [], first=true;
-			for( let x of xx[0] ){
-				for( let y of xx[1] ){
-					if( first ){
-						first = false; 
-					} else {
-						r.push( this.p2i( [x,y] ) );
-					}
-				}
-			}
-			return r
-		}
-
-		* neighNeumanni( i, torus = this.torus ){
-			// normal computation of neighbor indices (top left-middle-right, 
-			// left, right, bottom left-middle-right)
-			let t = i-1, l = i-this.Y_STEP, r = i+this.Y_STEP, b = i+1;
-			
-			// if pixel is part of one of the borders, adjust the 
-			// indices accordingly
-			// if torus is false, return NaN for all neighbors that cross
-			// the border.
-
-			// left border
-			if( i < this.extents[1] ){
-				if( torus ){
-					l += this.extents[0] * this.Y_STEP;
-					yield l;
-				} 
-			} else {
-				yield l;
-			}
-			// right border
-			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
-				if( torus ){
-					r -= this.field_size.x * this.Y_STEP;
-					yield r;
-				}
-			} else {
-				yield r;
-			}
-			// top border
-			if( i % this.Y_STEP == 0 ){
-				if( torus ){
-					t += this.extents[1];
-					yield t;
-				} 
-			} else {
-				yield t;
-			}
-			// bottom border
-			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
-				if( torus ){
-					b -= this.extents[1];
-					yield b;
-				} 
-			} else {
-				yield b;
-			}
-		}
-
-		neighi( i, torus = this.torus ){	
-			// normal computation of neighbor indices (top left-middle-right, 
-			// left, right, bottom left-middle-right)
-			let tl, tm, tr, l, r, bl, bm, br;
-			
-			tl = i-1-this.Y_STEP; tm = i-1; tr = i-1+this.Y_STEP;
-			l = i-this.Y_STEP; r = i+this.Y_STEP;
-			bl = i+1-this.Y_STEP; bm = i+1; br = i+1+this.Y_STEP;
-			
-			// if pixel is part of one of the borders, adjust the 
-			// indices accordingly
-			let add = NaN; // if torus is false, return NaN for all neighbors that cross
-			// the border.
-			// 
-			// left border
-			if( i < this.extents[1] ){
-				if( torus ){
-					add = this.extents[0] * this.Y_STEP;
-				}
-				tl += add; l += add; bl += add; 	
-			}
-			
-			// right border
-			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
-				if( torus ){
-					add = -this.field_size.x * this.Y_STEP;
-				}
-				tr += add; r += add; br += add;
-			}
-
-			// top border
-			if( i % this.Y_STEP == 0 ){
-				if( torus ){
-					add = this.extents[1];
-				}
-				tl += add; tm += add; tr += add;	
-			}
-			
-			// bottom border
-			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
-				if( torus ){
-					add = -this.extents[1];
-				}
-				bl += add; bm += add; br += add;
-			}
-			if( !torus ){
-				return [ tl, l, bl, tm, bm, tr, r, br ].filter( isFinite )
-			} else {
-				return [ tl, l, bl, tm, bm, tr, r, br ]
-			}
-		}
-		p2i ( p ){
-			return ( p[0] << this.Y_BITS ) + p[1]
-		}
-		i2p ( i ){
-			return [i >> this.Y_BITS, i & this.Y_MASK]
-		}
-		gradienti( i ){
-			let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus;
-			
-			let dx=0;
-			if( i < this.extents[1] ){ // left border
-				if( torus ){
-					l += this.extents[0] * this.Y_STEP;
-					dx = ((this._pixels[r]-this._pixels[i])+
-						(this._pixels[i]-this._pixels[l]))/2;
-				} else {
-					dx = this._pixels[r]-this._pixels[i];
-				}
-			} else { 
-				if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){ // right border
-					if( torus ){
-						r -= this.extents[0] * this.Y_STEP;
-						dx = ((this._pixels[r]-this._pixels[i])+
-							(this._pixels[i]-this._pixels[l]))/2;
-					} else {
-						dx = this._pixels[i]-this._pixels[l];
-					}
-				} else {
-					dx = ((this._pixels[r]-this._pixels[i])+
-						(this._pixels[i]-this._pixels[l]))/2;
-				}
-			}
-
-			let dy=0;
-			if( i % this.Y_STEP == 0 ){ // top border
-				if( torus ){
-					t += this.extents[1];
-					dy = ((this._pixels[b]-this._pixels[i])+
-						(this._pixels[i]-this._pixels[t]))/2;
-				}	else {
-					dy = this._pixels[b]-this._pixels[i];
-				}
-			} else { 
-				if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){ // bottom border
-					if( torus ){
-						b -= this.extents[1];
-						dy = ((this._pixels[b]-this._pixels[i])+
-							(this._pixels[i]-this._pixels[t]))/2;
-					} else {
-						dy = this._pixels[i]-this._pixels[t];
-					}
-				} else {
-					dy = ((this._pixels[b]-this._pixels[i])+
-						(this._pixels[i]-this._pixels[t]))/2;
-				}
-			}
-			return [
-				dx, dy
-			]
-		}
-	}
-
-	/** The core CPM class. Can be used for two- or 
-	 * three-dimensional simulations. 
-	*/
-
-	class CA extends Grid2D {
-		constructor( extents, conf ){
-			super( extents, conf );
-		}
-
-
-	}
-
 	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 	function createCommonjsModule(fn, module) {
@@ -572,6 +230,349 @@ var CPM = (function (exports) {
 	}));
 	});
 
+	class Grid {
+		constructor( field_size, torus = true ){
+			this.extents = field_size;
+			this.torus = torus;
+			this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
+			this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) );
+			this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
+			this.Y_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
+			this.Y_MASK = this.Y_STEP-1;
+		}
+
+		neigh(p, torus = this.torus){
+			let g = this;
+			return g.neighi( this.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+		}
+
+		setpix( p, t ){
+			this._pixels[this.p2i(p)] = t;
+		}
+
+		setpixi( i, t ){
+			this._pixels[i] = t;
+		}
+
+		pixt( p ){
+			return this._pixels[this.p2i(p)]
+		}
+
+		pixti( i ){
+			return this._pixels[i]
+		}
+
+		* pixels() {
+			//throw("Iterator 'pixels' not implemented!")
+			yield undefined;
+		}
+
+		* pixelsi() {
+			//throw("Iterator 'pixelsi' not implemented!")
+			yield undefined;
+		}
+
+		pixelsbuffer() {
+			if( this._pixels instanceof Uint16Array ){
+				this._pixelsbuffer = new Uint16Array(this._pixels.length);
+			} else if( this._pixels instanceof Float32Array ){
+				this._pixelsbuffer = new Float32Array(this._pixels.length);
+			} else {
+				throw("unsupported datatype: " + (typeof this._pixels))
+			}
+		}
+
+		gradienti( i ){
+			throw("method 'gradienti' not implemented! "+i)
+		}
+
+		gradient( p ){
+			return this.gradienti( this.p2i( p ) )
+		}
+
+		laplacian( p ){
+			return this.laplaciani( this.p2i( p ) )
+		}
+
+		laplaciani( i ){
+			let L = 0, n = 0;
+			for( let x of this.neighNeumanni(i) ){
+				L += this.pixti( x ); n ++;
+			} 
+			return L - n * this.pixti( i )
+		}
+
+		diffusion( D ){
+			if( ! this._pixelsbuffer ) this.pixelsbuffer();
+			for( let i of this.pixelsi() ){
+				this._pixelsbuffer[i] = this.pixti( i ) + D * this.laplaciani( i );
+			}
+			[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];
+		}
+
+		applyLocally( f ){
+			if( ! this._pixelsbuffer ) this.pixelsbuffer();
+			for( let i of this.pixelsi() ){
+				let p = this.i2p(i);
+				this._pixelsbuffer[i] = f( p, this.neigh(p) ); 
+			}
+			[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];		
+		}
+
+		multiplyBy( r ){
+			for( let i of this.pixelsi() ){
+				this._pixels[i] *= r; 
+			}
+		}
+
+	}
+
+	/** A class containing (mostly static) utility functions for dealing with 2D 
+	 *  and 3D grids. */
+
+	class Grid2D extends Grid {
+		constructor( extents, torus=true, datatype="Uint16" ){
+			super( extents, torus );
+			// Check that the grid size is not too big to store pixel ID in 32-bit number,
+			// and allow fast conversion of coordinates to unique ID numbers.
+			if( this.X_BITS + this.Y_BITS > 32 ){
+				throw("Field size too large -- field cannot be represented as 32-bit number")
+			}
+			// Attributes per pixel:
+			// celltype (identity) of the current pixel.
+			if( datatype == "Uint16" ){
+				this._pixels = new Uint16Array(this.p2i(this.extents));
+			} else if( datatype == "Float32" ){
+				this._pixels = new Float32Array(this.p2i(this.extents));
+			} else {
+				throw("unsupported datatype: " + datatype)
+			}
+		}
+
+		* pixelsi() {
+			let ii = 0, c = 0;
+			for( let i = 0 ; i < this.extents[0] ; i ++ ){
+				for( let j = 0 ; j < this.extents[1] ; j ++ ){
+					yield ii;
+					ii ++;
+				}
+				c += this.Y_STEP;
+				ii = c;
+			}
+		}
+
+		* pixels() {
+			let ii = 0, c = 0;
+			for( let i = 0 ; i < this.extents[0] ; i ++ ){
+				for( let j = 0 ; j < this.extents[1] ; j ++ ){
+					yield [[i,j], this._pixels[ii]];
+					ii ++;
+				}
+				c += this.Y_STEP;
+				ii = c;
+			}
+		}
+
+		/*	Return array of indices of neighbor pixels of the pixel at 
+			index i. The separate 2D and 3D functions are called by
+			the wrapper function neighi, depending on this.ndim.
+
+		*/
+		neighisimple( i ){
+			let p = this.i2p(i);
+			let xx = [];
+			for( let d = 0 ; d <= 1 ; d ++ ){
+				if( p[d] == 0 ){
+					if( this.torus[d] ){
+						xx[d] = [p[d],this.extents[d]-1,p[d]+1];
+					} else {
+						xx[d] = [p[d],p[d]+1];
+					}
+				} else if( p[d] == this.extents[d]-1 ){
+					if( this.torus[d] ){
+						xx[d] = [p[d],p[d]-1,0];
+					} else {
+						xx[d] = [p[d],p[d]-1];
+					}
+				} else {
+					xx[d] = [p[d],p[d]-1,p[d]+1];
+				}
+			}
+
+			let r = [], first=true;
+			for( let x of xx[0] ){
+				for( let y of xx[1] ){
+					if( first ){
+						first = false; 
+					} else {
+						r.push( this.p2i( [x,y] ) );
+					}
+				}
+			}
+			return r
+		}
+
+		* neighNeumanni( i, torus = this.torus ){
+			// normal computation of neighbor indices (top left-middle-right, 
+			// left, right, bottom left-middle-right)
+			let t = i-1, l = i-this.Y_STEP, r = i+this.Y_STEP, b = i+1;
+			
+			// if pixel is part of one of the borders, adjust the 
+			// indices accordingly
+			// if torus is false, return NaN for all neighbors that cross
+			// the border.
+
+			// left border
+			if( i < this.extents[1] ){
+				if( torus ){
+					l += this.extents[0] * this.Y_STEP;
+					yield l;
+				} 
+			} else {
+				yield l;
+			}
+			// right border
+			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+				if( torus ){
+					r -= this.extents[0] * this.Y_STEP;
+					yield r;
+				}
+			} else {
+				yield r;
+			}
+			// top border
+			if( i % this.Y_STEP == 0 ){
+				if( torus ){
+					t += this.extents[1];
+					yield t;
+				} 
+			} else {
+				yield t;
+			}
+			// bottom border
+			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+				if( torus ){
+					b -= this.extents[1];
+					yield b;
+				} 
+			} else {
+				yield b;
+			}
+		}
+
+		neighi( i, torus = this.torus ){	
+			// normal computation of neighbor indices (top left-middle-right, 
+			// left, right, bottom left-middle-right)
+			let tl, tm, tr, l, r, bl, bm, br;
+			
+			tl = i-1-this.Y_STEP; tm = i-1; tr = i-1+this.Y_STEP;
+			l = i-this.Y_STEP; r = i+this.Y_STEP;
+			bl = i+1-this.Y_STEP; bm = i+1; br = i+1+this.Y_STEP;
+			
+			// if pixel is part of one of the borders, adjust the 
+			// indices accordingly
+			let add = NaN; // if torus is false, return NaN for all neighbors that cross
+			// the border.
+			// 
+			// left border
+			if( i < this.extents[1] ){
+				if( torus ){
+					add = this.extents[0] * this.Y_STEP;
+				}
+				tl += add; l += add; bl += add; 	
+			}
+			
+			// right border
+			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+				if( torus ){
+					add = -this.extents[0] * this.Y_STEP;
+				}
+				tr += add; r += add; br += add;
+			}
+
+			// top border
+			if( i % this.Y_STEP == 0 ){
+				if( torus ){
+					add = this.extents[1];
+				}
+				tl += add; tm += add; tr += add;	
+			}
+			
+			// bottom border
+			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+				if( torus ){
+					add = -this.extents[1];
+				}
+				bl += add; bm += add; br += add;
+			}
+			if( !torus ){
+				return [ tl, l, bl, tm, bm, tr, r, br ].filter( isFinite )
+			} else {
+				return [ tl, l, bl, tm, bm, tr, r, br ]
+			}
+		}
+		p2i ( p ){
+			return ( p[0] << this.Y_BITS ) + p[1]
+		}
+		i2p ( i ){
+			return [i >> this.Y_BITS, i & this.Y_MASK]
+		}
+		gradienti( i ){
+			let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus;
+			
+			let dx=0;
+			if( i < this.extents[1] ){ // left border
+				if( torus ){
+					l += this.extents[0] * this.Y_STEP;
+					dx = ((this._pixels[r]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[l]))/2;
+				} else {
+					dx = this._pixels[r]-this._pixels[i];
+				}
+			} else { 
+				if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){ // right border
+					if( torus ){
+						r -= this.extents[0] * this.Y_STEP;
+						dx = ((this._pixels[r]-this._pixels[i])+
+							(this._pixels[i]-this._pixels[l]))/2;
+					} else {
+						dx = this._pixels[i]-this._pixels[l];
+					}
+				} else {
+					dx = ((this._pixels[r]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[l]))/2;
+				}
+			}
+
+			let dy=0;
+			if( i % this.Y_STEP == 0 ){ // top border
+				if( torus ){
+					t += this.extents[1];
+					dy = ((this._pixels[b]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[t]))/2;
+				}	else {
+					dy = this._pixels[b]-this._pixels[i];
+				}
+			} else { 
+				if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){ // bottom border
+					if( torus ){
+						b -= this.extents[1];
+						dy = ((this._pixels[b]-this._pixels[i])+
+							(this._pixels[i]-this._pixels[t]))/2;
+					} else {
+						dy = this._pixels[i]-this._pixels[t];
+					}
+				} else {
+					dy = ((this._pixels[b]-this._pixels[i])+
+						(this._pixels[i]-this._pixels[t]))/2;
+				}
+			}
+			return [
+				dx, dy
+			]
+		}
+	}
+
 	/** A class containing (mostly static) utility functions for dealing with 2D 
 	 *  and 3D grids. */
 
@@ -681,7 +682,7 @@ var CPM = (function (exports) {
 
 	class GridBasedModel {
 
-		constructor( field_size, conf ){
+		constructor( extents, conf ){
 			let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
 			this.mt = new MersenneTwister( seed );
 			if( !("torus" in conf) ){
@@ -689,7 +690,7 @@ var CPM = (function (exports) {
 			}
 
 			// Attributes based on input parameters
-			this.ndim = field_size.length; // grid dimensions (2 or 3)
+			this.ndim = extents.length; // grid dimensions (2 or 3)
 			if( this.ndim != 2 && this.ndim != 3 ){
 				throw("only 2D and 3D models are implemented!")
 			}
@@ -697,9 +698,9 @@ var CPM = (function (exports) {
 
 			// Some functions/attributes depend on ndim:
 			if( this.ndim == 2 ){
-				this.grid = new Grid2D(field_size,conf.torus);
+				this.grid = new Grid2D(extents,conf.torus);
 			} else {
-				this.grid = new Grid3D(field_size,conf.torus);
+				this.grid = new Grid3D(extents,conf.torus);
 			}
 			// Pull up some things from the grid object so we don't have to access it
 			// from the outside
@@ -709,6 +710,10 @@ var CPM = (function (exports) {
 			this.pixti = this.grid.pixti.bind(this.grid);
 			this.neighi = this.grid.neighi.bind(this.grid);
 			this.extents = this.grid.extents;
+		}
+
+		cellKind( t ){
+			return t 
 		}
 
 		/* Get neighbourhood of position p */
@@ -743,6 +748,21 @@ var CPM = (function (exports) {
 		
 		timeStep (){
 			throw("implemented in subclasses")
+		}
+	}
+
+	/** The core CPM class. Can be used for two- or 
+	 * three-dimensional simulations. 
+	*/
+
+	class CA extends GridBasedModel {
+		constructor( extents, conf ){
+			super( extents, conf );
+			this.updateRule = conf["UPDATE_RULE"].bind(this);
+		}
+
+		timeStep(){
+			this.grid.applyLocally( this.updateRule );
 		}
 	}
 
@@ -908,6 +928,7 @@ var CPM = (function (exports) {
 		getVolume( t ){
 			return this.cellvolume[t]
 		}
+
 		cellKind( t ){
 			return this.t2k[ t ]
 		}
@@ -1119,7 +1140,7 @@ var CPM = (function (exports) {
 	class Canvas {
 		/* The Canvas constructor accepts a CPM object C or a Grid2D object */
 		constructor( C, options ){
-			if( C instanceof CPM ){
+			if( C instanceof GridBasedModel ){
 				this.C = C;
 				this.extents = C.extents;
 			} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
@@ -1373,7 +1394,7 @@ var CPM = (function (exports) {
 			// Object cst contains pixel index of all pixels belonging to non-background,
 			// non-stroma cells.
 			let cellpixelsbyid = {};
-			for( let x of this.C.cellPixels() ){
+			for( let x of this.C.pixels() ){
 				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
 					if( !cellpixelsbyid[x[1]] ){
 						cellpixelsbyid[x[1]] = [];
@@ -2632,6 +2653,7 @@ var CPM = (function (exports) {
 
 	exports.CA = CA;
 	exports.CPM = CPM;
+	exports.GridBasedModel = GridBasedModel;
 	exports.Stats = Stats;
 	exports.Canvas = Canvas;
 	exports.GridManipulator = GridManipulator;

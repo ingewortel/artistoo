@@ -4,14 +4,17 @@
 
 "use strict"
 
-import GridBasedModel from "../grid/Grid2D.js"
+import GridBasedModel from "./GridBasedModel.js"
 
 class CA extends GridBasedModel {
 	constructor( extents, conf ){
 		super( extents, conf )
+		this.updateRule = conf["UPDATE_RULE"].bind(this)
 	}
 
-
+	timeStep(){
+		this.grid.applyLocally( this.updateRule )
+	}
 }
 
 export default CA
