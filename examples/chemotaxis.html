@@ -19,28 +19,35 @@ var g = new CPM.Grid2D([w/10,h/10], true, "Float32"),
 C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
 C.add( new CPM.VolumeConstraint( { V: [0,250], 
 	LAMBDA_V: [0,50] } ) )
-C.add( new CPM.ChemotaxisConstraint( { field: gi, LAMBDA_CHEMOTAXIS: [NaN, 100] } ) )
+C.add( new CPM.ChemotaxisConstraint( { field: gi, LAMBDA_CH: [0, 800] } ) )
 
-new CPM.GridInitializer(C).seedCellAt(1, [20,m])
+new CPM.GridInitializer(C).seedCellAt(1, [200,m])
 
 var Ci = new CPM.Canvas(C,{zoom:1})
-g.setpix( [w/10/2,h/10/2], 1e6 )
+
+let center = [w/10/2,h/10/2]
+
+//g.setpix( center, 1e6 )
 
 //console.log( g.gradient( [w/10/2-1,h/10/2-1] ) )
 
-let t = 500
+let t = 5000
 
 meter = new FPSMeter({left:"auto", right:"5px"})
 
 function timestep(){
 	meter.tickStart()
+	g.setpix( center, 100+g.pixt(center) )
 	for( let i = 1 ; i <= 10 ; i ++ ){
 		g.diffusion( D )
 	}
+	g.multiplyBy( 0.9 )
 	C.monteCarloStep()
-	Ci.drawField( gi )
-	Ci.drawCellBorders( -1, "FFFFFF" )
 	meter.tick()
+	if( t % 5 == 0 ){
+		Ci.drawField( gi )
+		Ci.drawCellBorders( -1, "FFFFFF" )
+	}
 	if( t-- > 0 ){
 		requestAnimationFrame( timestep )
 	}

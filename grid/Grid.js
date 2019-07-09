@@ -74,6 +74,12 @@ class Grid {
 		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer]
 	}
 
+	multiplyBy( r ){
+		for( let i of this.pixelsi() ){
+			this._pixels[i] *= r 
+		}
+	}
+
 }
 
 export default Grid

@@ -79,8 +79,8 @@ class GridInitializer {
 
 		return voxels
 	}
-	/* Convert all pixels in a given array to a specific cellkind */
-		/* Change the pixels defined by voxels (array of coordinates p) into
+	/* Convert all pixels in a given array to a specific cellkind:
+	   changes the pixels defined by voxels (array of coordinates p) into
 	   the given cellkind. */
 	changeKind ( voxels, cellkind ){
 		

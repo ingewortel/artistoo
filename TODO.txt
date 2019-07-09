@@ -1,3 +1,4 @@
 - Implement Laplacian / Gradient for 3D lattice
 
+- Finish implementation of chemotaxis constraint
 

@@ -4,7 +4,7 @@
 <script>
 "use strict"
 
-let C, Cm, zoom=2, Cim, cid=0, w=200, J_TC_TUMOR = 100, burnin_time = 25,
+let C, Ci, Cm, zoom=2, Cim, cid=0, w=200, J_TC_TUMOR = 100, burnin_time = 25,
 	cancer_cell_division_rate = 0.02, skin_cell_death_rate = 0.2,
 	skin_cell_min_volume = 0.8, homing_rate_t_cells = 0.2, max_nr_t_cells = 25
 
@@ -17,7 +17,7 @@ function draw(){
 	// T cells in red
 	Cim.drawCells( 2, "990000" )
 
-	// Cancer cells in black
+	// Cancer cell in black
 	Cim.drawCells( 3, "000000" )
 
 	Cim.drawCellBorders( -1, "DDDDDD" )
@@ -29,12 +29,12 @@ function timestep(){
 
 	draw()
 
-	Cm.prepare()
-	Cm.divideCells2D( 3, cancer_cell_division_rate / C.countCells( 3 ) )
-	Cm.killTooSmallCells( 1, skin_cell_death_rate, skin_cell_min_volume )
+	//Cm.prepare()
+	//Cm.divideCells2D( 3, 0.1 ) //cancer_cell_division_rate / C.countCells( 3 ) )
+	/*Cm.killTooSmallCells( 1, skin_cell_death_rate, skin_cell_min_volume )
 	if( C.random() < homing_rate_t_cells && C.countCells( 2 ) < max_nr_t_cells ){
 		C.seedCell( 2, {brutal: true, avoid: 3} ) 
-	}
+	}*/
 
 	requestAnimationFrame( timestep )
 }
@@ -42,39 +42,52 @@ function timestep(){
 function seedGrid(){
 	// Seed epidermal cell layer
 	let step = 12
-	for( var i = 1 ; i < C.field_size.x ; i += step ){
-		for( var j = 1 ; j < C.field_size.y ; j += step ){
-			C.seedCellAt( 1, [i,j] )
+	for( var i = 1 ; i < C.extents[0] ; i += step ){
+		for( var j = 1 ; j < C.extents[1] ; j += step ){
+			Ci.seedCellAt( 1, [i,j] )
 		}
 	}
 	// Seed 1 cancer cell
-	C.seedCellAt( 3, [C.field_size.x/2, C.field_size.y/2] )
+	Ci.seedCellAt( 3, [w/2, w/2] )
 }
+
+/*
+	[0,20,20], 
+	[20,20,100], // epidermal cells
+	[20,100,200]
+*/ 
 
 function initialize(){
 	// Create a new CPM, canvas, and stats object
-	C = new CPM.CPMChemotaxis( [w,w], {
+	C = new CPM.CPM( [w,w], {
 		seed : 2,
 		LAMBDA_CONNECTIVITY : [0,0,0,1000,0],
 		LAMBDA_CHEMOTAXIS : [0,0,400,0,0],
-		LAMBDA_P : [0,2,1,2,0],
-		LAMBDA_V : [0,50,50,50,50],
-		LAMBDA_ACT : [0,0,1000,0,0],
-		MAX_ACT : [0,0,20,0,0],
-		P : [0,145,130,145,0],
-		V : [0,152,100,152,0],
-		J_T_STROMA : [NaN,16,16,16,0],
-		J_T_ECM : [NaN,20,20,20,0],
-		J_T_T : [ [NaN,NaN,NaN,NaN,NaN], 
-				[NaN,100,40,100,0], // epidermal cells
-				[NaN,40,40,J_TC_TUMOR,0], // T cells
-				[NaN,100,J_TC_TUMOR,20,0], // Cancer cells
-				[NaN,0,0,0,0] ],
 		T : 20,
 		GRADIENT_TYPE : "radial",
 		GRADIENT_DIRECTION : [w/2,w/2],
-		ACT_MEAN : "geometric"
 	})
+
+	C.add( new CPM.Adhesion({J : [ 
+		 [0,20,20,20,20], 
+				[20,100,40,100,0], // epidermal cells
+				[20,40,40,J_TC_TUMOR,0], // T cells
+				[20,100,J_TC_TUMOR,20,0], // Cancer cells
+				[20,0,0,0,0] 
+	]}) )
+	C.add( new CPM.VolumeConstraint({
+		LAMBDA_V : [0,50,50,50,50],
+		V : [0,152,100,152,0]
+	}) )
+	C.add( new CPM.PerimeterConstraint({P: [0,145,130,145,0], 
+			LAMBDA_P:[0,2,1,2,0]})
+	)
+		C.add( new CPM.ActivityConstraint({MAX_ACT: [0,0,20,0,0], 
+		LAMBDA_ACT:[0,0,1000,0,0],
+		ACT_MEAN: "geometric" }) )
+
+
+	Ci = new CPM.GridInitializer( C )
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	Cm = new CPM.GridManipulator( C )
 	// Start simulation
