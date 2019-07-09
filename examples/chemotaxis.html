@@ -21,7 +21,7 @@ C.add( new CPM.VolumeConstraint( { V: [0,250],
 	LAMBDA_V: [0,50] } ) )
 C.add( new CPM.ChemotaxisConstraint( { field: gi, LAMBDA_CH: [0, 800] } ) )
 
-new CPM.GridInitializer(C).seedCellAt(1, [200,m])
+new CPM.GridManipulator(C).seedCellAt(1, [200,m])
 
 var Ci = new CPM.Canvas(C,{zoom:1})
 

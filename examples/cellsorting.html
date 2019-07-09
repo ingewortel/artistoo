@@ -35,7 +35,7 @@ function initialize(){
 	// Create a canvas to draw on
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 
-	let Ci = new CPM.GridInitializer( C )
+	let Ci = new CPM.GridManipulator( C )
 	Ci.seedCellsInCircle( 1, 500, [w/2,w/2], w/3 )
 	Ci.seedCellsInCircle( 2, 500, [w/2,w/2], w/3 )
 	

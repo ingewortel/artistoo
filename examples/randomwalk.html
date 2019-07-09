@@ -11,10 +11,9 @@ canvas{ border: 1px solid black }
 <script type="text/javascript">
 
 
-/* The classic cell sorting simulation */
+/* A simple 2D random walk */
 
-
-let C,Cim,t = 0, maxtime = 1000, w = 20,
+let C,Cim,t = 0, maxtime = 1000, w = 100,
 	r = 27,
 	meter
 
@@ -33,7 +32,7 @@ function initialize(){
 	// Create a canvas to draw on
 	Cim = new CPM.Canvas( C, {zoom:4} )
 
-	let Ci = new CPM.GridInitializer( C )
+	let Ci = new CPM.GridManipulator( C )
 	Ci.seedCellAt( 1, [w/2,w/2] )	
 	meter = new FPSMeter({left:"auto", right:"5px"})
 	// simulation

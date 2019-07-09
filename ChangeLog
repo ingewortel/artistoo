@@ -2,6 +2,15 @@
 yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
+
+2019-07-09 Johannes Textor <johannes.textor@gmx.de>
+	* grid/GridManipulator.js : Added this new class, and removed the 
+	existing "GridInitializer" class. There seems to be no good reason
+	to let these be two separate classes.
+	* examples/cancer-invasion.js : Made this example work as it was,
+	but now without the separate "CPMChemotaxis" class which will be 
+	removed soon.
+
 2019-07-04 Inge Wortel <ingewortel@gmail.com>
 	* hamiltonian/BarrierConstraint.js : new hard constraint to replace
 	the "stroma" celltype in the previous version. Basically, this 
@@ -9,7 +18,7 @@ yyyy-mm-dd Your Name <your@email.com>
 	from or into pixels with this cellkind are forbidden. Which cellkinds
 	are barrier are defined in the conf object in the IS_BARRIER array,
 	with a boolean value for each cellkind.
-	* grid/gridInitializer.js : added functions to define a plane on
+	* grid/GridInitializer.js : added functions to define a plane on
 	the grid and to set all pixels in that plane to a certain cellkind.
 	This can be used to build microchannels, for example.
 

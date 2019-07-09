@@ -2,7 +2,7 @@
 
 "use strict"
 
-import CPM from "./CPM.js"
+import CPM from "./models/CPM.js"
 import Grid2D from "./grid/Grid2D.js"
 import CoarseGrid from "./grid/CoarseGrid.js"
 

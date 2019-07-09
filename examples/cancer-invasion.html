@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="../build/cpm.js"></script>
+<script src="fpsmeter.min.js"></script>
 <script>
 "use strict"
 
 let C, Ci, Cm, zoom=2, Cim, cid=0, w=200, J_TC_TUMOR = 100, burnin_time = 25,
 	cancer_cell_division_rate = 0.02, skin_cell_death_rate = 0.2,
-	skin_cell_min_volume = 0.8, homing_rate_t_cells = 0.2, max_nr_t_cells = 25
+	skin_cell_min_volume = 0.8, homing_rate_t_cells = 0.2, max_nr_t_cells = 25,
+	meter, t=0
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
@@ -26,8 +28,10 @@ function draw(){
 function timestep(){
 	// Update the grid with one MCS
 	C.monteCarloStep()
-
-	draw()
+	meter.tick()
+	if( t++ % 2 == 0 ){
+		draw()
+	}
 
 	//Cm.prepare()
 	//Cm.divideCells2D( 3, 0.1 ) //cancer_cell_division_rate / C.countCells( 3 ) )
@@ -44,11 +48,11 @@ function seedGrid(){
 	let step = 12
 	for( var i = 1 ; i < C.extents[0] ; i += step ){
 		for( var j = 1 ; j < C.extents[1] ; j += step ){
-			Ci.seedCellAt( 1, [i,j] )
+			Cm.seedCellAt( 1, [i,j] )
 		}
 	}
 	// Seed 1 cancer cell
-	Ci.seedCellAt( 3, [w/2, w/2] )
+	Cm.seedCellAt( 3, [w/2, w/2] )
 }
 
 /*
@@ -87,7 +91,6 @@ function initialize(){
 		ACT_MEAN: "geometric" }) )
 
 
-	Ci = new CPM.GridInitializer( C )
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	Cm = new CPM.GridManipulator( C )
 	// Start simulation
@@ -97,6 +100,8 @@ function initialize(){
 	for( let i = 0 ; i < burnin_time ; i ++ ){
 		C.monteCarloStep()
 	}
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
 
 	timestep()
 }

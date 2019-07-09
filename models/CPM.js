@@ -4,49 +4,17 @@
 
 "use strict"
 
-import DiceSet from "./DiceSet.js"
-import MersenneTwister from "mersennetwister"
-import Grid2D from "./grid/Grid2D.js"
-import Grid3D from "./grid/Grid3D.js"
+import GridBasedModel from "./GridBasedModel.js"
+import DiceSet from "../DiceSet.js"
 
-class CPM {
+class CPM extends GridBasedModel {
 	constructor( field_size, conf ){
-		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER)
-		this.mt = new MersenneTwister( seed )
-		if( !("torus" in conf) ){
-			conf["torus"] = true
-		}
+		super( field_size, conf )
 
-		// Attributes based on input parameters
-		this.ndim = field_size.length // grid dimensions (2 or 3)
-		if( this.ndim != 2 && this.ndim != 3 ){
-			throw("only 2D and 3D models are implemented!")
-		}
-		this.conf = conf // input parameter settings; see documentation.
-
-		// Some functions/attributes depend on ndim:
-		if( this.ndim == 2 ){
-			this.grid = new Grid2D(field_size,conf.torus)
-		} else {
-			this.grid = new Grid3D(field_size,conf.torus)
-		}
-		// Pull up some things from the grid object so we don't have to access it
-		// from the outside
-		this.midpoint = this.grid.midpoint
-		this.field_size = this.grid.field_size
-		this.cellPixels = this.grid.pixels.bind(this.grid)
-		this.pixti = this.grid.pixti.bind(this.grid)
-		this.neighi = this.grid.neighi.bind(this.grid)
-		this.extents = this.grid.extents
-
-		// Attributes of the current CPM as a whole:
-		this.nNeigh = this.grid.neighi(
-			this.grid.p2i(this.midpoint)).length // neighbors per pixel (depends on ndim)
+		// CPM specific stuff here
 		this.nr_cells = 0				// number of cells currently in the grid
-		this.time = 0					// current system time in MCS
-	
 		// track border pixels for speed (see also the DiceSet data structure)
-		this.cellborderpixels = new DiceSet( this.mt )
+		this.borderpixels = new DiceSet( this.mt )
 
 		// Attributes per cell:
 		this.cellvolume = []			
@@ -65,12 +33,20 @@ class CPM {
 		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
 	}
 
+	* cellPixels() {
+		for( let p of this.grid.pixels() ){
+			if( p[1] != 0 ){
+				yield p
+			}
+		}
+	}
+
 	* cellIDs() {
 		yield* Object.keys( this.t2k )
 	}
 
 	* cellBorderPixels() {
-		for( let i of this.cellborderpixels.elements ){
+		for( let i of this.borderpixels.elements ){
 			const t = this.pixti(i)
 			if( t != 0 ){
 				yield [this.grid.i2p(i),t]
@@ -79,7 +55,7 @@ class CPM {
 	}
 
 	* cellBorderPixelIndices() {
-		for( let i of this.cellborderpixels.elements ){
+		for( let i of this.borderpixels.elements ){
 			const t = this.pixti(i)
 			if( t != 0 ){
 				yield [i,t]
@@ -148,28 +124,31 @@ class CPM {
 	}
 	/* ------------- COPY ATTEMPTS --------------- */
 
-	/* 	Simulate one MCS (a number of copy attempts depending on grid size):
+	/* 	Simulate one time step, i.e., a Monte Carlo step
+	  	(a number of copy attempts depending on grid size):
 		1) Randomly sample one of the border pixels for the copy attempt.
 		2) Compute the change in Hamiltonian for the suggested copy attempt.
 		3) With a probability depending on this change, decline or accept the 
 		   copy attempt and update the grid accordingly. 
 
-		TODO it is quite confusing that the "cellborderpixels" array also
+		TODO it is quite confusing that the "borderpixels" array also
 		contains border pixels of the background.
 	*/
-	
-	monteCarloStep (){
+	monteCarloStep () {
+		this.timeStep()
+	}
+	timeStep (){
 		let delta_t = 0.0
 		// this loop tracks the number of copy attempts until one MCS is completed.
 		while( delta_t < 1.0 ){
 
 			// This is the expected time (in MCS) you would expect it to take to
 			// randomly draw another border pixel.
-			delta_t += 1./(this.cellborderpixels.length)
+			delta_t += 1./(this.borderpixels.length)
 
 			// sample a random pixel that borders at least 1 cell of another type,
 			// and pick a random neighbour of tha pixel
-			const tgt_i = this.cellborderpixels.sample()
+			const tgt_i = this.borderpixels.sample()
 			const Ni = this.grid.neighi( tgt_i )
 			const src_i = Ni[this.ran(0,Ni.length-1)]
 		
@@ -249,21 +228,21 @@ class CPM {
 			}
 			if( nt == t_old ){
 				if( this._neighbours[ni] ++ == 0 ){
-					this.cellborderpixels.insert( ni )
+					this.borderpixels.insert( ni )
 				}
 			}
 			if( nt == t_new ){
 				if( --this._neighbours[ni] == 0 ){
-					this.cellborderpixels.remove( ni )
+					this.borderpixels.remove( ni )
 				}
 			}
 		}
 
 		if( !wasborder && this._neighbours[i] > 0 ){
-			this.cellborderpixels.insert( i )
+			this.borderpixels.insert( i )
 		}
 		if( wasborder &&  this._neighbours[i] == 0 ){
-			this.cellborderpixels.remove( i )
+			this.borderpixels.remove( i )
 		}
 	}
 

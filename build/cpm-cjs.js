@@ -6,80 +6,6 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var MersenneTwister = _interopDefault(require('mersennetwister'));
 
-/** This class implements a data structure with constant-time insertion, deletion, and random
-    sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
-    pixels at cell borders. */
-
-// pass in RNG
-class DiceSet{
-	constructor( mt ) {
-
-		// Use a hash map to check in constant time whether a pixel is at a cell border.
-		// 
-		// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
-		// at least in nodejs. This is weird given that in vanilla objects, all keys are 
-		// converted to strings, which does not happen for Maps
-		// 
-		this.indices = {}; //new Map() // {}
-		//this.indices = {}
-
-		// Use an array for constant time random sampling of pixels at the border of cells.
-		this.elements = [];
-
-		// track the number of pixels currently present in the DiceSet.
-		this.length = 0;
-
-		this.mt = mt;
-	}
-
-	insert( v ){
-		if( this.indices[v] ){
-			return
-		}
-		// Add element to both the hash map and the array.
-		//this.indices.set( v, this.length )
-		this.indices[v] = this.length;
-	
-		this.elements.push( v );
-		this.length ++; 
-	}
-
-	remove( v ){
-		// Check whether element is present before it can be removed.
-		if( !this.indices[v] ){
-			return
-		}
-		/* The hash map gives the index in the array of the value to be removed.
-		The value is removed directly from the hash map, but from the array we
-		initially remove the last element, which we then substitute for the 
-		element that should be removed.*/
-		//const i = this.indices.get(v)
-		const i = this.indices[v];
-
-		//this.indices.delete(v)
-		delete this.indices[v];
-
-		const e = this.elements.pop();
-		this.length --;
-		if( e == v ){
-			return
-		}
-		this.elements[i] = e;
-
-		//this.indices.set(e,i)
-		this.indices[e] = i;
-	}
-
-	contains( v ){
-		//return this.indices.has(v)
-		return (v in this.indices)
-	}
-
-	sample(){
-		return this.elements[Math.floor(this.mt.rnd()*this.length)]
-	}
-}
-
 class Grid {
 	constructor( field_size, torus = true ){
 		this.extents = field_size;
@@ -410,6 +336,18 @@ class Grid2D extends Grid {
 	}
 }
 
+/** The core CPM class. Can be used for two- or 
+ * three-dimensional simulations. 
+*/
+
+class CA extends Grid2D {
+	constructor( extents, conf ){
+		super( extents, conf );
+	}
+
+
+}
+
 /** A class containing (mostly static) utility functions for dealing with 2D 
  *  and 3D grids. */
 
@@ -517,7 +455,8 @@ class Grid3D extends Grid {
  * three-dimensional simulations. 
 */
 
-class CPM {
+class GridBasedModel {
+
 	constructor( field_size, conf ){
 		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
 		this.mt = new MersenneTwister( seed );
@@ -542,19 +481,133 @@ class CPM {
 		// from the outside
 		this.midpoint = this.grid.midpoint;
 		this.field_size = this.grid.field_size;
-		this.cellPixels = this.grid.pixels.bind(this.grid);
+		this.pixels = this.grid.pixels.bind(this.grid);
 		this.pixti = this.grid.pixti.bind(this.grid);
 		this.neighi = this.grid.neighi.bind(this.grid);
 		this.extents = this.grid.extents;
+	}
 
-		// Attributes of the current CPM as a whole:
-		this.nNeigh = this.grid.neighi(
-			this.grid.p2i(this.midpoint)).length; // neighbors per pixel (depends on ndim)
-		this.nr_cells = 0;				// number of cells currently in the grid
-		this.time = 0;					// current system time in MCS
+	/* Get neighbourhood of position p */
+	neigh(p, torus=this.conf.torus){
+		let g = this.grid;
+		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+	}
+
+	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
+	pixt( p ){
+		return this.grid.pixti( this.grid.p2i(p) )
+	}
+
+	/* Change the pixel at position p (coordinates) into cellid t. 
+	Update cell perimeters with Pup (optional parameter).*/
+
+	setpix ( p, t ){
+		this.grid.setpixi( this.grid.p2i(p), t );
+	}
+
+	/* ------------- MATH HELPER FUNCTIONS --------------- */
+	random (){
+		return this.mt.rnd()
+	}
+
+	/* Random integer number between incl_min and incl_max */
+	ran (incl_min, incl_max) {
+		return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
+	}
 	
+	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
+	
+	timeStep (){
+		throw("implemented in subclasses")
+	}
+}
+
+/** This class implements a data structure with constant-time insertion, deletion, and random
+    sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
+    pixels at cell borders. */
+
+// pass in RNG
+class DiceSet{
+	constructor( mt ) {
+
+		// Use a hash map to check in constant time whether a pixel is at a cell border.
+		// 
+		// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
+		// at least in nodejs. This is weird given that in vanilla objects, all keys are 
+		// converted to strings, which does not happen for Maps
+		// 
+		this.indices = {}; //new Map() // {}
+		//this.indices = {}
+
+		// Use an array for constant time random sampling of pixels at the border of cells.
+		this.elements = [];
+
+		// track the number of pixels currently present in the DiceSet.
+		this.length = 0;
+
+		this.mt = mt;
+	}
+
+	insert( v ){
+		if( this.indices[v] ){
+			return
+		}
+		// Add element to both the hash map and the array.
+		//this.indices.set( v, this.length )
+		this.indices[v] = this.length;
+	
+		this.elements.push( v );
+		this.length ++; 
+	}
+
+	remove( v ){
+		// Check whether element is present before it can be removed.
+		if( !this.indices[v] ){
+			return
+		}
+		/* The hash map gives the index in the array of the value to be removed.
+		The value is removed directly from the hash map, but from the array we
+		initially remove the last element, which we then substitute for the 
+		element that should be removed.*/
+		//const i = this.indices.get(v)
+		const i = this.indices[v];
+
+		//this.indices.delete(v)
+		delete this.indices[v];
+
+		const e = this.elements.pop();
+		this.length --;
+		if( e == v ){
+			return
+		}
+		this.elements[i] = e;
+
+		//this.indices.set(e,i)
+		this.indices[e] = i;
+	}
+
+	contains( v ){
+		//return this.indices.has(v)
+		return (v in this.indices)
+	}
+
+	sample(){
+		return this.elements[Math.floor(this.mt.rnd()*this.length)]
+	}
+}
+
+/** The core CPM class. Can be used for two- or 
+ * three-dimensional simulations. 
+*/
+
+class CPM extends GridBasedModel {
+	constructor( field_size, conf ){
+		super( field_size, conf );
+
+		// CPM specific stuff here
+		this.nr_cells = 0;				// number of cells currently in the grid
 		// track border pixels for speed (see also the DiceSet data structure)
-		this.cellborderpixels = new DiceSet( this.mt );
+		this.borderpixels = new DiceSet( this.mt );
 
 		// Attributes per cell:
 		this.cellvolume = [];			
@@ -573,12 +626,20 @@ class CPM {
 		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
 	}
 
+	* cellPixels() {
+		for( let p of this.grid.pixels() ){
+			if( p[1] != 0 ){
+				yield p;
+			}
+		}
+	}
+
 	* cellIDs() {
 		yield* Object.keys( this.t2k );
 	}
 
 	* cellBorderPixels() {
-		for( let i of this.cellborderpixels.elements ){
+		for( let i of this.borderpixels.elements ){
 			const t = this.pixti(i);
 			if( t != 0 ){
 				yield [this.grid.i2p(i),t];
@@ -587,7 +648,7 @@ class CPM {
 	}
 
 	* cellBorderPixelIndices() {
-		for( let i of this.cellborderpixels.elements ){
+		for( let i of this.borderpixels.elements ){
 			const t = this.pixti(i);
 			if( t != 0 ){
 				yield [i,t];
@@ -656,28 +717,31 @@ class CPM {
 	}
 	/* ------------- COPY ATTEMPTS --------------- */
 
-	/* 	Simulate one MCS (a number of copy attempts depending on grid size):
+	/* 	Simulate one time step, i.e., a Monte Carlo step
+	  	(a number of copy attempts depending on grid size):
 		1) Randomly sample one of the border pixels for the copy attempt.
 		2) Compute the change in Hamiltonian for the suggested copy attempt.
 		3) With a probability depending on this change, decline or accept the 
 		   copy attempt and update the grid accordingly. 
 
-		TODO it is quite confusing that the "cellborderpixels" array also
+		TODO it is quite confusing that the "borderpixels" array also
 		contains border pixels of the background.
 	*/
-	
-	monteCarloStep (){
+	monteCarloStep () {
+		this.timeStep();
+	}
+	timeStep (){
 		let delta_t = 0.0;
 		// this loop tracks the number of copy attempts until one MCS is completed.
 		while( delta_t < 1.0 ){
 
 			// This is the expected time (in MCS) you would expect it to take to
 			// randomly draw another border pixel.
-			delta_t += 1./(this.cellborderpixels.length);
+			delta_t += 1./(this.borderpixels.length);
 
 			// sample a random pixel that borders at least 1 cell of another type,
 			// and pick a random neighbour of tha pixel
-			const tgt_i = this.cellborderpixels.sample();
+			const tgt_i = this.borderpixels.sample();
 			const Ni = this.grid.neighi( tgt_i );
 			const src_i = Ni[this.ran(0,Ni.length-1)];
 		
@@ -757,21 +821,21 @@ class CPM {
 			}
 			if( nt == t_old ){
 				if( this._neighbours[ni] ++ == 0 ){
-					this.cellborderpixels.insert( ni );
+					this.borderpixels.insert( ni );
 				}
 			}
 			if( nt == t_new ){
 				if( --this._neighbours[ni] == 0 ){
-					this.cellborderpixels.remove( ni );
+					this.borderpixels.remove( ni );
 				}
 			}
 		}
 
 		if( !wasborder && this._neighbours[i] > 0 ){
-			this.cellborderpixels.insert( i );
+			this.borderpixels.insert( i );
 		}
 		if( wasborder &&  this._neighbours[i] == 0 ){
-			this.cellborderpixels.remove( i );
+			this.borderpixels.remove( i );
 		}
 	}
 
@@ -1647,214 +1711,8 @@ class PostMCSStats {
    Examples are cell division, cell death etc.
  */
 
-function GridManipulator( C ){
-	this.C = C;
-	this.Cs = new Stats( C );
-}
 
-GridManipulator.prototype = {
-
-	/* this.cellpixels is an object with keys for every cell type (identity) in the grid.
-	values contain pixel coordinates for all pixels belonging to that cell. */
-	prepare: function(){
-		this.cellpixels = this.Cs.cellpixels();
-	},
-	/* Kill a cell by setting its kind to 4 */
-	killCell: function( t ){
-		//console.log("killing cell "+t)
-		/*var cp = this.cellpixels
-		for( var j = 0 ; j < cp[t].length ; j ++ ){
-			this.C.setpix( cp[t][j], 0 )
-		}*/
-		this.C.setCellKind( t, 4 );
-	},
-	/* With a given [probability], kill cells of kind [kind] that have a volume of
-	less than [lowerbound] of their target volume. */
-	killTooSmallCells : function( kind, probability, lowerbound ){
-		var cp = this.cellpixels, C = this.C;
-		var ids = Object.keys(cp);
-
-		// Loop over cells in the grid
-		for( var i = 0 ;  i < ids.length ; i++ ){
-			var t = ids[i];
-			var k = C.cellKind(t);
-			if( k == kind && ( C.getVolume( t ) < C.conf.V[kind]*lowerbound ) ){
-				if( C.random() < probability ){
-					this.killCell( t );
-				}
-			}
-		}
-	},
-
-	/* Let cell t divide by splitting it along a line perpendicular to
-	 * its major axis. */
-	divideCell2D : function( id ){
-		let cp = this.cellpixels, C = this.C, Cs = this.Cs;
-		let bxx = 0, bxy = 0, byy=0,
-			com = Cs.getCentroidOf( id ), cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2;
-
-		// Loop over the pixels belonging to this cell
-		for( var j = 0 ; j < cp[id].length ; j ++ ){
-			cx = cp[id][j][0] - com[0]; // x position rel to centroid
-			cy = cp[id][j][1] - com[1]; // y position rel to centroid
-
-			// sum of squared distances:
-			bxx += cx*cx;
-			bxy += cx*cy;
-			byy += cy*cy;
-		}
-
-		// This code computes a "dividing line", which is perpendicular to the longest
-		// axis of the cell.
-		if( bxy == 0 ){
-			x0 = 0;
-			y0 = 0;
-			x1 = 1;
-			y1 = 0;
-		} else {
-			T = bxx + byy;
-			D = bxx*byy - bxy*bxy;
-			//L1 = T/2 + Math.sqrt(T*T/4 - D)
-			L2 = T/2 - Math.sqrt(T*T/4 - D);
-			x0 = 0;
-			y0 = 0;
-			x1 = L2 - byy;
-			y1 = bxy;
-		}
-
-		// create a new ID for the second cell
-		var nid = C.makeNewCellID( C.cellKind( id ) );
-
-		// Loop over the pixels belonging to this cell
-		//let sidea = 0, sideb = 0
-		for( j = 0 ; j < cp[id].length ; j ++ ){
-			// coordinates of current cell relative to center of mass
-			x2 = cp[id][j][0]-com[0];
-			y2 = cp[id][j][1]-com[1];
-
-			// Depending on which side of the dividing line this pixel is,
-			// set it to the new type
-			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
-			if( side > 0 ){
-				//sidea ++
-				C.setpix( cp[id][j], nid ); 
-			}
-		}
-		//console.log( sidea, sideb )
-		return nid
-	},
-
-	/* With a given probability, let cells of kind [kind] divide. */
-	divideCells2D: function( kind, probability, minvolume=10 ){
-		var cp = this.cellpixels, C = this.C;
-		var ids = Object.keys(cp);		
-		// loop over the cells
-		for( var i = 0 ;  i < ids.length ; i++ ){
-			var id = ids[i];
-			var k = C.cellKind(id); 
-			if( k == kind && ( C.getVolume( id ) >= minvolume ) && C.random() < probability ){
-				this.divideCell2D( id );
-			}
-		}
-	}
-};
-
-/* This extends the CPM from CPM.js with a chemotaxis module. 
-Can be used for two- or three-dimensional simulations, but visualization
-is currently supported only in 2D. Usable from browser and node.
-*/
-
-class CPMChemotaxis extends CPM {
-
-	constructor( extents, conf ) {
-		// call the parent (CPM) constructor
-		super( extents, conf );
-		// make sure "chemotaxis" is included in list of terms
-		if( this.terms.indexOf( "chemotaxis" ) == -1 ){	
-			this.terms.push( "chemotaxis" );
-		}
-	}
-
-
-	/*  To bias a copy attempt p1->p2 in the direction of target point pt.
-		Vector p1 -> p2 is the direction of the copy attempt, 
-		Vector p1 -> pt is the preferred direction. Then this function returns the cosine
-		of the angle alpha between these two vectors. This cosine is 1 if the angle between
-		copy attempt direction and preferred direction is 0 (when directions are the same), 
-		-1 if the angle is 180 (when directions are opposite), and 0 when directions are
-		perpendicular. */
-	pointAttractor ( p1, p2, pt ){
-		let r = 0., norm1 = 0, norm2 = 0, d1=0., d2=0.;
-		for( let i=0 ; i < p1.length ; i ++ ){
-			d1 = pt[i]-p1[i]; d2 = p2[i]-p1[i];
-			r += d1 * d2;
-			norm1 += d1*d1;
-			norm2 += d2*d2;
-		}
-		if( norm1 == 0 || norm2 == 0 ) return 0
-		return r/Math.sqrt(norm1)/Math.sqrt(norm2)
-	}
-	
-	/* To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
-	This implements a linear gradient rather than a radial one as with pointAttractor. */
-	linAttractor ( p1, p2, dir ){
-
-		let r = 0., norm1 = 0, norm2 = 0, d1 = 0., d2 = 0.;
-		// loops over the coordinates x,y,(z)
-		for( let i = 0; i < p1.length ; i++ ){
-			// direction of the copy attempt on this coordinate is from p1 to p2
-			d1 = p2[i] - p1[i];
-
-			// direction of the gradient
-			d2 = dir[i];
-			r += d1 * d2; 
-			norm1 += d1*d1;
-			norm2 += d2*d2;
-		}
-		return r/Math.sqrt(norm1)/Math.sqrt(norm2)
-	}
-
-	/* This computes the gradient based on a given function evaluated at the two target points. */ 
-	gridAttractor ( p1, p2, dir ){
-		return dir( p2 ) - dir( p1 )
-	}
-	
-	deltaHchemotaxis ( sourcei, targeti, src_type, tgt_type ){
-		const gradienttype = this.conf["GRADIENT_TYPE"];
-		const gradientvec = this.conf["GRADIENT_DIRECTION"];
-		let bias, lambdachem;
-
-		if( gradienttype == "radial" ){
-			bias = this.pointAttractor( this.i2p(sourcei), this.i2p(targeti), gradientvec );
-		} else if( gradienttype == "linear" ){
-			bias = this.linAttractor( this.i2p(sourcei), this.i2p(targeti), gradientvec );
-		} else if( gradienttype == "grid" ){
-			bias = this.gridAttractor( this.i2p( sourcei ), this.i2p( targeti ), gradientvec );
-		} else if( gradienttype == "custom" ){
-			bias = gradientvec( this.i2p( sourcei ), this.i2p( targeti ), this );
-		} else {
-			throw("Unknown GRADIENT_TYPE. Please choose 'linear', 'radial', 'grid', or 'custom'." )
-		}
-
-		// if source is non background, lambda chemotaxis is of the source cell.
-		// if source is background, use lambda chemotaxis of target cell.
-		if( src_type != 0 ){
-			lambdachem = this.par("LAMBDA_CHEMOTAXIS",src_type );
-		} else {
-			lambdachem = this.par("LAMBDA_CHEMOTAXIS",tgt_type );
-		}	
-
-		return -bias*lambdachem
-	}
-
-}
-
-/* This class contains methods that should be executed once per monte carlo step.
-   Examples are cell division, cell death etc.
- */
-
-
-class GridInitializer {
+class GridManipulator {
 	constructor( C ){
 		this.C = C;
 	}
@@ -1940,6 +1798,67 @@ class GridInitializer {
 			this.C.setpix( p, newid );
 		}
 		
+	}
+
+	/* Let cell t divide by splitting it along a line perpendicular to
+	 * its major axis. */
+	divideCell( id ){
+		if( C.ndim != 2 ){
+			throw("The divideCell methods is only implemented for 2D yet!")
+		}
+		let cp = this.cellpixels, C = this.C, Cs = this.Cs;
+		let bxx = 0, bxy = 0, byy=0,
+			com = Cs.getCentroidOf( id ), cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2;
+
+		// Loop over the pixels belonging to this cell
+		for( var j = 0 ; j < cp[id].length ; j ++ ){
+			cx = cp[id][j][0] - com[0]; // x position rel to centroid
+			cy = cp[id][j][1] - com[1]; // y position rel to centroid
+
+			// sum of squared distances:
+			bxx += cx*cx;
+			bxy += cx*cy;
+			byy += cy*cy;
+		}
+
+		// This code computes a "dividing line", which is perpendicular to the longest
+		// axis of the cell.
+		if( bxy == 0 ){
+			x0 = 0;
+			y0 = 0;
+			x1 = 1;
+			y1 = 0;
+		} else {
+			T = bxx + byy;
+			D = bxx*byy - bxy*bxy;
+			//L1 = T/2 + Math.sqrt(T*T/4 - D)
+			L2 = T/2 - Math.sqrt(T*T/4 - D);
+			x0 = 0;
+			y0 = 0;
+			x1 = L2 - byy;
+			y1 = bxy;
+		}
+
+		// create a new ID for the second cell
+		var nid = C.makeNewCellID( C.cellKind( id ) );
+
+		// Loop over the pixels belonging to this cell
+		//let sidea = 0, sideb = 0
+		for( j = 0 ; j < cp[id].length ; j ++ ){
+			// coordinates of current cell relative to center of mass
+			x2 = cp[id][j][0]-com[0];
+			y2 = cp[id][j][1]-com[1];
+
+			// Depending on which side of the dividing line this pixel is,
+			// set it to the new type
+			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
+			if( side > 0 ){
+				//sidea ++
+				C.setpix( cp[id][j], nid ); 
+			}
+		}
+		//console.log( sidea, sideb )
+		return nid
 	}
 }
 
@@ -2487,8 +2406,8 @@ class BarrierConstraint extends HardConstraint {
 	}
 }
 
+exports.CA = CA;
 exports.CPM = CPM;
-exports.CPMChemotaxis = CPMChemotaxis;
 exports.Stats = Stats;
 exports.Canvas = Canvas;
 exports.GridManipulator = GridManipulator;
@@ -2496,7 +2415,6 @@ exports.Grid2D = Grid2D;
 exports.Grid3D = Grid3D;
 exports.Adhesion = Adhesion;
 exports.VolumeConstraint = VolumeConstraint;
-exports.GridInitializer = GridInitializer;
 exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 exports.TestLogger = HardVolumeRangeConstraint$1;
 exports.ActivityConstraint = ActivityConstraint;

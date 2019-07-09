@@ -80,7 +80,7 @@ function setupCPM(conf){
 		ctx.stroke()
 	}} )
 
-	let Gi = new CPM.GridInitializer(C)
+	let Gi = new CPM.GridManipulator(C)
 	for( let i = 0 ; i < ncells ; i ++ ){
 		Gi.seedCell(1)
 		//let cid = C.makeNewCellID(1)
