@@ -710,10 +710,19 @@ var CPM = (function (exports) {
 			this.pixti = this.grid.pixti.bind(this.grid);
 			this.neighi = this.grid.neighi.bind(this.grid);
 			this.extents = this.grid.extents;
+
+			this.cellvolume = [];
+
+			this.stats = [];
+			this.stat_values = {};
 		}
 
 		cellKind( t ){
 			return t 
+		}
+
+		* cellIDs() {
+			yield* Object.keys( this.cellvolume );
 		}
 
 		/* Get neighbourhood of position p */
@@ -728,10 +737,34 @@ var CPM = (function (exports) {
 		}
 
 		/* Change the pixel at position p (coordinates) into cellid t. 
-		Update cell perimeters with Pup (optional parameter).*/
+			This standard implementation also keeps track of cell volumes
+			for all nonzero cell IDs. Subclasses may want to do more, 
+			such as also keeping track of perimeters or even centroids.
+			In that case, this method needs to be overridden. */
+		setpixi ( i, t ){		
+			const t_old = this.grid.pixti(i);
+			if( t_old > 0 ){
+				// also update volume of the old cell
+				this.cellvolume[t_old] --;
+				// if this was the last pixel belonging to this cell, 
+				// remove the cell altogether.
+				if( this.cellvolume[t_old] == 0 ){
+					delete this.cellvolume[t_old];
+				}
+			}
+			// update volume of the new cell and cellid of the pixel.
+			this.grid.setpixi( i, t );
+			if( t > 0 ){
+				if( !this.cellvolume[t] ){
+					this.cellvolume[t] = 1;
+				} else {
+					this.cellvolume[t] ++;
+				}
+			}
+		}
 
 		setpix ( p, t ){
-			this.grid.setpixi( this.grid.p2i(p), t );
+			this.setpixi( this.grid.p2i(p), t );
 		}
 
 		/* ------------- MATH HELPER FUNCTIONS --------------- */
@@ -742,6 +775,22 @@ var CPM = (function (exports) {
 		/* Random integer number between incl_min and incl_max */
 		ran (incl_min, incl_max) {
 			return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
+		}
+
+		getStat( s ){
+			/* Instantiate stats class if it doesn't exist yet and bind to this model */
+			if( !(s.name in this.stats) ){
+				let t = new s();
+				this.stats[s.name] = t;
+				t.model = this;
+				
+			}
+			/* Cache stat value if it hasn't been done yet */
+			if( !(s.name in this.stat_values) ){
+				this.stat_values[s.name] = this.stats[s.name].compute();
+			}
+			/* Return cached value */
+			return this.stat_values[s.name]
 		}
 		
 		/* ------------- COMPUTING THE HAMILTONIAN --------------- */
@@ -763,6 +812,7 @@ var CPM = (function (exports) {
 
 		timeStep(){
 			this.grid.applyLocally( this.updateRule );
+			this.stat_values = {};
 		}
 	}
 
@@ -866,7 +916,6 @@ var CPM = (function (exports) {
 			this.borderpixels = new DiceSet( this.mt );
 
 			// Attributes per cell:
-			this.cellvolume = [];			
 			this.t2k = [];	// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
 			this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
 
@@ -874,8 +923,6 @@ var CPM = (function (exports) {
 			this.hard_constraints = [];
 			this.post_setpix_listeners = [];
 			this.post_mcs_listeners = [];
-			this.stats = [];
-			this.stat_values = {};
 			this._neighbours = new Uint16Array(this.grid.p2i(field_size));
 		}
 
@@ -890,10 +937,6 @@ var CPM = (function (exports) {
 					yield p;
 				}
 			}
-		}
-
-		* cellIDs() {
-			yield* Object.keys( this.t2k );
 		}
 
 		* cellBorderPixels() {
@@ -914,21 +957,6 @@ var CPM = (function (exports) {
 			}
 		}
 
-		getStat( s ){
-			/* Instantiate stats class if it doesn't exist yet and bind to this model */
-			if( !(s.name in this.stats) ){
-				let t = new s();
-				this.stats[s.name] = t;
-				t.model = this;
-				
-			}
-			/* Cache stat value if it hasn't been done yet */
-			if( !(s.name in this.stat_values) ){
-				this.stat_values[s.name] = this.stats[s.name].compute();
-			}
-			/* Return cached value */
-			return this.stat_values[s.name]
-		}
 
 		add( t ){
 			if( t instanceof Constraint ){
@@ -1009,7 +1037,6 @@ var CPM = (function (exports) {
 			let delta_t = 0.0;
 			// this loop tracks the number of copy attempts until one MCS is completed.
 			while( delta_t < 1.0 ){
-
 				// This is the expected time (in MCS) you would expect it to take to
 				// randomly draw another border pixel.
 				delta_t += 1./(this.borderpixels.length);
@@ -1079,10 +1106,6 @@ var CPM = (function (exports) {
 			for( let l of this.post_setpix_listeners ){
 				l( i, t_old, t );
 			}
-		}
-
-		setpix ( p, t ){
-			this.setpixi( this.grid.p2i(p), t );
 		}
 
 		/* Update border elements after a successful copy attempt. */

@@ -32,10 +32,10 @@ function timestep(){
 let cellids = []
 
 function seedGrid(){
-	let Ci = new CPM.GridInitializer(C)
+	let Cm = new CPM.GridManipulator(C)
 	let i = (w*w/145.)
 	while( i-- > 0 ){
-		cellids.push( Ci.seedCell(1) )
+		cellids.push( Cm.seedCell(1) )
 	}
 	i = 50
 	while( i-- > 0 ){
@@ -77,6 +77,6 @@ C.add( new CPM.ActivityConstraint({MAX_ACT: [0,0,60],
 </script>
 </head>
 <body onload="initialize()">
-<p>A layer of epidermal cells</p>
+<p>A layer of epidermal cells with T cells crawling through</p>
 </body>
 </html>

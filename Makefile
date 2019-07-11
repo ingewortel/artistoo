@@ -1,7 +1,9 @@
 all : build/cpm.js
 
-build/cpm.js: app/index.js models/CPM.js DiceSet.js CPMChemotaxis.js Stats.js GridManipulator.js Canvas.js \
-	rollup.config.js grid/Grid.js grid/Grid2D.js grid/Grid3D.js grid/GridInitializer.js \
+build/cpm.js: rollup.config.js app/index.js \
+	models/CPM.js models/GridBasedModel.js models/CA.js \
+	DiceSet.js Canvas.js \
+	grid/Grid.js grid/Grid2D.js grid/Grid3D.js grid/GridManipulator.js \
 	hamiltonian/Adhesion.js hamiltonian/HardVolumeRangeConstraint.js \
 	hamiltonian/PerimeterConstraint.js hamiltonian/ActivityConstraint.js \
 	hamiltonian/PreferredDirectionConstraint.js stats/PostMCSStats.js \

@@ -18,7 +18,6 @@ class CPM extends GridBasedModel {
 		this.borderpixels = new DiceSet( this.mt )
 
 		// Attributes per cell:
-		this.cellvolume = []			
 		this.t2k = []	// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
 		this.t2k[0] = 0	// Background cell; there is just one cell of this type.
 
@@ -26,8 +25,6 @@ class CPM extends GridBasedModel {
 		this.hard_constraints = []
 		this.post_setpix_listeners = []
 		this.post_mcs_listeners = []
-		this.stats = []
-		this.stat_values = {}
 		this._neighbours = new Uint16Array(this.grid.p2i(field_size))
 	}
 
@@ -42,10 +39,6 @@ class CPM extends GridBasedModel {
 				yield p
 			}
 		}
-	}
-
-	* cellIDs() {
-		yield* Object.keys( this.t2k )
 	}
 
 	* cellBorderPixels() {
@@ -66,21 +59,6 @@ class CPM extends GridBasedModel {
 		}
 	}
 
-	getStat( s ){
-		/* Instantiate stats class if it doesn't exist yet and bind to this model */
-		if( !(s.name in this.stats) ){
-			let t = new s()
-			this.stats[s.name] = t
-			t.model = this
-			
-		}
-		/* Cache stat value if it hasn't been done yet */
-		if( !(s.name in this.stat_values) ){
-			this.stat_values[s.name] = this.stats[s.name].compute()
-		}
-		/* Return cached value */
-		return this.stat_values[s.name]
-	}
 
 	add( t ){
 		if( t instanceof Constraint ){
@@ -161,7 +139,6 @@ class CPM extends GridBasedModel {
 		let delta_t = 0.0
 		// this loop tracks the number of copy attempts until one MCS is completed.
 		while( delta_t < 1.0 ){
-
 			// This is the expected time (in MCS) you would expect it to take to
 			// randomly draw another border pixel.
 			delta_t += 1./(this.borderpixels.length)
@@ -231,10 +208,6 @@ class CPM extends GridBasedModel {
 		for( let l of this.post_setpix_listeners ){
 			l( i, t_old, t )
 		}
-	}
-
-	setpix ( p, t ){
-		this.setpixi( this.grid.p2i(p), t )
 	}
 
 	/* Update border elements after a successful copy attempt. */

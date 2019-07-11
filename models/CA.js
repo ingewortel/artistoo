@@ -14,6 +14,7 @@ class CA extends GridBasedModel {
 
 	timeStep(){
 		this.grid.applyLocally( this.updateRule )
+		this.stat_values = {}
 	}
 }
 

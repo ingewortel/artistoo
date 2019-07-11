@@ -29,11 +29,9 @@ function timestep(){
 function seedGrid(){
 	// Seed epidermal cell layer
 	let step = 12
-	for( var i = 1 ; i < C.field_size.x ; i += step ){
-		for( var j = 1 ; j < C.field_size.y ; j += step ){
-			let cid = C.makeNewCellID(1)
-			C.setpix( [i,j], cid )
-			//C.seedCellAt( 1, [i,j] )
+	for( var i = 1 ; i < C.extents[0] ; i += step ){
+		for( var j = 1 ; j < C.extents[1] ; j += step ){
+			C.setpix( [i,j], C.makeNewCellID(1) )
 		}
 	}
 }
