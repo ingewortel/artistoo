@@ -38,9 +38,17 @@ class Grid {
 		return this._pixels[i]
 	}
 
+	/* Return locations of all non-zero pixels.
+
+		This method isn't actually called because the subclasses implement
+		it themselves due to efficiency reasons. It serves as a template to
+		document the functionality. */
 	* pixels() {
-		//throw("Iterator 'pixels' not implemented!")
-		yield undefined;
+		for( let i of this.pixelsi() ){
+			if( this._pixels[i] > 0 ){
+				yield [this.i2p(i),this._pixels[i]]; 
+			}
+		}
 	}
 
 	* pixelsi() {
@@ -141,7 +149,9 @@ class Grid2D extends Grid {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				yield [[i,j], this._pixels[ii]];
+				if( this._pixels[ii] > 0 ){
+					yield [[i,j], this._pixels[ii]];
+				}
 				ii ++;
 			}
 			c += this.Y_STEP;
@@ -404,7 +414,9 @@ class Grid3D extends Grid {
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
 				let d = 0;
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
-					yield [[i,j,k], this._pixels[ii]];
+					if( this._pixels[ii] > 0 ){
+						yield [[i,j,k], this._pixels[ii]];
+					}
 					ii++;
 				}
 				d += this.Z_STEP;
@@ -985,7 +997,7 @@ class Stat {
 
 class PixelsByCell extends Stat {
 	compute(){
-		let cellpixels = { 0 : [] };
+		let cellpixels = { };
 		for( let i of this.M.cellIDs() ){
 			cellpixels[i] = [];
 		}

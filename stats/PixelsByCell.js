@@ -3,7 +3,7 @@ import Stat from "./Stat.js"
 
 class PixelsByCell extends Stat {
 	compute(){
-		let cellpixels = { 0 : [] }
+		let cellpixels = { }
 		for( let i of this.M.cellIDs() ){
 			cellpixels[i] = []
 		}

@@ -38,7 +38,9 @@ class Grid2D extends Grid {
 		let ii = 0, c = 0
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				yield [[i,j], this._pixels[ii]]
+				if( this._pixels[ii] > 0 ){
+					yield [[i,j], this._pixels[ii]]
+				}
 				ii ++
 			}
 			c += this.Y_STEP

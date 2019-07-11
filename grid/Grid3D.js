@@ -55,7 +55,9 @@ class Grid3D extends Grid {
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
 				let d = 0
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
-					yield [[i,j,k], this._pixels[ii]]
+					if( this._pixels[ii] > 0 ){
+						yield [[i,j,k], this._pixels[ii]]
+					}
 					ii++
 				}
 				d += this.Z_STEP

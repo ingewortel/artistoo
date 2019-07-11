@@ -31,9 +31,17 @@ class Grid {
 		return this._pixels[i]
 	}
 
+	/* Return locations of all non-zero pixels.
+
+		This method isn't actually called because the subclasses implement
+		it themselves due to efficiency reasons. It serves as a template to
+		document the functionality. */
 	* pixels() {
-		//throw("Iterator 'pixels' not implemented!")
-		yield undefined
+		for( let i of this.pixelsi() ){
+			if( this._pixels[i] > 0 ){
+				yield [this.i2p(i),this._pixels[i]] 
+			}
+		}
 	}
 
 	* pixelsi() {
