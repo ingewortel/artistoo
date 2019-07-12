@@ -2,4 +2,7 @@
 
 - Finish implementation of chemotaxis constraint
 
-- Should it be possible to call stats not every timestep, but at defined or entirely custom intervals?
+- Do we need to make it possible to compute stats for individual cells instead
+  of for all cells at once?
+
+

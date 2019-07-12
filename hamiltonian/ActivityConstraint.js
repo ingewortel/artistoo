@@ -12,9 +12,7 @@ import SoftConstraint from "./SoftConstraint.js"
 class ActivityConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf )
-
 		this.cellpixelsbirth = {} // time the pixel was added to its current cell.
-		
 		// Wrapper: select function to compute activities based on ACT_MEAN in conf
 		if( this.conf.ACT_MEAN == "arithmetic" ){
 			this.activityAt = this.activityAtArith

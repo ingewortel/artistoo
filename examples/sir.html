@@ -33,7 +33,7 @@ function timestep(){
 	if( running ){
 		// Update the grid with one MCS
 		meter.tickStart()
-		C.monteCarloStep()
+		C.timeStep()
 		meter.tick()
 		draw()
 	}
@@ -41,51 +41,28 @@ function timestep(){
 }
 
 function seedGrid(){
-	// Create a cell (other than background)
-	infected = C.makeNewCellID(1)
-	resistant = C.makeNewCellID(2)
-	C.setpix( C.midpoint, infected )
+	// seed infection in the middle
+	C.setpix( C.midpoint, 1 )
 }
 
 function initialize(){
-	// Create a new CPM, canvas, and stats object
-	C = new CPM.CPM( [w,w], {
-		J : [ [NaN,20], [20,100] ],
-		T : 0.01,
-	})
-	C.add({
-		CONSTRAINT_TYPE : "hard",
-		fulfilled : function(  sourcei, targeti, src_type, tgt_type ){
-			if( tgt_type == infected ){
-				return false
-			}
-			return true
-		}
-	})
-	C.add({
-		CONSTRAINT_TYPE : "soft",
-		deltaH : function(  sourcei, targeti, src_type, tgt_type ){
-			if( src_type == infected && tgt_type == 0 && C.random() < r_i ){
-				return -1000
-			}	
-			return 1000000
-		}
-	})
-	C.add({
-		postMCSListener : function(){
-			for( let [p,i] of C.cellPixels() ){
-				if( i == infected ){
-					console.log( " try " )
+	// Create a new CA, canvas, and stats object
+	C = new CPM.CA( [w,w], {
+		UPDATE_RULE : function( p, N ){
+			let t = this.pixt(p)
+			if(t == 0){ // Susceptible
+				for( let pn of N ){
+					if( this.pixt(pn) == 1 && C.random() < r_i ){
+						return 1
+					}
 				}
-				if( i == infected && C.random() < r_r ){
-					C.setpix( p, resistant )
-				}
+			} else if( t==1 && C.random() < r_r ){
+				return 2
 			}
+			return t
 		}
 	})
 
-
-	//C.add( new CPM.Adhesion( C.conf ) )
 	if( !Cim ){
 		Cim = new CPM.Canvas( C, {zoom:zoom} )
 	} else {
@@ -101,7 +78,7 @@ function initialize(){
 </script>
 </head>
 <body>
-<p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to reset simulation.</p>
+<p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to interrupt/restart simulation.</p>
 <p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
 <p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>
 <p><button onclick="initialize()">run</button></p>
