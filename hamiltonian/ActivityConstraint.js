@@ -12,8 +12,10 @@ import SoftConstraint from "./SoftConstraint.js"
 class ActivityConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf )
+		
+		//this.confChecker()
 
-		this.cellpixelsbirth = {} // time the pixel was added to its current cell.
+		this.cellpixelsact = {} // activity of cellpixels with a non-zero activity
 		
 		// Wrapper: select function to compute activities based on ACT_MEAN in conf
 		if( this.conf.ACT_MEAN == "arithmetic" ){
@@ -23,6 +25,14 @@ class ActivityConstraint extends SoftConstraint {
 		}
 		
 	}
+	
+	confChecker(){
+		this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] )
+		this.confCheckCellNonNegative( "LAMBDA_ACT" )
+		this.confCheckCellNonNegative( "MAX_ACT" )
+	}
+	
+	
 	/* ======= ACT MODEL ======= */
 
 	/* Act model : compute local activity values within cell around pixel i.
@@ -123,22 +133,33 @@ class ActivityConstraint extends SoftConstraint {
 	/* Current activity (under the Act model) of the pixel with ID i. */
 	pxact ( i ){
 	
-		// If the pixel is not in the cellpixelsbirth object, it has activity 0.
-		/*if ( !this.cellpixelsbirth[i] ){
+		// If the pixel is not in the cellpixelsact object, it has activity 0.
+		if ( this.cellpixelsact[i] == undefined ){
 			return 0
-		}*/
+		}
+		// otherwise, its activity is stored in the object.
+		return this.cellpixelsact[i]
 		
-		// cellkind of current pixel
-		const k = this.C.cellKind( this.C.pixti(i) )
-		
-		// Activity info
-		const actmax = this.conf["MAX_ACT"][k], age = (this.C.time - this.cellpixelsbirth[i])
-
-		return (age > actmax) ? 0 : actmax-age
 	}
+	
 	/* eslint-disable no-unused-vars*/
 	postSetpixListener( i, t_old, t ){
-		this.cellpixelsbirth[i] = this.C.time
+	
+		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
+		const k = this.C.cellKind( t )
+		this.cellpixelsact[i] = this.conf["MAX_ACT"][k]
+	}
+	
+	postMCSListener(){
+		// iterate over cellpixelsage and decrease all activities by one.
+		for( let key in this.cellpixelsact ){
+			this.cellpixelsact[ key ] = this.cellpixelsact[ key ] - 1
+			
+			// activities that reach zero no longer need to be stored.
+			if( this.cellpixelsact[ key ] <= 0 ){
+				delete this.cellpixelsact[ key ]
+			}
+		}
 	}
 
 

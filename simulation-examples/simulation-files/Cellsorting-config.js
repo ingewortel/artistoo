@@ -20,6 +20,7 @@ let config = {
 		// Mostly these have the format of an array in which each element specifies the
 		// parameter value for one of the cellkinds on the grid.
 		// First value is always cellkind 0 (the background) and is often not used.
+		nCellKinds : 2,
 		
 		// Adhesion parameters:
 		J : [ [NaN, 12, 6], [12, 6, 16], [6, 16, 6] ],

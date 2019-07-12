@@ -50,23 +50,25 @@ function seedGrid(){
 
 function initialize(){
 	// Create a new CPM, canvas, and stats object
-C = new CPM.CPM( [w,w], {
-	seed : 1,
-	T : 20,
-})
-C.add( new CPM.Adhesion({J : [ 
-	[0,20,20], 
-	[20,20,100], // epidermal cells
-	[20,100,200] 
-]}) )
-C.add( new CPM.VolumeConstraint({
-	LAMBDA_V : [0,30,30],
-	V : [0,152,100]
-}) )
-C.add( new CPM.PerimeterConstraint({P: [0,0,130], LAMBDA_P:[0,0,2]}) )
-C.add( new CPM.ActivityConstraint({MAX_ACT: [0,0,60], 
-	LAMBDA_ACT:[0,0,500],
-	ACT_MEAN: "geometric" }) )
+		C = new CPM.CPM( [w,w], {
+		seed : 1,
+		T : 20,
+		nCellKinds : 2,
+		J : [ [0,20,20], 
+		[20,20,100], // epidermal cells
+		[20,100,200] ],
+		LAMBDA_V : [0,30,30],
+		V : [0,152,100],
+		P: [0,0,130], 
+		LAMBDA_P:[0,0,2],
+		MAX_ACT: [0,0,60], 
+		LAMBDA_ACT:[0,0,500],
+		ACT_MEAN: "geometric"
+	})
+	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( new CPM.VolumeConstraint( C.conf ) )
+	C.add( new CPM.PerimeterConstraint( C.conf ) )
+	C.add( new CPM.ActivityConstraint( C.conf ) )
 
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	meter = new FPSMeter({left:"auto", right:"5px"})

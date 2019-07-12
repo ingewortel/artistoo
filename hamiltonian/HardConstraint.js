@@ -1,11 +1,12 @@
+import Constraint from "./Constraint.js"
 
-class HardConstraint {
+class HardConstraint extends Constraint {
 	get CONSTRAINT_TYPE() {
 		return "hard"
 	}
-	constructor( conf ){
+	/*constructor( conf ){
 		this.conf = conf
-	}
+	}*/
 	set CPM(C){
 		this.C = C
 	}

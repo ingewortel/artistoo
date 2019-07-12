@@ -5,6 +5,9 @@ class ChemotaxisConstraint extends SoftConstraint {
 	set CPM(C){
 		this.C = C
 	}
+	confChecker(){
+		this.confCheckCellNonNegative( "LAMBDA_CH" )
+	}
 
 	constructor( conf ){
 		super( conf )

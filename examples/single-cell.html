@@ -32,11 +32,14 @@ function setupCPM(conf){
 	const w = conf.w || 200
 	let C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : false
+		torus : false,
+		nCellKinds:1,
+		J: [[0,20], [20,100]] ,
+		V: [0,500], 
+		LAMBDA_V: [0,50]
 	})
-	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
-	C.add( new CPM.VolumeConstraint( { V: [0,500], 
-		LAMBDA_V: [0,50] } ) )
+	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( new CPM.VolumeConstraint( C.conf ) )
 	
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 

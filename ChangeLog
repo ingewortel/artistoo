@@ -3,6 +3,19 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-07-13 Inge Wortel <ingewortel@gmail.com>
+	* hamiltonian/ActivityConstraint.js : changed the name of the old version
+	to hamiltonian/ActivityConstraintOld.js and the name of the new version
+	to hamiltonian/ActivityConstraint.js, and updated app/index.js and Makefile
+	accordingly. For the difference between those two versions, see entry of 
+	2019-03-09 in this ChangeLog.
+	* I have now made it obligatory for every constraint to implement a 
+	confChecker() method, which checks if the required configuration parameters
+	are actually present in the supplied conf object and have the right format.
+	See the code in the main Constraint.js class for some default checker methods
+	that should be usable for most constraints you can imagine. Note that some
+	examples may not work right now if the nCellKinds is not present in the conf.
+
 2019-07-12 Inge Wortel <ingewortel@gmail.com>
 	* stats/CentroidsWithTorusCorrection.js : fixed it so it works now.
 	* simulation/Simulation.js : added a class for setting up a simulation
@@ -30,7 +43,6 @@ yyyy-mm-dd Your Name <your@email.com>
 	of creating a Microchannel simulation.
 	* simulation-examples/simulation-files/Microchannel-config.js : configuration
 	for the Microchannel simulation.
-	
 
 2019-07-09 Johannes Textor <johannes.textor@gmx.de>
 	* grid/GridManipulator.js : Added this new class, and removed the 

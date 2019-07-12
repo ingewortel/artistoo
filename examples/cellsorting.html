@@ -15,13 +15,13 @@ canvas{ border: 1px solid black }
 
 
 let C,Cim,t = 0, maxtime = 20000, w = 210,
-	zoom=3
-	meter
+	zoom=3, meter
 
 function initialize(){
 
 	// Create a CPM object
 	C = new CPM.CPM( [w, w], {
+		nCellKinds : 2,
 		LAMBDA_V : [0,25,25],
 		V : [0,25,25],
 		J : [ [NaN, 12, 6], [12, 6, 16], [6, 16, 6] ],

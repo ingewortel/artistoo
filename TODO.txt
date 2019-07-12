@@ -1,3 +1,6 @@
+- (Inge): check confCheckers and ChemotaxisConstraint
+Fix the many-cells-diffusion example.
+
 - (Inge): implement checks for valid sim configuration files.
 
 - (Inge): current centroid method probably won't work for microchannels, as cells occupy more than 50% of the grid height for a microchannel. The torus correction will go wrong in that case even though there actually shouldn't be a torus correction in the y dimension.

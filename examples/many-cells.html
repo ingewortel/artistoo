@@ -33,16 +33,23 @@ function setupCPM(conf){
 	const w = conf.w || 40
 	let C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : false 
+		nCellKinds: 1,
+		torus : false,
+		J: [[0,20], [20,100]],
+		V: [0,500], 
+		LAMBDA_V: [0,50],
+		LAMBDA_DIR: [0,100], 
+		PERSIST: [0,.7], 
+		pixeltracker: Cs 
 	})
+	Cs = new CPM.CentroidsWithTorusCorrection()
+	C.conf["pixeltracker"] = Cs
 	//Cs = new CPM.PostMCSStats()
 	//C.add( Cs )
 
-	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
-	C.add( new CPM.VolumeConstraint( { V: [0,500], 
-		LAMBDA_V: [0,50] } ) )
-	pdc = new CPM.PreferredDirectionConstraint( 
-		{LAMBDA_DIR: [0,100], PERSIST: [0,.7], pixeltracker: Cs } ) 
+	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( new CPM.VolumeConstraint( C.conf ) )
+	pdc = new CPM.PreferredDirectionConstraint(C.conf ) 
 	C.add( pdc )
 
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )

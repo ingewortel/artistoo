@@ -65,30 +65,32 @@ function initialize(){
 	// Create a new CPM, canvas, and stats object
 	C = new CPM.CPM( [w,w], {
 		seed : 2,
+		nCellKinds : 4,
 		LAMBDA_CONNECTIVITY : [0,0,0,1000,0],
 		LAMBDA_CHEMOTAXIS : [0,0,400,0,0],
 		T : 20,
 		GRADIENT_TYPE : "radial",
 		GRADIENT_DIRECTION : [w/2,w/2],
-	})
-
-	C.add( new CPM.Adhesion({J : [ 
+		J : [ 
 		 [0,20,20,20,20], 
 				[20,100,40,100,0], // epidermal cells
 				[20,40,40,J_TC_TUMOR,0], // T cells
 				[20,100,J_TC_TUMOR,20,0], // Cancer cells
 				[20,0,0,0,0] 
-	]}) )
-	C.add( new CPM.VolumeConstraint({
+		],
 		LAMBDA_V : [0,50,50,50,50],
-		V : [0,152,100,152,0]
-	}) )
-	C.add( new CPM.PerimeterConstraint({P: [0,145,130,145,0], 
-			LAMBDA_P:[0,2,1,2,0]})
-	)
-		C.add( new CPM.ActivityConstraint({MAX_ACT: [0,0,20,0,0], 
+		V : [0,152,100,152,0],
+		P: [0,145,130,145,0], 
+		LAMBDA_P:[0,2,1,2,0],
+		MAX_ACT: [0,0,20,0,0], 
 		LAMBDA_ACT:[0,0,1000,0,0],
-		ACT_MEAN: "geometric" }) )
+		ACT_MEAN: "geometric"
+	})
+
+	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( new CPM.VolumeConstraint( C.conf ) )
+	C.add( new CPM.PerimeterConstraint( C.conf ) )
+	C.add( new CPM.ActivityConstraint( C.conf ) )
 
 
 	Cim = new CPM.Canvas( C, {zoom:zoom} )

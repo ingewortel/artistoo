@@ -14,12 +14,21 @@ let w = 600, h=600, m=h/2, D = 0.1, meter
 
 var g = new CPM.Grid2D([w/10,h/10], true, "Float32"),
 	gi = new CPM.CoarseGrid( g, 10 ),
-	C = new CPM.CPM([w,h], {T:20, torus: true})
+	C = new CPM.CPM( [w,h], {
+		T:20, 
+		torus: true, 
+		nCellKinds : 1,
+		J: [[0,20], [20,100]],
+		V: [0,250], 
+		LAMBDA_V: [0,50] ,
+		field: gi, 
+		LAMBDA_CH: [0, 800],
+		
+	})
 
-C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
-C.add( new CPM.VolumeConstraint( { V: [0,250], 
-	LAMBDA_V: [0,50] } ) )
-C.add( new CPM.ChemotaxisConstraint( { field: gi, LAMBDA_CH: [0, 800] } ) )
+C.add( new CPM.Adhesion( C.conf ) )
+C.add( new CPM.VolumeConstraint( C.conf ) )
+C.add( new CPM.ChemotaxisConstraint( C.conf ) )
 
 new CPM.GridManipulator(C).seedCellAt(1, [200,m])
 

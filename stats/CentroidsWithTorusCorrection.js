@@ -23,7 +23,9 @@ class CentroidsWithTorusCorrection extends Stat {
 	/* Compute the centroid of a specific cell with id = <cellid>. 
 	The cellpixels object is given as an argument so that it only has to be requested
 	once for all cells together. */
-	computeCentroidOfCell( cellid, cellpixels ){
+	computeCentroidOfCell( cellid, cellpixels  ){
+	
+		//let cellpixels = this.M.getStat( PixelsByCell ) 
 	
 		const pixels = cellpixels[ cellid ]
 		

@@ -5,6 +5,11 @@
 import SoftConstraint from "./SoftConstraint.js"
 
 class VolumeConstraint extends SoftConstraint {
+	confChecker(){
+		this.confCheckCellNonNegative( "LAMBDA_V" )
+		this.confCheckCellNonNegative( "V" )
+	}
+
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		// volume gain of src cell
 		let deltaH = this.volconstraint( 1, src_type ) - 

@@ -5,6 +5,12 @@
 import SoftConstraint from "./SoftConstraint.js"
 
 class Adhesion extends SoftConstraint {
+	/* Check if conf parameters are correct format*/
+	confChecker(){
+		this.confCheckCellMatrix("J")
+	}
+
+
 	/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
 	J( t1, t2 ){
 		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]

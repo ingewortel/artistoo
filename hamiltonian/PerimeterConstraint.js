@@ -9,6 +9,11 @@ class PerimeterConstraint extends SoftConstraint {
 		super( conf )
 		this.cellperimeters = {}
 	}
+	confChecker(){
+		this.confCheckCellNonNegative( "LAMBDA_P" )
+		this.confCheckCellNonNegative( "P" )
+	}
+	
 	postSetpixListener( i, t_old, t_new ){
 		if( t_old == t_new ){ return }
 		const Ni = this.C.neighi( i )

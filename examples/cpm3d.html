@@ -49,16 +49,20 @@ function setupCPM(conf){
 	const dimension = 3
   	C = new CPM.CPM( [w,w,w], {
   		T : 20,
-  		torus : true
+  		torus : true,
+  		nCellKinds : 1,
+  		J: [[0,20], [20,100]],
+  		V: [0,500],
+  		LAMBDA_V: [0,50],
+  		LAMBDA_DIR: [0,300], 
+  		PERSIST: [0,0.8], 
+  		pixeltracker: Cs 
   	})
   	Cs = new CPM.PostMCSStats()
   	C.add( Cs )
-
-  	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
-  	C.add( new CPM.VolumeConstraint( { V: [0,500],
-  		LAMBDA_V: [0,50] } ) )
-  	pdc = new CPM.PreferredDirectionConstraint(
-  		{LAMBDA_DIR: [0,300], PERSIST: [0,0.8], pixeltracker: Cs } )
+  	C.add( new CPM.Adhesion( C.conf ) )
+  	C.add( new CPM.VolumeConstraint( C.conf ) )
+  	pdc = new CPM.PreferredDirectionConstraint( C.conf )
   	C.add( pdc )
 
   	let Cim = new CPM.Canvas( C, {zoom:zoom} )
@@ -78,7 +82,7 @@ function setupCPM(conf){
   		}
   	}} )
 
-	let Gi = new CPM.GridInitializer(C)
+	let Gi = new CPM.GridManipulator(C)
   	for( let i = 0 ; i < ncells ; i ++ ){
   		Gi.seedCell(1)
   	}

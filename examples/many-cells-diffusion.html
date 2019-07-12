@@ -35,19 +35,27 @@ function setupCPM(conf){
 	const w = conf.w || 40
 	let C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : true
+		torus : true,
+		nCellKinds: 4,
+		J: [[0,20,20,20,20], 
+		[20,100,20,100,20], 
+		[20,20,20,20,20], 
+		[20,100,20,100,20], 
+		[20,20,20,20,20]],
+		V: [0,125,300,125,300],
+		LAMBDA_V: [0,50,50,50,50],
+		P: [0,100,200,100,200],
+		LAMBDA_P: [0,2,2,2,2]
 	})
 	Cs = new CPM.PostMCSStats()
 	C.add( Cs )
 
-	C.add( new CPM.Adhesion( { J:
-		[[0,20,20,20,20], [20,100,20,100,20], [20,20,20,20,20], [20,100,20,100,20], [20,20,20,20,20]] } ) )
-	C.add( new CPM.VolumeConstraint( { V: [0,125,300,125,300],
-		LAMBDA_V: [0,50,50,50,50] } ) )
-	C.add( new CPM.PerimeterConstraint( { P: [0,100,200,100,200],
-		LAMBDA_P: [0,2,2,2,2] } ) )
+	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( new CPM.VolumeConstraint( C.conf  ) )
+	C.add( new CPM.PerimeterConstraint( C.conf ) )
 	chem12 = new CPM.ChemotaxisConstraint ({ 
 		MATHOBJ: math, SECRETOR: 2, 
+			nCellKinds: C.conf.nCellKinds,
 			RESOLUTION_DECREASE: 10, 
 			MM_PER_PIXEL: .38/600, 
 			SECOND_PER_MCS: 1,
@@ -55,6 +63,7 @@ function setupCPM(conf){
 			DIFFUSION_PER_MCS: 10, SECRETION: 100, 
 			DECAY: .1, LAMBDA_CHEMOTAXIS: [0,500,0,0,0] } )
 	chem34 = new CPM.ChemotaxisConstraint ( { 
+			nCellKinds: C.conf.nCellKinds,
 			MATHOBJ: math, SECRETOR: 4, 
 			RESOLUTION_DECREASE: 10, 
 			MM_PER_PIXEL: .38/600, 

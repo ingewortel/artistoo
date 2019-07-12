@@ -20,6 +20,10 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		}
 
 	}
+	confChecker(){
+		this.confCheckCellNonNegative( "LAMBDA_DIR" )
+	}
+	
 	deltaH ( sourcei, targeti, src_type ) {
 		if( src_type == 0 || !(src_type in this.celldirections) ) return 0
 		let b = this.celldirections[src_type]
@@ -83,7 +87,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 				this.cellcentroidlists[t] = []
 				this.celldirections[t] = this.randDir(this.C.ndim)
 			}
-			let ci = this.Cs.centroidWithTorusCorrection( t )
+			let ci = this.Cs.computeCentroidOfCell( t )
 			this.cellcentroidlists[t].unshift(ci)
 			if( this.cellcentroidlists[t].length >= dt ){
 				// note, dt could change during execution

@@ -5,6 +5,12 @@
 import HardConstraint from "./HardConstraint.js"
 
 class HardVolumeRangeConstraint extends HardConstraint {
+
+	confChecker(){
+		this.confCheckCellNonNegative( "LAMBDA_VRANGE_MAX" )
+		this.confCheckCellNonNegative( "LAMBDA_VRANGE_MIN" )
+	}
+
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 		// volume gain of src cell
 		if( src_type != 0 && this.C.getVolume(src_type) + 1 > 

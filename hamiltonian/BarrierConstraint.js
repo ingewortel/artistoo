@@ -5,6 +5,10 @@
 import HardConstraint from "./HardConstraint.js"
 
 class BarrierConstraint extends HardConstraint {
+	confChecker(){
+		this.confCheckCellBoolean( "IS_BARRIER" )
+	}
+
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 	
 		// Fulfilled = false when either src or tgt pixel is of the barrier cellkind	

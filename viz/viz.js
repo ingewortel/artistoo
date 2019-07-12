@@ -126,17 +126,19 @@ function render3d( max_cells ) {
 	var i = 0, t, k
 	if( arguments.length == 0 ) max_cells = Infinity
 
-	var cp = C.cellborderpixels.elements
+	var cp = C.cellBorderPixels()
 	// var con = Cs.cellsOnNetwork()
 
-	while( cellvoxels.length < cp.length  ){
+	/*while( cellvoxels.length < cp.length  ){
 		makevoxel()
-	}
+	}*/
 
-	for( ; i < cp.length ; i ++ ){
+	for( let p of C.cellBorderPixels() ){
 		// t = C.cellpixelstype[cp[i]]; k = C.cellKind(t)
 		// if( t < max_cells ){
-			var p = C.grid.i2p( cp[i] )
+			p = p[0]
+			
+			if( cellvoxels.length < (i+1) ){ makevoxel() }
 			cellvoxels[i].visible = true
 			cellvoxels[i].position.x = p[0]
 			cellvoxels[i].position.y = p[1]
@@ -155,8 +157,11 @@ function render3d( max_cells ) {
 
 		cellvoxels[i].material.color.setHex( cellBasicColor )
 		cellvoxels[i].material.opacity=0.15
+		i++
 	}
 
+	//i=0
+	
 	for( ; i < cellvoxels.length ; i ++ ){
 		cellvoxels[i].visible = false
 	}
