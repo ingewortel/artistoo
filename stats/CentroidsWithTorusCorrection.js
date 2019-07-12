@@ -92,9 +92,6 @@ class CentroidsWithTorusCorrection extends Stat {
 		return centroids
 		
 	}
-			
-
-
 }
 
 export default CentroidsWithTorusCorrection

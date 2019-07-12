@@ -1171,16 +1171,17 @@ class Stat {
 class PixelsByCell extends Stat {
 
 	compute(){
-		// initialize the object, and create keys with empty arrays for each cellid.
+		// initialize the object
 		let cellpixels = { };
-		for( let i of this.M.cellIDs() ){
-			cellpixels[i] = [];
-		}
 		// The this.M.pixels() iterator returns coordinates and cellid for all 
 		// non-background pixels on the grid. See the appropriate Grid class for
 		// its implementation.
 		for( let [p,i] of this.M.pixels() ){
-			cellpixels[i].push( p );
+			if( !cellpixels[i] ){
+				cellpixels[i] = [p];
+			} else {
+				cellpixels[i].push( p );
+			}
 		}
 		return cellpixels
 	}
@@ -2099,9 +2100,6 @@ class CentroidsWithTorusCorrection extends Stat {
 		return centroids
 		
 	}
-			
-
-
 }
 
 /* This class contains methods that should be executed once per monte carlo step.
@@ -2504,8 +2502,6 @@ class PerimeterConstraint extends SoftConstraint {
 class ActivityConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf );
-		
-		//this.confChecker()
 
 		this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
 		
@@ -2730,6 +2726,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		this.celldirections[t] = dx;
 	}
 	postMCSListener(){
+		let centroids = this.C.getStat( CentroidsWithTorusCorrection );
 		for( let t of this.C.cellIDs() ){
 			const k = this.C.cellKind(t);
 			let ld = this.conf["LAMBDA_DIR"][k];
@@ -2744,7 +2741,8 @@ class PreferredDirectionConstraint extends SoftConstraint {
 				this.cellcentroidlists[t] = [];
 				this.celldirections[t] = this.randDir(this.C.ndim);
 			}
-			let ci = this.Cs.computeCentroidOfCell( t );
+
+			let ci = centroids[t];
 			this.cellcentroidlists[t].unshift(ci);
 			if( this.cellcentroidlists[t].length >= dt ){
 				// note, dt could change during execution

@@ -12,7 +12,7 @@ function draw(){
 	Cim.clear( "CCCCCC" )
 
 	// Draw cell borders 
-	Cim.drawCells(1,"FFFF00")
+	Cim.drawCells(1,"AAAAAA")
 	Cim.drawCells(2,"FF0000")
 	Cim.drawCellBorders(-1,"000000")
 
@@ -22,7 +22,7 @@ function timestep(){
 	// Update the grid with one MCS
 	C.monteCarloStep()
 	meter.tick()
-	if( t % 2 == 0 ){
+	if( t % 3 == 0 ){
 		draw()
 	}
 	requestAnimationFrame( timestep )

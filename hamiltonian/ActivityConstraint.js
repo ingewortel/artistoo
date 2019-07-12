@@ -12,8 +12,6 @@ import SoftConstraint from "./SoftConstraint.js"
 class ActivityConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf )
-		
-		//this.confChecker()
 
 		this.cellpixelsact = {} // activity of cellpixels with a non-zero activity
 		

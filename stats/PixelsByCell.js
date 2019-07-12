@@ -9,16 +9,17 @@ import Stat from "./Stat.js"
 class PixelsByCell extends Stat {
 
 	compute(){
-		// initialize the object, and create keys with empty arrays for each cellid.
+		// initialize the object
 		let cellpixels = { }
-		for( let i of this.M.cellIDs() ){
-			cellpixels[i] = []
-		}
 		// The this.M.pixels() iterator returns coordinates and cellid for all 
 		// non-background pixels on the grid. See the appropriate Grid class for
 		// its implementation.
 		for( let [p,i] of this.M.pixels() ){
-			cellpixels[i].push( p )
+			if( !cellpixels[i] ){
+				cellpixels[i] = [p]
+			} else {
+				cellpixels[i].push( p )
+			}
 		}
 		return cellpixels
 	}

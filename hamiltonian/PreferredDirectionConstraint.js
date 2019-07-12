@@ -4,6 +4,7 @@
  */
 
 import SoftConstraint from "./SoftConstraint.js"
+import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
 
 class PreferredDirectionConstraint extends SoftConstraint {
 	constructor( conf ){
@@ -73,6 +74,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		this.celldirections[t] = dx
 	}
 	postMCSListener(){
+		let centroids = this.C.getStat( CentroidsWithTorusCorrection )
 		for( let t of this.C.cellIDs() ){
 			const k = this.C.cellKind(t)
 			let ld = this.conf["LAMBDA_DIR"][k]
@@ -87,7 +89,8 @@ class PreferredDirectionConstraint extends SoftConstraint {
 				this.cellcentroidlists[t] = []
 				this.celldirections[t] = this.randDir(this.C.ndim)
 			}
-			let ci = this.Cs.computeCentroidOfCell( t )
+
+			let ci = centroids[t]
 			this.cellcentroidlists[t].unshift(ci)
 			if( this.cellcentroidlists[t].length >= dt ){
 				// note, dt could change during execution
