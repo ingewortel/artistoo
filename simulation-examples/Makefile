@@ -1,6 +1,6 @@
 all : node-examples html-examples
 
-EXAMPLES=Microchannel
+EXAMPLES=Cellsorting Actmodel Microchannel
 
 html :
 	mkdir -p $@
@@ -15,5 +15,5 @@ html/%.html : write-example-html.bash | html
 	bash $< $* > $@
 
 node/run-%.js : write-example-node.bash | node
-	bash $< $@ > $@
+	bash $< $* > $@
 	

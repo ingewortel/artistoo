@@ -46,7 +46,8 @@ let config = {
 											// constraint applies to it.
 	},
 	
-	// Simulation setup and configuration
+	// Simulation setup and configuration: this controls stuff like grid initialization,
+	// runtime, and what the output should look like.
 	simsettings : {
 	
 		// Cells on the grid
@@ -55,6 +56,7 @@ let config = {
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
 		
 		// Visualization
 		CANVASCOLOR : "eaecef",
@@ -68,9 +70,10 @@ let config = {
 											// during the simulation?
 		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img",				// ... And save the image in this folder.
-		EXPNAME : "myexp",					// Used for the filename of output images.
+		EXPNAME : "Microchannel",					// Used for the filename of output images.
 		
 		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
 		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
 
 	}

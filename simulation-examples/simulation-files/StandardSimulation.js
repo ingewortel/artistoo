@@ -11,7 +11,7 @@ CPM = CPMbuild
 
 
 /* Write an extension of the existing simulation class */
-class SimulationTemplate extends CPM.Simulation {
+class StandardSimulation extends CPM.Simulation {
 	constructor( config ){
 		
 		super( config )
@@ -64,5 +64,5 @@ class SimulationTemplate extends CPM.Simulation {
 
 /* This allows using the code in either the browser or with nodejs. */
 if( typeof module !== "undefined" ){
-	module.exports = SimulationTemplate
+	module.exports = StandardSimulation
 }

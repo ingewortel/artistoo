@@ -11,9 +11,11 @@ yyyy-mm-dd Your Name <your@email.com>
 	* simulation-examples : started a new folder for examples generated
 	using simulation classes. This way, the node and html examples can be
 	generated automatically from a single file. To do this, call
-	'bash new-simulation.bash' from the simulation-examples/ folder. This
-	will set up a new class file and a config file in simulation-files, which
+	'bash new-simulation.bash' <mysim> <basic/custom> from the simulation-examples/ folder. This
+	will set up a new config file in simulation-files, which
 	you can then edit. It will also add the simulation to the Makefile.
+	If <basic>, the StandardSimulation.js class is used; otherwise, the boilerplate
+	code for a new class is generated in <mysim>.js.
 	You can then adjust the config and class files, and type 'make' to
 	produce the node/html examples.
 	* simulation-examples/Makefile : This automatically generates a node and

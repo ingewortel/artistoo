@@ -2809,7 +2809,7 @@ class Simulation {
 		}
 		
 		// Log stats every LOGRATE steps
-		if( this.lograte > 0 && this.time % this.conf["LOGRATE"] == 0 ){
+		if( this.conf["STATSOUT"][this.mode] && this.lograte > 0 && this.time % this.conf["LOGRATE"] == 0 ){
 			this.logStats();
 		}
 		

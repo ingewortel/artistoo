@@ -11,7 +11,7 @@ CPM = CPMbuild
 
 
 /* Write an extension of the existing simulation class */
-class SimulationTemplate extends CPM.Simulation {
+class Cellsorting extends CPM.Simulation {
 	constructor( config ){
 		
 		super( config )
@@ -25,24 +25,9 @@ class SimulationTemplate extends CPM.Simulation {
 		// add the GridManipulator if not already there and if you need it
 		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-	
-		// CHANGE THE CODE BELOW TO FIT YOUR SIMULATION
-	
-		let nrcells = this.conf["NRCELLS"], cellkind, i
-		
-		// Seed the right number of cells for each cellkind
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
-			
-			for( i = 0; i < nrcells[cellkind]; i++ ){
-				// first cell always at the midpoint. Any other cells
-				// randomly.				
-				if( i == 0 ){
-					this.gm.seedCellAt( cellkind+1, this.C.midpoint )
-				} else {
-					this.gm.seedCell( cellkind+1 )
-				}
-			}
-		}
+		this.gm.seedCellsInCircle( 1, 500, this.C.midpoint, this.C.extents[0]/3 )
+		this.gm.seedCellsInCircle( 2, 500, this.C.midpoint, this.C.extents[0]/3 )
+
 
 
 	}
@@ -64,5 +49,5 @@ class SimulationTemplate extends CPM.Simulation {
 
 /* This allows using the code in either the browser or with nodejs. */
 if( typeof module !== "undefined" ){
-	module.exports = SimulationTemplate
+	module.exports = Cellsorting
 }

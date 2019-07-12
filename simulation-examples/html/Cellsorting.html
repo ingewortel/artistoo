@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Microchannel</title>
+<title>Cellsorting</title>
 <script src="../../build/cpm.js"></script>
-<script src="../simulation-files/Microchannel.js"></script>
+<script src="../simulation-files/Cellsorting.js"></script>
 <script src="../fpsmeter.min.js"></script>
-<script type="text/javascript" src="../simulation-files/Microchannel-config.js"></script>
+<script type="text/javascript" src="../simulation-files/Cellsorting-config.js"></script>
 <script>
 "use strict"
 
@@ -22,7 +22,7 @@ function step(){
 
 
 function initialize(){
-	sim = new Microchannel( config )
+	sim = new Cellsorting( config )
 	meter = new FPSMeter({left:"auto", right:"5px"})
 	step()
 }
@@ -31,6 +31,6 @@ function initialize(){
 </script>
 </head>
 <body onload="initialize()">
-<p>Microchannel</p>
+<p>Cellsorting</p>
 </body>
 </html>
