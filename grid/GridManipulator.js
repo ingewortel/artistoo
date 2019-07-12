@@ -57,8 +57,10 @@ class GridManipulator {
 	makePlane ( voxels, coord, coordvalue ){
 		let x,y,z
 		let minc = [0,0,0]
-		let maxc = [this.C.field_size.x-1, this.C.field_size.y-1, 0]
-		if( this.C.ndim == 3 ){ maxc[2] = this.C.field_size.z-1 }
+		let maxc = [0,0,0]
+		for( let dim = 0; dim < this.C.ndim; dim++ ){
+			maxc[dim] = this.C.extents[dim]-1
+		}
 		minc[coord] = coordvalue
 		maxc[coord] = coordvalue
 

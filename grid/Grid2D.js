@@ -36,6 +36,10 @@ class Grid2D extends Grid {
 
 	* pixels() {
 		let ii = 0, c = 0
+		// Loop over coordinates [i,j] on the grid
+		// For each pixel with cellid != 0 (so non-background pixels), 
+		// return an array with in the first element the pixel 
+		// coordinates p = [i,j], and in the second element the cellid of this pixel.
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
 				if( this._pixels[ii] > 0 ){

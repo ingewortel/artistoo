@@ -147,6 +147,10 @@ class Grid2D extends Grid {
 
 	* pixels() {
 		let ii = 0, c = 0;
+		// Loop over coordinates [i,j] on the grid
+		// For each pixel with cellid != 0 (so non-background pixels), 
+		// return an array with in the first element the pixel 
+		// coordinates p = [i,j], and in the second element the cellid of this pixel.
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
 				if( this._pixels[ii] > 0 ){
@@ -995,12 +999,23 @@ class Stat {
 	}
 }
 
+/* 	
+	Creates an object with the cellpixels of each cell on the grid. 
+	Keys are the cellIDs of all cells on the grid, corresponding values are arrays
+	containing the pixels belonging to that cell. Each element of that array contains
+	the coordinate array p = [x,y] for that pixel.
+*/
+
 class PixelsByCell extends Stat {
 	compute(){
+		// initialize the object, and create keys with empty arrays for each cellid.
 		let cellpixels = { };
 		for( let i of this.M.cellIDs() ){
 			cellpixels[i] = [];
 		}
+		// The this.M.pixels() iterator returns coordinates and cellid for all 
+		// non-background pixels on the grid. See the appropriate Grid class for
+		// its implementation.
 		for( let [p,i] of this.M.pixels() ){
 			cellpixels[i].push( p );
 		}
@@ -1889,8 +1904,10 @@ class GridManipulator {
 	makePlane ( voxels, coord, coordvalue ){
 		let x,y,z;
 		let minc = [0,0,0];
-		let maxc = [this.C.field_size.x-1, this.C.field_size.y-1, 0];
-		if( this.C.ndim == 3 ){ maxc[2] = this.C.field_size.z-1; }
+		let maxc = [0,0,0];
+		for( let dim = 0; dim < this.C.ndim; dim++ ){
+			maxc[dim] = this.C.extents[dim]-1;
+		}
 		minc[coord] = coordvalue;
 		maxc[coord] = coordvalue;
 
