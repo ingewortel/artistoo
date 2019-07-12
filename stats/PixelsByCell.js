@@ -7,6 +7,7 @@
 import Stat from "./Stat.js"
 
 class PixelsByCell extends Stat {
+
 	compute(){
 		// initialize the object, and create keys with empty arrays for each cellid.
 		let cellpixels = { }
