@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Microchannel</title>
+<script src="../../build/cpm.js"></script>
+<script src="../simulation-files/Microchannel.js"></script>
+<script type="text/javascript" src="../simulation-files/Microchannel-config.js"></script>
+<script>
+"use strict"
+
+
+let sim
+
+
+function step(){
+	sim.step()
+	if( sim.time+1 < sim.conf["RUNTIME"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+function initialize(){
+	sim = new Microchannel( config )
+	step()
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<p>Microchannel</p>
+</body>
+</html>
