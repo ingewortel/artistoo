@@ -3,6 +3,33 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-07-12 Inge Wortel <ingewortel@gmail.com>
+	* stats/CentroidsWithTorusCorrection.js : fixed it so it works now.
+	* simulation/Simulation.js : added a class for setting up a simulation
+	that removes a lot of the boilerplate code. Still trying to work out 
+	what should and should not be in there by default, but it's a start.
+	* simulation-examples : started a new folder for examples generated
+	using simulation classes. This way, the node and html examples can be
+	generated automatically from a single file. To do this, call
+	'bash new-simulation.bash' from the simulation-examples/ folder. This
+	will set up a new class file and a config file in simulation-files, which
+	you can then edit. It will also add the simulation to the Makefile.
+	You can then adjust the config and class files, and type 'make' to
+	produce the node/html examples.
+	* simulation-examples/Makefile : This automatically generates a node and
+	html version of each example.
+	* simulation-examples/write-example-html.bash : Writes an html version
+	of a simulation. 
+	* simulation-examples/write-example-node.bash : Writes a node version
+	of a simulation.
+	* simulation-examples/new-simulation.bash : Sets up a new simulation
+	which you can then edit. See above.
+	* simulation-examples/simulation-files/Microchannel.js : example
+	of creating a Microchannel simulation.
+	* simulation-examples/simulation-files/Microchannel-config.js : configuration
+	for the Microchannel simulation.
+	
+
 2019-07-09 Johannes Textor <johannes.textor@gmx.de>
 	* grid/GridManipulator.js : Added this new class, and removed the 
 	existing "GridInitializer" class. There seems to be no good reason

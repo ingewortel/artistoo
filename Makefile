@@ -3,6 +3,7 @@ all : build/cpm.js
 build/cpm.js: rollup.config.js app/index.js \
 	models/CPM.js models/GridBasedModel.js models/CA.js \
 	DiceSet.js Canvas.js \
+	simulation/Simulation.js \
 	grid/Grid.js grid/Grid2D.js grid/Grid3D.js grid/GridManipulator.js \
 	stats/PixelsByCell.js stats/CentroidsWithTorusCorrection.js \
 	hamiltonian/Adhesion.js hamiltonian/HardVolumeRangeConstraint.js \
