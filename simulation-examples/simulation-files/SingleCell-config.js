@@ -3,7 +3,7 @@ let config = {
 
 	// Grid settings
 	ndim : 2,
-	field_size : [500, 12],
+	field_size : [200,200],
 	
 	// CPM parameters and configuration
 	conf : {
@@ -12,11 +12,8 @@ let config = {
 		seed : 1,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		constraints : [						// List the constraints to activate
-			"ActivityConstraint", 
 			"Adhesion", 
-			"VolumeConstraint", 
-			"PerimeterConstraint", 
-			"BarrierConstraint" 
+			"VolumeConstraint" 
 		],
 		
 		// Constraint parameters. 
@@ -24,37 +21,23 @@ let config = {
 		// parameter value for one of the cellkinds on the grid.
 		// First value is always cellkind 0 (the background) and is often not used.
 		
-		nCellKinds : 2,
-
-		
+		nCellKinds : 1,
+				
 		// Adhesion parameters:
-		J : [ [NaN,20,0], [20,100,5], [0,5,0] ],
+		J: [[0,20], [20,100]] ,
 		
 		// VolumeConstraint parameters
-		LAMBDA_V : [0,30,NaN],				// VolumeConstraint importance per cellkind
-		V : [0,500,NaN],					// Target volume of each cellkind
+		LAMBDA_V : [0,50],				// VolumeConstraint importance per cellkind
+		V : [0,500]						// Target volume of each cellkind
 		
-		// PerimeterConstraint parameters
-		LAMBDA_P : [0,2,NaN],				// PerimeterConstraint importance per cellkind
-		P : [0,360,NaN],					// Target perimeter of each cellkind
-		
-		// ActivityConstraint parameters
-		LAMBDA_ACT : [0,200,NaN],			// ActivityConstraint importance per cellkind
-		MAX_ACT : [0,30,NaN],				// Activity memory duration per cellkind
-		ACT_MEAN : "geometric",				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
-								
-		// BarrierConstraint parameters		
-		IS_BARRIER : [false,false,true]		// Specify for each cellkind if the barrier
-											// constraint applies to it.
+
 	},
 	
-	// Simulation setup and configuration: this controls stuff like grid initialization,
-	// runtime, and what the output should look like.
+	// Simulation setup and configuration
 	simsettings : {
 	
 		// Cells on the grid
-		NRCELLS : [3,0],					// Number of cells to seed for all
+		NRCELLS : [1],					// Number of cells to seed for all
 											// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
@@ -63,9 +46,9 @@ let config = {
 		
 		// Visualization
 		CANVASCOLOR : "eaecef",
-		CELLCOLOR : ["000000","AAAAAA"],
-		ACTCOLOR : [true,false],			// Should pixel activity values be displayed?
-		SHOWBORDERS : [false,false],				// Should cellborders be displayed?
+		CELLCOLOR : ["00FF00"],
+		ACTCOLOR : [true],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [true],				// Should cellborders be displayed?
 		zoom : 2,							// zoom in on canvas with this factor.
 		
 		// Output images
@@ -73,7 +56,7 @@ let config = {
 											// during the simulation?
 		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img",				// ... And save the image in this folder.
-		EXPNAME : "Microchannel",					// Used for the filename of output images.
+		EXPNAME : "SingleCell",					// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?

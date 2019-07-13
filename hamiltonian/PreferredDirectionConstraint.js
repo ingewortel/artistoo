@@ -11,7 +11,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		super( conf )
 		this.cellcentroidlists = {}
 		this.celldirections = {}
-		this.Cs = conf.pixeltracker
+		//this.Cs = conf.pixeltracker
 	}
 	set CPM(C){
 		this.halfsize = new Array(C.ndim).fill(0)

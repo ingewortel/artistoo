@@ -2663,7 +2663,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		super( conf );
 		this.cellcentroidlists = {};
 		this.celldirections = {};
-		this.Cs = conf.pixeltracker;
+		//this.Cs = conf.pixeltracker
 	}
 	set CPM(C){
 		this.halfsize = new Array(C.ndim).fill(0);
@@ -2952,19 +2952,21 @@ class Simulation {
 		// Clear canvas and draw stroma border
 		this.Cim.clear( this.conf["CANVASCOLOR"] );
 		
-		// Draw borders if required
-		if( this.conf["SHOWBORDERS"] ){
-			this.Cim.drawCellBorders();
-		}
+		
 
 		// Draw each cellkind appropriately
 		let cellcolor=this.conf["CELLCOLOR"], actcolor=this.conf["ACTCOLOR"], 
-			nrcells=this.conf["NRCELLS"], cellkind;
+			nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"];
 		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 		
 			// draw the cells of each kind in the right color
 			if( cellcolor[ cellkind ] != -1 ){
 				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] );
+			}
+			
+			// Draw borders if required
+			if(  cellborders[ cellkind  ]  ){
+				this.Cim.drawCellBorders( cellkind+1, "000000" );
 			}
 			
 			// if there is an activity constraint, draw activity values depending on color.

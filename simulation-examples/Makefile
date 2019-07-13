@@ -1,6 +1,6 @@
 all : node-examples html-examples
 
-EXAMPLES=Cellsorting Actmodel Microchannel
+EXAMPLES=ManyCellsPrefDir Randomwalk EpidermisWithTCells Epidermis IsingModel SingleCell Cellsorting Actmodel Microchannel
 
 html :
 	mkdir -p $@

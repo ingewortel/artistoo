@@ -57,12 +57,13 @@ let config = {
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
 		
 		// Visualization
 		CANVASCOLOR : "eaecef",
 		CELLCOLOR : ["000000","AAAAAA"],
 		ACTCOLOR : [true,false],			// Should pixel activity values be displayed?
-		SHOWBORDERS : false,				// Should cellborders be displayed?
+		SHOWBORDERS : [false,false],				// Should cellborders be displayed?
 		zoom : 2,							// zoom in on canvas with this factor.
 		
 		// Output images

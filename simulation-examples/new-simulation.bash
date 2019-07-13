@@ -22,7 +22,7 @@ fi
 	
 # Create the configuration file
 cat simulation-files/configTemplate.js | \
-	sed "s/expname/$examplename/g" > simulation-files/$examplename-config.js
+	sed "s/myexp/$examplename/g" > simulation-files/$examplename-config.js
 
 # Add the name to the makefile
 cat Makefile | sed "s/EXAMPLES=/EXAMPLES=$examplename /g" > Makefile.tmp

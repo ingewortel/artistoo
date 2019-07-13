@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Epidermis</title>
+<script src="../../build/cpm.js"></script>
+<script src="../simulation-files/Epidermis.js"></script>
+<script src="../fpsmeter.min.js"></script>
+<script type="text/javascript" src="../simulation-files/Epidermis-config.js"></script>
+<script>
+"use strict"
+
+
+let sim, meter
+
+
+function step(){
+	sim.step()
+	meter.tick()
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+function initialize(){
+	sim = new Epidermis( config )
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<p>Epidermis</p>
+</body>
+</html>

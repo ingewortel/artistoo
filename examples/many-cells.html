@@ -27,7 +27,7 @@ function initialize(){
 	timestep()
 }
 
-let pdc, Cs
+let pdc //, Cs
 function setupCPM(conf){
 	const zoom = conf.zoom || 1
 	const w = conf.w || 40
@@ -39,13 +39,8 @@ function setupCPM(conf){
 		V: [0,500], 
 		LAMBDA_V: [0,50],
 		LAMBDA_DIR: [0,100], 
-		PERSIST: [0,.7], 
-		pixeltracker: Cs 
+		PERSIST: [0,.7]
 	})
-	Cs = new CPM.CentroidsWithTorusCorrection()
-	C.conf["pixeltracker"] = Cs
-	//Cs = new CPM.PostMCSStats()
-	//C.add( Cs )
 
 	C.add( new CPM.Adhesion( C.conf ) )
 	C.add( new CPM.VolumeConstraint( C.conf ) )
