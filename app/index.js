@@ -8,6 +8,7 @@ import PostMCSStats from "../stats/PostMCSStats.js"
 
 import PixelsByCell from "../stats/PixelsByCell.js"
 import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
+import Centroids from "../stats/Centroids.js"
 
 import Grid2D from "../grid/Grid2D.js"
 import Grid3D from "../grid/Grid3D.js"
@@ -28,5 +29,5 @@ export {CA, CPM, GridBasedModel, Stats, Canvas, GridManipulator, Grid2D, Grid3D,
 	Adhesion, VolumeConstraint, HardVolumeRangeConstraint, TestLogger,
 	ActivityConstraint, PerimeterConstraint, PreferredDirectionConstraint,
 	PostMCSStats,CoarseGrid, ChemotaxisConstraint, BarrierConstraint,
-	PixelsByCell, CentroidsWithTorusCorrection }
+	PixelsByCell, Centroids, CentroidsWithTorusCorrection }
 
