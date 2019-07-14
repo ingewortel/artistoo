@@ -35,16 +35,16 @@ class Grid3D extends Grid {
 	* pixelsi() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					yield ii
 					ii++
 				}
-				d += this.Z_STEP
+				d += this.Y_STEP
 				ii = c + d
 			}
-			c += this.Y_STEP
+			c += this.Z_STEP
 			ii = c
 		}
 	}
@@ -52,18 +52,18 @@ class Grid3D extends Grid {
 	* pixels() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					if( this._pixels[ii] > 0 ){
 						yield [[i,j,k], this._pixels[ii]]
 					}
 					ii++
 				}
-				d += this.Z_STEP
+				d += this.Y_STEP
 				ii = c + d
 			}
-			c += this.Y_STEP
+			c += this.Z_STEP
 			ii = c
 		}
 	}

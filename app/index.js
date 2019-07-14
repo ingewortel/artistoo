@@ -21,13 +21,13 @@ import HardVolumeRangeConstraint from "../hamiltonian/HardVolumeRangeConstraint.
 import TestLogger from "../hamiltonian/TestLogger.js"
 import PerimeterConstraint from "../hamiltonian/PerimeterConstraint.js"
 import ActivityConstraint from "../hamiltonian/ActivityConstraint.js"
-import PreferredDirectionConstraint from "../hamiltonian/PreferredDirectionConstraint.js"
+import PersistenceConstraint from "../hamiltonian/PersistenceConstraint.js"
 import ChemotaxisConstraint from "../hamiltonian/ChemotaxisConstraint.js"
 import BarrierConstraint from "../hamiltonian/BarrierConstraint.js"
 
 export {CA, CPM, GridBasedModel, Stats, Canvas, GridManipulator, Grid2D, Grid3D,
 	Adhesion, VolumeConstraint, HardVolumeRangeConstraint, TestLogger,
-	ActivityConstraint, PerimeterConstraint, PreferredDirectionConstraint,
+	ActivityConstraint, PerimeterConstraint, PersistenceConstraint,
 	PostMCSStats,CoarseGrid, ChemotaxisConstraint, BarrierConstraint,
 	PixelsByCell, Centroids, CentroidsWithTorusCorrection }
 

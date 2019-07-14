@@ -9,6 +9,6 @@ build/cpm.js: rollup.config.js app/index.js \
 	hamiltonian/Adhesion.js hamiltonian/HardVolumeRangeConstraint.js \
 	hamiltonian/PerimeterConstraint.js hamiltonian/ActivityConstraint.js \
 	hamiltonian/Constraint.js hamiltonian/SoftConstraint.js hamiltonian/HardConstraint.js \
-	hamiltonian/PreferredDirectionConstraint.js stats/PostMCSStats.js \
+	hamiltonian/PersistenceConstraint.js stats/PostMCSStats.js \
 	hamiltonian/ChemotaxisConstraint.js hamiltonian/BarrierConstraint.js 
 	node_modules/rollup/bin/rollup -c

@@ -4,14 +4,14 @@
  */
 
 import SoftConstraint from "./SoftConstraint.js"
+import Centroids from "../stats/Centroids.js"
 import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
 
-class PreferredDirectionConstraint extends SoftConstraint {
+class PersistenceConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf )
 		this.cellcentroidlists = {}
 		this.celldirections = {}
-		//this.Cs = conf.pixeltracker
 	}
 	set CPM(C){
 		this.halfsize = new Array(C.ndim).fill(0)
@@ -74,7 +74,12 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		this.celldirections[t] = dx
 	}
 	postMCSListener(){
-		let centroids = this.C.getStat( CentroidsWithTorusCorrection )
+		let centroids
+		if( this.C.conf.torus ){
+			centroids = this.C.getStat( CentroidsWithTorusCorrection )
+		} else {
+			centroids = this.C.getStat( Centroids )
+		}
 		for( let t of this.C.cellIDs() ){
 			const k = this.C.cellKind(t)
 			let ld = this.conf["LAMBDA_DIR"][k]
@@ -126,4 +131,4 @@ class PreferredDirectionConstraint extends SoftConstraint {
 	}
 }
 
-export default PreferredDirectionConstraint
+export default PersistenceConstraint 

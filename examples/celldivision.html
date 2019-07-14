@@ -10,10 +10,7 @@ let C, Cim, Cm, w = 200, zoom = 1, meter, t = 0
 function draw(){
 	// Clear the canvas and redraw:
 	Cim.clear( "EEEEEE" )
-
-	// Epidermal cells in gray 
-
-	// Cancer cell in black
+	// Dividing cell in black with gray borders
 	Cim.drawCells( 1, "000000" )
 	Cim.drawOnCellBorders( 1, "666666" )
 }
@@ -44,7 +41,6 @@ function initialize(){
 		torus : false,
 		seed : 2,
 		nCellKinds : 1,
-		LAMBDA_CONNECTIVITY : [0,1000],
 		T : 20,
 		J : [ 
 		 	[0,20],
@@ -59,7 +55,6 @@ function initialize(){
 	C.add( new CPM.Adhesion( C.conf ) )
 	C.add( new CPM.VolumeConstraint( C.conf ) )
 	C.add( new CPM.PerimeterConstraint( C.conf ) )
-
 
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	Cm = new CPM.GridManipulator( C )

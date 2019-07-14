@@ -398,16 +398,16 @@ class Grid3D extends Grid {
 	* pixelsi() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0;
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0;
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					yield ii;
 					ii++;
 				}
-				d += this.Z_STEP;
+				d += this.Y_STEP;
 				ii = c + d;
 			}
-			c += this.Y_STEP;
+			c += this.Z_STEP;
 			ii = c;
 		}
 	}
@@ -415,18 +415,18 @@ class Grid3D extends Grid {
 	* pixels() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0;
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0;
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					if( this._pixels[ii] > 0 ){
 						yield [[i,j,k], this._pixels[ii]];
 					}
 					ii++;
 				}
-				d += this.Z_STEP;
+				d += this.Y_STEP;
 				ii = c + d;
 			}
-			c += this.Y_STEP;
+			c += this.Z_STEP;
 			ii = c;
 		}
 	}
@@ -2726,12 +2726,11 @@ class ActivityConstraint extends SoftConstraint {
  * This direction is only dependent on the cell, not on the specific pixel of a cell.
  */
 
-class PreferredDirectionConstraint extends SoftConstraint {
+class PersistenceConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf );
 		this.cellcentroidlists = {};
 		this.celldirections = {};
-		//this.Cs = conf.pixeltracker
 	}
 	set CPM(C){
 		this.halfsize = new Array(C.ndim).fill(0);
@@ -2794,7 +2793,12 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		this.celldirections[t] = dx;
 	}
 	postMCSListener(){
-		let centroids = this.C.getStat( CentroidsWithTorusCorrection );
+		let centroids;
+		if( this.C.conf.torus ){
+			centroids = this.C.getStat( CentroidsWithTorusCorrection );
+		} else {
+			centroids = this.C.getStat( Centroids );
+		}
 		for( let t of this.C.cellIDs() ){
 			const k = this.C.cellKind(t);
 			let ld = this.conf["LAMBDA_DIR"][k];
@@ -2915,7 +2919,7 @@ exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 exports.TestLogger = HardVolumeRangeConstraint$1;
 exports.ActivityConstraint = ActivityConstraint;
 exports.PerimeterConstraint = PerimeterConstraint;
-exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
+exports.PersistenceConstraint = PersistenceConstraint;
 exports.PostMCSStats = PostMCSStats;
 exports.CoarseGrid = CoarseGrid;
 exports.ChemotaxisConstraint = ChemotaxisConstraint;
