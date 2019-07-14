@@ -5,9 +5,8 @@ class Grid {
 		this.torus = torus
 		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) )
 		this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) )
+		this.Y_MASK = (1 << this.Y_BITS)-1
 		this.midpoint = this.extents.map( i => Math.round((i-1)/2) )
-		this.Y_STEP = 1 << this.Y_BITS // for neighborhoods based on pixel index
-		this.Y_MASK = this.Y_STEP-1
 	}
 
 	neigh(p, torus = this.torus){

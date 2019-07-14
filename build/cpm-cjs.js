@@ -12,9 +12,8 @@ class Grid {
 		this.torus = torus;
 		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
 		this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) );
+		this.Y_MASK = (1 << this.Y_BITS)-1;
 		this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
-		this.Y_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
-		this.Y_MASK = this.Y_STEP-1;
 	}
 
 	neigh(p, torus = this.torus){
@@ -117,6 +116,8 @@ class Grid {
 class Grid2D extends Grid {
 	constructor( extents, torus=true, datatype="Uint16" ){
 		super( extents, torus );
+		this.X_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
+		this.Y_MASK = this.X_STEP-1;
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		if( this.X_BITS + this.Y_BITS > 32 ){
@@ -140,7 +141,7 @@ class Grid2D extends Grid {
 				yield ii;
 				ii ++;
 			}
-			c += this.Y_STEP;
+			c += this.X_STEP;
 			ii = c;
 		}
 	}
@@ -158,7 +159,7 @@ class Grid2D extends Grid {
 				}
 				ii ++;
 			}
-			c += this.Y_STEP;
+			c += this.X_STEP;
 			ii = c;
 		}
 	}
@@ -205,7 +206,7 @@ class Grid2D extends Grid {
 	* neighNeumanni( i, torus = this.torus ){
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
-		let t = i-1, l = i-this.Y_STEP, r = i+this.Y_STEP, b = i+1;
+		let t = i-1, l = i-this.X_STEP, r = i+this.X_STEP, b = i+1;
 		
 		// if pixel is part of one of the borders, adjust the 
 		// indices accordingly
@@ -215,23 +216,23 @@ class Grid2D extends Grid {
 		// left border
 		if( i < this.extents[1] ){
 			if( torus ){
-				l += this.extents[0] * this.Y_STEP;
+				l += this.extents[0] * this.X_STEP;
 				yield l;
 			} 
 		} else {
 			yield l;
 		}
 		// right border
-		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+		if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				r -= this.extents[0] * this.Y_STEP;
+				r -= this.extents[0] * this.X_STEP;
 				yield r;
 			}
 		} else {
 			yield r;
 		}
 		// top border
-		if( i % this.Y_STEP == 0 ){
+		if( i % this.X_STEP == 0 ){
 			if( torus ){
 				t += this.extents[1];
 				yield t;
@@ -240,7 +241,7 @@ class Grid2D extends Grid {
 			yield t;
 		}
 		// bottom border
-		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
 			if( torus ){
 				b -= this.extents[1];
 				yield b;
@@ -255,9 +256,9 @@ class Grid2D extends Grid {
 		// left, right, bottom left-middle-right)
 		let tl, tm, tr, l, r, bl, bm, br;
 		
-		tl = i-1-this.Y_STEP; tm = i-1; tr = i-1+this.Y_STEP;
-		l = i-this.Y_STEP; r = i+this.Y_STEP;
-		bl = i+1-this.Y_STEP; bm = i+1; br = i+1+this.Y_STEP;
+		tl = i-1-this.X_STEP; tm = i-1; tr = i-1+this.X_STEP;
+		l = i-this.X_STEP; r = i+this.X_STEP;
+		bl = i+1-this.X_STEP; bm = i+1; br = i+1+this.X_STEP;
 		
 		// if pixel is part of one of the borders, adjust the 
 		// indices accordingly
@@ -267,21 +268,21 @@ class Grid2D extends Grid {
 		// left border
 		if( i < this.extents[1] ){
 			if( torus ){
-				add = this.extents[0] * this.Y_STEP;
+				add = this.extents[0] * this.X_STEP;
 			}
 			tl += add; l += add; bl += add; 	
 		}
 		
 		// right border
-		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+		if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				add = -this.extents[0] * this.Y_STEP;
+				add = -this.extents[0] * this.X_STEP;
 			}
 			tr += add; r += add; br += add;
 		}
 
 		// top border
-		if( i % this.Y_STEP == 0 ){
+		if( i % this.X_STEP == 0 ){
 			if( torus ){
 				add = this.extents[1];
 			}
@@ -289,7 +290,7 @@ class Grid2D extends Grid {
 		}
 		
 		// bottom border
-		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
 			if( torus ){
 				add = -this.extents[1];
 			}
@@ -308,21 +309,21 @@ class Grid2D extends Grid {
 		return [i >> this.Y_BITS, i & this.Y_MASK]
 	}
 	gradienti( i ){
-		let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus;
+		let t = i-1, b = i+1, l = i-this.X_STEP, r = i+this.X_STEP, torus = this.torus;
 		
 		let dx=0;
 		if( i < this.extents[1] ){ // left border
 			if( torus ){
-				l += this.extents[0] * this.Y_STEP;
+				l += this.extents[0] * this.X_STEP;
 				dx = ((this._pixels[r]-this._pixels[i])+
 					(this._pixels[i]-this._pixels[l]))/2;
 			} else {
 				dx = this._pixels[r]-this._pixels[i];
 			}
 		} else { 
-			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){ // right border
+			if( i >= this.X_STEP*( this.extents[0] - 1 ) ){ // right border
 				if( torus ){
-					r -= this.extents[0] * this.Y_STEP;
+					r -= this.extents[0] * this.X_STEP;
 					dx = ((this._pixels[r]-this._pixels[i])+
 						(this._pixels[i]-this._pixels[l]))/2;
 				} else {
@@ -335,7 +336,7 @@ class Grid2D extends Grid {
 		}
 
 		let dy=0;
-		if( i % this.Y_STEP == 0 ){ // top border
+		if( i % this.X_STEP == 0 ){ // top border
 			if( torus ){
 				t += this.extents[1];
 				dy = ((this._pixels[b]-this._pixels[i])+
@@ -344,7 +345,7 @@ class Grid2D extends Grid {
 				dy = this._pixels[b]-this._pixels[i];
 			}
 		} else { 
-			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){ // bottom border
+			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){ // bottom border
 				if( torus ){
 					b -= this.extents[1];
 					dy = ((this._pixels[b]-this._pixels[i])+
