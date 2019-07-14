@@ -5,16 +5,18 @@ class Constraint {
 	}
 	constructor( conf ){
 		this.conf = conf
-		this.confChecker()
+		if( typeof this.confChecker === "function" ){
+			this.confChecker()
+		}
 	}
 	set CPM(C){
 		this.C = C
 	}
-	/* This should be a method that checks that all the required conf parameters
+	/* The optional confChecker method should verify that all the required conf parameters
 	are actually present in the conf object and have the right format.*/
-	confChecker( ){
-		throw("You need to implement the confChecker() method for the " + this.__proto__.constructor.name + " constraint!" )
-	}
+	//confChecker( ){
+	//	
+	//}
 	/* Helper check function for parameters that should be a single string,
 	which can take on one of the values in 'values'*/
 	confCheckString( name, values ){
