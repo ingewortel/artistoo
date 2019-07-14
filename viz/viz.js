@@ -31,13 +31,13 @@ function makevoxel( voxset ){
 
 // Initialize a movie frame of w x h pixels
 function init3d( w, h, C ){
-	var i, j, p, draw_grid = 1, x2 = C.field_size.x/2,
-		y2 = C.field_size.y/2, z2 = C.field_size.z/2
+	var i, j, p, draw_grid = 1, x2 = C.extents[0]/2,
+		y2 = C.extents[1], z2 = C.extents[2]/2
 
 	container = document.getElementById( 'stage' )
 
 	camera = new THREE.PerspectiveCamera( 45, 1, 1, 10000 )
-	camera.position.set( x2, y2, z2 + C.field_size.x*1.26 )
+	camera.position.set( x2, y2, z2 + C.extents[0]*1.26 )
 
 	camera.up.set( -1, 0, 0 )
 
@@ -64,7 +64,7 @@ function init3d( w, h, C ){
 	// grid
 
 	if( draw_grid ){
-		var size = C.field_size.x, step = 10;
+		var size = C.extents[0], step = 10;
 		var geometry = new THREE.Geometry();
 		for ( i = 0; i <= size; i += step ) {
 			geometry.vertices.push( new THREE.Vector3( 0, 0, i ) );

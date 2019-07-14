@@ -3,6 +3,12 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-07-18 Johannes <johannes.textor@gmx.de>
+	* PreferredDirectionConstraint.js: Renamed to to PersistenceConstraint
+    * Constraint.js: confChecker no longer obligatory as this makes implementing new
+    custrom constraints unnecessarily bureaucratic. Instead the method will be called
+    when available.
+
 2019-07-13 Inge Wortel <ingewortel@gmail.com>
 	* hamiltonian/ActivityConstraint.js : changed the name of the old version
 	to hamiltonian/ActivityConstraintOld.js and the name of the new version

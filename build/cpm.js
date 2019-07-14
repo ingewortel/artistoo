@@ -591,20 +591,19 @@ var CPM = (function (exports) {
 	 *  and 3D grids. */
 
 	class Grid3D extends Grid {
-		constructor( field_size, torus = true ){
-			super( field_size, torus );
-			this.field_size = { x : field_size[0],
-				y : field_size[1],
-				z : field_size[2] };
+		constructor( extents, torus = true ){
+			super( extents, torus );
 			// Check that the grid size is not too big to store pixel ID in 32-bit number,
 			// and allow fast conversion of coordinates to unique ID numbers.
-			this.Z_BITS = 1+Math.floor( Math.log2( this.field_size.z - 1 ) );
+			this.Z_BITS = 1+Math.floor( Math.log2( this.extents[2] - 1 ) );
 			if( this.X_BITS + this.Y_BITS + this.Z_BITS > 32 ){
 				throw("Field size too large -- field cannot be represented as 32-bit number")
 			}
 			this.Z_MASK = (1 << this.Z_BITS)-1;
-			this.Z_STEP = 1 << ( this.Y_BITS + this.Z_BITS );
-			this._pixels = new Uint16Array(this.p2i(field_size));
+			this.Z_STEP = 1;
+			this.Y_STEP = 1 << (this.Z_BITS);
+			this.X_STEP = 1 << (this.Z_BITS +this.Y_BITS);
+			this._pixels = new Uint16Array(this.p2i(extents));
 		}
 		/* 	Convert pixel coordinates to unique pixel ID numbers and back.
 			Depending on this.ndim, the 2D or 3D version will be used by the 
@@ -631,7 +630,7 @@ var CPM = (function (exports) {
 					d += this.Y_STEP;
 					ii = c + d;
 				}
-				c += this.Z_STEP;
+				c += this.X_STEP;
 				ii = c;
 			}
 		}
@@ -650,7 +649,7 @@ var CPM = (function (exports) {
 					d += this.Y_STEP;
 					ii = c + d;
 				}
-				c += this.Z_STEP;
+				c += this.X_STEP;
 				ii = c;
 			}
 		}
