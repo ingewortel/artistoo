@@ -12,22 +12,24 @@
 
 import Constraint from "./Constraint.js"
 
-class PreferredDirectionConstraint extends Constraint {
+class AttractionPointConstraint extends Constraint {
 	get CONSTRAINT_TYPE() {
 		return "soft"
 	}
 	deltaH( src_i, tgt_i, src_type ){
-		let l = this.conf["LAMBDA_DIR"][this.C.cellKind( src_type )]
+		let l = this.conf["LAMBDA_ATTRACTIONPOINT"][this.C.cellKind( src_type )]
 		if( !l ){
 			return 0
 		}
 		let torus = this.C.conf.torus
-		let dir = this.conf["DIR"][this.C.cellKind( src_type )]
+		let tgt = this.conf["ATTRACTIONPOINT"][this.C.cellKind( src_type )]
 		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i )
 		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
-		let r = 0.
+		let r = 0., ldir = 0.
 		// loops over the coordinates x,y,(z)
 		for( let i = 0; i < p1.length ; i++ ){
+			let dir_i = tgt[i] - p1[i]
+			ldir += dir_i * dir_i
 			let si = this.C.extents[i]
 			// direction of the copy attempt on this coordinate is from p1 to p2
 			let dx = p2[i] - p1[i]
@@ -41,10 +43,10 @@ class PreferredDirectionConstraint extends Constraint {
 				}
 			}
 			// direction of the gradient
-			r += dx * dir[i] 
+			r += dx * dir_i 
 		}
-		return - r * l
+		return - r * l / Math.sqrt( ldir )
 	}
 }
 
-export default PreferredDirectionConstraint
+export default AttractionPointConstraint

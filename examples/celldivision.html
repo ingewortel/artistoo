@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="../build/cpm.js"></script>
+<script src="fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+let C, Cim, Cm, w = 200, zoom = 1, meter, t = 0
+
+function draw(){
+	// Clear the canvas and redraw:
+	Cim.clear( "EEEEEE" )
+	// Dividing cell in black with gray borders
+	Cim.drawCells( 1, "000000" )
+	Cim.drawOnCellBorders( 1, "666666" )
+}
+
+function timestep(){
+	// Update the grid with one MCS
+	C.monteCarloStep()
+	meter.tick()
+	if( t++ % 2 == 0 ){
+		draw()
+	}
+	for( let i of C.cellIDs() ){
+		if( C.getVolume(i) > C.conf.V[1]*0.95 && C.random() < 0.01 ){
+			Cm.divideCell(i)
+		}
+	}
+	requestAnimationFrame( timestep )
+}
+
+function seedGrid(){
+	// Seed 1 cancer cell
+	Cm.seedCellAt( 1, [w/2, w/2] )
+}
+
+function initialize(){
+	// Create a new CPM, canvas, and stats object
+	C = new CPM.CPM( [2*w,w], {
+		torus : false,
+		seed : 2,
+		nCellKinds : 1,
+		T : 20,
+		J : [ 
+		 	[0,20],
+			[20,1000]
+		],
+		LAMBDA_V : [0,50],
+		V : [0,152],
+		P: [0,145], 
+		LAMBDA_P:[0,2]
+	})
+
+	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( new CPM.VolumeConstraint( C.conf ) )
+	C.add( new CPM.PerimeterConstraint( C.conf ) )
+
+	Cim = new CPM.Canvas( C, {zoom:zoom} )
+	Cm = new CPM.GridManipulator( C )
+	// Start simulation
+
+	seedGrid()
+
+	for( let i = 0 ; i < 100 ; i ++ ){
+		C.monteCarloStep()
+	}
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
+
+	timestep()
+}
+</script>
+</head>
+<body onload="initialize()">
+<p>Proliferating cells.</p>
+</body>
+</html>

@@ -4,20 +4,19 @@
 import Grid from "./Grid.js"
 
 class Grid3D extends Grid {
-	constructor( field_size, torus = true ){
-		super( field_size, torus )
-		this.field_size = { x : field_size[0],
-			y : field_size[1],
-			z : field_size[2] }
+	constructor( extents, torus = true ){
+		super( extents, torus )
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
-		this.Z_BITS = 1+Math.floor( Math.log2( this.field_size.z - 1 ) )
+		this.Z_BITS = 1+Math.floor( Math.log2( this.extents[2] - 1 ) )
 		if( this.X_BITS + this.Y_BITS + this.Z_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
 		this.Z_MASK = (1 << this.Z_BITS)-1
-		this.Z_STEP = 1 << ( this.Y_BITS + this.Z_BITS )
-		this._pixels = new Uint16Array(this.p2i(field_size))
+		this.Z_STEP = 1
+		this.Y_STEP = 1 << (this.Z_BITS)
+		this.X_STEP = 1 << (this.Z_BITS +this.Y_BITS)
+		this._pixels = new Uint16Array(this.p2i(extents))
 	}
 	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
 		Depending on this.ndim, the 2D or 3D version will be used by the 
@@ -35,16 +34,16 @@ class Grid3D extends Grid {
 	* pixelsi() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					yield ii
 					ii++
 				}
-				d += this.Z_STEP
+				d += this.Y_STEP
 				ii = c + d
 			}
-			c += this.Y_STEP
+			c += this.X_STEP
 			ii = c
 		}
 	}
@@ -52,18 +51,18 @@ class Grid3D extends Grid {
 	* pixels() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					if( this._pixels[ii] > 0 ){
 						yield [[i,j,k], this._pixels[ii]]
 					}
 					ii++
 				}
-				d += this.Z_STEP
+				d += this.Y_STEP
 				ii = c + d
 			}
-			c += this.Y_STEP
+			c += this.X_STEP
 			ii = c
 		}
 	}

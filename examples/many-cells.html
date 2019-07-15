@@ -44,7 +44,7 @@ function setupCPM(conf){
 
 	C.add( new CPM.Adhesion( C.conf ) )
 	C.add( new CPM.VolumeConstraint( C.conf ) )
-	pdc = new CPM.PreferredDirectionConstraint(C.conf ) 
+	pdc = new CPM.PersistenceConstraint(C.conf ) 
 	C.add( pdc )
 
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )

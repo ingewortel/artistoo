@@ -2,6 +2,8 @@
    Examples are cell division, cell death etc.
  */
 
+import PixelsByCell from "../stats/PixelsByCell.js"
+import Centroids from "../stats/Centroids.js"
 
 class GridManipulator {
 	constructor( C ){
@@ -56,8 +58,8 @@ class GridManipulator {
 	letting the other coordinates range from their min value 0 to their max value. */
 	makePlane ( voxels, coord, coordvalue ){
 		let x,y,z
-		let minc = [0,0,0]
-		let maxc = [0,0,0]
+		let minc = Array(this.C.ndim).fill(0)
+		let maxc = Array(this.C.ndim)
 		for( let dim = 0; dim < this.C.ndim; dim++ ){
 			maxc[dim] = this.C.extents[dim]-1
 		}
@@ -96,17 +98,19 @@ class GridManipulator {
 	/* Let cell t divide by splitting it along a line perpendicular to
 	 * its major axis. */
 	divideCell( id ){
-		if( C.ndim != 2 ){
-			throw("The divideCell methods is only implemented for 2D yet!")
+		let C = this.C
+		if( C.ndim != 2 || C.conf.torus ){
+			throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
 		}
-		let cp = this.cellpixels, C = this.C, Cs = this.Cs
-		let bxx = 0, bxy = 0, byy=0,
-			com = Cs.getCentroidOf( id ), cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2
+		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id]
+		let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2
+
+			
 
 		// Loop over the pixels belonging to this cell
-		for( var j = 0 ; j < cp[id].length ; j ++ ){
-			cx = cp[id][j][0] - com[0] // x position rel to centroid
-			cy = cp[id][j][1] - com[1] // y position rel to centroid
+		for( let j = 0 ; j < cp.length ; j ++ ){
+			cx = cp[j][0] - com[0] // x position rel to centroid
+			cy = cp[j][1] - com[1] // y position rel to centroid
 
 			// sum of squared distances:
 			bxx += cx*cx
@@ -133,21 +137,21 @@ class GridManipulator {
 		}
 
 		// create a new ID for the second cell
-		var nid = C.makeNewCellID( C.cellKind( id ) )
+		let nid = C.makeNewCellID( C.cellKind( id ) )
 
 		// Loop over the pixels belonging to this cell
 		//let sidea = 0, sideb = 0
-		for( j = 0 ; j < cp[id].length ; j ++ ){
+		for( let j = 0 ; j < cp.length ; j ++ ){
 			// coordinates of current cell relative to center of mass
-			x2 = cp[id][j][0]-com[0]
-			y2 = cp[id][j][1]-com[1]
+			x2 = cp[j][0]-com[0]
+			y2 = cp[j][1]-com[1]
 
 			// Depending on which side of the dividing line this pixel is,
 			// set it to the new type
 			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0)
 			if( side > 0 ){
 				//sidea ++
-				C.setpix( cp[id][j], nid ) 
+				C.setpix( cp[j], nid ) 
 			} else {
 				//sideb ++
 			}

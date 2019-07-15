@@ -242,12 +242,17 @@ class Canvas {
 	}
 
 	/* colors outer pixels of each cell */
-	drawOnCellBorders( col ){
+	drawOnCellBorders( kind, col ){
 		col = col || "000000"
 		this.getImageData()
 		this.col( col )
-		for( let i of this.C.cellBorderPixels() ){
-			this.pxfi( i[0] )
+		for( let p of this.C.cellBorderPixels() ){
+			if( kind < 0 || this.C.cellKind(p[1]) == kind ){
+				if( typeof col == "function" ){
+					this.col( col(p[1]) )
+				}
+				this.pxfi( p[0] )
+			}
 		}
 		this.putImageData()
 	}

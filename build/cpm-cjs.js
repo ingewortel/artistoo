@@ -12,9 +12,8 @@ class Grid {
 		this.torus = torus;
 		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
 		this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) );
+		this.Y_MASK = (1 << this.Y_BITS)-1;
 		this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
-		this.Y_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
-		this.Y_MASK = this.Y_STEP-1;
 	}
 
 	neigh(p, torus = this.torus){
@@ -117,6 +116,8 @@ class Grid {
 class Grid2D extends Grid {
 	constructor( extents, torus=true, datatype="Uint16" ){
 		super( extents, torus );
+		this.X_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
+		this.Y_MASK = this.X_STEP-1;
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
 		if( this.X_BITS + this.Y_BITS > 32 ){
@@ -140,7 +141,7 @@ class Grid2D extends Grid {
 				yield ii;
 				ii ++;
 			}
-			c += this.Y_STEP;
+			c += this.X_STEP;
 			ii = c;
 		}
 	}
@@ -158,7 +159,7 @@ class Grid2D extends Grid {
 				}
 				ii ++;
 			}
-			c += this.Y_STEP;
+			c += this.X_STEP;
 			ii = c;
 		}
 	}
@@ -205,7 +206,7 @@ class Grid2D extends Grid {
 	* neighNeumanni( i, torus = this.torus ){
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
-		let t = i-1, l = i-this.Y_STEP, r = i+this.Y_STEP, b = i+1;
+		let t = i-1, l = i-this.X_STEP, r = i+this.X_STEP, b = i+1;
 		
 		// if pixel is part of one of the borders, adjust the 
 		// indices accordingly
@@ -215,23 +216,23 @@ class Grid2D extends Grid {
 		// left border
 		if( i < this.extents[1] ){
 			if( torus ){
-				l += this.extents[0] * this.Y_STEP;
+				l += this.extents[0] * this.X_STEP;
 				yield l;
 			} 
 		} else {
 			yield l;
 		}
 		// right border
-		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+		if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				r -= this.extents[0] * this.Y_STEP;
+				r -= this.extents[0] * this.X_STEP;
 				yield r;
 			}
 		} else {
 			yield r;
 		}
 		// top border
-		if( i % this.Y_STEP == 0 ){
+		if( i % this.X_STEP == 0 ){
 			if( torus ){
 				t += this.extents[1];
 				yield t;
@@ -240,7 +241,7 @@ class Grid2D extends Grid {
 			yield t;
 		}
 		// bottom border
-		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
 			if( torus ){
 				b -= this.extents[1];
 				yield b;
@@ -255,9 +256,9 @@ class Grid2D extends Grid {
 		// left, right, bottom left-middle-right)
 		let tl, tm, tr, l, r, bl, bm, br;
 		
-		tl = i-1-this.Y_STEP; tm = i-1; tr = i-1+this.Y_STEP;
-		l = i-this.Y_STEP; r = i+this.Y_STEP;
-		bl = i+1-this.Y_STEP; bm = i+1; br = i+1+this.Y_STEP;
+		tl = i-1-this.X_STEP; tm = i-1; tr = i-1+this.X_STEP;
+		l = i-this.X_STEP; r = i+this.X_STEP;
+		bl = i+1-this.X_STEP; bm = i+1; br = i+1+this.X_STEP;
 		
 		// if pixel is part of one of the borders, adjust the 
 		// indices accordingly
@@ -267,21 +268,21 @@ class Grid2D extends Grid {
 		// left border
 		if( i < this.extents[1] ){
 			if( torus ){
-				add = this.extents[0] * this.Y_STEP;
+				add = this.extents[0] * this.X_STEP;
 			}
 			tl += add; l += add; bl += add; 	
 		}
 		
 		// right border
-		if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){
+		if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
 			if( torus ){
-				add = -this.extents[0] * this.Y_STEP;
+				add = -this.extents[0] * this.X_STEP;
 			}
 			tr += add; r += add; br += add;
 		}
 
 		// top border
-		if( i % this.Y_STEP == 0 ){
+		if( i % this.X_STEP == 0 ){
 			if( torus ){
 				add = this.extents[1];
 			}
@@ -289,7 +290,7 @@ class Grid2D extends Grid {
 		}
 		
 		// bottom border
-		if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){
+		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
 			if( torus ){
 				add = -this.extents[1];
 			}
@@ -308,21 +309,21 @@ class Grid2D extends Grid {
 		return [i >> this.Y_BITS, i & this.Y_MASK]
 	}
 	gradienti( i ){
-		let t = i-1, b = i+1, l = i-this.Y_STEP, r = i+this.Y_STEP, torus = this.torus;
+		let t = i-1, b = i+1, l = i-this.X_STEP, r = i+this.X_STEP, torus = this.torus;
 		
 		let dx=0;
 		if( i < this.extents[1] ){ // left border
 			if( torus ){
-				l += this.extents[0] * this.Y_STEP;
+				l += this.extents[0] * this.X_STEP;
 				dx = ((this._pixels[r]-this._pixels[i])+
 					(this._pixels[i]-this._pixels[l]))/2;
 			} else {
 				dx = this._pixels[r]-this._pixels[i];
 			}
 		} else { 
-			if( i >= this.Y_STEP*( this.extents[0] - 1 ) ){ // right border
+			if( i >= this.X_STEP*( this.extents[0] - 1 ) ){ // right border
 				if( torus ){
-					r -= this.extents[0] * this.Y_STEP;
+					r -= this.extents[0] * this.X_STEP;
 					dx = ((this._pixels[r]-this._pixels[i])+
 						(this._pixels[i]-this._pixels[l]))/2;
 				} else {
@@ -335,7 +336,7 @@ class Grid2D extends Grid {
 		}
 
 		let dy=0;
-		if( i % this.Y_STEP == 0 ){ // top border
+		if( i % this.X_STEP == 0 ){ // top border
 			if( torus ){
 				t += this.extents[1];
 				dy = ((this._pixels[b]-this._pixels[i])+
@@ -344,7 +345,7 @@ class Grid2D extends Grid {
 				dy = this._pixels[b]-this._pixels[i];
 			}
 		} else { 
-			if( (i+1-this.extents[1]) % this.Y_STEP == 0 ){ // bottom border
+			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){ // bottom border
 				if( torus ){
 					b -= this.extents[1];
 					dy = ((this._pixels[b]-this._pixels[i])+
@@ -367,20 +368,19 @@ class Grid2D extends Grid {
  *  and 3D grids. */
 
 class Grid3D extends Grid {
-	constructor( field_size, torus = true ){
-		super( field_size, torus );
-		this.field_size = { x : field_size[0],
-			y : field_size[1],
-			z : field_size[2] };
+	constructor( extents, torus = true ){
+		super( extents, torus );
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
-		this.Z_BITS = 1+Math.floor( Math.log2( this.field_size.z - 1 ) );
+		this.Z_BITS = 1+Math.floor( Math.log2( this.extents[2] - 1 ) );
 		if( this.X_BITS + this.Y_BITS + this.Z_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
 		this.Z_MASK = (1 << this.Z_BITS)-1;
-		this.Z_STEP = 1 << ( this.Y_BITS + this.Z_BITS );
-		this._pixels = new Uint16Array(this.p2i(field_size));
+		this.Z_STEP = 1;
+		this.Y_STEP = 1 << (this.Z_BITS);
+		this.X_STEP = 1 << (this.Z_BITS +this.Y_BITS);
+		this._pixels = new Uint16Array(this.p2i(extents));
 	}
 	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
 		Depending on this.ndim, the 2D or 3D version will be used by the 
@@ -398,16 +398,16 @@ class Grid3D extends Grid {
 	* pixelsi() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0;
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0;
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					yield ii;
 					ii++;
 				}
-				d += this.Z_STEP;
+				d += this.Y_STEP;
 				ii = c + d;
 			}
-			c += this.Y_STEP;
+			c += this.X_STEP;
 			ii = c;
 		}
 	}
@@ -415,18 +415,18 @@ class Grid3D extends Grid {
 	* pixels() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
+			let d = 0;
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				let d = 0;
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
 					if( this._pixels[ii] > 0 ){
 						yield [[i,j,k], this._pixels[ii]];
 					}
 					ii++;
 				}
-				d += this.Z_STEP;
+				d += this.Y_STEP;
 				ii = c + d;
 			}
-			c += this.Y_STEP;
+			c += this.X_STEP;
 			ii = c;
 		}
 	}
@@ -688,16 +688,18 @@ class Constraint {
 	}
 	constructor( conf ){
 		this.conf = conf;
-		this.confChecker();
+		if( typeof this.confChecker === "function" ){
+			this.confChecker();
+		}
 	}
 	set CPM(C){
 		this.C = C;
 	}
-	/* This should be a method that checks that all the required conf parameters
+	/* The optional confChecker method should verify that all the required conf parameters
 	are actually present in the conf object and have the right format.*/
-	confChecker( ){
-		throw("You need to implement the confChecker() method for the " + this.__proto__.constructor.name + " constraint!" )
-	}
+	//confChecker( ){
+	//	
+	//}
 	/* Helper check function for parameters that should be a single string,
 	which can take on one of the values in 'values'*/
 	confCheckString( name, values ){
@@ -1424,12 +1426,17 @@ class Canvas {
 	}
 
 	/* colors outer pixels of each cell */
-	drawOnCellBorders( col ){
+	drawOnCellBorders( kind, col ){
 		col = col || "000000";
 		this.getImageData();
 		this.col( col );
-		for( let i of this.C.cellBorderPixels() ){
-			this.pxfi( i[0] );
+		for( let p of this.C.cellBorderPixels() ){
+			if( kind < 0 || this.C.cellKind(p[1]) == kind ){
+				if( typeof col == "function" ){
+					this.col( col(p[1]) );
+				}
+				this.pxfi( p[0] );
+			}
 		}
 		this.putImageData();
 	}
@@ -1835,180 +1842,6 @@ class Stats {
 	
 }
 
-class PostMCSStats {
-	constructor( conf ){
-		this.conf = {
-			trackpixels: true
-		};
-		Object.assign( this.conf, conf );
-	}
-	set CPM( C ){
-		this.C = C;
-		this.halfsize = new Array(C.ndim).fill(0);
-		for( let i = 0 ; i < C.ndim ; i ++ ){
-			this.halfsize[i] = C.extents[i]/2;
-		}
-	}
-	postMCSListener(){
-		if( this.conf.trackpixels ){
-			this.cellpixels = {};
-			for( let i of this.C.cellIDs() ){
-				this.cellpixels[i] = [];
-			}
-			for( let [p,i] of this.C.cellPixels() ){
-				this.cellpixels[i].push( p );
-			}
-		}
-	}
-	/* Return an array with the pixel coordinates of each connected
-	 * component for the cell with type t
-	 *
-	 * TODO this function appears to be extremely slow. 
-	 * Avoid calling this at all costs 
-	 * if possible. */
-	connectedComponentsOfCell( t, torus ){
-		let visited = {}, k=0, pixels = [], C = this.C;
-		let labelComponent = function(seed, k){
-			let q = [seed];
-			visited[q[0]] = 1;
-			pixels[k] = [];
-			while( q.length > 0 ){
-				let e = q.pop();
-				pixels[k].push( C.grid.i2p(e) );
-				let ne = C.grid.neighi( e, torus );
-				for( let i = 0 ; i < ne.length ; i ++ ){
-					if( C.pixti( ne[i] ) == t &&
-						!(ne[i] in visited) ){
-						q.push(ne[i]);
-						visited[ne[i]]=1;
-					}
-				}
-			}
-		};
-		for( let i = 0 ; i < this.cellpixels[t].length ; i ++ ){
-			let pi = this.C.grid.p2i( this.cellpixels[t][i] );
-			if( !(pi in visited) ){
-				labelComponent( pi, k );
-				k++;
-			}
-		}
-		return pixels
-	}
-	/* converts an array of pixel coordinates to its centroid.
-	Includes a correction for pixels that are "too far apart", such
-	   that meaningful centroids will be computed if the cell resides on 
-	 a torus grid. */
-	pixelsToCentroid( pixels ){
-		let cvec = new Array(this.C.ndim).fill(0);
-		for( let dim = 0 ; dim < this.C.ndim ; dim ++ ){
-			let mi = 0.;
-			// compute mean per dimension with online algorithm
-			for( let j = 0 ; j < pixels.length ; j ++ ){
-				let dx = pixels[j][dim] - mi;
-				mi += dx/(j+1);
-			}
-			cvec[dim] = mi;
-		}
-		return cvec
-	}
-	/*
-	 * Computes a simple cell centroid.
-	 */
-	centroid( t ){
-		return this.pixelsToCentroid( this.cellpixels[t] )
-	}
-
-	/*
-	 * Computes the centroid of a cell when grid has a torus.
-	 * Assumption: cell pixels never extend for more than half the
-	 * size of the grid.
-	 */
-	centroidWithTorusCorrection( t ){
-		const pixels = this.cellpixels[t];
-		let cvec = new Array(this.C.ndim).fill(0);
-		for( let dim = 0 ; dim < this.C.ndim ; dim ++ ){
-			let mi = 0.;
-			const hsi = this.halfsize[dim], si = this.C.extents[dim];
-			// compute mean per dimension with online algorithm
-			for( let j = 0 ; j < pixels.length ; j ++ ){
-				let dx = pixels[j][dim] - mi;
-				if( j > 0 ){
-					if( dx > hsi ){
-						dx -= si;
-					} else if( dx < -hsi ){
-						dx += si;
-					}
-				}
-				mi += dx/(j+1);
-			}
-			if( mi < 0 ){
-				mi += si;
-			} else if( mi > si ){
-				mi -= si;
-			}
-			cvec[dim] = mi;
-		}
-		return cvec
-	}
-
-
-	/*
-	 * Computes the centroid of a cell when grid has a torus.
-	 * This is an older, slower implementation based on connected
-	 * components. */
-	centroidWithTorusSlow( t ){
-		// get the connected components and the pixels in it
-		let ccpixels = this.connectedComponentsOfCell( t, false );
-	
-		if( ccpixels.length == 0 ){
-			return (void 0)
-		}
-
-		// centroid of the first component
-		let centroid0 = this.pixelsToCentroid( ccpixels[ 0 ] );
-
-		// loop over the connected components to compute a weighted sum of their 
-		// centroids.
-		let n = 0, 
-			centroid = new Array(this.C.ndim).fill(0);
-		const fs = this.C.extents;
-		for( let j = 0; j < ccpixels.length ; j++ ){
-			let centroidc, nc, d;
-			centroidc = this.pixelsToCentroid( ccpixels[ j ] );
-			nc = ccpixels[ j ].length;
-			n += nc;
-
-
-			// compute weighted sum. 
-			for( d = 0; d < this.C.ndim; d++ ){
-				// If centroid is more than half the field size away
-				// from the first centroid0, it crosses the border, so we 
-				// first correct its coordinates.
-				if( centroidc[d] - centroid0[d] > fs[d]/2 ){
-					centroidc[d] -= fs[d];
-				} else if( centroidc[d] - centroid0[d] < -fs[d]/2 ){
-					centroidc[d] += fs[d];
-				}
-				centroid[d] += centroidc[d] * nc;
-			}
-			
-		}
-		
-		// divide by the total n to get the mean
-		for( let d = 0; d < this.C.ndim; d++ ){
-			centroid[d] /= n;
-			while( centroid[d] < 0 ){
-				centroid[d] += fs[d];
-			}
-			while( centroid[d] > fs[d] ){
-				centroid[d] -= fs[d];
-			}
-		}
-
-		return centroid		
-	}
-}
-
 /*	Computes the centroid of a cell when grid has a torus. 
 	Assumption: cell pixels never extend for more than half the size of the grid. 
 */
@@ -2102,10 +1935,78 @@ class CentroidsWithTorusCorrection extends Stat {
 	}
 }
 
+/*	Computes the centroid of a cell. When the cell resides on a torus, the
+	centroid may be well outside the cell, and other stats may be preferable. 
+*/
+
+class Centroids extends Stat {
+	set model( M ){
+		this.M = M;
+		// Half the grid dimensions; if pixels with the same cellid are further apart,
+		// we assume they are on the border of the grid and that we need to correct
+		// their positions to compute the centroid.
+		this.halfsize = new Array( this.M.ndim).fill(0);
+		for( let i = 0 ; i < this.M.ndim ; i ++ ){
+			this.halfsize[i] = this.M.extents[i]/2;
+		}
+	}
+	constructor( conf ){
+		super(conf);
+	}
+	/* Compute the centroid of a specific cell with id = <cellid>. 
+	The cellpixels object is given as an argument so that it only has to be requested
+	once for all cells together. */
+	computeCentroidOfCell( cellid, cellpixels  ){
+	
+		//let cellpixels = this.M.getStat( PixelsByCell ) 
+	
+		const pixels = cellpixels[ cellid ];
+		
+		// cvec will contain the x, y, (z) coordinate of the centroid.
+		// Loop over the dimensions to compute each element separately.
+		let cvec = new Array(this.M.ndim).fill(0);
+		for( let dim = 0 ; dim < this.M.ndim ; dim ++ ){
+			
+			let mi = 0.;
+			// Loop over the pixels;
+			// compute mean position per dimension with online algorithm
+			for( let j = 0 ; j < pixels.length ; j ++ ){
+				// Check distance of current pixel to the accumulated mean in this dim.
+				// Check if this distance is greater than half the grid size in this
+				// dimension; if so, this indicates that the cell has moved to the
+				// other end of the grid because of the torus. Note that this only
+				// holds AFTER the first pixel (so for j > 0), when we actually have
+				// an idea of where the cell is.
+				let dx = pixels[j][dim] - mi;
+				// Update the mean with the appropriate weight. 
+				mi += dx/(j+1);
+			}			
+			// Set the mean position in the cvec vector.
+			cvec[dim] = mi;
+		}
+		return cvec
+		
+	}
+		
+	/* Compute centroids for all cells on the grid, returning an object with a key
+	for each cellid and as "value" the array with coordinates of the centroid. */
+	compute(){
+		// Get object with arrays of pixels for each cell on the grid, and get
+		// the array for the current cell.
+		let cellpixels = this.M.getStat( PixelsByCell ); 
+		
+		// Create an object for the centroids. Add the centroid array for each cell.
+		let centroids = {};
+		for( let cid of this.M.cellIDs() ){
+			centroids[cid] = this.computeCentroidOfCell( cid, cellpixels );
+		}
+		return centroids
+	}
+}
+
 /* This class contains methods that should be executed once per monte carlo step.
    Examples are cell division, cell death etc.
  */
-
 
 class GridManipulator {
 	constructor( C ){
@@ -2160,8 +2061,8 @@ class GridManipulator {
 	letting the other coordinates range from their min value 0 to their max value. */
 	makePlane ( voxels, coord, coordvalue ){
 		let x,y,z;
-		let minc = [0,0,0];
-		let maxc = [0,0,0];
+		let minc = Array(this.C.ndim).fill(0);
+		let maxc = Array(this.C.ndim);
 		for( let dim = 0; dim < this.C.ndim; dim++ ){
 			maxc[dim] = this.C.extents[dim]-1;
 		}
@@ -2200,17 +2101,19 @@ class GridManipulator {
 	/* Let cell t divide by splitting it along a line perpendicular to
 	 * its major axis. */
 	divideCell( id ){
-		if( C.ndim != 2 ){
-			throw("The divideCell methods is only implemented for 2D yet!")
+		let C = this.C;
+		if( C.ndim != 2 || C.conf.torus ){
+			throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
 		}
-		let cp = this.cellpixels, C = this.C, Cs = this.Cs;
-		let bxx = 0, bxy = 0, byy=0,
-			com = Cs.getCentroidOf( id ), cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2;
+		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id];
+		let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2;
+
+			
 
 		// Loop over the pixels belonging to this cell
-		for( var j = 0 ; j < cp[id].length ; j ++ ){
-			cx = cp[id][j][0] - com[0]; // x position rel to centroid
-			cy = cp[id][j][1] - com[1]; // y position rel to centroid
+		for( let j = 0 ; j < cp.length ; j ++ ){
+			cx = cp[j][0] - com[0]; // x position rel to centroid
+			cy = cp[j][1] - com[1]; // y position rel to centroid
 
 			// sum of squared distances:
 			bxx += cx*cx;
@@ -2237,21 +2140,21 @@ class GridManipulator {
 		}
 
 		// create a new ID for the second cell
-		var nid = C.makeNewCellID( C.cellKind( id ) );
+		let nid = C.makeNewCellID( C.cellKind( id ) );
 
 		// Loop over the pixels belonging to this cell
 		//let sidea = 0, sideb = 0
-		for( j = 0 ; j < cp[id].length ; j ++ ){
+		for( let j = 0 ; j < cp.length ; j ++ ){
 			// coordinates of current cell relative to center of mass
-			x2 = cp[id][j][0]-com[0];
-			y2 = cp[id][j][1]-com[1];
+			x2 = cp[j][0]-com[0];
+			y2 = cp[j][1]-com[1];
 
 			// Depending on which side of the dividing line this pixel is,
 			// set it to the new type
 			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
 			if( side > 0 ){
 				//sidea ++
-				C.setpix( cp[id][j], nid ); 
+				C.setpix( cp[j], nid ); 
 			}
 		}
 		//console.log( sidea, sideb )
@@ -2520,7 +2423,6 @@ class ActivityConstraint extends SoftConstraint {
 		this.confCheckCellNonNegative( "MAX_ACT" );
 	}
 	
-	
 	/* ======= ACT MODEL ======= */
 
 	/* Act model : compute local activity values within cell around pixel i.
@@ -2620,19 +2522,13 @@ class ActivityConstraint extends SoftConstraint {
 
 	/* Current activity (under the Act model) of the pixel with ID i. */
 	pxact ( i ){
-	
 		// If the pixel is not in the cellpixelsact object, it has activity 0.
-		if ( this.cellpixelsact[i] == undefined ){
-			return 0
-		}
-		// otherwise, its activity is stored in the object.
-		return this.cellpixelsact[i]
-		
+		// Otherwise, its activity is stored in the object.
+		return this.cellpixelsact[i] || 0
 	}
 	
 	/* eslint-disable no-unused-vars*/
 	postSetpixListener( i, t_old, t ){
-	
 		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
 		const k = this.C.cellKind( t );
 		this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
@@ -2641,10 +2537,8 @@ class ActivityConstraint extends SoftConstraint {
 	postMCSListener(){
 		// iterate over cellpixelsage and decrease all activities by one.
 		for( let key in this.cellpixelsact ){
-			this.cellpixelsact[ key ] = this.cellpixelsact[ key ] - 1;
-			
 			// activities that reach zero no longer need to be stored.
-			if( this.cellpixelsact[ key ] <= 0 ){
+			if( --this.cellpixelsact[ key ] <= 0 ){
 				delete this.cellpixelsact[ key ];
 			}
 		}
@@ -2658,12 +2552,11 @@ class ActivityConstraint extends SoftConstraint {
  * This direction is only dependent on the cell, not on the specific pixel of a cell.
  */
 
-class PreferredDirectionConstraint extends SoftConstraint {
+class PersistenceConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf );
 		this.cellcentroidlists = {};
 		this.celldirections = {};
-		//this.Cs = conf.pixeltracker
 	}
 	set CPM(C){
 		this.halfsize = new Array(C.ndim).fill(0);
@@ -2726,7 +2619,12 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		this.celldirections[t] = dx;
 	}
 	postMCSListener(){
-		let centroids = this.C.getStat( CentroidsWithTorusCorrection );
+		let centroids;
+		if( this.C.conf.torus ){
+			centroids = this.C.getStat( CentroidsWithTorusCorrection );
+		} else {
+			centroids = this.C.getStat( Centroids );
+		}
 		for( let t of this.C.cellIDs() ){
 			const k = this.C.cellKind(t);
 			let ld = this.conf["LAMBDA_DIR"][k];
@@ -2775,6 +2673,41 @@ class PreferredDirectionConstraint extends SoftConstraint {
 				}
 			}
 		}
+	}
+}
+
+class PreferredDirectionConstraint extends Constraint {
+	get CONSTRAINT_TYPE() {
+		return "soft"
+	}
+	deltaH( src_i, tgt_i, src_type ){
+		let l = this.conf["LAMBDA_DIR"][this.C.cellKind( src_type )];
+		if( !l ){
+			return 0
+		}
+		let torus = this.C.conf.torus;
+		let dir = this.conf["DIR"][this.C.cellKind( src_type )];
+		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
+		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
+		let r = 0.;
+		// loops over the coordinates x,y,(z)
+		for( let i = 0; i < p1.length ; i++ ){
+			let si = this.C.extents[i];
+			// direction of the copy attempt on this coordinate is from p1 to p2
+			let dx = p2[i] - p1[i];
+			if( torus ){
+				// If distance is greater than half the grid size, correct the
+				// coordinate.
+				if( dx > si/2 ){
+					dx -= si;
+				} else if( dx < -si/2 ){
+					dx += si;
+				}
+			}
+			// direction of the gradient
+			r += dx * dir[i]; 
+		}
+		return - r * l
 	}
 }
 
@@ -2833,205 +2766,41 @@ class BarrierConstraint extends HardConstraint {
 	}
 }
 
-class Simulation {
-	constructor( config ){
-	
-		// Configuration of the simulation environment
-		this.conf = config.simsettings;
-		this.imgrate = this.conf["IMGFRAMERATE"] || -1;
-		this.lograte = this.conf["LOGRATE"] || -1;
-		if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
-			this.mode = "browser";
-		} else {
-			this.mode = "node";
+class AttractionPointConstraint extends Constraint {
+	get CONSTRAINT_TYPE() {
+		return "soft"
+	}
+	deltaH( src_i, tgt_i, src_type ){
+		let l = this.conf["LAMBDA_ATTRACTIONPOINT"][this.C.cellKind( src_type )];
+		if( !l ){
+			return 0
 		}
-		
-		
-		// Save the time of the simulation.
-		this.time = 0;
-		
-		// Make CPM object and add constraints
-		this.C = new CPM( config.field_size, config.conf );
-
-		// Track which constraints are active. They are added automatically by 
-		// the addConstraints() function.
-		this.activeconstraints = config.conf.constraints;
-		this.constraints = {}; // will contain the constraint objects
-		this.addConstraints();
-				
-		// To add canvas / gridmanipulator automatically when required. This will set
-		// their values in helpClasses to 'true', so they don't have to be added again.
-		this.helpClasses = { gm: false, canvas: false };
-		
-		// initialize the grid.
-		this.runChecks();
-		this.initializeGrid();
-		this.runBurnin();
-		
-	}
-	
-	
-	/* TODO: Write some checks, such that all the parameters needed for the constraints
-	have been defined, and that the path to save images to actually exists. */
-	runChecks(){
-	
-		
-		
-	}
-	
-	
-	// Add all the constraints from the array in Cset.constraints to the CPM object,
-	// and also save their objects here.
-	addConstraints() {
-	
-		// Add all the constraints specified in the config file.
-		for( let cn of this.activeconstraints ){
-		
-			// Create the constraint, save its object in the simulation, and add it to
-			// the CPM object.
-			let cobject;
-			if( this.mode == "browser" ){
-				cobject = new window["CPM"][ cn ]( this.C.conf );
-			} else {
-				cobject = new global["CPM"][ cn ]( this.C.conf );
-			}
-			this.constraints[cn] = cobject;
-			this.C.add( cobject );
-		}
-	}
-	
-	// Add GridManipulator/Canvas objects when required.
-	addGridManipulator(){
-		this.gm = new GridManipulator( this.C );
-		this.helpClasses[ "gm" ] = true;
-	}
-	addCanvas(){
-		this.Cim = new Canvas( this.C, {zoom:this.conf.zoom} );
-		this.helpClasses[ "canvas" ] = true;
-	}
-	
-	// Method to initialize the Grid should be implemented in each simulation.
-	initializeGrid(){
-	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator(); }
-	
-		let nrcells = this.conf["NRCELLS"], cellkind, i;
-		
-		// Seed the right number of cells for each cellkind
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
-			
-			for( i = 0; i < nrcells[cellkind]; i++ ){
-				// first cell always at the midpoint. Any other cells
-				// randomly.				
-				if( i == 0 ){
-					this.gm.seedCellAt( cellkind+1, this.C.midpoint );
-				} else {
-					this.gm.seedCell( cellkind+1 );
+		let torus = this.C.conf.torus;
+		let tgt = this.conf["ATTRACTIONPOINT"][this.C.cellKind( src_type )];
+		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
+		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
+		let r = 0., ldir = 0.;
+		// loops over the coordinates x,y,(z)
+		for( let i = 0; i < p1.length ; i++ ){
+			let dir_i = tgt[i] - p1[i];
+			ldir += dir_i * dir_i;
+			let si = this.C.extents[i];
+			// direction of the copy attempt on this coordinate is from p1 to p2
+			let dx = p2[i] - p1[i];
+			if( torus ){
+				// If distance is greater than half the grid size, correct the
+				// coordinate.
+				if( dx > si/2 ){
+					dx -= si;
+				} else if( dx < -si/2 ){
+					dx += si;
 				}
 			}
+			// direction of the gradient
+			r += dx * dir_i; 
 		}
-
-
+		return - r * l / Math.sqrt( ldir )
 	}
-	
-	runBurnin(){
-		// Simulate the burnin phase
-		for( let i = 0; i < this.conf["BURNIN"]; i++ ){
-			this.C.monteCarloStep();
-		}
-	}
-
-	
-	// draw the canvas
-	drawCanvas(){
-	
-		// Add the canvas if required
-		if( !this.helpClasses["canvas"] ){ this.addCanvas(); }
-	
-		// Clear canvas and draw stroma border
-		this.Cim.clear( this.conf["CANVASCOLOR"] );
-		
-		
-
-		// Draw each cellkind appropriately
-		let cellcolor=this.conf["CELLCOLOR"], actcolor=this.conf["ACTCOLOR"], 
-			nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"];
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
-		
-			// draw the cells of each kind in the right color
-			if( cellcolor[ cellkind ] != -1 ){
-				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] );
-			}
-			
-			// Draw borders if required
-			if(  cellborders[ cellkind  ]  ){
-				this.Cim.drawCellBorders( cellkind+1, "000000" );
-			}
-			
-			// if there is an activity constraint, draw activity values depending on color.
-			if( this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
-				if( actcolor[ cellkind ] ){
-					this.Cim.drawActivityValues( cellkind + 1, this.constraints["ActivityConstraint"] );
-				}			
-			}
-
-		}
-		
-	}
-	
-	// Computing and logging stats
-	logStats(){
-		
-		// compute centroids for all cells
-		let allcentroids = this.C.getStat( CentroidsWithTorusCorrection );
-		
-		for( let cid of this.C.cellIDs() ){
-		
-			let thecentroid = allcentroids[cid];
-			
-			// eslint-disable-next-line no-console
-			console.log( this.time + "\t" + cid + "\t" + 
-				this.C.cellKind(cid) + "\t" + thecentroid.join("\t") );
-			
-		}
-
-	}
-	
-	// Run a montecarlostep and produce outputs if required.
-	step(){
-		this.C.monteCarloStep();
-		
-		// Draw the canvas every IMGFRAMERATE steps
-		if( this.imgrate > 0 && this.time % this.conf["IMGFRAMERATE"] == 0 ){
-			
-			this.drawCanvas();
-			
-			// Save the image if required and if we're in node (not possible in browser)
-			if( this.mode == "node" && this.conf["SAVEIMG"] ){
-				let outpath = this.conf["SAVEPATH"], expname = this.conf["EXPNAME"];
-				this.Cim.writePNG( outpath +"/" + expname + "-t"+this.time+".png" );
-			}
-		}
-		
-		// Log stats every LOGRATE steps
-		if( this.conf["STATSOUT"][this.mode] && this.lograte > 0 && this.time % this.conf["LOGRATE"] == 0 ){
-			this.logStats();
-		}
-		
-		this.time++;
-	}
-	
-	
-	// Run the entire simulation.
-	run(){
-		while( this.time < this.conf["RUNTIME"] ){
-		
-			this.step();
-			
-		}
-	}
-	
 }
 
 exports.CA = CA;
@@ -3048,11 +2817,12 @@ exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 exports.TestLogger = HardVolumeRangeConstraint$1;
 exports.ActivityConstraint = ActivityConstraint;
 exports.PerimeterConstraint = PerimeterConstraint;
-exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
-exports.PostMCSStats = PostMCSStats;
+exports.PersistenceConstraint = PersistenceConstraint;
 exports.CoarseGrid = CoarseGrid;
 exports.ChemotaxisConstraint = ChemotaxisConstraint;
 exports.BarrierConstraint = BarrierConstraint;
+exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
+exports.AttractionPointConstraint = AttractionPointConstraint;
 exports.PixelsByCell = PixelsByCell;
+exports.Centroids = Centroids;
 exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
-exports.Simulation = Simulation;
