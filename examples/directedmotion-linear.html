@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="../build/cpm.js"></script>
+<script src="fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+let C, Cdir, Cim, Cm, w = 200, zoom = 2, meter, t = 0
+
+function draw(){
+	// Clear the canvas and redraw:
+	Cim.clear( "EEEEEE" )
+	// Draw cell in black with gray borders
+	Cim.drawCells( 1, "000000" )
+	Cim.drawOnCellBorders( 1, "666666" )
+}
+
+function timestep(){
+	// Update the grid with one MCS
+	C.timeStep()
+	C.timeStep()
+	C.timeStep()
+	meter.tick()
+	if( t++ % 2 == 0 ){
+		Cdir.conf.DIR[1] = [Math.cos(t/200),Math.sin(t/200)]
+		draw()
+	}
+	requestAnimationFrame( timestep )
+}
+
+function seedGrid(){
+	// Seed 1 cell
+	for( let i = 0 ; i < w ; i += 30 ){
+		for( let j = 0 ; j < w ; j += 30 ){
+			Cm.seedCellAt( 1, [i,j] )
+		}
+	}
+}
+
+function initialize(){
+	// Create a new CPM, canvas, and stats object
+	C = new CPM.CPM( [w,w], {
+		torus : true,
+		seed : 2,
+		nCellKinds : 1,
+		LAMBDA_CONNECTIVITY : [0,1000],
+		T : 20,
+		J : [ 
+		 	[0,20],
+			[20,1000]
+		],
+		LAMBDA_V : [0,50],
+		V : [0,152],
+	})
+
+	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( new CPM.VolumeConstraint( C.conf ) )
+	Cdir =  new CPM.PreferredDirectionConstraint({
+		LAMBDA_DIR : [0,50], 
+		DIR : [[0,0],[1,1]]
+	})
+
+	C.add( Cdir )
+
+	Cim = new CPM.Canvas( C, {zoom:zoom} )
+	Cm = new CPM.GridManipulator( C )
+	// Start simulation
+
+	seedGrid()
+
+	for( let i = 0 ; i < 20 ; i ++ ){
+		C.timeStep()
+	}
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
+
+	timestep()
+}
+</script>
+</head>
+<body onload="initialize()">
+<p>Cell following a linear direction gradient that slowly changes over time.</p>
+</body>
+</html>
