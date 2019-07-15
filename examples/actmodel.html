@@ -6,7 +6,7 @@
 <script>
 "use strict"
 
-let C, zoom=2, Cim, cid=0, w=200, meter, A
+let C, zoom=2, Cim, cid=0, w=200, meter
 
 
 function draw(){
@@ -14,7 +14,7 @@ function draw(){
 	Cim.clear( "FFFFFF" )
 	// The cell in red
 	Cim.drawCells( 1, "000000" )
-	Cim.drawActivityValues( 1, A )
+	Cim.drawActivityValues( 1 )
 }
 
 function timestep(){
@@ -30,7 +30,6 @@ function initialize(){
 	C = new CPM.CPM( [w,w], {
 		seed : 1,
 		T : 10, 
-		nCellKinds : 1,
 		V: [0,500], 
 		LAMBDA_V: [0,5],
 		J: [[0,10], [10,0]],
@@ -40,12 +39,11 @@ function initialize(){
 		P: [0,260],
 		LAMBDA_P: [0,2]
 	})
-	A = new CPM.ActivityConstraint( C.conf )
 
-	C.add( new CPM.VolumeConstraint( C.conf ) )
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( A )
-	C.add( new CPM.PerimeterConstraint( C.conf ) )
+	C.add( CPM.VolumeConstraint )
+	C.add( CPM.Adhesion )
+	C.add( CPM.ActivityConstraint )
+	C.add( CPM.PerimeterConstraint )
 
 
 	let cid = C.makeNewCellID(1)

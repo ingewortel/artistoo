@@ -61,10 +61,14 @@ class CPM extends GridBasedModel {
 
 
 	add( t ){
+		if( typeof t === "function" ){
+			this.add( new t(this.conf) )
+			return
+		}
 		if( t instanceof Constraint ){
 			switch( t.CONSTRAINT_TYPE ){
-			case "soft": this.soft_constraints.push( t.deltaH.bind(t) ) ;break
-			case "hard": this.hard_constraints.push( t.fulfilled.bind(t) ); break
+			case "soft": this.soft_constraints.push( t ) ;break
+			case "hard": this.hard_constraints.push( t ); break
 			}
 		}
 		if( typeof t["postSetpixListener"] === "function" ){
@@ -112,11 +116,11 @@ class CPM extends GridBasedModel {
 
 	/* ======= ADHESION ======= */
 
-	// returns both change in hamiltonian and perimeter
+	// returns both change in hamiltonian for all registered soft constraints
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 		let r = 0.0
 		for( let t of this.soft_constraints ){
-			r += t( sourcei, targeti, src_type, tgt_type )
+			r += t.deltaH( sourcei, targeti, src_type, tgt_type )
 		}
 		return r
 	}
@@ -158,7 +162,7 @@ class CPM extends GridBasedModel {
 			if( tgt_type != src_type ){
 				let ok = true
 				for( let h of this.hard_constraints ){
-					if( !h( src_i, tgt_i, src_type, tgt_type ) ){
+					if( !h.fulfilled( src_i, tgt_i, src_type, tgt_type ) ){
 						ok = false; break
 					}
 				}

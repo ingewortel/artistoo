@@ -6,6 +6,7 @@ import GridBasedModel from "./models/GridBasedModel.js"
 import Grid2D from "./grid/Grid2D.js"
 import CoarseGrid from "./grid/CoarseGrid.js"
 import PixelsByCell from "./stats/PixelsByCell.js"
+import ActivityConstraint from "./hamiltonian/ActivityConstraint.js"
 
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
@@ -208,8 +209,21 @@ class Canvas {
 	}
 
 	/* Use to show activity values of the act model using a color gradient, for
-	cells in the grid of cellkind "kind". */
+		cells in the grid of cellkind "kind". 
+		The constraint holding the activity values can be supplied as an 
+		argument. Otherwise, the current CPM is searched for the first 
+		registered activity constraint and that is then used. */
 	drawActivityValues( kind, A ){
+		if( !A ){
+			for( let c of this.C.soft_constraints ){
+				if( c instanceof ActivityConstraint ){
+					A = c ; break
+				}
+			}
+		}
+		if( !A ){
+			throw("Cannot find activity values to draw!")
+		}
 		// cst contains the pixel ids of all non-background/non-stroma cells in
 		// the grid. 
 		let ii, sigma, a

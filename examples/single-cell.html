@@ -13,7 +13,8 @@ canvas{ border: 1px solid black }
 let zoom=1, w = 250, t = 5000
 
 
-let C,meter
+var C,meter
+
 function timestep(){
 	meter.tickStart()
 	C.monteCarloStep()
@@ -30,10 +31,9 @@ function initialize(){
 function setupCPM(conf){
 	const zoom = conf.zoom || 1
 	const w = conf.w || 200
-	let C = new CPM.CPM( [w,w], {
+	C = new CPM.CPM( [w,w], {
 		T : 20,
 		torus : false,
-		nCellKinds:1,
 		J: [[0,20], [20,100]] ,
 		V: [0,500], 
 		LAMBDA_V: [0,50]

@@ -910,20 +910,22 @@ var CPM = (function (exports) {
 		get CONSTRAINT_TYPE() {
 			throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
 		}
+		get parameters(){
+			return null
+		}
 		constructor( conf ){
 			this.conf = conf;
+		}
+		set CPM(C){
+			this.C = C;
 			if( typeof this.confChecker === "function" ){
 				this.confChecker();
 			}
 		}
-		set CPM(C){
-			this.C = C;
-		}
 		/* The optional confChecker method should verify that all the required conf parameters
 		are actually present in the conf object and have the right format.*/
-		//confChecker( ){
-		//	
-		//}
+		confChecker( ){
+		}
 		/* Helper check function for parameters that should be a single string,
 		which can take on one of the values in 'values'*/
 		confCheckString( name, values ){
@@ -974,34 +976,45 @@ var CPM = (function (exports) {
 		
 		/* Helper function. Some parameters need to be specified for each cellkind, 
 		so to check those we first need to know the number of cellkinds.*/
-		confCheckCellKinds(){
-			if( !this.conf.hasOwnProperty( "nCellKinds" ) ){
-				throw( "Please specify the nCellKinds in the configuration object of the "
-				+ this.__proto__.constructor.name + " constraint.")
+		confCheckCellKinds( n_default ){
+			if( !this.C ){
+				throw("confCheck method called before addition to CPM!")
 			}
+			if( !("n_cell_kinds" in this.C) ){
+				this.C.n_cell_kinds = n_default - 1;
+			}
+			return this.C.n_cell_kinds
 		}
-		
-		/* Checker for parameters that come in an array with a number for each cellkind. */
-		confCheckCellNumbers( name ){
+
+		confCheckArray( name, type ){
 			// Check if the property exists at all
 			if( !this.conf.hasOwnProperty( name ) ){
 				throw( "Cannot find parameter " + name + " in the conf object!" )
 			}
+			let p = this.conf[name];
+			if( !(p instanceof Array) ){
+				throw( "Parameter " + name + " is not an array!" )
+			}
 			
 			// Check if the property has the right type
-			this.confCheckCellKinds();
-			if( ! ( typeof this.conf[name] === "object" ) | 
-				! ( this.conf[name].length == this.conf["nCellKinds"] + 1 ) ){
+			let n_cell_kinds = this.confCheckCellKinds( p.length );
+			if( this.conf[name].length != n_cell_kinds + 1 ){
 				throw( "Conf object parameter " + name + 
 				" should be an array with an element for each cellkind including background!" )
 			}
 			
 			// Check if the property has the right value.
 			for( let e of this.conf[name] ){
-				if( ! ( typeof e === "number" ) ){
-					throw( "Conf object parameter " + name + " should be an array with numbers/NaNs!" )
+				if( ! ( typeof e === type ) ){
+					throw( "Conf object parameter " + name + 
+						" should be an array with "+type+"s!" )
 				}
 			}
+		}
+
+		/* Checker for parameters that come in an array with a number for each cellkind. */
+		confCheckCellNumbers( name ){
+			this.confCheckArray( name, "number" );
 		}
 		
 		/* Same as confCheckCellNumbers, but now numbers should also not be negative*/
@@ -1029,51 +1042,35 @@ var CPM = (function (exports) {
 		
 		/* Same as confCheckCellNumbers, but now values should be boolean */
 		confCheckCellBoolean( name ){
-			// Check if the property exists at all
-			if( !this.conf.hasOwnProperty( name ) ){
-				throw( "Cannot find parameter " + name + " in the conf object!" )
-			}
-			
-			// Check if the property has the right type
-			this.confCheckCellKinds();
-			if( ! ( typeof this.conf[name] === "object" ) | 
-				! ( this.conf[name].length == this.conf["nCellKinds"] + 1 ) ){
-				throw( "Conf object parameter " + name + 
-				" should be an array with an element for each cellkind including background!" )
-			}
-			
-			// Check if the property has the right value.
-			for( let e of this.conf[name] ){
-				if( ! ( typeof e === "boolean" ) ){
-					throw( "Conf object parameter " + name + " should be an array with booleans!" )
-				}
-			}
+			this.confCheckArray( name, "boolean" );
 		}
 		
 		/* Now the format should be a 'matrix' with rows and columns of numbers for each cellkind. */
-		confCheckCellMatrix( name ){
+		confCheckCellMatrix( name, type="number" ){
 			// Check if the property exists at all
 			if( !this.conf.hasOwnProperty( name ) ){
 				throw( "Cannot find parameter " + name + " in the conf object!" )
 			}
-			
+			let p = this.conf[name];
+			if( !(p instanceof Array) ){
+				throw( "Parameter " + name + " is not an array!" )
+			}
+
 			// Check if the property has the right type
-			this.confCheckCellKinds();
-			if( ! ( typeof this.conf[name] === "object" ) | 
-				! ( this.conf[name].length == this.conf["nCellKinds"] + 1 ) ){
+			let n_cell_kinds = this.confCheckCellKinds( p.length );
+			if( !( p.length == n_cell_kinds + 1 ) ){
 				throw( "Conf object parameter " + name + 
-				" should be an array with a sub-array for each cellkind including background!" )
+				" must be an array with a sub-array for each cellkind including background!" )
 			}
 			
 			for( let e of this.conf[name] ){
-				if( ! ( typeof e === "object" ) | 
-					! ( e.length == this.conf["nCellKinds"] + 1 ) ){
+				if( ! ( e.length == n_cell_kinds + 1 ) ){
 					throw( "Sub-arrays of " + name + 
-					" should have an element for each cellkind including background!" )
+					" must have an element for each cellkind including background!" )
 				}
 				for( let ee of e ){
-					if( !(typeof ee === "number" ) ){
-						throw("Elements in conf parameter " + name + " should all be numbers/NaN!" )
+					if( !(typeof ee === type ) ){
+						throw("Elements in conf parameter " + name + " must all be numbers/NaN!" )
 					}
 				}
 			}
@@ -1139,10 +1136,14 @@ var CPM = (function (exports) {
 
 
 		add( t ){
+			if( typeof t === "function" ){
+				this.add( new t(this.conf) );
+				return
+			}
 			if( t instanceof Constraint ){
 				switch( t.CONSTRAINT_TYPE ){
-				case "soft": this.soft_constraints.push( t.deltaH.bind(t) ) ;break
-				case "hard": this.hard_constraints.push( t.fulfilled.bind(t) ); break
+				case "soft": this.soft_constraints.push( t ) ;break
+				case "hard": this.hard_constraints.push( t ); break
 				}
 			}
 			if( typeof t["postSetpixListener"] === "function" ){
@@ -1190,11 +1191,11 @@ var CPM = (function (exports) {
 
 		/* ======= ADHESION ======= */
 
-		// returns both change in hamiltonian and perimeter
+		// returns both change in hamiltonian for all registered soft constraints
 		deltaH ( sourcei, targeti, src_type, tgt_type ){
 			let r = 0.0;
 			for( let t of this.soft_constraints ){
-				r += t( sourcei, targeti, src_type, tgt_type );
+				r += t.deltaH( sourcei, targeti, src_type, tgt_type );
 			}
 			return r
 		}
@@ -1236,7 +1237,7 @@ var CPM = (function (exports) {
 				if( tgt_type != src_type ){
 					let ok = true;
 					for( let h of this.hard_constraints ){
-						if( !h( src_i, tgt_i, src_type, tgt_type ) ){
+						if( !h.fulfilled( src_i, tgt_i, src_type, tgt_type ) ){
 							ok = false; break
 						}
 					}
@@ -1411,6 +1412,170 @@ var CPM = (function (exports) {
 			}
 			return cellpixels
 		}
+	}
+
+	class SoftConstraint extends Constraint {
+		get CONSTRAINT_TYPE() {
+			return "soft"
+		}
+		// eslint-disable-next-line no-unused-vars
+		deltaH( src_i, tgt_i, src_type, tgt_type ){
+			throw("You need to implement the 'deltaH' method for this constraint!")
+		}
+	}
+
+	/* 
+		Implements the activity constraint of Potts models. 
+		See also: 
+			Niculescu I, Textor J, de Boer RJ (2015) 
+	 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
+	 		PLoS Comput Biol 11(10): e1004280. 
+	 		https://doi.org/10.1371/journal.pcbi.1004280
+	 */
+
+	class ActivityConstraint extends SoftConstraint {
+		constructor( conf ){
+			super( conf );
+
+			this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
+			
+			// Wrapper: select function to compute activities based on ACT_MEAN in conf
+			if( this.conf.ACT_MEAN == "arithmetic" ){
+				this.activityAt = this.activityAtArith;
+			} else {
+				this.activityAt = this.activityAtGeom;
+			}
+			
+		}
+		
+		confChecker(){
+			this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
+			this.confCheckCellNonNegative( "LAMBDA_ACT" );
+			this.confCheckCellNonNegative( "MAX_ACT" );
+		}
+		
+		/* ======= ACT MODEL ======= */
+
+		/* Act model : compute local activity values within cell around pixel i.
+		 * Depending on settings in conf, this is an arithmetic (activityAtArith)
+		 * or geometric (activityAtGeom) mean of the activities of the neighbors
+		 * of pixel i.
+		 */
+		/* Hamiltonian computation */ 
+		deltaH ( sourcei, targeti, src_type, tgt_type ){
+
+			let deltaH = 0, maxact, lambdaact;
+			const src_kind = this.C.cellKind( src_type );
+			const tgt_kind = this.C.cellKind( tgt_type );
+
+			// use parameters for the source cell, unless that is the background.
+			// In that case, use parameters of the target cell.
+			if( src_type != 0 ){
+				maxact = this.conf["MAX_ACT"][src_kind];
+				lambdaact = this.conf["LAMBDA_ACT"][src_kind];
+			} else {
+				// special case: punishment for a copy attempt from background into
+				// an active cell. This effectively means that the active cell retracts,
+				// which is different from one cell pushing into another (active) cell.
+				maxact = this.conf["MAX_ACT"][tgt_kind];
+				lambdaact = this.conf["LAMBDA_ACT"][tgt_kind];
+			}
+			if( maxact == 0 || lambdaact == 0 ){
+				return 0
+			}
+
+			// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
+			// or activityAtGeom, depending on conf (see constructor).	
+			deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
+			return deltaH
+		}
+
+		/* Activity mean computation methods for arithmetic/geometric mean.
+		The method used by activityAt is defined by conf ( see constructor ).*/
+		activityAtArith( i ){
+			const t = this.C.pixti( i );
+			
+			// no activity for background/stroma
+			if( t <= 0 ){ return 0 }
+			
+			// neighborhood pixels
+			const N = this.C.neighi(i);
+			
+			// r activity summed, nN number of neighbors
+			// we start with the current pixel. 
+			let r = this.pxact(i), nN = 1;
+			
+			// loop over neighbor pixels
+			for( let j = 0 ; j < N.length ; j ++ ){ 
+				const tn = this.C.pixti( N[j] ); 
+				
+				// a neighbor only contributes if it belongs to the same cell
+				if( tn == t ){
+					r += this.pxact( N[j] );
+					nN ++; 
+				}
+			}
+
+			// average is summed r divided by num neighbors.
+			return r/nN
+		}
+		activityAtGeom ( i ){
+			const t = this.C.pixti( i );
+
+			// no activity for background/stroma
+			if( t <= 0 ){ return 0 }
+			
+			//neighborhood pixels
+			const N = this.C.neighi( i );
+			
+			// r activity product, nN number of neighbors.
+			// we start with the current pixel.
+			let nN = 1, r = this.pxact( i );
+
+			// loop over neighbor pixels
+			for( let j = 0 ; j < N.length ; j ++ ){ 
+				const tn = this.C.pixti( N[j] ); 
+
+				// a neighbor only contributes if it belongs to the same cell.
+				// if it does and has activity 0, the product will also be zero so
+				// we can already return.
+				if( tn == t ){
+					if( this.pxact( N[j] ) == 0 ) return 0
+					r *= this.pxact( N[j] );
+					nN ++; 
+				}
+			}
+			
+			// Geometric mean computation. 
+			return Math.pow(r,1/nN)
+		}
+
+
+		/* Current activity (under the Act model) of the pixel with ID i. */
+		pxact ( i ){
+			// If the pixel is not in the cellpixelsact object, it has activity 0.
+			// Otherwise, its activity is stored in the object.
+			return this.cellpixelsact[i] || 0
+		}
+		
+		/* eslint-disable no-unused-vars*/
+		postSetpixListener( i, t_old, t ){
+			// After setting a pixel, it gets the MAX_ACT value of its cellkind.
+			const k = this.C.cellKind( t );
+			this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
+		}
+		
+		postMCSListener(){
+			// iterate over cellpixelsage and decrease all activities by one.
+			for( let key in this.cellpixelsact ){
+				// activities that reach zero no longer need to be stored.
+				if( --this.cellpixelsact[ key ] <= 0 ){
+					delete this.cellpixelsact[ key ];
+				}
+			}
+		}
+
+
 	}
 
 	/** Class for taking a CPM grid and displaying it in either browser or with nodejs. */
@@ -1616,8 +1781,21 @@ var CPM = (function (exports) {
 		}
 
 		/* Use to show activity values of the act model using a color gradient, for
-		cells in the grid of cellkind "kind". */
+			cells in the grid of cellkind "kind". 
+			The constraint holding the activity values can be supplied as an 
+			argument. Otherwise, the current CPM is searched for the first 
+			registered activity constraint and that is then used. */
 		drawActivityValues( kind, A ){
+			if( !A ){
+				for( let c of this.C.soft_constraints ){
+					if( c instanceof ActivityConstraint ){
+						A = c ; break
+					}
+				}
+			}
+			if( !A ){
+				throw("Cannot find activity values to draw!")
+			}
 			// cst contains the pixel ids of all non-background/non-stroma cells in
 			// the grid. 
 			let ii, sigma, a;
@@ -2386,16 +2564,6 @@ var CPM = (function (exports) {
 		}
 	}
 
-	class SoftConstraint extends Constraint {
-		get CONSTRAINT_TYPE() {
-			return "soft"
-		}
-		// eslint-disable-next-line no-unused-vars
-		deltaH( src_i, tgt_i, src_type, tgt_type ){
-			throw("You need to implement the 'deltaH' method for this constraint!")
-		}
-	}
-
 	/** 
 	 * Implements the adhesion constraint of Potts models. 
 	 */
@@ -2615,160 +2783,6 @@ var CPM = (function (exports) {
 			//console.log( r )
 			return r
 		}
-	}
-
-	/* 
-		Implements the activity constraint of Potts models. 
-		See also: 
-			Niculescu I, Textor J, de Boer RJ (2015) 
-	 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
-	 		PLoS Comput Biol 11(10): e1004280. 
-	 		https://doi.org/10.1371/journal.pcbi.1004280
-	 */
-
-	class ActivityConstraint extends SoftConstraint {
-		constructor( conf ){
-			super( conf );
-
-			this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
-			
-			// Wrapper: select function to compute activities based on ACT_MEAN in conf
-			if( this.conf.ACT_MEAN == "arithmetic" ){
-				this.activityAt = this.activityAtArith;
-			} else {
-				this.activityAt = this.activityAtGeom;
-			}
-			
-		}
-		
-		confChecker(){
-			this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
-			this.confCheckCellNonNegative( "LAMBDA_ACT" );
-			this.confCheckCellNonNegative( "MAX_ACT" );
-		}
-		
-		/* ======= ACT MODEL ======= */
-
-		/* Act model : compute local activity values within cell around pixel i.
-		 * Depending on settings in conf, this is an arithmetic (activityAtArith)
-		 * or geometric (activityAtGeom) mean of the activities of the neighbors
-		 * of pixel i.
-		 */
-		/* Hamiltonian computation */ 
-		deltaH ( sourcei, targeti, src_type, tgt_type ){
-
-			let deltaH = 0, maxact, lambdaact;
-			const src_kind = this.C.cellKind( src_type );
-			const tgt_kind = this.C.cellKind( tgt_type );
-
-			// use parameters for the source cell, unless that is the background.
-			// In that case, use parameters of the target cell.
-			if( src_type != 0 ){
-				maxact = this.conf["MAX_ACT"][src_kind];
-				lambdaact = this.conf["LAMBDA_ACT"][src_kind];
-			} else {
-				// special case: punishment for a copy attempt from background into
-				// an active cell. This effectively means that the active cell retracts,
-				// which is different from one cell pushing into another (active) cell.
-				maxact = this.conf["MAX_ACT"][tgt_kind];
-				lambdaact = this.conf["LAMBDA_ACT"][tgt_kind];
-			}
-			if( maxact == 0 || lambdaact == 0 ){
-				return 0
-			}
-
-			// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
-			// or activityAtGeom, depending on conf (see constructor).	
-			deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
-			return deltaH
-		}
-
-		/* Activity mean computation methods for arithmetic/geometric mean.
-		The method used by activityAt is defined by conf ( see constructor ).*/
-		activityAtArith( i ){
-			const t = this.C.pixti( i );
-			
-			// no activity for background/stroma
-			if( t <= 0 ){ return 0 }
-			
-			// neighborhood pixels
-			const N = this.C.neighi(i);
-			
-			// r activity summed, nN number of neighbors
-			// we start with the current pixel. 
-			let r = this.pxact(i), nN = 1;
-			
-			// loop over neighbor pixels
-			for( let j = 0 ; j < N.length ; j ++ ){ 
-				const tn = this.C.pixti( N[j] ); 
-				
-				// a neighbor only contributes if it belongs to the same cell
-				if( tn == t ){
-					r += this.pxact( N[j] );
-					nN ++; 
-				}
-			}
-
-			// average is summed r divided by num neighbors.
-			return r/nN
-		}
-		activityAtGeom ( i ){
-			const t = this.C.pixti( i );
-
-			// no activity for background/stroma
-			if( t <= 0 ){ return 0 }
-			
-			//neighborhood pixels
-			const N = this.C.neighi( i );
-			
-			// r activity product, nN number of neighbors.
-			// we start with the current pixel.
-			let nN = 1, r = this.pxact( i );
-
-			// loop over neighbor pixels
-			for( let j = 0 ; j < N.length ; j ++ ){ 
-				const tn = this.C.pixti( N[j] ); 
-
-				// a neighbor only contributes if it belongs to the same cell.
-				// if it does and has activity 0, the product will also be zero so
-				// we can already return.
-				if( tn == t ){
-					if( this.pxact( N[j] ) == 0 ) return 0
-					r *= this.pxact( N[j] );
-					nN ++; 
-				}
-			}
-			
-			// Geometric mean computation. 
-			return Math.pow(r,1/nN)
-		}
-
-
-		/* Current activity (under the Act model) of the pixel with ID i. */
-		pxact ( i ){
-			// If the pixel is not in the cellpixelsact object, it has activity 0.
-			// Otherwise, its activity is stored in the object.
-			return this.cellpixelsact[i] || 0
-		}
-		
-		/* eslint-disable no-unused-vars*/
-		postSetpixListener( i, t_old, t ){
-			// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-			const k = this.C.cellKind( t );
-			this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
-		}
-		
-		postMCSListener(){
-			// iterate over cellpixelsage and decrease all activities by one.
-			for( let key in this.cellpixelsact ){
-				// activities that reach zero no longer need to be stored.
-				if( --this.cellpixelsact[ key ] <= 0 ){
-					delete this.cellpixelsact[ key ];
-				}
-			}
-		}
-
-
 	}
 
 	/**
