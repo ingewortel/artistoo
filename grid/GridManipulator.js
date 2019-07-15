@@ -58,8 +58,8 @@ class GridManipulator {
 	letting the other coordinates range from their min value 0 to their max value. */
 	makePlane ( voxels, coord, coordvalue ){
 		let x,y,z
-		let minc = Array(this.C.ndim).fill(0)
-		let maxc = Array(this.C.ndim)
+		let minc = [0,0,0]
+		let maxc = [0,0,0]
 		for( let dim = 0; dim < this.C.ndim; dim++ ){
 			maxc[dim] = this.C.extents[dim]-1
 		}
