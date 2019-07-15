@@ -47,15 +47,8 @@ function initialize(){
 			[20,1000]
 		],
 		LAMBDA_V : [0,50],
-		V : [0,152],
-		P: [0,145], 
-		LAMBDA_P:[0,2]
+		V : [0,152]
 	})
-
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( new CPM.VolumeConstraint( C.conf ) )
-	C.add( new CPM.PerimeterConstraint( C.conf ) )
-
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	Cm = new CPM.GridManipulator( C )
 	// Start simulation

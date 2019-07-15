@@ -1079,6 +1079,346 @@ var CPM = (function (exports) {
 		}
 	}
 
+	class SoftConstraint extends Constraint {
+		get CONSTRAINT_TYPE() {
+			return "soft"
+		}
+		// eslint-disable-next-line no-unused-vars
+		deltaH( src_i, tgt_i, src_type, tgt_type ){
+			throw("You need to implement the 'deltaH' method for this constraint!")
+		}
+	}
+
+	/** 
+	 * Implements the adhesion constraint of Potts models. 
+	 */
+
+	class Adhesion extends SoftConstraint {
+		/* Check if conf parameters are correct format*/
+		confChecker(){
+			this.confCheckCellMatrix("J");
+		}
+
+
+		/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
+		J( t1, t2 ){
+			return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+		}
+		/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
+		 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
+		 */
+		H( i, tp ){
+			let r = 0, tn;
+			/* eslint-disable */
+			const N = this.C.grid.neighi( i );
+			for( let j = 0 ; j < N.length ; j ++ ){
+				tn = this.C.pixti( N[j] );
+				if( tn != tp ) r += this.J( tn, tp );
+			}
+			return r
+		}
+		deltaH( sourcei, targeti, src_type, tgt_type ){
+			return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
+		}
+	}
+
+	/** 
+	 * Implements the adhesion constraint of Potts models. 
+	 */
+
+	class VolumeConstraint extends SoftConstraint {
+		confChecker(){
+			this.confCheckCellNonNegative( "LAMBDA_V" );
+			this.confCheckCellNonNegative( "V" );
+		}
+
+		deltaH( sourcei, targeti, src_type, tgt_type ){
+			// volume gain of src cell
+			let deltaH = this.volconstraint( 1, src_type ) - 
+				this.volconstraint( 0, src_type );
+			// volume loss of tgt cell
+			deltaH += this.volconstraint( -1, tgt_type ) - 
+				this.volconstraint( 0, tgt_type );
+			return deltaH
+		}
+		/* ======= VOLUME ======= */
+
+		/* The volume constraint term of the Hamiltonian for the cell with id t.
+		   Use vgain=0 for energy of current volume, vgain=1 for energy if cell gains
+		   a pixel, and vgain = -1 for energy if cell loses a pixel. 
+		*/
+		volconstraint ( vgain, t ){
+			const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
+			// the background "cell" has no volume constraint.
+			if( t == 0 || l == 0 ) return 0
+			const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
+			return l*vdiff*vdiff
+		}
+	}
+
+	/* 
+		Implements the activity constraint of Potts models. 
+		See also: 
+			Niculescu I, Textor J, de Boer RJ (2015) 
+	 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
+	 		PLoS Comput Biol 11(10): e1004280. 
+	 		https://doi.org/10.1371/journal.pcbi.1004280
+	 */
+
+	class ActivityConstraint extends SoftConstraint {
+		constructor( conf ){
+			super( conf );
+
+			this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
+			
+			// Wrapper: select function to compute activities based on ACT_MEAN in conf
+			if( this.conf.ACT_MEAN == "arithmetic" ){
+				this.activityAt = this.activityAtArith;
+			} else {
+				this.activityAt = this.activityAtGeom;
+			}
+			
+		}
+		
+		confChecker(){
+			this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
+			this.confCheckCellNonNegative( "LAMBDA_ACT" );
+			this.confCheckCellNonNegative( "MAX_ACT" );
+		}
+		
+		/* ======= ACT MODEL ======= */
+
+		/* Act model : compute local activity values within cell around pixel i.
+		 * Depending on settings in conf, this is an arithmetic (activityAtArith)
+		 * or geometric (activityAtGeom) mean of the activities of the neighbors
+		 * of pixel i.
+		 */
+		/* Hamiltonian computation */ 
+		deltaH ( sourcei, targeti, src_type, tgt_type ){
+
+			let deltaH = 0, maxact, lambdaact;
+			const src_kind = this.C.cellKind( src_type );
+			const tgt_kind = this.C.cellKind( tgt_type );
+
+			// use parameters for the source cell, unless that is the background.
+			// In that case, use parameters of the target cell.
+			if( src_type != 0 ){
+				maxact = this.conf["MAX_ACT"][src_kind];
+				lambdaact = this.conf["LAMBDA_ACT"][src_kind];
+			} else {
+				// special case: punishment for a copy attempt from background into
+				// an active cell. This effectively means that the active cell retracts,
+				// which is different from one cell pushing into another (active) cell.
+				maxact = this.conf["MAX_ACT"][tgt_kind];
+				lambdaact = this.conf["LAMBDA_ACT"][tgt_kind];
+			}
+			if( maxact == 0 || lambdaact == 0 ){
+				return 0
+			}
+
+			// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
+			// or activityAtGeom, depending on conf (see constructor).	
+			deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
+			return deltaH
+		}
+
+		/* Activity mean computation methods for arithmetic/geometric mean.
+		The method used by activityAt is defined by conf ( see constructor ).*/
+		activityAtArith( i ){
+			const t = this.C.pixti( i );
+			
+			// no activity for background/stroma
+			if( t <= 0 ){ return 0 }
+			
+			// neighborhood pixels
+			const N = this.C.neighi(i);
+			
+			// r activity summed, nN number of neighbors
+			// we start with the current pixel. 
+			let r = this.pxact(i), nN = 1;
+			
+			// loop over neighbor pixels
+			for( let j = 0 ; j < N.length ; j ++ ){ 
+				const tn = this.C.pixti( N[j] ); 
+				
+				// a neighbor only contributes if it belongs to the same cell
+				if( tn == t ){
+					r += this.pxact( N[j] );
+					nN ++; 
+				}
+			}
+
+			// average is summed r divided by num neighbors.
+			return r/nN
+		}
+		activityAtGeom ( i ){
+			const t = this.C.pixti( i );
+
+			// no activity for background/stroma
+			if( t <= 0 ){ return 0 }
+			
+			//neighborhood pixels
+			const N = this.C.neighi( i );
+			
+			// r activity product, nN number of neighbors.
+			// we start with the current pixel.
+			let nN = 1, r = this.pxact( i );
+
+			// loop over neighbor pixels
+			for( let j = 0 ; j < N.length ; j ++ ){ 
+				const tn = this.C.pixti( N[j] ); 
+
+				// a neighbor only contributes if it belongs to the same cell.
+				// if it does and has activity 0, the product will also be zero so
+				// we can already return.
+				if( tn == t ){
+					if( this.pxact( N[j] ) == 0 ) return 0
+					r *= this.pxact( N[j] );
+					nN ++; 
+				}
+			}
+			
+			// Geometric mean computation. 
+			return Math.pow(r,1/nN)
+		}
+
+
+		/* Current activity (under the Act model) of the pixel with ID i. */
+		pxact ( i ){
+			// If the pixel is not in the cellpixelsact object, it has activity 0.
+			// Otherwise, its activity is stored in the object.
+			return this.cellpixelsact[i] || 0
+		}
+		
+		/* eslint-disable no-unused-vars*/
+		postSetpixListener( i, t_old, t ){
+			// After setting a pixel, it gets the MAX_ACT value of its cellkind.
+			const k = this.C.cellKind( t );
+			this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
+		}
+		
+		postMCSListener(){
+			// iterate over cellpixelsage and decrease all activities by one.
+			for( let key in this.cellpixelsact ){
+				// activities that reach zero no longer need to be stored.
+				if( --this.cellpixelsact[ key ] <= 0 ){
+					delete this.cellpixelsact[ key ];
+				}
+			}
+		}
+
+
+	}
+
+	/** 
+	 * Implements the adhesion constraint of Potts models. 
+	 */
+
+	class PerimeterConstraint extends SoftConstraint {
+		constructor( conf ){
+			super( conf );
+			this.cellperimeters = {};
+		}
+		confChecker(){
+			this.confCheckCellNonNegative( "LAMBDA_P" );
+			this.confCheckCellNonNegative( "P" );
+		}
+		
+		postSetpixListener( i, t_old, t_new ){
+			if( t_old == t_new ){ return }
+			const Ni = this.C.neighi( i );
+			let n_new = 0, n_old = 0;
+			for( let i = 0 ; i < Ni.length ; i ++  ){
+				const nt = this.C.pixti(Ni[i]);
+				if( nt != t_new ){
+					n_new ++; 
+				}
+				if( nt != t_old ){
+					n_old ++;
+				}
+				if( nt != 0 ){
+					if( nt == t_old ){
+						this.cellperimeters[nt] ++;
+					}
+					if( nt == t_new ){
+						this.cellperimeters[nt] --;
+					}
+				}
+			}
+			if( t_old != 0 ){
+				this.cellperimeters[t_old] -= n_old;
+			}
+			if( t_new != 0 ){
+				if( !(t_new in this.cellperimeters) ){
+					this.cellperimeters[t_new] = 0;
+				}
+				this.cellperimeters[t_new] += n_new;
+			}
+		}
+		deltaH( sourcei, targeti, src_type, tgt_type ){
+			if( src_type == tgt_type ){
+				return 0
+			}
+			const ts = this.C.cellKind(src_type);
+			const ls = this.conf["LAMBDA_P"][ts];
+			const tt = this.C.cellKind(tgt_type);
+			const lt = this.conf["LAMBDA_P"][tt];
+			if( !(ls>0) && !(lt>0) ){
+				return 0
+			}
+			const Ni = this.C.neighi( targeti );
+			let pchange = {};
+			pchange[src_type] = 0; pchange[tgt_type] = 0;
+			for( let i = 0 ; i < Ni.length ; i ++  ){
+				const nt = this.C.pixti(Ni[i]);
+				if( nt != src_type ){
+					pchange[src_type]++; 
+				}
+				if( nt != tgt_type ){
+					pchange[tgt_type]--;
+				}
+				if( nt == tgt_type ){
+					pchange[nt] ++;
+				}
+				if( nt == src_type ){
+					pchange[nt] --;
+				}
+			}
+			let r = 0.0;
+			if( ls > 0 ){
+				const pt = this.conf["P"][ts],
+					ps = this.cellperimeters[src_type];
+				const hnew = (ps+pchange[src_type])-pt,
+					hold = ps-pt;
+				r += ls*((hnew*hnew)-(hold*hold));
+			}
+			if( lt > 0 ){
+				const pt = this.conf["P"][tt],
+					ps = this.cellperimeters[tgt_type];
+				const hnew = (ps+pchange[tgt_type])-pt,
+					hold = ps-pt;
+				r += lt*((hnew*hnew)-(hold*hold));
+			}
+			// eslint-disable-next-line
+			//console.log( r )
+			return r
+		}
+	}
+
+	/* This class enables automatic addition of Hamiltonian terms to a CPM
+	 * through their parameter names.
+	 *
+	 * For each parameter name, we specify one Hamiltonian term. If the parameter
+	 * is present, then a new instance of this term is initialized with the CPM's
+	 * configuration as parameter and added to the CPM. */
+
+	let AutoAdderConfig = {
+		J : Adhesion,
+		LAMBDA_V : VolumeConstraint,
+		LAMBDA_ACT : ActivityConstraint,
+		LAMBDA_P : PerimeterConstraint
+	};
+
 	/** The core CPM class. Can be used for two- or 
 	 * three-dimensional simulations. 
 	*/
@@ -1101,6 +1441,12 @@ var CPM = (function (exports) {
 			this.post_setpix_listeners = [];
 			this.post_mcs_listeners = [];
 			this._neighbours = new Uint16Array(this.grid.p2i(field_size));
+
+			for( let x of Object.keys( conf ) ){
+				if( x in AutoAdderConfig ){
+					this.add( new AutoAdderConfig[x]( conf ) );
+				}
+			}
 		}
 
 		neigh(p, torus=this.conf.torus){
@@ -1136,10 +1482,6 @@ var CPM = (function (exports) {
 
 
 		add( t ){
-			if( typeof t === "function" ){
-				this.add( new t(this.conf) );
-				return
-			}
 			if( t instanceof Constraint ){
 				switch( t.CONSTRAINT_TYPE ){
 				case "soft": this.soft_constraints.push( t ) ;break
@@ -1412,170 +1754,6 @@ var CPM = (function (exports) {
 			}
 			return cellpixels
 		}
-	}
-
-	class SoftConstraint extends Constraint {
-		get CONSTRAINT_TYPE() {
-			return "soft"
-		}
-		// eslint-disable-next-line no-unused-vars
-		deltaH( src_i, tgt_i, src_type, tgt_type ){
-			throw("You need to implement the 'deltaH' method for this constraint!")
-		}
-	}
-
-	/* 
-		Implements the activity constraint of Potts models. 
-		See also: 
-			Niculescu I, Textor J, de Boer RJ (2015) 
-	 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
-	 		PLoS Comput Biol 11(10): e1004280. 
-	 		https://doi.org/10.1371/journal.pcbi.1004280
-	 */
-
-	class ActivityConstraint extends SoftConstraint {
-		constructor( conf ){
-			super( conf );
-
-			this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
-			
-			// Wrapper: select function to compute activities based on ACT_MEAN in conf
-			if( this.conf.ACT_MEAN == "arithmetic" ){
-				this.activityAt = this.activityAtArith;
-			} else {
-				this.activityAt = this.activityAtGeom;
-			}
-			
-		}
-		
-		confChecker(){
-			this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
-			this.confCheckCellNonNegative( "LAMBDA_ACT" );
-			this.confCheckCellNonNegative( "MAX_ACT" );
-		}
-		
-		/* ======= ACT MODEL ======= */
-
-		/* Act model : compute local activity values within cell around pixel i.
-		 * Depending on settings in conf, this is an arithmetic (activityAtArith)
-		 * or geometric (activityAtGeom) mean of the activities of the neighbors
-		 * of pixel i.
-		 */
-		/* Hamiltonian computation */ 
-		deltaH ( sourcei, targeti, src_type, tgt_type ){
-
-			let deltaH = 0, maxact, lambdaact;
-			const src_kind = this.C.cellKind( src_type );
-			const tgt_kind = this.C.cellKind( tgt_type );
-
-			// use parameters for the source cell, unless that is the background.
-			// In that case, use parameters of the target cell.
-			if( src_type != 0 ){
-				maxact = this.conf["MAX_ACT"][src_kind];
-				lambdaact = this.conf["LAMBDA_ACT"][src_kind];
-			} else {
-				// special case: punishment for a copy attempt from background into
-				// an active cell. This effectively means that the active cell retracts,
-				// which is different from one cell pushing into another (active) cell.
-				maxact = this.conf["MAX_ACT"][tgt_kind];
-				lambdaact = this.conf["LAMBDA_ACT"][tgt_kind];
-			}
-			if( maxact == 0 || lambdaact == 0 ){
-				return 0
-			}
-
-			// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
-			// or activityAtGeom, depending on conf (see constructor).	
-			deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
-			return deltaH
-		}
-
-		/* Activity mean computation methods for arithmetic/geometric mean.
-		The method used by activityAt is defined by conf ( see constructor ).*/
-		activityAtArith( i ){
-			const t = this.C.pixti( i );
-			
-			// no activity for background/stroma
-			if( t <= 0 ){ return 0 }
-			
-			// neighborhood pixels
-			const N = this.C.neighi(i);
-			
-			// r activity summed, nN number of neighbors
-			// we start with the current pixel. 
-			let r = this.pxact(i), nN = 1;
-			
-			// loop over neighbor pixels
-			for( let j = 0 ; j < N.length ; j ++ ){ 
-				const tn = this.C.pixti( N[j] ); 
-				
-				// a neighbor only contributes if it belongs to the same cell
-				if( tn == t ){
-					r += this.pxact( N[j] );
-					nN ++; 
-				}
-			}
-
-			// average is summed r divided by num neighbors.
-			return r/nN
-		}
-		activityAtGeom ( i ){
-			const t = this.C.pixti( i );
-
-			// no activity for background/stroma
-			if( t <= 0 ){ return 0 }
-			
-			//neighborhood pixels
-			const N = this.C.neighi( i );
-			
-			// r activity product, nN number of neighbors.
-			// we start with the current pixel.
-			let nN = 1, r = this.pxact( i );
-
-			// loop over neighbor pixels
-			for( let j = 0 ; j < N.length ; j ++ ){ 
-				const tn = this.C.pixti( N[j] ); 
-
-				// a neighbor only contributes if it belongs to the same cell.
-				// if it does and has activity 0, the product will also be zero so
-				// we can already return.
-				if( tn == t ){
-					if( this.pxact( N[j] ) == 0 ) return 0
-					r *= this.pxact( N[j] );
-					nN ++; 
-				}
-			}
-			
-			// Geometric mean computation. 
-			return Math.pow(r,1/nN)
-		}
-
-
-		/* Current activity (under the Act model) of the pixel with ID i. */
-		pxact ( i ){
-			// If the pixel is not in the cellpixelsact object, it has activity 0.
-			// Otherwise, its activity is stored in the object.
-			return this.cellpixelsact[i] || 0
-		}
-		
-		/* eslint-disable no-unused-vars*/
-		postSetpixListener( i, t_old, t ){
-			// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-			const k = this.C.cellKind( t );
-			this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
-		}
-		
-		postMCSListener(){
-			// iterate over cellpixelsage and decrease all activities by one.
-			for( let key in this.cellpixelsact ){
-				// activities that reach zero no longer need to be stored.
-				if( --this.cellpixelsact[ key ] <= 0 ){
-					delete this.cellpixelsact[ key ];
-				}
-			}
-		}
-
-
 	}
 
 	/** Class for taking a CPM grid and displaying it in either browser or with nodejs. */
@@ -2564,73 +2742,6 @@ var CPM = (function (exports) {
 		}
 	}
 
-	/** 
-	 * Implements the adhesion constraint of Potts models. 
-	 */
-
-	class Adhesion extends SoftConstraint {
-		/* Check if conf parameters are correct format*/
-		confChecker(){
-			this.confCheckCellMatrix("J");
-		}
-
-
-		/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
-		J( t1, t2 ){
-			return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
-		}
-		/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
-		 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
-		 */
-		H( i, tp ){
-			let r = 0, tn;
-			/* eslint-disable */
-			const N = this.C.grid.neighi( i );
-			for( let j = 0 ; j < N.length ; j ++ ){
-				tn = this.C.pixti( N[j] );
-				if( tn != tp ) r += this.J( tn, tp );
-			}
-			return r
-		}
-		deltaH( sourcei, targeti, src_type, tgt_type ){
-			return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
-		}
-	}
-
-	/** 
-	 * Implements the adhesion constraint of Potts models. 
-	 */
-
-	class VolumeConstraint extends SoftConstraint {
-		confChecker(){
-			this.confCheckCellNonNegative( "LAMBDA_V" );
-			this.confCheckCellNonNegative( "V" );
-		}
-
-		deltaH( sourcei, targeti, src_type, tgt_type ){
-			// volume gain of src cell
-			let deltaH = this.volconstraint( 1, src_type ) - 
-				this.volconstraint( 0, src_type );
-			// volume loss of tgt cell
-			deltaH += this.volconstraint( -1, tgt_type ) - 
-				this.volconstraint( 0, tgt_type );
-			return deltaH
-		}
-		/* ======= VOLUME ======= */
-
-		/* The volume constraint term of the Hamiltonian for the cell with id t.
-		   Use vgain=0 for energy of current volume, vgain=1 for energy if cell gains
-		   a pixel, and vgain = -1 for energy if cell loses a pixel. 
-		*/
-		volconstraint ( vgain, t ){
-			const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
-			// the background "cell" has no volume constraint.
-			if( t == 0 || l == 0 ) return 0
-			const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
-			return l*vdiff*vdiff
-		}
-	}
-
 	class HardConstraint extends Constraint {
 		get CONSTRAINT_TYPE() {
 			return "hard"
@@ -2687,101 +2798,6 @@ var CPM = (function (exports) {
 		}
 		afterMCSListener( ){
 			console.log( "the time is now: ", this.C.time );
-		}
-	}
-
-	/** 
-	 * Implements the adhesion constraint of Potts models. 
-	 */
-
-	class PerimeterConstraint extends SoftConstraint {
-		constructor( conf ){
-			super( conf );
-			this.cellperimeters = {};
-		}
-		confChecker(){
-			this.confCheckCellNonNegative( "LAMBDA_P" );
-			this.confCheckCellNonNegative( "P" );
-		}
-		
-		postSetpixListener( i, t_old, t_new ){
-			if( t_old == t_new ){ return }
-			const Ni = this.C.neighi( i );
-			let n_new = 0, n_old = 0;
-			for( let i = 0 ; i < Ni.length ; i ++  ){
-				const nt = this.C.pixti(Ni[i]);
-				if( nt != t_new ){
-					n_new ++; 
-				}
-				if( nt != t_old ){
-					n_old ++;
-				}
-				if( nt != 0 ){
-					if( nt == t_old ){
-						this.cellperimeters[nt] ++;
-					}
-					if( nt == t_new ){
-						this.cellperimeters[nt] --;
-					}
-				}
-			}
-			if( t_old != 0 ){
-				this.cellperimeters[t_old] -= n_old;
-			}
-			if( t_new != 0 ){
-				if( !(t_new in this.cellperimeters) ){
-					this.cellperimeters[t_new] = 0;
-				}
-				this.cellperimeters[t_new] += n_new;
-			}
-		}
-		deltaH( sourcei, targeti, src_type, tgt_type ){
-			if( src_type == tgt_type ){
-				return 0
-			}
-			const ts = this.C.cellKind(src_type);
-			const ls = this.conf["LAMBDA_P"][ts];
-			const tt = this.C.cellKind(tgt_type);
-			const lt = this.conf["LAMBDA_P"][tt];
-			if( !(ls>0) && !(lt>0) ){
-				return 0
-			}
-			const Ni = this.C.neighi( targeti );
-			let pchange = {};
-			pchange[src_type] = 0; pchange[tgt_type] = 0;
-			for( let i = 0 ; i < Ni.length ; i ++  ){
-				const nt = this.C.pixti(Ni[i]);
-				if( nt != src_type ){
-					pchange[src_type]++; 
-				}
-				if( nt != tgt_type ){
-					pchange[tgt_type]--;
-				}
-				if( nt == tgt_type ){
-					pchange[nt] ++;
-				}
-				if( nt == src_type ){
-					pchange[nt] --;
-				}
-			}
-			let r = 0.0;
-			if( ls > 0 ){
-				const pt = this.conf["P"][ts],
-					ps = this.cellperimeters[src_type];
-				const hnew = (ps+pchange[src_type])-pt,
-					hold = ps-pt;
-				r += ls*((hnew*hnew)-(hold*hold));
-			}
-			if( lt > 0 ){
-				const pt = this.conf["P"][tt],
-					ps = this.cellperimeters[tgt_type];
-				const hnew = (ps+pchange[tgt_type])-pt,
-					hold = ps-pt;
-				r += lt*((hnew*hnew)-(hold*hold));
-			}
-			// eslint-disable-next-line
-			//console.log( r )
-			return r
 		}
 	}
 

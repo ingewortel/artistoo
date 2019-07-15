@@ -16,8 +16,7 @@ let zoom=1, w = 250, t = 5000
 var C,meter
 
 function timestep(){
-	meter.tickStart()
-	C.monteCarloStep()
+	C.timeStep()
 	meter.tick()
 	if( t-- > 0 ){
 		requestAnimationFrame( timestep )
@@ -38,8 +37,6 @@ function setupCPM(conf){
 		V: [0,500], 
 		LAMBDA_V: [0,50]
 	})
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( new CPM.VolumeConstraint( C.conf ) )
 	
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 

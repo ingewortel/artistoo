@@ -40,12 +40,6 @@ function initialize(){
 		LAMBDA_P: [0,2]
 	})
 
-	C.add( CPM.VolumeConstraint )
-	C.add( CPM.Adhesion )
-	C.add( CPM.ActivityConstraint )
-	C.add( CPM.PerimeterConstraint )
-
-
 	let cid = C.makeNewCellID(1)
 	C.setpix( C.grid.midpoint, cid )
 

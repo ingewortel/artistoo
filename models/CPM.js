@@ -8,6 +8,8 @@ import GridBasedModel from "./GridBasedModel.js"
 import DiceSet from "../DiceSet.js"
 import Constraint from "../hamiltonian/Constraint.js"
 
+import AutoAdderConfig from "../hamiltonian/AutoAdderConfig.js"
+
 class CPM extends GridBasedModel {
 	constructor( field_size, conf ){
 		super( field_size, conf )
@@ -26,6 +28,12 @@ class CPM extends GridBasedModel {
 		this.post_setpix_listeners = []
 		this.post_mcs_listeners = []
 		this._neighbours = new Uint16Array(this.grid.p2i(field_size))
+
+		for( let x of Object.keys( conf ) ){
+			if( x in AutoAdderConfig ){
+				this.add( new AutoAdderConfig[x]( conf ) )
+			}
+		}
 	}
 
 	neigh(p, torus=this.conf.torus){
@@ -61,10 +69,6 @@ class CPM extends GridBasedModel {
 
 
 	add( t ){
-		if( typeof t === "function" ){
-			this.add( new t(this.conf) )
-			return
-		}
 		if( t instanceof Constraint ){
 			switch( t.CONSTRAINT_TYPE ){
 			case "soft": this.soft_constraints.push( t ) ;break

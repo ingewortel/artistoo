@@ -21,16 +21,11 @@ function initialize(){
 
 	// Create a CPM object
 	C = new CPM.CPM( [w, w], {
-		nCellKinds : 2,
 		LAMBDA_V : [0,25,25],
 		V : [0,25,25],
 		J : [ [NaN, 12, 6], [12, 6, 16], [6, 16, 6] ],
 		T : 15,
 	})
-
-        C.add( new CPM.VolumeConstraint( C.conf ) )
-        C.add( new CPM.Adhesion( C.conf ) )
-	
 
 	// Create a canvas to draw on
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
@@ -49,13 +44,7 @@ function initialize(){
 function timestep(){
 	meter.tick()
 	// Update the grid with one MCS
-	C.monteCarloStep()
-	//C.monteCarloStep()
-	//C.monteCarloStep()
-	//C.monteCarloStep()
-	//C.monteCarloStep()
-
-
+	C.timeStep()
 	if( t % 2 == 0 ){
 		// Clear the canvas (white)
 		Cim.clear( "FFFFFF" )
