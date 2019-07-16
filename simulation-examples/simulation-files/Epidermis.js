@@ -1,9 +1,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /* START DESCRIPTION Do not remove this line */
-A tightly packed monolayer of epidermal cells. These cells have
+Simulation of a tightly packed monolayer of epidermal cells. These cells have
 adhesion and volume constraints, as well as a perimeter constraint
-to increase their stiffness.
+to increase their stiffness. 
 /* END DESCRIPTION Do not remove this line */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
