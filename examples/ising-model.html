@@ -58,7 +58,13 @@ function initialize(){
 		J : [ [NaN,20], [20,100] ],
 		T : 0.01,
 	})
-	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( CPM.Adhesion )
+
+	C.add( new CPM.Adhesion( { 
+		J : [ [NaN,20], [20,100] ]
+	} )
+
+
 	C.add( new CPM.PixelsByCell( ) )
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	// Start simulation

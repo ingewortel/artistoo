@@ -152,7 +152,7 @@ class Canvas {
 		let maxval = 0
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				let p = cc.pixt([i,j])
+				let p = Math.log(.1+cc.pixt([i,j]))
 				if( maxval < p ){
 					maxval = p
 				}
@@ -163,7 +163,7 @@ class Canvas {
 		this.col_b = 0
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				this.col_r =  255*(cc.pixt( [i,j] )/maxval)
+				this.col_r =  255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
 				this.pxfi([i,j])
 			}
 		}

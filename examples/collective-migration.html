@@ -39,16 +39,9 @@ function initialize(){
 		ACT_MEAN : "geometric",
 		torus : true
 	})
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( new CPM.VolumeConstraint( C.conf ) )
-	C.add( new CPM.PerimeterConstraint( C.conf ) )
-	A = new CPM.ActivityConstraint( C.conf )
-	C.add( A )
-
 
 	// Create a canvas to draw on
 	Cim = new CPM.Canvas( C, {zoom:2} )
-	//Cs = new CPMStats( C )
 
 	C.stop = true
 	C.rate = 2
