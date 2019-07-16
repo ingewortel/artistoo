@@ -1,29 +1,40 @@
-/* This trick allows using the code in either the browser or with nodejs. */
-const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-let CPMbuild
-if( !isBrowser ){
-	CPMbuild = require( "../../build/cpm-cjs.js")
-	let CPM
-} else {
-	CPMbuild = CPM
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/* START DESCRIPTION Do not remove this line */
+The Ising model: a classic example of a CPM with only one "cell",
+and only an adhesion constraint. Because there is no volume constraint,
+the cell eventually either disappears or takes over the entire grid -
+because that minimizes the adhesion penalty.
+/* END DESCRIPTION Do not remove this line */
+
+
+/* 	================= DECLARE CUSTOM METHODS ===================== */
+/* 	If no custom methods are defined, the drawing/initialisation/output 
+	functions of the CPM.Simulation class are used. */
+
+// Are any custom methods defined here?
+Custom-methods: true
+
+/* START METHODS OBJECT Do not remove this line */
+/* 	The following functions are defined below and will be added to
+	the simulation object.*/
+let custommethods = {
+	initializeGrid : initializeGrid,
+	logStats : logStats,
+	postMCSListener : postMCSListener
 }
-CPM = CPMbuild
+/* END METHODS OBJECT Do not remove this line */
 
 
-/* Write an extension of the existing simulation class */
-class IsingModel extends CPM.Simulation {
-	constructor( config ){
-		
-		super( config )
-		this.cid = 0
-		
-	}
 
-	
-	// Implement some method to initialize the Grid should be implemented in each simulation.
-	initializeGrid(){
-	
-	
+
+/* ================= WRITE CUSTOM METHODS ===================== */
+
+/* START METHODS DEFINITION Do not remove this line */
+
+/* The following custom methods will be added to the simulation object*/
+function initializeGrid(){
+
 		// Create a cell (other than background)
 		this.cid = this.C.makeNewCellID(1)
 		let cid = this.cid 
@@ -41,13 +52,11 @@ class IsingModel extends CPM.Simulation {
 				}
 			}
 		}
-
-
 	}
 	
-	// Computing and logging stats.
-	// Centroids are not really meaningful here so we'll log volume.
-	logStats(){
+// Computing and logging stats.
+// Centroids are not really meaningful here so we'll log volume.
+function logStats(){
 		
 		// compute volume of all non-background		
 		for( let cid of this.C.cellIDs() ){
@@ -59,13 +68,10 @@ class IsingModel extends CPM.Simulation {
 				this.C.cellKind(cid) + "\t" + volume )
 			
 		}
-
 	}
 
-
-	// Change step to reinitialize grid when one of the cells disappears
-	step(){
-		this.C.monteCarloStep()
+// Add a postMCSListener to reinitialize the grid when one of the cells disappears
+function postMCSListener(){
 		
 		for( let cid of this.C.cellIDs() ){
 			let vol = this.C.getVolume(cid)
@@ -73,37 +79,67 @@ class IsingModel extends CPM.Simulation {
 				this.initializeGrid()
 			}
 		}
+}
+
+/* END METHODS DEFINITION Do not remove this line */
+
+
+
+/* ================= CONFIGURATION ===================== */
+
+/* Do not remove this line: START CONFIGURATION */
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [300,300],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : true,						// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 0.01,								// CPM temperature
 		
+		// Constraint parameters. 	
+		// Adhesion parameters:
+		J : [ [NaN,20], [20,100] ]
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [3],					// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
 		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["AA0000"],
+		ACTCOLOR : [false],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [false],				// Should cellborders be displayed?
+		zoom : 1,							// zoom in on canvas with this factor.
 		
+		// Output images
+		SAVEIMG : true,					// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/IsingModel",	// ... And save the image in this folder.
+		EXPNAME : "IsingModel",					// Used for the filename of output images.
 		
-		
-		// Draw the canvas every IMGFRAMERATE steps
-		if( this.imgrate > 0 && this.time % this.conf["IMGFRAMERATE"] == 0 ){
-			
-			this.drawCanvas()
-			
-			// Save the image if required and if we're in node (not possible in browser)
-			if( this.mode == "node" && this.conf["SAVEIMG"] ){
-				let outpath = this.conf["SAVEPATH"], expname = this.conf["EXPNAME"]
-				this.Cim.writePNG( outpath +"/" + expname + "-t"+this.time+".png" )
-			}
-		}
-		
-		// Log stats every LOGRATE steps
-		if( this.conf["STATSOUT"][this.mode] && this.lograte > 0 && this.time % this.conf["LOGRATE"] == 0 ){
-			this.logStats()
-		}
-		
-		
-		this.time++
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
 	}
-	
-
-	
 }
-
-/* This allows using the code in either the browser or with nodejs. */
-if( typeof module !== "undefined" ){
-	module.exports = IsingModel
-}
+/*	---------------------------------- */
+/* Do not remove this line: END CONFIGURATION */

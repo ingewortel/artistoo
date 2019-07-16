@@ -1,4 +1,23 @@
-// Configuration file
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/* START DESCRIPTION Do not remove this line */
+A single CPM cell with only adhesion and volume constraints.
+/* END DESCRIPTION Do not remove this line */
+
+/* 	================= DECLARE CUSTOM METHODS ===================== */
+/* 	If no custom methods are defined, the drawing/initialisation/output 
+	functions of the CPM.Simulation class are used. */
+
+// Are any custom methods defined here?
+Custom-methods: false
+
+/* ================= CONFIGURATION ===================== */
+
+/* Do not remove this line: START CONFIGURATION */
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
 let config = {
 
 	// Grid settings
@@ -11,17 +30,10 @@ let config = {
 		torus : true,						// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 20,								// CPM temperature
-		constraints : [						// List the constraints to activate
-			"Adhesion", 
-			"VolumeConstraint" 
-		],
-		
 		// Constraint parameters. 
 		// Mostly these have the format of an array in which each element specifies the
 		// parameter value for one of the cellkinds on the grid.
 		// First value is always cellkind 0 (the background) and is often not used.
-		
-		nCellKinds : 1,
 				
 		// Adhesion parameters:
 		J: [[0,20], [20,100]] ,
@@ -55,8 +67,8 @@ let config = {
 		SAVEIMG : true,					// Should a png image of the grid be saved
 											// during the simulation?
 		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img",				// ... And save the image in this folder.
-		EXPNAME : "SingleCell",					// Used for the filename of output images.
+		SAVEPATH : "output/img/SingleCell",	// ... And save the image in this folder.
+		EXPNAME : "SingleCell",				// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?
@@ -64,7 +76,5 @@ let config = {
 
 	}
 }
-
-if( typeof module !== "undefined" ){
-	module.exports = config
-}
+/*	---------------------------------- */
+/* Do not remove this line: END CONFIGURATION */

@@ -1,4 +1,35 @@
-// Configuration file
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/* START DESCRIPTION Do not remove this line */
+Simulation of a random walk using the hard volumeconstraint
+(the cell must always have either 1 or 2 pixels).
+/* END DESCRIPTION Do not remove this line */
+
+/* 	================= DECLARE CUSTOM METHODS ===================== */
+/* 	If no custom methods are defined, the drawing/initialisation/output 
+	functions of the CPM.Simulation class are used. */
+
+// Are any custom methods defined here?
+Custom-methods: false
+
+/* ================= ADD MORE CONSTRAINTS ===================== */
+/* START ADDCONSTRAINTS Do not remove this line */
+
+let hardvolconstraint = new CPM.HardVolumeRangeConstraint( sim.C.conf )
+sim.C.add( hardvolconstraint )
+sim.initializeGrid()
+sim.runBurnin()
+
+
+/* END ADDCONSTRAINTS Do not remove this line */
+
+/* ================= CONFIGURATION ===================== */
+
+/* Do not remove this line: START CONFIGURATION */
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
 let config = {
 
 	// Grid settings
@@ -11,17 +42,12 @@ let config = {
 		torus : false,						// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 4,								// CPM temperature
-		constraints : [						// List the constraints to activate
-			"HardVolumeRangeConstraint"
-		],
 		
 		// Constraint parameters. 
 		// Mostly these have the format of an array in which each element specifies the
 		// parameter value for one of the cellkinds on the grid.
 		// First value is always cellkind 0 (the background) and is often not used.
-		
-		nCellKinds : 1,
-				
+			
 		LAMBDA_VRANGE_MIN : [0,1],			// MIN/MAX volume for the hard volume constraint
 		LAMBDA_VRANGE_MAX : [0,2]
 	},
@@ -48,8 +74,8 @@ let config = {
 		SAVEIMG : false,					// Should a png image of the grid be saved
 											// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img",				// ... And save the image in this folder.
-		EXPNAME : "Randomwalk",					// Used for the filename of output images.
+		SAVEPATH : "output/img/RandomWalk",	// ... And save the image in this folder.
+		EXPNAME : "RandomWalk",				// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?
@@ -57,7 +83,5 @@ let config = {
 
 	}
 }
-
-if( typeof module !== "undefined" ){
-	module.exports = config
-}
+/*	---------------------------------- */
+/* Do not remove this line: END CONFIGURATION */

@@ -1,26 +1,50 @@
-/* This trick allows using the code in either the browser or with nodejs. */
-const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
-let CPMbuild
-if( !isBrowser ){
-	CPMbuild = require( "../../build/cpm-cjs.js")
-	let CPM
-} else {
-	CPMbuild = CPM
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/* START DESCRIPTION Do not remove this line */
+Many moving cells with an imposed persistence constraint.
+
+/* END DESCRIPTION Do not remove this line */
+
+/* 	================= DECLARE CUSTOM METHODS ===================== */
+/* 	If no custom methods are defined, the drawing/initialisation/output 
+	functions of the CPM.Simulation class are used. */
+
+// Are any custom methods defined here?
+Custom-methods: true
+
+/* START METHODS OBJECT Do not remove this line */
+/* 	The following functions are defined below and will be added to
+	the simulation object. If Custom-methods above is set to false,
+	this object is ignored and not used in the html/node files. */
+let custommethods = {
+	initializeGrid : initializeGrid,
+	drawCanvas: drawCanvas
 }
-CPM = CPMbuild
+/* END METHODS OBJECT Do not remove this line */
+
+/* ================= ADD MORE CONSTRAINTS ===================== */
+/* START ADDCONSTRAINTS Do not remove this line */
+
+let pconstraint = new CPM.PersistenceConstraint( 
+	{
+		// PreferredDirectionConstraint parameters
+		LAMBDA_DIR: [0,100,100], 				// PreferredDirectionConstraint importance per ck
+		PERSIST: [0,.7,0.2]						// Weight of the persistent direction in the
+												// computation of the new direction per cellkind
+	} 
+)
+sim.C.add( pconstraint )
 
 
-/* Write an extension of the existing simulation class */
-class ManyCellsPrefDir extends CPM.Simulation {
-	constructor( config ){
-		
-		super( config )
-		
-	}
+/* END ADDCONSTRAINTS Do not remove this line */
 
-	
-	// Implement some method to initialize the Grid should be implemented in each simulation.
-	initializeGrid(){
+/* ================= WRITE CUSTOM METHODS ===================== */
+
+/* START METHODS DEFINITION Do not remove this line */
+
+// This is the same as the basic initializeGrid() function, but now we
+// also allow each cell to have a small burnin period just after seeding.
+function initializeGrid(){
 	
 		// add the GridManipulator if not already there and if you need it
 		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
@@ -47,11 +71,12 @@ class ManyCellsPrefDir extends CPM.Simulation {
 				}
 			}
 		}
-	}
+}
+
+// Custom drawing function to draw the preferred directions.
+function drawCanvas(){
 	
-	/* Adjusted drawing function to display the preferred direction */
-	
-	drawCanvas(){
+	/* This part is the normal drawing function */
 	
 		// Add the canvas if required
 		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
@@ -73,21 +98,20 @@ class ManyCellsPrefDir extends CPM.Simulation {
 			if(  cellborders[ cellkind  ]  ){
 				this.Cim.drawCellBorders( cellkind+1, "000000" )
 			}
-			
-
-
 		}
-		// For drawing the preferred directions
+		
+	/* This part is for drawing the preferred directions */
+	let pdc = this.C.getConstraint( "PersistenceConstraint" )
 		let ctx = this.Cim.context(), zoom = this.conf["zoom"]
-		let prefdir = ( this.C.conf["LAMBDA_DIR"][ cellkind+1 ] > 0  ) || false
+		let prefdir = ( pdc.conf["LAMBDA_DIR"][ cellkind+1 ] > 0  ) || false
 		ctx.beginPath()
 		ctx.lineWidth = 2*zoom
-		let pdc = this.constraints["PreferredDirectionConstraint"]
+
 		for( let i of this.C.cellIDs() ){
 		
 			// Only draw for cells that have a preferred direction.
 			//if( i == 0 ) continue
-			prefdir = ( this.C.conf["LAMBDA_DIR"][ this.C.cellKind( i ) ] > 0  ) || false
+			prefdir = ( pdc.conf["LAMBDA_DIR"][ this.C.cellKind( i ) ] > 0  ) || false
 			if( !prefdir ) continue
 			
 			ctx.moveTo( 
@@ -99,16 +123,83 @@ class ManyCellsPrefDir extends CPM.Simulation {
 		       	)
 		}
 		ctx.stroke()		
+}
+	
+
+/* END METHODS DEFINITION Do not remove this line */
+
+
+
+/* ================= CONFIGURATION ===================== */
+
+/* Do not remove this line: START CONFIGURATION */
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [200,200],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : false,						// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 20,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+
+		// Adhesion parameters:
+		J: [[0,20,20], 
+			[20,20,20], 
+			[20,20,20]],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50,50],					// VolumeConstraint importance per cellkind
+		V : [0,500,200],						// Target volume of each cellkind
+		
+		LAMBDA_P : [0,2,2],
+		P : [0,280,140]
 		
 		
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [30,30],					// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["00FF00","0000FF"],
+		ACTCOLOR : [false,false],					// Should pixel activity values be displayed?
+		SHOWBORDERS : [true,true],				// Should cellborders be displayed?
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : true,						// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/ManyCellsPrefDir",// ... And save the image in this folder.
+		EXPNAME : "ManyCellsPrefDir",			// Used for the filename of output images.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
 	}
-	
-
-
-	
 }
-
-/* This allows using the code in either the browser or with nodejs. */
-if( typeof module !== "undefined" ){
-	module.exports = ManyCellsPrefDir
-}
+/*	---------------------------------- */
+/* Do not remove this line: END CONFIGURATION */

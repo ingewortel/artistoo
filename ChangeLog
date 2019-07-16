@@ -3,6 +3,29 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-07-16 Inge Wortel <ingewortel@gmail.com>
+	* models/CPM.js : added a method getConstraint() to retrieve a 
+	constraint by name. This is useful for drawing methods that need
+	attributes stored in the constraint object.
+	* simulation/Simulation.js : Made compatible with the new version of 
+	the CPM in which constraints are added automatically.
+	
+	* simulation-examples/new-simulation.bash : changed this so that 
+	it now works differently. Run with 
+		"bash new-simulation.bash <simulation-name>", 
+	which will produce a file simulation-files/<simulation-name>.js
+	that serves as a template for the html/node files.
+	This file is produced from simulation-files/Template.js, and contains
+	both configuration object and custom code for that simulation.
+	See the provided examples for details. After editing the template in
+	simulation-files/<simulation-name>.js, type "make" from the 
+	simulation-examples folder to produce the html and node files.
+	* simulation-examples/write-example-html.bash and write-example-node.bash
+	have been adjusted to use the new method.
+	* simulation-examples/Makefile : this now contains a target 
+	"test-node-examples", which runs all the examples in the
+	simulation-examples/node folder, to see if they work without any errors.
+	
 2019-07-18 Johannes <johannes.textor@gmx.de>
 	* PreferredDirectionConstraint.js: Renamed to to PersistenceConstraint
     * Constraint.js: confChecker no longer obligatory as this makes implementing new

@@ -3,20 +3,40 @@
 /* START DESCRIPTION Do not remove this line */
 Act cells moving in a microchannnel.
 /* END DESCRIPTION Do not remove this line */
-/* ================= DECLARE CUSTOM METHODS ===================== */
+
+/* 	================= DECLARE CUSTOM METHODS ===================== */
+/* 	If no custom methods are defined, the drawing/initialisation/output 
+	functions of the CPM.Simulation class are used. */
 
 // Are any custom methods defined here?
 Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
-	the simulation object.*/
+	the simulation object. If Custom-methods above is set to false,
+	this object is ignored and not used in the html/node files. */
 let custommethods = {
 	initializeGrid : initializeGrid,
 	buildChannel : buildChannel
 }
 /* END METHODS OBJECT Do not remove this line */
 
+/* ================= ADD MORE CONSTRAINTS ===================== */
+
+/* Example of how to add a constraint. Put this code between the
+lines with "START ADDCONSTRAINTS" and "END ADDCONSTRAINTS" below.
+let pconstraint = new CPM.PersistenceConstraint( 
+	{
+		// PreferredDirectionConstraint parameters
+		LAMBDA_DIR: [0,100,100], 				// PreferredDirectionConstraint importance per ck
+		PERSIST: [0,.7,0.2]						// Weight of the persistent direction in the
+												// computation of the new direction per cellkind
+	} 
+)
+sim.C.add( pconstraint ) */
+/* START ADDCONSTRAINTS Do not remove this line */
+
+/* END ADDCONSTRAINTS Do not remove this line */
 
 
 
@@ -24,8 +44,7 @@ let custommethods = {
 
 /* START METHODS DEFINITION Do not remove this line */
 
-/* The following custom methods will be added to the simulation object
-below. */
+/* The following custom methods will be added to the simulation object*/
 function initializeGrid(){
 	
 		// add the initializer if not already there
@@ -89,6 +108,7 @@ let config = {
 		// Mostly these have the format of an array in which each element specifies the
 		// parameter value for one of the cellkinds on the grid.
 		// First value is always cellkind 0 (the background) and is often not used.
+
 		
 		// Adhesion parameters:
 		J : [ [NaN,20,0], [20,100,5], [0,5,0] ],
@@ -132,11 +152,11 @@ let config = {
 		zoom : 2,							// zoom in on canvas with this factor.
 		
 		// Output images
-		SAVEIMG : true,					// Should a png image of the grid be saved
+		SAVEIMG : true,						// Should a png image of the grid be saved
 											// during the simulation?
 		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img/Microchannel",// ... And save the image in this folder.
-		EXPNAME : "Microchannel",					// Used for the filename of output images.
+		SAVEPATH : "output/img/<myexp>",	// ... And save the image in this folder.
+		EXPNAME : "<myexp>",					// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?

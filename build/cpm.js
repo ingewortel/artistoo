@@ -1405,6 +1405,46 @@ var CPM = (function (exports) {
 		}
 	}
 
+	class HardConstraint extends Constraint {
+		get CONSTRAINT_TYPE() {
+			return "hard"
+		}
+		/*constructor( conf ){
+			this.conf = conf
+		}*/
+		set CPM(C){
+			this.C = C;
+		}
+		// eslint-disable-next-line no-unused-vars
+		fulfilled( src_i, tgt_i, src_type, tgt_type ){
+			throw("You need to implement the 'fulfilled' method for this constraint!")
+		}
+	}
+
+	/** 
+	 * Allows a "barrier" celltype from and into which copy attempts are forbidden. 
+	 */
+
+	class BarrierConstraint extends HardConstraint {
+		confChecker(){
+			this.confCheckCellBoolean( "IS_BARRIER" );
+		}
+
+		fulfilled( src_i, tgt_i, src_type, tgt_type ){
+		
+			// Fulfilled = false when either src or tgt pixel is of the barrier cellkind	
+			if( this.conf["IS_BARRIER"][this.C.cellKind( src_type ) ] ){
+				return false
+			}
+
+			if( this.conf["IS_BARRIER"][this.C.cellKind( tgt_type ) ] ){
+				return false
+			}
+
+			return true
+		}
+	}
+
 	/* This class enables automatic addition of Hamiltonian terms to a CPM
 	 * through their parameter names.
 	 *
@@ -1416,7 +1456,8 @@ var CPM = (function (exports) {
 		J : Adhesion,
 		LAMBDA_V : VolumeConstraint,
 		LAMBDA_ACT : ActivityConstraint,
-		LAMBDA_P : PerimeterConstraint
+		LAMBDA_P : PerimeterConstraint,
+		IS_BARRIER : BarrierConstraint
 	};
 
 	/** The core CPM class. Can be used for two- or 
@@ -1437,7 +1478,9 @@ var CPM = (function (exports) {
 			this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
 
 			this.soft_constraints = [];
+			this.soft_constraints_indices = {};
 			this.hard_constraints = [];
+			this.hard_constraints_indices ={};
 			this.post_setpix_listeners = [];
 			this.post_mcs_listeners = [];
 			this._neighbours = new Uint16Array(this.grid.p2i(field_size));
@@ -1482,10 +1525,38 @@ var CPM = (function (exports) {
 
 
 		add( t ){
+			let tname = t.constructor.name, currentindex;
 			if( t instanceof Constraint ){
 				switch( t.CONSTRAINT_TYPE ){
-				case "soft": this.soft_constraints.push( t ) ;break
-				case "hard": this.hard_constraints.push( t ); break
+				
+				case "soft": 
+					// Add constraint to the array of soft constraints
+					this.soft_constraints.push( t );
+					
+					// Find index of this constraint in this array
+					currentindex = this.soft_constraints.length - 1;
+					
+					// Write this index to an array in the 
+					// this.soft_constraints_indices object, for lookup later. 
+					if( !this.soft_constraints_indices.hasOwnProperty(tname) ){
+						this.soft_constraints_indices[tname] = [];
+					}
+					this.soft_constraints_indices[tname].push( currentindex );
+					break
+					
+				case "hard": 
+					// Add constraint to the array of soft constraints
+					this.hard_constraints.push( t );
+					
+					// Find index of this constraint in this array
+					currentindex = this.hard_constraints.length - 1;
+					// Write this index to an array in the 
+					// this.soft_constraints_indices object, for lookup later. 
+					if( !this.hard_constraints_indices.hasOwnProperty(tname) ){
+						this.hard_constraints_indices[tname] = [];
+					}
+					this.hard_constraints_indices[tname].push( currentindex );				
+					break
 				}
 			}
 			if( typeof t["postSetpixListener"] === "function" ){
@@ -1498,6 +1569,25 @@ var CPM = (function (exports) {
 			if( typeof t["postAdd"] === "function" ){
 				t.postAdd();
 			}
+		}
+		
+		getConstraint( constraintname, num ){
+		
+			if( !num ){
+				num = 0;
+			}
+			let i;
+			
+			if( this.hard_constraints_indices.hasOwnProperty( constraintname ) ){
+				i = this.hard_constraints_indices[constraintname][num];
+				return this.hard_constraints[i]
+			} else if ( this.soft_constraints_indices.hasOwnProperty( constraintname ) ){
+				i = this.soft_constraints_indices[constraintname][num];
+				return this.soft_constraints[i]
+			} else {
+				throw("No constraint of name " + " exists in this CPM!")
+			}	
+		
 		}
 
 		/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
@@ -2742,22 +2832,6 @@ var CPM = (function (exports) {
 		}
 	}
 
-	class HardConstraint extends Constraint {
-		get CONSTRAINT_TYPE() {
-			return "hard"
-		}
-		/*constructor( conf ){
-			this.conf = conf
-		}*/
-		set CPM(C){
-			this.C = C;
-		}
-		// eslint-disable-next-line no-unused-vars
-		fulfilled( src_i, tgt_i, src_type, tgt_type ){
-			throw("You need to implement the 'fulfilled' method for this constraint!")
-		}
-	}
-
 	/** 
 	 * Forbids that cells exceed or fall below a certain size range. 
 	 */
@@ -2996,30 +3070,6 @@ var CPM = (function (exports) {
 		}
 	}
 
-	/** 
-	 * Allows a "barrier" celltype from and into which copy attempts are forbidden. 
-	 */
-
-	class BarrierConstraint extends HardConstraint {
-		confChecker(){
-			this.confCheckCellBoolean( "IS_BARRIER" );
-		}
-
-		fulfilled( src_i, tgt_i, src_type, tgt_type ){
-		
-			// Fulfilled = false when either src or tgt pixel is of the barrier cellkind	
-			if( this.conf["IS_BARRIER"][this.C.cellKind( src_type ) ] ){
-				return false
-			}
-
-			if( this.conf["IS_BARRIER"][this.C.cellKind( tgt_type ) ] ){
-				return false
-			}
-
-			return true
-		}
-	}
-
 	class AttractionPointConstraint extends Constraint {
 		get CONSTRAINT_TYPE() {
 			return "soft"
@@ -3058,72 +3108,45 @@ var CPM = (function (exports) {
 	}
 
 	class Simulation {
-		constructor( config ){
+		constructor( config, custommethods ){
+		
+			// overwrite default method if methods are supplied in custommethods
+			// these can be initializeGrid(), drawCanvas(), logStats(),
+			// postMCSListener().
+			for( let m of Object.keys( custommethods ) ){
+				this[m] = custommethods[m];
+			}
+			
 		
 			// Configuration of the simulation environment
 			this.conf = config.simsettings;
 			this.imgrate = this.conf["IMGFRAMERATE"] || -1;
 			this.lograte = this.conf["LOGRATE"] || -1;
+			
+			// See if code is run in browser or via node, which will be used
+			// below to determine what the output should be.
 			if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
 				this.mode = "browser";
 			} else {
 				this.mode = "node";
 			}
 			
-			
 			// Save the time of the simulation.
 			this.time = 0;
 			
 			// Make CPM object and add constraints
 			this.C = new CPM( config.field_size, config.conf );
-
-			// Track which constraints are active. They are added automatically by 
-			// the addConstraints() function.
-			this.activeconstraints = config.conf.constraints;
-			this.constraints = {}; // will contain the constraint objects
-			this.addConstraints();
 					
 			// To add canvas / gridmanipulator automatically when required. This will set
 			// their values in helpClasses to 'true', so they don't have to be added again.
 			this.helpClasses = { gm: false, canvas: false };
 			
-			// initialize the grid.
-			this.runChecks();
+			// Initialize the grid and run the burnin.
 			this.initializeGrid();
 			this.runBurnin();
 			
 		}
-		
-		
-		/* TODO: Write some checks, such that all the parameters needed for the constraints
-		have been defined, and that the path to save images to actually exists. */
-		runChecks(){
-		
-			
-			
-		}
-		
-		
-		// Add all the constraints from the array in Cset.constraints to the CPM object,
-		// and also save their objects here.
-		addConstraints() {
-		
-			// Add all the constraints specified in the config file.
-			for( let cn of this.activeconstraints ){
-			
-				// Create the constraint, save its object in the simulation, and add it to
-				// the CPM object.
-				let cobject;
-				if( this.mode == "browser" ){
-					cobject = new window["CPM"][ cn ]( this.C.conf );
-				} else {
-					cobject = new global["CPM"][ cn ]( this.C.conf );
-				}
-				this.constraints[cn] = cobject;
-				this.C.add( cobject );
-			}
-		}
-		
+
 		// Add GridManipulator/Canvas objects when required.
 		addGridManipulator(){
 			this.gm = new GridManipulator( this.C );
@@ -3194,9 +3217,9 @@ var CPM = (function (exports) {
 				}
 				
 				// if there is an activity constraint, draw activity values depending on color.
-				if( this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
+				if( this.C.conf["LAMBDA_ACT"] !== undefined && this.C.conf["LAMBDA_ACT"][ cellkind + 1 ] > 0 ){ //this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
 					if( actcolor[ cellkind ] ){
-						this.Cim.drawActivityValues( cellkind + 1, this.constraints["ActivityConstraint"] );
+						this.Cim.drawActivityValues( cellkind + 1 );//, this.constraints["ActivityConstraint"] )
 					}			
 				}
 
@@ -3222,10 +3245,13 @@ var CPM = (function (exports) {
 
 		}
 		
-		// Run a montecarlostep and produce outputs if required.
-		step(){
-			this.C.monteCarloStep();
-			
+		// Listener for something that needs to be done after every monte carlo step.
+		postMCSListener(){
+		
+		}
+		
+		// Function for creating outputs
+		createOutputs(){
 			// Draw the canvas every IMGFRAMERATE steps
 			if( this.imgrate > 0 && this.time % this.conf["IMGFRAMERATE"] == 0 ){
 				
@@ -3242,7 +3268,13 @@ var CPM = (function (exports) {
 			if( this.conf["STATSOUT"][this.mode] && this.lograte > 0 && this.time % this.conf["LOGRATE"] == 0 ){
 				this.logStats();
 			}
-			
+		}
+		
+		// Run a montecarlostep and produce outputs if required.
+		step(){
+			this.C.monteCarloStep();
+			this.postMCSListener();
+			this.createOutputs();
 			this.time++;
 		}
 		

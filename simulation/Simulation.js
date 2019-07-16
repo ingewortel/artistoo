@@ -4,72 +4,45 @@ import GridManipulator from "../grid/GridManipulator.js"
 import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
 
 class Simulation {
-	constructor( config ){
+	constructor( config, custommethods ){
+	
+		// overwrite default method if methods are supplied in custommethods
+		// these can be initializeGrid(), drawCanvas(), logStats(),
+		// postMCSListener().
+		for( let m of Object.keys( custommethods ) ){
+			this[m] = custommethods[m]
+		}
+		
 	
 		// Configuration of the simulation environment
 		this.conf = config.simsettings
 		this.imgrate = this.conf["IMGFRAMERATE"] || -1
 		this.lograte = this.conf["LOGRATE"] || -1
+		
+		// See if code is run in browser or via node, which will be used
+		// below to determine what the output should be.
 		if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
 			this.mode = "browser"
 		} else {
 			this.mode = "node"
 		}
 		
-		
 		// Save the time of the simulation.
 		this.time = 0
 		
 		// Make CPM object and add constraints
 		this.C = new CPM( config.field_size, config.conf )
-
-		// Track which constraints are active. They are added automatically by 
-		// the addConstraints() function.
-		this.activeconstraints = config.conf.constraints
-		this.constraints = {} // will contain the constraint objects
-		this.addConstraints()
 				
 		// To add canvas / gridmanipulator automatically when required. This will set
 		// their values in helpClasses to 'true', so they don't have to be added again.
 		this.helpClasses = { gm: false, canvas: false }
 		
-		// initialize the grid.
-		this.runChecks()
+		// Initialize the grid and run the burnin.
 		this.initializeGrid()
 		this.runBurnin()
 		
 	}
-	
-	
-	/* TODO: Write some checks, such that all the parameters needed for the constraints
-	have been defined, and that the path to save images to actually exists. */
-	runChecks(){
-	
-		
-		
-	}
-	
-	
-	// Add all the constraints from the array in Cset.constraints to the CPM object,
-	// and also save their objects here.
-	addConstraints() {
-	
-		// Add all the constraints specified in the config file.
-		for( let cn of this.activeconstraints ){
-		
-			// Create the constraint, save its object in the simulation, and add it to
-			// the CPM object.
-			let cobject
-			if( this.mode == "browser" ){
-				cobject = new window["CPM"][ cn ]( this.C.conf )
-			} else {
-				cobject = new global["CPM"][ cn ]( this.C.conf )
-			}
-			this.constraints[cn] = cobject
-			this.C.add( cobject )
-		}
-	}
-	
+
 	// Add GridManipulator/Canvas objects when required.
 	addGridManipulator(){
 		this.gm = new GridManipulator( this.C )
@@ -140,9 +113,9 @@ class Simulation {
 			}
 			
 			// if there is an activity constraint, draw activity values depending on color.
-			if( this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
+			if( this.C.conf["LAMBDA_ACT"] !== undefined && this.C.conf["LAMBDA_ACT"][ cellkind + 1 ] > 0 ){ //this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
 				if( actcolor[ cellkind ] ){
-					this.Cim.drawActivityValues( cellkind + 1, this.constraints["ActivityConstraint"] )
+					this.Cim.drawActivityValues( cellkind + 1 )//, this.constraints["ActivityConstraint"] )
 				}			
 			}
 
@@ -168,10 +141,13 @@ class Simulation {
 
 	}
 	
-	// Run a montecarlostep and produce outputs if required.
-	step(){
-		this.C.monteCarloStep()
-		
+	// Listener for something that needs to be done after every monte carlo step.
+	postMCSListener(){
+	
+	}
+	
+	// Function for creating outputs
+	createOutputs(){
 		// Draw the canvas every IMGFRAMERATE steps
 		if( this.imgrate > 0 && this.time % this.conf["IMGFRAMERATE"] == 0 ){
 			
@@ -188,7 +164,13 @@ class Simulation {
 		if( this.conf["STATSOUT"][this.mode] && this.lograte > 0 && this.time % this.conf["LOGRATE"] == 0 ){
 			this.logStats()
 		}
-		
+	}
+	
+	// Run a montecarlostep and produce outputs if required.
+	step(){
+		this.C.monteCarloStep()
+		this.postMCSListener()
+		this.createOutputs()
 		this.time++
 	}
 	

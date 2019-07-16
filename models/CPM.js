@@ -24,7 +24,9 @@ class CPM extends GridBasedModel {
 		this.t2k[0] = 0	// Background cell; there is just one cell of this type.
 
 		this.soft_constraints = []
+		this.soft_constraints_indices = {}
 		this.hard_constraints = []
+		this.hard_constraints_indices ={}
 		this.post_setpix_listeners = []
 		this.post_mcs_listeners = []
 		this._neighbours = new Uint16Array(this.grid.p2i(field_size))
@@ -69,10 +71,38 @@ class CPM extends GridBasedModel {
 
 
 	add( t ){
+		let tname = t.constructor.name, currentindex
 		if( t instanceof Constraint ){
 			switch( t.CONSTRAINT_TYPE ){
-			case "soft": this.soft_constraints.push( t ) ;break
-			case "hard": this.hard_constraints.push( t ); break
+			
+			case "soft": 
+				// Add constraint to the array of soft constraints
+				this.soft_constraints.push( t )
+				
+				// Find index of this constraint in this array
+				currentindex = this.soft_constraints.length - 1
+				
+				// Write this index to an array in the 
+				// this.soft_constraints_indices object, for lookup later. 
+				if( !this.soft_constraints_indices.hasOwnProperty(tname) ){
+					this.soft_constraints_indices[tname] = []
+				}
+				this.soft_constraints_indices[tname].push( currentindex )
+				break
+				
+			case "hard": 
+				// Add constraint to the array of soft constraints
+				this.hard_constraints.push( t )
+				
+				// Find index of this constraint in this array
+				currentindex = this.hard_constraints.length - 1
+				// Write this index to an array in the 
+				// this.soft_constraints_indices object, for lookup later. 
+				if( !this.hard_constraints_indices.hasOwnProperty(tname) ){
+					this.hard_constraints_indices[tname] = []
+				}
+				this.hard_constraints_indices[tname].push( currentindex )				
+				break
 			}
 		}
 		if( typeof t["postSetpixListener"] === "function" ){
@@ -85,6 +115,25 @@ class CPM extends GridBasedModel {
 		if( typeof t["postAdd"] === "function" ){
 			t.postAdd()
 		}
+	}
+	
+	getConstraint( constraintname, num ){
+	
+		if( !num ){
+			num = 0
+		}
+		let i
+		
+		if( this.hard_constraints_indices.hasOwnProperty( constraintname ) ){
+			i = this.hard_constraints_indices[constraintname][num]
+			return this.hard_constraints[i]
+		} else if ( this.soft_constraints_indices.hasOwnProperty( constraintname ) ){
+			i = this.soft_constraints_indices[constraintname][num]
+			return this.soft_constraints[i]
+		} else {
+			throw("No constraint of name " + " exists in this CPM!")
+		}	
+	
 	}
 
 	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
