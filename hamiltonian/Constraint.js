@@ -19,20 +19,29 @@ class Constraint {
 	are actually present in the conf object and have the right format.*/
 	confChecker( ){
 	}
-	/* Helper check function for parameters that should be a single string,
-	which can take on one of the values in 'values'*/
-	confCheckString( name, values ){
-	
-		// Check if the property exists at all
+
+	// Check if the property exists at all
+	confCheckPresenceOf( name ){
 		if( !this.conf.hasOwnProperty( name ) ){
 			throw( "Cannot find parameter " + name + " in the conf object!" )
 		}
 		
+	}
+
+	confCheckTypeOf( name, type ){
+		this.confCheckPresenceOf( name )
 		// Check if the property has the right type
-		if( !( typeof this.conf[name] === "string" ) ){
-			throw( "Conf object parameter " + name + " should be a single string!" )
+		if( !( typeof this.conf[name] === type ) ){
+			throw( "Conf object parameter " + name + " should be a " + type +"!" )
 		}
-		
+	}
+
+	/* Helper check function for parameters that should be a single string,
+	which can take on one of the values in 'values'*/
+	confCheckString( name, values ){
+		this.confCheckPresenceOf( name )
+		this.confCheckTypeOf( name, "string" )
+
 		// Check if the property has one of the allowed values.
 		let valueFound = false
 		for( let v of values ){
@@ -48,20 +57,12 @@ class Constraint {
 	}
 	/* Checker for parameters that should be a single number.*/
 	confCheckNumber( name ){
-		// Check if the property exists at all
-		if( !this.conf.hasOwnProperty( name ) ){
-			throw( "Cannot find parameter " + name + " in the conf object!" )
-		}
-		
-		// Check if the property has the right type
-		if( !( typeof this.conf[name] === "number" ) ){
-			throw( "Conf object parameter " + name + " should be a number/NaN!" )
-		}	
+		this.confCheckTypeOf( name, "number" )
 	}
 	
 	/* Checker for parameters that should be a single non-negative number*/
 	confCheckSingleNonNegative( name ){
-		this.confCheckNumber()
+		this.confCheckNumber( name )
 		if ( this.conf[name] < 0 ){
 			throw( "Conf object parameter " + name + " should be non-negative!" )
 		}
@@ -80,10 +81,7 @@ class Constraint {
 	}
 
 	confCheckArray( name, type ){
-		// Check if the property exists at all
-		if( !this.conf.hasOwnProperty( name ) ){
-			throw( "Cannot find parameter " + name + " in the conf object!" )
-		}
+		this.confCheckPresenceOf( name )
 		let p = this.conf[name]
 		if( !(p instanceof Array) ){
 			throw( "Parameter " + name + " is not an array!" )
@@ -140,10 +138,7 @@ class Constraint {
 	
 	/* Now the format should be a 'matrix' with rows and columns of numbers for each cellkind. */
 	confCheckCellMatrix( name, type="number" ){
-		// Check if the property exists at all
-		if( !this.conf.hasOwnProperty( name ) ){
-			throw( "Cannot find parameter " + name + " in the conf object!" )
-		}
+		this.confCheckPresenceOf( name )
 		let p = this.conf[name]
 		if( !(p instanceof Array) ){
 			throw( "Parameter " + name + " is not an array!" )
@@ -167,8 +162,6 @@ class Constraint {
 				}
 			}
 		}
-		
-		
 	}
 }
 

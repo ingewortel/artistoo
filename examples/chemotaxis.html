@@ -20,15 +20,13 @@ var g = new CPM.Grid2D([w/10,h/10], true, "Float32"),
 		nCellKinds : 1,
 		J: [[0,20], [20,100]],
 		V: [0,250], 
-		LAMBDA_V: [0,50] ,
-		field: gi, 
-		LAMBDA_CH: [0, 800],
-		
+		LAMBDA_V: [0,50] ,		
 	})
 
-C.add( new CPM.Adhesion( C.conf ) )
-C.add( new CPM.VolumeConstraint( C.conf ) )
-C.add( new CPM.ChemotaxisConstraint( C.conf ) )
+C.add( new CPM.ChemotaxisConstraint( {
+	LAMBDA_CH: [0,800],
+	CH_FIELD : gi }
+) )
 
 new CPM.GridManipulator(C).seedCellAt(1, [200,m])
 

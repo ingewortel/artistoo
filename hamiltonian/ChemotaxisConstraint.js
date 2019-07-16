@@ -7,12 +7,13 @@ class ChemotaxisConstraint extends SoftConstraint {
 	}
 	confChecker(){
 		this.confCheckCellNonNegative( "LAMBDA_CH" )
+		this.confCheckPresenceOf( "CH_FIELD" )
 	}
 
 	constructor( conf ){
 		super( conf )
 		this.conf = conf
-		this.field = conf.field
+		this.field = conf.CH_FIELD
 		if( this.field instanceof CoarseGrid ){
 			this.deltaH = this.deltaHCoarse
 		}
