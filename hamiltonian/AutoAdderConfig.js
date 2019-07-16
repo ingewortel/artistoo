@@ -9,12 +9,14 @@ import Adhesion from "./Adhesion.js"
 import VolumeConstraint from "./VolumeConstraint.js"
 import ActivityConstraint from "./ActivityConstraint.js"
 import PerimeterConstraint from "./PerimeterConstraint.js"
+import BarrierConstraint from "./BarrierConstraint.js"
 
 let AutoAdderConfig = {
 	J : Adhesion,
 	LAMBDA_V : VolumeConstraint,
 	LAMBDA_ACT : ActivityConstraint,
-	LAMBDA_P : PerimeterConstraint
+	LAMBDA_P : PerimeterConstraint,
+	IS_BARRIER : BarrierConstraint
 }
 
 export default AutoAdderConfig
