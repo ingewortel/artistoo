@@ -1,3 +1,5 @@
+- Check when cached stats should be removed; this now happens after every MCS - but this fails when stuff happens between the MCS and stat computation such that the cached stats are no longer valid (eg cell division).  
+
 - (Inge): check confCheckers and ChemotaxisConstraint
 Fix the many-cells-diffusion example.
 
