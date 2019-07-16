@@ -40,6 +40,7 @@ class GridBasedModel {
 		this.extents = this.grid.extents
 
 		this.cellvolume = []
+		this.time = 0
 
 		this.stats = []
 		this.stat_values = {}

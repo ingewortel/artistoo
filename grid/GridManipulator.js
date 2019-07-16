@@ -141,6 +141,8 @@ class GridManipulator {
 
 		// Loop over the pixels belonging to this cell
 		//let sidea = 0, sideb = 0
+		//let pix_id = []
+		//let pix_nid = []
 		for( let j = 0 ; j < cp.length ; j ++ ){
 			// coordinates of current cell relative to center of mass
 			x2 = cp[j][0]-com[0]
@@ -152,10 +154,15 @@ class GridManipulator {
 			if( side > 0 ){
 				//sidea ++
 				C.setpix( cp[j], nid ) 
+				//pix_nid.push( cp[j] )
 			} else {
+				//pix_id.push( cp[j] )
 				//sideb ++
 			}
 		}
+		//cp[id] = pix_id
+		//cp[nid] = pix_nid
+		C.stat_values = {} // remove cached stats or this will crash!!!
 		//console.log( sidea, sideb )
 		return nid
 	}

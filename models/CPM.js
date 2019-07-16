@@ -262,6 +262,7 @@ class CPM extends GridBasedModel {
 			this.cellvolume[t] ++
 		}
 		this.updateborderneari( i, t_old, t )
+		//this.stat_values = {} // invalidate stat value cache
 		for( let l of this.post_setpix_listeners ){
 			l( i, t_old, t )
 		}

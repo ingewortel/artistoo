@@ -72,7 +72,7 @@ let config = {
 		EXPNAME : "Microchannel",					// Used for the filename of output images.
 		
 		// Output stats etc
-		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		STATSOUT : { browser: true, node: true }, // Should stats be computed?
 		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
 
 	}

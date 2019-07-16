@@ -504,6 +504,7 @@ class GridBasedModel {
 		this.extents = this.grid.extents;
 
 		this.cellvolume = [];
+		this.time = 0;
 
 		this.stats = [];
 		this.stat_values = {};
@@ -1485,6 +1486,7 @@ class CPM extends GridBasedModel {
 			this.cellvolume[t] ++;
 		}
 		this.updateborderneari( i, t_old, t );
+		//this.stat_values = {} // invalidate stat value cache
 		for( let l of this.post_setpix_listeners ){
 			l( i, t_old, t );
 		}
@@ -2595,6 +2597,8 @@ class GridManipulator {
 
 		// Loop over the pixels belonging to this cell
 		//let sidea = 0, sideb = 0
+		//let pix_id = []
+		//let pix_nid = []
 		for( let j = 0 ; j < cp.length ; j ++ ){
 			// coordinates of current cell relative to center of mass
 			x2 = cp[j][0]-com[0];
@@ -2606,8 +2610,12 @@ class GridManipulator {
 			if( side > 0 ){
 				//sidea ++
 				C.setpix( cp[j], nid ); 
+				//pix_nid.push( cp[j] )
 			}
 		}
+		//cp[id] = pix_id
+		//cp[nid] = pix_nid
+		C.stat_values = {}; // remove cached stats or this will crash!!!
 		//console.log( sidea, sideb )
 		return nid
 	}
@@ -2995,7 +3003,11 @@ class Simulation {
 			
 			// Draw borders if required
 			if(  cellborders[ cellkind  ]  ){
-				this.Cim.drawCellBorders( cellkind+1, "000000" );
+				let bordercol = "000000";
+				if( this.conf.hasOwnProperty("BORDERCOL") ){
+					bordercol = this.conf["BORDERCOL"][cellkind];
+				}
+				this.Cim.drawOnCellBorders( cellkind+1, bordercol );
 			}
 			
 			// if there is an activity constraint, draw activity values depending on color.

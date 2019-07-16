@@ -1,25 +1,53 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Epidermis</title>
-<style type="text/css">
-body{
-		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
-		 Helvetica, Arial, "Lucida Grande", sans-serif;
-	 padding : 15px;
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/* START DESCRIPTION Do not remove this line */
+Simulation of a tightly packed monolayer of epidermal cells. These cells have
+adhesion and volume constraints, as well as a perimeter constraint
+to increase their stiffness. 
+/* END DESCRIPTION Do not remove this line */
+
+/* 	================= DECLARE CUSTOM METHODS ===================== */
+/* 	If no custom methods are defined, the drawing/initialisation/output 
+	functions of the CPM.Simulation class are used. */
+
+// Are any custom methods defined here?
+Custom-methods: true
+
+/* START METHODS OBJECT Do not remove this line */
+/* 	The following functions are defined below and will be added to
+	the simulation object.*/
+let custommethods = {
+	initializeGrid : initializeGrid
 }
-td {
-	 padding: 10px;
-	 vertical-align: top;
+/* END METHODS OBJECT Do not remove this line */
+
+
+
+
+/* ================= WRITE CUSTOM METHODS ===================== */
+
+/* START METHODS DEFINITION Do not remove this line */
+
+/* The following custom methods will be added to the simulation object
+below. */
+function initializeGrid(){
+	// Seed epidermal cell layer
+	let step = 12
+	
+	for( let i = 1 ; i < this.C.extents[0] ; i += step ){
+		for( let j = 1 ; j < this.C.extents[1] ; j += step ){
+			this.C.setpix( [i,j], this.C.makeNewCellID(1) )
+		}
+	}
 }
-</style>
+
+/* END METHODS DEFINITION Do not remove this line */
 
 
-<script src="../../build/cpm.js"></script>
-<script src="../fpsmeter.min.js"></script>
-<script>
-"use strict"
 
+/* ================= CONFIGURATION ===================== */
 
+/* Do not remove this line: START CONFIGURATION */
 /*	----------------------------------
 	CONFIGURATION SETTINGS
 	----------------------------------
@@ -89,54 +117,4 @@ let config = {
 	}
 }
 /*	---------------------------------- */
-let sim, meter
-
-
-function initialize(){
-	 /* 	The following functions are defined below and will be added to
-	 	the simulation object.*/
-	 let custommethods = {
-	 	initializeGrid : initializeGrid
-	 }
-	sim = new CPM.Simulation( config, custommethods )
-
-
-	meter = new FPSMeter({left:"auto", right:"5px"})
-	step()
-}
-
-
-function step(){
-	sim.step()
-	meter.tick()
-	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME"] ){
-		requestAnimationFrame( step )
-	}
-}
-
-
-
-/* The following custom methods will be added to the simulation object
-below. */
-function initializeGrid(){
-	// Seed epidermal cell layer
-	let step = 12
-	
-	for( let i = 1 ; i < this.C.extents[0] ; i += step ){
-		for( let j = 1 ; j < this.C.extents[1] ; j += step ){
-			this.C.setpix( [i,j], this.C.makeNewCellID(1) )
-		}
-	}
-}
-
-</script>
-</head>
-<body onload="initialize()">
-<h1>Epidermis</h1>
-<p>
-Simulation of a tightly packed monolayer of epidermal cells. These cells have
-adhesion and volume constraints, as well as a perimeter constraint
-to increase their stiffness. 
-</p>
-</body>
-</html>
+/* Do not remove this line: END CONFIGURATION */

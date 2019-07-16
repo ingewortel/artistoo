@@ -3,8 +3,8 @@
 
 all : node-examples html-examples
 
-#EXAMPLES=SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis CellSorting ManyCellsPrefDir Randomwalk EpidermisWithTCells Epidermis IsingModel SingleCell Cellsorting Actmodel Microchannel
-EXAMPLES=SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis CellSorting ActModel Microchannel
+#EXAMPLES=CellDivision SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis CellSorting ManyCellsPrefDir Randomwalk EpidermisWithTCells Epidermis IsingModel SingleCell Cellsorting Actmodel Microchannel
+EXAMPLES=CellDivision SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis CellSorting ActModel Microchannel
 
 html :
 	mkdir -p $@
