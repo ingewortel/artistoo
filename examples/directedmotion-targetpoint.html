@@ -50,9 +50,6 @@ function initialize(){
 		V : [0,152],
 	})
 
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( new CPM.VolumeConstraint( C.conf ) )
-
 	Cdir = new CPM.AttractionPointConstraint({
 		LAMBDA_ATTRACTIONPOINT : [0,100],
 		ATTRACTIONPOINT : [[0,0], [w/2,w/2] ] 

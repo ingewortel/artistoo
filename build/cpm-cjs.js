@@ -702,20 +702,29 @@ class Constraint {
 	are actually present in the conf object and have the right format.*/
 	confChecker( ){
 	}
-	/* Helper check function for parameters that should be a single string,
-	which can take on one of the values in 'values'*/
-	confCheckString( name, values ){
-	
-		// Check if the property exists at all
+
+	// Check if the property exists at all
+	confCheckPresenceOf( name ){
 		if( !this.conf.hasOwnProperty( name ) ){
 			throw( "Cannot find parameter " + name + " in the conf object!" )
 		}
 		
+	}
+
+	confCheckTypeOf( name, type ){
+		this.confCheckPresenceOf( name );
 		// Check if the property has the right type
-		if( !( typeof this.conf[name] === "string" ) ){
-			throw( "Conf object parameter " + name + " should be a single string!" )
+		if( !( typeof this.conf[name] === type ) ){
+			throw( "Conf object parameter " + name + " should be a " + type +"!" )
 		}
-		
+	}
+
+	/* Helper check function for parameters that should be a single string,
+	which can take on one of the values in 'values'*/
+	confCheckString( name, values ){
+		this.confCheckPresenceOf( name );
+		this.confCheckTypeOf( name, "string" );
+
 		// Check if the property has one of the allowed values.
 		let valueFound = false;
 		for( let v of values ){
@@ -731,20 +740,12 @@ class Constraint {
 	}
 	/* Checker for parameters that should be a single number.*/
 	confCheckNumber( name ){
-		// Check if the property exists at all
-		if( !this.conf.hasOwnProperty( name ) ){
-			throw( "Cannot find parameter " + name + " in the conf object!" )
-		}
-		
-		// Check if the property has the right type
-		if( !( typeof this.conf[name] === "number" ) ){
-			throw( "Conf object parameter " + name + " should be a number/NaN!" )
-		}	
+		this.confCheckTypeOf( name, "number" );
 	}
 	
 	/* Checker for parameters that should be a single non-negative number*/
 	confCheckSingleNonNegative( name ){
-		this.confCheckNumber();
+		this.confCheckNumber( name );
 		if ( this.conf[name] < 0 ){
 			throw( "Conf object parameter " + name + " should be non-negative!" )
 		}
@@ -763,10 +764,7 @@ class Constraint {
 	}
 
 	confCheckArray( name, type ){
-		// Check if the property exists at all
-		if( !this.conf.hasOwnProperty( name ) ){
-			throw( "Cannot find parameter " + name + " in the conf object!" )
-		}
+		this.confCheckPresenceOf( name );
 		let p = this.conf[name];
 		if( !(p instanceof Array) ){
 			throw( "Parameter " + name + " is not an array!" )
@@ -823,10 +821,7 @@ class Constraint {
 	
 	/* Now the format should be a 'matrix' with rows and columns of numbers for each cellkind. */
 	confCheckCellMatrix( name, type="number" ){
-		// Check if the property exists at all
-		if( !this.conf.hasOwnProperty( name ) ){
-			throw( "Cannot find parameter " + name + " in the conf object!" )
-		}
+		this.confCheckPresenceOf( name );
 		let p = this.conf[name];
 		if( !(p instanceof Array) ){
 			throw( "Parameter " + name + " is not an array!" )
@@ -850,8 +845,6 @@ class Constraint {
 				}
 			}
 		}
-		
-		
 	}
 }
 
@@ -1457,7 +1450,7 @@ class CPM extends GridBasedModel {
 	*/
 
 class CoarseGrid {
-	constructor( grid, upscale = 2 ){
+	constructor( grid, upscale = 3 ){
 		this.extents = new Array( grid.extents.length );
 		for( let i = 0 ; i < grid.extents.length ; i++ ){
 			this.extents[i] = upscale * grid.extents[i];
@@ -1467,26 +1460,38 @@ class CoarseGrid {
 	}
 
 	pixt( p ){
-		let ps = new Array( p.length ), pmod = new Array( p.length );
-		for( let i = 0 ; i < p.length ; i ++ ){
-			ps[i] = ~~(p[i]/this.upscale);
-			pmod[i] = p[i] % this.upscale;
+		// 2D bilinear interpolation
+		let l = ~~(p[0] / this.upscale);
+		let r = l+1;
+		if( r > this.grid.extents[0] ){
+			r = this.grid.extents[0];
 		}
-		let pg = this.grid.gradient( ps );
-		let v = this.grid.pixt(ps);
-		for( let i = 0 ; i < ps.length ; i ++ ){
-			v += pg[i] * pmod[i] / this.upscale;
-		}	
-		return v 
+		let t = ~~(p[1] / this.upscale);
+		let b = t+1;
+		if( b > this.grid.extents[1] ){
+			b = this.grid.extents[1];
+		}
+
+		let f_lt = this.grid.pixt([l,t]);
+		let f_rt = this.grid.pixt([r,t]);
+		let f_lb = this.grid.pixt([l,b]);
+		let f_rb = this.grid.pixt([r,b]);
+
+		let h = (p[0] % this.upscale) / this.upscale;
+		let f_x_b = f_lb * (1-h) + f_rb * h; 
+		let f_x_t = f_lt * (1-h) + f_rt * h;
+
+		let v = (p[1] % this.upscale) / this.upscale;
+		return f_x_t*(1-v) + f_x_b * v
 	}
 
-	gradient( p ){
-		let ps = new Array( p.length );
+	/*gradient( p ){
+		let ps = new Array( p.length )
 		for( let i = 0 ; i < p.length ; i ++ ){
-			ps[i] = ~~(p[i]/this.upscale);
+			ps[i] = ~~(p[i]/this.upscale)
 		}
 		return this.grid.gradient( ps )
-	}
+	}*/
 }
 
 class Stat {
@@ -1678,7 +1683,7 @@ class Canvas {
 		let maxval = 0;
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				let p = cc.pixt([i,j]);
+				let p = Math.log(.1+cc.pixt([i,j]));
 				if( maxval < p ){
 					maxval = p;
 				}
@@ -1689,7 +1694,7 @@ class Canvas {
 		this.col_b = 0;
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				this.col_r =  255*(cc.pixt( [i,j] )/maxval);
+				this.col_r =  255*(Math.log(.1+cc.pixt( [i,j] ))/maxval);
 				this.pxfi([i,j]);
 			}
 		}
@@ -2747,6 +2752,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 	}
 	confChecker(){
 		this.confCheckCellNonNegative( "LAMBDA_CH" );
+		this.confCheckPresenceOf( "CH_FIELD" );
 	}
 
 	constructor( conf ){
