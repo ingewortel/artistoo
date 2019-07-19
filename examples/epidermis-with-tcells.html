@@ -65,10 +65,6 @@ function initialize(){
 		LAMBDA_ACT:[0,0,500],
 		ACT_MEAN: "geometric"
 	})
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( new CPM.VolumeConstraint( C.conf ) )
-	C.add( new CPM.PerimeterConstraint( C.conf ) )
-	C.add( new CPM.ActivityConstraint( C.conf ) )
 
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	meter = new FPSMeter({left:"auto", right:"5px"})

@@ -6,7 +6,6 @@
 
 import GridBasedModel from "./GridBasedModel.js"
 import DiceSet from "../DiceSet.js"
-import Constraint from "../hamiltonian/Constraint.js"
 
 import AutoAdderConfig from "../hamiltonian/AutoAdderConfig.js"
 
@@ -71,37 +70,32 @@ class CPM extends GridBasedModel {
 
 
 	add( t ){
-		let tname = t.constructor.name, currentindex
-		if( t instanceof Constraint ){
+		let tname = t.constructor.name, i 
+		if( t.CONSTRAINT_TYPE ){
 			switch( t.CONSTRAINT_TYPE ){
 			
 			case "soft": 
 				// Add constraint to the array of soft constraints
-				this.soft_constraints.push( t )
-				
-				// Find index of this constraint in this array
-				currentindex = this.soft_constraints.length - 1
+				i = this.soft_constraints.push( t )
 				
 				// Write this index to an array in the 
 				// this.soft_constraints_indices object, for lookup later. 
 				if( !this.soft_constraints_indices.hasOwnProperty(tname) ){
 					this.soft_constraints_indices[tname] = []
 				}
-				this.soft_constraints_indices[tname].push( currentindex )
+				this.soft_constraints_indices[tname].push( i-1 )
 				break
 				
 			case "hard": 
 				// Add constraint to the array of soft constraints
-				this.hard_constraints.push( t )
+				i = this.hard_constraints.push( t )
 				
-				// Find index of this constraint in this array
-				currentindex = this.hard_constraints.length - 1
 				// Write this index to an array in the 
 				// this.soft_constraints_indices object, for lookup later. 
 				if( !this.hard_constraints_indices.hasOwnProperty(tname) ){
 					this.hard_constraints_indices[tname] = []
 				}
-				this.hard_constraints_indices[tname].push( currentindex )				
+				this.hard_constraints_indices[tname].push( i-1 )				
 				break
 			}
 		}

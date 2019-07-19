@@ -56,7 +56,7 @@ class ActivityConstraint extends SoftConstraint {
 			maxact = this.conf["MAX_ACT"][tgt_kind]
 			lambdaact = this.conf["LAMBDA_ACT"][tgt_kind]
 		}
-		if( maxact == 0 || lambdaact == 0 ){
+		if( !maxact || !lambdaact ){
 			return 0
 		}
 

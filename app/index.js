@@ -24,6 +24,8 @@ import PreferredDirectionConstraint from "../hamiltonian/PreferredDirectionConst
 import ChemotaxisConstraint from "../hamiltonian/ChemotaxisConstraint.js"
 import BarrierConstraint from "../hamiltonian/BarrierConstraint.js"
 import AttractionPointConstraint from "../hamiltonian/AttractionPointConstraint.js"
+import HardConstraint from "../hamiltonian/HardConstraint.js"
+import SoftConstraint from "../hamiltonian/SoftConstraint.js"
 
 import Simulation from "../simulation/Simulation.js"
 
@@ -33,5 +35,5 @@ export {CA, CPM, GridBasedModel, Stats, Canvas, GridManipulator, Grid2D, Grid3D,
 	CoarseGrid, ChemotaxisConstraint, BarrierConstraint,
 	PreferredDirectionConstraint, AttractionPointConstraint,
 	PixelsByCell, Centroids, CentroidsWithTorusCorrection,
-	Simulation }
+	Simulation, HardConstraint, SoftConstraint }
 
