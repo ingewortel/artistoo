@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Diffusion</title>
+<title>GameOfLife</title>
 <style type="text/css">
 body{
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
@@ -23,60 +23,63 @@ td {
 
 "use strict"
 
+
 // Configuration
 let conf = {
-	w : 61,					// dimensions of the grid to build
-	D : 0.1545706,			// Diffusion coefficient
-	res : 10,				// 'Resolution' of the coarse grid
-	zoom : 1,				// zoom for displaying the grid
+	gsize : [200,200],		// dimensions of the grid to build
+	zoom : 3,				// zoom for displaying the grid
 	torus: true,			// Should grid boundaries be connected?
-	runtime : 20
+	runtime : 1000
 }
 
-conf["m"]=(conf.w-1)/2		// midpoint of the grid
-
-let grid, diffusiongrid, Cim, t = 0, s = 0, meter
+let C, Cim, cid=0, meter, t = 0
 
 
 // Setup the grid and needed objects
 function setup(){
-	let w = conf.w
-	grid = new CPM.Grid2D([conf.w,conf.w], conf.torus, "Float32")
-	diffusiongrid = new CPM.CoarseGrid( grid, conf.res )
-	Cim = new CPM.Canvas( diffusiongrid , {zoom:conf.zoom} )
+		C = new CPM.CA( [conf.gsize[0],conf.gsize[1]], {
+		"UPDATE_RULE": 	function(p,N){
+			let nalive = 0
+			for( let pn of N ){
+				nalive += (this.pixt(pn)==1)
+			}	
+			if( this.pixt(p) == 1 ){
+				if( nalive == 2 || nalive == 3 ){
+					return 1
+				}
+			} else {
+				if( nalive == 3 ) return 1
+			}
+			return 0
+		}
+	})
+	Cim = new CPM.Canvas( C, {zoom:conf.zoom} )
 	meter = new FPSMeter({left:"auto", right:"5px"})
 }
 
 // Place something on the grid
 function initializeGrid(){
-	grid.setpix( [conf.m,conf.m], 1 )
-}
-
-
-// Perform one diffusionstep
-function diffusionStep(){
-
-	let D = conf.D, s = 0, w = conf.w, m = conf.m
-
-	grid.diffusion( D*0.01 )
-	s = 0
-	for( let x = 0 ; x < w ; x ++ ){
-		for( let y = 0 ; y < w ; y ++ ){
-			s += ((x-m)*(x-m)+(y-m)*(y-m))*(0.38*0.38/60./60.)*grid.pixt( [x,y] )
+	for( let x = 0 ; x < conf.gsize[0] ; x ++ ){
+		for( let y = 0 ; y < conf.gsize[1] ; y ++ ){
+			if( C.random() < 0.5 ){
+				C.setpix( [x,y], 1 )
+			}
 		}
 	}
 }
 
 // Produce output, like drawing on the canvas and logging stats
 function output(){
-	Cim.drawField( diffusiongrid )
-	console.log( t, s, 4 * 6.2 * 1E-5 * (t/10) )
+	// Clear the canvas (in the backgroundcolor white), and redraw:
+	Cim.clear( "FFFFFF" )
+	// The cell in red
+	Cim.drawCells( 1, "AA0000" )
 }
 
 // Run everything needed for a single step (output and computation),
 // and update the current time
 function step(){
-	diffusionStep()
+	C.timeStep()
 	meter.tick()
 	output()
 	t++
@@ -96,9 +99,9 @@ function run(){
 </script>
 </head>
 <body onload="initialize()">
-<h1>Diffusion</h1>
+<h1>GameOfLife</h1>
 <p>
-Diffusion on a coarse grid.
+Conway's Game of Life with random initial conditions.
 </p>
 </body>
 </html>

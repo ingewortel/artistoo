@@ -12,6 +12,7 @@ build/cpm.js: rollup.config.js app/index.js \
 	hamiltonian/PersistenceConstraint.js stats/PostMCSStats.js \
 	hamiltonian/ChemotaxisConstraint.js hamiltonian/BarrierConstraint.js \
 	hamiltonian/PreferredDirectionConstraint.js hamiltonian/AttractionPointConstraint.js \
-	hamiltonian/AutoAdderConfig.js \
+	hamiltonian/AdhesionMultiBackground.js hamiltonian/AutoAdderConfig.js \
+	hamiltonian/ActivityMultiBackground.js \
 	simulation/Simulation.js
 	node_modules/rollup/bin/rollup -c

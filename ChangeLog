@@ -3,6 +3,14 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-08-01 Inge Wortel <ingewortel@gmail.com>
+	* hamiltonian/AdhesionMultiBackground.js : Added a new form of the adhesion constraint,
+	where a set of pixels on the grid is given different parameters when it is background.
+	* hamiltonian/ActivityMultiBackground.js : Idem for the Act model. This allows building
+	adhesive micropatterns on the substrate for the cell to move on.
+	* simulation-examples : new examples added for the GameOfLife CA, and one for the
+	micropatterned substrate.
+
 2019-07-16 Inge Wortel <ingewortel@gmail.com>
 	* grid/GridManipulator.js : reset stats after cell division, because
 	the cellpixels stat is out of date

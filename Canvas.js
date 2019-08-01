@@ -7,6 +7,7 @@ import Grid2D from "./grid/Grid2D.js"
 import CoarseGrid from "./grid/CoarseGrid.js"
 import PixelsByCell from "./stats/PixelsByCell.js"
 import ActivityConstraint from "./hamiltonian/ActivityConstraint.js"
+import ActivityMultiBackground from "./hamiltonian/ActivityMultiBackground.js"
 
 class Canvas {
 	/* The Canvas constructor accepts a CPM object C or a Grid2D object */
@@ -216,8 +217,8 @@ class Canvas {
 	drawActivityValues( kind, A ){
 		if( !A ){
 			for( let c of this.C.soft_constraints ){
-				if( c instanceof ActivityConstraint ){
-					A = c ; break
+				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
+					A = c; break
 				}
 			}
 		}

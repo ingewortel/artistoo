@@ -22,7 +22,7 @@ let conf = {
 
 conf["m"]=(conf.w-1)/2		// midpoint of the grid
 
-let grid, diffusiongrid, Cim, t = 0, s = 0
+let grid, diffusiongrid, Cim, t = 0, s = 0, meter
 
 
 // Setup the grid and needed objects
@@ -31,6 +31,7 @@ function setup(){
 	grid = new CPM.Grid2D([conf.w,conf.w], conf.torus, "Float32")
 	diffusiongrid = new CPM.CoarseGrid( grid, conf.res )
 	Cim = new CPM.Canvas( diffusiongrid , {zoom:conf.zoom} )
+	meter = new FPSMeter({left:"auto", right:"5px"})
 }
 
 // Place something on the grid
@@ -63,16 +64,16 @@ function output(){
 // and update the current time
 function step(){
 	diffusionStep()
+	meter.tick()
 	output()
 	t++
-	if( t < conf.runtime ){ requestAnimationFrame( step ) }
 }
 
 // Starts up the simulation
 function initialize(){
 	setup()
 	initializeGrid()
-	step()
+	run()
 }
 /* END CODE Do not remove this line */
 

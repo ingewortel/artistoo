@@ -17,7 +17,7 @@ let conf = {
 
 conf["m"]=(conf.w-1)/2		// midpoint of the grid
 
-let grid, diffusiongrid, Cim, t = 0, s = 0
+let grid, diffusiongrid, Cim, t = 0, s = 0, meter
 
 
 // Setup the grid and needed objects
@@ -60,13 +60,18 @@ function step(){
 	diffusionStep()
 	output()
 	t++
-	if( t < conf.runtime ){ requestAnimationFrame( step ) }
 }
 
 // Starts up the simulation
 function initialize(){
 	setup()
 	initializeGrid()
-	step()
+	run()
+}
+// all steps
+function run(){
+	 while( t < conf.runtime){
+			step()
+	 }
 }
 initialize()

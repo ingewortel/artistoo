@@ -27,7 +27,13 @@ echo '<script>'
 echo -e "\n"
 
 sed -e '1,/START CODE/d' -e '/END CODE/,$d' $templatefile \
-	
+
+echo "// Run the simulation"
+echo function run'(){'
+echo -e '\t	step()'
+echo -e '\t	if( t < conf.runtime ){ requestAnimationFrame( run ) }'
+echo "}"
+
 
 
 

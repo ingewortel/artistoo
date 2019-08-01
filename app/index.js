@@ -13,12 +13,14 @@ import Grid3D from "../grid/Grid3D.js"
 import GridManipulator from "../grid/GridManipulator.js"
 import CoarseGrid from "../grid/CoarseGrid.js"
 
+import AdhesionMultiBackground from "../hamiltonian/AdhesionMultiBackground.js"
 import Adhesion from "../hamiltonian/Adhesion.js"
 import VolumeConstraint from "../hamiltonian/VolumeConstraint.js"
 import HardVolumeRangeConstraint from "../hamiltonian/HardVolumeRangeConstraint.js"
 import TestLogger from "../hamiltonian/TestLogger.js"
 import PerimeterConstraint from "../hamiltonian/PerimeterConstraint.js"
 import ActivityConstraint from "../hamiltonian/ActivityConstraint.js"
+import ActivityMultiBackground from "../hamiltonian/ActivityMultiBackground.js"
 import PersistenceConstraint from "../hamiltonian/PersistenceConstraint.js"
 import PreferredDirectionConstraint from "../hamiltonian/PreferredDirectionConstraint.js"
 import ChemotaxisConstraint from "../hamiltonian/ChemotaxisConstraint.js"
@@ -35,5 +37,6 @@ export {CA, CPM, GridBasedModel, Stats, Canvas, GridManipulator, Grid2D, Grid3D,
 	CoarseGrid, ChemotaxisConstraint, BarrierConstraint,
 	PreferredDirectionConstraint, AttractionPointConstraint,
 	PixelsByCell, Centroids, CentroidsWithTorusCorrection,
-	Simulation, HardConstraint, SoftConstraint }
+	Simulation, HardConstraint, SoftConstraint, AdhesionMultiBackground,
+	ActivityMultiBackground }
 

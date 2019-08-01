@@ -158,7 +158,7 @@ class Constraint {
 			}
 			for( let ee of e ){
 				if( !(typeof ee === type ) ){
-					throw("Elements in conf parameter " + name + " must all be numbers/NaN!" )
+					throw("Elements in conf parameter " + name + " must all be of type " + type + "!" )
 				}
 			}
 		}
