@@ -55,7 +55,7 @@ echo "function step(){"
 
 echo -e '\tsim.step()'
 echo -e '\tmeter.tick()'
-echo -e '\t'if'( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME"] ){'
+echo -e '\t'if'( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){'
 echo -e '\t\trequestAnimationFrame( step )'
 echo -e '\t}'
 echo '}'

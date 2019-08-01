@@ -3414,6 +3414,7 @@ var CPM = (function (exports) {
 			
 			// Save the time of the simulation.
 			this.time = 0;
+			this.running = true;
 			
 			// Make CPM object and add constraints
 			this.C = new CPM( config.field_size, config.conf );
@@ -3557,12 +3558,18 @@ var CPM = (function (exports) {
 		
 		// Run a montecarlostep and produce outputs if required.
 		step(){
-			this.C.monteCarloStep();
-			this.postMCSListener();
-			this.createOutputs();
-			this.time++;
+			if( this.running ){
+				this.C.monteCarloStep();
+				this.postMCSListener();
+				this.createOutputs();
+				this.time++;
+			}
 		}
 		
+		// toggle running
+		toggleRunning(){
+			this.running = !this.running;
+		}
 		
 		// Run the entire simulation.
 		run(){
