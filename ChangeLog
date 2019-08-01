@@ -5,7 +5,7 @@ yyyy-mm-dd Your Name <your@email.com>
 
 2019-07-16 Inge Wortel <ingewortel@gmail.com>
 	* grid/GridManipulator.js : reset stats after cell division, because
-	the cellpixels stat is out of date.
+	the cellpixels stat is out of date
 	* models/CPM.js : added a method getConstraint() to retrieve a 
 	constraint by name. This is useful for drawing methods that need
 	attributes stored in the constraint object.

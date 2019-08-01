@@ -1,7 +1,7 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /* START DESCRIPTION Do not remove this line */
-Act cells moving in a microchannnel.
+Cells moving up a gradient of a diffusing chemokine, which is produced in the center. 
 /* END DESCRIPTION Do not remove this line */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
@@ -17,7 +17,8 @@ Custom-methods: true
 	this object is ignored and not used in the html/node files. */
 let custommethods = {
 	initializeGrid : initializeGrid,
-	buildChannel : buildChannel
+	postMCSListener : postMCSListener,
+	drawCanvas : drawCanvas
 }
 /* END METHODS OBJECT Do not remove this line */
 
@@ -35,7 +36,13 @@ let pconstraint = new CPM.PersistenceConstraint(
 )
 sim.C.add( pconstraint ) */
 /* START ADDCONSTRAINTS Do not remove this line */
+sim.g = new CPM.Grid2D([sim.C.extents[0]/10,sim.C.extents[1]/10], true, "Float32"),
+sim.gi = new CPM.CoarseGrid( sim.g, 10 ),
 
+sim.C.add( new CPM.ChemotaxisConstraint( {
+	LAMBDA_CH: [0,5000],
+	CH_FIELD : sim.gi }
+) )
 /* END ADDCONSTRAINTS Do not remove this line */
 
 
@@ -50,33 +57,27 @@ function initializeGrid(){
 		// add the initializer if not already there
 		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		let nrcells = this.conf["NRCELLS"], cellkind, i
-		this.buildChannel()
-		
-		// Seed the right number of cells for each cellkind
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
-			
-			for( i = 0; i < nrcells[cellkind]; i++ ){
-				// first cell always at the midpoint. Any other cells
-				// randomly.				
-				if( i == 0 ){
-					this.gm.seedCellAt( cellkind+1, this.C.midpoint )
-				} else {
-					this.gm.seedCell( cellkind+1 )
-				}
-			}
+		for( let i = 0 ; i < Math.PI*2 ; i += 0.4 ){
+			this.gm.seedCellAt( 1, 
+			[Math.round(this.C.extents[0]/2+this.C.extents[0]/3*Math.sin(i)),
+			Math.round(this.C.extents[1]/2+this.C.extents[1]/3*Math.cos(i))] )
 		}
 }
+function postMCSListener(){
+	let center = [this.C.extents[0]/10/2,this.C.extents[1]/10/2]
+	this.g.setpix( center, 10000+this.g.pixt(center) )
+	for( let i = 1 ; i <= 10 ; i ++ ){
+		this.g.diffusion( this.C.conf["D"] )
+	}
+	this.g.multiplyBy( 0.9 )
+}
+
+function drawCanvas(){
 	
-function buildChannel(){
-		
-		let channelvoxels
-	
-		channelvoxels = this.gm.makePlane( [], 1, 0 )
-		let gridheight = this.C.extents[1]
-		channelvoxels = this.gm.makePlane( channelvoxels, 1, gridheight-1 )
-		
-		this.gm.changeKind( channelvoxels, 2)
+		// Add the canvas if required
+		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
+		this.Cim.drawField( this.gi )
+		this.Cim.drawCellBorders( -1, "FFFFFF" )
 		
 }
 
@@ -91,11 +92,12 @@ function buildChannel(){
 	CONFIGURATION SETTINGS
 	----------------------------------
 */
+
 let config = {
 
 	// Grid settings
 	ndim : 2,
-	field_size : [500, 12],
+	field_size : [600,600],
 	
 	// CPM parameters and configuration
 	conf : {
@@ -103,6 +105,7 @@ let config = {
 		torus : true,						// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 20,								// CPM temperature
+		D : 0.05,
 		
 		// Constraint parameters. 
 		// Mostly these have the format of an array in which each element specifies the
@@ -111,25 +114,12 @@ let config = {
 
 		
 		// Adhesion parameters:
-		J : [ [NaN,20,0], [20,100,5], [0,5,0] ],
+		J: [[0,20], [20,100]],
 		
 		// VolumeConstraint parameters
-		LAMBDA_V : [0,30,NaN],				// VolumeConstraint importance per cellkind
-		V : [0,500,NaN],					// Target volume of each cellkind
+		LAMBDA_V : [0,50],					// VolumeConstraint importance per cellkind
+		V : [0,250]						// Target volume of each cellkind
 		
-		// PerimeterConstraint parameters
-		LAMBDA_P : [0,2,NaN],				// PerimeterConstraint importance per cellkind
-		P : [0,360,NaN],					// Target perimeter of each cellkind
-		
-		// ActivityConstraint parameters
-		LAMBDA_ACT : [0,200,NaN],			// ActivityConstraint importance per cellkind
-		MAX_ACT : [0,30,NaN],				// Activity memory duration per cellkind
-		ACT_MEAN : "geometric",				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
-								
-		// BarrierConstraint parameters		
-		IS_BARRIER : [false,false,true]		// Specify for each cellkind if the barrier
-											// constraint applies to it.
 	},
 	
 	// Simulation setup and configuration: this controls stuff like grid initialization,
@@ -145,18 +135,14 @@ let config = {
 		RUNTIME_BROWSER : "Inf",
 		
 		// Visualization
-		CANVASCOLOR : "eaecef",
-		CELLCOLOR : ["000000","AAAAAA"],
-		ACTCOLOR : [true,false],			// Should pixel activity values be displayed?
-		SHOWBORDERS : [false,false],				// Should cellborders be displayed?
-		zoom : 2,							// zoom in on canvas with this factor.
+		zoom : 1,							// zoom in on canvas with this factor.
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
 											// during the simulation?
-		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img/<myexp>",	// ... And save the image in this folder.
-		EXPNAME : "<myexp>",					// Used for the filename of output images.
+		IMGFRAMERATE : 20,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/Chemotaxis",	// ... And save the image in this folder.
+		EXPNAME : "Chemotaxis",					// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?
