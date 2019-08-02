@@ -1,5 +1,8 @@
 /* 
-	
+	todo:
+	- what about the potential when a focal point detaches?
+	- keep track of the focal points with a postsetpixlistener.
+	- add new focal points if a cell has too few.
  */
 
 import SoftConstraint from "./SoftConstraint.js"
@@ -8,14 +11,7 @@ class ProtrusionConstraint extends SoftConstraint {
 	constructor( conf ){
 		super( conf )
 
-		this.cellpixelsact = {} // activity of cellpixels with a non-zero activity
-		
-		// Wrapper: select function to compute activities based on ACT_MEAN in conf
-		if( this.conf.ACT_MEAN == "arithmetic" ){
-			this.activityAt = this.activityAtArith
-		} else {
-			this.activityAt = this.activityAtGeom
-		}
+		this.focalpoints = {} // track all the cell's focal points
 		
 	}
 	
@@ -25,7 +21,7 @@ class ProtrusionConstraint extends SoftConstraint {
 	}
 	
 	isFocalPoint( i ){
-	
+		return ( i in this.focalpoints )
 	}
 	
 	G( kind ){
@@ -80,6 +76,10 @@ class ProtrusionConstraint extends SoftConstraint {
 		return deltaH
 	}
 
+	/* eslint-disable no-unused-vars*/
+	postSetpixListener( i, t_old, t ){
+		
+	}
 
 }
 
