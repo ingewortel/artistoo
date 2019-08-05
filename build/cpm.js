@@ -1845,7 +1845,9 @@ var CPM = (function (exports) {
 
 	/** Class for outputting various statistics from a CPM simulation, as for instance
 	    the centroids of all cells (which is actually the only thing that's implemented
-	    so far) */
+	    so far) 
+	    @private 
+	    @ignore */
 
 	class Stats {
 		constructor( C ){
@@ -3162,136 +3164,6 @@ var CPM = (function (exports) {
 		}
 	}
 
-	/** 
-	 * Implements the adhesion constraint of Potts models, but allows multiple types of 
-	 background. Only the 0 background is physically present on the grid, but the parameters
-	 are taken from other background types depending on whether the background type of that
-	 location is set.
-	 Adhesion parameters are now in J_MULTI instead of J.
-	 */
-
-	class AdhesionMultiBackground extends SoftConstraint {
-
-		constructor( conf ){
-		
-			super( conf );
-			
-			this.bgvoxels = [];
-			this.setup = false;
-			
-		}
-		
-		setBackgroundVoxels(){
-		
-			for( let bgkind = 0; bgkind < this.conf["BACKGROUND_VOXELS"].length; bgkind++ ){
-				this.bgvoxels.push({});
-				for( let v of this.conf["BACKGROUND_VOXELS"][bgkind] ){
-					this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true;
-				}
-			}
-			this.setup = true;
-
-		}
-
-		/* Check if conf parameters are correct format*/
-		confChecker(){
-			this.confCheckCellMatrix("J_MULTI");
-		}
-
-
-		/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". 
-		Adjusted method from the default adhesion constraint to account for multiple backgrounds.
-		i1 and i2 are the positions of the pixels to assess adhesion from.*/
-		J( i1 , i2, t1, t2 ){
-		
-			// Get cellkinds of the types
-			let k1 = this.C.cellKind( t1 ), k2 = this.C.cellKind( t2 );
-		
-			// If one of the types is background, the parameters may change depending on 
-			// location
-			if( k1 == 0 ){
-				for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
-					if( i1 in this.bgvoxels[bgkind] ){
-						k1 = bgkind;
-					}
-				}
-			}
-			if( k2 == 0 ){
-				for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
-					if( i2 in this.bgvoxels[bgkind] ){
-						k2 = bgkind;
-					}
-				}
-			}
-			
-			return this.conf["J_MULTI"][k1][k2]
-		}
-		H( i, tp ){
-			let r = 0, tn;
-			/* eslint-disable */
-			const N = this.C.grid.neighi( i );
-			for( let j = 0 ; j < N.length ; j ++ ){
-				tn = this.C.pixti( N[j] );
-				if( tn != tp ){
-					r += this.J( i, N[j], tn, tp );
-				} else if ( tn == 0 ){ // and since tn == tp, tp is also zero
-					r += this.J( i, N[j], tn, tp );
-				}
-			}
-			return r
-		}
-		deltaH( sourcei, targeti, src_type, tgt_type ){
-			if( ! this.setup ){
-				this.setBackgroundVoxels();
-			}
-			return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
-		}
-		
-	}
-
-	/** 
-	 * Forbids that cells exceed or fall below a certain size range. 
-	 */
-
-	class HardVolumeRangeConstraint extends HardConstraint {
-
-		confChecker(){
-			this.confCheckCellNonNegative( "LAMBDA_VRANGE_MAX" );
-			this.confCheckCellNonNegative( "LAMBDA_VRANGE_MIN" );
-		}
-
-		fulfilled( src_i, tgt_i, src_type, tgt_type ){
-			// volume gain of src cell
-			if( src_type != 0 && this.C.getVolume(src_type) + 1 > 
-				this.conf["LAMBDA_VRANGE_MAX"][this.C.cellKind(src_type)] ){
-				return false
-			}
-			// volume loss of tgt cell
-			if( tgt_type != 0 && this.C.getVolume(tgt_type) - 1 < 
-				this.conf["LAMBDA_VRANGE_MIN"][this.C.cellKind(tgt_type)] ){
-				return false
-			}
-			return true
-		}
-	}
-
-	/** 
-	 * Forbids that cells exceed or fall below a certain size range. 
-	 */
-
-	class HardVolumeRangeConstraint$1 extends HardConstraint {	
-		get CONSTRAINT_TYPE() {
-			return "none"
-		}
-		/* eslint-disable */
-		setpixListener( i, t_old, t ){
-			console.log( i, t_old, t );
-		}
-		afterMCSListener( ){
-			console.log( "the time is now: ", this.C.time );
-		}
-	}
-
 	/**
 	 * This is a constraint in which each cell has a preferred direction of migration. 
 	 * This direction is only dependent on the cell, not on the specific pixel of a cell.
@@ -3525,6 +3397,32 @@ var CPM = (function (exports) {
 		}
 	}
 
+	/** 
+	 * Forbids that cells exceed or fall below a certain size range. 
+	 */
+
+	class HardVolumeRangeConstraint extends HardConstraint {
+
+		confChecker(){
+			this.confCheckCellNonNegative( "LAMBDA_VRANGE_MAX" );
+			this.confCheckCellNonNegative( "LAMBDA_VRANGE_MIN" );
+		}
+
+		fulfilled( src_i, tgt_i, src_type, tgt_type ){
+			// volume gain of src cell
+			if( src_type != 0 && this.C.getVolume(src_type) + 1 > 
+				this.conf["LAMBDA_VRANGE_MAX"][this.C.cellKind(src_type)] ){
+				return false
+			}
+			// volume loss of tgt cell
+			if( tgt_type != 0 && this.C.getVolume(tgt_type) - 1 < 
+				this.conf["LAMBDA_VRANGE_MIN"][this.C.cellKind(tgt_type)] ){
+				return false
+			}
+			return true
+		}
+	}
+
 	class Simulation {
 		constructor( config, custommethods ){
 		
@@ -3738,34 +3636,35 @@ var CPM = (function (exports) {
 		
 	}
 
+	// NOTE : This file is now auto-generated by app/automatic-index.bash when you compile the build using 'make'.
+
+	exports.Canvas = Canvas;
+	exports.Stats = Stats;
 	exports.CA = CA;
 	exports.CPM = CPM;
 	exports.GridBasedModel = GridBasedModel;
-	exports.Stats = Stats;
-	exports.Canvas = Canvas;
-	exports.GridManipulator = GridManipulator;
+	exports.Stat = Stat;
+	exports.PixelsByCell = PixelsByCell;
+	exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
+	exports.Centroids = Centroids;
 	exports.Grid2D = Grid2D;
 	exports.Grid3D = Grid3D;
+	exports.GridManipulator = GridManipulator;
+	exports.CoarseGrid = CoarseGrid;
+	exports.SoftConstraint = SoftConstraint;
 	exports.Adhesion = Adhesion;
 	exports.VolumeConstraint = VolumeConstraint;
-	exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
-	exports.TestLogger = HardVolumeRangeConstraint$1;
-	exports.ActivityConstraint = ActivityConstraint;
 	exports.PerimeterConstraint = PerimeterConstraint;
-	exports.PersistenceConstraint = PersistenceConstraint;
-	exports.CoarseGrid = CoarseGrid;
-	exports.ChemotaxisConstraint = ChemotaxisConstraint;
-	exports.BarrierConstraint = BarrierConstraint;
-	exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
-	exports.AttractionPointConstraint = AttractionPointConstraint;
-	exports.PixelsByCell = PixelsByCell;
-	exports.Centroids = Centroids;
-	exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
-	exports.Simulation = Simulation;
-	exports.HardConstraint = HardConstraint;
-	exports.SoftConstraint = SoftConstraint;
-	exports.AdhesionMultiBackground = AdhesionMultiBackground;
+	exports.ActivityConstraint = ActivityConstraint;
 	exports.ActivityMultiBackground = ActivityMultiBackground;
+	exports.PersistenceConstraint = PersistenceConstraint;
+	exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
+	exports.ChemotaxisConstraint = ChemotaxisConstraint;
+	exports.AttractionPointConstraint = AttractionPointConstraint;
+	exports.HardConstraint = HardConstraint;
+	exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
+	exports.BarrierConstraint = BarrierConstraint;
+	exports.Simulation = Simulation;
 
 	return exports;
 
