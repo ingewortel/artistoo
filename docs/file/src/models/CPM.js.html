@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/models/CPM.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Stats.js~Stats.html">Stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Margolus2D.js~Margolus2D.html">Margolus2D</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html">AdhesionMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PostMCSStats.js~PostMCSStats.html">PostMCSStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/models/CPM.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** The core CPM class. Can be used for two- or 
+ * three-dimensional simulations. 
+*/
+
+&quot;use strict&quot;
+
+import GridBasedModel from &quot;./GridBasedModel.js&quot;
+import DiceSet from &quot;../DiceSet.js&quot;
+
+import AutoAdderConfig from &quot;../hamiltonian/AutoAdderConfig.js&quot;
+
+class CPM extends GridBasedModel {
+	constructor( field_size, conf ){
+		super( field_size, conf )
+
+		// CPM specific stuff here
+		this.nr_cells = 0				// number of cells currently in the grid
+		// track border pixels for speed (see also the DiceSet data structure)
+		this.borderpixels = new DiceSet( this.mt )
+
+		// Attributes per cell:
+		this.t2k = []	// celltype (&quot;kind&quot;). Example: this.t2k[1] is the celltype of cell 1.
+		this.t2k[0] = 0	// Background cell; there is just one cell of this type.
+
+		this.soft_constraints = []
+		this.soft_constraints_indices = {}
+		this.hard_constraints = []
+		this.hard_constraints_indices ={}
+		this.post_setpix_listeners = []
+		this.post_mcs_listeners = []
+		this._neighbours = new Uint16Array(this.grid.p2i(field_size))
+
+		for( let x of Object.keys( conf ) ){
+			if( x in AutoAdderConfig ){
+				this.add( new AutoAdderConfig[x]( conf ) )
+			}
+		}
+	}
+
+	neigh(p, torus=this.conf.torus){
+		let g = this.grid
+		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+	}
+
+	* cellPixels() {
+		for( let p of this.grid.pixels() ){
+			if( p[1] != 0 ){
+				yield p
+			}
+		}
+	}
+
+	* cellBorderPixels() {
+		for( let i of this.borderpixels.elements ){
+			const t = this.pixti(i)
+			if( t != 0 ){
+				yield [this.grid.i2p(i),t]
+			}
+		}
+	}
+
+	* cellBorderPixelIndices() {
+		for( let i of this.borderpixels.elements ){
+			const t = this.pixti(i)
+			if( t != 0 ){
+				yield [i,t]
+			}
+		}
+	}
+
+
+	add( t ){
+		let tname = t.constructor.name, i 
+		if( t.CONSTRAINT_TYPE ){
+			switch( t.CONSTRAINT_TYPE ){
+			
+			case &quot;soft&quot;: 
+				// Add constraint to the array of soft constraints
+				i = this.soft_constraints.push( t )
+				
+				// Write this index to an array in the 
+				// this.soft_constraints_indices object, for lookup later. 
+				if( !this.soft_constraints_indices.hasOwnProperty(tname) ){
+					this.soft_constraints_indices[tname] = []
+				}
+				this.soft_constraints_indices[tname].push( i-1 )
+				break
+				
+			case &quot;hard&quot;: 
+				// Add constraint to the array of soft constraints
+				i = this.hard_constraints.push( t )
+				
+				// Write this index to an array in the 
+				// this.soft_constraints_indices object, for lookup later. 
+				if( !this.hard_constraints_indices.hasOwnProperty(tname) ){
+					this.hard_constraints_indices[tname] = []
+				}
+				this.hard_constraints_indices[tname].push( i-1 )				
+				break
+			}
+		}
+		if( typeof t[&quot;postSetpixListener&quot;] === &quot;function&quot; ){
+			this.post_setpix_listeners.push( t.postSetpixListener.bind(t) )
+		}
+		if( typeof t[&quot;postMCSListener&quot;] === &quot;function&quot; ){
+			this.post_mcs_listeners.push( t.postMCSListener.bind(t) )
+		}
+		t.CPM = this
+		if( typeof t[&quot;postAdd&quot;] === &quot;function&quot; ){
+			t.postAdd()
+		}
+	}
+	
+	getConstraint( constraintname, num ){
+	
+		if( !num ){
+			num = 0
+		}
+		let i
+		
+		if( this.hard_constraints_indices.hasOwnProperty( constraintname ) ){
+			i = this.hard_constraints_indices[constraintname][num]
+			return this.hard_constraints[i]
+		} else if ( this.soft_constraints_indices.hasOwnProperty( constraintname ) ){
+			i = this.soft_constraints_indices[constraintname][num]
+			return this.soft_constraints[i]
+		} else {
+			throw(&quot;No constraint of name &quot; + &quot; exists in this CPM!&quot;)
+		}	
+	
+	}
+
+	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
+	pixt( p ){
+		return this.grid.pixti( this.grid.p2i(p) )
+	}
+
+	/* Get volume, or cellkind of the cell with type (identity) t */ 
+	getVolume( t ){
+		return this.cellvolume[t]
+	}
+
+	cellKind( t ){
+		return this.t2k[ t ]
+	}
+
+	/* Assign the cell with type (identity) t to kind k.*/
+	setCellKind( t, k ){
+		this.t2k[ t ] = k
+	}
+	
+	/* ------------- MATH HELPER FUNCTIONS --------------- */
+	random (){
+		return this.mt.rnd()
+	}
+	/* Random integer number between incl_min and incl_max */
+	ran (incl_min, incl_max) {
+		return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
+	}
+	
+	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
+
+
+	/* ======= ADHESION ======= */
+
+	// returns both change in hamiltonian for all registered soft constraints
+	deltaH ( sourcei, targeti, src_type, tgt_type ){
+		let r = 0.0
+		for( let t of this.soft_constraints ){
+			r += t.deltaH( sourcei, targeti, src_type, tgt_type )
+		}
+		return r
+	}
+	/* ------------- COPY ATTEMPTS --------------- */
+
+	/* 	Simulate one time step, i.e., a Monte Carlo step
+	  	(a number of copy attempts depending on grid size):
+		1) Randomly sample one of the border pixels for the copy attempt.
+		2) Compute the change in Hamiltonian for the suggested copy attempt.
+		3) With a probability depending on this change, decline or accept the 
+		   copy attempt and update the grid accordingly. 
+
+		TODO it is quite confusing that the &quot;borderpixels&quot; array also
+		contains border pixels of the background.
+	*/
+	monteCarloStep () {
+		this.timeStep()
+	}
+	timeStep (){
+		let delta_t = 0.0
+		// this loop tracks the number of copy attempts until one MCS is completed.
+		while( delta_t &lt; 1.0 ){
+			// This is the expected time (in MCS) you would expect it to take to
+			// randomly draw another border pixel.
+			delta_t += 1./(this.borderpixels.length)
+
+			// sample a random pixel that borders at least 1 cell of another type,
+			// and pick a random neighbour of tha pixel
+			const tgt_i = this.borderpixels.sample()
+			const Ni = this.grid.neighi( tgt_i )
+			const src_i = Ni[this.ran(0,Ni.length-1)]
+		
+			const src_type = this.grid.pixti( src_i )
+			const tgt_type = this.grid.pixti( tgt_i )
+
+			// only compute the Hamiltonian if source and target belong to a different cell,
+			// and do not allow a copy attempt into the stroma. Only continue if the copy attempt
+			// would result in a viable cell.
+			if( tgt_type != src_type ){
+				let ok = true
+				for( let h of this.hard_constraints ){
+					if( !h.fulfilled( src_i, tgt_i, src_type, tgt_type ) ){
+						ok = false; break
+					}
+				}
+				if( ok ){
+					const hamiltonian = this.deltaH( src_i, tgt_i, src_type, tgt_type )
+					// probabilistic success of copy attempt 
+					if( this.docopy( hamiltonian ) ){
+						this.setpixi( tgt_i, src_type )
+					}
+				}
+			} 
+		}
+		this.time++ // update time with one MCS.
+		this.stat_values = {} // invalidate stat value cache
+		for( let l of this.post_mcs_listeners ){
+			l()
+		}
+	}	
+
+	/* Determine whether copy attempt will succeed depending on deltaH (stochastic). */
+	docopy ( deltaH ){
+		if( deltaH &lt; 0 ) return true
+		return this.random() &lt; Math.exp( -deltaH / this.conf.T )
+	}
+	/* Change the pixel at position p (coordinates) into cellid t. 
+	Update cell perimeters with Pup (optional parameter).*/
+	setpixi ( i, t ){		
+		const t_old = this.grid.pixti(i)
+		if( t_old &gt; 0 ){
+			// also update volume of the old cell
+			// (unless it is background/stroma)
+			this.cellvolume[t_old] --
+			
+			// if this was the last pixel belonging to this cell, 
+			// remove the cell altogether.
+			if( this.cellvolume[t_old] == 0 ){
+				delete this.cellvolume[t_old]
+				delete this.t2k[t_old]
+			}
+		}
+		// update volume of the new cell and cellid of the pixel.
+		this.grid.setpixi(i,t)
+		if( t &gt; 0 ){
+			this.cellvolume[t] ++
+		}
+		this.updateborderneari( i, t_old, t )
+		//this.stat_values = {} // invalidate stat value cache
+		for( let l of this.post_setpix_listeners ){
+			l( i, t_old, t )
+		}
+	}
+
+	/* Update border elements after a successful copy attempt. */
+	updateborderneari ( i, t_old, t_new ){
+		if( t_old == t_new ) return
+		const Ni = this.grid.neighi( i )
+		const wasborder = this._neighbours[i] &gt; 0 
+		this._neighbours[i] = 0
+		for( let ni of Ni  ){
+			const nt = this.grid.pixti(ni)
+			if( nt != t_new ){
+				this._neighbours[i] ++ 
+			}
+			if( nt == t_old ){
+				if( this._neighbours[ni] ++ == 0 ){
+					this.borderpixels.insert( ni )
+				}
+			}
+			if( nt == t_new ){
+				if( --this._neighbours[ni] == 0 ){
+					this.borderpixels.remove( ni )
+				}
+			}
+		}
+
+		if( !wasborder &amp;&amp; this._neighbours[i] &gt; 0 ){
+			this.borderpixels.insert( i )
+		}
+		if( wasborder &amp;&amp;  this._neighbours[i] == 0 ){
+			this.borderpixels.remove( i )
+		}
+	}
+
+	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
+
+	/* Initiate a new cellid for a cell of celltype &quot;kind&quot;, and create elements
+	   for this cell in the relevant arrays (cellvolume, cellperimeter, t2k).*/
+	makeNewCellID ( kind ){
+		const newid = ++ this.nr_cells
+		this.cellvolume[newid] = 0
+		this.setCellKind( newid, kind )
+		return newid
+	}
+
+}
+
+export default CPM
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

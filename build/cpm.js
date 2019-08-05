@@ -817,93 +817,96 @@ var CPM = (function (exports) {
 		}
 	}
 
-	/** The core CPM class. Can be used for two- or 
-	 * three-dimensional simulations. 
-	*/
+	/* This class encapsulates a lower-resolution grid and makes it
+	   visible as a higher-resolution grid. Only exact subsampling by
+	   a constant factor per dimension is supported. 
+		*/
 
-	class CA extends GridBasedModel {
-		constructor( extents, conf ){
-			super( extents, conf );
-			this.updateRule = conf["UPDATE_RULE"].bind(this);
+	class CoarseGrid {
+		constructor( grid, upscale = 3 ){
+			this.extents = new Array( grid.extents.length );
+			for( let i = 0 ; i < grid.extents.length ; i++ ){
+				this.extents[i] = upscale * grid.extents[i];
+			}
+			this.grid = grid;
+			this.upscale = upscale;
 		}
 
-		timeStep(){
-			this.grid.applyLocally( this.updateRule );
-			this.stat_values = {};
+		pixt( p ){
+			// 2D bilinear interpolation
+			let l = ~~(p[0] / this.upscale);
+			let r = l+1;
+			if( r > this.grid.extents[0] ){
+				r = this.grid.extents[0];
+			}
+			let t = ~~(p[1] / this.upscale);
+			let b = t+1;
+			if( b > this.grid.extents[1] ){
+				b = this.grid.extents[1];
+			}
+
+			let f_lt = this.grid.pixt([l,t]);
+			let f_rt = this.grid.pixt([r,t]);
+			let f_lb = this.grid.pixt([l,b]);
+			let f_rb = this.grid.pixt([r,b]);
+
+			let h = (p[0] % this.upscale) / this.upscale;
+			let f_x_b = f_lb * (1-h) + f_rb * h; 
+			let f_x_t = f_lt * (1-h) + f_rt * h;
+
+			let v = (p[1] % this.upscale) / this.upscale;
+			return f_x_t*(1-v) + f_x_b * v
+		}
+
+		/*gradient( p ){
+			let ps = new Array( p.length )
+			for( let i = 0 ; i < p.length ; i ++ ){
+				ps[i] = ~~(p[i]/this.upscale)
+			}
+			return this.grid.gradient( ps )
+		}*/
+	}
+
+	class Stat {
+		// Although Stats do have a 'conf' object, they should not 
+		// really be configurable in the sense that they should always
+		// provide an expected output. The 'conf' object is mainly intended
+		// to provide an option to configure logging / debugging output. That
+		// is not implemented yet.
+		constructor( conf ){
+			this.conf = conf || {};
+		}
+		set model( M ){
+			this.M = M;
+		}
+		compute(){
+			throw("compute method not implemented for subclass of Stat")
 		}
 	}
 
-	/** This class implements a data structure with constant-time insertion, deletion, and random
-	    sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
-	    pixels at cell borders. */
+	/* 	
+		Creates an object with the cellpixels of each cell on the grid. 
+		Keys are the cellIDs of all cells on the grid, corresponding values are arrays
+		containing the pixels belonging to that cell. Each element of that array contains
+		the coordinate array p = [x,y] for that pixel.
+	*/
 
-	// pass in RNG
-	class DiceSet{
-		constructor( mt ) {
+	class PixelsByCell extends Stat {
 
-			// Use a hash map to check in constant time whether a pixel is at a cell border.
-			// 
-			// Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
-			// at least in nodejs. This is weird given that in vanilla objects, all keys are 
-			// converted to strings, which does not happen for Maps
-			// 
-			this.indices = {}; //new Map() // {}
-			//this.indices = {}
-
-			// Use an array for constant time random sampling of pixels at the border of cells.
-			this.elements = [];
-
-			// track the number of pixels currently present in the DiceSet.
-			this.length = 0;
-
-			this.mt = mt;
-		}
-
-		insert( v ){
-			if( this.indices[v] ){
-				return
+		compute(){
+			// initialize the object
+			let cellpixels = { };
+			// The this.M.pixels() iterator returns coordinates and cellid for all 
+			// non-background pixels on the grid. See the appropriate Grid class for
+			// its implementation.
+			for( let [p,i] of this.M.pixels() ){
+				if( !cellpixels[i] ){
+					cellpixels[i] = [p];
+				} else {
+					cellpixels[i].push( p );
+				}
 			}
-			// Add element to both the hash map and the array.
-			//this.indices.set( v, this.length )
-			this.indices[v] = this.length;
-		
-			this.elements.push( v );
-			this.length ++; 
-		}
-
-		remove( v ){
-			// Check whether element is present before it can be removed.
-			if( !this.indices[v] ){
-				return
-			}
-			/* The hash map gives the index in the array of the value to be removed.
-			The value is removed directly from the hash map, but from the array we
-			initially remove the last element, which we then substitute for the 
-			element that should be removed.*/
-			//const i = this.indices.get(v)
-			const i = this.indices[v];
-
-			//this.indices.delete(v)
-			delete this.indices[v];
-
-			const e = this.elements.pop();
-			this.length --;
-			if( e == v ){
-				return
-			}
-			this.elements[i] = e;
-
-			//this.indices.set(e,i)
-			this.indices[e] = i;
-		}
-
-		contains( v ){
-			//return this.indices.has(v)
-			return (v in this.indices)
-		}
-
-		sample(){
-			return this.elements[Math.floor(this.mt.rnd()*this.length)]
+			return cellpixels
 		}
 	}
 
@@ -1083,73 +1086,6 @@ var CPM = (function (exports) {
 		}
 	}
 
-	/** 
-	 * Implements the adhesion constraint of Potts models. 
-	 */
-
-	class Adhesion extends SoftConstraint {
-		/* Check if conf parameters are correct format*/
-		confChecker(){
-			this.confCheckCellMatrix("J");
-		}
-
-
-		/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
-		J( t1, t2 ){
-			return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
-		}
-		/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
-		 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
-		 */
-		H( i, tp ){
-			let r = 0, tn;
-			/* eslint-disable */
-			const N = this.C.grid.neighi( i );
-			for( let j = 0 ; j < N.length ; j ++ ){
-				tn = this.C.pixti( N[j] );
-				if( tn != tp ) r += this.J( tn, tp );
-			}
-			return r
-		}
-		deltaH( sourcei, targeti, src_type, tgt_type ){
-			return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
-		}
-	}
-
-	/** 
-	 * Implements the adhesion constraint of Potts models. 
-	 */
-
-	class VolumeConstraint extends SoftConstraint {
-		confChecker(){
-			this.confCheckCellNonNegative( "LAMBDA_V" );
-			this.confCheckCellNonNegative( "V" );
-		}
-
-		deltaH( sourcei, targeti, src_type, tgt_type ){
-			// volume gain of src cell
-			let deltaH = this.volconstraint( 1, src_type ) - 
-				this.volconstraint( 0, src_type );
-			// volume loss of tgt cell
-			deltaH += this.volconstraint( -1, tgt_type ) - 
-				this.volconstraint( 0, tgt_type );
-			return deltaH
-		}
-		/* ======= VOLUME ======= */
-
-		/* The volume constraint term of the Hamiltonian for the cell with id t.
-		   Use vgain=0 for energy of current volume, vgain=1 for energy if cell gains
-		   a pixel, and vgain = -1 for energy if cell loses a pixel. 
-		*/
-		volconstraint ( vgain, t ){
-			const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
-			// the background "cell" has no volume constraint.
-			if( t == 0 || l == 0 ) return 0
-			const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
-			return l*vdiff*vdiff
-		}
-	}
-
 	/* 
 		Implements the activity constraint of Potts models. 
 		See also: 
@@ -1302,6 +1238,1151 @@ var CPM = (function (exports) {
 		}
 
 
+	}
+
+	/**
+	 * The ActivityMultiBackground constraint implements the activity constraint of Potts models,
+	 but allows users to specify locations on the grid where LAMBDA_ACT is different. 
+		See also: 
+			Niculescu I, Textor J, de Boer RJ (2015) 
+	 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
+	 		PLoS Comput Biol 11(10): e1004280. 
+	 		https://doi.org/10.1371/journal.pcbi.1004280
+	 */
+	class ActivityMultiBackground extends SoftConstraint {
+
+		/** Creates an instance of the ActivityMultiBackground constraint 
+		* @param {object} conf - Configuration object with the parameters.
+		* ACT_MEAN is a single string determining whether the activity mean should be computed
+		* using a "geometric" or "arithmetic" mean. 
+		*/
+		constructor( conf ){
+			super( conf );
+
+			this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
+			
+			// Wrapper: select function to compute activities based on ACT_MEAN in conf
+			if( this.conf.ACT_MEAN == "arithmetic" ){
+				this.activityAt = this.activityAtArith;
+			} else {
+				this.activityAt = this.activityAtGeom;
+			}
+			
+			
+			this.bgvoxels = [];
+			this.setup = false;
+		}
+		
+		confChecker(){
+			this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
+			//this.confCheckCellNonNegative( "LAMBDA_ACT" )
+			this.confCheckCellNonNegative( "MAX_ACT" );
+		}
+		
+			
+		setBackgroundVoxels(){
+		
+			for( let bgkind = 0; bgkind < this.conf["BACKGROUND_VOXELS"].length; bgkind++ ){
+				this.bgvoxels.push({});
+				for( let v of this.conf["BACKGROUND_VOXELS"][bgkind] ){
+					this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true;
+				}
+			}
+			this.setup = true;
+
+		}
+		
+		/* ======= ACT MODEL ======= */
+
+		/* Act model : compute local activity values within cell around pixel i.
+		 * Depending on settings in conf, this is an arithmetic (activityAtArith)
+		 * or geometric (activityAtGeom) mean of the activities of the neighbors
+		 * of pixel i.
+		 */
+		/* Hamiltonian computation */ 
+		deltaH ( sourcei, targeti, src_type, tgt_type ){
+		
+			if( ! this.setup ){
+				this.setBackgroundVoxels();
+			}
+
+			let deltaH = 0, maxact, lambdaact;
+			const src_kind = this.C.cellKind( src_type );
+			const tgt_kind = this.C.cellKind( tgt_type );
+			let bgindex1 = 0, bgindex2 = 0;
+			
+			for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
+				if( sourcei in this.bgvoxels[bgkind] ){
+					bgindex1 = bgkind;
+				}
+				if( targeti in this.bgvoxels[bgkind] ){
+					bgindex2 = bgkind;
+				}
+			}
+			
+
+			// use parameters for the source cell, unless that is the background.
+			// In that case, use parameters of the target cell.
+			if( src_type != 0 ){
+				maxact = this.conf["MAX_ACT"][src_kind];
+				lambdaact = this.conf["LAMBDA_ACT_MBG"][src_kind][bgindex1];
+			} else {
+				// special case: punishment for a copy attempt from background into
+				// an active cell. This effectively means that the active cell retracts,
+				// which is different from one cell pushing into another (active) cell.
+				maxact = this.conf["MAX_ACT"][tgt_kind];
+				lambdaact = this.conf["LAMBDA_ACT_MBG"][tgt_kind][bgindex2];
+			}
+			if( !maxact || !lambdaact ){
+				return 0
+			}
+
+			// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
+			// or activityAtGeom, depending on conf (see constructor).	
+			deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
+			return deltaH
+		}
+
+		/* Activity mean computation methods for arithmetic/geometric mean.
+		The method used by activityAt is defined by conf ( see constructor ).*/
+		activityAtArith( i ){
+			const t = this.C.pixti( i );
+			
+			// no activity for background/stroma
+			if( t <= 0 ){ return 0 }
+			
+			// neighborhood pixels
+			const N = this.C.neighi(i);
+			
+			// r activity summed, nN number of neighbors
+			// we start with the current pixel. 
+			let r = this.pxact(i), nN = 1;
+			
+			// loop over neighbor pixels
+			for( let j = 0 ; j < N.length ; j ++ ){ 
+				const tn = this.C.pixti( N[j] ); 
+				
+				// a neighbor only contributes if it belongs to the same cell
+				if( tn == t ){
+					r += this.pxact( N[j] );
+					nN ++; 
+				}
+			}
+
+			// average is summed r divided by num neighbors.
+			return r/nN
+		}
+		activityAtGeom ( i ){
+			const t = this.C.pixti( i );
+
+			// no activity for background/stroma
+			if( t <= 0 ){ return 0 }
+			
+			//neighborhood pixels
+			const N = this.C.neighi( i );
+			
+			// r activity product, nN number of neighbors.
+			// we start with the current pixel.
+			let nN = 1, r = this.pxact( i );
+
+			// loop over neighbor pixels
+			for( let j = 0 ; j < N.length ; j ++ ){ 
+				const tn = this.C.pixti( N[j] ); 
+
+				// a neighbor only contributes if it belongs to the same cell.
+				// if it does and has activity 0, the product will also be zero so
+				// we can already return.
+				if( tn == t ){
+					if( this.pxact( N[j] ) == 0 ) return 0
+					r *= this.pxact( N[j] );
+					nN ++; 
+				}
+			}
+			
+			// Geometric mean computation. 
+			return Math.pow(r,1/nN)
+		}
+
+
+		/* Current activity (under the Act model) of the pixel with ID i. */
+		pxact ( i ){
+			// If the pixel is not in the cellpixelsact object, it has activity 0.
+			// Otherwise, its activity is stored in the object.
+			return this.cellpixelsact[i] || 0
+		}
+		
+		/* eslint-disable no-unused-vars*/
+		postSetpixListener( i, t_old, t ){
+			// After setting a pixel, it gets the MAX_ACT value of its cellkind.
+			const k = this.C.cellKind( t );
+			this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
+		}
+		
+		postMCSListener(){
+			// iterate over cellpixelsage and decrease all activities by one.
+			for( let key in this.cellpixelsact ){
+				// activities that reach zero no longer need to be stored.
+				if( --this.cellpixelsact[ key ] <= 0 ){
+					delete this.cellpixelsact[ key ];
+				}
+			}
+		}
+
+
+	}
+
+	/** 
+	 * Class for taking a CPM grid and displaying it in either browser or with nodejs.
+	 * Note: when using this class from outside the module, you don't need to import it
+	 * separately but can access it from CPM.Canvas. */
+	class Canvas {
+		/** The Canvas constructor accepts a CPM object C or a Grid2D object.
+		@param {GridBasedModel/Grid2D/CoarseGrid} C the object to draw, which is
+		either an object of class GridBasedModel (either CPM or CA), or a grid (Grid2D or
+		CoarseGrid).
+		@param {object} options Configuration settings, containing: "zoom" (positive number specifying
+		the zoom level to draw with.) */
+		constructor( C, options ){
+			if( C instanceof GridBasedModel ){
+				/**
+				 * The underlying model that is drawn on the canvas.
+				 * @type {GridBasedModel}
+				 */
+				this.C = C;
+				/** @private
+				 * @ignore */
+				this.extents = C.extents;
+			} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
+				/**
+				 * The underlying grid that is drawn on the canvas.
+				 * @type {Grid2D/CoarseGrid}
+				 */
+				this.grid = C;
+				this.extents = C.extents;
+			}
+			/** Zoom level to draw the canvas with, set to options.zoom or its default value 1.
+			* @type {number}*/
+			this.zoom = (options && options.zoom) || 1;
+			/** @ignore*/
+			this.wrap = (options && options.wrap) || [0,0,0];
+			
+			/** Width of the canvas in pixels (in its unzoomed state)
+			* @type {number}*/
+			this.width = this.wrap[0];
+			/** Height of the canvas in pixels (in its unzoomed state)
+			* @type {number}*/
+			this.height = this.wrap[1];
+
+			if( this.width == 0 || this.extents[0] < this.width ){
+				this.width = this.extents[0];
+			}
+			if( this.height == 0 || this.extents[1] < this.height ){
+				this.height = this.extents[1];
+			}
+
+			if( typeof document !== "undefined" ){
+				/** @ignore */
+				this.el = document.createElement("canvas");
+				this.el.width = this.width*this.zoom;
+				this.el.height = this.height*this.zoom;//extents[1]*this.zoom
+				var parent_element = (options && options.parentElement) || document.body;
+				parent_element.appendChild( this.el );
+			} else {
+				const {createCanvas} = require("canvas");
+				/** @ignore */
+				this.el = createCanvas( this.width*this.zoom,
+					this.height*this.zoom );
+				/** @ignore */
+				this.fs = require("fs");
+			}
+
+			/** @ignore */
+			this.ctx = this.el.getContext("2d");
+			this.ctx.lineWidth = .2;
+			this.ctx.lineCap="butt";
+		}
+
+
+		/* Several internal helper functions (used by drawing functions below) : */
+		
+		/** @private 
+		@ignore*/
+		pxf( p ){
+			this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom );
+		}
+
+		/** @private
+		@ignore */
+		pxfi( p ){
+			const dy = this.zoom*this.width;
+			const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
+			for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
+				for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
+					this.px[i+j+off] = this.col_r;
+					this.px[i+j+off + 1] = this.col_g;
+					this.px[i+j+off + 2] = this.col_b;
+					this.px[i+j+off + 3] = 255;
+				}
+			}
+		}
+
+		/** @private
+		@ignore */
+		pxfir( p ){
+			const dy = this.zoom*this.width;
+			const off = (p[1]*dy + p[0])*4;
+			this.px[off] = this.col_r;
+			this.px[off + 1] = this.col_g;
+			this.px[off + 2] = this.col_b;
+			this.px[off + 3] = 255;
+		}
+
+		/** @private 
+		@ignore*/
+		getImageData(){
+			/** @ignore */
+			this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
+			/** @ignore */
+			this.px = this.image_data.data;
+		}
+
+		/** @private 
+		@ignore*/
+		putImageData(){
+			this.ctx.putImageData(this.image_data, 0, 0);
+		}
+
+		/** @private 
+		@ignore*/
+		pxfnozoom( p ){
+			this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 );
+		}
+
+		/** draw a line left (l), right (r), down (d), or up (u) of pixel p 
+		@private 
+		@ignore */
+		pxdrawl( p ){
+			for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+				this.pxfir( [this.zoom*p[0],i] );
+			}
+		}
+
+		/** @private 
+		@ignore */
+		pxdrawr( p ){
+			for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+				this.pxfir( [this.zoom*(p[0]+1),i] );
+			}
+		}
+		/** @private 
+		@ignore */
+		pxdrawd( p ){
+			for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+				this.pxfir( [i,this.zoom*(p[1]+1)] );
+			}
+		}
+		/** @private 
+		@ignore */
+		pxdrawu( p ){
+			for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+				this.pxfir( [i,this.zoom*p[1]] );
+			}
+		}
+		
+		/** For easier color naming 
+		@private
+		@ignore */
+		col( hex ){
+			this.ctx.fillStyle="#"+hex;
+			/** @ignore */
+			this.col_r = parseInt( hex.substr(0,2), 16 );
+			/** @ignore */
+			this.col_g = parseInt( hex.substr(2,2), 16 );
+			/** @ignore */
+			this.col_b = parseInt( hex.substr(4,2), 16 );
+		}
+
+		/** Color the whole grid in color [col], or in black if no argument is given.
+		   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
+		   * it gets the default value of black ("000000").
+		*/
+		clear( col ){
+			col = col || "000000";
+			this.ctx.fillStyle="#"+col;
+			this.ctx.fillRect( 0,0, this.el.width, this.el.height );
+		}
+
+		/** Return the current drawing context.
+		@return {RenderingContext} current drawing context on the canvas.
+		*/
+		context(){
+			return this.ctx
+		}
+		/** @private 
+		@ignore */
+		p2pdraw( p ){
+			var dim;
+			for( dim = 0; dim < p.length; dim++ ){
+				if( this.wrap[dim] != 0 ){
+					p[dim] = p[dim] % this.wrap[dim];
+				}
+			}
+			return p
+		}
+
+		/* DRAWING FUNCTIONS ---------------------- */
+
+		/** Use to color a grid according to its values. High values are colored in a brighter
+		red. 
+	   * @param {Grid2D or CoarseGrid} cc - Optional: the grid to draw values for. If left 
+	   * unspecified, the grid that was originally supplied to the constructor is used. 
+	   */
+		drawField( cc ){
+			if( !cc ){
+				cc = this.grid;
+			}
+			let maxval = 0;
+			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+					let p = Math.log(.1+cc.pixt([i,j]));
+					if( maxval < p ){
+						maxval = p;
+					}
+				}
+			}
+			this.getImageData();
+			this.col_g = 0;
+			this.col_b = 0;
+			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+					this.col_r =  255*(Math.log(.1+cc.pixt( [i,j] ))/maxval);
+					this.pxfi([i,j]);
+				}
+			}
+			this.putImageData();
+		}
+		/** Method for drawing the cell borders for a given cellkind in the color specified in "col"
+		(hex format). This function draws a line around the cell (rather than coloring the
+		outer pixels). If [kind] is negative, simply draw all borders.
+	   * @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+	   * positive integer as 0 is reserved for the background.
+	   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
+	   * it gets the default value of black ("000000").
+	   * @see drawOnCellBorders to color the outer pixels of the cell.
+	   */
+		drawCellBorders( kind, col ){
+			col = col || "000000";
+			let pc, pu, pd, pl, pr, pdraw;
+			this.col( col );
+			this.getImageData();
+			// cst contains indices of pixels at the border of cells
+			for( let x of this.C.cellBorderPixels() ){
+				let p = x[0];
+				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+					pdraw = this.p2pdraw( p );
+
+					pc = this.C.pixt( [p[0],p[1]] );
+					pr = this.C.pixt( [p[0]+1,p[1]] );
+					pl = this.C.pixt( [p[0]-1,p[1]] );		
+					pd = this.C.pixt( [p[0],p[1]+1] );
+					pu = this.C.pixt( [p[0],p[1]-1] );
+
+					if( pc != pl  ){
+						this.pxdrawl( pdraw );
+					}
+					if( pc != pr ){
+						this.pxdrawr( pdraw );
+					}
+					if( pc != pd ){
+						this.pxdrawd( pdraw );
+					}
+					if( pc != pu ){
+						this.pxdrawu( pdraw );
+					}
+				}
+
+			}
+			this.putImageData();
+		}
+			
+		/** Use to show activity values of the act model using a color gradient, for
+			cells in the grid of cellkind "kind". 
+			The constraint holding the activity values can be supplied as an 
+			argument. Otherwise, the current CPM is searched for the first 
+			registered activity constraint and that is then used.
+	   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+	   positive integer as 0 is reserved for the background.
+	   @param {ActivityConstraint or ActivityMultiBackground} A - the constraint object to use.
+	   By default this is the first instance of an ActivityConstraint or ActivityMultiBackground
+	   object found in the soft_constraints of the attached CPM.
+	   */
+		drawActivityValues( kind, A ){
+			if( !A ){
+				for( let c of this.C.soft_constraints ){
+					if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
+						A = c; break
+					}
+				}
+			}
+			if( !A ){
+				throw("Cannot find activity values to draw!")
+			}
+			// cst contains the pixel ids of all non-background/non-stroma cells in
+			// the grid. 
+			let ii, sigma, a;
+			// loop over all pixels belonging to non-background, non-stroma
+			this.col("FF0000");
+			this.getImageData();
+			this.col_b = 0;
+			//this.col_g = 0
+			for( let x of this.C.cellPixels() ){
+				ii = x[0];
+				sigma = x[1];
+
+				// For all pixels that belong to the current kind, compute
+				// color based on activity values, convert to hex, and draw.
+				if( this.C.cellKind(sigma) == kind ){
+					a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][kind];
+					if( a > 0 ){
+						if( a > 0.5 ){
+							this.col_r = 255;
+							this.col_g = (2-2*a)*255;
+						} else {
+							this.col_r = (2*a)*255;
+							this.col_g = 255;
+						}
+						this.pxfi( ii );
+					}
+				}
+			}
+			this.putImageData();
+		}
+				
+		/** Color outer pixel of all cells of kind [kind] in col [col].
+	   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+	   positive integer as 0 is reserved for the background.
+	   @param {string} col - Optional: hex code for the color to use. If left unspecified,
+	   it gets the default value of black ("000000").
+	   @see drawCellBorders to actually draw around the cell rather than coloring the
+	   outer pixels.
+	   */
+		drawOnCellBorders( kind, col ){
+			col = col || "000000";
+			this.getImageData();
+			this.col( col );
+			for( let p of this.C.cellBorderPixels() ){
+				if( kind < 0 || this.C.cellKind(p[1]) == kind ){
+					if( typeof col == "function" ){
+						this.col( col(p[1]) );
+					}
+					this.pxfi( p[0] );
+				}
+			}
+			this.putImageData();
+		}
+
+
+		/** Draw all cells of cellkind "kind" in color col (hex). 
+	   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+	   positive integer as 0 is reserved for the background.
+	   @param {string/function} col - Optional: hex code for the color to use. If left unspecified,
+	   it gets the default value of black ("000000"). col can also be a function that
+		returns a hex value for a cell id.
+	   */
+		drawCells( kind, col ){
+			if( ! col ){
+				col = "000000";
+			}
+			if( typeof col == "string" ){
+				this.col(col);
+			}
+			// Object cst contains pixel index of all pixels belonging to non-background,
+			// non-stroma cells.
+
+			let cellpixelsbyid = this.C.getStat( PixelsByCell );
+
+			/*for( let x of this.C.pixels() ){
+				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+					if( !cellpixelsbyid[x[1]] ){
+						cellpixelsbyid[x[1]] = []
+					}
+					cellpixelsbyid[x[1]].push( x[0] )
+				}
+			}*/
+
+			this.getImageData();
+			for( let cid of Object.keys( cellpixelsbyid ) ){
+				if( kind < 0 || this.C.cellKind(cid) == kind ){
+					if( typeof col == "function" ){
+						this.col( col(cid) );
+					}
+					for( let cp of cellpixelsbyid[cid] ){
+						this.pxfi( cp );
+					}
+				}
+			}
+			this.putImageData();
+		}
+
+		/** Draw grid to the png file "fname". 
+		@param {string} fname Path to the file to write. Any parent folders in this path must
+		already exist.*/
+		writePNG( fname ){
+		
+			try {
+				this.fs.writeFileSync(fname, this.el.toBuffer());
+			}
+			catch (err) {
+				if (err.code === "ENOENT") {
+					let message = "Canvas.writePNG: cannot write to file " + fname + 
+						", are you sure the directory exists?";
+					throw(message)
+				}
+			}
+		
+		}
+	}
+
+	/** Class for outputting various statistics from a CPM simulation, as for instance
+	    the centroids of all cells (which is actually the only thing that's implemented
+	    so far) */
+
+	class Stats {
+		constructor( C ){
+			this.C = C;
+			this.ndim = this.C.ndim;
+		}
+
+		// ------------  FRC NETWORK 
+
+		// for simulation on FRC network. Returns all cells that are in contact with
+		// a stroma cell.
+		cellsOnNetwork(){
+			var px = this.C.cellborderpixels.elements, i,j, N, r = {}, t;
+			for( i = 0 ; i < px.length ; i ++ ){
+				t = this.C.pixti( px[i] );
+				if( r[t] ) continue
+				N = this.C.neighi(  px[i] );
+				for( j = 0 ; j < N.length ; j ++ ){
+					if( this.C.pixti( N[j] ) < 0 ){
+						r[t]=1; break
+					}
+				}
+			}
+			return r
+		}
+		
+		
+		// ------------  CELL LENGTH IN ONE DIMENSION
+		// (this does not work with a grid torus).
+			
+		// For computing mean and variance with online algorithm
+		updateOnline( aggregate, value ){
+			
+			var delta, delta2;
+
+			aggregate.count ++;
+			delta = value - aggregate.mean;
+			aggregate.mean += delta/aggregate.count;
+			delta2 = value - aggregate.mean;
+			aggregate.sqd += delta*delta2;
+
+			return aggregate
+		}
+
+		newOnline(){
+			return( { count : 0, mean : 0, sqd : 0 } ) 
+		}
+		// return mean and variance of coordinates in a given dimension for cell t
+		// (dimension as 0,1, or 2)
+		cellStats( t, dim ){
+
+			var aggregate, cpt, j, stats;
+
+			// the cellpixels object can be given as the third argument
+			if( arguments.length == 3){
+				cpt = arguments[2][t];
+			} else {
+				cpt = this.cellpixels()[t];
+			}
+
+			// compute using online algorithm
+			aggregate = this.newOnline();
+
+			// loop over pixels to update the aggregate
+			for( j = 0; j < cpt.length; j++ ){
+				aggregate = this.updateOnline( aggregate, cpt[j][dim] );
+			}
+
+			// get mean and variance
+			stats = { mean : aggregate.mean, variance : aggregate.sqd / ( aggregate.count - 1 ) };
+			return stats
+		}
+
+		// get the length (variance) of cell in a given dimension
+		// does not work with torus!
+		getLengthOf( t, dim ){
+			
+			// get mean and sd in x direction
+			var stats = this.cellStats( t, dim );
+			return stats.variance
+
+		}
+
+		// get the range of coordinates in dim for cell t
+		// does not work with torus!
+		getRangeOf( t, dim ){
+
+			var minc, maxc, cpt, j;
+
+			// the cellpixels object can be given as the third argument
+			if( arguments.length == 3){
+				cpt = arguments[2][t];
+			} else {
+				cpt = this.cellpixels()[t];
+			}
+
+			// loop over pixels to find min and max
+			minc = cpt[0][dim];
+			maxc = cpt[0][dim];
+			for( j = 1; j < cpt.length; j++ ){
+				if( cpt[j][dim] < minc ) minc = cpt[j][dim];
+				if( cpt[j][dim] > maxc ) maxc = cpt[j][dim];
+			}
+			
+			return( maxc - minc )		
+
+		}
+		
+		// ------------  CONNECTEDNESS OF CELLS
+		// ( compatible with torus )
+		
+		// Compute connected components of the cell ( to check connectivity )
+		getConnectedComponentOfCell( t, cellindices ){
+			if( cellindices.length == 0 ){ return }
+
+			var visited = {}, k=1, volume = {}, myself = this;
+
+			var labelComponent = function(seed, k){
+				var q = [parseInt(seed)];
+				visited[q[0]] = 1;
+				volume[k] = 0;
+				while( q.length > 0 ){
+					var e = parseInt(q.pop());
+					volume[k] ++;
+					var ne = myself.C.neighi( e );
+					for( var i = 0 ; i < ne.length ; i ++ ){
+						if( myself.C.pixti( ne[i] ) == t &&
+							!visited.hasOwnProperty(ne[i]) ){
+							q.push(ne[i]);
+							visited[ne[i]]=1;
+						}
+					}
+				}
+			};
+
+			for( var i = 0 ; i < cellindices.length ; i ++ ){
+				if( !visited.hasOwnProperty( cellindices[i] ) ){
+					labelComponent( cellindices[i], k );
+					k++;
+				}
+			}
+
+			return volume
+		}
+
+		getConnectedComponents(){
+		
+			let cpi;
+		
+			if( arguments.length == 1 ){
+				cpi = arguments[0];
+			} else {
+				cpi = this.cellpixelsi();
+			}
+
+			const tx = Object.keys( cpi );
+			let i, volumes = {};
+			for( i = 0 ; i < tx.length ; i ++ ){
+				volumes[tx[i]] = this.getConnectedComponentOfCell( tx[i], cpi[tx[i]] );
+			}
+			return volumes
+		}
+		
+		// Compute probabilities that two pixels taken at random come from the same cell.
+		getConnectedness(){
+		
+			let cpi;
+		
+			if( arguments.length == 1 ){
+				cpi = arguments[0];
+			} else {
+				cpi = this.cellpixelsi();
+			}
+		
+			const v = this.getConnectedComponents( cpi );
+			let s = {}, r = {}, i, j;
+			for( i in v ){
+				s[i] = 0;
+				r[i] = 0;
+				for( j in v[i] ){
+					s[i] += v[i][j];
+				}
+				for( j in v[i] ){
+					r[i] += (v[i][j]/s[i]) * (v[i][j]/s[i]);
+				}
+			}
+			return r
+		}	
+		
+		// ------------  PROTRUSION ANALYSIS: PERCENTAGE ACTIVE / ORDER INDEX 
+		// ( compatible with torus )
+		
+		// Compute percentage of pixels with activity > threshold
+		getPercentageActOfCell( t, cellindices, threshold ){
+			if( cellindices.length == 0 ){ return }
+			var i, count = 0;
+
+			for( i = 0 ; i < cellindices.length ; i ++ ){
+				if( this.C.pxact( cellindices[i] ) > threshold ){
+					count++;
+				}
+			}
+			return 100*(count/cellindices.length)
+		
+		}
+
+		getPercentageAct( threshold ){
+		
+			let cpi;
+		
+			if( arguments.length == 2 ){
+				cpi = arguments[1];
+			} else {
+				cpi = this.cellpixelsi();
+			}
+		
+			const tx = Object.keys( cpi );
+			let i, activities = {};
+			for( i = 0 ; i < tx.length ; i ++ ){
+				activities[tx[i]] = this.getPercentageActOfCell( tx[i], cpi[tx[i]], threshold );
+			}
+			return activities
+		
+		}
+
+		// Computing an order index of the activity gradients within the cell.
+		getGradientAt( t, i ){
+		
+			var gradient = [];
+			
+			// for computing index of neighbors in x,y,z dimension:
+			var diff = [1, this.C.dy, this.C.dz ]; 
+			
+			var d, neigh1, neigh2, t1, t2, ai = this.C.pxact( i ), terms = 0;
+			
+			for( d = 0; d < this.C.ndim; d++ ){
+				// get the two neighbors and their types
+				neigh1 = i - diff[d];
+				neigh2 = i + diff[d];
+				t1 = this.C.cellpixelstype[ neigh1 ];
+				t2 = this.C.cellpixelstype[ neigh2 ];
+				
+				// start with a zero gradient
+				gradient[d] = 0.00;
+				
+				// we will average the difference with the left and right neighbor only if both
+				// belong to the same cell. If only one neighbor belongs to the same cell, we
+				// use that difference. If neither belongs to the same cell, the gradient
+				// stays zero.
+				if( t == t1 ){
+					gradient[d] += ( ai - this.C.pxact( neigh1 ) );
+					terms++;
+				}
+				if( t == t2 ){
+					gradient[d] += ( this.C.pxact( neigh2 ) - ai );
+					terms++;
+				}
+				if( terms != 0 ){
+					gradient[d] = gradient[d] / terms;
+				}		
+							
+			}
+			
+			return gradient
+			
+		}
+
+		// compute the norm of a vector (in array form)
+		norm( v ){
+			var i;
+			var norm = 0;
+			for( i = 0; i < v.length; i++ ){
+				norm += v[i]*v[i];
+			}
+			norm = Math.sqrt( norm );
+			return norm
+		}
+
+		getOrderIndexOfCell( t, cellindices ){
+		
+			if( cellindices.length == 0 ){ return }
+			
+			// create an array to store the gradient in. Fill it with zeros for all dimensions.
+			var gradientsum = [], d;
+			for( d = 0; d < this.C.ndim; d++ ){
+				gradientsum.push(0.0);
+			}
+			
+			// now loop over the cellindices and add gi/norm(gi) to the gradientsum for each
+			// non-zero local gradient:
+			var j;
+			for( j = 0; j < cellindices.length; j++ ){
+				var g = this.getGradientAt( t, cellindices[j] );
+				var gn = this.norm( g );
+				// we only consider non-zero gradients for the order index
+				if( gn != 0 ){
+					for( d = 0; d < this.C.ndim; d++ ){
+						gradientsum[d] += 100*g[d]/gn/cellindices.length;
+					}
+				}
+			}
+			
+			
+			// finally, return the norm of this summed vector
+			var orderindex = this.norm( gradientsum );
+			return orderindex	
+		}
+
+		getOrderIndices( ){
+			var cpi = this.cellborderpixelsi();
+			var tx = Object.keys( cpi ), i, orderindices = {};
+			for( i = 0 ; i < tx.length ; i ++ ){
+				orderindices[tx[i]] = this.getOrderIndexOfCell( tx[i], cpi[tx[i]] );
+			}
+			return orderindices
+		
+		}
+		
+
+		// returns a list of all cell ids of the cells that border to "cell" and are of a different type
+		// a dictionairy with keys = neighbor cell ids, and 
+		// values = number of "cell"-pixels the neighbor cell borders to
+		cellNeighborsList( cell, cbpi ) {
+			if (!cbpi) {
+				cbpi = this.cellborderpixelsi()[cell];
+			} else {
+				cbpi = cbpi[cell];
+			}
+			let neigh_cell_amountborder = {};
+			//loop over border pixels of cell
+			for ( let cellpix = 0; cellpix < cbpi.length; cellpix++ ) {
+				//get neighbouring pixels of borderpixel of cell
+				let neighbours_of_borderpixel_cell = this.C.neighi(cbpi[cellpix]);
+				//don't add a pixel in cell more than twice
+				//loop over neighbouring pixels and store the parent cell if it is different from
+				//cell, add or increment the key corresponding to the neighbor in the dictionairy
+				for ( let neighborpix = 0; neighborpix < neighbours_of_borderpixel_cell.length;
+					neighborpix ++ ) {
+					let cell_id = this.C.pixti(neighbours_of_borderpixel_cell[neighborpix]);
+					if (cell_id != cell) {
+						neigh_cell_amountborder[cell_id] = neigh_cell_amountborder[cell_id]+1 || 1;
+					}
+				}
+			}
+			return neigh_cell_amountborder
+		}
+
+		// ------------ HELPER FUNCTIONS
+		
+		// TODO all helper functions have been removed from this class.
+		// We should only access cellpixels through the "official" interface
+		// in the CPM class.
+		
+	}
+
+	/** The core CPM class. Can be used for two- or 
+	 * three-dimensional simulations. 
+	*/
+
+	class CA extends GridBasedModel {
+		constructor( extents, conf ){
+			super( extents, conf );
+			this.updateRule = conf["UPDATE_RULE"].bind(this);
+		}
+
+		timeStep(){
+			this.grid.applyLocally( this.updateRule );
+			this.stat_values = {};
+		}
+	}
+
+	// pass in RNG
+
+	/** This class implements a data structure with constant-time insertion, deletion, and random
+	    sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
+	    pixels at cell borders. */
+	class DiceSet{
+
+		/** The constructor of class DiceSet takes a MersenneTwister object as input, to allow
+		seeding of the random number generator used for random sampling.
+		@param {MersenneTwister} mt MersenneTwister object used for random numbers.*/
+		constructor( mt ) {
+
+			/** Object or hash map used to check in constant time whether a pixel is at the
+			cell border. Keys are the actual values stored in the DiceSet, numbers are their
+			location in the elements arrray.
+			Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
+			at least in nodejs. This is weird given that in vanilla objects, all keys are 
+			converted to strings, which does not happen for Maps.
+			@type {object}
+			*/
+			this.indices = {}; //new Map() // {}
+			//this.indices = {}
+
+			/** Use an array for constant time random sampling of pixels at the border of cells.
+			@type {array} */
+			this.elements = [];
+
+			/** The number of elements currently present in the DiceSet. 
+			@type {number}
+			*/
+			this.length = 0;
+
+			/** @ignore */
+			this.mt = mt;
+		}
+
+		/** Insert a new element. It is added as an index in the indices, and pushed
+		to the end of the elements array.
+		@param {unique ID} v The element to add. Can be a number or a string, but it must be
+		unique as it should also be a unique identifier in the indices object.
+		*/
+		insert( v ){
+			if( this.indices[v] ){
+				return
+			}
+			// Add element to both the hash map and the array.
+			//this.indices.set( v, this.length )
+			this.indices[v] = this.length;
+		
+			this.elements.push( v );
+			this.length ++; 
+		}
+
+		/** Remove element v.
+		@param {unique ID} v The element to remove. Can be a number or a string, but it must be
+		unique as it should also be a unique identifier in the indices object (which is used
+		to remove it).
+		*/
+		remove( v ){
+			// Check whether element is present before it can be removed.
+			if( !this.indices[v] ){
+				return
+			}
+			/* The hash map gives the index in the array of the value to be removed.
+			The value is removed directly from the hash map, but from the array we
+			initially remove the last element, which we then substitute for the 
+			element that should be removed.*/
+			//const i = this.indices.get(v)
+			const i = this.indices[v];
+
+			//this.indices.delete(v)
+			delete this.indices[v];
+
+			const e = this.elements.pop();
+			this.length --;
+			if( e == v ){
+				return
+			}
+			this.elements[i] = e;
+
+			//this.indices.set(e,i)
+			this.indices[e] = i;
+		}
+		/** Check if the DiceSet already contains element v. 
+		@param {unique ID} v The element to check presence of. Can be a number or a string, but it must be
+		unique as it should also be a unique identifier in the indices object.
+		@return {boolean} true or false depending on whether the element is present or not.
+		*/
+		contains( v ){
+			//return this.indices.has(v)
+			return (v in this.indices)
+		}
+		
+		/** Sample a random element from v.
+		@return {unique ID} the element sampled.
+		*/
+		sample(){
+			return this.elements[Math.floor(this.mt.rnd()*this.length)]
+		}
+	}
+
+	/** 
+	 * Implements the adhesion constraint of Potts models. 
+	 */
+
+	class Adhesion extends SoftConstraint {
+		/* Check if conf parameters are correct format*/
+		confChecker(){
+			this.confCheckCellMatrix("J");
+		}
+
+
+		/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
+		J( t1, t2 ){
+			return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+		}
+		/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
+		 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
+		 */
+		H( i, tp ){
+			let r = 0, tn;
+			/* eslint-disable */
+			const N = this.C.grid.neighi( i );
+			for( let j = 0 ; j < N.length ; j ++ ){
+				tn = this.C.pixti( N[j] );
+				if( tn != tp ) r += this.J( tn, tp );
+			}
+			return r
+		}
+		deltaH( sourcei, targeti, src_type, tgt_type ){
+			return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
+		}
+	}
+
+	/** 
+	 * Implements the adhesion constraint of Potts models. 
+	 */
+
+	class VolumeConstraint extends SoftConstraint {
+		confChecker(){
+			this.confCheckCellNonNegative( "LAMBDA_V" );
+			this.confCheckCellNonNegative( "V" );
+		}
+
+		deltaH( sourcei, targeti, src_type, tgt_type ){
+			// volume gain of src cell
+			let deltaH = this.volconstraint( 1, src_type ) - 
+				this.volconstraint( 0, src_type );
+			// volume loss of tgt cell
+			deltaH += this.volconstraint( -1, tgt_type ) - 
+				this.volconstraint( 0, tgt_type );
+			return deltaH
+		}
+		/* ======= VOLUME ======= */
+
+		/* The volume constraint term of the Hamiltonian for the cell with id t.
+		   Use vgain=0 for energy of current volume, vgain=1 for energy if cell gains
+		   a pixel, and vgain = -1 for energy if cell loses a pixel. 
+		*/
+		volconstraint ( vgain, t ){
+			const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
+			// the background "cell" has no volume constraint.
+			if( t == 0 || l == 0 ) return 0
+			const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
+			return l*vdiff*vdiff
+		}
 	}
 
 	/** 
@@ -1753,950 +2834,6 @@ var CPM = (function (exports) {
 			return newid
 		}
 
-	}
-
-	/* This class encapsulates a lower-resolution grid and makes it
-	   visible as a higher-resolution grid. Only exact subsampling by
-	   a constant factor per dimension is supported. 
-		*/
-
-	class CoarseGrid {
-		constructor( grid, upscale = 3 ){
-			this.extents = new Array( grid.extents.length );
-			for( let i = 0 ; i < grid.extents.length ; i++ ){
-				this.extents[i] = upscale * grid.extents[i];
-			}
-			this.grid = grid;
-			this.upscale = upscale;
-		}
-
-		pixt( p ){
-			// 2D bilinear interpolation
-			let l = ~~(p[0] / this.upscale);
-			let r = l+1;
-			if( r > this.grid.extents[0] ){
-				r = this.grid.extents[0];
-			}
-			let t = ~~(p[1] / this.upscale);
-			let b = t+1;
-			if( b > this.grid.extents[1] ){
-				b = this.grid.extents[1];
-			}
-
-			let f_lt = this.grid.pixt([l,t]);
-			let f_rt = this.grid.pixt([r,t]);
-			let f_lb = this.grid.pixt([l,b]);
-			let f_rb = this.grid.pixt([r,b]);
-
-			let h = (p[0] % this.upscale) / this.upscale;
-			let f_x_b = f_lb * (1-h) + f_rb * h; 
-			let f_x_t = f_lt * (1-h) + f_rt * h;
-
-			let v = (p[1] % this.upscale) / this.upscale;
-			return f_x_t*(1-v) + f_x_b * v
-		}
-
-		/*gradient( p ){
-			let ps = new Array( p.length )
-			for( let i = 0 ; i < p.length ; i ++ ){
-				ps[i] = ~~(p[i]/this.upscale)
-			}
-			return this.grid.gradient( ps )
-		}*/
-	}
-
-	class Stat {
-		// Although Stats do have a 'conf' object, they should not 
-		// really be configurable in the sense that they should always
-		// provide an expected output. The 'conf' object is mainly intended
-		// to provide an option to configure logging / debugging output. That
-		// is not implemented yet.
-		constructor( conf ){
-			this.conf = conf || {};
-		}
-		set model( M ){
-			this.M = M;
-		}
-		compute(){
-			throw("compute method not implemented for subclass of Stat")
-		}
-	}
-
-	/* 	
-		Creates an object with the cellpixels of each cell on the grid. 
-		Keys are the cellIDs of all cells on the grid, corresponding values are arrays
-		containing the pixels belonging to that cell. Each element of that array contains
-		the coordinate array p = [x,y] for that pixel.
-	*/
-
-	class PixelsByCell extends Stat {
-
-		compute(){
-			// initialize the object
-			let cellpixels = { };
-			// The this.M.pixels() iterator returns coordinates and cellid for all 
-			// non-background pixels on the grid. See the appropriate Grid class for
-			// its implementation.
-			for( let [p,i] of this.M.pixels() ){
-				if( !cellpixels[i] ){
-					cellpixels[i] = [p];
-				} else {
-					cellpixels[i].push( p );
-				}
-			}
-			return cellpixels
-		}
-	}
-
-	/* 
-		Implements the activity constraint of Potts models. 
-		See also: 
-			Niculescu I, Textor J, de Boer RJ (2015) 
-	 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
-	 		PLoS Comput Biol 11(10): e1004280. 
-	 		https://doi.org/10.1371/journal.pcbi.1004280
-	 */
-
-	class ActivityMultiBackground extends SoftConstraint {
-		constructor( conf ){
-			super( conf );
-
-			this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
-			
-			// Wrapper: select function to compute activities based on ACT_MEAN in conf
-			if( this.conf.ACT_MEAN == "arithmetic" ){
-				this.activityAt = this.activityAtArith;
-			} else {
-				this.activityAt = this.activityAtGeom;
-			}
-			
-			
-			this.bgvoxels = [];
-			this.setup = false;
-		}
-		
-		confChecker(){
-			this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
-			//this.confCheckCellNonNegative( "LAMBDA_ACT" )
-			this.confCheckCellNonNegative( "MAX_ACT" );
-		}
-		
-			
-		setBackgroundVoxels(){
-		
-			for( let bgkind = 0; bgkind < this.conf["BACKGROUND_VOXELS"].length; bgkind++ ){
-				this.bgvoxels.push({});
-				for( let v of this.conf["BACKGROUND_VOXELS"][bgkind] ){
-					this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true;
-				}
-			}
-			this.setup = true;
-
-		}
-		
-		/* ======= ACT MODEL ======= */
-
-		/* Act model : compute local activity values within cell around pixel i.
-		 * Depending on settings in conf, this is an arithmetic (activityAtArith)
-		 * or geometric (activityAtGeom) mean of the activities of the neighbors
-		 * of pixel i.
-		 */
-		/* Hamiltonian computation */ 
-		deltaH ( sourcei, targeti, src_type, tgt_type ){
-		
-			if( ! this.setup ){
-				this.setBackgroundVoxels();
-			}
-
-			let deltaH = 0, maxact, lambdaact;
-			const src_kind = this.C.cellKind( src_type );
-			const tgt_kind = this.C.cellKind( tgt_type );
-			let bgindex1 = 0, bgindex2 = 0;
-			
-			for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
-				if( sourcei in this.bgvoxels[bgkind] ){
-					bgindex1 = bgkind;
-				}
-				if( targeti in this.bgvoxels[bgkind] ){
-					bgindex2 = bgkind;
-				}
-			}
-			
-
-			// use parameters for the source cell, unless that is the background.
-			// In that case, use parameters of the target cell.
-			if( src_type != 0 ){
-				maxact = this.conf["MAX_ACT"][src_kind];
-				lambdaact = this.conf["LAMBDA_ACT_MBG"][src_kind][bgindex1];
-			} else {
-				// special case: punishment for a copy attempt from background into
-				// an active cell. This effectively means that the active cell retracts,
-				// which is different from one cell pushing into another (active) cell.
-				maxact = this.conf["MAX_ACT"][tgt_kind];
-				lambdaact = this.conf["LAMBDA_ACT_MBG"][tgt_kind][bgindex2];
-			}
-			if( !maxact || !lambdaact ){
-				return 0
-			}
-
-			// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
-			// or activityAtGeom, depending on conf (see constructor).	
-			deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
-			return deltaH
-		}
-
-		/* Activity mean computation methods for arithmetic/geometric mean.
-		The method used by activityAt is defined by conf ( see constructor ).*/
-		activityAtArith( i ){
-			const t = this.C.pixti( i );
-			
-			// no activity for background/stroma
-			if( t <= 0 ){ return 0 }
-			
-			// neighborhood pixels
-			const N = this.C.neighi(i);
-			
-			// r activity summed, nN number of neighbors
-			// we start with the current pixel. 
-			let r = this.pxact(i), nN = 1;
-			
-			// loop over neighbor pixels
-			for( let j = 0 ; j < N.length ; j ++ ){ 
-				const tn = this.C.pixti( N[j] ); 
-				
-				// a neighbor only contributes if it belongs to the same cell
-				if( tn == t ){
-					r += this.pxact( N[j] );
-					nN ++; 
-				}
-			}
-
-			// average is summed r divided by num neighbors.
-			return r/nN
-		}
-		activityAtGeom ( i ){
-			const t = this.C.pixti( i );
-
-			// no activity for background/stroma
-			if( t <= 0 ){ return 0 }
-			
-			//neighborhood pixels
-			const N = this.C.neighi( i );
-			
-			// r activity product, nN number of neighbors.
-			// we start with the current pixel.
-			let nN = 1, r = this.pxact( i );
-
-			// loop over neighbor pixels
-			for( let j = 0 ; j < N.length ; j ++ ){ 
-				const tn = this.C.pixti( N[j] ); 
-
-				// a neighbor only contributes if it belongs to the same cell.
-				// if it does and has activity 0, the product will also be zero so
-				// we can already return.
-				if( tn == t ){
-					if( this.pxact( N[j] ) == 0 ) return 0
-					r *= this.pxact( N[j] );
-					nN ++; 
-				}
-			}
-			
-			// Geometric mean computation. 
-			return Math.pow(r,1/nN)
-		}
-
-
-		/* Current activity (under the Act model) of the pixel with ID i. */
-		pxact ( i ){
-			// If the pixel is not in the cellpixelsact object, it has activity 0.
-			// Otherwise, its activity is stored in the object.
-			return this.cellpixelsact[i] || 0
-		}
-		
-		/* eslint-disable no-unused-vars*/
-		postSetpixListener( i, t_old, t ){
-			// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-			const k = this.C.cellKind( t );
-			this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
-		}
-		
-		postMCSListener(){
-			// iterate over cellpixelsage and decrease all activities by one.
-			for( let key in this.cellpixelsact ){
-				// activities that reach zero no longer need to be stored.
-				if( --this.cellpixelsact[ key ] <= 0 ){
-					delete this.cellpixelsact[ key ];
-				}
-			}
-		}
-
-
-	}
-
-	/** Class for taking a CPM grid and displaying it in either browser or with nodejs. */
-
-	class Canvas {
-		/* The Canvas constructor accepts a CPM object C or a Grid2D object */
-		constructor( C, options ){
-			if( C instanceof GridBasedModel ){
-				this.C = C;
-				this.extents = C.extents;
-			} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
-				this.grid = C;
-				this.extents = C.extents;
-			}
-			this.zoom = (options && options.zoom) || 1;
-			this.wrap = (options && options.wrap) || [0,0,0];
-			this.width = this.wrap[0];
-			this.height = this.wrap[1];
-
-			if( this.width == 0 || this.extents[0] < this.width ){
-				this.width = this.extents[0];
-			}
-			if( this.height == 0 || this.extents[1] < this.height ){
-				this.height = this.extents[1];
-			}
-
-			if( typeof document !== "undefined" ){
-				this.el = document.createElement("canvas");
-				this.el.width = this.width*this.zoom;
-				this.el.height = this.height*this.zoom;//extents[1]*this.zoom
-				var parent_element = (options && options.parentElement) || document.body;
-				parent_element.appendChild( this.el );
-			} else {
-				const {createCanvas} = require("canvas");
-				this.el = createCanvas( this.width*this.zoom,
-					this.height*this.zoom );
-				this.fs = require("fs");
-			}
-
-			this.ctx = this.el.getContext("2d");
-			this.ctx.lineWidth = .2;
-			this.ctx.lineCap="butt";
-		}
-
-
-		/* Several internal helper functions (used by drawing functions below) : */
-		pxf( p ){
-			this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom );
-		}
-
-		pxfi( p ){
-			const dy = this.zoom*this.width;
-			const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
-			for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
-				for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
-					this.px[i+j+off] = this.col_r;
-					this.px[i+j+off + 1] = this.col_g;
-					this.px[i+j+off + 2] = this.col_b;
-					this.px[i+j+off + 3] = 255;
-				}
-			}
-		}
-
-		pxfir( p ){
-			const dy = this.zoom*this.width;
-			const off = (p[1]*dy + p[0])*4;
-			this.px[off] = this.col_r;
-			this.px[off + 1] = this.col_g;
-			this.px[off + 2] = this.col_b;
-			this.px[off + 3] = 255;
-		}
-
-		getImageData(){
-			this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
-			this.px = this.image_data.data;
-		}
-
-		putImageData(){
-			this.ctx.putImageData(this.image_data, 0, 0);
-		}
-
-		pxfnozoom( p ){
-			this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 );
-		}
-
-		/* draw a line left (l), right (r), down (d), or up (u) of pixel p */
-		pxdrawl( p ){
-			for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
-				this.pxfir( [this.zoom*p[0],i] );
-			}
-		}
-
-		pxdrawr( p ){
-			for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
-				this.pxfir( [this.zoom*(p[0]+1),i] );
-			}
-		}
-
-		pxdrawd( p ){
-			for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
-				this.pxfir( [i,this.zoom*(p[1]+1)] );
-			}
-		}
-
-		pxdrawu( p ){
-			for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
-				this.pxfir( [i,this.zoom*p[1]] );
-			}
-		}
-
-		/* For easier color naming */
-		col( hex ){
-			this.ctx.fillStyle="#"+hex;
-			this.col_r = parseInt( hex.substr(0,2), 16 );
-			this.col_g = parseInt( hex.substr(2,2), 16 );
-			this.col_b = parseInt( hex.substr(4,2), 16 );
-		}
-
-		/* Color the whole grid in color [col] */
-		clear( col ){
-			col = col || "000000";
-			this.ctx.fillStyle="#"+col;
-			this.ctx.fillRect( 0,0, this.el.width, this.el.height );
-		}
-
-		context(){
-			return this.ctx
-		}
-
-		p2pdraw( p ){
-			var dim;
-			for( dim = 0; dim < p.length; dim++ ){
-				if( this.wrap[dim] != 0 ){
-					p[dim] = p[dim] % this.wrap[dim];
-				}
-			}
-			return p
-		}
-
-		/* DRAWING FUNCTIONS ---------------------- */
-
-		drawField( cc ){
-			if( !cc ){
-				cc = this.grid;
-			}
-			let maxval = 0;
-			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
-				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-					let p = Math.log(.1+cc.pixt([i,j]));
-					if( maxval < p ){
-						maxval = p;
-					}
-				}
-			}
-			this.getImageData();
-			this.col_g = 0;
-			this.col_b = 0;
-			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
-				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-					this.col_r =  255*(Math.log(.1+cc.pixt( [i,j] ))/maxval);
-					this.pxfi([i,j]);
-				}
-			}
-			this.putImageData();
-		}
-
-		/* Use to draw the border of each cell on the grid in the color specified in "col"
-		(hex format). This function draws a line around the cell (rather than coloring the
-		outer pixels). If [kind] is negative, simply draw all borders. */
-		drawCellBorders( kind, col ){
-			col = col || "000000";
-			let pc, pu, pd, pl, pr, pdraw;
-			this.col( col );
-			this.getImageData();
-			// cst contains indices of pixels at the border of cells
-			for( let x of this.C.cellBorderPixels() ){
-				let p = x[0];
-				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
-					pdraw = this.p2pdraw( p );
-
-					pc = this.C.pixt( [p[0],p[1]] );
-					pr = this.C.pixt( [p[0]+1,p[1]] );
-					pl = this.C.pixt( [p[0]-1,p[1]] );		
-					pd = this.C.pixt( [p[0],p[1]+1] );
-					pu = this.C.pixt( [p[0],p[1]-1] );
-
-					if( pc != pl  ){
-						this.pxdrawl( pdraw );
-					}
-					if( pc != pr ){
-						this.pxdrawr( pdraw );
-					}
-					if( pc != pd ){
-						this.pxdrawd( pdraw );
-					}
-					if( pc != pu ){
-						this.pxdrawu( pdraw );
-					}
-				}
-
-			}
-			this.putImageData();
-		}
-
-		/* Use to show activity values of the act model using a color gradient, for
-			cells in the grid of cellkind "kind". 
-			The constraint holding the activity values can be supplied as an 
-			argument. Otherwise, the current CPM is searched for the first 
-			registered activity constraint and that is then used. */
-		drawActivityValues( kind, A ){
-			if( !A ){
-				for( let c of this.C.soft_constraints ){
-					if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
-						A = c; break
-					}
-				}
-			}
-			if( !A ){
-				throw("Cannot find activity values to draw!")
-			}
-			// cst contains the pixel ids of all non-background/non-stroma cells in
-			// the grid. 
-			let ii, sigma, a;
-			// loop over all pixels belonging to non-background, non-stroma
-			this.col("FF0000");
-			this.getImageData();
-			this.col_b = 0;
-			//this.col_g = 0
-			for( let x of this.C.cellPixels() ){
-				ii = x[0];
-				sigma = x[1];
-
-				// For all pixels that belong to the current kind, compute
-				// color based on activity values, convert to hex, and draw.
-				if( this.C.cellKind(sigma) == kind ){
-					a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][kind];
-					if( a > 0 ){
-						if( a > 0.5 ){
-							this.col_r = 255;
-							this.col_g = (2-2*a)*255;
-						} else {
-							this.col_r = (2*a)*255;
-							this.col_g = 255;
-						}
-						this.pxfi( ii );
-					}
-				}
-			}
-			this.putImageData();
-		}
-
-		/* colors outer pixels of each cell */
-		drawOnCellBorders( kind, col ){
-			col = col || "000000";
-			this.getImageData();
-			this.col( col );
-			for( let p of this.C.cellBorderPixels() ){
-				if( kind < 0 || this.C.cellKind(p[1]) == kind ){
-					if( typeof col == "function" ){
-						this.col( col(p[1]) );
-					}
-					this.pxfi( p[0] );
-				}
-			}
-			this.putImageData();
-		}
-
-		/* Draw all cells of cellkind "kind" in color col (hex). col can also be a function that
-		 * returns a hex value for a cell id. */
-		drawCells( kind, col ){
-			if( ! col ){
-				col = "000000";
-			}
-			if( typeof col == "string" ){
-				this.col(col);
-			}
-			// Object cst contains pixel index of all pixels belonging to non-background,
-			// non-stroma cells.
-
-			let cellpixelsbyid = this.C.getStat( PixelsByCell );
-
-			/*for( let x of this.C.pixels() ){
-				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
-					if( !cellpixelsbyid[x[1]] ){
-						cellpixelsbyid[x[1]] = []
-					}
-					cellpixelsbyid[x[1]].push( x[0] )
-				}
-			}*/
-
-			this.getImageData();
-			for( let cid of Object.keys( cellpixelsbyid ) ){
-				if( kind < 0 || this.C.cellKind(cid) == kind ){
-					if( typeof col == "function" ){
-						this.col( col(cid) );
-					}
-					for( let cp of cellpixelsbyid[cid] ){
-						this.pxfi( cp );
-					}
-				}
-			}
-			this.putImageData();
-		}
-
-		/* Draw grid to the png file "fname". */
-		writePNG( fname ){
-			this.fs.writeFileSync(fname, this.el.toBuffer());
-		}
-	}
-
-	/** Class for outputting various statistics from a CPM simulation, as for instance
-	    the centroids of all cells (which is actually the only thing that's implemented
-	    so far) */
-
-	class Stats {
-		constructor( C ){
-			this.C = C;
-			this.ndim = this.C.ndim;
-		}
-
-		// ------------  FRC NETWORK 
-
-		// for simulation on FRC network. Returns all cells that are in contact with
-		// a stroma cell.
-		cellsOnNetwork(){
-			var px = this.C.cellborderpixels.elements, i,j, N, r = {}, t;
-			for( i = 0 ; i < px.length ; i ++ ){
-				t = this.C.pixti( px[i] );
-				if( r[t] ) continue
-				N = this.C.neighi(  px[i] );
-				for( j = 0 ; j < N.length ; j ++ ){
-					if( this.C.pixti( N[j] ) < 0 ){
-						r[t]=1; break
-					}
-				}
-			}
-			return r
-		}
-		
-		
-		// ------------  CELL LENGTH IN ONE DIMENSION
-		// (this does not work with a grid torus).
-			
-		// For computing mean and variance with online algorithm
-		updateOnline( aggregate, value ){
-			
-			var delta, delta2;
-
-			aggregate.count ++;
-			delta = value - aggregate.mean;
-			aggregate.mean += delta/aggregate.count;
-			delta2 = value - aggregate.mean;
-			aggregate.sqd += delta*delta2;
-
-			return aggregate
-		}
-
-		newOnline(){
-			return( { count : 0, mean : 0, sqd : 0 } ) 
-		}
-		// return mean and variance of coordinates in a given dimension for cell t
-		// (dimension as 0,1, or 2)
-		cellStats( t, dim ){
-
-			var aggregate, cpt, j, stats;
-
-			// the cellpixels object can be given as the third argument
-			if( arguments.length == 3){
-				cpt = arguments[2][t];
-			} else {
-				cpt = this.cellpixels()[t];
-			}
-
-			// compute using online algorithm
-			aggregate = this.newOnline();
-
-			// loop over pixels to update the aggregate
-			for( j = 0; j < cpt.length; j++ ){
-				aggregate = this.updateOnline( aggregate, cpt[j][dim] );
-			}
-
-			// get mean and variance
-			stats = { mean : aggregate.mean, variance : aggregate.sqd / ( aggregate.count - 1 ) };
-			return stats
-		}
-
-		// get the length (variance) of cell in a given dimension
-		// does not work with torus!
-		getLengthOf( t, dim ){
-			
-			// get mean and sd in x direction
-			var stats = this.cellStats( t, dim );
-			return stats.variance
-
-		}
-
-		// get the range of coordinates in dim for cell t
-		// does not work with torus!
-		getRangeOf( t, dim ){
-
-			var minc, maxc, cpt, j;
-
-			// the cellpixels object can be given as the third argument
-			if( arguments.length == 3){
-				cpt = arguments[2][t];
-			} else {
-				cpt = this.cellpixels()[t];
-			}
-
-			// loop over pixels to find min and max
-			minc = cpt[0][dim];
-			maxc = cpt[0][dim];
-			for( j = 1; j < cpt.length; j++ ){
-				if( cpt[j][dim] < minc ) minc = cpt[j][dim];
-				if( cpt[j][dim] > maxc ) maxc = cpt[j][dim];
-			}
-			
-			return( maxc - minc )		
-
-		}
-		
-		// ------------  CONNECTEDNESS OF CELLS
-		// ( compatible with torus )
-		
-		// Compute connected components of the cell ( to check connectivity )
-		getConnectedComponentOfCell( t, cellindices ){
-			if( cellindices.length == 0 ){ return }
-
-			var visited = {}, k=1, volume = {}, myself = this;
-
-			var labelComponent = function(seed, k){
-				var q = [parseInt(seed)];
-				visited[q[0]] = 1;
-				volume[k] = 0;
-				while( q.length > 0 ){
-					var e = parseInt(q.pop());
-					volume[k] ++;
-					var ne = myself.C.neighi( e );
-					for( var i = 0 ; i < ne.length ; i ++ ){
-						if( myself.C.pixti( ne[i] ) == t &&
-							!visited.hasOwnProperty(ne[i]) ){
-							q.push(ne[i]);
-							visited[ne[i]]=1;
-						}
-					}
-				}
-			};
-
-			for( var i = 0 ; i < cellindices.length ; i ++ ){
-				if( !visited.hasOwnProperty( cellindices[i] ) ){
-					labelComponent( cellindices[i], k );
-					k++;
-				}
-			}
-
-			return volume
-		}
-
-		getConnectedComponents(){
-		
-			let cpi;
-		
-			if( arguments.length == 1 ){
-				cpi = arguments[0];
-			} else {
-				cpi = this.cellpixelsi();
-			}
-
-			const tx = Object.keys( cpi );
-			let i, volumes = {};
-			for( i = 0 ; i < tx.length ; i ++ ){
-				volumes[tx[i]] = this.getConnectedComponentOfCell( tx[i], cpi[tx[i]] );
-			}
-			return volumes
-		}
-		
-		// Compute probabilities that two pixels taken at random come from the same cell.
-		getConnectedness(){
-		
-			let cpi;
-		
-			if( arguments.length == 1 ){
-				cpi = arguments[0];
-			} else {
-				cpi = this.cellpixelsi();
-			}
-		
-			const v = this.getConnectedComponents( cpi );
-			let s = {}, r = {}, i, j;
-			for( i in v ){
-				s[i] = 0;
-				r[i] = 0;
-				for( j in v[i] ){
-					s[i] += v[i][j];
-				}
-				for( j in v[i] ){
-					r[i] += (v[i][j]/s[i]) * (v[i][j]/s[i]);
-				}
-			}
-			return r
-		}	
-		
-		// ------------  PROTRUSION ANALYSIS: PERCENTAGE ACTIVE / ORDER INDEX 
-		// ( compatible with torus )
-		
-		// Compute percentage of pixels with activity > threshold
-		getPercentageActOfCell( t, cellindices, threshold ){
-			if( cellindices.length == 0 ){ return }
-			var i, count = 0;
-
-			for( i = 0 ; i < cellindices.length ; i ++ ){
-				if( this.C.pxact( cellindices[i] ) > threshold ){
-					count++;
-				}
-			}
-			return 100*(count/cellindices.length)
-		
-		}
-
-		getPercentageAct( threshold ){
-		
-			let cpi;
-		
-			if( arguments.length == 2 ){
-				cpi = arguments[1];
-			} else {
-				cpi = this.cellpixelsi();
-			}
-		
-			const tx = Object.keys( cpi );
-			let i, activities = {};
-			for( i = 0 ; i < tx.length ; i ++ ){
-				activities[tx[i]] = this.getPercentageActOfCell( tx[i], cpi[tx[i]], threshold );
-			}
-			return activities
-		
-		}
-
-		// Computing an order index of the activity gradients within the cell.
-		getGradientAt( t, i ){
-		
-			var gradient = [];
-			
-			// for computing index of neighbors in x,y,z dimension:
-			var diff = [1, this.C.dy, this.C.dz ]; 
-			
-			var d, neigh1, neigh2, t1, t2, ai = this.C.pxact( i ), terms = 0;
-			
-			for( d = 0; d < this.C.ndim; d++ ){
-				// get the two neighbors and their types
-				neigh1 = i - diff[d];
-				neigh2 = i + diff[d];
-				t1 = this.C.cellpixelstype[ neigh1 ];
-				t2 = this.C.cellpixelstype[ neigh2 ];
-				
-				// start with a zero gradient
-				gradient[d] = 0.00;
-				
-				// we will average the difference with the left and right neighbor only if both
-				// belong to the same cell. If only one neighbor belongs to the same cell, we
-				// use that difference. If neither belongs to the same cell, the gradient
-				// stays zero.
-				if( t == t1 ){
-					gradient[d] += ( ai - this.C.pxact( neigh1 ) );
-					terms++;
-				}
-				if( t == t2 ){
-					gradient[d] += ( this.C.pxact( neigh2 ) - ai );
-					terms++;
-				}
-				if( terms != 0 ){
-					gradient[d] = gradient[d] / terms;
-				}		
-							
-			}
-			
-			return gradient
-			
-		}
-
-		// compute the norm of a vector (in array form)
-		norm( v ){
-			var i;
-			var norm = 0;
-			for( i = 0; i < v.length; i++ ){
-				norm += v[i]*v[i];
-			}
-			norm = Math.sqrt( norm );
-			return norm
-		}
-
-		getOrderIndexOfCell( t, cellindices ){
-		
-			if( cellindices.length == 0 ){ return }
-			
-			// create an array to store the gradient in. Fill it with zeros for all dimensions.
-			var gradientsum = [], d;
-			for( d = 0; d < this.C.ndim; d++ ){
-				gradientsum.push(0.0);
-			}
-			
-			// now loop over the cellindices and add gi/norm(gi) to the gradientsum for each
-			// non-zero local gradient:
-			var j;
-			for( j = 0; j < cellindices.length; j++ ){
-				var g = this.getGradientAt( t, cellindices[j] );
-				var gn = this.norm( g );
-				// we only consider non-zero gradients for the order index
-				if( gn != 0 ){
-					for( d = 0; d < this.C.ndim; d++ ){
-						gradientsum[d] += 100*g[d]/gn/cellindices.length;
-					}
-				}
-			}
-			
-			
-			// finally, return the norm of this summed vector
-			var orderindex = this.norm( gradientsum );
-			return orderindex	
-		}
-
-		getOrderIndices( ){
-			var cpi = this.cellborderpixelsi();
-			var tx = Object.keys( cpi ), i, orderindices = {};
-			for( i = 0 ; i < tx.length ; i ++ ){
-				orderindices[tx[i]] = this.getOrderIndexOfCell( tx[i], cpi[tx[i]] );
-			}
-			return orderindices
-		
-		}
-		
-
-		// returns a list of all cell ids of the cells that border to "cell" and are of a different type
-		// a dictionairy with keys = neighbor cell ids, and 
-		// values = number of "cell"-pixels the neighbor cell borders to
-		cellNeighborsList( cell, cbpi ) {
-			if (!cbpi) {
-				cbpi = this.cellborderpixelsi()[cell];
-			} else {
-				cbpi = cbpi[cell];
-			}
-			let neigh_cell_amountborder = {};
-			//loop over border pixels of cell
-			for ( let cellpix = 0; cellpix < cbpi.length; cellpix++ ) {
-				//get neighbouring pixels of borderpixel of cell
-				let neighbours_of_borderpixel_cell = this.C.neighi(cbpi[cellpix]);
-				//don't add a pixel in cell more than twice
-				//loop over neighbouring pixels and store the parent cell if it is different from
-				//cell, add or increment the key corresponding to the neighbor in the dictionairy
-				for ( let neighborpix = 0; neighborpix < neighbours_of_borderpixel_cell.length;
-					neighborpix ++ ) {
-					let cell_id = this.C.pixti(neighbours_of_borderpixel_cell[neighborpix]);
-					if (cell_id != cell) {
-						neigh_cell_amountborder[cell_id] = neigh_cell_amountborder[cell_id]+1 || 1;
-					}
-				}
-			}
-			return neigh_cell_amountborder
-		}
-
-		// ------------ HELPER FUNCTIONS
-		
-		// TODO all helper functions have been removed from this class.
-		// We should only access cellpixels through the "official" interface
-		// in the CPM class.
-		
 	}
 
 	/*	Computes the centroid of a cell when grid has a torus. 
@@ -3391,6 +3528,8 @@ var CPM = (function (exports) {
 	class Simulation {
 		constructor( config, custommethods ){
 		
+			custommethods = custommethods || {};
+		
 			// overwrite default method if methods are supplied in custommethods
 			// these can be initializeGrid(), drawCanvas(), logStats(),
 			// postMCSListener().
@@ -3401,8 +3540,8 @@ var CPM = (function (exports) {
 		
 			// Configuration of the simulation environment
 			this.conf = config.simsettings;
-			this.imgrate = this.conf["IMGFRAMERATE"] || -1;
-			this.lograte = this.conf["LOGRATE"] || -1;
+			this.imgrate = this.conf["IMGFRAMERATE"] || 1;
+			this.lograte = this.conf["LOGRATE"] || 1;
 			
 			// See if code is run in browser or via node, which will be used
 			// below to determine what the output should be.
@@ -3410,6 +3549,18 @@ var CPM = (function (exports) {
 				this.mode = "browser";
 			} else {
 				this.mode = "node";
+			}
+			
+			// Log stats or not
+			this.logstats = this.conf["STATSOUT"] || { browser: false, node: true };
+			this.logstats = this.logstats[this.mode];
+			
+			// Saving images
+			this.saveimg = this.conf["SAVEIMG"] || false;
+			this.savepath = this.conf["SAVEPATH"] || "undefined";
+			
+			if( this.saveimg && this.savepath === "undefined" ){
+				throw( "You need to specify the SAVEPATH option in the configuration object of your simulation!")
 			}
 			
 			// Save the time of the simulation.
@@ -3435,7 +3586,8 @@ var CPM = (function (exports) {
 			this.helpClasses[ "gm" ] = true;
 		}
 		addCanvas(){
-			this.Cim = new Canvas( this.C, {zoom:this.conf.zoom} );
+			let zoom = this.conf.zoom || 2;
+			this.Cim = new Canvas( this.C, {zoom:zoom} );
 			this.helpClasses[ "canvas" ] = true;
 		}
 		
@@ -3466,7 +3618,8 @@ var CPM = (function (exports) {
 		
 		runBurnin(){
 			// Simulate the burnin phase
-			for( let i = 0; i < this.conf["BURNIN"]; i++ ){
+			let burnin = this.conf["BURNIN"] || 0;
+			for( let i = 0; i < burnin; i++ ){
 				this.C.monteCarloStep();
 			}
 		}
@@ -3539,19 +3692,22 @@ var CPM = (function (exports) {
 		// Function for creating outputs
 		createOutputs(){
 			// Draw the canvas every IMGFRAMERATE steps
-			if( this.imgrate > 0 && this.time % this.conf["IMGFRAMERATE"] == 0 ){
+			if( this.imgrate > 0 && this.time % this.imgrate == 0 ){
 				
-				this.drawCanvas();
+				if( this.mode == "browser" ){
+					this.drawCanvas();
+				}
 				
 				// Save the image if required and if we're in node (not possible in browser)
-				if( this.mode == "node" && this.conf["SAVEIMG"] ){
-					let outpath = this.conf["SAVEPATH"], expname = this.conf["EXPNAME"];
+				if( this.mode == "node" && this.saveimg ){
+					this.drawCanvas();
+					let outpath = this.conf["SAVEPATH"], expname = this.conf["EXPNAME"] || "mysim";
 					this.Cim.writePNG( outpath +"/" + expname + "-t"+this.time+".png" );
 				}
 			}
 			
 			// Log stats every LOGRATE steps
-			if( this.conf["STATSOUT"][this.mode] && this.lograte > 0 && this.time % this.conf["LOGRATE"] == 0 ){
+			if( this.logstats && this.time % this.lograte == 0 ){
 				this.logStats();
 			}
 		}

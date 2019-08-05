@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/hamiltonian/Constraint.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Stats.js~Stats.html">Stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Margolus2D.js~Margolus2D.html">Margolus2D</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html">AdhesionMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PostMCSStats.js~PostMCSStats.html">PostMCSStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/hamiltonian/Constraint.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+class Constraint {
+	get CONSTRAINT_TYPE() {
+		throw(&quot;You need to implement the &apos;CONSTRAINT_TYPE&apos; getter for this constraint!&quot;)
+	}
+	get parameters(){
+		return null
+	}
+	constructor( conf ){
+		this.conf = conf
+	}
+	set CPM(C){
+		this.C = C
+		if( typeof this.confChecker === &quot;function&quot; ){
+			this.confChecker()
+		}
+	}
+	/* The optional confChecker method should verify that all the required conf parameters
+	are actually present in the conf object and have the right format.*/
+	confChecker( ){
+	}
+
+	// Check if the property exists at all
+	confCheckPresenceOf( name ){
+		if( !this.conf.hasOwnProperty( name ) ){
+			throw( &quot;Cannot find parameter &quot; + name + &quot; in the conf object!&quot; )
+		}
+		
+	}
+
+	confCheckTypeOf( name, type ){
+		this.confCheckPresenceOf( name )
+		// Check if the property has the right type
+		if( !( typeof this.conf[name] === type ) ){
+			throw( &quot;Conf object parameter &quot; + name + &quot; should be a &quot; + type +&quot;!&quot; )
+		}
+	}
+
+	/* Helper check function for parameters that should be a single string,
+	which can take on one of the values in &apos;values&apos;*/
+	confCheckString( name, values ){
+		this.confCheckPresenceOf( name )
+		this.confCheckTypeOf( name, &quot;string&quot; )
+
+		// Check if the property has one of the allowed values.
+		let valueFound = false
+		for( let v of values ){
+			if ( this.conf[name] == v ){
+				valueFound = true
+			}
+		}
+		
+		if( !valueFound ){
+			throw( &quot;Conf object parameter &quot; + name + &quot; has invalid value &quot; + this.conf[name] + 
+				&quot;! Please choose from: &quot; + values.join( &quot; / &quot; ) )
+		}
+	}
+	/* Checker for parameters that should be a single number.*/
+	confCheckNumber( name ){
+		this.confCheckTypeOf( name, &quot;number&quot; )
+	}
+	
+	/* Checker for parameters that should be a single non-negative number*/
+	confCheckSingleNonNegative( name ){
+		this.confCheckNumber( name )
+		if ( this.conf[name] &lt; 0 ){
+			throw( &quot;Conf object parameter &quot; + name + &quot; should be non-negative!&quot; )
+		}
+	}
+	
+	/* Helper function. Some parameters need to be specified for each cellkind, 
+	so to check those we first need to know the number of cellkinds.*/
+	confCheckCellKinds( n_default ){
+		if( !this.C ){
+			throw(&quot;confCheck method called before addition to CPM!&quot;)
+		}
+		if( !(&quot;n_cell_kinds&quot; in this.C) ){
+			this.C.n_cell_kinds = n_default - 1
+		}
+		return this.C.n_cell_kinds
+	}
+
+	confCheckArray( name, type ){
+		this.confCheckPresenceOf( name )
+		let p = this.conf[name]
+		if( !(p instanceof Array) ){
+			throw( &quot;Parameter &quot; + name + &quot; is not an array!&quot; )
+		}
+		
+		// Check if the property has the right type
+		let n_cell_kinds = this.confCheckCellKinds( p.length )
+		if( this.conf[name].length != n_cell_kinds + 1 ){
+			throw( &quot;Conf object parameter &quot; + name + 
+			&quot; should be an array with an element for each cellkind including background!&quot; )
+		}
+		
+		// Check if the property has the right value.
+		for( let e of this.conf[name] ){
+			if( ! ( typeof e === type ) ){
+				throw( &quot;Conf object parameter &quot; + name + 
+					&quot; should be an array with &quot;+type+&quot;s!&quot; )
+			}
+		}
+	}
+
+	/* Checker for parameters that come in an array with a number for each cellkind. */
+	confCheckCellNumbers( name ){
+		this.confCheckArray( name, &quot;number&quot; )
+	}
+	
+	/* Same as confCheckCellNumbers, but now numbers should also not be negative*/
+	confCheckCellNonNegative( name ){
+		this.confCheckCellNumbers( name )
+		for( let e of this.conf[name] ){
+			if( e &lt; 0 ){
+				throw( &quot;Elements of parameter &quot; + name + &quot; should be non-negative!&quot; )
+			}
+		}
+	}
+	
+	/* Same as confCheckCellNonNegative, but now numbers should be between 0 and 1*/
+	confCheckCellProbability( name ){
+		this.confCheckCellNumbers( name )
+		for( let e of this.conf[name] ){
+			if( e &lt; 0 ){
+				throw( &quot;Elements of parameter &quot; + name + &quot; should be between 0 and 1!&quot; )
+			}
+			if( e &gt; 1 ){
+				throw( &quot;Elements of parameter &quot; + name + &quot; should be between 0 and 1!&quot; )			
+			}
+		}
+	}
+	
+	/* Same as confCheckCellNumbers, but now values should be boolean */
+	confCheckCellBoolean( name ){
+		this.confCheckArray( name, &quot;boolean&quot; )
+	}
+	
+	/* Now the format should be a &apos;matrix&apos; with rows and columns of numbers for each cellkind. */
+	confCheckCellMatrix( name, type=&quot;number&quot; ){
+		this.confCheckPresenceOf( name )
+		let p = this.conf[name]
+		if( !(p instanceof Array) ){
+			throw( &quot;Parameter &quot; + name + &quot; is not an array!&quot; )
+		}
+
+		// Check if the property has the right type
+		let n_cell_kinds = this.confCheckCellKinds( p.length )
+		if( !( p.length == n_cell_kinds + 1 ) ){
+			throw( &quot;Conf object parameter &quot; + name + 
+			&quot; must be an array with a sub-array for each cellkind including background!&quot; )
+		}
+		
+		for( let e of this.conf[name] ){
+			if( ! ( e.length == n_cell_kinds + 1 ) ){
+				throw( &quot;Sub-arrays of &quot; + name + 
+				&quot; must have an element for each cellkind including background!&quot; )
+			}
+			for( let ee of e ){
+				if( !(typeof ee === type ) ){
+					throw(&quot;Elements in conf parameter &quot; + name + &quot; must all be of type &quot; + type + &quot;!&quot; )
+				}
+			}
+		}
+	}
+}
+
+export default Constraint
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

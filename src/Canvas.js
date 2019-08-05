@@ -1,0 +1,424 @@
+
+"use strict"
+
+import GridBasedModel from "./models/GridBasedModel.js"
+import Grid2D from "./grid/Grid2D.js"
+import CoarseGrid from "./grid/CoarseGrid.js"
+import PixelsByCell from "./stats/PixelsByCell.js"
+import ActivityConstraint from "./hamiltonian/ActivityConstraint.js"
+import ActivityMultiBackground from "./hamiltonian/ActivityMultiBackground.js"
+
+/** 
+ * Class for taking a CPM grid and displaying it in either browser or with nodejs.
+ * Note: when using this class from outside the module, you don't need to import it
+ * separately but can access it from CPM.Canvas. */
+class Canvas {
+	/** The Canvas constructor accepts a CPM object C or a Grid2D object.
+	@param {GridBasedModel/Grid2D/CoarseGrid} C the object to draw, which is
+	either an object of class GridBasedModel (either CPM or CA), or a grid (Grid2D or
+	CoarseGrid).
+	@param {object} options Configuration settings, containing: "zoom" (positive number specifying
+	the zoom level to draw with.) */
+	constructor( C, options ){
+		if( C instanceof GridBasedModel ){
+			/**
+			 * The underlying model that is drawn on the canvas.
+			 * @type {GridBasedModel}
+			 */
+			this.C = C
+			/** @private
+			 * @ignore */
+			this.extents = C.extents
+		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
+			/**
+			 * The underlying grid that is drawn on the canvas.
+			 * @type {Grid2D/CoarseGrid}
+			 */
+			this.grid = C
+			this.extents = C.extents
+		}
+		/** Zoom level to draw the canvas with, set to options.zoom or its default value 1.
+		* @type {number}*/
+		this.zoom = (options && options.zoom) || 1
+		/** @ignore*/
+		this.wrap = (options && options.wrap) || [0,0,0]
+		
+		/** Width of the canvas in pixels (in its unzoomed state)
+		* @type {number}*/
+		this.width = this.wrap[0]
+		/** Height of the canvas in pixels (in its unzoomed state)
+		* @type {number}*/
+		this.height = this.wrap[1]
+
+		if( this.width == 0 || this.extents[0] < this.width ){
+			this.width = this.extents[0]
+		}
+		if( this.height == 0 || this.extents[1] < this.height ){
+			this.height = this.extents[1]
+		}
+
+		if( typeof document !== "undefined" ){
+			/** @ignore */
+			this.el = document.createElement("canvas")
+			this.el.width = this.width*this.zoom
+			this.el.height = this.height*this.zoom//extents[1]*this.zoom
+			var parent_element = (options && options.parentElement) || document.body
+			parent_element.appendChild( this.el )
+		} else {
+			const {createCanvas} = require("canvas")
+			/** @ignore */
+			this.el = createCanvas( this.width*this.zoom,
+				this.height*this.zoom )
+			/** @ignore */
+			this.fs = require("fs")
+		}
+
+		/** @ignore */
+		this.ctx = this.el.getContext("2d")
+		this.ctx.lineWidth = .2
+		this.ctx.lineCap="butt"
+	}
+
+
+	/* Several internal helper functions (used by drawing functions below) : */
+	
+	/** @private 
+	@ignore*/
+	pxf( p ){
+		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom )
+	}
+
+	/** @private
+	@ignore */
+	pxfi( p ){
+		const dy = this.zoom*this.width
+		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4
+		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
+			for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
+				this.px[i+j+off] = this.col_r
+				this.px[i+j+off + 1] = this.col_g
+				this.px[i+j+off + 2] = this.col_b
+				this.px[i+j+off + 3] = 255
+			}
+		}
+	}
+
+	/** @private
+	@ignore */
+	pxfir( p ){
+		const dy = this.zoom*this.width
+		const off = (p[1]*dy + p[0])*4
+		this.px[off] = this.col_r
+		this.px[off + 1] = this.col_g
+		this.px[off + 2] = this.col_b
+		this.px[off + 3] = 255
+	}
+
+	/** @private 
+	@ignore*/
+	getImageData(){
+		/** @ignore */
+		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom)
+		/** @ignore */
+		this.px = this.image_data.data
+	}
+
+	/** @private 
+	@ignore*/
+	putImageData(){
+		this.ctx.putImageData(this.image_data, 0, 0)
+	}
+
+	/** @private 
+	@ignore*/
+	pxfnozoom( p ){
+		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 )
+	}
+
+	/** draw a line left (l), right (r), down (d), or up (u) of pixel p 
+	@private 
+	@ignore */
+	pxdrawl( p ){
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*p[0],i] )
+		}
+	}
+
+	/** @private 
+	@ignore */
+	pxdrawr( p ){
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*(p[0]+1),i] )
+		}
+	}
+	/** @private 
+	@ignore */
+	pxdrawd( p ){
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*(p[1]+1)] )
+		}
+	}
+	/** @private 
+	@ignore */
+	pxdrawu( p ){
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*p[1]] )
+		}
+	}
+	
+	/** For easier color naming 
+	@private
+	@ignore */
+	col( hex ){
+		this.ctx.fillStyle="#"+hex
+		/** @ignore */
+		this.col_r = parseInt( hex.substr(0,2), 16 )
+		/** @ignore */
+		this.col_g = parseInt( hex.substr(2,2), 16 )
+		/** @ignore */
+		this.col_b = parseInt( hex.substr(4,2), 16 )
+	}
+
+	/** Color the whole grid in color [col], or in black if no argument is given.
+	   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
+	   * it gets the default value of black ("000000").
+	*/
+	clear( col ){
+		col = col || "000000"
+		this.ctx.fillStyle="#"+col
+		this.ctx.fillRect( 0,0, this.el.width, this.el.height )
+	}
+
+	/** Return the current drawing context.
+	@return {RenderingContext} current drawing context on the canvas.
+	*/
+	context(){
+		return this.ctx
+	}
+	/** @private 
+	@ignore */
+	p2pdraw( p ){
+		var dim
+		for( dim = 0; dim < p.length; dim++ ){
+			if( this.wrap[dim] != 0 ){
+				p[dim] = p[dim] % this.wrap[dim]
+			}
+		}
+		return p
+	}
+
+	/* DRAWING FUNCTIONS ---------------------- */
+
+	/** Use to color a grid according to its values. High values are colored in a brighter
+	red. 
+   * @param {Grid2D or CoarseGrid} cc - Optional: the grid to draw values for. If left 
+   * unspecified, the grid that was originally supplied to the constructor is used. 
+   */
+	drawField( cc ){
+		if( !cc ){
+			cc = this.grid
+		}
+		let maxval = 0
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				let p = Math.log(.1+cc.pixt([i,j]))
+				if( maxval < p ){
+					maxval = p
+				}
+			}
+		}
+		this.getImageData()
+		this.col_g = 0
+		this.col_b = 0
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				this.col_r =  255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				this.pxfi([i,j])
+			}
+		}
+		this.putImageData()
+	}
+	/** Method for drawing the cell borders for a given cellkind in the color specified in "col"
+	(hex format). This function draws a line around the cell (rather than coloring the
+	outer pixels). If [kind] is negative, simply draw all borders.
+   * @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   * positive integer as 0 is reserved for the background.
+   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
+   * it gets the default value of black ("000000").
+   * @see drawOnCellBorders to color the outer pixels of the cell.
+   */
+	drawCellBorders( kind, col ){
+		col = col || "000000"
+		let pc, pu, pd, pl, pr, pdraw
+		this.col( col )
+		this.getImageData()
+		// cst contains indices of pixels at the border of cells
+		for( let x of this.C.cellBorderPixels() ){
+			let p = x[0]
+			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+				pdraw = this.p2pdraw( p )
+
+				pc = this.C.pixt( [p[0],p[1]] )
+				pr = this.C.pixt( [p[0]+1,p[1]] )
+				pl = this.C.pixt( [p[0]-1,p[1]] )		
+				pd = this.C.pixt( [p[0],p[1]+1] )
+				pu = this.C.pixt( [p[0],p[1]-1] )
+
+				if( pc != pl  ){
+					this.pxdrawl( pdraw )
+				}
+				if( pc != pr ){
+					this.pxdrawr( pdraw )
+				}
+				if( pc != pd ){
+					this.pxdrawd( pdraw )
+				}
+				if( pc != pu ){
+					this.pxdrawu( pdraw )
+				}
+			}
+
+		}
+		this.putImageData()
+	}
+		
+	/** Use to show activity values of the act model using a color gradient, for
+		cells in the grid of cellkind "kind". 
+		The constraint holding the activity values can be supplied as an 
+		argument. Otherwise, the current CPM is searched for the first 
+		registered activity constraint and that is then used.
+   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   positive integer as 0 is reserved for the background.
+   @param {ActivityConstraint or ActivityMultiBackground} A - the constraint object to use.
+   By default this is the first instance of an ActivityConstraint or ActivityMultiBackground
+   object found in the soft_constraints of the attached CPM.
+   */
+	drawActivityValues( kind, A ){
+		if( !A ){
+			for( let c of this.C.soft_constraints ){
+				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
+					A = c; break
+				}
+			}
+		}
+		if( !A ){
+			throw("Cannot find activity values to draw!")
+		}
+		// cst contains the pixel ids of all non-background/non-stroma cells in
+		// the grid. 
+		let ii, sigma, a
+		// loop over all pixels belonging to non-background, non-stroma
+		this.col("FF0000")
+		this.getImageData()
+		this.col_b = 0
+		//this.col_g = 0
+		for( let x of this.C.cellPixels() ){
+			ii = x[0]
+			sigma = x[1]
+
+			// For all pixels that belong to the current kind, compute
+			// color based on activity values, convert to hex, and draw.
+			if( this.C.cellKind(sigma) == kind ){
+				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][kind]
+				if( a > 0 ){
+					if( a > 0.5 ){
+						this.col_r = 255
+						this.col_g = (2-2*a)*255
+					} else {
+						this.col_r = (2*a)*255
+						this.col_g = 255
+					}
+					this.pxfi( ii )
+				}
+			}
+		}
+		this.putImageData()
+	}
+			
+	/** Color outer pixel of all cells of kind [kind] in col [col].
+   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   positive integer as 0 is reserved for the background.
+   @param {string} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black ("000000").
+   @see drawCellBorders to actually draw around the cell rather than coloring the
+   outer pixels.
+   */
+	drawOnCellBorders( kind, col ){
+		col = col || "000000"
+		this.getImageData()
+		this.col( col )
+		for( let p of this.C.cellBorderPixels() ){
+			if( kind < 0 || this.C.cellKind(p[1]) == kind ){
+				if( typeof col == "function" ){
+					this.col( col(p[1]) )
+				}
+				this.pxfi( p[0] )
+			}
+		}
+		this.putImageData()
+	}
+
+
+	/** Draw all cells of cellkind "kind" in color col (hex). 
+   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   positive integer as 0 is reserved for the background.
+   @param {string/function} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black ("000000"). col can also be a function that
+	returns a hex value for a cell id.
+   */
+	drawCells( kind, col ){
+		if( ! col ){
+			col = "000000"
+		}
+		if( typeof col == "string" ){
+			this.col(col)
+		}
+		// Object cst contains pixel index of all pixels belonging to non-background,
+		// non-stroma cells.
+
+		let cellpixelsbyid = this.C.getStat( PixelsByCell )
+
+		/*for( let x of this.C.pixels() ){
+			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+				if( !cellpixelsbyid[x[1]] ){
+					cellpixelsbyid[x[1]] = []
+				}
+				cellpixelsbyid[x[1]].push( x[0] )
+			}
+		}*/
+
+		this.getImageData()
+		for( let cid of Object.keys( cellpixelsbyid ) ){
+			if( kind < 0 || this.C.cellKind(cid) == kind ){
+				if( typeof col == "function" ){
+					this.col( col(cid) )
+				}
+				for( let cp of cellpixelsbyid[cid] ){
+					this.pxfi( cp )
+				}
+			}
+		}
+		this.putImageData()
+	}
+
+	/** Draw grid to the png file "fname". 
+	@param {string} fname Path to the file to write. Any parent folders in this path must
+	already exist.*/
+	writePNG( fname ){
+	
+		try {
+			this.fs.writeFileSync(fname, this.el.toBuffer())
+		}
+		catch (err) {
+			if (err.code === "ENOENT") {
+				let message = "Canvas.writePNG: cannot write to file " + fname + 
+					", are you sure the directory exists?"
+				throw(message)
+			}
+		}
+	
+	}
+}
+
+export default Canvas
+

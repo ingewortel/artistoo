@@ -3,6 +3,16 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-08-05 Inge Wortel <ingewortel@gmail.com>
+	* src : Moved all source code into a folder src/. This will help generating 
+	automatic documentation using esdoc.
+	* app/index.js : Fixed the new paths using the src folder.
+	* Makefile : Fixed the new paths using the src folder.
+	* node_modules : installed "esdoc": "^1.1.0" and "esdoc-standard-plugin": "^1.0.0",
+	and these are added to package.json.
+	* docs : Added documentation using esdoc (not finished yet, but accessible from
+	docs/index.html)
+
 2019-08-01 Inge Wortel <ingewortel@gmail.com>
 	* hamiltonian/AdhesionMultiBackground.js : Added a new form of the adhesion constraint,
 	where a set of pixels on the grid is given different parameters when it is background.

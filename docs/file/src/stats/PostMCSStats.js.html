@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/stats/PostMCSStats.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Stats.js~Stats.html">Stats</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Margolus2D.js~Margolus2D.html">Margolus2D</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html">AdhesionMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PostMCSStats.js~PostMCSStats.html">PostMCSStats</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/stats/PostMCSStats.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+class PostMCSStats {
+	constructor( conf ){
+		this.conf = {
+			trackpixels: true
+		}
+		Object.assign( this.conf, conf )
+	}
+	set CPM( C ){
+		this.C = C
+		this.halfsize = new Array(C.ndim).fill(0)
+		for( let i = 0 ; i &lt; C.ndim ; i ++ ){
+			this.halfsize[i] = C.extents[i]/2
+		}
+	}
+	postMCSListener(){
+		if( this.conf.trackpixels ){
+			this.cellpixels = {}
+			for( let i of this.C.cellIDs() ){
+				this.cellpixels[i] = []
+			}
+			for( let [p,i] of this.C.cellPixels() ){
+				this.cellpixels[i].push( p )
+			}
+		}
+	}
+	/* Return an array with the pixel coordinates of each connected
+	 * component for the cell with type t
+	 *
+	 * TODO this function appears to be extremely slow. 
+	 * Avoid calling this at all costs 
+	 * if possible. */
+	connectedComponentsOfCell( t, torus ){
+		let visited = {}, k=0, pixels = [], C = this.C
+		let labelComponent = function(seed, k){
+			let q = [seed]
+			visited[q[0]] = 1
+			pixels[k] = []
+			while( q.length &gt; 0 ){
+				let e = q.pop()
+				pixels[k].push( C.grid.i2p(e) )
+				let ne = C.grid.neighi( e, torus )
+				for( let i = 0 ; i &lt; ne.length ; i ++ ){
+					if( C.pixti( ne[i] ) == t &amp;&amp;
+						!(ne[i] in visited) ){
+						q.push(ne[i])
+						visited[ne[i]]=1
+					}
+				}
+			}
+		}
+		for( let i = 0 ; i &lt; this.cellpixels[t].length ; i ++ ){
+			let pi = this.C.grid.p2i( this.cellpixels[t][i] )
+			if( !(pi in visited) ){
+				labelComponent( pi, k )
+				k++
+			}
+		}
+		return pixels
+	}
+	/* converts an array of pixel coordinates to its centroid.
+	Includes a correction for pixels that are &quot;too far apart&quot;, such
+	   that meaningful centroids will be computed if the cell resides on 
+	 a torus grid. */
+	pixelsToCentroid( pixels ){
+		let cvec = new Array(this.C.ndim).fill(0)
+		for( let dim = 0 ; dim &lt; this.C.ndim ; dim ++ ){
+			let mi = 0.
+			// compute mean per dimension with online algorithm
+			for( let j = 0 ; j &lt; pixels.length ; j ++ ){
+				let dx = pixels[j][dim] - mi
+				mi += dx/(j+1)
+			}
+			cvec[dim] = mi
+		}
+		return cvec
+	}
+	/*
+	 * Computes a simple cell centroid.
+	 */
+	centroid( t ){
+		return this.pixelsToCentroid( this.cellpixels[t] )
+	}
+
+	/*
+	 * Computes the centroid of a cell when grid has a torus.
+	 * Assumption: cell pixels never extend for more than half the
+	 * size of the grid.
+	 */
+	centroidWithTorusCorrection( t ){
+		const pixels = this.cellpixels[t]
+		let cvec = new Array(this.C.ndim).fill(0)
+		for( let dim = 0 ; dim &lt; this.C.ndim ; dim ++ ){
+			let mi = 0.
+			const hsi = this.halfsize[dim], si = this.C.extents[dim]
+			// compute mean per dimension with online algorithm
+			for( let j = 0 ; j &lt; pixels.length ; j ++ ){
+				let dx = pixels[j][dim] - mi
+				if( j &gt; 0 ){
+					if( dx &gt; hsi ){
+						dx -= si
+					} else if( dx &lt; -hsi ){
+						dx += si
+					}
+				}
+				mi += dx/(j+1)
+			}
+			if( mi &lt; 0 ){
+				mi += si
+			} else if( mi &gt; si ){
+				mi -= si
+			}
+			cvec[dim] = mi
+		}
+		return cvec
+	}
+
+
+	/*
+	 * Computes the centroid of a cell when grid has a torus.
+	 * This is an older, slower implementation based on connected
+	 * components. */
+	centroidWithTorusSlow( t ){
+		// get the connected components and the pixels in it
+		let ccpixels = this.connectedComponentsOfCell( t, false )
+	
+		if( ccpixels.length == 0 ){
+			return (void 0)
+		}
+
+		// centroid of the first component
+		let centroid0 = this.pixelsToCentroid( ccpixels[ 0 ] )
+
+		// loop over the connected components to compute a weighted sum of their 
+		// centroids.
+		let n = 0, 
+			centroid = new Array(this.C.ndim).fill(0)
+		const fs = this.C.extents
+		for( let j = 0; j &lt; ccpixels.length ; j++ ){
+			let centroidc, nc, d
+			centroidc = this.pixelsToCentroid( ccpixels[ j ] )
+			nc = ccpixels[ j ].length
+			n += nc
+
+
+			// compute weighted sum. 
+			for( d = 0; d &lt; this.C.ndim; d++ ){
+				// If centroid is more than half the field size away
+				// from the first centroid0, it crosses the border, so we 
+				// first correct its coordinates.
+				if( centroidc[d] - centroid0[d] &gt; fs[d]/2 ){
+					centroidc[d] -= fs[d]
+				} else if( centroidc[d] - centroid0[d] &lt; -fs[d]/2 ){
+					centroidc[d] += fs[d]
+				}
+				centroid[d] += centroidc[d] * nc
+			}
+			
+		}
+		
+		// divide by the total n to get the mean
+		for( let d = 0; d &lt; this.C.ndim; d++ ){
+			centroid[d] /= n
+			while( centroid[d] &lt; 0 ){
+				centroid[d] += fs[d]
+			}
+			while( centroid[d] &gt; fs[d] ){
+				centroid[d] -= fs[d]
+			}
+		}
+
+		return centroid		
+	}
+}
+
+export default  PostMCSStats 
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
