@@ -5621,11 +5621,11 @@ var CPM = (function (exports) {
 				throw("Cannot remove focalpoint " + i + " : i is not a focal point!")
 
 			}
-			if( !( this.C.grid.pixti(i) == cellid ) ){
-				this.log( cellid );
-				this.log( this.C.grid.pixti(i));
+			/*if( !( this.C.grid.pixti(i) == cellid ) ){
+				this.log( cellid )
+				this.log( this.C.grid.pixti(i))
 				throw("Something went wrong! focalpoint " + i + " does not belong to cellid " + cellid + "!")
-			}
+			}*/
 		
 			delete this.focalpoints["points"][i];
 			this.focalpoints["num"][cellid]--;
@@ -5645,6 +5645,17 @@ var CPM = (function (exports) {
 		log( message ){
 			/* eslint-disable no-console*/
 			console.log(message);
+		}
+
+		postMCSListener(){
+			// remove all focalpoints that are no longer at the border.
+			for( let fp of Object.keys( this.focalpoints["points"] ) ){
+				if( !this.C.borderpixels.contains( fp ) ){
+					let cellid = this.C.pixti(fp);
+					this.removeFocalPoint( fp, cellid );
+				}
+			}
+			
 		}
 
 		/* eslint-disable no-unused-vars*/
@@ -5667,9 +5678,11 @@ var CPM = (function (exports) {
 				// case, drop it. (This should only happen when the N_PROTRUSION) changes during
 				// the simulation, eg via HTML controls.
 				let sourcei = this.lastSource();
-				if( this.isFocalPoint( sourcei ) && this.currentNumberFocalPoints(t) <= this.conf["N_PROTRUSION"][kind] ){
+				if( this.isFocalPoint( sourcei ) ){
 					this.removeFocalPoint( sourcei, t );
-					this.addFocalPoint( i, t );
+					if( this.currentNumberFocalPoints(t) <= this.conf["N_PROTRUSION"][kind] ){
+						this.addFocalPoint( i, t );
+					} 
 				}
 			
 				// 2) If the copy did not come from a focalpoint, but the cell that has just 
