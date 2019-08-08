@@ -1,168 +1,62 @@
+/** This base class defines a general CPM constraint and provides methods that do not 
+depend on the specific constraint used. This class is never used on its own, 
+as it does not yet contain the actual definition of a constraint (such as a deltaH method).
 
+In general, we distinguish between two types of constraint:
+
+- a {@link HardConstraint} is a hard rule that *must* be fulfilled in order for a copy
+attempt to succeed;
+- a {@link SoftConstraint} is an energy term in the Hamiltonian that can make a copy 
+attempt either more or less energetically favourable, but does not by itself determine
+whether a copy attempt will succeed. An unfavourable outcome may be outbalanced by 
+favourable energies from other terms, and even a copy attempt net unfavourable 
+energy (deltaH > 0) may succeed with a success chance P = exp(-DeltaH/T). 
+
+See the subclasses {@link SoftConstraint} and {@link HardConstraint} for details. Each
+implemented constraint is in turn a subclass of one of these two.
+*/
 class Constraint {
+
+	/** This method is actually implemented in the subclass.
+	@abstract
+	*/
 	get CONSTRAINT_TYPE() {
 		throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
 	}
 	get parameters(){
 		return null
 	}
+	/** The constructor of a constraint takes a configuration object.
+	This method is usually overwritten by the actual constraint so that the entries
+	of this object can be documented.
+	@param {object} conf - configuration settings for this constraint, containing the
+	relevant parameters.
+	@abstract*/
 	constructor( conf ){
+		/** Configuration object for this constraint.
+		@type {object}*/
 		this.conf = conf
 	}
+	/** This function attaches the relevant CPM to this constraint, so that information
+	about this cpm can be requested from the constraint. 
+	@todo Check why some constraints overwrite this? Because that disables the automatic
+	usage of a confChecker() when it is implemented. 
+	@param {CPM} C - the CPM to attach to this constraint.*/
 	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
 		this.C = C
 		if( typeof this.confChecker === "function" ){
 			this.confChecker()
 		}
 	}
-	/* The optional confChecker method should verify that all the required conf parameters
-	are actually present in the conf object and have the right format.*/
+	/** The optional confChecker method should verify that all the required conf parameters
+	are actually present in the conf object and have the right format. It is implemented in
+	the subclass that specifies the actual constraint.
+	@abstract */
 	confChecker( ){
 	}
 
-	// Check if the property exists at all
-	confCheckPresenceOf( name ){
-		if( !this.conf.hasOwnProperty( name ) ){
-			throw( "Cannot find parameter " + name + " in the conf object!" )
-		}
-		
-	}
-
-	confCheckTypeOf( name, type ){
-		this.confCheckPresenceOf( name )
-		// Check if the property has the right type
-		if( !( typeof this.conf[name] === type ) ){
-			throw( "Conf object parameter " + name + " should be a " + type +"!" )
-		}
-	}
-
-	/* Helper check function for parameters that should be a single string,
-	which can take on one of the values in 'values'*/
-	confCheckString( name, values ){
-		this.confCheckPresenceOf( name )
-		this.confCheckTypeOf( name, "string" )
-
-		// Check if the property has one of the allowed values.
-		let valueFound = false
-		for( let v of values ){
-			if ( this.conf[name] == v ){
-				valueFound = true
-			}
-		}
-		
-		if( !valueFound ){
-			throw( "Conf object parameter " + name + " has invalid value " + this.conf[name] + 
-				"! Please choose from: " + values.join( " / " ) )
-		}
-	}
-	/* Checker for parameters that should be a single number.*/
-	confCheckNumber( name ){
-		this.confCheckTypeOf( name, "number" )
-	}
-	
-	/* Checker for parameters that should be a single non-negative number*/
-	confCheckSingleNonNegative( name ){
-		this.confCheckNumber( name )
-		if ( this.conf[name] < 0 ){
-			throw( "Conf object parameter " + name + " should be non-negative!" )
-		}
-	}
-	
-	/* Helper function. Some parameters need to be specified for each cellkind, 
-	so to check those we first need to know the number of cellkinds.*/
-	confCheckCellKinds( n_default ){
-		if( !this.C ){
-			throw("confCheck method called before addition to CPM!")
-		}
-		if( !("n_cell_kinds" in this.C) ){
-			this.C.n_cell_kinds = n_default - 1
-		}
-		return this.C.n_cell_kinds
-	}
-
-	confCheckArray( name, type ){
-		this.confCheckPresenceOf( name )
-		let p = this.conf[name]
-		if( !(p instanceof Array) ){
-			throw( "Parameter " + name + " is not an array!" )
-		}
-		
-		// Check if the property has the right type
-		let n_cell_kinds = this.confCheckCellKinds( p.length )
-		if( this.conf[name].length != n_cell_kinds + 1 ){
-			throw( "Conf object parameter " + name + 
-			" should be an array with an element for each cellkind including background!" )
-		}
-		
-		// Check if the property has the right value.
-		for( let e of this.conf[name] ){
-			if( ! ( typeof e === type ) ){
-				throw( "Conf object parameter " + name + 
-					" should be an array with "+type+"s!" )
-			}
-		}
-	}
-
-	/* Checker for parameters that come in an array with a number for each cellkind. */
-	confCheckCellNumbers( name ){
-		this.confCheckArray( name, "number" )
-	}
-	
-	/* Same as confCheckCellNumbers, but now numbers should also not be negative*/
-	confCheckCellNonNegative( name ){
-		this.confCheckCellNumbers( name )
-		for( let e of this.conf[name] ){
-			if( e < 0 ){
-				throw( "Elements of parameter " + name + " should be non-negative!" )
-			}
-		}
-	}
-	
-	/* Same as confCheckCellNonNegative, but now numbers should be between 0 and 1*/
-	confCheckCellProbability( name ){
-		this.confCheckCellNumbers( name )
-		for( let e of this.conf[name] ){
-			if( e < 0 ){
-				throw( "Elements of parameter " + name + " should be between 0 and 1!" )
-			}
-			if( e > 1 ){
-				throw( "Elements of parameter " + name + " should be between 0 and 1!" )			
-			}
-		}
-	}
-	
-	/* Same as confCheckCellNumbers, but now values should be boolean */
-	confCheckCellBoolean( name ){
-		this.confCheckArray( name, "boolean" )
-	}
-	
-	/* Now the format should be a 'matrix' with rows and columns of numbers for each cellkind. */
-	confCheckCellMatrix( name, type="number" ){
-		this.confCheckPresenceOf( name )
-		let p = this.conf[name]
-		if( !(p instanceof Array) ){
-			throw( "Parameter " + name + " is not an array!" )
-		}
-
-		// Check if the property has the right type
-		let n_cell_kinds = this.confCheckCellKinds( p.length )
-		if( !( p.length == n_cell_kinds + 1 ) ){
-			throw( "Conf object parameter " + name + 
-			" must be an array with a sub-array for each cellkind including background!" )
-		}
-		
-		for( let e of this.conf[name] ){
-			if( ! ( e.length == n_cell_kinds + 1 ) ){
-				throw( "Sub-arrays of " + name + 
-				" must have an element for each cellkind including background!" )
-			}
-			for( let ee of e ){
-				if( !(typeof ee === type ) ){
-					throw("Elements in conf parameter " + name + " must all be of type " + type + "!" )
-				}
-			}
-		}
-	}
 }
 
 export default Constraint

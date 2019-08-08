@@ -1,47 +1,107 @@
 
 
-import SoftConstraint from "./SoftConstraint.js"
-
+import ActivityConstraint from "./ActivityConstraint.js"
+import ParameterChecker from "./ParameterChecker.js"
 /**
  * The ActivityMultiBackground constraint implements the activity constraint of Potts models,
  but allows users to specify locations on the grid where LAMBDA_ACT is different. 
-	See also: 
-		Niculescu I, Textor J, de Boer RJ (2015) 
- 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
- 		PLoS Comput Biol 11(10): e1004280. 
- 		https://doi.org/10.1371/journal.pcbi.1004280
+ See {@link ActivityConstraint} for the normal version of this constraint.
+ See {@link ActivityMultiBackground#constructor} for an explanation of the parameters.
  */
-class ActivityMultiBackground extends SoftConstraint {
+class ActivityMultiBackground extends ActivityConstraint {
 
 	/** Creates an instance of the ActivityMultiBackground constraint 
 	* @param {object} conf - Configuration object with the parameters.
 	* ACT_MEAN is a single string determining whether the activity mean should be computed
 	* using a "geometric" or "arithmetic" mean. 
 	*/
+	/** The constructor of the ActivityConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {string} [conf.ACT_MEAN="geometric"] - should local mean activity be measured with an
+	"arithmetic" or a "geometric" mean?
+	@param {PerKindArray} conf.LAMBDA_ACT_MBG - strength of the activityconstraint per cellkind and per background.
+	@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
+	@param {Array} conf.BACKGROUND_VOXELS - an array where each element represents a different background type.
+	This is again an array of {@ArrayCoordinate}s of the pixels belonging to that backgroundtype. These pixels
+	will have the LAMBDA_ACT_MBG value of that backgroundtype, instead of the standard value.
+	*/
 	constructor( conf ){
 		super( conf )
 
+		/** Activity of all cellpixels with a non-zero activity is stored in this object,
+		with the {@link IndexCoordinate} of each pixel as key and its current activity as
+		value. When the activity reaches 0, the pixel is removed from the object until it
+		is added again. 
+		@type {object}*/
 		this.cellpixelsact = {} // activity of cellpixels with a non-zero activity
 		
-		// Wrapper: select function to compute activities based on ACT_MEAN in conf
+		/** Wrapper: select function to compute activities based on ACT_MEAN in conf.
+		Default is to use the {@link activityAtGeom} for a geometric mean.
+		@type {function}*/
+		this.activityAt = this.activityAtGeom
 		if( this.conf.ACT_MEAN == "arithmetic" ){
 			this.activityAt = this.activityAtArith
-		} else {
-			this.activityAt = this.activityAtGeom
-		}
+		} 
 		
-		
+		/** Store which pixels belong to which background type 
+		@type {Array}*/
 		this.bgvoxels = []
+		
+		/** Track if this.bgvoxels has been set.
+		@type {boolean}*/
 		this.setup = false
 	}
 	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
 	confChecker(){
-		this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] )
-		//this.confCheckCellNonNegative( "LAMBDA_ACT" )
-		this.confCheckCellNonNegative( "MAX_ACT" )
+		let checker = new ParameterChecker( this.conf, this.C )
+		checker.confCheckParameter( "ACT_MEAN", "SingleValue", "String", [ "geometric", "arithmetic" ] )
+		checker.confCheckPresenceOf( "LAMBDA_ACT_MBG" )
+		checker.confCheckParameter( "MAX_ACT", "KindArray", "NonNegative" )
+		
+		// Custom checks
+		checker.confCheckStructureKindArray( this.conf["LAMBDA_ACT_MBG"], "LAMBDA_ACT_MBG" )
+		for( let e of this.conf["LAMBDA_ACT_MBG"] ){
+			for( let i of e ){
+				if( !checker.isNonNegative(i) ){
+					throw("Elements of LAMBDA_ACT_MBG must be non-negative numbers!")
+				}
+			}
+		}
+		checker.confCheckPresenceOf( "BACKGROUND_VOXELS" )
+		let bgvox = this.conf["BACKGROUND_VOXELS"]
+		// Background voxels must be an array of arrays
+		if( !(bgvox instanceof Array) ){
+			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+		} else if ( bgvox.length < 2 ){
+			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+		}
+		// Elements of the initial array must be arrays.
+		for( let e of bgvox ){
+			if( !(e instanceof Array) ){
+				throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+			}
+			
+			// Entries of this array must be pixel coordinates, which are arrays of length C.extents.length
+			for( let ee of e ){
+				let isCoordinate = true
+				if( !(ee instanceof Array) ){
+					isCoordinate = false
+				} else if ( ee.length != this.C.extents.length ){
+					isCoordinate = false
+				}
+				if( !isCoordinate ){
+					throw( "Parameter BACKGROUND_VOXELS: subarray elements should be ArrayCoordinates; arrays of length " + this.C.extents.length + "!" )
+				}
+			}
+		}
 	}
 	
-		
+	/** Get the background voxels from the conf object and store them in a correct format
+	in this.bgvoxels. This only has to be done once.
+	@private */	
 	setBackgroundVoxels(){
 	
 		for( let bgkind = 0; bgkind < this.conf["BACKGROUND_VOXELS"].length; bgkind++ ){
@@ -61,7 +121,13 @@ class ActivityMultiBackground extends SoftConstraint {
 	 * or geometric (activityAtGeom) mean of the activities of the neighbors
 	 * of pixel i.
 	 */
-	/* Hamiltonian computation */ 
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 	
 		if( ! this.setup ){
@@ -105,90 +171,6 @@ class ActivityMultiBackground extends SoftConstraint {
 		return deltaH
 	}
 
-	/* Activity mean computation methods for arithmetic/geometric mean.
-	The method used by activityAt is defined by conf ( see constructor ).*/
-	activityAtArith( i ){
-		const t = this.C.pixti( i )
-		
-		// no activity for background/stroma
-		if( t <= 0 ){ return 0 }
-		
-		// neighborhood pixels
-		const N = this.C.neighi(i)
-		
-		// r activity summed, nN number of neighbors
-		// we start with the current pixel. 
-		let r = this.pxact(i), nN = 1
-		
-		// loop over neighbor pixels
-		for( let j = 0 ; j < N.length ; j ++ ){ 
-			const tn = this.C.pixti( N[j] ) 
-			
-			// a neighbor only contributes if it belongs to the same cell
-			if( tn == t ){
-				r += this.pxact( N[j] )
-				nN ++ 
-			}
-		}
-
-		// average is summed r divided by num neighbors.
-		return r/nN
-	}
-	activityAtGeom ( i ){
-		const t = this.C.pixti( i )
-
-		// no activity for background/stroma
-		if( t <= 0 ){ return 0 }
-		
-		//neighborhood pixels
-		const N = this.C.neighi( i )
-		
-		// r activity product, nN number of neighbors.
-		// we start with the current pixel.
-		let nN = 1, r = this.pxact( i )
-
-		// loop over neighbor pixels
-		for( let j = 0 ; j < N.length ; j ++ ){ 
-			const tn = this.C.pixti( N[j] ) 
-
-			// a neighbor only contributes if it belongs to the same cell.
-			// if it does and has activity 0, the product will also be zero so
-			// we can already return.
-			if( tn == t ){
-				if( this.pxact( N[j] ) == 0 ) return 0
-				r *= this.pxact( N[j] )
-				nN ++ 
-			}
-		}
-		
-		// Geometric mean computation. 
-		return Math.pow(r,1/nN)
-	}
-
-
-	/* Current activity (under the Act model) of the pixel with ID i. */
-	pxact ( i ){
-		// If the pixel is not in the cellpixelsact object, it has activity 0.
-		// Otherwise, its activity is stored in the object.
-		return this.cellpixelsact[i] || 0
-	}
-	
-	/* eslint-disable no-unused-vars*/
-	postSetpixListener( i, t_old, t ){
-		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-		const k = this.C.cellKind( t )
-		this.cellpixelsact[i] = this.conf["MAX_ACT"][k]
-	}
-	
-	postMCSListener(){
-		// iterate over cellpixelsage and decrease all activities by one.
-		for( let key in this.cellpixelsact ){
-			// activities that reach zero no longer need to be stored.
-			if( --this.cellpixelsact[ key ] <= 0 ){
-				delete this.cellpixelsact[ key ]
-			}
-		}
-	}
 
 
 }

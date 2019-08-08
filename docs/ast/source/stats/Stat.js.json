@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 493,
+  "end": 1409,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 22,
+      "line": 42,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 493,
+    "end": 1409,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 22,
+        "line": 42,
         "column": 0
       }
     },
@@ -30,62 +30,63 @@
     "body": [
       {
         "type": "Identifier",
-        "start": 1,
-        "end": 469,
+        "start": 173,
+        "end": 1385,
         "loc": {
           "start": {
-            "line": 2,
+            "line": 4,
             "column": 0
           },
           "end": {
-            "line": 17,
+            "line": 37,
             "column": 1
           }
         },
         "id": {
           "type": "Identifier",
-          "start": 7,
-          "end": 11,
+          "start": 179,
+          "end": 183,
           "loc": {
             "start": {
-              "line": 2,
+              "line": 4,
               "column": 6
             },
             "end": {
-              "line": 2,
+              "line": 4,
               "column": 10
             },
             "identifierName": "Stat"
           },
-          "name": "Stat"
+          "name": "Stat",
+          "leadingComments": null
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 12,
-          "end": 469,
+          "start": 184,
+          "end": 1385,
           "loc": {
             "start": {
-              "line": 2,
+              "line": 4,
               "column": 11
             },
             "end": {
-              "line": 17,
+              "line": 37,
               "column": 1
             }
           },
           "body": [
             {
               "type": "ClassMethod",
-              "start": 308,
-              "end": 356,
+              "start": 702,
+              "end": 897,
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 14,
                   "column": 1
                 },
                 "end": {
-                  "line": 10,
+                  "line": 19,
                   "column": 2
                 }
               },
@@ -93,15 +94,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 308,
-                "end": 319,
+                "start": 702,
+                "end": 713,
                 "loc": {
                   "start": {
-                    "line": 8,
+                    "line": 14,
                     "column": 1
                   },
                   "end": {
-                    "line": 8,
+                    "line": 14,
                     "column": 12
                   },
                   "identifierName": "constructor"
@@ -117,15 +118,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 321,
-                  "end": 325,
+                  "start": 715,
+                  "end": 719,
                   "loc": {
                     "start": {
-                      "line": 8,
+                      "line": 14,
                       "column": 14
                     },
                     "end": {
-                      "line": 8,
+                      "line": 14,
                       "column": 18
                     },
                     "identifierName": "conf"
@@ -135,121 +136,123 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 327,
-                "end": 356,
+                "start": 721,
+                "end": 897,
                 "loc": {
                   "start": {
-                    "line": 8,
+                    "line": 14,
                     "column": 20
                   },
                   "end": {
-                    "line": 10,
+                    "line": 19,
                     "column": 2
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 331,
-                    "end": 353,
+                    "start": 872,
+                    "end": 894,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 18,
                         "column": 2
                       },
                       "end": {
-                        "line": 9,
+                        "line": 18,
                         "column": 24
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 331,
-                      "end": 353,
+                      "start": 872,
+                      "end": 894,
                       "loc": {
                         "start": {
-                          "line": 9,
+                          "line": 18,
                           "column": 2
                         },
                         "end": {
-                          "line": 9,
+                          "line": 18,
                           "column": 24
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 331,
-                        "end": 340,
+                        "start": 872,
+                        "end": 881,
                         "loc": {
                           "start": {
-                            "line": 9,
+                            "line": 18,
                             "column": 2
                           },
                           "end": {
-                            "line": 9,
+                            "line": 18,
                             "column": 11
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 331,
-                          "end": 335,
+                          "start": 872,
+                          "end": 876,
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 18,
                               "column": 2
                             },
                             "end": {
-                              "line": 9,
+                              "line": 18,
                               "column": 6
                             }
-                          }
+                          },
+                          "leadingComments": null
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 336,
-                          "end": 340,
+                          "start": 877,
+                          "end": 881,
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 18,
                               "column": 7
                             },
                             "end": {
-                              "line": 9,
+                              "line": 18,
                               "column": 11
                             },
                             "identifierName": "conf"
                           },
                           "name": "conf"
                         },
-                        "computed": false
+                        "computed": false,
+                        "leadingComments": null
                       },
                       "right": {
                         "type": "LogicalExpression",
-                        "start": 343,
-                        "end": 353,
+                        "start": 884,
+                        "end": 894,
                         "loc": {
                           "start": {
-                            "line": 9,
+                            "line": 18,
                             "column": 14
                           },
                           "end": {
-                            "line": 9,
+                            "line": 18,
                             "column": 24
                           }
                         },
                         "left": {
                           "type": "Identifier",
-                          "start": 343,
-                          "end": 347,
+                          "start": 884,
+                          "end": 888,
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 18,
                               "column": 14
                             },
                             "end": {
-                              "line": 9,
+                              "line": 18,
                               "column": 18
                             },
                             "identifierName": "conf"
@@ -259,104 +262,78 @@
                         "operator": "||",
                         "right": {
                           "type": "ObjectExpression",
-                          "start": 351,
-                          "end": 353,
+                          "start": 892,
+                          "end": 894,
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 18,
                               "column": 22
                             },
                             "end": {
-                              "line": 9,
+                              "line": 18,
                               "column": 24
                             }
                           },
                           "properties": []
                         }
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "* Configuration object for the stat, which should not change its value but\n\t\tmay be used for logging and debugging options.\n\t\t@type {object}",
+                        "start": 725,
+                        "end": 869,
+                        "loc": {
+                          "start": {
+                            "line": 15,
+                            "column": 2
+                          },
+                          "end": {
+                            "line": 17,
+                            "column": 18
+                          }
+                        }
                       }
-                    }
+                    ]
                   }
                 ],
-                "directives": []
+                "directives": [],
+                "trailingComments": null
               },
               "leadingComments": [
                 {
-                  "type": "CommentLine",
-                  "value": " Although Stats do have a 'conf' object, they should not ",
-                  "start": 15,
-                  "end": 74,
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 1
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 60
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": " really be configurable in the sense that they should always",
-                  "start": 76,
-                  "end": 138,
-                  "loc": {
-                    "start": {
-                      "line": 4,
-                      "column": 1
-                    },
-                    "end": {
-                      "line": 4,
-                      "column": 63
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": " provide an expected output. The 'conf' object is mainly intended",
-                  "start": 140,
-                  "end": 207,
-                  "loc": {
-                    "start": {
-                      "line": 5,
-                      "column": 1
-                    },
-                    "end": {
-                      "line": 5,
-                      "column": 68
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": " to provide an option to configure logging / debugging output. That",
-                  "start": 209,
-                  "end": 278,
+                  "type": "CommentBlock",
+                  "value": "* The constructor of class Stat takes a 'conf' object as argument.\n\tHowever, Stats should not really be configurable in the sense that they should always\n\tprovide an expected output. The 'conf' object is mainly intended\n\tto provide an option to configure logging / debugging output. That\n\tis not implemented yet.\t\n\t@param {object} conf configuration options for the Stat, which should change nothing\n\tabout the return value produced by the compute() method but may be used for logging\n\tand debugging options.",
+                  "start": 188,
+                  "end": 700,
                   "loc": {
                     "start": {
                       "line": 6,
                       "column": 1
                     },
                     "end": {
-                      "line": 6,
-                      "column": 70
+                      "line": 13,
+                      "column": 25
                     }
                   }
-                },
+                }
+              ],
+              "trailingComments": [
                 {
-                  "type": "CommentLine",
-                  "value": " is not implemented yet.",
-                  "start": 280,
-                  "end": 306,
+                  "type": "CommentBlock",
+                  "value": "* Every stat is linked to a specific model.\n\t@param {GridBasedModel} M the model to compute the stat on.",
+                  "start": 901,
+                  "end": 1009,
                   "loc": {
                     "start": {
-                      "line": 7,
+                      "line": 21,
                       "column": 1
                     },
                     "end": {
-                      "line": 7,
-                      "column": 27
+                      "line": 22,
+                      "column": 62
                     }
                   }
                 }
@@ -364,15 +341,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 358,
-              "end": 389,
+              "start": 1011,
+              "end": 1112,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 23,
                   "column": 1
                 },
                 "end": {
-                  "line": 13,
+                  "line": 28,
                   "column": 2
                 }
               },
@@ -380,15 +357,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 362,
-                "end": 367,
+                "start": 1015,
+                "end": 1020,
                 "loc": {
                   "start": {
-                    "line": 11,
+                    "line": 23,
                     "column": 5
                   },
                   "end": {
-                    "line": 11,
+                    "line": 23,
                     "column": 10
                   },
                   "identifierName": "model"
@@ -403,15 +380,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 369,
-                  "end": 370,
+                  "start": 1022,
+                  "end": 1023,
                   "loc": {
                     "start": {
-                      "line": 11,
+                      "line": 23,
                       "column": 12
                     },
                     "end": {
-                      "line": 11,
+                      "line": 23,
                       "column": 13
                     },
                     "identifierName": "M"
@@ -421,130 +398,188 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 372,
-                "end": 389,
+                "start": 1025,
+                "end": 1112,
                 "loc": {
                   "start": {
-                    "line": 11,
+                    "line": 23,
                     "column": 15
                   },
                   "end": {
-                    "line": 13,
+                    "line": 28,
                     "column": 2
                   }
                 },
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 376,
-                    "end": 386,
+                    "start": 1099,
+                    "end": 1109,
                     "loc": {
                       "start": {
-                        "line": 12,
+                        "line": 27,
                         "column": 2
                       },
                       "end": {
-                        "line": 12,
+                        "line": 27,
                         "column": 12
                       }
                     },
                     "expression": {
                       "type": "AssignmentExpression",
-                      "start": 376,
-                      "end": 386,
+                      "start": 1099,
+                      "end": 1109,
                       "loc": {
                         "start": {
-                          "line": 12,
+                          "line": 27,
                           "column": 2
                         },
                         "end": {
-                          "line": 12,
+                          "line": 27,
                           "column": 12
                         }
                       },
                       "operator": "=",
                       "left": {
                         "type": "MemberExpression",
-                        "start": 376,
-                        "end": 382,
+                        "start": 1099,
+                        "end": 1105,
                         "loc": {
                           "start": {
-                            "line": 12,
+                            "line": 27,
                             "column": 2
                           },
                           "end": {
-                            "line": 12,
+                            "line": 27,
                             "column": 8
                           }
                         },
                         "object": {
                           "type": "ThisExpression",
-                          "start": 376,
-                          "end": 380,
+                          "start": 1099,
+                          "end": 1103,
                           "loc": {
                             "start": {
-                              "line": 12,
+                              "line": 27,
                               "column": 2
                             },
                             "end": {
-                              "line": 12,
+                              "line": 27,
                               "column": 6
                             }
-                          }
+                          },
+                          "leadingComments": null
                         },
                         "property": {
                           "type": "Identifier",
-                          "start": 381,
-                          "end": 382,
+                          "start": 1104,
+                          "end": 1105,
                           "loc": {
                             "start": {
-                              "line": 12,
+                              "line": 27,
                               "column": 7
                             },
                             "end": {
-                              "line": 12,
+                              "line": 27,
                               "column": 8
                             },
                             "identifierName": "M"
                           },
                           "name": "M"
                         },
-                        "computed": false
+                        "computed": false,
+                        "leadingComments": null
                       },
                       "right": {
                         "type": "Identifier",
-                        "start": 385,
-                        "end": 386,
+                        "start": 1108,
+                        "end": 1109,
                         "loc": {
                           "start": {
-                            "line": 12,
+                            "line": 27,
                             "column": 11
                           },
                           "end": {
-                            "line": 12,
+                            "line": 27,
                             "column": 12
                           },
                           "identifierName": "M"
                         },
                         "name": "M"
+                      },
+                      "leadingComments": null
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentBlock",
+                        "value": "* The model to compute the stat on.\n\t\t@type {GridBasedModel} ",
+                        "start": 1031,
+                        "end": 1096,
+                        "loc": {
+                          "start": {
+                            "line": 25,
+                            "column": 2
+                          },
+                          "end": {
+                            "line": 26,
+                            "column": 27
+                          }
+                        }
                       }
-                    }
+                    ]
                   }
                 ],
-                "directives": []
-              }
+                "directives": [],
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "* Every stat is linked to a specific model.\n\t@param {GridBasedModel} M the model to compute the stat on.",
+                  "start": 901,
+                  "end": 1009,
+                  "loc": {
+                    "start": {
+                      "line": 21,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 22,
+                      "column": 62
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "* The compute method of the base Stat class throws an error, \n\tenforcing that you have to implement this method when you build a new \n\tstat class extending this base class. \n\t@abstract ",
+                  "start": 1116,
+                  "end": 1305,
+                  "loc": {
+                    "start": {
+                      "line": 30,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 13
+                    }
+                  }
+                }
+              ]
             },
             {
               "type": "ClassMethod",
-              "start": 391,
-              "end": 467,
+              "start": 1307,
+              "end": 1383,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 34,
                   "column": 1
                 },
                 "end": {
-                  "line": 16,
+                  "line": 36,
                   "column": 2
                 }
               },
@@ -552,20 +587,21 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 391,
-                "end": 398,
+                "start": 1307,
+                "end": 1314,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 34,
                     "column": 1
                   },
                   "end": {
-                    "line": 14,
+                    "line": 34,
                     "column": 8
                   },
                   "identifierName": "compute"
                 },
-                "name": "compute"
+                "name": "compute",
+                "leadingComments": null
               },
               "kind": "method",
               "id": null,
@@ -575,44 +611,44 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 400,
-                "end": 467,
+                "start": 1316,
+                "end": 1383,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 34,
                     "column": 10
                   },
                   "end": {
-                    "line": 16,
+                    "line": 36,
                     "column": 2
                   }
                 },
                 "body": [
                   {
                     "type": "ThrowStatement",
-                    "start": 404,
-                    "end": 464,
+                    "start": 1320,
+                    "end": 1380,
                     "loc": {
                       "start": {
-                        "line": 15,
+                        "line": 35,
                         "column": 2
                       },
                       "end": {
-                        "line": 15,
+                        "line": 35,
                         "column": 62
                       }
                     },
                     "argument": {
                       "type": "StringLiteral",
-                      "start": 410,
-                      "end": 463,
+                      "start": 1326,
+                      "end": 1379,
                       "loc": {
                         "start": {
-                          "line": 15,
+                          "line": 35,
                           "column": 8
                         },
                         "end": {
-                          "line": 15,
+                          "line": 35,
                           "column": 61
                         }
                       },
@@ -620,46 +656,64 @@
                         "rawValue": "compute method not implemented for subclass of Stat",
                         "raw": "\"compute method not implemented for subclass of Stat\"",
                         "parenthesized": true,
-                        "parenStart": 409
+                        "parenStart": 1325
                       },
                       "value": "compute method not implemented for subclass of Stat"
                     }
                   }
                 ],
                 "directives": []
-              }
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "* The compute method of the base Stat class throws an error, \n\tenforcing that you have to implement this method when you build a new \n\tstat class extending this base class. \n\t@abstract ",
+                  "start": 1116,
+                  "end": 1305,
+                  "loc": {
+                    "start": {
+                      "line": 30,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 13
+                    }
+                  }
+                }
+              ]
             }
           ]
         },
-        "name": "_",
         "leadingComments": [],
+        "name": "_",
         "trailingComments": []
       },
       {
         "type": "Identifier",
-        "start": 471,
-        "end": 490,
+        "start": 1387,
+        "end": 1406,
         "loc": {
           "start": {
-            "line": 19,
+            "line": 39,
             "column": 0
           },
           "end": {
-            "line": 19,
+            "line": 39,
             "column": 19
           }
         },
         "declaration": {
           "type": "Identifier",
-          "start": 486,
-          "end": 490,
+          "start": 1402,
+          "end": 1406,
           "loc": {
             "start": {
-              "line": 19,
+              "line": 39,
               "column": 15
             },
             "end": {
-              "line": 19,
+              "line": 39,
               "column": 19
             },
             "identifierName": "Stat"
@@ -672,76 +726,77 @@
       },
       {
         "type": "ExportDefaultDeclaration",
-        "start": 471,
-        "end": 490,
+        "start": 1387,
+        "end": 1406,
         "loc": {
           "start": {
-            "line": 19,
+            "line": 39,
             "column": 0
           },
           "end": {
-            "line": 19,
+            "line": 39,
             "column": 19
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 1,
-          "end": 469,
+          "start": 173,
+          "end": 1385,
           "loc": {
             "start": {
-              "line": 2,
+              "line": 4,
               "column": 0
             },
             "end": {
-              "line": 17,
+              "line": 37,
               "column": 1
             }
           },
           "id": {
             "type": "Identifier",
-            "start": 7,
-            "end": 11,
+            "start": 179,
+            "end": 183,
             "loc": {
               "start": {
-                "line": 2,
+                "line": 4,
                 "column": 6
               },
               "end": {
-                "line": 2,
+                "line": 4,
                 "column": 10
               },
               "identifierName": "Stat"
             },
-            "name": "Stat"
+            "name": "Stat",
+            "leadingComments": null
           },
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 12,
-            "end": 469,
+            "start": 184,
+            "end": 1385,
             "loc": {
               "start": {
-                "line": 2,
+                "line": 4,
                 "column": 11
               },
               "end": {
-                "line": 17,
+                "line": 37,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 308,
-                "end": 356,
+                "start": 702,
+                "end": 897,
                 "loc": {
                   "start": {
-                    "line": 8,
+                    "line": 14,
                     "column": 1
                   },
                   "end": {
-                    "line": 10,
+                    "line": 19,
                     "column": 2
                   }
                 },
@@ -749,15 +804,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 308,
-                  "end": 319,
+                  "start": 702,
+                  "end": 713,
                   "loc": {
                     "start": {
-                      "line": 8,
+                      "line": 14,
                       "column": 1
                     },
                     "end": {
-                      "line": 8,
+                      "line": 14,
                       "column": 12
                     },
                     "identifierName": "constructor"
@@ -773,15 +828,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 321,
-                    "end": 325,
+                    "start": 715,
+                    "end": 719,
                     "loc": {
                       "start": {
-                        "line": 8,
+                        "line": 14,
                         "column": 14
                       },
                       "end": {
-                        "line": 8,
+                        "line": 14,
                         "column": 18
                       },
                       "identifierName": "conf"
@@ -791,121 +846,123 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 327,
-                  "end": 356,
+                  "start": 721,
+                  "end": 897,
                   "loc": {
                     "start": {
-                      "line": 8,
+                      "line": 14,
                       "column": 20
                     },
                     "end": {
-                      "line": 10,
+                      "line": 19,
                       "column": 2
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 331,
-                      "end": 353,
+                      "start": 872,
+                      "end": 894,
                       "loc": {
                         "start": {
-                          "line": 9,
+                          "line": 18,
                           "column": 2
                         },
                         "end": {
-                          "line": 9,
+                          "line": 18,
                           "column": 24
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 331,
-                        "end": 353,
+                        "start": 872,
+                        "end": 894,
                         "loc": {
                           "start": {
-                            "line": 9,
+                            "line": 18,
                             "column": 2
                           },
                           "end": {
-                            "line": 9,
+                            "line": 18,
                             "column": 24
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 331,
-                          "end": 340,
+                          "start": 872,
+                          "end": 881,
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 18,
                               "column": 2
                             },
                             "end": {
-                              "line": 9,
+                              "line": 18,
                               "column": 11
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 331,
-                            "end": 335,
+                            "start": 872,
+                            "end": 876,
                             "loc": {
                               "start": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 2
                               },
                               "end": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 6
                               }
-                            }
+                            },
+                            "leadingComments": null
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 336,
-                            "end": 340,
+                            "start": 877,
+                            "end": 881,
                             "loc": {
                               "start": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 7
                               },
                               "end": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 11
                               },
                               "identifierName": "conf"
                             },
                             "name": "conf"
                           },
-                          "computed": false
+                          "computed": false,
+                          "leadingComments": null
                         },
                         "right": {
                           "type": "LogicalExpression",
-                          "start": 343,
-                          "end": 353,
+                          "start": 884,
+                          "end": 894,
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 18,
                               "column": 14
                             },
                             "end": {
-                              "line": 9,
+                              "line": 18,
                               "column": 24
                             }
                           },
                           "left": {
                             "type": "Identifier",
-                            "start": 343,
-                            "end": 347,
+                            "start": 884,
+                            "end": 888,
                             "loc": {
                               "start": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 14
                               },
                               "end": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 18
                               },
                               "identifierName": "conf"
@@ -915,104 +972,78 @@
                           "operator": "||",
                           "right": {
                             "type": "ObjectExpression",
-                            "start": 351,
-                            "end": 353,
+                            "start": 892,
+                            "end": 894,
                             "loc": {
                               "start": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 22
                               },
                               "end": {
-                                "line": 9,
+                                "line": 18,
                                 "column": 24
                               }
                             },
                             "properties": []
                           }
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "* Configuration object for the stat, which should not change its value but\n\t\tmay be used for logging and debugging options.\n\t\t@type {object}",
+                          "start": 725,
+                          "end": 869,
+                          "loc": {
+                            "start": {
+                              "line": 15,
+                              "column": 2
+                            },
+                            "end": {
+                              "line": 17,
+                              "column": 18
+                            }
+                          }
                         }
-                      }
+                      ]
                     }
                   ],
-                  "directives": []
+                  "directives": [],
+                  "trailingComments": null
                 },
                 "leadingComments": [
                   {
-                    "type": "CommentLine",
-                    "value": " Although Stats do have a 'conf' object, they should not ",
-                    "start": 15,
-                    "end": 74,
-                    "loc": {
-                      "start": {
-                        "line": 3,
-                        "column": 1
-                      },
-                      "end": {
-                        "line": 3,
-                        "column": 60
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentLine",
-                    "value": " really be configurable in the sense that they should always",
-                    "start": 76,
-                    "end": 138,
-                    "loc": {
-                      "start": {
-                        "line": 4,
-                        "column": 1
-                      },
-                      "end": {
-                        "line": 4,
-                        "column": 63
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentLine",
-                    "value": " provide an expected output. The 'conf' object is mainly intended",
-                    "start": 140,
-                    "end": 207,
-                    "loc": {
-                      "start": {
-                        "line": 5,
-                        "column": 1
-                      },
-                      "end": {
-                        "line": 5,
-                        "column": 68
-                      }
-                    }
-                  },
-                  {
-                    "type": "CommentLine",
-                    "value": " to provide an option to configure logging / debugging output. That",
-                    "start": 209,
-                    "end": 278,
+                    "type": "CommentBlock",
+                    "value": "* The constructor of class Stat takes a 'conf' object as argument.\n\tHowever, Stats should not really be configurable in the sense that they should always\n\tprovide an expected output. The 'conf' object is mainly intended\n\tto provide an option to configure logging / debugging output. That\n\tis not implemented yet.\t\n\t@param {object} conf configuration options for the Stat, which should change nothing\n\tabout the return value produced by the compute() method but may be used for logging\n\tand debugging options.",
+                    "start": 188,
+                    "end": 700,
                     "loc": {
                       "start": {
                         "line": 6,
                         "column": 1
                       },
                       "end": {
-                        "line": 6,
-                        "column": 70
+                        "line": 13,
+                        "column": 25
                       }
                     }
-                  },
+                  }
+                ],
+                "trailingComments": [
                   {
-                    "type": "CommentLine",
-                    "value": " is not implemented yet.",
-                    "start": 280,
-                    "end": 306,
+                    "type": "CommentBlock",
+                    "value": "* Every stat is linked to a specific model.\n\t@param {GridBasedModel} M the model to compute the stat on.",
+                    "start": 901,
+                    "end": 1009,
                     "loc": {
                       "start": {
-                        "line": 7,
+                        "line": 21,
                         "column": 1
                       },
                       "end": {
-                        "line": 7,
-                        "column": 27
+                        "line": 22,
+                        "column": 62
                       }
                     }
                   }
@@ -1020,15 +1051,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 358,
-                "end": 389,
+                "start": 1011,
+                "end": 1112,
                 "loc": {
                   "start": {
-                    "line": 11,
+                    "line": 23,
                     "column": 1
                   },
                   "end": {
-                    "line": 13,
+                    "line": 28,
                     "column": 2
                   }
                 },
@@ -1036,15 +1067,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 362,
-                  "end": 367,
+                  "start": 1015,
+                  "end": 1020,
                   "loc": {
                     "start": {
-                      "line": 11,
+                      "line": 23,
                       "column": 5
                     },
                     "end": {
-                      "line": 11,
+                      "line": 23,
                       "column": 10
                     },
                     "identifierName": "model"
@@ -1059,15 +1090,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 369,
-                    "end": 370,
+                    "start": 1022,
+                    "end": 1023,
                     "loc": {
                       "start": {
-                        "line": 11,
+                        "line": 23,
                         "column": 12
                       },
                       "end": {
-                        "line": 11,
+                        "line": 23,
                         "column": 13
                       },
                       "identifierName": "M"
@@ -1077,130 +1108,188 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 372,
-                  "end": 389,
+                  "start": 1025,
+                  "end": 1112,
                   "loc": {
                     "start": {
-                      "line": 11,
+                      "line": 23,
                       "column": 15
                     },
                     "end": {
-                      "line": 13,
+                      "line": 28,
                       "column": 2
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 376,
-                      "end": 386,
+                      "start": 1099,
+                      "end": 1109,
                       "loc": {
                         "start": {
-                          "line": 12,
+                          "line": 27,
                           "column": 2
                         },
                         "end": {
-                          "line": 12,
+                          "line": 27,
                           "column": 12
                         }
                       },
                       "expression": {
                         "type": "AssignmentExpression",
-                        "start": 376,
-                        "end": 386,
+                        "start": 1099,
+                        "end": 1109,
                         "loc": {
                           "start": {
-                            "line": 12,
+                            "line": 27,
                             "column": 2
                           },
                           "end": {
-                            "line": 12,
+                            "line": 27,
                             "column": 12
                           }
                         },
                         "operator": "=",
                         "left": {
                           "type": "MemberExpression",
-                          "start": 376,
-                          "end": 382,
+                          "start": 1099,
+                          "end": 1105,
                           "loc": {
                             "start": {
-                              "line": 12,
+                              "line": 27,
                               "column": 2
                             },
                             "end": {
-                              "line": 12,
+                              "line": 27,
                               "column": 8
                             }
                           },
                           "object": {
                             "type": "ThisExpression",
-                            "start": 376,
-                            "end": 380,
+                            "start": 1099,
+                            "end": 1103,
                             "loc": {
                               "start": {
-                                "line": 12,
+                                "line": 27,
                                 "column": 2
                               },
                               "end": {
-                                "line": 12,
+                                "line": 27,
                                 "column": 6
                               }
-                            }
+                            },
+                            "leadingComments": null
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 381,
-                            "end": 382,
+                            "start": 1104,
+                            "end": 1105,
                             "loc": {
                               "start": {
-                                "line": 12,
+                                "line": 27,
                                 "column": 7
                               },
                               "end": {
-                                "line": 12,
+                                "line": 27,
                                 "column": 8
                               },
                               "identifierName": "M"
                             },
                             "name": "M"
                           },
-                          "computed": false
+                          "computed": false,
+                          "leadingComments": null
                         },
                         "right": {
                           "type": "Identifier",
-                          "start": 385,
-                          "end": 386,
+                          "start": 1108,
+                          "end": 1109,
                           "loc": {
                             "start": {
-                              "line": 12,
+                              "line": 27,
                               "column": 11
                             },
                             "end": {
-                              "line": 12,
+                              "line": 27,
                               "column": 12
                             },
                             "identifierName": "M"
                           },
                           "name": "M"
+                        },
+                        "leadingComments": null
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": "* The model to compute the stat on.\n\t\t@type {GridBasedModel} ",
+                          "start": 1031,
+                          "end": 1096,
+                          "loc": {
+                            "start": {
+                              "line": 25,
+                              "column": 2
+                            },
+                            "end": {
+                              "line": 26,
+                              "column": 27
+                            }
+                          }
                         }
-                      }
+                      ]
                     }
                   ],
-                  "directives": []
-                }
+                  "directives": [],
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "* Every stat is linked to a specific model.\n\t@param {GridBasedModel} M the model to compute the stat on.",
+                    "start": 901,
+                    "end": 1009,
+                    "loc": {
+                      "start": {
+                        "line": 21,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 22,
+                        "column": 62
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "* The compute method of the base Stat class throws an error, \n\tenforcing that you have to implement this method when you build a new \n\tstat class extending this base class. \n\t@abstract ",
+                    "start": 1116,
+                    "end": 1305,
+                    "loc": {
+                      "start": {
+                        "line": 30,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 33,
+                        "column": 13
+                      }
+                    }
+                  }
+                ]
               },
               {
                 "type": "ClassMethod",
-                "start": 391,
-                "end": 467,
+                "start": 1307,
+                "end": 1383,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 34,
                     "column": 1
                   },
                   "end": {
-                    "line": 16,
+                    "line": 36,
                     "column": 2
                   }
                 },
@@ -1208,20 +1297,21 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 391,
-                  "end": 398,
+                  "start": 1307,
+                  "end": 1314,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 34,
                       "column": 1
                     },
                     "end": {
-                      "line": 14,
+                      "line": 34,
                       "column": 8
                     },
                     "identifierName": "compute"
                   },
-                  "name": "compute"
+                  "name": "compute",
+                  "leadingComments": null
                 },
                 "kind": "method",
                 "id": null,
@@ -1231,44 +1321,44 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 400,
-                  "end": 467,
+                  "start": 1316,
+                  "end": 1383,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 34,
                       "column": 10
                     },
                     "end": {
-                      "line": 16,
+                      "line": 36,
                       "column": 2
                     }
                   },
                   "body": [
                     {
                       "type": "ThrowStatement",
-                      "start": 404,
-                      "end": 464,
+                      "start": 1320,
+                      "end": 1380,
                       "loc": {
                         "start": {
-                          "line": 15,
+                          "line": 35,
                           "column": 2
                         },
                         "end": {
-                          "line": 15,
+                          "line": 35,
                           "column": 62
                         }
                       },
                       "argument": {
                         "type": "StringLiteral",
-                        "start": 410,
-                        "end": 463,
+                        "start": 1326,
+                        "end": 1379,
                         "loc": {
                           "start": {
-                            "line": 15,
+                            "line": 35,
                             "column": 8
                           },
                           "end": {
-                            "line": 15,
+                            "line": 35,
                             "column": 61
                           }
                         },
@@ -1276,19 +1366,54 @@
                           "rawValue": "compute method not implemented for subclass of Stat",
                           "raw": "\"compute method not implemented for subclass of Stat\"",
                           "parenthesized": true,
-                          "parenStart": 409
+                          "parenStart": 1325
                         },
                         "value": "compute method not implemented for subclass of Stat"
                       }
                     }
                   ],
                   "directives": []
-                }
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "* The compute method of the base Stat class throws an error, \n\tenforcing that you have to implement this method when you build a new \n\tstat class extending this base class. \n\t@abstract ",
+                    "start": 1116,
+                    "end": 1305,
+                    "loc": {
+                      "start": {
+                        "line": 30,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 33,
+                        "column": 13
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "* Base class for a statistic that can be computed on a GridBasedModel. \nThis class by itself is not usable; see its subclasses for stats that are \ncurrently supported. ",
+              "start": 0,
+              "end": 172,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 3,
+                  "column": 23
+                }
+              }
+            }
+          ],
           "__PseudoExport__": false,
-          "leadingComments": [],
           "trailingComments": []
         },
         "leadingComments": null
@@ -1298,87 +1423,119 @@
   },
   "comments": [
     {
-      "type": "CommentLine",
-      "value": " Although Stats do have a 'conf' object, they should not ",
-      "start": 15,
-      "end": 74,
+      "type": "CommentBlock",
+      "value": "* Base class for a statistic that can be computed on a GridBasedModel. \nThis class by itself is not usable; see its subclasses for stats that are \ncurrently supported. ",
+      "start": 0,
+      "end": 172,
       "loc": {
         "start": {
-          "line": 3,
-          "column": 1
+          "line": 1,
+          "column": 0
         },
         "end": {
           "line": 3,
-          "column": 60
+          "column": 23
         }
       }
     },
     {
-      "type": "CommentLine",
-      "value": " really be configurable in the sense that they should always",
-      "start": 76,
-      "end": 138,
-      "loc": {
-        "start": {
-          "line": 4,
-          "column": 1
-        },
-        "end": {
-          "line": 4,
-          "column": 63
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " provide an expected output. The 'conf' object is mainly intended",
-      "start": 140,
-      "end": 207,
-      "loc": {
-        "start": {
-          "line": 5,
-          "column": 1
-        },
-        "end": {
-          "line": 5,
-          "column": 68
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " to provide an option to configure logging / debugging output. That",
-      "start": 209,
-      "end": 278,
+      "type": "CommentBlock",
+      "value": "* The constructor of class Stat takes a 'conf' object as argument.\n\tHowever, Stats should not really be configurable in the sense that they should always\n\tprovide an expected output. The 'conf' object is mainly intended\n\tto provide an option to configure logging / debugging output. That\n\tis not implemented yet.\t\n\t@param {object} conf configuration options for the Stat, which should change nothing\n\tabout the return value produced by the compute() method but may be used for logging\n\tand debugging options.",
+      "start": 188,
+      "end": 700,
       "loc": {
         "start": {
           "line": 6,
           "column": 1
         },
         "end": {
-          "line": 6,
-          "column": 70
+          "line": 13,
+          "column": 25
         }
       }
     },
     {
-      "type": "CommentLine",
-      "value": " is not implemented yet.",
-      "start": 280,
-      "end": 306,
+      "type": "CommentBlock",
+      "value": "* Configuration object for the stat, which should not change its value but\n\t\tmay be used for logging and debugging options.\n\t\t@type {object}",
+      "start": 725,
+      "end": 869,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 15,
+          "column": 2
+        },
+        "end": {
+          "line": 17,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Every stat is linked to a specific model.\n\t@param {GridBasedModel} M the model to compute the stat on.",
+      "start": 901,
+      "end": 1009,
+      "loc": {
+        "start": {
+          "line": 21,
           "column": 1
         },
         "end": {
-          "line": 7,
+          "line": 22,
+          "column": 62
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* The model to compute the stat on.\n\t\t@type {GridBasedModel} ",
+      "start": 1031,
+      "end": 1096,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 2
+        },
+        "end": {
+          "line": 26,
           "column": 27
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* The compute method of the base Stat class throws an error, \n\tenforcing that you have to implement this method when you build a new \n\tstat class extending this base class. \n\t@abstract ",
+      "start": 1116,
+      "end": 1305,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 1
+        },
+        "end": {
+          "line": 33,
+          "column": 13
         }
       }
     }
   ],
   "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "* Base class for a statistic that can be computed on a GridBasedModel. \nThis class by itself is not usable; see its subclasses for stats that are \ncurrently supported. ",
+      "start": 0,
+      "end": 172,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 23
+        }
+      }
+    },
     {
       "type": {
         "label": "class",
@@ -1394,15 +1551,15 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 1,
-      "end": 6,
+      "start": 173,
+      "end": 178,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 2,
+          "line": 4,
           "column": 5
         }
       }
@@ -1420,15 +1577,15 @@
         "binop": null
       },
       "value": "Stat",
-      "start": 7,
-      "end": 11,
+      "start": 179,
+      "end": 183,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 4,
           "column": 6
         },
         "end": {
-          "line": 2,
+          "line": 4,
           "column": 10
         }
       }
@@ -1445,96 +1602,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 12,
-      "end": 13,
+      "start": 184,
+      "end": 185,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 4,
           "column": 11
         },
         "end": {
-          "line": 2,
+          "line": 4,
           "column": 12
         }
       }
     },
     {
-      "type": "CommentLine",
-      "value": " Although Stats do have a 'conf' object, they should not ",
-      "start": 15,
-      "end": 74,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 1
-        },
-        "end": {
-          "line": 3,
-          "column": 60
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " really be configurable in the sense that they should always",
-      "start": 76,
-      "end": 138,
-      "loc": {
-        "start": {
-          "line": 4,
-          "column": 1
-        },
-        "end": {
-          "line": 4,
-          "column": 63
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " provide an expected output. The 'conf' object is mainly intended",
-      "start": 140,
-      "end": 207,
-      "loc": {
-        "start": {
-          "line": 5,
-          "column": 1
-        },
-        "end": {
-          "line": 5,
-          "column": 68
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " to provide an option to configure logging / debugging output. That",
-      "start": 209,
-      "end": 278,
+      "type": "CommentBlock",
+      "value": "* The constructor of class Stat takes a 'conf' object as argument.\n\tHowever, Stats should not really be configurable in the sense that they should always\n\tprovide an expected output. The 'conf' object is mainly intended\n\tto provide an option to configure logging / debugging output. That\n\tis not implemented yet.\t\n\t@param {object} conf configuration options for the Stat, which should change nothing\n\tabout the return value produced by the compute() method but may be used for logging\n\tand debugging options.",
+      "start": 188,
+      "end": 700,
       "loc": {
         "start": {
           "line": 6,
           "column": 1
         },
         "end": {
-          "line": 6,
-          "column": 70
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " is not implemented yet.",
-      "start": 280,
-      "end": 306,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 1
-        },
-        "end": {
-          "line": 7,
-          "column": 27
+          "line": 13,
+          "column": 25
         }
       }
     },
@@ -1551,15 +1644,15 @@
         "binop": null
       },
       "value": "constructor",
-      "start": 308,
-      "end": 319,
+      "start": 702,
+      "end": 713,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 14,
           "column": 1
         },
         "end": {
-          "line": 8,
+          "line": 14,
           "column": 12
         }
       }
@@ -1576,15 +1669,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 319,
-      "end": 320,
+      "start": 713,
+      "end": 714,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 14,
           "column": 12
         },
         "end": {
-          "line": 8,
+          "line": 14,
           "column": 13
         }
       }
@@ -1602,15 +1695,15 @@
         "binop": null
       },
       "value": "conf",
-      "start": 321,
-      "end": 325,
+      "start": 715,
+      "end": 719,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 14,
           "column": 14
         },
         "end": {
-          "line": 8,
+          "line": 14,
           "column": 18
         }
       }
@@ -1627,15 +1720,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 326,
-      "end": 327,
+      "start": 720,
+      "end": 721,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 14,
           "column": 19
         },
         "end": {
-          "line": 8,
+          "line": 14,
           "column": 20
         }
       }
@@ -1652,16 +1745,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 327,
-      "end": 328,
+      "start": 721,
+      "end": 722,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 14,
           "column": 20
         },
         "end": {
-          "line": 8,
+          "line": 14,
           "column": 21
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Configuration object for the stat, which should not change its value but\n\t\tmay be used for logging and debugging options.\n\t\t@type {object}",
+      "start": 725,
+      "end": 869,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 2
+        },
+        "end": {
+          "line": 17,
+          "column": 18
         }
       }
     },
@@ -1680,15 +1789,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 331,
-      "end": 335,
+      "start": 872,
+      "end": 876,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 2
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 6
         }
       }
@@ -1706,15 +1815,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 335,
-      "end": 336,
+      "start": 876,
+      "end": 877,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 6
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 7
         }
       }
@@ -1732,15 +1841,15 @@
         "binop": null
       },
       "value": "conf",
-      "start": 336,
-      "end": 340,
+      "start": 877,
+      "end": 881,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 7
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 11
         }
       }
@@ -1759,15 +1868,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 341,
-      "end": 342,
+      "start": 882,
+      "end": 883,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 12
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 13
         }
       }
@@ -1785,15 +1894,15 @@
         "binop": null
       },
       "value": "conf",
-      "start": 343,
-      "end": 347,
+      "start": 884,
+      "end": 888,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 14
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 18
         }
       }
@@ -1812,15 +1921,15 @@
         "updateContext": null
       },
       "value": "||",
-      "start": 348,
-      "end": 350,
+      "start": 889,
+      "end": 891,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 19
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 21
         }
       }
@@ -1837,15 +1946,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 351,
-      "end": 352,
+      "start": 892,
+      "end": 893,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 22
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 23
         }
       }
@@ -1862,15 +1971,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 352,
-      "end": 353,
+      "start": 893,
+      "end": 894,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 18,
           "column": 23
         },
         "end": {
-          "line": 9,
+          "line": 18,
           "column": 24
         }
       }
@@ -1887,16 +1996,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 355,
-      "end": 356,
+      "start": 896,
+      "end": 897,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 19,
           "column": 1
         },
         "end": {
-          "line": 10,
+          "line": 19,
           "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Every stat is linked to a specific model.\n\t@param {GridBasedModel} M the model to compute the stat on.",
+      "start": 901,
+      "end": 1009,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 1
+        },
+        "end": {
+          "line": 22,
+          "column": 62
         }
       }
     },
@@ -1913,15 +2038,15 @@
         "binop": null
       },
       "value": "set",
-      "start": 358,
-      "end": 361,
+      "start": 1011,
+      "end": 1014,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 23,
           "column": 1
         },
         "end": {
-          "line": 11,
+          "line": 23,
           "column": 4
         }
       }
@@ -1939,15 +2064,15 @@
         "binop": null
       },
       "value": "model",
-      "start": 362,
-      "end": 367,
+      "start": 1015,
+      "end": 1020,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 23,
           "column": 5
         },
         "end": {
-          "line": 11,
+          "line": 23,
           "column": 10
         }
       }
@@ -1964,15 +2089,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 367,
-      "end": 368,
+      "start": 1020,
+      "end": 1021,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 23,
           "column": 10
         },
         "end": {
-          "line": 11,
+          "line": 23,
           "column": 11
         }
       }
@@ -1990,15 +2115,15 @@
         "binop": null
       },
       "value": "M",
-      "start": 369,
-      "end": 370,
+      "start": 1022,
+      "end": 1023,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 23,
           "column": 12
         },
         "end": {
-          "line": 11,
+          "line": 23,
           "column": 13
         }
       }
@@ -2015,15 +2140,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 371,
-      "end": 372,
+      "start": 1024,
+      "end": 1025,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 23,
           "column": 14
         },
         "end": {
-          "line": 11,
+          "line": 23,
           "column": 15
         }
       }
@@ -2040,16 +2165,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 372,
-      "end": 373,
+      "start": 1025,
+      "end": 1026,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 23,
           "column": 15
         },
         "end": {
-          "line": 11,
+          "line": 23,
           "column": 16
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* The model to compute the stat on.\n\t\t@type {GridBasedModel} ",
+      "start": 1031,
+      "end": 1096,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 2
+        },
+        "end": {
+          "line": 26,
+          "column": 27
         }
       }
     },
@@ -2068,15 +2209,15 @@
         "updateContext": null
       },
       "value": "this",
-      "start": 376,
-      "end": 380,
+      "start": 1099,
+      "end": 1103,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 27,
           "column": 2
         },
         "end": {
-          "line": 12,
+          "line": 27,
           "column": 6
         }
       }
@@ -2094,15 +2235,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 380,
-      "end": 381,
+      "start": 1103,
+      "end": 1104,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 27,
           "column": 6
         },
         "end": {
-          "line": 12,
+          "line": 27,
           "column": 7
         }
       }
@@ -2120,15 +2261,15 @@
         "binop": null
       },
       "value": "M",
-      "start": 381,
-      "end": 382,
+      "start": 1104,
+      "end": 1105,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 27,
           "column": 7
         },
         "end": {
-          "line": 12,
+          "line": 27,
           "column": 8
         }
       }
@@ -2147,15 +2288,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 383,
-      "end": 384,
+      "start": 1106,
+      "end": 1107,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 27,
           "column": 9
         },
         "end": {
-          "line": 12,
+          "line": 27,
           "column": 10
         }
       }
@@ -2173,15 +2314,15 @@
         "binop": null
       },
       "value": "M",
-      "start": 385,
-      "end": 386,
+      "start": 1108,
+      "end": 1109,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 27,
           "column": 11
         },
         "end": {
-          "line": 12,
+          "line": 27,
           "column": 12
         }
       }
@@ -2198,16 +2339,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 388,
-      "end": 389,
+      "start": 1111,
+      "end": 1112,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 28,
           "column": 1
         },
         "end": {
-          "line": 13,
+          "line": 28,
           "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* The compute method of the base Stat class throws an error, \n\tenforcing that you have to implement this method when you build a new \n\tstat class extending this base class. \n\t@abstract ",
+      "start": 1116,
+      "end": 1305,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 1
+        },
+        "end": {
+          "line": 33,
+          "column": 13
         }
       }
     },
@@ -2224,15 +2381,15 @@
         "binop": null
       },
       "value": "compute",
-      "start": 391,
-      "end": 398,
+      "start": 1307,
+      "end": 1314,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 34,
           "column": 1
         },
         "end": {
-          "line": 14,
+          "line": 34,
           "column": 8
         }
       }
@@ -2249,15 +2406,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 398,
-      "end": 399,
+      "start": 1314,
+      "end": 1315,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 34,
           "column": 8
         },
         "end": {
-          "line": 14,
+          "line": 34,
           "column": 9
         }
       }
@@ -2274,15 +2431,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 399,
-      "end": 400,
+      "start": 1315,
+      "end": 1316,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 34,
           "column": 9
         },
         "end": {
-          "line": 14,
+          "line": 34,
           "column": 10
         }
       }
@@ -2299,15 +2456,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 400,
-      "end": 401,
+      "start": 1316,
+      "end": 1317,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 34,
           "column": 10
         },
         "end": {
-          "line": 14,
+          "line": 34,
           "column": 11
         }
       }
@@ -2327,15 +2484,15 @@
         "updateContext": null
       },
       "value": "throw",
-      "start": 404,
-      "end": 409,
+      "start": 1320,
+      "end": 1325,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 35,
           "column": 2
         },
         "end": {
-          "line": 15,
+          "line": 35,
           "column": 7
         }
       }
@@ -2352,15 +2509,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 409,
-      "end": 410,
+      "start": 1325,
+      "end": 1326,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 35,
           "column": 7
         },
         "end": {
-          "line": 15,
+          "line": 35,
           "column": 8
         }
       }
@@ -2379,15 +2536,15 @@
         "updateContext": null
       },
       "value": "compute method not implemented for subclass of Stat",
-      "start": 410,
-      "end": 463,
+      "start": 1326,
+      "end": 1379,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 35,
           "column": 8
         },
         "end": {
-          "line": 15,
+          "line": 35,
           "column": 61
         }
       }
@@ -2404,15 +2561,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 463,
-      "end": 464,
+      "start": 1379,
+      "end": 1380,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 35,
           "column": 61
         },
         "end": {
-          "line": 15,
+          "line": 35,
           "column": 62
         }
       }
@@ -2429,15 +2586,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 466,
-      "end": 467,
+      "start": 1382,
+      "end": 1383,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 36,
           "column": 1
         },
         "end": {
-          "line": 16,
+          "line": 36,
           "column": 2
         }
       }
@@ -2454,15 +2611,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 468,
-      "end": 469,
+      "start": 1384,
+      "end": 1385,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 37,
           "column": 0
         },
         "end": {
-          "line": 17,
+          "line": 37,
           "column": 1
         }
       }
@@ -2482,15 +2639,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 471,
-      "end": 477,
+      "start": 1387,
+      "end": 1393,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 39,
           "column": 0
         },
         "end": {
-          "line": 19,
+          "line": 39,
           "column": 6
         }
       }
@@ -2510,15 +2667,15 @@
         "updateContext": null
       },
       "value": "default",
-      "start": 478,
-      "end": 485,
+      "start": 1394,
+      "end": 1401,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 39,
           "column": 7
         },
         "end": {
-          "line": 19,
+          "line": 39,
           "column": 14
         }
       }
@@ -2536,15 +2693,15 @@
         "binop": null
       },
       "value": "Stat",
-      "start": 486,
-      "end": 490,
+      "start": 1402,
+      "end": 1406,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 39,
           "column": 15
         },
         "end": {
-          "line": 19,
+          "line": 39,
           "column": 19
         }
       }
@@ -2562,15 +2719,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 493,
-      "end": 493,
+      "start": 1409,
+      "end": 1409,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 42,
           "column": 0
         },
         "end": {
-          "line": 22,
+          "line": 42,
           "column": 0
         }
       }

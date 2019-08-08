@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 328,
+  "end": 1204,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 15,
+      "line": 31,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 328,
+    "end": 1204,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 15,
+        "line": 31,
         "column": 0
       }
     },
@@ -94,51 +94,72 @@
             "rawValue": "./Constraint.js",
             "raw": "\"./Constraint.js\""
           },
-          "value": "./Constraint.js"
-        }
+          "value": "./Constraint.js",
+          "leadingComments": null,
+          "trailingComments": null
+        },
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "* Extension of class {@link Constraint} used for a soft constraint. See description in\n {@link Constraint} for details. This class is not used on its own but serves as a base\n class for a soft constraint. ",
+            "start": 43,
+            "end": 252,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 0
+              },
+              "end": {
+                "line": 6,
+                "column": 32
+              }
+            }
+          }
+        ]
       },
       {
         "type": "Identifier",
-        "start": 43,
-        "end": 296,
+        "start": 253,
+        "end": 1172,
         "loc": {
           "start": {
-            "line": 4,
+            "line": 7,
             "column": 0
           },
           "end": {
-            "line": 12,
+            "line": 28,
             "column": 1
           }
         },
         "id": {
           "type": "Identifier",
-          "start": 49,
-          "end": 63,
+          "start": 259,
+          "end": 273,
           "loc": {
             "start": {
-              "line": 4,
+              "line": 7,
               "column": 6
             },
             "end": {
-              "line": 4,
+              "line": 7,
               "column": 20
             },
             "identifierName": "SoftConstraint"
           },
-          "name": "SoftConstraint"
+          "name": "SoftConstraint",
+          "leadingComments": null
         },
         "superClass": {
           "type": "Identifier",
-          "start": 72,
-          "end": 82,
+          "start": 282,
+          "end": 292,
           "loc": {
             "start": {
-              "line": 4,
+              "line": 7,
               "column": 29
             },
             "end": {
-              "line": 4,
+              "line": 7,
               "column": 39
             },
             "identifierName": "Constraint"
@@ -147,30 +168,30 @@
         },
         "body": {
           "type": "ClassBody",
-          "start": 83,
-          "end": 296,
+          "start": 293,
+          "end": 1172,
           "loc": {
             "start": {
-              "line": 4,
+              "line": 7,
               "column": 40
             },
             "end": {
-              "line": 12,
+              "line": 28,
               "column": 1
             }
           },
           "body": [
             {
               "type": "ClassMethod",
-              "start": 86,
-              "end": 128,
+              "start": 397,
+              "end": 439,
               "loc": {
                 "start": {
-                  "line": 5,
+                  "line": 11,
                   "column": 1
                 },
                 "end": {
-                  "line": 7,
+                  "line": 13,
                   "column": 2
                 }
               },
@@ -178,15 +199,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 90,
-                "end": 105,
+                "start": 401,
+                "end": 416,
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 11,
                     "column": 5
                   },
                   "end": {
-                    "line": 5,
+                    "line": 11,
                     "column": 20
                   },
                   "identifierName": "CONSTRAINT_TYPE"
@@ -201,44 +222,44 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 108,
-                "end": 128,
+                "start": 419,
+                "end": 439,
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 11,
                     "column": 23
                   },
                   "end": {
-                    "line": 7,
+                    "line": 13,
                     "column": 2
                   }
                 },
                 "body": [
                   {
                     "type": "ReturnStatement",
-                    "start": 112,
-                    "end": 125,
+                    "start": 423,
+                    "end": 436,
                     "loc": {
                       "start": {
-                        "line": 6,
+                        "line": 12,
                         "column": 2
                       },
                       "end": {
-                        "line": 6,
+                        "line": 12,
                         "column": 15
                       }
                     },
                     "argument": {
                       "type": "StringLiteral",
-                      "start": 119,
-                      "end": 125,
+                      "start": 430,
+                      "end": 436,
                       "loc": {
                         "start": {
-                          "line": 6,
+                          "line": 12,
                           "column": 9
                         },
                         "end": {
-                          "line": 6,
+                          "line": 12,
                           "column": 15
                         }
                       },
@@ -253,19 +274,53 @@
                 "directives": [],
                 "trailingComments": null
               },
-              "trailingComments": [
+              "leadingComments": [
                 {
-                  "type": "CommentLine",
-                  "value": " eslint-disable-next-line no-unused-vars",
-                  "start": 130,
-                  "end": 172,
+                  "type": "CommentBlock",
+                  "value": "* Let the CPM know that this is a soft constraint, so return 'soft'. \n\t@return {string} \"soft\"",
+                  "start": 297,
+                  "end": 395,
                   "loc": {
                     "start": {
-                      "line": 8,
+                      "line": 9,
                       "column": 1
                     },
                     "end": {
-                      "line": 8,
+                      "line": 10,
+                      "column": 26
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "* Soft constraints must have a deltaH method to compute the Hamiltonian. This method\n\tmust be implemented in any SoftConstraint subclass before it works.\n\t@abstract\n\t @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.\n\t @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying\n\t to copy into.\n\t @param {CellId} src_type - cellid of the source pixel.\n\t @param {CellId} tgt_type - cellid of the target pixel. \n\t @return {number} the change in Hamiltonian for this copy attempt and this constraint.",
+                  "start": 443,
+                  "end": 1003,
+                  "loc": {
+                    "start": {
+                      "line": 15,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 89
+                    }
+                  }
+                },
+                {
+                  "type": "CommentLine",
+                  "value": " eslint-disable-next-line no-unused-vars",
+                  "start": 1006,
+                  "end": 1048,
+                  "loc": {
+                    "start": {
+                      "line": 24,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 24,
                       "column": 43
                     }
                   }
@@ -274,15 +329,15 @@
             },
             {
               "type": "ClassMethod",
-              "start": 174,
-              "end": 294,
+              "start": 1050,
+              "end": 1170,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 25,
                   "column": 1
                 },
                 "end": {
-                  "line": 11,
+                  "line": 27,
                   "column": 2
                 }
               },
@@ -290,15 +345,15 @@
               "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 174,
-                "end": 180,
+                "start": 1050,
+                "end": 1056,
                 "loc": {
                   "start": {
-                    "line": 9,
+                    "line": 25,
                     "column": 1
                   },
                   "end": {
-                    "line": 9,
+                    "line": 25,
                     "column": 7
                   },
                   "identifierName": "deltaH"
@@ -314,15 +369,15 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 182,
-                  "end": 187,
+                  "start": 1058,
+                  "end": 1063,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 25,
                       "column": 9
                     },
                     "end": {
-                      "line": 9,
+                      "line": 25,
                       "column": 14
                     },
                     "identifierName": "src_i"
@@ -331,15 +386,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 189,
-                  "end": 194,
+                  "start": 1065,
+                  "end": 1070,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 25,
                       "column": 16
                     },
                     "end": {
-                      "line": 9,
+                      "line": 25,
                       "column": 21
                     },
                     "identifierName": "tgt_i"
@@ -348,15 +403,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 196,
-                  "end": 204,
+                  "start": 1072,
+                  "end": 1080,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 25,
                       "column": 23
                     },
                     "end": {
-                      "line": 9,
+                      "line": 25,
                       "column": 31
                     },
                     "identifierName": "src_type"
@@ -365,15 +420,15 @@
                 },
                 {
                   "type": "Identifier",
-                  "start": 206,
-                  "end": 214,
+                  "start": 1082,
+                  "end": 1090,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 25,
                       "column": 33
                     },
                     "end": {
-                      "line": 9,
+                      "line": 25,
                       "column": 41
                     },
                     "identifierName": "tgt_type"
@@ -383,44 +438,44 @@
               ],
               "body": {
                 "type": "BlockStatement",
-                "start": 216,
-                "end": 294,
+                "start": 1092,
+                "end": 1170,
                 "loc": {
                   "start": {
-                    "line": 9,
+                    "line": 25,
                     "column": 43
                   },
                   "end": {
-                    "line": 11,
+                    "line": 27,
                     "column": 2
                   }
                 },
                 "body": [
                   {
                     "type": "ThrowStatement",
-                    "start": 220,
-                    "end": 291,
+                    "start": 1096,
+                    "end": 1167,
                     "loc": {
                       "start": {
-                        "line": 10,
+                        "line": 26,
                         "column": 2
                       },
                       "end": {
-                        "line": 10,
+                        "line": 26,
                         "column": 73
                       }
                     },
                     "argument": {
                       "type": "StringLiteral",
-                      "start": 226,
-                      "end": 290,
+                      "start": 1102,
+                      "end": 1166,
                       "loc": {
                         "start": {
-                          "line": 10,
+                          "line": 26,
                           "column": 8
                         },
                         "end": {
-                          "line": 10,
+                          "line": 26,
                           "column": 72
                         }
                       },
@@ -428,7 +483,7 @@
                         "rawValue": "You need to implement the 'deltaH' method for this constraint!",
                         "raw": "\"You need to implement the 'deltaH' method for this constraint!\"",
                         "parenthesized": true,
-                        "parenStart": 225
+                        "parenStart": 1101
                       },
                       "value": "You need to implement the 'deltaH' method for this constraint!"
                     }
@@ -438,17 +493,33 @@
               },
               "leadingComments": [
                 {
-                  "type": "CommentLine",
-                  "value": " eslint-disable-next-line no-unused-vars",
-                  "start": 130,
-                  "end": 172,
+                  "type": "CommentBlock",
+                  "value": "* Soft constraints must have a deltaH method to compute the Hamiltonian. This method\n\tmust be implemented in any SoftConstraint subclass before it works.\n\t@abstract\n\t @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.\n\t @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying\n\t to copy into.\n\t @param {CellId} src_type - cellid of the source pixel.\n\t @param {CellId} tgt_type - cellid of the target pixel. \n\t @return {number} the change in Hamiltonian for this copy attempt and this constraint.",
+                  "start": 443,
+                  "end": 1003,
                   "loc": {
                     "start": {
-                      "line": 8,
+                      "line": 15,
                       "column": 1
                     },
                     "end": {
-                      "line": 8,
+                      "line": 23,
+                      "column": 89
+                    }
+                  }
+                },
+                {
+                  "type": "CommentLine",
+                  "value": " eslint-disable-next-line no-unused-vars",
+                  "start": 1006,
+                  "end": 1048,
+                  "loc": {
+                    "start": {
+                      "line": 24,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 24,
                       "column": 43
                     }
                   }
@@ -457,35 +528,35 @@
             }
           ]
         },
-        "name": "_",
         "leadingComments": [],
+        "name": "_",
         "trailingComments": []
       },
       {
         "type": "Identifier",
-        "start": 298,
-        "end": 327,
+        "start": 1174,
+        "end": 1203,
         "loc": {
           "start": {
-            "line": 14,
+            "line": 30,
             "column": 0
           },
           "end": {
-            "line": 14,
+            "line": 30,
             "column": 29
           }
         },
         "declaration": {
           "type": "Identifier",
-          "start": 313,
-          "end": 327,
+          "start": 1189,
+          "end": 1203,
           "loc": {
             "start": {
-              "line": 14,
+              "line": 30,
               "column": 15
             },
             "end": {
-              "line": 14,
+              "line": 30,
               "column": 29
             },
             "identifierName": "SoftConstraint"
@@ -498,60 +569,61 @@
       },
       {
         "type": "ExportDefaultDeclaration",
-        "start": 298,
-        "end": 327,
+        "start": 1174,
+        "end": 1203,
         "loc": {
           "start": {
-            "line": 14,
+            "line": 30,
             "column": 0
           },
           "end": {
-            "line": 14,
+            "line": 30,
             "column": 29
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 43,
-          "end": 296,
+          "start": 253,
+          "end": 1172,
           "loc": {
             "start": {
-              "line": 4,
+              "line": 7,
               "column": 0
             },
             "end": {
-              "line": 12,
+              "line": 28,
               "column": 1
             }
           },
           "id": {
             "type": "Identifier",
-            "start": 49,
-            "end": 63,
+            "start": 259,
+            "end": 273,
             "loc": {
               "start": {
-                "line": 4,
+                "line": 7,
                 "column": 6
               },
               "end": {
-                "line": 4,
+                "line": 7,
                 "column": 20
               },
               "identifierName": "SoftConstraint"
             },
-            "name": "SoftConstraint"
+            "name": "SoftConstraint",
+            "leadingComments": null
           },
           "superClass": {
             "type": "Identifier",
-            "start": 72,
-            "end": 82,
+            "start": 282,
+            "end": 292,
             "loc": {
               "start": {
-                "line": 4,
+                "line": 7,
                 "column": 29
               },
               "end": {
-                "line": 4,
+                "line": 7,
                 "column": 39
               },
               "identifierName": "Constraint"
@@ -560,30 +632,30 @@
           },
           "body": {
             "type": "ClassBody",
-            "start": 83,
-            "end": 296,
+            "start": 293,
+            "end": 1172,
             "loc": {
               "start": {
-                "line": 4,
+                "line": 7,
                 "column": 40
               },
               "end": {
-                "line": 12,
+                "line": 28,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 86,
-                "end": 128,
+                "start": 397,
+                "end": 439,
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 11,
                     "column": 1
                   },
                   "end": {
-                    "line": 7,
+                    "line": 13,
                     "column": 2
                   }
                 },
@@ -591,15 +663,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 90,
-                  "end": 105,
+                  "start": 401,
+                  "end": 416,
                   "loc": {
                     "start": {
-                      "line": 5,
+                      "line": 11,
                       "column": 5
                     },
                     "end": {
-                      "line": 5,
+                      "line": 11,
                       "column": 20
                     },
                     "identifierName": "CONSTRAINT_TYPE"
@@ -614,44 +686,44 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 108,
-                  "end": 128,
+                  "start": 419,
+                  "end": 439,
                   "loc": {
                     "start": {
-                      "line": 5,
+                      "line": 11,
                       "column": 23
                     },
                     "end": {
-                      "line": 7,
+                      "line": 13,
                       "column": 2
                     }
                   },
                   "body": [
                     {
                       "type": "ReturnStatement",
-                      "start": 112,
-                      "end": 125,
+                      "start": 423,
+                      "end": 436,
                       "loc": {
                         "start": {
-                          "line": 6,
+                          "line": 12,
                           "column": 2
                         },
                         "end": {
-                          "line": 6,
+                          "line": 12,
                           "column": 15
                         }
                       },
                       "argument": {
                         "type": "StringLiteral",
-                        "start": 119,
-                        "end": 125,
+                        "start": 430,
+                        "end": 436,
                         "loc": {
                           "start": {
-                            "line": 6,
+                            "line": 12,
                             "column": 9
                           },
                           "end": {
-                            "line": 6,
+                            "line": 12,
                             "column": 15
                           }
                         },
@@ -666,19 +738,53 @@
                   "directives": [],
                   "trailingComments": null
                 },
-                "trailingComments": [
+                "leadingComments": [
                   {
-                    "type": "CommentLine",
-                    "value": " eslint-disable-next-line no-unused-vars",
-                    "start": 130,
-                    "end": 172,
+                    "type": "CommentBlock",
+                    "value": "* Let the CPM know that this is a soft constraint, so return 'soft'. \n\t@return {string} \"soft\"",
+                    "start": 297,
+                    "end": 395,
                     "loc": {
                       "start": {
-                        "line": 8,
+                        "line": 9,
                         "column": 1
                       },
                       "end": {
-                        "line": 8,
+                        "line": 10,
+                        "column": 26
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "* Soft constraints must have a deltaH method to compute the Hamiltonian. This method\n\tmust be implemented in any SoftConstraint subclass before it works.\n\t@abstract\n\t @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.\n\t @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying\n\t to copy into.\n\t @param {CellId} src_type - cellid of the source pixel.\n\t @param {CellId} tgt_type - cellid of the target pixel. \n\t @return {number} the change in Hamiltonian for this copy attempt and this constraint.",
+                    "start": 443,
+                    "end": 1003,
+                    "loc": {
+                      "start": {
+                        "line": 15,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 23,
+                        "column": 89
+                      }
+                    }
+                  },
+                  {
+                    "type": "CommentLine",
+                    "value": " eslint-disable-next-line no-unused-vars",
+                    "start": 1006,
+                    "end": 1048,
+                    "loc": {
+                      "start": {
+                        "line": 24,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 24,
                         "column": 43
                       }
                     }
@@ -687,15 +793,15 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 174,
-                "end": 294,
+                "start": 1050,
+                "end": 1170,
                 "loc": {
                   "start": {
-                    "line": 9,
+                    "line": 25,
                     "column": 1
                   },
                   "end": {
-                    "line": 11,
+                    "line": 27,
                     "column": 2
                   }
                 },
@@ -703,15 +809,15 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 174,
-                  "end": 180,
+                  "start": 1050,
+                  "end": 1056,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 25,
                       "column": 1
                     },
                     "end": {
-                      "line": 9,
+                      "line": 25,
                       "column": 7
                     },
                     "identifierName": "deltaH"
@@ -727,15 +833,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 182,
-                    "end": 187,
+                    "start": 1058,
+                    "end": 1063,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 25,
                         "column": 9
                       },
                       "end": {
-                        "line": 9,
+                        "line": 25,
                         "column": 14
                       },
                       "identifierName": "src_i"
@@ -744,15 +850,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 189,
-                    "end": 194,
+                    "start": 1065,
+                    "end": 1070,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 25,
                         "column": 16
                       },
                       "end": {
-                        "line": 9,
+                        "line": 25,
                         "column": 21
                       },
                       "identifierName": "tgt_i"
@@ -761,15 +867,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 196,
-                    "end": 204,
+                    "start": 1072,
+                    "end": 1080,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 25,
                         "column": 23
                       },
                       "end": {
-                        "line": 9,
+                        "line": 25,
                         "column": 31
                       },
                       "identifierName": "src_type"
@@ -778,15 +884,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 206,
-                    "end": 214,
+                    "start": 1082,
+                    "end": 1090,
                     "loc": {
                       "start": {
-                        "line": 9,
+                        "line": 25,
                         "column": 33
                       },
                       "end": {
-                        "line": 9,
+                        "line": 25,
                         "column": 41
                       },
                       "identifierName": "tgt_type"
@@ -796,44 +902,44 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 216,
-                  "end": 294,
+                  "start": 1092,
+                  "end": 1170,
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 25,
                       "column": 43
                     },
                     "end": {
-                      "line": 11,
+                      "line": 27,
                       "column": 2
                     }
                   },
                   "body": [
                     {
                       "type": "ThrowStatement",
-                      "start": 220,
-                      "end": 291,
+                      "start": 1096,
+                      "end": 1167,
                       "loc": {
                         "start": {
-                          "line": 10,
+                          "line": 26,
                           "column": 2
                         },
                         "end": {
-                          "line": 10,
+                          "line": 26,
                           "column": 73
                         }
                       },
                       "argument": {
                         "type": "StringLiteral",
-                        "start": 226,
-                        "end": 290,
+                        "start": 1102,
+                        "end": 1166,
                         "loc": {
                           "start": {
-                            "line": 10,
+                            "line": 26,
                             "column": 8
                           },
                           "end": {
-                            "line": 10,
+                            "line": 26,
                             "column": 72
                           }
                         },
@@ -841,7 +947,7 @@
                           "rawValue": "You need to implement the 'deltaH' method for this constraint!",
                           "raw": "\"You need to implement the 'deltaH' method for this constraint!\"",
                           "parenthesized": true,
-                          "parenStart": 225
+                          "parenStart": 1101
                         },
                         "value": "You need to implement the 'deltaH' method for this constraint!"
                       }
@@ -851,17 +957,33 @@
                 },
                 "leadingComments": [
                   {
-                    "type": "CommentLine",
-                    "value": " eslint-disable-next-line no-unused-vars",
-                    "start": 130,
-                    "end": 172,
+                    "type": "CommentBlock",
+                    "value": "* Soft constraints must have a deltaH method to compute the Hamiltonian. This method\n\tmust be implemented in any SoftConstraint subclass before it works.\n\t@abstract\n\t @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.\n\t @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying\n\t to copy into.\n\t @param {CellId} src_type - cellid of the source pixel.\n\t @param {CellId} tgt_type - cellid of the target pixel. \n\t @return {number} the change in Hamiltonian for this copy attempt and this constraint.",
+                    "start": 443,
+                    "end": 1003,
                     "loc": {
                       "start": {
-                        "line": 8,
+                        "line": 15,
                         "column": 1
                       },
                       "end": {
-                        "line": 8,
+                        "line": 23,
+                        "column": 89
+                      }
+                    }
+                  },
+                  {
+                    "type": "CommentLine",
+                    "value": " eslint-disable-next-line no-unused-vars",
+                    "start": 1006,
+                    "end": 1048,
+                    "loc": {
+                      "start": {
+                        "line": 24,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 24,
                         "column": 43
                       }
                     }
@@ -870,8 +992,25 @@
               }
             ]
           },
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "* Extension of class {@link Constraint} used for a soft constraint. See description in\n {@link Constraint} for details. This class is not used on its own but serves as a base\n class for a soft constraint. ",
+              "start": 43,
+              "end": 252,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 0
+                },
+                "end": {
+                  "line": 6,
+                  "column": 32
+                }
+              }
+            }
+          ],
           "__PseudoExport__": false,
-          "leadingComments": [],
           "trailingComments": []
         },
         "leadingComments": null
@@ -881,17 +1020,65 @@
   },
   "comments": [
     {
-      "type": "CommentLine",
-      "value": " eslint-disable-next-line no-unused-vars",
-      "start": 130,
-      "end": 172,
+      "type": "CommentBlock",
+      "value": "* Extension of class {@link Constraint} used for a soft constraint. See description in\n {@link Constraint} for details. This class is not used on its own but serves as a base\n class for a soft constraint. ",
+      "start": 43,
+      "end": 252,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Let the CPM know that this is a soft constraint, so return 'soft'. \n\t@return {string} \"soft\"",
+      "start": 297,
+      "end": 395,
+      "loc": {
+        "start": {
+          "line": 9,
           "column": 1
         },
         "end": {
-          "line": 8,
+          "line": 10,
+          "column": 26
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Soft constraints must have a deltaH method to compute the Hamiltonian. This method\n\tmust be implemented in any SoftConstraint subclass before it works.\n\t@abstract\n\t @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.\n\t @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying\n\t to copy into.\n\t @param {CellId} src_type - cellid of the source pixel.\n\t @param {CellId} tgt_type - cellid of the target pixel. \n\t @return {number} the change in Hamiltonian for this copy attempt and this constraint.",
+      "start": 443,
+      "end": 1003,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 1
+        },
+        "end": {
+          "line": 23,
+          "column": 89
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " eslint-disable-next-line no-unused-vars",
+      "start": 1006,
+      "end": 1048,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 1
+        },
+        "end": {
+          "line": 24,
           "column": 43
         }
       }
@@ -1006,6 +1193,22 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "* Extension of class {@link Constraint} used for a soft constraint. See description in\n {@link Constraint} for details. This class is not used on its own but serves as a base\n class for a soft constraint. ",
+      "start": 43,
+      "end": 252,
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 32
+        }
+      }
+    },
+    {
       "type": {
         "label": "class",
         "keyword": "class",
@@ -1020,15 +1223,15 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 43,
-      "end": 48,
+      "start": 253,
+      "end": 258,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 7,
           "column": 0
         },
         "end": {
-          "line": 4,
+          "line": 7,
           "column": 5
         }
       }
@@ -1046,15 +1249,15 @@
         "binop": null
       },
       "value": "SoftConstraint",
-      "start": 49,
-      "end": 63,
+      "start": 259,
+      "end": 273,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 7,
           "column": 6
         },
         "end": {
-          "line": 4,
+          "line": 7,
           "column": 20
         }
       }
@@ -1074,15 +1277,15 @@
         "updateContext": null
       },
       "value": "extends",
-      "start": 64,
-      "end": 71,
+      "start": 274,
+      "end": 281,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 7,
           "column": 21
         },
         "end": {
-          "line": 4,
+          "line": 7,
           "column": 28
         }
       }
@@ -1100,15 +1303,15 @@
         "binop": null
       },
       "value": "Constraint",
-      "start": 72,
-      "end": 82,
+      "start": 282,
+      "end": 292,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 7,
           "column": 29
         },
         "end": {
-          "line": 4,
+          "line": 7,
           "column": 39
         }
       }
@@ -1125,16 +1328,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 83,
-      "end": 84,
+      "start": 293,
+      "end": 294,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 7,
           "column": 40
         },
         "end": {
-          "line": 4,
+          "line": 7,
           "column": 41
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Let the CPM know that this is a soft constraint, so return 'soft'. \n\t@return {string} \"soft\"",
+      "start": 297,
+      "end": 395,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 1
+        },
+        "end": {
+          "line": 10,
+          "column": 26
         }
       }
     },
@@ -1151,15 +1370,15 @@
         "binop": null
       },
       "value": "get",
-      "start": 86,
-      "end": 89,
+      "start": 397,
+      "end": 400,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 11,
           "column": 1
         },
         "end": {
-          "line": 5,
+          "line": 11,
           "column": 4
         }
       }
@@ -1177,15 +1396,15 @@
         "binop": null
       },
       "value": "CONSTRAINT_TYPE",
-      "start": 90,
-      "end": 105,
+      "start": 401,
+      "end": 416,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 11,
           "column": 5
         },
         "end": {
-          "line": 5,
+          "line": 11,
           "column": 20
         }
       }
@@ -1202,15 +1421,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 105,
-      "end": 106,
+      "start": 416,
+      "end": 417,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 11,
           "column": 20
         },
         "end": {
-          "line": 5,
+          "line": 11,
           "column": 21
         }
       }
@@ -1227,15 +1446,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 106,
-      "end": 107,
+      "start": 417,
+      "end": 418,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 11,
           "column": 21
         },
         "end": {
-          "line": 5,
+          "line": 11,
           "column": 22
         }
       }
@@ -1252,15 +1471,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 108,
-      "end": 109,
+      "start": 419,
+      "end": 420,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 11,
           "column": 23
         },
         "end": {
-          "line": 5,
+          "line": 11,
           "column": 24
         }
       }
@@ -1280,15 +1499,15 @@
         "updateContext": null
       },
       "value": "return",
-      "start": 112,
-      "end": 118,
+      "start": 423,
+      "end": 429,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 12,
           "column": 2
         },
         "end": {
-          "line": 6,
+          "line": 12,
           "column": 8
         }
       }
@@ -1307,15 +1526,15 @@
         "updateContext": null
       },
       "value": "soft",
-      "start": 119,
-      "end": 125,
+      "start": 430,
+      "end": 436,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 12,
           "column": 9
         },
         "end": {
-          "line": 6,
+          "line": 12,
           "column": 15
         }
       }
@@ -1332,31 +1551,47 @@
         "postfix": false,
         "binop": null
       },
-      "start": 127,
-      "end": 128,
+      "start": 438,
+      "end": 439,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 13,
           "column": 1
         },
         "end": {
-          "line": 7,
+          "line": 13,
           "column": 2
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* Soft constraints must have a deltaH method to compute the Hamiltonian. This method\n\tmust be implemented in any SoftConstraint subclass before it works.\n\t@abstract\n\t @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.\n\t @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying\n\t to copy into.\n\t @param {CellId} src_type - cellid of the source pixel.\n\t @param {CellId} tgt_type - cellid of the target pixel. \n\t @return {number} the change in Hamiltonian for this copy attempt and this constraint.",
+      "start": 443,
+      "end": 1003,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 1
+        },
+        "end": {
+          "line": 23,
+          "column": 89
         }
       }
     },
     {
       "type": "CommentLine",
       "value": " eslint-disable-next-line no-unused-vars",
-      "start": 130,
-      "end": 172,
+      "start": 1006,
+      "end": 1048,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 24,
           "column": 1
         },
         "end": {
-          "line": 8,
+          "line": 24,
           "column": 43
         }
       }
@@ -1374,15 +1609,15 @@
         "binop": null
       },
       "value": "deltaH",
-      "start": 174,
-      "end": 180,
+      "start": 1050,
+      "end": 1056,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 1
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 7
         }
       }
@@ -1399,15 +1634,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 180,
-      "end": 181,
+      "start": 1056,
+      "end": 1057,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 7
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 8
         }
       }
@@ -1425,15 +1660,15 @@
         "binop": null
       },
       "value": "src_i",
-      "start": 182,
-      "end": 187,
+      "start": 1058,
+      "end": 1063,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 9
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 14
         }
       }
@@ -1451,15 +1686,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 187,
-      "end": 188,
+      "start": 1063,
+      "end": 1064,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 14
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 15
         }
       }
@@ -1477,15 +1712,15 @@
         "binop": null
       },
       "value": "tgt_i",
-      "start": 189,
-      "end": 194,
+      "start": 1065,
+      "end": 1070,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 16
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 21
         }
       }
@@ -1503,15 +1738,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 194,
-      "end": 195,
+      "start": 1070,
+      "end": 1071,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 21
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 22
         }
       }
@@ -1529,15 +1764,15 @@
         "binop": null
       },
       "value": "src_type",
-      "start": 196,
-      "end": 204,
+      "start": 1072,
+      "end": 1080,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 23
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 31
         }
       }
@@ -1555,15 +1790,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 204,
-      "end": 205,
+      "start": 1080,
+      "end": 1081,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 31
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 32
         }
       }
@@ -1581,15 +1816,15 @@
         "binop": null
       },
       "value": "tgt_type",
-      "start": 206,
-      "end": 214,
+      "start": 1082,
+      "end": 1090,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 33
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 41
         }
       }
@@ -1606,15 +1841,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 215,
-      "end": 216,
+      "start": 1091,
+      "end": 1092,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 42
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 43
         }
       }
@@ -1631,15 +1866,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 216,
-      "end": 217,
+      "start": 1092,
+      "end": 1093,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 25,
           "column": 43
         },
         "end": {
-          "line": 9,
+          "line": 25,
           "column": 44
         }
       }
@@ -1659,15 +1894,15 @@
         "updateContext": null
       },
       "value": "throw",
-      "start": 220,
-      "end": 225,
+      "start": 1096,
+      "end": 1101,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 26,
           "column": 2
         },
         "end": {
-          "line": 10,
+          "line": 26,
           "column": 7
         }
       }
@@ -1684,15 +1919,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 225,
-      "end": 226,
+      "start": 1101,
+      "end": 1102,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 26,
           "column": 7
         },
         "end": {
-          "line": 10,
+          "line": 26,
           "column": 8
         }
       }
@@ -1711,15 +1946,15 @@
         "updateContext": null
       },
       "value": "You need to implement the 'deltaH' method for this constraint!",
-      "start": 226,
-      "end": 290,
+      "start": 1102,
+      "end": 1166,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 26,
           "column": 8
         },
         "end": {
-          "line": 10,
+          "line": 26,
           "column": 72
         }
       }
@@ -1736,15 +1971,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 290,
-      "end": 291,
+      "start": 1166,
+      "end": 1167,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 26,
           "column": 72
         },
         "end": {
-          "line": 10,
+          "line": 26,
           "column": 73
         }
       }
@@ -1761,15 +1996,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 293,
-      "end": 294,
+      "start": 1169,
+      "end": 1170,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 27,
           "column": 1
         },
         "end": {
-          "line": 11,
+          "line": 27,
           "column": 2
         }
       }
@@ -1786,15 +2021,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 295,
-      "end": 296,
+      "start": 1171,
+      "end": 1172,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 28,
           "column": 0
         },
         "end": {
-          "line": 12,
+          "line": 28,
           "column": 1
         }
       }
@@ -1814,15 +2049,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 298,
-      "end": 304,
+      "start": 1174,
+      "end": 1180,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 30,
           "column": 0
         },
         "end": {
-          "line": 14,
+          "line": 30,
           "column": 6
         }
       }
@@ -1842,15 +2077,15 @@
         "updateContext": null
       },
       "value": "default",
-      "start": 305,
-      "end": 312,
+      "start": 1181,
+      "end": 1188,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 30,
           "column": 7
         },
         "end": {
-          "line": 14,
+          "line": 30,
           "column": 14
         }
       }
@@ -1868,15 +2103,15 @@
         "binop": null
       },
       "value": "SoftConstraint",
-      "start": 313,
-      "end": 327,
+      "start": 1189,
+      "end": 1203,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 30,
           "column": 15
         },
         "end": {
-          "line": 14,
+          "line": 30,
           "column": 29
         }
       }
@@ -1894,15 +2129,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 328,
-      "end": 328,
+      "start": 1204,
+      "end": 1204,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 31,
           "column": 0
         },
         "end": {
-          "line": 15,
+          "line": 31,
           "column": 0
         }
       }

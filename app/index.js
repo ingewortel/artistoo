@@ -11,8 +11,10 @@ import GridBasedModel from "../src/models/GridBasedModel.js"
  
 import Stat from "../src/stats/Stat.js" 
 import PixelsByCell from "../src/stats/PixelsByCell.js" 
-import CentroidsWithTorusCorrection from "../src/stats/CentroidsWithTorusCorrection" 
+import BorderPixelsByCell from "../src/stats/BorderPixelsByCell.js" 
+import CentroidsWithTorusCorrection from "../src/stats/CentroidsWithTorusCorrection.js" 
 import Centroids from "../src/stats/Centroids.js" 
+import CellNeighborList from "../src/stats/CellNeighborList.js" 
  
 import Grid2D from "../src/grid/Grid2D.js" 
 import Grid3D from "../src/grid/Grid3D.js" 
@@ -29,6 +31,7 @@ import PersistenceConstraint from "../src/hamiltonian/PersistenceConstraint.js"
 import PreferredDirectionConstraint from "../src/hamiltonian/PreferredDirectionConstraint.js" 
 import ChemotaxisConstraint from "../src/hamiltonian/ChemotaxisConstraint.js" 
 import AttractionPointConstraint from "../src/hamiltonian/AttractionPointConstraint.js" 
+import ProtrusionConstraint from "../src/hamiltonian/ProtrusionConstraint.js" 
  
 import HardConstraint from "../src/hamiltonian/HardConstraint.js" 
 import HardVolumeRangeConstraint from "../src/hamiltonian/HardVolumeRangeConstraint.js" 
@@ -44,8 +47,10 @@ export {
 	GridBasedModel,
 	Stat,
 	PixelsByCell,
+	BorderPixelsByCell,
 	CentroidsWithTorusCorrection,
 	Centroids,
+	CellNeighborList,
 	Grid2D,
 	Grid3D,
 	GridManipulator,
@@ -60,6 +65,7 @@ export {
 	PreferredDirectionConstraint,
 	ChemotaxisConstraint,
 	AttractionPointConstraint,
+	ProtrusionConstraint,
 	HardConstraint,
 	HardVolumeRangeConstraint,
 	BarrierConstraint,

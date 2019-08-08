@@ -1,6 +1,8 @@
 /** Class for outputting various statistics from a CPM simulation, as for instance
     the centroids of all cells (which is actually the only thing that's implemented
-    so far) */
+    so far) 
+    @private 
+    @ignore */
 
 class Stats {
 	constructor( C ){

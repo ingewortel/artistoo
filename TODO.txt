@@ -9,6 +9,8 @@ Fix the many-cells-diffusion example.
 
 - Implement Laplacian / Gradient for 3D lattice
 
+- Allow 3D grid to have float32 datatype just like 2D.
+
 - Finish implementation of chemotaxis constraint
 
 - Do we need to make it possible to compute stats for individual cells instead

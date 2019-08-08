@@ -6,12 +6,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/activityconstraintold.js~activityconstraint",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html",
-    "<span>ActivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ActivityConstraintOld.js</span>",
-    "class"
-  ],
-  [
     "cpmjs/src/hamiltonian/activitymultibackground.js~activitymultibackground",
     "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html",
     "<span>ActivityMultiBackground</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ActivityMultiBackground.js</span>",
@@ -24,27 +18,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html",
-    "<span>AdhesionMultiBackground</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/AdhesionMultiBackground.js</span>",
-    "class"
-  ],
-  [
     "cpmjs/src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint",
     "class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html",
     "<span>AttractionPointConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/AttractionPointConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/autoadderconfig.js~autoadderconfig",
-    "variable/index.html#static-variable-AutoAdderConfig",
-    "<span>AutoAdderConfig</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/AutoAdderConfig.js</span>",
-    "variable"
-  ],
-  [
     "cpmjs/src/hamiltonian/barrierconstraint.js~barrierconstraint",
     "class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html",
     "<span>BarrierConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/BarrierConstraint.js</span>",
+    "class"
+  ],
+  [
+    "cpmjs/src/stats/borderpixelsbycell.js~borderpixelsbycell",
+    "class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html",
+    "<span>BorderPixelsByCell</span> <span class=\"search-result-import-path\">cpmjs/src/stats/BorderPixelsByCell.js</span>",
     "class"
   ],
   [
@@ -66,6 +54,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "cpmjs/src/stats/cellneighborlist.js~cellneighborlist",
+    "class/src/stats/CellNeighborList.js~CellNeighborList.html",
+    "<span>CellNeighborList</span> <span class=\"search-result-import-path\">cpmjs/src/stats/CellNeighborList.js</span>",
+    "class"
+  ],
+  [
     "cpmjs/src/stats/centroids.js~centroids",
     "class/src/stats/Centroids.js~Centroids.html",
     "<span>Centroids</span> <span class=\"search-result-import-path\">cpmjs/src/stats/Centroids.js</span>",
@@ -81,12 +75,6 @@ window.esdocSearchIndex = [
     "cpmjs/src/hamiltonian/chemotaxisconstraint.js~chemotaxisconstraint",
     "class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html",
     "<span>ChemotaxisConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ChemotaxisConstraint.js</span>",
-    "class"
-  ],
-  [
-    "cpmjs/src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html",
-    "<span>ChemotaxisConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ChemotaxisConstraintOld.js</span>",
     "class"
   ],
   [
@@ -150,15 +138,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/testlogger.js~hardvolumerangeconstraint",
-    "class/src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint.html",
-    "<span>HardVolumeRangeConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/TestLogger.js</span>",
-    "class"
-  ],
-  [
-    "cpmjs/src/grid/margolus2d.js~margolus2d",
-    "class/src/grid/Margolus2D.js~Margolus2D.html",
-    "<span>Margolus2D</span> <span class=\"search-result-import-path\">cpmjs/src/grid/Margolus2D.js</span>",
+    "cpmjs/src/hamiltonian/parameterchecker.js~parameterchecker",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html",
+    "<span>ParameterChecker</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ParameterChecker.js</span>",
     "class"
   ],
   [
@@ -177,12 +159,6 @@ window.esdocSearchIndex = [
     "cpmjs/src/stats/pixelsbycell.js~pixelsbycell",
     "class/src/stats/PixelsByCell.js~PixelsByCell.html",
     "<span>PixelsByCell</span> <span class=\"search-result-import-path\">cpmjs/src/stats/PixelsByCell.js</span>",
-    "class"
-  ],
-  [
-    "cpmjs/src/stats/postmcsstats.js~postmcsstats",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html",
-    "<span>PostMCSStats</span> <span class=\"search-result-import-path\">cpmjs/src/stats/PostMCSStats.js</span>",
     "class"
   ],
   [
@@ -213,12 +189,6 @@ window.esdocSearchIndex = [
     "cpmjs/src/stats/stat.js~stat",
     "class/src/stats/Stat.js~Stat.html",
     "<span>Stat</span> <span class=\"search-result-import-path\">cpmjs/src/stats/Stat.js</span>",
-    "class"
-  ],
-  [
-    "cpmjs/src/stats.js~stats",
-    "class/src/Stats.js~Stats.html",
-    "<span>Stats</span> <span class=\"search-result-import-path\">cpmjs/src/Stats.js</span>",
     "class"
   ],
   [
@@ -570,6 +540,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/canvas.js~canvas#extents",
+    "class/src/Canvas.js~Canvas.html#instance-member-extents",
+    "src/Canvas.js~Canvas#extents",
+    "member"
+  ],
+  [
     "src/canvas.js~canvas#grid",
     "class/src/Canvas.js~Canvas.html#instance-member-grid",
     "src/Canvas.js~Canvas#grid",
@@ -588,6 +564,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/canvas.js~canvas#wrap",
+    "class/src/Canvas.js~Canvas.html#instance-member-wrap",
+    "src/Canvas.js~Canvas#wrap",
+    "member"
+  ],
+  [
     "src/canvas.js~canvas#writepng",
     "class/src/Canvas.js~Canvas.html#instance-method-writePNG",
     "src/Canvas.js~Canvas#writePNG",
@@ -598,6 +580,18 @@ window.esdocSearchIndex = [
     "class/src/Canvas.js~Canvas.html#instance-member-zoom",
     "src/Canvas.js~Canvas#zoom",
     "member"
+  ],
+  [
+    "src/canvas.js~canvas.canvasrenderingcontext2d",
+    "typedef/index.html#static-typedef-CanvasRenderingContext2D",
+    "src/Canvas.js~Canvas.CanvasRenderingContext2D",
+    "typedef"
+  ],
+  [
+    "src/canvas.js~canvas.hexcolor",
+    "typedef/index.html#static-typedef-HexColor",
+    "src/Canvas.js~Canvas.HexColor",
+    "typedef"
   ],
   [
     "src/diceset.js",
@@ -654,124 +648,22 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/diceset.js~diceset.mersennetwister",
+    "typedef/index.html#static-typedef-MersenneTwister",
+    "src/DiceSet.js~DiceSet.MersenneTwister",
+    "typedef"
+  ],
+  [
+    "src/diceset.js~diceset.uniqueid",
+    "typedef/index.html#static-typedef-uniqueID",
+    "src/DiceSet.js~DiceSet.uniqueID",
+    "typedef"
+  ],
+  [
     "src/stats.js",
     "file/src/Stats.js.html",
     "src/Stats.js",
     "file"
-  ],
-  [
-    "src/stats.js~stats#c",
-    "class/src/Stats.js~Stats.html#instance-member-C",
-    "src/Stats.js~Stats#C",
-    "member"
-  ],
-  [
-    "src/stats.js~stats#cellneighborslist",
-    "class/src/Stats.js~Stats.html#instance-method-cellNeighborsList",
-    "src/Stats.js~Stats#cellNeighborsList",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#cellstats",
-    "class/src/Stats.js~Stats.html#instance-method-cellStats",
-    "src/Stats.js~Stats#cellStats",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#cellsonnetwork",
-    "class/src/Stats.js~Stats.html#instance-method-cellsOnNetwork",
-    "src/Stats.js~Stats#cellsOnNetwork",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#constructor",
-    "class/src/Stats.js~Stats.html#instance-constructor-constructor",
-    "src/Stats.js~Stats#constructor",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getconnectedcomponentofcell",
-    "class/src/Stats.js~Stats.html#instance-method-getConnectedComponentOfCell",
-    "src/Stats.js~Stats#getConnectedComponentOfCell",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getconnectedcomponents",
-    "class/src/Stats.js~Stats.html#instance-method-getConnectedComponents",
-    "src/Stats.js~Stats#getConnectedComponents",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getconnectedness",
-    "class/src/Stats.js~Stats.html#instance-method-getConnectedness",
-    "src/Stats.js~Stats#getConnectedness",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getgradientat",
-    "class/src/Stats.js~Stats.html#instance-method-getGradientAt",
-    "src/Stats.js~Stats#getGradientAt",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getlengthof",
-    "class/src/Stats.js~Stats.html#instance-method-getLengthOf",
-    "src/Stats.js~Stats#getLengthOf",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getorderindexofcell",
-    "class/src/Stats.js~Stats.html#instance-method-getOrderIndexOfCell",
-    "src/Stats.js~Stats#getOrderIndexOfCell",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getorderindices",
-    "class/src/Stats.js~Stats.html#instance-method-getOrderIndices",
-    "src/Stats.js~Stats#getOrderIndices",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getpercentageact",
-    "class/src/Stats.js~Stats.html#instance-method-getPercentageAct",
-    "src/Stats.js~Stats#getPercentageAct",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getpercentageactofcell",
-    "class/src/Stats.js~Stats.html#instance-method-getPercentageActOfCell",
-    "src/Stats.js~Stats#getPercentageActOfCell",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#getrangeof",
-    "class/src/Stats.js~Stats.html#instance-method-getRangeOf",
-    "src/Stats.js~Stats#getRangeOf",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#ndim",
-    "class/src/Stats.js~Stats.html#instance-member-ndim",
-    "src/Stats.js~Stats#ndim",
-    "member"
-  ],
-  [
-    "src/stats.js~stats#newonline",
-    "class/src/Stats.js~Stats.html#instance-method-newOnline",
-    "src/Stats.js~Stats#newOnline",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#norm",
-    "class/src/Stats.js~Stats.html#instance-method-norm",
-    "src/Stats.js~Stats#norm",
-    "method"
-  ],
-  [
-    "src/stats.js~stats#updateonline",
-    "class/src/Stats.js~Stats.html#instance-method-updateOnline",
-    "src/Stats.js~Stats#updateOnline",
-    "method"
   ],
   [
     "src/grid/coarsegrid.js",
@@ -814,24 +706,6 @@ window.esdocSearchIndex = [
     "file/src/grid/Grid.js.html",
     "src/grid/Grid.js",
     "file"
-  ],
-  [
-    "src/grid/grid.js~grid#x_bits",
-    "class/src/grid/Grid.js~Grid.html#instance-member-X_BITS",
-    "src/grid/Grid.js~Grid#X_BITS",
-    "member"
-  ],
-  [
-    "src/grid/grid.js~grid#y_bits",
-    "class/src/grid/Grid.js~Grid.html#instance-member-Y_BITS",
-    "src/grid/Grid.js~Grid#Y_BITS",
-    "member"
-  ],
-  [
-    "src/grid/grid.js~grid#y_mask",
-    "class/src/grid/Grid.js~Grid.html#instance-member-Y_MASK",
-    "src/grid/Grid.js~Grid#Y_MASK",
-    "member"
   ],
   [
     "src/grid/grid.js~grid#_pixelsbuffer",
@@ -954,22 +828,28 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/grid/grid.js~grid.pixel",
+    "typedef/index.html#static-typedef-Pixel",
+    "src/grid/Grid.js~Grid.Pixel",
+    "typedef"
+  ],
+  [
+    "src/grid/grid.js~grid.ipixel",
+    "typedef/index.html#static-typedef-iPixel",
+    "src/grid/Grid.js~Grid.iPixel",
+    "typedef"
+  ],
+  [
+    "src/grid/grid.js~grid.updatepixelfunction",
+    "typedef/index.html#static-typedef-updatePixelFunction",
+    "src/grid/Grid.js~Grid.updatePixelFunction",
+    "typedef"
+  ],
+  [
     "src/grid/grid2d.js",
     "file/src/grid/Grid2D.js.html",
     "src/grid/Grid2D.js",
     "file"
-  ],
-  [
-    "src/grid/grid2d.js~grid2d#x_step",
-    "class/src/grid/Grid2D.js~Grid2D.html#instance-member-X_STEP",
-    "src/grid/Grid2D.js~Grid2D#X_STEP",
-    "member"
-  ],
-  [
-    "src/grid/grid2d.js~grid2d#y_mask",
-    "class/src/grid/Grid2D.js~Grid2D.html#instance-member-Y_MASK",
-    "src/grid/Grid2D.js~Grid2D#Y_MASK",
-    "member"
   ],
   [
     "src/grid/grid2d.js~grid2d#_pixels",
@@ -1008,12 +888,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/grid/grid2d.js~grid2d#neighisimple",
-    "class/src/grid/Grid2D.js~Grid2D.html#instance-method-neighisimple",
-    "src/grid/Grid2D.js~Grid2D#neighisimple",
-    "method"
-  ],
-  [
     "src/grid/grid2d.js~grid2d#p2i",
     "class/src/grid/Grid2D.js~Grid2D.html#instance-method-p2i",
     "src/grid/Grid2D.js~Grid2D#p2i",
@@ -1036,36 +910,6 @@ window.esdocSearchIndex = [
     "file/src/grid/Grid3D.js.html",
     "src/grid/Grid3D.js",
     "file"
-  ],
-  [
-    "src/grid/grid3d.js~grid3d#x_step",
-    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-X_STEP",
-    "src/grid/Grid3D.js~Grid3D#X_STEP",
-    "member"
-  ],
-  [
-    "src/grid/grid3d.js~grid3d#y_step",
-    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-Y_STEP",
-    "src/grid/Grid3D.js~Grid3D#Y_STEP",
-    "member"
-  ],
-  [
-    "src/grid/grid3d.js~grid3d#z_bits",
-    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-Z_BITS",
-    "src/grid/Grid3D.js~Grid3D#Z_BITS",
-    "member"
-  ],
-  [
-    "src/grid/grid3d.js~grid3d#z_mask",
-    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-Z_MASK",
-    "src/grid/Grid3D.js~Grid3D#Z_MASK",
-    "member"
-  ],
-  [
-    "src/grid/grid3d.js~grid3d#z_step",
-    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-Z_STEP",
-    "src/grid/Grid3D.js~Grid3D#Z_STEP",
-    "member"
   ],
   [
     "src/grid/grid3d.js~grid3d#_pixels",
@@ -1164,58 +1008,28 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/grid/margolus2d.js",
-    "file/src/grid/Margolus2D.js.html",
-    "src/grid/Margolus2D.js",
+    "src/grid/grid-typedef.js",
+    "file/src/grid/grid-typedef.js.html",
+    "src/grid/grid-typedef.js",
     "file"
   ],
   [
-    "src/grid/margolus2d.js~margolus2d#constructor",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-constructor-constructor",
-    "src/grid/Margolus2D.js~Margolus2D#constructor",
-    "method"
+    "src/grid/grid-typedef.js~arraycoordinate",
+    "typedef/index.html#static-typedef-ArrayCoordinate",
+    "src/grid/grid-typedef.js~ArrayCoordinate",
+    "typedef"
   ],
   [
-    "src/grid/margolus2d.js~margolus2d#currentpartition",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-member-currentpartition",
-    "src/grid/Margolus2D.js~Margolus2D#currentpartition",
-    "member"
+    "src/grid/grid-typedef.js~gridsize",
+    "typedef/index.html#static-typedef-GridSize",
+    "src/grid/grid-typedef.js~GridSize",
+    "typedef"
   ],
   [
-    "src/grid/margolus2d.js~margolus2d#diffusemargolus",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-method-diffuseMargolus",
-    "src/grid/Margolus2D.js~Margolus2D#diffuseMargolus",
-    "method"
-  ],
-  [
-    "src/grid/margolus2d.js~margolus2d#domargolus",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-method-doMargolus",
-    "src/grid/Margolus2D.js~Margolus2D#doMargolus",
-    "method"
-  ],
-  [
-    "src/grid/margolus2d.js~margolus2d#margolusblock",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-method-margolusBlock",
-    "src/grid/Margolus2D.js~Margolus2D#margolusBlock",
-    "method"
-  ],
-  [
-    "src/grid/margolus2d.js~margolus2d#margolusblockold",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-method-margolusBlockOld",
-    "src/grid/Margolus2D.js~Margolus2D#margolusBlockOld",
-    "method"
-  ],
-  [
-    "src/grid/margolus2d.js~margolus2d#margolusrotate",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-method-margolusRotate",
-    "src/grid/Margolus2D.js~Margolus2D#margolusRotate",
-    "method"
-  ],
-  [
-    "src/grid/margolus2d.js~margolus2d#togglepartition",
-    "class/src/grid/Margolus2D.js~Margolus2D.html#instance-method-togglePartition",
-    "src/grid/Margolus2D.js~Margolus2D#togglePartition",
-    "method"
+    "src/grid/grid-typedef.js~indexcoordinate",
+    "typedef/index.html#static-typedef-IndexCoordinate",
+    "src/grid/grid-typedef.js~IndexCoordinate",
+    "typedef"
   ],
   [
     "src/hamiltonian/activityconstraint.js",
@@ -1284,60 +1098,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/hamiltonian/activityconstraintold.js",
-    "file/src/hamiltonian/ActivityConstraintOld.js.html",
-    "src/hamiltonian/ActivityConstraintOld.js",
-    "file"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#activityat",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-member-activityAt",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#activityAt",
-    "member"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#activityatarith",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-method-activityAtArith",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#activityAtArith",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#activityatgeom",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-method-activityAtGeom",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#activityAtGeom",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#cellpixelsbirth",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-member-cellpixelsbirth",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#cellpixelsbirth",
-    "member"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#constructor",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-constructor-constructor",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#constructor",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#deltah",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-method-deltaH",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#deltaH",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#postsetpixlistener",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-method-postSetpixListener",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#postSetpixListener",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activityconstraintold.js~activityconstraint#pxact",
-    "class/src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint.html#instance-method-pxact",
-    "src/hamiltonian/ActivityConstraintOld.js~ActivityConstraint#pxact",
-    "method"
-  ],
-  [
     "src/hamiltonian/activitymultibackground.js",
     "file/src/hamiltonian/ActivityMultiBackground.js.html",
     "src/hamiltonian/ActivityMultiBackground.js",
@@ -1348,18 +1108,6 @@ window.esdocSearchIndex = [
     "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-member-activityAt",
     "src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground#activityAt",
     "member"
-  ],
-  [
-    "src/hamiltonian/activitymultibackground.js~activitymultibackground#activityatarith",
-    "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-activityAtArith",
-    "src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground#activityAtArith",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activitymultibackground.js~activitymultibackground#activityatgeom",
-    "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-activityAtGeom",
-    "src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground#activityAtGeom",
-    "method"
   ],
   [
     "src/hamiltonian/activitymultibackground.js~activitymultibackground#bgvoxels",
@@ -1389,24 +1137,6 @@ window.esdocSearchIndex = [
     "src/hamiltonian/activitymultibackground.js~activitymultibackground#deltah",
     "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-deltaH",
     "src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground#deltaH",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activitymultibackground.js~activitymultibackground#postmcslistener",
-    "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-postMCSListener",
-    "src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground#postMCSListener",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activitymultibackground.js~activitymultibackground#postsetpixlistener",
-    "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-postSetpixListener",
-    "src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground#postSetpixListener",
-    "method"
-  ],
-  [
-    "src/hamiltonian/activitymultibackground.js~activitymultibackground#pxact",
-    "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-pxact",
-    "src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground#pxact",
     "method"
   ],
   [
@@ -1446,64 +1176,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/hamiltonian/adhesion.js~adhesion#constructor",
+    "class/src/hamiltonian/Adhesion.js~Adhesion.html#instance-constructor-constructor",
+    "src/hamiltonian/Adhesion.js~Adhesion#constructor",
+    "method"
+  ],
+  [
     "src/hamiltonian/adhesion.js~adhesion#deltah",
     "class/src/hamiltonian/Adhesion.js~Adhesion.html#instance-method-deltaH",
     "src/hamiltonian/Adhesion.js~Adhesion#deltaH",
     "method"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js",
-    "file/src/hamiltonian/AdhesionMultiBackground.js.html",
-    "src/hamiltonian/AdhesionMultiBackground.js",
-    "file"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#h",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-method-H",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#H",
-    "method"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#j",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-method-J",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#J",
-    "method"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#bgvoxels",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-member-bgvoxels",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#bgvoxels",
-    "member"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#confchecker",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-method-confChecker",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#confChecker",
-    "method"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#constructor",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-constructor-constructor",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#constructor",
-    "method"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#deltah",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-method-deltaH",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#deltaH",
-    "method"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#setbackgroundvoxels",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-method-setBackgroundVoxels",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#setBackgroundVoxels",
-    "method"
-  ],
-  [
-    "src/hamiltonian/adhesionmultibackground.js~adhesionmultibackground#setup",
-    "class/src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground.html#instance-member-setup",
-    "src/hamiltonian/AdhesionMultiBackground.js~AdhesionMultiBackground#setup",
-    "member"
   ],
   [
     "src/hamiltonian/attractionpointconstraint.js",
@@ -1512,10 +1194,16 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint#constraint_type",
-    "class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html#instance-get-CONSTRAINT_TYPE",
-    "src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint#CONSTRAINT_TYPE",
-    "member"
+    "src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint#confchecker",
+    "class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html#instance-method-confChecker",
+    "src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint#confChecker",
+    "method"
+  ],
+  [
+    "src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint#constructor",
+    "class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint#constructor",
+    "method"
   ],
   [
     "src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint#deltah",
@@ -1542,6 +1230,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/hamiltonian/barrierconstraint.js~barrierconstraint#constructor",
+    "class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/BarrierConstraint.js~BarrierConstraint#constructor",
+    "method"
+  ],
+  [
     "src/hamiltonian/barrierconstraint.js~barrierconstraint#fulfilled",
     "class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html#instance-method-fulfilled",
     "src/hamiltonian/BarrierConstraint.js~BarrierConstraint#fulfilled",
@@ -1564,6 +1258,12 @@ window.esdocSearchIndex = [
     "class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM",
     "src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint#CPM",
     "member"
+  ],
+  [
+    "src/hamiltonian/chemotaxisconstraint.js~chemotaxisconstraint#checkfield",
+    "class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-method-checkField",
+    "src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint#checkField",
+    "method"
   ],
   [
     "src/hamiltonian/chemotaxisconstraint.js~chemotaxisconstraint#conf",
@@ -1602,192 +1302,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/hamiltonian/chemotaxisconstraintold.js",
-    "file/src/hamiltonian/ChemotaxisConstraintOld.js.html",
-    "src/hamiltonian/ChemotaxisConstraintOld.js",
-    "file"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#a",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-A",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#A",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#c",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-C",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#C",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#cpm",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-set-CPM",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#CPM",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#d",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-D",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#D",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#dpermcs",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-DPerMCS",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#DPerMCS",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#l",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-L",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#L",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#chemogrid",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-chemoGrid",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#chemoGrid",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#chemokinelevel",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-chemokinelevel",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#chemokinelevel",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#conf",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-conf",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#conf",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#constructor",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-constructor-constructor",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#constructor",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#decay",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-decay",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#decay",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#deltah",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-deltaH",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#deltaH",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#dt",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-dt",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#dt",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#dx",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-dx",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#dx",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#initializefield",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-initializeField",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#initializeField",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#interpolate",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-interpolate",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#interpolate",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#interpolatelist",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-interpolatelist",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#interpolatelist",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#linattractor",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-linAttractor",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#linAttractor",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#maxchemokinevalue",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-maxChemokineValue",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#maxChemokineValue",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#newsize",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-newSize",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#newSize",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#nmod",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-nmod",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#nmod",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#postmcslistener",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-postMCSListener",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#postMCSListener",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#producechemokine",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-produceChemokine",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#produceChemokine",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#removechemokine",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-removeChemokine",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#removeChemokine",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#resolutiondecrease",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-resolutionDecrease",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#resolutionDecrease",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#secretion",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-secretion",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#secretion",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#size",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-member-size",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#size",
-    "member"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#t21",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-t21",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#t21",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#updategrid",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-updateGrid",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#updateGrid",
-    "method"
-  ],
-  [
-    "src/hamiltonian/chemotaxisconstraintold.js~chemotaxisconstraint#updatevalues",
-    "class/src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint.html#instance-method-updateValues",
-    "src/hamiltonian/ChemotaxisConstraintOld.js~ChemotaxisConstraint#updateValues",
-    "method"
-  ],
-  [
     "src/hamiltonian/constraint.js",
     "file/src/hamiltonian/Constraint.js.html",
     "src/hamiltonian/Constraint.js",
@@ -1818,78 +1332,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/hamiltonian/constraint.js~constraint#confcheckarray",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckArray",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckArray",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckcellboolean",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckCellBoolean",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckCellBoolean",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckcellkinds",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckCellKinds",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckCellKinds",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckcellmatrix",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckCellMatrix",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckCellMatrix",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckcellnonnegative",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckCellNonNegative",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckCellNonNegative",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckcellnumbers",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckCellNumbers",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckCellNumbers",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckcellprobability",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckCellProbability",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckCellProbability",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confchecknumber",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckNumber",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckNumber",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckpresenceof",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckPresenceOf",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckPresenceOf",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confchecksinglenonnegative",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckSingleNonNegative",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckSingleNonNegative",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confcheckstring",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckString",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckString",
-    "method"
-  ],
-  [
-    "src/hamiltonian/constraint.js~constraint#confchecktypeof",
-    "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confCheckTypeOf",
-    "src/hamiltonian/Constraint.js~Constraint#confCheckTypeOf",
-    "method"
-  ],
-  [
     "src/hamiltonian/constraint.js~constraint#confchecker",
     "class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confChecker",
     "src/hamiltonian/Constraint.js~Constraint#confChecker",
@@ -1914,21 +1356,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/hamiltonian/hardconstraint.js~hardconstraint#c",
-    "class/src/hamiltonian/HardConstraint.js~HardConstraint.html#instance-member-C",
-    "src/hamiltonian/HardConstraint.js~HardConstraint#C",
-    "member"
-  ],
-  [
     "src/hamiltonian/hardconstraint.js~hardconstraint#constraint_type",
     "class/src/hamiltonian/HardConstraint.js~HardConstraint.html#instance-get-CONSTRAINT_TYPE",
     "src/hamiltonian/HardConstraint.js~HardConstraint#CONSTRAINT_TYPE",
-    "member"
-  ],
-  [
-    "src/hamiltonian/hardconstraint.js~hardconstraint#cpm",
-    "class/src/hamiltonian/HardConstraint.js~HardConstraint.html#instance-set-CPM",
-    "src/hamiltonian/HardConstraint.js~HardConstraint#CPM",
     "member"
   ],
   [
@@ -1950,10 +1380,142 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/hamiltonian/hardvolumerangeconstraint.js~hardvolumerangeconstraint#constructor",
+    "class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint#constructor",
+    "method"
+  ],
+  [
     "src/hamiltonian/hardvolumerangeconstraint.js~hardvolumerangeconstraint#fulfilled",
     "class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html#instance-method-fulfilled",
     "src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint#fulfilled",
     "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js",
+    "file/src/hamiltonian/ParameterChecker.js.html",
+    "src/hamiltonian/ParameterChecker.js",
+    "file"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#c",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-member-C",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#C",
+    "member"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#conf",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-member-conf",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#conf",
+    "member"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckcellkinds",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckCellKinds",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckCellKinds",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckparameter",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckParameter",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckParameter",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckpresenceof",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckPresenceOf",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckPresenceOf",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckstructure",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckStructure",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckStructure",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckstructurekindarray",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckStructureKindArray",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckStructureKindArray",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckstructurekindmatrix",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckStructureKindMatrix",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckStructureKindMatrix",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckstructuresingle",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckStructureSingle",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckStructureSingle",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#confcheckvaluetype",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-confCheckValueType",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#confCheckValueType",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#constructor",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-constructor-constructor",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#constructor",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#isboolean",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-isBoolean",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#isBoolean",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#iscoordinate",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-isCoordinate",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#isCoordinate",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#isnonnegative",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-isNonNegative",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#isNonNegative",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#isnumber",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-isNumber",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#isNumber",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#isprobability",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-isProbability",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#isProbability",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker#isstring",
+    "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html#instance-method-isString",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker#isString",
+    "method"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker.kindarray",
+    "typedef/index.html#static-typedef-KindArray",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker.KindArray",
+    "typedef"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker.kindmatrix",
+    "typedef/index.html#static-typedef-KindMatrix",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker.KindMatrix",
+    "typedef"
+  ],
+  [
+    "src/hamiltonian/parameterchecker.js~parameterchecker.singlevalue",
+    "typedef/index.html#static-typedef-SingleValue",
+    "src/hamiltonian/ParameterChecker.js~ParameterChecker.SingleValue",
+    "typedef"
   ],
   [
     "src/hamiltonian/perimeterconstraint.js",
@@ -2040,12 +1602,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/hamiltonian/persistenceconstraint.js~persistenceconstraint#halfsize",
-    "class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html#instance-member-halfsize",
-    "src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint#halfsize",
-    "member"
-  ],
-  [
     "src/hamiltonian/persistenceconstraint.js~persistenceconstraint#normalize",
     "class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html#instance-method-normalize",
     "src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint#normalize",
@@ -2082,10 +1638,16 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/hamiltonian/preferreddirectionconstraint.js~preferreddirectionconstraint#constraint_type",
-    "class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html#instance-get-CONSTRAINT_TYPE",
-    "src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint#CONSTRAINT_TYPE",
-    "member"
+    "src/hamiltonian/preferreddirectionconstraint.js~preferreddirectionconstraint#confchecker",
+    "class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html#instance-method-confChecker",
+    "src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint#confChecker",
+    "method"
+  ],
+  [
+    "src/hamiltonian/preferreddirectionconstraint.js~preferreddirectionconstraint#constructor",
+    "class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint#constructor",
+    "method"
   ],
   [
     "src/hamiltonian/preferreddirectionconstraint.js~preferreddirectionconstraint#deltah",
@@ -2106,6 +1668,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#_lastrequestedcopy",
+    "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-member-_lastrequestedcopy",
+    "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#_lastrequestedcopy",
+    "member"
+  ],
+  [
+    "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#addfocalpoint",
+    "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-addFocalPoint",
+    "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#addFocalPoint",
+    "method"
+  ],
+  [
     "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#confchecker",
     "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-confChecker",
     "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#confChecker",
@@ -2115,6 +1689,12 @@ window.esdocSearchIndex = [
     "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#constructor",
     "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-constructor-constructor",
     "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#constructor",
+    "method"
+  ],
+  [
+    "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#currentnumberfocalpoints",
+    "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-currentNumberFocalPoints",
+    "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#currentNumberFocalPoints",
     "method"
   ],
   [
@@ -2148,9 +1728,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#lastsource",
+    "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-lastSource",
+    "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#lastSource",
+    "method"
+  ],
+  [
+    "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#log",
+    "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-log",
+    "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#log",
+    "method"
+  ],
+  [
     "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#postsetpixlistener",
     "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-postSetpixListener",
     "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#postSetpixListener",
+    "method"
+  ],
+  [
+    "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#removefocalpoint",
+    "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-removeFocalPoint",
+    "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#removeFocalPoint",
     "method"
   ],
   [
@@ -2172,30 +1770,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/hamiltonian/testlogger.js",
-    "file/src/hamiltonian/TestLogger.js.html",
-    "src/hamiltonian/TestLogger.js",
-    "file"
-  ],
-  [
-    "src/hamiltonian/testlogger.js~hardvolumerangeconstraint#constraint_type",
-    "class/src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint.html#instance-get-CONSTRAINT_TYPE",
-    "src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint#CONSTRAINT_TYPE",
-    "member"
-  ],
-  [
-    "src/hamiltonian/testlogger.js~hardvolumerangeconstraint#aftermcslistener",
-    "class/src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint.html#instance-method-afterMCSListener",
-    "src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint#afterMCSListener",
-    "method"
-  ],
-  [
-    "src/hamiltonian/testlogger.js~hardvolumerangeconstraint#setpixlistener",
-    "class/src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint.html#instance-method-setpixListener",
-    "src/hamiltonian/TestLogger.js~HardVolumeRangeConstraint#setpixListener",
-    "method"
-  ],
-  [
     "src/hamiltonian/volumeconstraint.js",
     "file/src/hamiltonian/VolumeConstraint.js.html",
     "src/hamiltonian/VolumeConstraint.js",
@@ -2205,6 +1779,12 @@ window.esdocSearchIndex = [
     "src/hamiltonian/volumeconstraint.js~volumeconstraint#confchecker",
     "class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html#instance-method-confChecker",
     "src/hamiltonian/VolumeConstraint.js~VolumeConstraint#confChecker",
+    "method"
+  ],
+  [
+    "src/hamiltonian/volumeconstraint.js~volumeconstraint#constructor",
+    "class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/VolumeConstraint.js~VolumeConstraint#constructor",
     "method"
   ],
   [
@@ -2218,6 +1798,42 @@ window.esdocSearchIndex = [
     "class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html#instance-method-volconstraint",
     "src/hamiltonian/VolumeConstraint.js~VolumeConstraint#volconstraint",
     "method"
+  ],
+  [
+    "src/hamiltonian/constraint-typedef.js",
+    "file/src/hamiltonian/constraint-typedef.js.html",
+    "src/hamiltonian/constraint-typedef.js",
+    "file"
+  ],
+  [
+    "src/hamiltonian/constraint-typedef.js~cellkindinteractionmatrix",
+    "typedef/index.html#static-typedef-CellKindInteractionMatrix",
+    "src/hamiltonian/constraint-typedef.js~CellKindInteractionMatrix",
+    "typedef"
+  ],
+  [
+    "src/hamiltonian/constraint-typedef.js~perkindarray",
+    "typedef/index.html#static-typedef-PerKindArray",
+    "src/hamiltonian/constraint-typedef.js~PerKindArray",
+    "typedef"
+  ],
+  [
+    "src/hamiltonian/constraint-typedef.js~perkindboolean",
+    "typedef/index.html#static-typedef-PerKindBoolean",
+    "src/hamiltonian/constraint-typedef.js~PerKindBoolean",
+    "typedef"
+  ],
+  [
+    "src/hamiltonian/constraint-typedef.js~perkindnonnegative",
+    "typedef/index.html#static-typedef-PerKindNonNegative",
+    "src/hamiltonian/constraint-typedef.js~PerKindNonNegative",
+    "typedef"
+  ],
+  [
+    "src/hamiltonian/constraint-typedef.js~perkindprob",
+    "typedef/index.html#static-typedef-PerKindProb",
+    "src/hamiltonian/constraint-typedef.js~PerKindProb",
+    "typedef"
   ],
   [
     "src/models/ca.js",
@@ -2352,12 +1968,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/models/cpm.js~cpm#neigh",
-    "class/src/models/CPM.js~CPM.html#instance-method-neigh",
-    "src/models/CPM.js~CPM#neigh",
-    "method"
-  ],
-  [
     "src/models/cpm.js~cpm#nr_cells",
     "class/src/models/CPM.js~CPM.html#instance-member-nr_cells",
     "src/models/CPM.js~CPM#nr_cells",
@@ -2380,18 +1990,6 @@ window.esdocSearchIndex = [
     "class/src/models/CPM.js~CPM.html#instance-member-post_setpix_listeners",
     "src/models/CPM.js~CPM#post_setpix_listeners",
     "member"
-  ],
-  [
-    "src/models/cpm.js~cpm#ran",
-    "class/src/models/CPM.js~CPM.html#instance-method-ran",
-    "src/models/CPM.js~CPM#ran",
-    "method"
-  ],
-  [
-    "src/models/cpm.js~cpm#random",
-    "class/src/models/CPM.js~CPM.html#instance-method-random",
-    "src/models/CPM.js~CPM#random",
-    "method"
   ],
   [
     "src/models/cpm.js~cpm#setcellkind",
@@ -2598,6 +2196,24 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/models/model-typedefs.js",
+    "file/src/models/model-typedefs.js.html",
+    "src/models/model-typedefs.js",
+    "file"
+  ],
+  [
+    "src/models/model-typedefs.js~cellid",
+    "typedef/index.html#static-typedef-CellId",
+    "src/models/model-typedefs.js~CellId",
+    "typedef"
+  ],
+  [
+    "src/models/model-typedefs.js~cellkind",
+    "typedef/index.html#static-typedef-CellKind",
+    "src/models/model-typedefs.js~CellKind",
+    "typedef"
+  ],
+  [
     "src/simulation/simulation.js",
     "file/src/simulation/Simulation.js.html",
     "src/simulation/Simulation.js",
@@ -2760,6 +2376,60 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/stats/borderpixelsbycell.js",
+    "file/src/stats/BorderPixelsByCell.js.html",
+    "src/stats/BorderPixelsByCell.js",
+    "file"
+  ],
+  [
+    "src/stats/borderpixelsbycell.js~borderpixelsbycell#m",
+    "class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html#instance-member-M",
+    "src/stats/BorderPixelsByCell.js~BorderPixelsByCell#M",
+    "member"
+  ],
+  [
+    "src/stats/borderpixelsbycell.js~borderpixelsbycell#compute",
+    "class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html#instance-method-compute",
+    "src/stats/BorderPixelsByCell.js~BorderPixelsByCell#compute",
+    "method"
+  ],
+  [
+    "src/stats/borderpixelsbycell.js~borderpixelsbycell#model",
+    "class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html#instance-set-model",
+    "src/stats/BorderPixelsByCell.js~BorderPixelsByCell#model",
+    "member"
+  ],
+  [
+    "src/stats/cellneighborlist.js",
+    "file/src/stats/CellNeighborList.js.html",
+    "src/stats/CellNeighborList.js",
+    "file"
+  ],
+  [
+    "src/stats/cellneighborlist.js~cellneighborlist#m",
+    "class/src/stats/CellNeighborList.js~CellNeighborList.html#instance-member-M",
+    "src/stats/CellNeighborList.js~CellNeighborList#M",
+    "member"
+  ],
+  [
+    "src/stats/cellneighborlist.js~cellneighborlist#compute",
+    "class/src/stats/CellNeighborList.js~CellNeighborList.html#instance-method-compute",
+    "src/stats/CellNeighborList.js~CellNeighborList#compute",
+    "method"
+  ],
+  [
+    "src/stats/cellneighborlist.js~cellneighborlist#getneighborsofcell",
+    "class/src/stats/CellNeighborList.js~CellNeighborList.html#instance-method-getNeighborsOfCell",
+    "src/stats/CellNeighborList.js~CellNeighborList#getNeighborsOfCell",
+    "method"
+  ],
+  [
+    "src/stats/cellneighborlist.js~cellneighborlist#model",
+    "class/src/stats/CellNeighborList.js~CellNeighborList.html#instance-set-model",
+    "src/stats/CellNeighborList.js~CellNeighborList#model",
+    "member"
+  ],
+  [
     "src/stats/centroids.js",
     "file/src/stats/Centroids.js.html",
     "src/stats/Centroids.js",
@@ -2782,18 +2452,6 @@ window.esdocSearchIndex = [
     "class/src/stats/Centroids.js~Centroids.html#instance-method-computeCentroidOfCell",
     "src/stats/Centroids.js~Centroids#computeCentroidOfCell",
     "method"
-  ],
-  [
-    "src/stats/centroids.js~centroids#constructor",
-    "class/src/stats/Centroids.js~Centroids.html#instance-constructor-constructor",
-    "src/stats/Centroids.js~Centroids#constructor",
-    "method"
-  ],
-  [
-    "src/stats/centroids.js~centroids#halfsize",
-    "class/src/stats/Centroids.js~Centroids.html#instance-member-halfsize",
-    "src/stats/Centroids.js~Centroids#halfsize",
-    "member"
   ],
   [
     "src/stats/centroids.js~centroids#model",
@@ -2826,18 +2484,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/stats/centroidswithtoruscorrection.js~centroidswithtoruscorrection#constructor",
-    "class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html#instance-constructor-constructor",
-    "src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection#constructor",
-    "method"
-  ],
-  [
-    "src/stats/centroidswithtoruscorrection.js~centroidswithtoruscorrection#halfsize",
-    "class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html#instance-member-halfsize",
-    "src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection#halfsize",
-    "member"
-  ],
-  [
     "src/stats/centroidswithtoruscorrection.js~centroidswithtoruscorrection#model",
     "class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html#instance-set-model",
     "src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection#model",
@@ -2853,84 +2499,6 @@ window.esdocSearchIndex = [
     "src/stats/pixelsbycell.js~pixelsbycell#compute",
     "class/src/stats/PixelsByCell.js~PixelsByCell.html#instance-method-compute",
     "src/stats/PixelsByCell.js~PixelsByCell#compute",
-    "method"
-  ],
-  [
-    "src/stats/postmcsstats.js",
-    "file/src/stats/PostMCSStats.js.html",
-    "src/stats/PostMCSStats.js",
-    "file"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#c",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-member-C",
-    "src/stats/PostMCSStats.js~PostMCSStats#C",
-    "member"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#cpm",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-set-CPM",
-    "src/stats/PostMCSStats.js~PostMCSStats#CPM",
-    "member"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#cellpixels",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-member-cellpixels",
-    "src/stats/PostMCSStats.js~PostMCSStats#cellpixels",
-    "member"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#centroid",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-method-centroid",
-    "src/stats/PostMCSStats.js~PostMCSStats#centroid",
-    "method"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#centroidwithtoruscorrection",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-method-centroidWithTorusCorrection",
-    "src/stats/PostMCSStats.js~PostMCSStats#centroidWithTorusCorrection",
-    "method"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#centroidwithtorusslow",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-method-centroidWithTorusSlow",
-    "src/stats/PostMCSStats.js~PostMCSStats#centroidWithTorusSlow",
-    "method"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#conf",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-member-conf",
-    "src/stats/PostMCSStats.js~PostMCSStats#conf",
-    "member"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#connectedcomponentsofcell",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-method-connectedComponentsOfCell",
-    "src/stats/PostMCSStats.js~PostMCSStats#connectedComponentsOfCell",
-    "method"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#constructor",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-constructor-constructor",
-    "src/stats/PostMCSStats.js~PostMCSStats#constructor",
-    "method"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#halfsize",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-member-halfsize",
-    "src/stats/PostMCSStats.js~PostMCSStats#halfsize",
-    "member"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#pixelstocentroid",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-method-pixelsToCentroid",
-    "src/stats/PostMCSStats.js~PostMCSStats#pixelsToCentroid",
-    "method"
-  ],
-  [
-    "src/stats/postmcsstats.js~postmcsstats#postmcslistener",
-    "class/src/stats/PostMCSStats.js~PostMCSStats.html#instance-method-postMCSListener",
-    "src/stats/PostMCSStats.js~PostMCSStats#postMCSListener",
     "method"
   ],
   [
@@ -2968,5 +2536,23 @@ window.esdocSearchIndex = [
     "class/src/stats/Stat.js~Stat.html#instance-set-model",
     "src/stats/Stat.js~Stat#model",
     "member"
+  ],
+  [
+    "src/stats/stat-typedef.js",
+    "file/src/stats/stat-typedef.js.html",
+    "src/stats/stat-typedef.js",
+    "file"
+  ],
+  [
+    "src/stats/stat-typedef.js~cellarrayobject",
+    "typedef/index.html#static-typedef-CellArrayObject",
+    "src/stats/stat-typedef.js~CellArrayObject",
+    "typedef"
+  ],
+  [
+    "src/stats/stat-typedef.js~cellobject",
+    "typedef/index.html#static-typedef-CellObject",
+    "src/stats/stat-typedef.js~CellObject",
+    "typedef"
   ]
 ]

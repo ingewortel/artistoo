@@ -27,8 +27,8 @@ let custommethods = {
 
 let pconstraint = new CPM.PersistenceConstraint( 
 	{
-		// PreferredDirectionConstraint parameters
-		LAMBDA_DIR: [0,100,100], 				// PreferredDirectionConstraint importance per ck
+		// PersistenceConstraint parameters
+		LAMBDA_DIR: [0,100,100], 				// PersistenceConstraint importance per ck
 		PERSIST: [0,.7,0.2]						// Weight of the persistent direction in the
 												// computation of the new direction per cellkind
 	} 

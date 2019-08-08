@@ -6,42 +6,121 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var MersenneTwister = _interopDefault(require('mersennetwister'));
 
+/** This base class defines a general grid and provides grid methods that do not depend on
+the coordinate system used. This class is never used on its own, as it does not yet 
+contain methods for neighborhood computation etc (which depend on the coordinate system). 
+Coordinate system-dependent methods are implemented in extensions
+of the Grid class, for example Grid2D and Grid3D. */
 class Grid {
+
+	/** The grid constructor.
+	@param {GridSize} field_size array of field size in each dimension. E.g. [100,200] for
+	a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
+	numbers.
+	@param {boolean} [torus=true] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right? */
 	constructor( field_size, torus = true ){
+		/** field_size array of field size in each dimension. E.g. [100,200] for
+		a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
+		numbers.
+		@type {GridSize}*/
 		this.extents = field_size;
+		
+		/** Should the borders of the grid be linked, so that a cell moving
+		out on the left reappears on the right? 
+		@type {boolean}*/
 		this.torus = torus;
+		
+		
+		/* These are used for rapid conversion between array and index coordinates,
+		but not documented as they should not be used from outside.*/
+		/** @ignore */
 		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
+		/** @ignore */
 		this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) );
+		/** @ignore */
 		this.Y_MASK = (1 << this.Y_BITS)-1;
+		
+		/** Array coordinates to the middle pixel on the grid.
+		@type {ArrayCoordinate}
+		*/
 		this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
 	}
 
+	/** The neigh method returns the neighborhood of a pixel p.
+	This function uses array coordinates as input and output arguments, but
+	internally calls a method 'neighi' which computes neighborhoods using
+	index-coordinates. Since neighbordhoods depend on the coordinate system,
+	the 'neighi' method is defined in the extension class for that specific coordinate system.
+	@param {ArrayCoordinate} p array coordinates of a specific pixel
+	@param {boolean} torus are borders of the grid linked so that a cell leaving on the
+	right re-enters the grid on the left?
+	@return {ArrayCoordinate[]} an array of neighbors of pixel p, where each element contains the array
+	coordinates of the neighbor in question.*/
 	neigh(p, torus = this.torus){
 		let g = this;
 		return g.neighi( this.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
 	}
 
+	/** The setpix method changes the value of a pixel p on the grid to t.
+	@param {ArrayCoordinate} p array coordinates of the pixel to change the value of
+	@param {number} t the value to assign to this pixel. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
 	setpix( p, t ){
 		this._pixels[this.p2i(p)] = t;
 	}
 
+	/** The setpixi method changes the value of a pixel i on the grid to t.
+	@param {IndexCoordinate} i index coordinates of the pixel to change the value of
+	@param {number} t the value to assign to this pixel. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
 	setpixi( i, t ){
 		this._pixels[i] = t;
 	}
 
+	/** The pixt method finds the current value of a pixel p on the grid.
+	@param {ArrayCoordinate} p array coordinates of the pixel to find the value of
+	@return {number} t the value of p on the grid. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
 	pixt( p ){
 		return this._pixels[this.p2i(p)]
 	}
 
+	/** The pixti method finds the current value of a pixel i on the grid.
+	@param {IndexCoordinate} i index coordinates of the pixel to find the value of
+	@return {number} t the value of i on the grid. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
 	pixti( i ){
 		return this._pixels[i]
 	}
 
-	/* Return locations of all non-zero pixels.
+	/** A pixel on the grid.
+	@typedef {Object[]} Pixel
+	@property {ArrayCoordinate} Pixel[0] - pixel coordinate
+	@property {number} Pixel[1] - pixel value
+	*/
+	
+	/** A pixel on the grid.
+	@typedef {Object[]} iPixel
+	@property {IndexCoordinate} Pixel[0] - pixel coordinate
+	@property {number} Pixel[1] - pixel value
+	*/
+
+	/** This iterator returns locations and values of all non-zero pixels.
 
 		This method isn't actually called because the subclasses implement
 		it themselves due to efficiency reasons. It serves as a template to
-		document the functionality. */
+		document the functionality. 
+		@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel's array coordinates on the grid, and v its value.*/
 	* pixels() {
 		for( let i of this.pixelsi() ){
 			if( this._pixels[i] > 0 ){
@@ -50,12 +129,31 @@ class Grid {
 		}
 	}
 
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		This method isn't actually called because the subclasses implement
+		it themselves due to efficiency reasons. It serves as a template to
+		document the functionality. 
+		@abstrac
+		@return {undefined} for each pixel, because this method should be implemented
+		in a grid subclass.*/
 	* pixelsi() {
 		//throw("Iterator 'pixelsi' not implemented!")
 		yield undefined;
 	}
 
+	/** This method pre-allocates an array of the correct datatype to make
+	a copy of the current pixel values. Values are not actually copied yet.
+	@return {Uint16Array|Float32Array} an array with an element for each pixel.
+	The datatype is determined by the datatype of this._pixels (implemented in the
+	subclass), which can be either Uint16Array or Float32Array.*/
 	pixelsbuffer() {
+	
+		/** For storing a copy of all pixel values; eg for synchronous updating of some
+		sort.
+		@type {Uint16Array|Float32Array}*/
+		this._pixelsbuffer = [];
+	
 		if( this._pixels instanceof Uint16Array ){
 			this._pixelsbuffer = new Uint16Array(this._pixels.length);
 		} else if( this._pixels instanceof Float32Array ){
@@ -65,18 +163,44 @@ class Grid {
 		}
 	}
 
+	/** Template method to compute the gradient at location i on the grid
+	(location given in index coordinates).
+	This method throws an error, which is overwritten when a subclass 
+	implements a gradienti method.
+	@param {IndexCoordinate} i index coordinate of a pixel to compute the gradient at. 
+	@see https://en.wikipedia.org/wiki/Gradient*/
 	gradienti( i ){
 		throw("method 'gradienti' not implemented! "+i)
 	}
 
+	/** Method to compute the gradient at location p on the grid
+	(location given in array coordinates). It internally calls the gradienti
+	method using index coordinates, which should be implemented in the grid
+	subclass.
+	@param {ArrayCoordinate} p array coordinates of a pixel p to compute the gradient at
+	@return {number} the gradient at position p.
+	@see https://en.wikipedia.org/wiki/Gradient*/
 	gradient( p ){
 		return this.gradienti( this.p2i( p ) )
 	}
 
+	/** Method to compute the laplacian at location p on the grid
+	(location given in array coordinates). It internally calls the laplaciani
+	method that does the same but uses index coordinates.
+	@param {ArrayCoordinate} p array coordinates of a pixel p to compute the laplacian at
+	@return {number} the laplacian at position p.
+	@see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions */
 	laplacian( p ){
 		return this.laplaciani( this.p2i( p ) )
 	}
 
+	/** Method to compute the laplacian at location i on the grid
+	(location given in index coordinates). It internally uses the 
+	neighNeumanni method to compute a Neumann neighborhood, which should
+	be implemented in the grid subclass.
+	@param {IndexCoordinate} i index coordinates of a pixel to compute the laplacian at
+	@return {number} the laplacian at position p.
+	@see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions */
 	laplaciani( i ){
 		let L = 0, n = 0;
 		for( let x of this.neighNeumanni(i) ){
@@ -85,14 +209,39 @@ class Grid {
 		return L - n * this.pixti( i )
 	}
 
+	/** Perform a diffusion step on the grid, updating the values of all pixels 
+	according to Fick's second law of diffusion.
+	@param {number} D diffusion coefficient 
+	@see https://en.wikipedia.org/wiki/Diffusion#Fick's_law_and_equations
+	@see https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Mesh_Laplacians
+	*/
 	diffusion( D ){
+		// For synchronous updating of the grid: compute updated values in a copy
+		// of the current pixels
 		if( ! this._pixelsbuffer ) this.pixelsbuffer();
 		for( let i of this.pixelsi() ){
+			// Diffusion: new value is current value + change.
+			// the change is given by the diffusion coefficient D times the laplacian.
 			this._pixelsbuffer[i] = this.pixti( i ) + D * this.laplaciani( i );
 		}
+		// swap the copy and the original
 		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];
 	}
 
+	
+	/**
+	 Function that updates a gridpoint depending on its current value and that of its
+	 neighbors.
+	 @typedef {function} updatePixelFunction
+	 @param {ArrayCoordinate} p - pixel to update
+	 @param {ArrayCoordinate[]} neighbors - coordinates of neighbors of p
+	 @return {number} value - the updated value, based on the current value of p and
+	 its neighbors.
+	 */
+
+	/** Apply a function to all pixel values on the grid. It acts on this._pixels,
+	which is implemented in the grid subclass.
+	@param {updatePixelFunction} f - the function to apply to each pixel. */
 	applyLocally( f ){
 		if( ! this._pixelsbuffer ) this.pixelsbuffer();
 		for( let i of this.pixelsi() ){
@@ -101,7 +250,10 @@ class Grid {
 		}
 		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];		
 	}
-
+	
+	/** Multiply all pixel values on the grid with a constant factor r. 
+	This method acts on this._pixels, which is implemented in the grid subclass.
+	@param {number} r the multiplication factor. */
 	multiplyBy( r ){
 		for( let i of this.pixelsi() ){
 			this._pixels[i] *= r; 
@@ -111,12 +263,57 @@ class Grid {
 }
 
 /** A class containing (mostly static) utility functions for dealing with 2D 
- *  and 3D grids. */
+ 	grids. Extends the Grid class but implements functions specific to the 2D
+ 	grid (such as neighborhoods). 
+ 	
+	@example <caption>Diffusion on a 2D chemokine grid</caption>
+ 	* 
+ 	* let CPM = require("path/to/build")
+ 	* 
+ 	* // Make a grid with a chemokine, add some chemokine at the middle pixel
+ 	* let chemogrid = new CPM.Grid2D( [100,100], true, "Float32" )
+ 	* chemogrid.setpix( [50,50], 100 )
+ 	* 
+ 	* // Measure chemokine at different spots before and after diffusion
+ 	* let p1 = [50,50], p2 = [50,51]
+ 	* console.log( "p1: " + chemogrid.pixt( p1 ) + ", p2: " + chemogrid.pixt(p2) )
+ 	* chemogrid.diffusion( 0.001 )
+ 	* console.log( "p1: " + chemogrid.pixt( p1 ) + ", p2: " + chemogrid.pixt(p2) )
+ 	* chemogrid.multiplyBy( 0.9 )	 // decay of the chemokine
+ 	* console.log( "p1: " + chemogrid.pixt( p1 ) + ", p2: " + chemogrid.pixt(p2) )
+ 	
+ 	@example <caption>Neighborhoods on a 2D grid</caption>
+ 	* 
+ 	* let CPM = require("path/to/build")
+ 	* 
+ 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0]
+ 	* let grid = new CPM.Grid2D( [100,100], true )
+ 	* console.log( grid.neigh( [0,0] ) ) // returns coordinates of 8 neighbors
+ 	* 
+ 	* // Now try a grid without torus; the corner now has fewer neighbors.
+ 	* let grid2 = new CPM.Grid2D( [100,100], false )
+ 	* console.log( grid2.neigh( [0,0] ) ) // returns only 3 neighbors
+ 	* 
+ 	* // Or try a Neumann neighborhood using the iterator
+ 	* for( let i of grid.neighNeumanni( 0 ) ){
+ 	* 	console.log( grid.i2p(i).join(" ") )
+ 	* }
+ 	*/
 
 class Grid2D extends Grid {
+
+	/** Constructor of the Grid2D object.
+	@param {GridSize} extents - the size of the grid in each dimension 
+	@param {boolean} [torus = true] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right?
+	@param {string} [datatype="Uint16"] - What datatype are the values associated with each
+	pixel on the grid? Choose from "Uint16" or "Float32". */
 	constructor( extents, torus=true, datatype="Uint16" ){
 		super( extents, torus );
+		
+		/** @ignore */
 		this.X_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
+		/** @ignore */
 		this.Y_MASK = this.X_STEP-1;
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
@@ -126,6 +323,11 @@ class Grid2D extends Grid {
 		// Attributes per pixel:
 		// celltype (identity) of the current pixel.
 		if( datatype == "Uint16" ){
+			/** Array with values for each pixel stored at the position of its 
+			{@link IndexCoordinate}. E.g. the value of pixel with coordinate i is
+			stored as this._pixels[i].
+			@private
+			@type {Uint16Array|Float32Array} */
 			this._pixels = new Uint16Array(this.p2i(this.extents));
 		} else if( datatype == "Float32" ){
 			this._pixels = new Float32Array(this.p2i(this.extents));
@@ -134,6 +336,23 @@ class Grid2D extends Grid {
 		}
 	}
 
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		@return {iPixel} for each pixel, return an array [i,v] where i is
+		the pixel's {@link IndexCoordinate} on the grid, and v its value.
+		
+		@example
+		* let CPM = require( "path/to/build" )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid2D( [100,100], true )
+		* grid.setpixi( 0, 1 )
+		* grid.setpixi( 1, 5 )
+		* 
+		* // iterator
+		* for( let i of grid.pixelsi() ){
+		* 	console.log( i )
+		* }
+		*/
 	* pixelsi() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -145,7 +364,24 @@ class Grid2D extends Grid {
 			ii = c;
 		}
 	}
+	
+	/** This iterator returns locations and values of all non-zero pixels.
 
+		@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel's array coordinates on the grid, and v its value.
+		
+		@example
+		* let CPM = require( "path/to/build" )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid2D( [100,100], true )
+		* grid.setpix( [0,0], 1 )
+		* grid.setpix( [0,1], 5 )
+		* 
+		* // iterator
+		* for( let p of grid.pixels() ){
+		* 	console.log( p )
+		* }
+		*/
 	* pixels() {
 		let ii = 0, c = 0;
 		// Loop over coordinates [i,j] on the grid
@@ -164,10 +400,13 @@ class Grid2D extends Grid {
 		}
 	}
 
-	/*	Return array of indices of neighbor pixels of the pixel at 
-		index i. The separate 2D and 3D functions are called by
-		the wrapper function neighi, depending on this.ndim.
-
+	/**	??? OLD METHOD
+		@todo check if this method is still used.
+		@ignore
+		Return array of {@link IndexCoordinate} of neighbor pixels of the pixel at 
+		coordinate i. This function takes the 2D Moore neighborhood.
+		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
 	*/
 	neighisimple( i ){
 		let p = this.i2p(i);
@@ -202,7 +441,17 @@ class Grid2D extends Grid {
 		}
 		return r
 	}
-
+	
+	/**	Return array of {@link IndexCoordinate} of von Neumann-4 neighbor pixels 
+		of the pixel at 
+		coordinate i. This function takes the 2D Neumann-4 neighborhood, excluding the
+		pixel itself.
+		@see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+		setting on this grid, see {@link torus}
+		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	*/
 	* neighNeumanni( i, torus = this.torus ){
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
@@ -250,7 +499,15 @@ class Grid2D extends Grid {
 			yield b;
 		}
 	}
-
+	/**	Return array of {@link IndexCoordinate} of Moore-8 neighbor pixels of the pixel at 
+		coordinate i. This function takes the 2D Moore-8 neighborhood, excluding the
+		pixel itself.
+		@see https://en.wikipedia.org/wiki/Moore_neighborhood
+		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+		setting on this grid, see {@link torus}
+		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	*/
 	neighi( i, torus = this.torus ){	
 		// normal computation of neighbor indices (top left-middle-right, 
 		// left, right, bottom left-middle-right)
@@ -302,12 +559,45 @@ class Grid2D extends Grid {
 			return [ tl, l, bl, tm, bm, tr, r, br ]
 		}
 	}
+	
+	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
+	
+	See also {@link Grid2D#i2p} for the backward conversion.
+	
+	@param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	@return {IndexCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid2D( [100,100], true )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
 	p2i ( p ){
 		return ( p[0] << this.Y_BITS ) + p[1]
 	}
+	/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
+	
+	See also {@link Grid2D#p2i} for the backward conversion.
+	
+	@param {IndexCoordinate} i - the coordinate of the pixel to convert
+	@return {ArrayCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid2D( [100,100], true )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
 	i2p ( i ){
 		return [i >> this.Y_BITS, i & this.Y_MASK]
 	}
+	
+	/** Method to compute the gradient at location i on the grid
+	(location given as an {@link IndexCoordinate}).
+	@param {IndexCoordinate} i - index coordinate of a pixel to compute the gradient at
+	@return {number} the gradient at position i.
+	@see https://en.wikipedia.org/wiki/Gradient*/
 	gradienti( i ){
 		let t = i-1, b = i+1, l = i-this.X_STEP, r = i+this.X_STEP, torus = this.torus;
 		
@@ -364,37 +654,105 @@ class Grid2D extends Grid {
 	}
 }
 
-/** A class containing (mostly static) utility functions for dealing with 2D 
- *  and 3D grids. */
-
+/** A class containing (mostly static) utility functions for dealing with 3D 
+ 	grids. Extends the Grid class but implements functions specific to the 3D
+ 	grid (such as neighborhoods). 
+ 	
+ 	@example <caption>Neighborhoods on a 3D grid</caption>
+ 	* 
+ 	* let CPM = require("path/to/build")
+ 	* 
+ 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
+ 	* let grid = new CPM.Grid3D( [100,100,100], true )
+ 	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
+ 	* 
+ 	* // Now try a grid without torus; the corner now has fewer neighbors.
+ 	* let grid2 = new CPM.Grid3D( [100,100,100], false )
+ 	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+ 	*/
 class Grid3D extends Grid {
+
+	/** Constructor of the Grid3D object.
+	@param {GridSize} extents - the size of the grid in each dimension 
+	@param {boolean} [torus = true] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right? */
 	constructor( extents, torus = true ){
 		super( extents, torus );
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
+		/** @ignore */
 		this.Z_BITS = 1+Math.floor( Math.log2( this.extents[2] - 1 ) );
 		if( this.X_BITS + this.Y_BITS + this.Z_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
+		/** @ignore */
 		this.Z_MASK = (1 << this.Z_BITS)-1;
+		/** @ignore */
 		this.Z_STEP = 1;
+		/** @ignore */
 		this.Y_STEP = 1 << (this.Z_BITS);
+		/** @ignore */
 		this.X_STEP = 1 << (this.Z_BITS +this.Y_BITS);
+		/** Array with values for each pixel stored at the position of its 
+			{@link IndexCoordinate}. E.g. the value of pixel with coordinate i is
+			stored as this._pixels[i].
+			@private
+			@type {Uint16Array} */
 		this._pixels = new Uint16Array(this.p2i(extents));
 	}
-	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
-		Depending on this.ndim, the 2D or 3D version will be used by the 
-		wrapper functions p2i and i2p. Use binary encoding for speed. */
+	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
+	
+	See also {@link Grid3D#i2p} for the backward conversion.
+	
+	@param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	@return {IndexCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid3D( [100,100,100], true )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
 	p2i( p ){
 		return ( p[0] << ( this.Z_BITS + this.Y_BITS ) ) + 
 			( p[1] << this.Z_BITS ) + 
 			p[2]
 	}
+	/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
+	
+	See also {@link Grid3D#p2i} for the backward conversion.
+	
+	@param {IndexCoordinate} i - the coordinate of the pixel to convert
+	@return {ArrayCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid3D( [100,100,100], true )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
 	i2p( i ){
 		return [i >> (this.Y_BITS + this.Z_BITS), 
 			( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 	}
+	
+	/** This iterator returns locations and values of all non-zero pixels.
 
+		@return {iPixel} for each pixel, return an array [i,v] where i is
+		the pixel's {@link IndexCoordinate} on the grid, and v its value.
+		
+		@example
+		* let CPM = require( "path/to/build" )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* grid.setpixi( 0, 1 )
+		* grid.setpixi( 1, 5 )
+		* 
+		* // iterator
+		* for( let i of grid.pixelsi() ){
+		* 	console.log( i )
+		* }
+		*/
 	* pixelsi() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -412,6 +770,23 @@ class Grid3D extends Grid {
 		}
 	}
 
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel's array coordinates on the grid, and v its value.
+		
+		@example
+		* let CPM = require( "path/to/build" )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* grid.setpix( [0,0,0], 1 )
+		* grid.setpix( [0,0,1], 5 )
+		* 
+		* // iterator
+		* for( let p of grid.pixels() ){
+		* 	console.log( p )
+		* }
+		*/
 	* pixels() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -431,6 +806,15 @@ class Grid3D extends Grid {
 		}
 	}
 
+	/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels of the pixel at 
+		coordinate i. This function takes the 3D equivalent of the 2D Moore-8 neighborhood, 
+		excluding the pixel itself.
+		@see https://en.wikipedia.org/wiki/Moore_neighborhood
+		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+		setting on this grid, see {@link torus}
+		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	*/
 	neighi( i, torus = this.torus ){
 		let p = this.i2p(i);
 
@@ -468,72 +852,131 @@ class Grid3D extends Grid {
 	}
 }
 
-/** The core CPM class. Can be used for two- or 
- * three-dimensional simulations. 
+/** Base class for grid-based models. This class is not used by itself; see
+{@link CPM} for a Cellular Potts Model and {@link CA} for a Cellular Automaton. 
 */
-
 class GridBasedModel {
 
+	/** The constructor of a GridBasedModel automatically attaches a grid of 
+	class {@link Grid2D} or {@link Grid3D}, depending on the grid dimensions
+	given in the 'extents' parameter. Configuration options for the model can
+	be supplied in 'conf'.
+	@param {GridSize} extents - the size of the grid of the model.
+	@param {object} conf - configuration options. See below for its elements,
+	but subclasses can have more.
+	@param {boolean} [conf.torus=true] - should the grid have linked borders?
+	@param {number} [seed] - seed for the random number generator. If left unspecified,
+	a random number from the Math.random() generator is used to make one.  */
 	constructor( extents, conf ){
 		let seed = conf.seed || Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
+		
+		/** Attach a random number generation with a seed.
+		@type {MersenneTwister}*/
 		this.mt = new MersenneTwister( seed );
 		if( !("torus" in conf) ){
 			conf["torus"] = true;
 		}
 
 		// Attributes based on input parameters
+		/** Dimensionality of the grid 
+		@type {number}*/
 		this.ndim = extents.length; // grid dimensions (2 or 3)
 		if( this.ndim != 2 && this.ndim != 3 ){
 			throw("only 2D and 3D models are implemented!")
 		}
+		
+		/** Input parameter settings; see the constructor of subclasses documentation.
+		@type {object}*/
 		this.conf = conf; // input parameter settings; see documentation.
 
 		// Some functions/attributes depend on ndim:
 		if( this.ndim == 2 ){
+			/** The grid.
+			@type {Grid2D|Grid3D}*/
 			this.grid = new Grid2D(extents,conf.torus);
 		} else {
 			this.grid = new Grid3D(extents,conf.torus);
 		}
 		// Pull up some things from the grid object so we don't have to access it
 		// from the outside
+		/** Midpoint of the grid.
+		@type {ArrayCoordinate}*/
 		this.midpoint = this.grid.midpoint;
+		/** Size of the grid in object format.
+		@type {object}*/
 		this.field_size = this.grid.field_size;
+		/** The {@link Grid2D#pixels} or {@link Grid3D#pixels} iterator function of the underlying grid.
+		@type {function}*/
 		this.pixels = this.grid.pixels.bind(this.grid);
+		/** The {@link Grid#pixti} iterator function of the underlying grid.
+		@type {function}*/
 		this.pixti = this.grid.pixti.bind(this.grid);
+		/** The {@link Grid2D#neighi} or {@link Grid3D#neighi} iterator function of the underlying grid.
+		@type {function}*/
 		this.neighi = this.grid.neighi.bind(this.grid);
+		/** Size of the grid.
+		@type {GridSize}*/
 		this.extents = this.grid.extents;
 
-		this.cellvolume = [];
-		this.time = 0;
 
+		/** This tracks the volumes of all non-background cells on the grid.
+		cellvolumes will be added with key = {@link CellId}, value = volume.
+		@type{number[]}*/
+		this.cellvolume = [];
+		/** Tracks the elapsed time in MCS
+		@type {number}*/
+		this.time = 0;
+		/** Objects of class {@link Stat} that have been computed on this model.
+		@type {Stat}*/
 		this.stats = [];
+		/** Cached values of these stats. Object with stat name as key and its cached
+		value as value. The cache must be cleared when the grid changes!
+		@type {object} */
 		this.stat_values = {};
 	}
 
+	/** Get the {@link CellKind} of the cell with {@link CellId} t. For this model, they
+	are just the same.
+	@param {CellId} t - id of the cell to get kind of.
+	@return {CellKind} the cellkind. */
 	cellKind( t ){
 		return t 
 	}
 
+	/** Iterator for all the {@link CellId}s that are currently on the grid. 
+	@return {CellId}*/
 	* cellIDs() {
 		yield* Object.keys( this.cellvolume );
 	}
 
-	/* Get neighbourhood of position p */
+	/** Get neighbourhood of position p, using neighborhood functions of the underlying
+	grid class.
+	@param {ArrayCoordinate} p - coordinate of a pixel to get the neighborhood of.
+	@param {boolean} [torus]  Does the grid have linked borders? If left unspecified,
+	this is determined by this.conf.torus.*/
 	neigh(p, torus=this.conf.torus){
 		let g = this.grid;
 		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
 	}
 
-	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
+	/** Get {@link CellId} of the pixel at coordinates p. 
+	@param {ArrayCoordinate} p - pixel to get cellid of.
+	@return {CellId} ID of the cell p belongs to.*/
 	pixt( p ){
 		return this.grid.pixti( this.grid.p2i(p) )
 	}
 
-	/* Change the pixel at position p (coordinates) into cellid t. 
+	/** Change the pixel at position i into {@link CellId} t. 
 		This standard implementation also keeps track of cell volumes
 		for all nonzero cell IDs. Subclasses may want to do more, 
 		such as also keeping track of perimeters or even centroids.
-		In that case, this method needs to be overridden. */
+		In that case, this method needs to be overridden. 
+		
+		See also {@link setpix} for a method working with {@link ArrayCoordinate}s.
+		
+		@param {IndexCoordinate} i - coordinate of pixel to change.
+		@param {CellId} t - cellid to change this pixel into.
+		*/
 	setpixi ( i, t ){		
 		const t_old = this.grid.pixti(i);
 		if( t_old > 0 ){
@@ -556,20 +999,47 @@ class GridBasedModel {
 		}
 	}
 
+	/** Change the pixel at position p into {@link CellId} t. 
+		This just calls the {@link setpixi} method internally.
+		
+		@param {ArrayCoordinate} p - coordinate of pixel to change.
+		@param {CellId} t - cellid to change this pixel into.
+		*/
 	setpix ( p, t ){
 		this.setpixi( this.grid.p2i(p), t );
 	}
 
 	/* ------------- MATH HELPER FUNCTIONS --------------- */
+	/** Get a random number from the seeded number generator.
+	@return {number} a random number between 0 and 1, uniformly sampled.*/
 	random (){
 		return this.mt.rnd()
 	}
 
-	/* Random integer number between incl_min and incl_max */
+	/** Get a random integer number between incl_min and incl_max, uniformly sampled.
+	@param {number} incl_min - lower end of the sampling range.
+	@param {number} incl_max - upper end of the sampling range. 
+	@return {number} the randomly sampled integer.*/
 	ran (incl_min, incl_max) {
 		return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
 	}
 
+	/** Compute a statistic on this model. If necessary, this produces an object
+	of the right {@link Stat} subclass and runs the compute method. Stats are 
+	cached because many stats use each other; this prevents that 'expensive' stats are
+	computed twice. 
+	@param {Stat} s - the stat to compute.
+	@return {anything} - the value of the computed stat. This is often a {@link CellObject}
+	or a {@link CellArrayObject}. 
+	
+	@example
+	* let CPM = require( "path/to/dir")
+	* let C = new CPM.CPM( [200,200], {T:20, torus:false} )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell( 1 )
+	* gm.seedCell( 1 )
+	* C.getStat( Centroids )
+	*/
 	getStat( s ){
 		/* Instantiate stats class if it doesn't exist yet and bind to this model */
 		if( !(s.name in this.stats) ){
@@ -586,28 +1056,78 @@ class GridBasedModel {
 		return this.stat_values[s.name]
 	}
 	
-	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
-	
+	/** Update the grid in one timestep. This method is model-dependent and 
+	must be implemented in the subclass.
+	@abstract */
 	timeStep (){
 		throw("implemented in subclasses")
 	}
 }
 
-/* This class encapsulates a lower-resolution grid and makes it
+/** This class encapsulates a lower-resolution grid and makes it
    visible as a higher-resolution grid. Only exact subsampling by
    a constant factor per dimension is supported. 
-	*/
-
+   
+   This class is useful when combining information of grids of
+   different sizes. This is often the case for chemotaxis, where
+   we let diffusion occur on a lower resolution grid to speed things up.
+   This class then allows you to obtain chemokine information from the 
+   low resolution chemokine grid using coordinates from the linked,
+   higher resolution model grid.
+   
+   @example <caption>Linear interpolation on a low resolution chemokine grid</caption>
+   * let CPM = require( "path/to/build" )
+   * 
+   * // Define a grid with float values for chemokine values, and set the middle pixel
+   * let chemogrid = new CPM.Grid2D( [50,50], true, "Float32" )
+   * chemogrid.setpix( [99,99], 100 )
+   * 
+   * // Make a coarse grid at 5x as high resolution, which is then 500x500 pixels.
+   * let coarsegrid = new CPM.CoarseGrid( chemogrid, 5 )
+   * 
+   * // Use interpolation. Pixels close to the midpoint won't have the exact same
+   * // value of either 100 or 0, but something inbetween.
+   * let p1 = [250,250], p2 = [250,251]
+   * console.log( "p1 : " + coarsegrid.pixt(p1) + ", p2 : " + coarsegrid.pixt(p2) )
+   * // p1 : 100, p2 : 80 
+   * 
+   * // Or draw it to see this. Compare these two:
+   * let Cim1 = new CPM.Canvas( coarsegrid )
+   * Cim1.drawField()
+   * let Cim2 = new CPM.Canvas( chemogrid, {zoom:5} )
+   * Cim2.drawField()
+*/
 class CoarseGrid {
+	/** The constructor of class CoarseGrid takes a low resolution grid as input
+	and a factor 'upscale', which is how much bigger the dimensions of the high
+	resolution grid are (must be a constant factor). 
+	@param {Grid2D} grid the grid to scale up; currently only supports the {@link Grid2D} class.
+	@param {number} upscale The (integer) factor to magnify the original grid with. */
 	constructor( grid, upscale = 3 ){
+	
+		/** Size of the new grid in all dimensions.
+		@type {GridSize} with a non-negative integer number for each dimension. */
 		this.extents = new Array( grid.extents.length );
 		for( let i = 0 ; i < grid.extents.length ; i++ ){
 			this.extents[i] = upscale * grid.extents[i];
 		}
+		/** The original, low-resolution grid. 
+		@type {Grid2D}*/
 		this.grid = grid;
+		
+		/** The upscale factor (a positive integer number).
+		@private
+		@type {number} */
 		this.upscale = upscale;
 	}
 
+	/** The pixt method takes as input a coordinate on the bigger grid, and maps it
+	to the corresponding value on the resized small grid via bilinear interpolation.
+	This prevents artefacts from the lower resolution of the second grid: the 
+	[upscale x upscale] pixels that map to the same pixel in the low resolution grid
+	do not get the same value.
+	@param {ArrayCoordinate} p array coordinates on the high resolution grid.
+	@return {number} interpolated value from the low resolution grid at this position. */
 	pixt( p ){
 		// 2D bilinear interpolation
 		let l = ~~(p[0] / this.upscale);
@@ -643,32 +1163,72 @@ class CoarseGrid {
 	}*/
 }
 
+/** Base class for a statistic that can be computed on a GridBasedModel. 
+This class by itself is not usable; see its subclasses for stats that are 
+currently supported. */
 class Stat {
-	// Although Stats do have a 'conf' object, they should not 
-	// really be configurable in the sense that they should always
-	// provide an expected output. The 'conf' object is mainly intended
-	// to provide an option to configure logging / debugging output. That
-	// is not implemented yet.
+
+	/** The constructor of class Stat takes a 'conf' object as argument.
+	However, Stats should not really be configurable in the sense that they should always
+	provide an expected output. The 'conf' object is mainly intended
+	to provide an option to configure logging / debugging output. That
+	is not implemented yet.	
+	@param {object} conf configuration options for the Stat, which should change nothing
+	about the return value produced by the compute() method but may be used for logging
+	and debugging options.*/
 	constructor( conf ){
+		/** Configuration object for the stat, which should not change its value but
+		may be used for logging and debugging options.
+		@type {object}*/
 		this.conf = conf || {};
 	}
+	
+	/** Every stat is linked to a specific model.
+	@param {GridBasedModel} M the model to compute the stat on.*/
 	set model( M ){
+	
+		/** The model to compute the stat on.
+		@type {GridBasedModel} */
 		this.M = M;
 	}
+	
+	/** The compute method of the base Stat class throws an error, 
+	enforcing that you have to implement this method when you build a new 
+	stat class extending this base class. 
+	@abstract */
 	compute(){
 		throw("compute method not implemented for subclass of Stat")
 	}
 }
 
-/* 	
-	Creates an object with the cellpixels of each cell on the grid. 
-	Keys are the cellIDs of all cells on the grid, corresponding values are arrays
+/** This Stat creates an object with the cellpixels of each cell on the grid. 
+	Keys are the {@link CellId} of all cells on the grid, corresponding values are arrays
 	containing the pixels belonging to that cell. Each element of that array contains
-	the coordinate array p = [x,y] for that pixel.
+	the {@link ArrayCoordinate} for that pixel.
+	
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed a cell, and get the PixelsByCell
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell(1)
+	* gm.seedCell(1)
+	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
+	* C.getStat( CPM.PixelsByCell )
 */
-
 class PixelsByCell extends Stat {
 
+	/** The compute method of PixelsByCell creates an object with cellpixels of each
+	cell on the grid.
+	@return {CellArrayObject} object with for each cell on the grid
+	an array of pixels (specified by {@link ArrayCoordinate}) belonging to that cell.
+	*/
 	compute(){
 		// initialize the object
 		let cellpixels = { };
@@ -686,77 +1246,174 @@ class PixelsByCell extends Stat {
 	}
 }
 
+/** This base class defines a general CPM constraint and provides methods that do not 
+depend on the specific constraint used. This class is never used on its own, 
+as it does not yet contain the actual definition of a constraint (such as a deltaH method).
+
+In general, we distinguish between two types of constraint:
+
+- a {@link HardConstraint} is a hard rule that *must* be fulfilled in order for a copy
+attempt to succeed;
+- a {@link SoftConstraint} is an energy term in the Hamiltonian that can make a copy 
+attempt either more or less energetically favourable, but does not by itself determine
+whether a copy attempt will succeed. An unfavourable outcome may be outbalanced by 
+favourable energies from other terms, and even a copy attempt net unfavourable 
+energy (deltaH > 0) may succeed with a success chance P = exp(-DeltaH/T). 
+
+See the subclasses {@link SoftConstraint} and {@link HardConstraint} for details. Each
+implemented constraint is in turn a subclass of one of these two.
+*/
 class Constraint {
+
+	/** This method is actually implemented in the subclass.
+	@abstract
+	*/
 	get CONSTRAINT_TYPE() {
 		throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
 	}
 	get parameters(){
 		return null
 	}
+	/** The constructor of a constraint takes a configuration object.
+	This method is usually overwritten by the actual constraint so that the entries
+	of this object can be documented.
+	@param {object} conf - configuration settings for this constraint, containing the
+	relevant parameters.
+	@abstract*/
 	constructor( conf ){
+		/** Configuration object for this constraint.
+		@type {object}*/
 		this.conf = conf;
 	}
+	/** This function attaches the relevant CPM to this constraint, so that information
+	about this cpm can be requested from the constraint. 
+	@todo Check why some constraints overwrite this? Because that disables the automatic
+	usage of a confChecker() when it is implemented. 
+	@param {CPM} C - the CPM to attach to this constraint.*/
 	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
 		this.C = C;
 		if( typeof this.confChecker === "function" ){
 			this.confChecker();
 		}
 	}
-	/* The optional confChecker method should verify that all the required conf parameters
-	are actually present in the conf object and have the right format.*/
+	/** The optional confChecker method should verify that all the required conf parameters
+	are actually present in the conf object and have the right format. It is implemented in
+	the subclass that specifies the actual constraint.
+	@abstract */
 	confChecker( ){
 	}
 
-	// Check if the property exists at all
+}
+
+/** Extension of class {@link Constraint} used for a soft constraint. See description in
+ {@link Constraint} for details. This class is not used on its own but serves as a base
+ class for a soft constraint. */
+class SoftConstraint extends Constraint {
+
+	/** Let the CPM know that this is a soft constraint, so return 'soft'. 
+	@return {string} "soft"*/
+	get CONSTRAINT_TYPE() {
+		return "soft"
+	}
+	
+	/** Soft constraints must have a deltaH method to compute the Hamiltonian. This method
+	must be implemented in any SoftConstraint subclass before it works.
+	@abstract
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	// eslint-disable-next-line no-unused-vars
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
+		throw("You need to implement the 'deltaH' method for this constraint!")
+	}
+}
+
+/** Class for checking if parameters are present in a conf object and are of the expected
+structure and type. This is not meant for usage from outside the package, but you can
+use it when you are building your own constraints and want to specify the required parameters.
+
+@example
+* // Add this above your constraint class
+* import ParameterChecker from "./ParameterChecker.js"
+* 
+* // from inside the confChecker() function of your constraint:
+* let checker = new ParameterChecker( this.conf, this.C )
+* 
+* // Most parameters have a standard structure and value type;
+* // you can check them like this:
+* checker.confCheckParameter( "MY_PARAMETER", "KindMatrix", "Number" ) // see Adhesion
+* checker.confCheckParameter( "MY_PARAMETER_2", "KindArray", "NonNegative" )
+* 
+* // Or you can just check their presence and do a custom check:
+* checker.confCheckPresenceOf( "MY_WEIRD_PARAMETER" )
+* if( !myCondition ){
+* 	throw( "Some error because MY_WEIRD_PARAMETER does not fulfill myCondition!" )
+* }
+*/
+class ParameterChecker {
+
+	/** The constructor of the ParameterChecker takes a configuration object.
+	@param {object} conf - configuration settings as supplied to a constraint, containing the
+	relevant parameters.
+	@param {CPM} C - the attached CPM.
+	*/
+	constructor( conf, C ){
+	
+		/** The configuration object to check parameters in 
+		@type {object}*/
+		this.conf = conf;
+		
+		/** The attached CPM. This is used to check if parameter array lengths match
+		the number of cellkinds
+		@type {CPM}*/
+		this.C = C;
+	}
+	
+	/* ========= CHECKING PARAMETER PRESENCE ======== */
+
+	/** Method to check if a parameter of a given name is present in the conf object 
+	supplied to the constraint, and if it is defined. Throws an error if this is not the case.
+	@param {string} name - the name of the parameter, which should be present as a key
+	in the object.
+	
+	@example
+	* let conf = { MY_PARAMETER : "something" }
+	* // This works, because  MY_PARAMETER is present in conf
+	* let checker = new ParameterChecker( conf, myCPM )
+	* checker.confCheckPresenceOf( "MY_PARAMETER" )
+	* 
+	* // There will be an error if MY_PARAMETER is absent/undefined:
+	* conf = {}
+	* checker = new ParameterChecker( conf, myCPM )
+	* checker.confCheckPresenceOf( "MY_PARAMETER" )
+	* conf = { MY_PARAMETER : "undefined" }
+	* checker = new ParameterChecker( conf, myCPM )
+	* checker.confCheckPresenceOf( "MY_PARAMETER" )
+	*/
 	confCheckPresenceOf( name ){
 		if( !this.conf.hasOwnProperty( name ) ){
 			throw( "Cannot find parameter " + name + " in the conf object!" )
 		}
-		
-	}
-
-	confCheckTypeOf( name, type ){
-		this.confCheckPresenceOf( name );
-		// Check if the property has the right type
-		if( !( typeof this.conf[name] === type ) ){
-			throw( "Conf object parameter " + name + " should be a " + type +"!" )
-		}
-	}
-
-	/* Helper check function for parameters that should be a single string,
-	which can take on one of the values in 'values'*/
-	confCheckString( name, values ){
-		this.confCheckPresenceOf( name );
-		this.confCheckTypeOf( name, "string" );
-
-		// Check if the property has one of the allowed values.
-		let valueFound = false;
-		for( let v of values ){
-			if ( this.conf[name] == v ){
-				valueFound = true;
-			}
-		}
-		
-		if( !valueFound ){
-			throw( "Conf object parameter " + name + " has invalid value " + this.conf[name] + 
-				"! Please choose from: " + values.join( " / " ) )
-		}
-	}
-	/* Checker for parameters that should be a single number.*/
-	confCheckNumber( name ){
-		this.confCheckTypeOf( name, "number" );
-	}
-	
-	/* Checker for parameters that should be a single non-negative number*/
-	confCheckSingleNonNegative( name ){
-		this.confCheckNumber( name );
-		if ( this.conf[name] < 0 ){
-			throw( "Conf object parameter " + name + " should be non-negative!" )
+		if( this.conf[name] == "undefined" ){
+			throw( "Parameter " + name + " is undefined!" )
 		}
 	}
 	
-	/* Helper function. Some parameters need to be specified for each cellkind, 
-	so to check those we first need to know the number of cellkinds.*/
+	/* ========= CHECKING PARAMETER STRUCTURE ======== */
+	
+	/** Helper function. Some parameters need to be specified for each {@link CellKind}, 
+	so to check those we first need to know the number of cellkinds on the CPM.
+	This number is retrieved from the CPM or added to it if it isn't there yet.
+	@param {number} n_default - a number of cellkinds (including background), which is used
+	to set the number of cellkinds in the CPM if it isn't there yet.
+	@return {number} the number of non-background cellkinds as cached in the CPM.
+	@private
+	*/
 	confCheckCellKinds( n_default ){
 		if( !this.C ){
 			throw("confCheck method called before addition to CPM!")
@@ -766,130 +1423,457 @@ class Constraint {
 		}
 		return this.C.n_cell_kinds
 	}
-
-	confCheckArray( name, type ){
-		this.confCheckPresenceOf( name );
-		let p = this.conf[name];
-		if( !(p instanceof Array) ){
-			throw( "Parameter " + name + " is not an array!" )
+	
+	/** Parameter structure for parameters that should come as a single value.
+	This value can be of type string, boolean, or number.
+	@example
+	* let ACT_MEAN = "arithmetic" // Is a SingleValue parameter
+	@typedef {number|string|boolean} SingleValue
+	*/
+	
+	/** Check if a parameter consists of a single value (rather than an object or array),
+	which can be a string, number, or boolean. 
+	@param {SingleValue} p - the parameter to check, which must be a single
+	string/number/boolean value.
+	@param {string} name - the name of this parameter in the conf object, used for the
+	error message if p is not a single value.
+	
+	@example
+	* let checker = new ParameterChecker( conf, C )
+	* let p1 = true, p2 = 1, p3 = "hi", p4 = [1,2]
+	* // Nothing happens for parameters of type SingleValue:
+	* checker.confCheckStructureSingle( p1, "MY_PARAMETER" )
+	* checker.confCheckStructureSingle( p2, "MY_PARAMETER" )
+	* checker.confCheckStructureSingle( p3, "MY_PARAMETER" )
+	*
+	* // This will throw an error because p4 is an array.
+	* checker.confCheckStructureSingle( p4, "MY_PARAMETER" )
+	*/
+	confCheckStructureSingle( p, name ){
+	
+		// single values are of type string, number, or boolean. If that is the case,
+		// just return.
+		let type = typeof p;
+		if( type == "string" || type == "number" || type == "boolean" ){
+			return
+		} else {
+			throw( "Parameter " + name + " should be a single value!" )
 		}
+
+	}
+	
+	/** Parameter structure for parameters that should come in an array with an element
+	for each {@link CellKind} including background.
+	@example
+	* let V = [0,5] // Is a KindArray parameter
+	@typedef {Array} KindArray
+	*/
+	
+	/** Check if a parameter has a {@link KindArray} structure.
+	@param {KindArray} p - the parameter to check
+	@param {string} name - the name of this parameter in the conf object, used for the
+	error message if p is not a {@link KindArray}.
+	
+	@example
+	* // C is a CPM which has 2 cellkinds including background:
+	* let checker = new ParameterChecker( conf, C )
+	* let p1 = [1,1], p2 = ["hi","hi"], p3 = "hi", p4 = [1,2,3]
+	* // Nothing happens when parameters are indeed arrays of length 2
+	* // (regardless of what type of array)
+	* checker.confCheckStructureKindArray( p1, "MY_PARAMETER" )
+	* checker.confCheckStructureKindArray( p2, "MY_PARAMETER" )
+	*
+	* // You'll get an error when p is no array, or when 
+	* // its length doesn't match the number of cellkinds:
+	* checker.confCheckStructureSingle( p3, "MY_PARAMETER" )
+	* checker.confCheckStructureSingle( p4, "MY_PARAMETER" )
+	*/
+	confCheckStructureKindArray( p, name ){
+		if( !(p instanceof Array) ){
+			throw( "Parameter " + name + " should be an array!" )
+		}	
 		
-		// Check if the property has the right type
+		// Check if the array has an element for each cellkind incl. background
 		let n_cell_kinds = this.confCheckCellKinds( p.length );
 		if( this.conf[name].length != n_cell_kinds + 1 ){
-			throw( "Conf object parameter " + name + 
+			throw( "Parameter " + name + 
 			" should be an array with an element for each cellkind including background!" )
 		}
-		
-		// Check if the property has the right value.
-		for( let e of this.conf[name] ){
-			if( ! ( typeof e === type ) ){
-				throw( "Conf object parameter " + name + 
-					" should be an array with "+type+"s!" )
-			}
-		}
 	}
+	
+	/** Parameter structure for parameters that specify interactions between two cells 
+	with each a {@link CellKind}. Should be an array of arrays ("matrix") 
+	where each array has an element for each cellkind including background. 
+	Thus, M[n][m] specifies the parameter for an interaction between a cell of 
+	cellkind n and a cell of cellkind m.
+	@example
+	* let J = [[0,20],[20,10]] // is a KindMatrix parameter.
+	@typedef {Array} KindMatrix
+	*/
+	
+	/** Checker if a parameter has a {@link KindMatrix} structure.
+	If this is not the case, the method throws an error.
+	@param {KindMatrix} p - the parameter to check
+	@param {string} name - the name of this parameter in the conf object, used for the
+	error message if p is not a {@link KindMatrix}.
+	
+	@example
+	* // C is a CPM which has 2 cellkinds including background:
+	* let checker = new ParameterChecker( conf, C )
+	* let p1 = [[1,1],[1,1]], p2 = [["a","a"],["a","a"]] 
+	* // Nothing happens when parameters are indeed arrays of length 2
+	* // with sub-arrays of length 2 (regardless of what is in the elements)
+	* checker.confCheckStructureKindArray( p1, "MY_PARAMETER" ) //OK
+	* checker.confCheckStructureKindArray( p2, "MY_PARAMETER" ) //OK
+	*
+	* // You'll get an error when p is no array, or when 
+	* // its length doesn't match the number of cellkinds:
+	* let p3 = 1, p4 = [1,2,3], p5 = [[1,2],[1,2],[1,2]]
+	* checker.confCheckStructureSingle( p3, "MY_PARAMETER" ) //error
+	* checker.confCheckStructureSingle( p4, "MY_PARAMETER" ) //error
+	* checker.confCheckStructureSingle( p5, "MY_PARAMETER" ) //error
+	*/
+	confCheckStructureKindMatrix( p, name ){
 
-	/* Checker for parameters that come in an array with a number for each cellkind. */
-	confCheckCellNumbers( name ){
-		this.confCheckArray( name, "number" );
-	}
-	
-	/* Same as confCheckCellNumbers, but now numbers should also not be negative*/
-	confCheckCellNonNegative( name ){
-		this.confCheckCellNumbers( name );
-		for( let e of this.conf[name] ){
-			if( e < 0 ){
-				throw( "Elements of parameter " + name + " should be non-negative!" )
-			}
-		}
-	}
-	
-	/* Same as confCheckCellNonNegative, but now numbers should be between 0 and 1*/
-	confCheckCellProbability( name ){
-		this.confCheckCellNumbers( name );
-		for( let e of this.conf[name] ){
-			if( e < 0 ){
-				throw( "Elements of parameter " + name + " should be between 0 and 1!" )
-			}
-			if( e > 1 ){
-				throw( "Elements of parameter " + name + " should be between 0 and 1!" )			
-			}
-		}
-	}
-	
-	/* Same as confCheckCellNumbers, but now values should be boolean */
-	confCheckCellBoolean( name ){
-		this.confCheckArray( name, "boolean" );
-	}
-	
-	/* Now the format should be a 'matrix' with rows and columns of numbers for each cellkind. */
-	confCheckCellMatrix( name, type="number" ){
-		this.confCheckPresenceOf( name );
-		let p = this.conf[name];
+		let err1 = false, err2 = false;
+		let n_cell_kinds;
+
+		// err1: Check if the main array is an array and has the right size
 		if( !(p instanceof Array) ){
-			throw( "Parameter " + name + " is not an array!" )
+			err1 = true;
+		} else {
+			n_cell_kinds = this.confCheckCellKinds( p.length );
+			if( !( p.length == n_cell_kinds + 1 ) ){
+				err1 = true;
+			}		
 		}
-
-		// Check if the property has the right type
-		let n_cell_kinds = this.confCheckCellKinds( p.length );
-		if( !( p.length == n_cell_kinds + 1 ) ){
-			throw( "Conf object parameter " + name + 
+		if( err1 ){
+			throw( "Parameter " + name + 
 			" must be an array with a sub-array for each cellkind including background!" )
 		}
 		
-		for( let e of this.conf[name] ){
-			if( ! ( e.length == n_cell_kinds + 1 ) ){
+		// Check if subarrays have the right size
+		for( let e of p ){
+			if( !(e instanceof Array) ){
+				err2 = true;
+			} else {
+				if( !( e.length == n_cell_kinds + 1 ) ){
+					err2 = true;
+				}		
+			}
+			if( err2 ){
 				throw( "Sub-arrays of " + name + 
 				" must have an element for each cellkind including background!" )
 			}
-			for( let ee of e ){
-				if( !(typeof ee === type ) ){
-					throw("Elements in conf parameter " + name + " must all be of type " + type + "!" )
-				}
-			}
 		}
 	}
+	
+	/** Method for checking if the parameter has the right structure. Throws an error
+	message if the parameter does not have this structure.
+	
+	It internally uses one of the following functions, depending on the structure argument:
+	{@link confCheckStructureSingle}, {@link confCheckStructureKindArray}, or
+	{@link confCheckStructureKindMatrix}.
+	
+	@param {SingleValue|KindArray|KindMatrix} p - the parameter to check the structure of
+	@param {string} name - the name of this parameter in the conf object, used for the
+	error message.
+	@param {string} structure - parameter structure, which must be one of 
+	"{@link SingleValue}", "{@link KindArray}", or "{@link KindMatrix}".
+	
+	@example
+	* // My own configuration object
+	* let conf = {
+	*	P1 : true,
+	* 	P2 : [0,2],
+	* 	P3 : [-1,2,4],
+	* 	P4 : [[1,2],[1,2]]
+	* }
+	* // C is a CPM which has 2 cellkinds including background:
+	* let checker = new ParameterChecker( conf, C )
+	* // These checks work out fine:
+	* checker.confCheckStructure( conf["P1"],"P1","SingleValue")
+	* checker.confCheckStructure( conf["P2"],"P2","KindArray")
+	* checker.confCheckStructure( conf["P4"],"P4","KindMatrix")
+	* 
+	* // These checks throw an error:
+	* checker.confCheckStructure( conf["P1"],"P1","KindArray") // not an array
+	* checker.confCheckStructure( conf["P2"],"P3","KindArray") // too long
+	*/
+	confCheckStructure( p, name, structure ){
+		if( structure == "SingleValue" ){
+			this.confCheckStructureSingle( p, name );
+		} else if ( structure == "KindArray" ){
+			this.confCheckStructureKindArray( p, name );
+		} else if ( structure == "KindMatrix" ){
+			this.confCheckStructureKindMatrix( p, name );
+		} else {
+			throw("Unknown structure " + structure + ", please choose 'SingleValue', 'KindArray', or 'KindMatrix'.")
+		}
+	}
+	
+	/* ========= CHECKING VALUE TYPE ======== */
+	
+	/** Check if a value is of type 'number'.
+	@param {number} v - value to check.
+	@return {boolean} is v a number?
+	@example
+	this.isNumber( -1 ) // true
+	this.isNumber( 0.5 ) // true
+	this.isNumber( true ) // false
+	this.isNumber( [1,2 ] ) // false
+	this.isNumber( "hello world" ) // false
+	@private
+	*/
+	isNumber( v ){
+		return ( typeof v === "number" )
+	}
+	/** Check if a value is of type 'number' and non-negative.
+	@param {number} v - value to check.
+	@return {boolean} is v a non-negative number?
+	@example
+	this.isNonNegative( -1 ) // false
+	this.isNonNegative( 0.5 ) // true
+	this.isNumber( true ) // false
+	this.isNumber( [1,2 ] ) // false
+	this.isNumber( "hello world" ) // false
+	@private
+	*/
+	isNonNegative( v ){
+		if( !( typeof v === "number" ) || v < 0 ){
+			return false
+		}
+		return true
+	}
+	/** Check if a value is of type 'number' and between 0 and 1.
+	@param {number} v - value to check.
+	@return {boolean} is v a number between 0 and 1?
+	@example
+	this.isProbability( -1 ) // false
+	this.isProbability( 0.5 ) // true
+	this.isProbability( true ) // false
+	this.isProbability( [1,2 ] ) // false
+	this.isProbability( "hello world" ) // false
+	@private
+	*/
+	isProbability( v ){
+		if( !( typeof v === "number" ) || v < 0 || v > 1 ){
+			return false
+		}
+		return true
+	}
+	/** Check if a value is of type 'string' and has one of a set of
+	predefined values.
+	@param {number} v - value to check.
+	@param {string[]} [values=[]] - possible values. If left empty,
+	any string is considered OK.
+	@return {boolean} is v a string and does it match one of the predefined values?
+	@example
+	this.isString( true ) // false
+	this.isString( ["a","b"] ) // false
+	this.isString( "hello world" ) // true
+	@private
+	*/
+	isString( v, values = [] ){
+		if( !( typeof v === "string" ) ){
+			return false
+		}
+		let found = false;
+		for( let val of values ){
+			if( val == v ){
+				found = true;
+			}
+		}
+		return found
+	}
+	/** Check if a value is of type 'boolean'.
+	@param {number} v - value to check.
+	@return {boolean} is v a boolean?
+	@example
+	this.isBoolean( true ) // true
+	this.isBoolean( [true,false] ) // false
+	this.isBoolean( "hello world" ) // true
+	@private
+	*/
+	isBoolean( v ){
+		return( typeof v === "boolean" )
+	}
+	
+	/** Check if a value is a coordinate in the dimensions of the current grid.
+	@param {number} v - value to check.
+	@return {boolean} is v a coordinate of the right dimensions?
+	@public
+	*/
+	isCoordinate( v ){
+		if( !( v instanceof Array ) ){
+			return false
+		}
+		if( !v.length == this.C.extents.length ){
+			return false
+		}
+		return true
+	}
+	
+	/** Check if the elements of a given parameter are of the right type.
+	It throws an error if this is not the case.
+	@param {anything} p - parameter to check.
+	@param {string} name - parameter name used for any error messages.
+	@param {string} structure - parameter structure, which must be one of 
+	"{@link SingleValue}", "{@link KindArray}", or "{@link KindMatrix}".
+	@param {string} valuetype - type of value, which must be one of 
+	"Number", "NonNegative", "Probability", "String", or "Boolean". 
+	@param {string[]} values - predefined specific options for the value. 
+	If left empty, this is ignored.
+	@private
+	*/
+	confCheckValueType( p, name, structure, valuetype, values = [] ){
+	
+		// Determine which checkfunction will be used.
+		let valuechecker;
+		if( valuetype == "Number" ){
+			valuechecker = this.isNumber;
+		} else if ( valuetype == "NonNegative" ){
+			valuechecker = this.isNonNegative;
+		} else if ( valuetype == "Probability" ){
+			valuechecker = this.isProbability;
+		} else if ( valuetype == "String" ){
+			valuechecker = this.isString;
+		} else if ( valuetype == "Boolean" ){
+			valuechecker = this.isBoolean;
+		} else {
+			throw( "Unsupported valuetype in check for parameter " + name +
+				", please choose from: 'Number','NonNegative', 'Probability', 'String', 'Boolean'.")
+		}
+		
+		let message =  "Parameter " + name + " : incorrect type. Expecting values of type " + valuetype + "."; 
+		
+		// structure determines how the checker is applied.
+		if( structure == "SingleValue" ){
+			if( p == "undefined" || !valuechecker( p, values ) ){ throw(message) }
+		} else if ( structure == "KindArray" ){
+			for( let i of p ){
+				if( i == "undefined" || !valuechecker( i, values ) ){ throw(message) }
+			}
+		} else if ( structure == "KindMatrix" ){
+			for( let i of p ){
+				for( let j of i ){
+					if( j == "undefined" || !valuechecker( j, values ) ){ throw(message) }
+				}
+			}
+		} else {
+			throw("Unknown structure " + structure + ", please choose 'SingleValue', 'KindArray', or 'KindMatrix'.")
+		}
+	}
+	
+	/** Check if a parameter exists and is defined, has the right structure, and if all 
+	its elements are of the correct type. Throw an error if any of these do not hold.
+	@param {string} name - parameter name used for any error messages.
+	@param {string} structure - parameter structure, which must be one of 
+	"{@link SingleValue}", "{@link KindArray}", or "{@link KindMatrix}".
+	@param {string} valuetype - type of value, which must be one of 
+	"Number", "NonNegative", "Probability", "String", or "Boolean". 
+	@param {string[]} [values =[]] - predefined specific options for the value. 
+	If left empty, this is ignored.
+	
+	@example
+	* // from inside the confChecker() function of your constraint:
+	* let checker = new ParameterChecker( this.conf, this.C )
+	* 
+	* checker.confCheckParameter( "MY_PARAMETER", "KindMatrix", "Number" ) // see Adhesion
+	* checker.confCheckParameter( "MY_PARAMETER_2", "KindArray", "NonNegative" )
+	*/
+	confCheckParameter( name, structure, valuetype, values = [] ){
+		this.confCheckPresenceOf( name );
+		let p = this.conf[name];
+		this.confCheckStructure( p, name, structure );
+		this.confCheckValueType( p, name, structure, valuetype, values );
+	}
+	
+	
 }
 
-class SoftConstraint extends Constraint {
-	get CONSTRAINT_TYPE() {
-		return "soft"
-	}
-	// eslint-disable-next-line no-unused-vars
-	deltaH( src_i, tgt_i, src_type, tgt_type ){
-		throw("You need to implement the 'deltaH' method for this constraint!")
-	}
-}
-
-/* 
-	Implements the activity constraint of Potts models. 
-	See also: 
-		Niculescu I, Textor J, de Boer RJ (2015) 
- 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
- 		PLoS Comput Biol 11(10): e1004280. 
- 		https://doi.org/10.1371/journal.pcbi.1004280
+/** This class implements the activity constraint of Potts models published in:
+ *
+ *	Niculescu I, Textor J, de Boer RJ (2015) 
+ *	Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
+ *	PLoS Comput Biol 11(10): e1004280. 
+ * 
+ * Pixels recently added to a cell get an "activity", which then declines with every MCS.
+ * Copy attempts from more active into less active pixels have a higher success rate,
+ * which puts a positive feedback on protrusive activity and leads to cell migration.
+ * 
+ * This constraint is generally used together with {@link Adhesion}, {@link VolumeConstraint},
+ * and {@link PerimeterConstraint}.
+ * 
+ * @see https://doi.org/10.1371/journal.pcbi.1004280
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5],
+ * 	P : [0,260],
+ * 	LAMBDA_P : [0,2] 	
+ * })
+ * C.add( new CPM.ActivityConstraint( {
+ * 	LAMBDA_ACT : [0,500],
+ * 	MAX_ACT : [0,30],
+ * 	ACT_MEAN : "geometric"
+ * } ) )
+ * 
+ * // Or add automatically by entering the parameters in the CPM
+ * let C2 = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5],
+ * 	P : [0,260],
+ * 	LAMBDA_P : [0,2],
+ * 	LAMBDA_ACT : [0,500],
+ * 	MAX_ACT : [0,30],
+ * 	ACT_MEAN : "geometric"	
+ * })
  */
-
 class ActivityConstraint extends SoftConstraint {
+
+	/** The constructor of the ActivityConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {string} [conf.ACT_MEAN="geometric"] - should local mean activity be measured with an
+	"arithmetic" or a "geometric" mean?
+	@param {PerKindNonNegative} conf.LAMBDA_ACT - strength of the activityconstraint per cellkind.
+	@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
+	*/
 	constructor( conf ){
 		super( conf );
 
-		this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
+		/** Activity of all cellpixels with a non-zero activity is stored in this object,
+		with the {@link IndexCoordinate} of each pixel as key and its current activity as
+		value. When the activity reaches 0, the pixel is removed from the object until it
+		is added again. 
+		@type {object}*/
+		this.cellpixelsact = {};
 		
-		// Wrapper: select function to compute activities based on ACT_MEAN in conf
+		/** Wrapper: select function to compute activities based on ACT_MEAN in conf.
+		Default is to use the {@link activityAtGeom} for a geometric mean.
+		@type {function}*/
+		this.activityAt = this.activityAtGeom;
 		if( this.conf.ACT_MEAN == "arithmetic" ){
 			this.activityAt = this.activityAtArith;
-		} else {
-			this.activityAt = this.activityAtGeom;
-		}
+		} 
 		
 	}
 	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
 	confChecker(){
-		this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
-		this.confCheckCellNonNegative( "LAMBDA_ACT" );
-		this.confCheckCellNonNegative( "MAX_ACT" );
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "ACT_MEAN", "SingleValue", "String", [ "geometric", "arithmetic" ] );
+		checker.confCheckParameter( "LAMBDA_ACT", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "MAX_ACT", "KindArray", "NonNegative" );
 	}
 	
 	/* ======= ACT MODEL ======= */
@@ -899,7 +1883,13 @@ class ActivityConstraint extends SoftConstraint {
 	 * or geometric (activityAtGeom) mean of the activities of the neighbors
 	 * of pixel i.
 	 */
-	/* Hamiltonian computation */ 
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 
 		let deltaH = 0, maxact, lambdaact;
@@ -928,8 +1918,16 @@ class ActivityConstraint extends SoftConstraint {
 		return deltaH
 	}
 
-	/* Activity mean computation methods for arithmetic/geometric mean.
-	The method used by activityAt is defined by conf ( see constructor ).*/
+	/** Activity mean computation methods for arithmetic mean. It computes the mean activity
+		of a pixel and all its neighbors belonging to the same cell.
+		
+		This method is generally called indirectly via {@link activityAt}, which is set
+		based on the value of ACT_MEAN in the configuration object given to the constructor.
+		
+		@param {IndexCoordinate} i - pixel to evaluate local activity at.
+		@return {number} the arithmetic mean of activities in this part of the cell.
+		@private
+	*/
 	activityAtArith( i ){
 		const t = this.C.pixti( i );
 		
@@ -957,6 +1955,16 @@ class ActivityConstraint extends SoftConstraint {
 		// average is summed r divided by num neighbors.
 		return r/nN
 	}
+	/** Activity mean computation methods for geometric mean. It computes the mean activity
+		of a pixel and all its neighbors belonging to the same cell.
+		
+		This method is generally called indirectly via {@link activityAt}, which is set
+		based on the value of ACT_MEAN in the configuration object given to the constructor.
+		
+		@param {IndexCoordinate} i - pixel to evaluate local activity at.
+		@return {number} the geometric mean of activities in this part of the cell.
+		@private
+	*/
 	activityAtGeom ( i ){
 		const t = this.C.pixti( i );
 
@@ -989,13 +1997,23 @@ class ActivityConstraint extends SoftConstraint {
 	}
 
 
-	/* Current activity (under the Act model) of the pixel with ID i. */
+	/** Current activity (under the Act model) of the pixel at position i. 
+	@param {IndexCoordinate} i the position of the pixel to evaluate the activity of.
+	@return {number} the current activity of this pixel, which is >= 0.*/
 	pxact ( i ){
 		// If the pixel is not in the cellpixelsact object, it has activity 0.
 		// Otherwise, its activity is stored in the object.
 		return this.cellpixelsact[i] || 0
 	}
 	
+	/** The postSetpixListener of the ActivityConstraint ensures that pixels are 
+	given their maximal activity when they are freshly added to a CPM.
+	@listens {CPM#setpixi} because when a new pixel is set (which is determined in the CPM),
+	its activity must change so that this class knows about the update.
+	@param {IndexCoordinate} i - the coordinate of the pixel that is changed.
+	@param {CellId} t_old - the cellid of this pixel before the copy
+	@param {CellId} t - the cellid of this pixel after the copy.
+	*/
 	/* eslint-disable no-unused-vars*/
 	postSetpixListener( i, t_old, t ){
 		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
@@ -1003,6 +2021,10 @@ class ActivityConstraint extends SoftConstraint {
 		this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
 	}
 	
+	/** The postMCSListener of the ActivityConstraint ensures that pixel activities
+	decline with one after every MCS.
+	@listens {CPM#timeStep} because when the CPM has finished an MCS, the activities must go down.
+	*/
 	postMCSListener(){
 		// iterate over cellpixelsage and decrease all activities by one.
 		for( let key in this.cellpixelsact ){
@@ -1019,43 +2041,103 @@ class ActivityConstraint extends SoftConstraint {
 /**
  * The ActivityMultiBackground constraint implements the activity constraint of Potts models,
  but allows users to specify locations on the grid where LAMBDA_ACT is different. 
-	See also: 
-		Niculescu I, Textor J, de Boer RJ (2015) 
- 		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
- 		PLoS Comput Biol 11(10): e1004280. 
- 		https://doi.org/10.1371/journal.pcbi.1004280
+ See {@link ActivityConstraint} for the normal version of this constraint.
+ See {@link ActivityMultiBackground#constructor} for an explanation of the parameters.
  */
-class ActivityMultiBackground extends SoftConstraint {
+class ActivityMultiBackground extends ActivityConstraint {
 
 	/** Creates an instance of the ActivityMultiBackground constraint 
 	* @param {object} conf - Configuration object with the parameters.
 	* ACT_MEAN is a single string determining whether the activity mean should be computed
 	* using a "geometric" or "arithmetic" mean. 
 	*/
+	/** The constructor of the ActivityConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {string} [conf.ACT_MEAN="geometric"] - should local mean activity be measured with an
+	"arithmetic" or a "geometric" mean?
+	@param {PerKindArray} conf.LAMBDA_ACT_MBG - strength of the activityconstraint per cellkind and per background.
+	@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
+	@param {Array} conf.BACKGROUND_VOXELS - an array where each element represents a different background type.
+	This is again an array of {@ArrayCoordinate}s of the pixels belonging to that backgroundtype. These pixels
+	will have the LAMBDA_ACT_MBG value of that backgroundtype, instead of the standard value.
+	*/
 	constructor( conf ){
 		super( conf );
 
+		/** Activity of all cellpixels with a non-zero activity is stored in this object,
+		with the {@link IndexCoordinate} of each pixel as key and its current activity as
+		value. When the activity reaches 0, the pixel is removed from the object until it
+		is added again. 
+		@type {object}*/
 		this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
 		
-		// Wrapper: select function to compute activities based on ACT_MEAN in conf
+		/** Wrapper: select function to compute activities based on ACT_MEAN in conf.
+		Default is to use the {@link activityAtGeom} for a geometric mean.
+		@type {function}*/
+		this.activityAt = this.activityAtGeom;
 		if( this.conf.ACT_MEAN == "arithmetic" ){
 			this.activityAt = this.activityAtArith;
-		} else {
-			this.activityAt = this.activityAtGeom;
-		}
+		} 
 		
-		
+		/** Store which pixels belong to which background type 
+		@type {Array}*/
 		this.bgvoxels = [];
+		
+		/** Track if this.bgvoxels has been set.
+		@type {boolean}*/
 		this.setup = false;
 	}
 	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
 	confChecker(){
-		this.confCheckString( "ACT_MEAN" , [ "geometric", "arithmetic" ] );
-		//this.confCheckCellNonNegative( "LAMBDA_ACT" )
-		this.confCheckCellNonNegative( "MAX_ACT" );
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "ACT_MEAN", "SingleValue", "String", [ "geometric", "arithmetic" ] );
+		checker.confCheckPresenceOf( "LAMBDA_ACT_MBG" );
+		checker.confCheckParameter( "MAX_ACT", "KindArray", "NonNegative" );
+		
+		// Custom checks
+		checker.confCheckStructureKindArray( this.conf["LAMBDA_ACT_MBG"], "LAMBDA_ACT_MBG" );
+		for( let e of this.conf["LAMBDA_ACT_MBG"] ){
+			for( let i of e ){
+				if( !checker.isNonNegative(i) ){
+					throw("Elements of LAMBDA_ACT_MBG must be non-negative numbers!")
+				}
+			}
+		}
+		checker.confCheckPresenceOf( "BACKGROUND_VOXELS" );
+		let bgvox = this.conf["BACKGROUND_VOXELS"];
+		// Background voxels must be an array of arrays
+		if( !(bgvox instanceof Array) ){
+			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+		} else if ( bgvox.length < 2 ){
+			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+		}
+		// Elements of the initial array must be arrays.
+		for( let e of bgvox ){
+			if( !(e instanceof Array) ){
+				throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+			}
+			
+			// Entries of this array must be pixel coordinates, which are arrays of length C.extents.length
+			for( let ee of e ){
+				let isCoordinate = true;
+				if( !(ee instanceof Array) ){
+					isCoordinate = false;
+				} else if ( ee.length != this.C.extents.length ){
+					isCoordinate = false;
+				}
+				if( !isCoordinate ){
+					throw( "Parameter BACKGROUND_VOXELS: subarray elements should be ArrayCoordinates; arrays of length " + this.C.extents.length + "!" )
+				}
+			}
+		}
 	}
 	
-		
+	/** Get the background voxels from the conf object and store them in a correct format
+	in this.bgvoxels. This only has to be done once.
+	@private */	
 	setBackgroundVoxels(){
 	
 		for( let bgkind = 0; bgkind < this.conf["BACKGROUND_VOXELS"].length; bgkind++ ){
@@ -1075,7 +2157,13 @@ class ActivityMultiBackground extends SoftConstraint {
 	 * or geometric (activityAtGeom) mean of the activities of the neighbors
 	 * of pixel i.
 	 */
-	/* Hamiltonian computation */ 
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 	
 		if( ! this.setup ){
@@ -1119,90 +2207,6 @@ class ActivityMultiBackground extends SoftConstraint {
 		return deltaH
 	}
 
-	/* Activity mean computation methods for arithmetic/geometric mean.
-	The method used by activityAt is defined by conf ( see constructor ).*/
-	activityAtArith( i ){
-		const t = this.C.pixti( i );
-		
-		// no activity for background/stroma
-		if( t <= 0 ){ return 0 }
-		
-		// neighborhood pixels
-		const N = this.C.neighi(i);
-		
-		// r activity summed, nN number of neighbors
-		// we start with the current pixel. 
-		let r = this.pxact(i), nN = 1;
-		
-		// loop over neighbor pixels
-		for( let j = 0 ; j < N.length ; j ++ ){ 
-			const tn = this.C.pixti( N[j] ); 
-			
-			// a neighbor only contributes if it belongs to the same cell
-			if( tn == t ){
-				r += this.pxact( N[j] );
-				nN ++; 
-			}
-		}
-
-		// average is summed r divided by num neighbors.
-		return r/nN
-	}
-	activityAtGeom ( i ){
-		const t = this.C.pixti( i );
-
-		// no activity for background/stroma
-		if( t <= 0 ){ return 0 }
-		
-		//neighborhood pixels
-		const N = this.C.neighi( i );
-		
-		// r activity product, nN number of neighbors.
-		// we start with the current pixel.
-		let nN = 1, r = this.pxact( i );
-
-		// loop over neighbor pixels
-		for( let j = 0 ; j < N.length ; j ++ ){ 
-			const tn = this.C.pixti( N[j] ); 
-
-			// a neighbor only contributes if it belongs to the same cell.
-			// if it does and has activity 0, the product will also be zero so
-			// we can already return.
-			if( tn == t ){
-				if( this.pxact( N[j] ) == 0 ) return 0
-				r *= this.pxact( N[j] );
-				nN ++; 
-			}
-		}
-		
-		// Geometric mean computation. 
-		return Math.pow(r,1/nN)
-	}
-
-
-	/* Current activity (under the Act model) of the pixel with ID i. */
-	pxact ( i ){
-		// If the pixel is not in the cellpixelsact object, it has activity 0.
-		// Otherwise, its activity is stored in the object.
-		return this.cellpixelsact[i] || 0
-	}
-	
-	/* eslint-disable no-unused-vars*/
-	postSetpixListener( i, t_old, t ){
-		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-		const k = this.C.cellKind( t );
-		this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
-	}
-	
-	postMCSListener(){
-		// iterate over cellpixelsage and decrease all activities by one.
-		for( let key in this.cellpixelsact ){
-			// activities that reach zero no longer need to be stored.
-			if( --this.cellpixelsact[ key ] <= 0 ){
-				delete this.cellpixelsact[ key ];
-			}
-		}
-	}
 
 
 }
@@ -1213,25 +2217,53 @@ class ActivityMultiBackground extends SoftConstraint {
  * separately but can access it from CPM.Canvas. */
 class Canvas {
 	/** The Canvas constructor accepts a CPM object C or a Grid2D object.
-	@param {GridBasedModel/Grid2D/CoarseGrid} C the object to draw, which is
-	either an object of class GridBasedModel (either CPM or CA), or a grid (Grid2D or
-	CoarseGrid).
-	@param {object} options Configuration settings, containing: "zoom" (positive number specifying
-	the zoom level to draw with.) */
+	@param {GridBasedModel|Grid2D|CoarseGrid} C - the object to draw, which must be
+	an object of class {@link GridBasedModel} (or its subclasses {@link CPM} and {@link CA}),
+	or a 2D grid ({@link Grid2D} or {@link CoarseGrid}). Drawing of other grids is currently
+	not supported.
+	@param {object} [ options = {} ] - Configuration settings
+	@param {number} [ options.zoom = 1 ]- positive number specifying the zoom level to draw with.
+	@param {number[]} [options.wrap = [0,0,0]] - if nonzero: 'wrap' the grid to these 
+	dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+	
+	@example <caption>A CPM with Canvas</caption>
+	* let CPM = require( "path/to/build" )
+	* 
+	* // Create a CPM, corresponding Canvas and GridManipulator 
+	* // (Use CPM. prefix from outside the module)
+	* let C = new CPM.CPM( [200,200], {
+	* 	T : 20, 
+	* 	J : [[0,20][20,10]], 
+	* 	V:[0,500], 
+	* 	LAMBDA_V:[0,5] 
+	* } )
+	* let Cim = new CPM.Canvas( C, {zoom:2} )
+	* let gm = new CPM.GridManipulator( C )
+	* 
+	* // Seed a cell at [x=100,y=100] and run 100 MCS.
+	* gm.seedCellAt( 1, [100,100] )
+	* for( let t = 0; t < 100; t++ ){
+	* 	C.timeStep()
+	* }
+	* 
+	* // Draw the cell and save an image
+	* Cim.drawCells( 1, "FF0000" )			// draw cells of CellKind 1 in red
+	* Cim.writePNG( "my-cell-t100.png" )
+	*/
 	constructor( C, options ){
 		if( C instanceof GridBasedModel ){
 			/**
 			 * The underlying model that is drawn on the canvas.
-			 * @type {GridBasedModel}
+			 * @type {GridBasedModel|CPM|CA}
 			 */
 			this.C = C;
-			/** @private
-			 * @ignore */
+			/** Grid size in each dimension, taken from the CPM or grid object to draw.
+			@type {GridSize} each element is the grid size in that dimension in pixels */
 			this.extents = C.extents;
 		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
 			/**
 			 * The underlying grid that is drawn on the canvas.
-			 * @type {Grid2D/CoarseGrid}
+			 * @type {Grid2D|CoarseGrid}
 			 */
 			this.grid = C;
 			this.extents = C.extents;
@@ -1239,7 +2271,9 @@ class Canvas {
 		/** Zoom level to draw the canvas with, set to options.zoom or its default value 1.
 		* @type {number}*/
 		this.zoom = (options && options.zoom) || 1;
-		/** @ignore*/
+		/** if nonzero: 'wrap' the grid to these dimensions; eg a pixel with x 
+		coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+		@type {number[]} */
 		this.wrap = (options && options.wrap) || [0,0,0];
 		
 		/** Width of the canvas in pixels (in its unzoomed state)
@@ -1378,9 +2412,11 @@ class Canvas {
 		this.col_b = parseInt( hex.substr(4,2), 16 );
 	}
 
+	/** Hex code string for a color.
+	@typedef {string} HexColor*/
+
 	/** Color the whole grid in color [col], or in black if no argument is given.
-	   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
-	   * it gets the default value of black ("000000").
+	   * @param {HexColor} [ col = "000000" ] -hex code for the color to use, defaults to black.
 	*/
 	clear( col ){
 		col = col || "000000";
@@ -1388,8 +2424,13 @@ class Canvas {
 		this.ctx.fillRect( 0,0, this.el.width, this.el.height );
 	}
 
+	/** Rendering context of canvas.
+	@see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+	@typedef {object} CanvasRenderingContext2D
+	*/
+
 	/** Return the current drawing context.
-	@return {RenderingContext} current drawing context on the canvas.
+	@return {CanvasRenderingContext2D} current drawing context on the canvas.
 	*/
 	context(){
 		return this.ctx
@@ -1410,8 +2451,8 @@ class Canvas {
 
 	/** Use to color a grid according to its values. High values are colored in a brighter
 	red. 
-   * @param {Grid2D or CoarseGrid} cc - Optional: the grid to draw values for. If left 
-   * unspecified, the grid that was originally supplied to the constructor is used. 
+   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
+   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
    */
 	drawField( cc ){
 		if( !cc ){
@@ -1437,14 +2478,15 @@ class Canvas {
 		}
 		this.putImageData();
 	}
-	/** Method for drawing the cell borders for a given cellkind in the color specified in "col"
+	/** @desc Method for drawing the cell borders for a given cellkind in the color specified in "col"
 	(hex format). This function draws a line around the cell (rather than coloring the
 	outer pixels). If [kind] is negative, simply draw all borders.
-   * @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+	
+	See {@link drawOnCellBorders} to color the outer pixels of the cell.
+	
+   * @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
    * positive integer as 0 is reserved for the background.
-   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
-   * it gets the default value of black ("000000").
-   * @see drawOnCellBorders to color the outer pixels of the cell.
+   * @param {HexColor}  [ col = "000000" ] - hex code for the color to use, defaults to black.
    */
 	drawCellBorders( kind, col ){
 		col = col || "000000";
@@ -1480,16 +2522,17 @@ class Canvas {
 		}
 		this.putImageData();
 	}
-		
+
 	/** Use to show activity values of the act model using a color gradient, for
 		cells in the grid of cellkind "kind". 
 		The constraint holding the activity values can be supplied as an 
 		argument. Otherwise, the current CPM is searched for the first 
 		registered activity constraint and that is then used.
-   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
    positive integer as 0 is reserved for the background.
-   @param {ActivityConstraint or ActivityMultiBackground} A - the constraint object to use.
-   By default this is the first instance of an ActivityConstraint or ActivityMultiBackground
+   @param {ActivityConstraint|ActivityMultiBackground} [ A ] - the constraint object to
+   use, which must be of class {@link ActivityConstraint} or {@link ActivityMultiBackground}
+   If left unspecified, this is the first instance of an ActivityConstraint or ActivityMultiBackground
    object found in the soft_constraints of the attached CPM.
    */
 	drawActivityValues( kind, A ){
@@ -1535,12 +2578,14 @@ class Canvas {
 	}
 			
 	/** Color outer pixel of all cells of kind [kind] in col [col].
-   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
-   positive integer as 0 is reserved for the background.
-   @param {string} col - Optional: hex code for the color to use. If left unspecified,
-   it gets the default value of black ("000000").
-   @see drawCellBorders to actually draw around the cell rather than coloring the
+	
+	   See {@link drawCellBorders} to actually draw around the cell rather than coloring the
    outer pixels.
+   
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
+   positive integer as 0 is reserved for the background.
+   @param {HexColor} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black ("000000").
    */
 	drawOnCellBorders( kind, col ){
 		col = col || "000000";
@@ -1559,9 +2604,9 @@ class Canvas {
 
 
 	/** Draw all cells of cellkind "kind" in color col (hex). 
-   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
    positive integer as 0 is reserved for the background.
-   @param {string/function} col - Optional: hex code for the color to use. If left unspecified,
+   @param {HexColor|function} col - Optional: hex code for the color to use. If left unspecified,
    it gets the default value of black ("000000"). col can also be a function that
 	returns a hex value for a cell id.
    */
@@ -1979,18 +3024,61 @@ class Stats {
 	
 }
 
-/** The core CPM class. Can be used for two- or 
- * three-dimensional simulations. 
-*/
+/** Extension of the {@link GridBasedModel} class suitable for
+a Cellular Automaton (CA). Currently only supports synchronous CAs.
 
+@example <caption>Conway's Game of Life </caption>
+*	let CPM = require( "path/to/build" )
+*	let C = new CPM.CA( [200,200], {
+*		"UPDATE_RULE": 	function(p,N){
+*			let nalive = 0
+*			for( let pn of N ){
+*				nalive += (this.pixt(pn)==1)
+*			}	
+*			if( this.pixt(p) == 1 ){
+*				if( nalive == 2 || nalive == 3 ){
+*					return 1
+*				}
+*			} else {
+*				if( nalive == 3 ) return 1
+*			}
+*			return 0
+*		}
+*	})
+*	let initialpixels = [ [100,100], [101,100], [102,100], [102,101], [101,102] ]
+*	for( p of initialpixels ){
+*		C.setpix( p, 1 )
+* 	}
+*	// Run it.
+*	for( let t = 0; t < 10; t++ ){ C.timeStep() }
+
+@todo Include asynchronous updating scheme?
+*/
 class CA extends GridBasedModel {
+
+	/** The constructor of class CA.
+	@param {GridSize} extents - the size of the grid of the model.
+	@param {object} conf - configuration options. 
+	@param {boolean} [conf.torus=true] - should the grid have linked borders?
+	@param {number} [seed] - seed for the random number generator. If left unspecified,
+	a random number from the Math.random() generator is used to make one.
+	@param {updatePixelFunction} conf.UPDATE_RULE - the update rule of the CA. 
+	*/
 	constructor( extents, conf ){
 		super( extents, conf );
+		/** Bind the supplied updaterule to the object.
+		@type {updatePixelFunction}*/
 		this.updateRule = conf["UPDATE_RULE"].bind(this);
 	}
 
+	/** A timestep in a CA just applies the update rule and clears any cached stats after
+	doing so. */
 	timeStep(){
 		this.grid.applyLocally( this.updateRule );
+		
+		/** Cached values of these stats. Object with stat name as key and its cached
+		value as value. The cache must be cleared when the grid changes!
+		@type {object} */
 		this.stat_values = {};
 	}
 }
@@ -1999,8 +3087,13 @@ class CA extends GridBasedModel {
 
 /** This class implements a data structure with constant-time insertion, deletion, and random
     sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
-    pixels at cell borders. */
+    pixels at cell borders. Elements in this set must be unique.*/
 class DiceSet{
+
+	/** An object of class MersenneTwister. 
+	@see https://github.com/pigulla/mersennetwister
+	@typedef {object} MersenneTwister
+	*/
 
 	/** The constructor of class DiceSet takes a MersenneTwister object as input, to allow
 	seeding of the random number generator used for random sampling.
@@ -2019,7 +3112,7 @@ class DiceSet{
 		//this.indices = {}
 
 		/** Use an array for constant time random sampling of pixels at the border of cells.
-		@type {array} */
+		@type {number[]} */
 		this.elements = [];
 
 		/** The number of elements currently present in the DiceSet. 
@@ -2031,10 +3124,13 @@ class DiceSet{
 		this.mt = mt;
 	}
 
+	/** Unique identifier of some element. This can be a number (integer) or a string,
+	but it must uniquely identify one element in a set.
+	@typedef {number|string} uniqueID*/
+
 	/** Insert a new element. It is added as an index in the indices, and pushed
 	to the end of the elements array.
-	@param {unique ID} v The element to add. Can be a number or a string, but it must be
-	unique as it should also be a unique identifier in the indices object.
+	@param {uniqueID} v The element to add.
 	*/
 	insert( v ){
 		if( this.indices[v] ){
@@ -2049,9 +3145,7 @@ class DiceSet{
 	}
 
 	/** Remove element v.
-	@param {unique ID} v The element to remove. Can be a number or a string, but it must be
-	unique as it should also be a unique identifier in the indices object (which is used
-	to remove it).
+	@param {uniqueID} v The element to remove. 
 	*/
 	remove( v ){
 		// Check whether element is present before it can be removed.
@@ -2079,8 +3173,7 @@ class DiceSet{
 		this.indices[e] = i;
 	}
 	/** Check if the DiceSet already contains element v. 
-	@param {unique ID} v The element to check presence of. Can be a number or a string, but it must be
-	unique as it should also be a unique identifier in the indices object.
+	@param {uniqueID} v The element to check presence of. 
 	@return {boolean} true or false depending on whether the element is present or not.
 	*/
 	contains( v ){
@@ -2089,7 +3182,7 @@ class DiceSet{
 	}
 	
 	/** Sample a random element from v.
-	@return {unique ID} the element sampled.
+	@return {uniqueID} the element sampled.
 	*/
 	sample(){
 		return this.elements[Math.floor(this.mt.rnd()*this.length)]
@@ -2098,21 +3191,58 @@ class DiceSet{
 
 /** 
  * Implements the adhesion constraint of Potts models. 
+ * Each pair of neighboring pixels [n,m] gets a positive energy penalty deltaH if n and m
+ * do not belong to the same {@link CellId}.
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], { T : 20 } )
+ * C.add( new CPM.Adhesion( { J : [[0,20],[20,10]] } ) )
+ * 
+ * // Or add automatically by entering the parameters in the CPM
+ * let C2 = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]]
+ * })
  */
-
 class Adhesion extends SoftConstraint {
-	/* Check if conf parameters are correct format*/
-	confChecker(){
-		this.confCheckCellMatrix("J");
+
+	/** The constructor of Adhesion requires a conf object with a single parameter J.
+	@param {object} conf - parameter object for this constraint
+	@param {CellKindInteractionMatrix} conf.J - J[n][m] gives the adhesion energy between a pixel of
+	{@link CellKind} n and a pixel of {@link CellKind} m. J[n][n] is only non-zero
+	when the pixels in question are of the same {@link CellKind}, but a different 
+	{@link CellId}. Energies are given as non-negative numbers.
+	*/
+	constructor( conf ){
+		super( conf );		
 	}
 
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "J", "KindMatrix", "Number" );
+	}
 
-	/*  Get adhesion between two cells with type (identity) t1,t2 from "conf" using "this.par". */
+	/**  Get adhesion between two cells t1,t2 from "conf". 
+	@param {CellId} t1 - cellid of the first cell.
+	@param {CellId} t2 - cellid of the second cell.
+	@return {number} adhesion between a pixel of t1 and one of t2.
+	@private
+	*/
 	J( t1, t2 ){
 		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
 	}
-	/*  Returns the Hamiltonian around pixel p, which has ID (type) tp (surrounding pixels'
-	 *  types are queried). This Hamiltonian only contains the neighbor adhesion terms.
+	/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
+	neighbors that belong to a different cellid.
+	@param {IndexCoordinate} i - coordinate of the pixel to evaluate hamiltonian at.
+	@param {CellId} tp - cellid of this pixel.
+	@return {number} sum over all neighbors of adhesion energies (only non-zero for 
+	neighbors belonging to a different cellid).	
+	@private
 	 */
 	H( i, tp ){
 		let r = 0, tn;
@@ -2124,21 +3254,73 @@ class Adhesion extends SoftConstraint {
 		}
 		return r
 	}
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
 	}
 }
 
 /** 
- * Implements the adhesion constraint of Potts models. 
+ * Implements the volume constraint of Potts models. 
+ * 
+ * This constraint is typically used together with {@link Adhesion}.
+ * 
+ * See {@link VolumeConstraint#constructor} for the required parameters.
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]]
+ * })
+ * C.add( new CPM.VolumeConstraint( {
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5] 	
+ * } ) )
+ * 
+ * // Or add automatically by entering the parameters in the CPM
+ * let C2 = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5]
+ * })
  */
-
 class VolumeConstraint extends SoftConstraint {
+
+
+	/** The constructor of the VolumeConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_V - strength of the constraint per cellkind.
+	@param {PerKindNonNegative} conf.V - Target volume per cellkind.
+	*/
+	constructor( conf ){
+		super( conf );
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
 	confChecker(){
-		this.confCheckCellNonNegative( "LAMBDA_V" );
-		this.confCheckCellNonNegative( "V" );
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_V", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "V", "KindArray", "NonNegative" );
 	}
 
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		// volume gain of src cell
 		let deltaH = this.volconstraint( 1, src_type ) - 
@@ -2150,9 +3332,11 @@ class VolumeConstraint extends SoftConstraint {
 	}
 	/* ======= VOLUME ======= */
 
-	/* The volume constraint term of the Hamiltonian for the cell with id t.
-	   Use vgain=0 for energy of current volume, vgain=1 for energy if cell gains
-	   a pixel, and vgain = -1 for energy if cell loses a pixel. 
+	/** The volume constraint term of the Hamiltonian for the cell with id t.
+	@param {number} vgain - Use vgain=0 for energy of current volume, vgain=1 
+		for energy if cell gains a pixel, and vgain = -1 for energy if cell loses a pixel.
+	@param {CellId} t - the cellid of the cell whose volume energy we are computing.
+	@return {number} the volume energy of this cell.
 	*/
 	volconstraint ( vgain, t ){
 		const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
@@ -2164,40 +3348,111 @@ class VolumeConstraint extends SoftConstraint {
 }
 
 /** 
- * Implements the adhesion constraint of Potts models. 
+ * Implements the perimeter constraint of Potts models. 
+ * A cell's "perimeter" is the number over all its borderpixels of the number of 
+ * neighbors that do not belong to the cell itself. 
+ * 
+ * This constraint is typically used together with {@link Adhesion} and {@VolumeConstraint}.
+ * 
+ * See {@link PerimeterConstraint#constructor} for the required parameters.
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5]
+ * })
+ * C.add( new CPM.PerimeterConstraint( {
+ * 	P : [0,260],
+ * 	LAMBDA_P : [0,2] 	
+ * } ) )
+ * 
+ * // Or add automatically by entering the parameters in the CPM
+ * let C2 = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5],
+ * 	P : [0,260],
+ * 	LAMBDA_P : [0,2]
+ * })
  */
-
 class PerimeterConstraint extends SoftConstraint {
+
+	/** The constructor of the PerimeterConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_P - strength of the perimeterconstraint per cellkind.
+	@param {PerKindNonNegative} conf.P - Target perimeter per cellkind.
+	*/
 	constructor( conf ){
 		super( conf );
+		
+		/** The perimeter size of each pixel is tracked.
+		@type {CellObject}*/
 		this.cellperimeters = {};
 	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
 	confChecker(){
-		this.confCheckCellNonNegative( "LAMBDA_P" );
-		this.confCheckCellNonNegative( "P" );
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_P", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "P", "KindArray", "NonNegative" );
 	}
 	
+	/** The postSetpixListener of the PerimeterConstraint ensures that cell perimeters 
+	are updated after each copy in the CPM.
+	@listens {CPM#setpixi} because when a new pixel is set (which is determined in the CPM),
+	some of the cell perimeters will change.
+	@param {IndexCoordinate} i - the coordinate of the pixel that is changed.
+	@param {CellId} t_old - the cellid of this pixel before the copy
+	@param {CellId} t_new - the cellid of this pixel after the copy.
+	*/
+	/* eslint-disable no-unused-vars*/
 	postSetpixListener( i, t_old, t_new ){
 		if( t_old == t_new ){ return }
+		
+		// Neighborhood of the pixel that changes
 		const Ni = this.C.neighi( i );
+		
+		// Keep track of perimeter before and after copy
 		let n_new = 0, n_old = 0;
+		
+		// Loop over the neighborhood. 
 		for( let i = 0 ; i < Ni.length ; i ++  ){
 			const nt = this.C.pixti(Ni[i]);
+			
+			// neighbors are added to the perimeter if they are
+			// of a different cellid than the current pixel
 			if( nt != t_new ){
 				n_new ++; 
 			}
 			if( nt != t_old ){
 				n_old ++;
 			}
+			
+			// if the neighbor is non-background, the perimeter
+			// of the cell it belongs to may also have to be updated.
 			if( nt != 0 ){
+			
+				// if it was of t_old, its perimeter goes up because
+				// the current pixel will no longer be t_old.
+				// This means it will have a different type and start counting as perimeter.
 				if( nt == t_old ){
 					this.cellperimeters[nt] ++;
 				}
+				// opposite if it is t_new.
 				if( nt == t_new ){
 					this.cellperimeters[nt] --;
 				}
 			}
 		}
+		
+		// update perimeters of the old and new type if they are non-background
 		if( t_old != 0 ){
 			this.cellperimeters[t_old] -= n_old;
 		}
@@ -2208,6 +3463,14 @@ class PerimeterConstraint extends SoftConstraint {
 			this.cellperimeters[t_new] += n_new;
 		}
 	}
+	
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	deltaH( sourcei, targeti, src_type, tgt_type ){
 		if( src_type == tgt_type ){
 			return 0
@@ -2258,16 +3521,33 @@ class PerimeterConstraint extends SoftConstraint {
 	}
 }
 
+/** Extension of class {@link Constraint} used for a hard constraint. See description in
+ {@link Constraint} for details. This class is not used on its own but serves as a base
+ class for a hard constraint. */
 class HardConstraint extends Constraint {
+
+	/** Let the CPM know that this is a soft constraint, so return 'soft'.
+	@return {string} "hard"*/
 	get CONSTRAINT_TYPE() {
 		return "hard"
 	}
 	/*constructor( conf ){
 		this.conf = conf
 	}*/
-	set CPM(C){
-		this.C = C;
-	}
+	/*set CPM(C){
+		this.C = C
+	}*/
+	
+	/** Hard constraints must have a 'fulfilled' method to compute whether the copy attempt fulfills the rule.
+	This method must be implemented in the subclass.
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {boolean} whether the copy attempt satisfies the constraint.
+	 @abstract
+	 */ 
 	// eslint-disable-next-line no-unused-vars
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 		throw("You need to implement the 'fulfilled' method for this constraint!")
@@ -2275,14 +3555,64 @@ class HardConstraint extends Constraint {
 }
 
 /** 
- * Allows a "barrier" celltype from and into which copy attempts are forbidden. 
+ * This constraint allows a "barrier" celltype from and into which copy attempts are forbidden.
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,0,20],[0,0,5],[20,5,10]],
+ * 	V : [0,0,500],
+ * 	LAMBDA_V : [0,0,5],
+ * })
+ * C.add( new CPM.BarrierConstraint( {
+ * 	IS_BARRIER : [false,true,false]
+ * } ) )
+ * 
+ * // OR: add automatically by entering the parameters in the CPM
+ * C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,0,20],[0,0,5],[20,5,10]],
+ * 	V : [0,0,500],
+ * 	LAMBDA_V : [0,0,5],
+ * 	IS_BARRIER : [false,true,false]
+ * })
+ * 
+ * // Make a horizontal line barrier (cellkind 1 )
+ * let cid = C.makeNewCellID( 1 )
+ * for( let x = 0; x < 200; x++ ){
+ * 	C.setpix( [x,95], cid )
+ * }
+ * // Seed a cell (cellkind2)
+ * let gm = new CPM.GridManipulator( C )
+ * gm.seedCell(2)
  */
-
 class BarrierConstraint extends HardConstraint {
-	confChecker(){
-		this.confCheckCellBoolean( "IS_BARRIER" );
+
+	/** The constructor of the BarrierConstraint requires a conf object with a single parameter.
+	@param {object} conf - parameter object for this constraint.
+	@param {PerKindBoolean} conf.IS_BARRIER - specify for each cellkind if it should be 
+ 	considered as a barrier. If so, all copy attempts into and from it are forbidden.
+	*/
+	constructor( conf ){
+		super(conf);
 	}
 
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "IS_BARRIER", "KindArray", "Boolean" );
+	}
+
+	/** Method for hard constraints to compute whether the copy attempt fulfills the rule.
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {boolean} whether the copy attempt satisfies the constraint.*/ 
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 	
 		// Fulfilled = false when either src or tgt pixel is of the barrier cellkind	
@@ -2298,13 +3628,20 @@ class BarrierConstraint extends HardConstraint {
 	}
 }
 
-/* This class enables automatic addition of Hamiltonian terms to a CPM
+/** This class enables automatic addition of Hamiltonian terms to a CPM
  * through their parameter names.
  *
  * For each parameter name, we specify one Hamiltonian term. If the parameter
  * is present, then a new instance of this term is initialized with the CPM's
- * configuration as parameter and added to the CPM. */
-
+ * configuration as parameter and added to the CPM. 
+@type {object}
+@property {Constraint} J - An {@link Adhesion} constraint is added when there is a parameter J.
+@property {Constraint} LAMBDA_V - A {@link VolumeConstraint} is added when there is a parameter LAMBDA_V.
+@property {Constraint} LAMBDA_P - A {@link PerimeterConstraint} is added when there is a parameter LAMBDA_P.
+@property {Constraint} LAMBDA_ACT - An {@link ActivityConstraint} is added when there is a parameter LAMBDA_ACT.
+@property {Constraint} IS_BARRIER - A {@link BarrierConstraint} is added when there is a parameter IS_BARRIER.
+@access package
+*/
 let AutoAdderConfig = {
 	J : Adhesion,
 	LAMBDA_V : VolumeConstraint,
@@ -2316,28 +3653,74 @@ let AutoAdderConfig = {
 /** The core CPM class. Can be used for two- or 
  * three-dimensional simulations. 
 */
-
 class CPM extends GridBasedModel {
+
+	/** The constructor of class CA.
+	@param {GridSize} field_size - the size of the grid of the model.
+	@param {object} conf - configuration options; see below. In addition, the conf
+	object can have parameters to constraints added to the CPM. See the different
+	{@link Constraint} subclasses for options. For some constraints, adding its
+	paramter to the CPM conf object automatically adds the constraint; see 
+	{@link AutoAdderConfig} to see for which constraints this is supported.
+	@param {boolean} [conf.torus=true] - should the grid have linked borders?
+	@param {number} [seed] - seed for the random number generator. If left unspecified,
+	a random number from the Math.random() generator is used to make one.
+	*/
 	constructor( field_size, conf ){
 		super( field_size, conf );
 
-		// CPM specific stuff here
-		this.nr_cells = 0;				// number of cells currently in the grid
-		// track border pixels for speed (see also the DiceSet data structure)
+		// ---------- CPM specific stuff here
+		
+		/** Number of non-background cells currently on the grid.
+		@type{number}*/
+		this.nr_cells = 0;
+		/** track border pixels for speed 
+		@type {DiceSet}*/
 		this.borderpixels = new DiceSet( this.mt );
+		/** Private property used by {@link updateborderneari} to track borders. 
+		@private
+		@type {Uint16Array} */
+		this._neighbours = new Uint16Array(this.grid.p2i(field_size));
 
-		// Attributes per cell:
+		//  ---------- Attributes per cell:
+		/** Store the {@CellKind} of each cell on the grid. 
+		@example
+		this.t2k[1] // cellkind of cell with cellid 1
+		@type {CellObject}
+		*/
 		this.t2k = [];	// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
 		this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
 
+		//  ---------- CPM constraints
+		/** Array of objects of (@link SoftConstraint) subclasses attached to the CPM.
+		These are used to determine {@link deltaH}.
+		@type {Array}*/
 		this.soft_constraints = [];
+		/** Object showing which constraints are where in {@link soft_constraints}. Used
+		by the {@link getConstraint} method to find an attached constraint by name.
+		@type {object}*/
 		this.soft_constraints_indices = {};
+		/** Array of objects of (@link HardConstraint) subclasses attached to the CPM.
+		These are used to determine which copy attempts are allowed in a {@link timeStep}.
+		@type {Array}*/
 		this.hard_constraints = [];
+		/** Object showing which constraints are where in {@link soft_constraints}. Used
+		by the {@link getConstraint} method to find an attached constraint by name.
+		@type {object}*/
 		this.hard_constraints_indices ={};
+		/** Array of functions that need to be executed after every {@link setpixi} event.
+		These functions are often implemented in subclasses of {@link Constraint} that
+		need to track some specific property on the grid. 
+		@type {function[]}*/
 		this.post_setpix_listeners = [];
+		/** Array of functions that need to be executed after every {@link timeStep} event.
+		These functions are often implemented in subclasses of {@link Constraint} that
+		need to track some specific property on the grid. 
+		@type {function[]}*/
 		this.post_mcs_listeners = [];
-		this._neighbours = new Uint16Array(this.grid.p2i(field_size));
-
+		
+		/* Automatically add constraints by their parameters in conf. This only works
+		for some constraints specified in AutoAdderConfig. */
 		for( let x of Object.keys( conf ) ){
 			if( x in AutoAdderConfig ){
 				this.add( new AutoAdderConfig[x]( conf ) );
@@ -2345,11 +3728,15 @@ class CPM extends GridBasedModel {
 		}
 	}
 
+	/* This is no different from the GridBasedModel function and can go. 
 	neigh(p, torus=this.conf.torus){
-		let g = this.grid;
+		let g = this.grid
 		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
-	}
+	}*/
 
+	/** Iterator returning nonbackground pixels on the grid. 
+	@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel's array coordinates on the grid, and v its value.*/
 	* cellPixels() {
 		for( let p of this.grid.pixels() ){
 			if( p[1] != 0 ){
@@ -2358,6 +3745,12 @@ class CPM extends GridBasedModel {
 		}
 	}
 
+	/** Iterator returning nonbackground borderpixels on the grid. 
+	See {@link cellBorderPixelIndices} for a version returning pixels
+	by their {@link IndexCoordinate} instead of {@link ArrayCoordinate}.
+	
+	@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel's array coordinates on the grid, and v its value.*/
 	* cellBorderPixels() {
 		for( let i of this.borderpixels.elements ){
 			const t = this.pixti(i);
@@ -2367,6 +3760,12 @@ class CPM extends GridBasedModel {
 		}
 	}
 
+	/** Iterator returning nonbackground borderpixels on the grid. 
+	See {@link cellBorderPixels} for a version returning pixels
+	by their {@link ArrayCoordinate} instead of {@link IndexCoordinate}.
+	
+	@return {iPixel} for each pixel, return an array [p,v] where p are
+		the pixel's array coordinates on the grid, and v its value.*/
 	* cellBorderPixelIndices() {
 		for( let i of this.borderpixels.elements ){
 			const t = this.pixti(i);
@@ -2376,7 +3775,11 @@ class CPM extends GridBasedModel {
 		}
 	}
 
-
+	/** Add a constraint to the CPM, ensuring that its {@link SoftConstraint#deltaH} or
+	{@link HardConstraint#fulfilled} methods are called appropriately during a copy attempt.
+	Any postSetpixListeners and postMCSListeners are also executed at the appropriate times.
+	@param {Constraint} t - the constraint object to add.
+	*/
 	add( t ){
 		let tname = t.constructor.name, i; 
 		if( t.CONSTRAINT_TYPE ){
@@ -2419,6 +3822,20 @@ class CPM extends GridBasedModel {
 		}
 	}
 	
+	/** Get a {@link Constraint} object linked to this CPM by the name of its class.
+	By default, the first constraint found of this class is returned. It is possible
+	that there are multiple constraints of the same type on the CPM; in that case,
+	supply its number (by order in which the constraints of this type were added) to 
+	get a specific one. 
+	
+	This function can be useful if you need to access information in the constraint object,
+	such as the cell directions in a {@PersistenceConstraint}, from outside. You can use
+	this for stuff like drawing.
+	
+	@param {string} constraintname - name of the constraint class you are looking for.
+	@param {number} [num = 0] - if multiple constraints of this class are present, 
+	return the num-th one added to the CPM. 
+	*/
 	getConstraint( constraintname, num ){
 	
 		if( !num ){
@@ -2438,40 +3855,56 @@ class CPM extends GridBasedModel {
 	
 	}
 
-	/* Get celltype/identity (pixt) or cellkind (pixk) of the cell at coordinates p or index i. */
+	/** Get {@link CellId} of the pixel at coordinates p. 
+	@param {ArrayCoordinate} p - pixel to get cellid of.
+	@return {CellId} ID of the cell p belongs to.*/
 	pixt( p ){
 		return this.grid.pixti( this.grid.p2i(p) )
 	}
 
-	/* Get volume, or cellkind of the cell with type (identity) t */ 
+	/** Get volume of the cell with {@link CellId} t 
+	@param {CellId} t - id of the cell to get volume of.
+	@return {number} the cell's current volume. */ 
 	getVolume( t ){
 		return this.cellvolume[t]
 	}
 
+	/** Get the {@link CellKind} of the cell with {@link CellId} t. 
+	Overwrites {@link GridBasedModel#cellKind} because in a CPM, the two are not the same.
+	@param {CellId} t - id of the cell to get kind of.
+	@return {CellKind} the cellkind. */
 	cellKind( t ){
 		return this.t2k[ t ]
 	}
 
-	/* Assign the cell with type (identity) t to kind k.*/
+	/** Assign the cell with {@link CellId} t to {@link CellKind} k.
+	@param {CellId} t - id of the cell to assing
+	@param {CellKind} k - cellkind to give it. 
+	*/
 	setCellKind( t, k ){
 		this.t2k[ t ] = k;
 	}
 	
 	/* ------------- MATH HELPER FUNCTIONS --------------- */
+	/* These can go, they are implemented in the GridBasedMOdel.
 	random (){
 		return this.mt.rnd()
 	}
-	/* Random integer number between incl_min and incl_max */
+	// Random integer number between incl_min and incl_max 
 	ran (incl_min, incl_max) {
 		return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
-	}
+	}*/
 	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
-
-	/* ======= ADHESION ======= */
-
-	// returns both change in hamiltonian for all registered soft constraints
+	/** returns total change in hamiltonian for all registered soft constraints together.
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt.
+	*/
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 		let r = 0.0;
 		for( let t of this.soft_constraints ){
@@ -2481,19 +3914,25 @@ class CPM extends GridBasedModel {
 	}
 	/* ------------- COPY ATTEMPTS --------------- */
 
-	/* 	Simulate one time step, i.e., a Monte Carlo step
-	  	(a number of copy attempts depending on grid size):
+	/** Simulate one Monte Carlo Step. We now just use {@link timeStep} for consistency
+	with other {@link GridBasedModel}s, but we have kept this method for compatibility
+	with earlier version. Internally, it just calls {@link timeStep}.
+	*/
+	monteCarloStep () {
+		this.timeStep();
+	}
+	
+	/** A time step in the CPM is a Monte Carlo step. This performs a 
+	  	 number of copy attempts depending on grid size:
+	  	 
 		1) Randomly sample one of the border pixels for the copy attempt.
 		2) Compute the change in Hamiltonian for the suggested copy attempt.
 		3) With a probability depending on this change, decline or accept the 
 		   copy attempt and update the grid accordingly. 
 
-		TODO it is quite confusing that the "borderpixels" array also
+		@todo TODO it is quite confusing that the "borderpixels" array also
 		contains border pixels of the background.
 	*/
-	monteCarloStep () {
-		this.timeStep();
-	}
 	timeStep (){
 		let delta_t = 0.0;
 		// this loop tracks the number of copy attempts until one MCS is completed.
@@ -2531,19 +3970,33 @@ class CPM extends GridBasedModel {
 			} 
 		}
 		this.time++; // update time with one MCS.
+		/** Cached values of these stats. Object with stat name as key and its cached
+		value as value. The cache must be cleared when the grid changes!
+		@type {object} */
 		this.stat_values = {}; // invalidate stat value cache
 		for( let l of this.post_mcs_listeners ){
 			l();
 		}
 	}	
 
-	/* Determine whether copy attempt will succeed depending on deltaH (stochastic). */
+	/** Determine whether copy attempt will succeed depending on deltaH (stochastic). 
+	@param {number} deltaH - energy change associated with the potential copy.
+	@return {boolean} whether the copy attempt succeeds.
+	*/
 	docopy ( deltaH ){
 		if( deltaH < 0 ) return true
 		return this.random() < Math.exp( -deltaH / this.conf.T )
 	}
-	/* Change the pixel at position p (coordinates) into cellid t. 
-	Update cell perimeters with Pup (optional parameter).*/
+	
+	/** Change the pixel at position i into {@link CellId} t. 
+	This method overrides {@link GridBasedModel#setpixi} because we want to
+	add postSetpixListeners for all the constraints, to keep track of relevant information.
+	
+	See also {@link setpix} for a method working with {@link ArrayCoordinate}s.
+	
+	@param {IndexCoordinate} i - coordinate of pixel to change.
+	@param {CellId} t - cellid to change this pixel into.
+	*/
 	setpixi ( i, t ){		
 		const t_old = this.grid.pixti(i);
 		if( t_old > 0 ){
@@ -2570,7 +4023,12 @@ class CPM extends GridBasedModel {
 		}
 	}
 
-	/* Update border elements after a successful copy attempt. */
+	/** Update border elements ({@link borderpixels}) after a successful copy attempt. 
+	@listens {setpixi} because borders change when a copy succeeds.
+	@param {IndexCoordinate} i - coordinate of pixel that has changed.
+	@param {CellId} t_old - id of the cell the pixel belonged to before the copy.
+	@param {CellId} t_new - id of the cell the pixel has changed into.
+	*/
 	updateborderneari ( i, t_old, t_new ){
 		if( t_old == t_new ) return
 		const Ni = this.grid.neighi( i );
@@ -2603,8 +4061,10 @@ class CPM extends GridBasedModel {
 
 	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
 
-	/* Initiate a new cellid for a cell of celltype "kind", and create elements
-	   for this cell in the relevant arrays (cellvolume, cellperimeter, t2k).*/
+	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
+	   for this cell in the relevant arrays (cellvolume, t2k).
+	   @param {CellKind} kind - cellkind of the cell that has to be made.
+	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind ){
 		const newid = ++ this.nr_cells;
 		this.cellvolume[newid] = 0;
@@ -2614,28 +4074,121 @@ class CPM extends GridBasedModel {
 
 }
 
-/*	Computes the centroid of a cell when grid has a torus. 
-	Assumption: cell pixels never extend for more than half the size of the grid. 
+/**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 
+	Keys are the {@link CellId} of cells on the grid, corresponding values are arrays
+	containing the pixels belonging to that cell. Coordinates are stored as {@link ArrayCoordinate}.
+	
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed a cell, and get the BorderPixelsByCell
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* C.setpix( [50,50], 1 )
+	* C.getStat( CPM.BorderPixelsByCell )
+*/
+class BorderPixelsByCell extends Stat {
+
+	/** The set model function of BorderPixelsByCell requires an object of type CPM.
+	@param {CPM} M The CPM to compute cellborderpixels of.*/
+	set model( M ){
+		if( M instanceof CPM ){
+			/** The CPM to compute borderpixels for.
+			@type {CPM} */
+			this.M = M;
+		} else {
+			throw( "The stat BorderPixelsByCell is only implemented for CPMs, where cellborderpixels are stored!" )
+		}
+		
+	}
+
+	/** The compute method of BorderPixelsByCell creates an object with the borderpixels of
+	each cell on the grid.
+	@returns {CellArrayObject} An object with a key for each cell on the grid, and as
+	corresponding value an array with all the borderpixels of that 
+	cell. Each pixel is stored by its {@link ArrayCoordinate}.*/
+	compute(){
+		// initialize the object
+		let cellborderpixels = { };
+		
+		// The this.M.cellBorderPixels() iterator returns coordinates and cellid for all 
+		// non-background pixels on the grid. See the appropriate Grid class for
+		// its implementation.
+		for( let [p,i] of this.M.cellBorderPixels() ){
+			if( !cellborderpixels[i] ){
+				cellborderpixels[i] = [p];
+			} else {
+				cellborderpixels[i].push( p );
+			}
+		}
+		return cellborderpixels
+	}
+}
+
+/**	This Stat computes the centroid of a cell when grid has a torus. 
+
+	!!! Assumption: cell pixels never extend for more than half the size of the grid.
+	If this assumption does not hold, centroids may be computed wrongly.
+	
+	See also {@link Centroids} for a version without torus correction.
+		
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed two cells, run a little, and get their centroids
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	* 	torus:true,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell(1)
+	* gm.seedCell(1)
+	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
+	*
+	* C.getStat( CPM.CentroidsWithTorusCorrection ) 
 */
 
 class CentroidsWithTorusCorrection extends Stat {
+
+	/** The set model method of class CentroidsWithTorusCorrection.
+	@param {GridBasedModel} M - the model to compute centroids on. */
 	set model( M ){
+	
+		/** The model to compute centroids on. 
+		@type {GridBasedModel}*/
 		this.M = M;
 		// Half the grid dimensions; if pixels with the same cellid are further apart,
 		// we assume they are on the border of the grid and that we need to correct
 		// their positions to compute the centroid.
+		/** @ignore */
 		this.halfsize = new Array( this.M.ndim).fill(0);
 		for( let i = 0 ; i < this.M.ndim ; i ++ ){
 			this.halfsize[i] = this.M.extents[i]/2;
 		}
 	}
+	
+	/** @ignore */
 	constructor( conf ){
 		super(conf);
 	}
 		
-	/* Compute the centroid of a specific cell with id = <cellid>. 
+	/** This method computes the centroid of a specific cell with id = <cellid>. 
 	The cellpixels object is given as an argument so that it only has to be requested
-	once for all cells together. */
+	once for all cells together.
+	@param {CellId} cellid ID number of the cell to get centroid of. 
+	@param {CellArrayObject} cellpixels object produced by {@link PixelsByCell}, 
+	where keys are the cellids
+	of all non-background cells on the grid, and the corresponding value is an array
+	of the pixels belonging to that cell specified by their {@link ArrayCoordinate}.
+	@return {ArrayCoordinate} the centroid of the current cell.
+	*/
 	computeCentroidOfCell( cellid, cellpixels  ){
 	
 		//let cellpixels = this.M.getStat( PixelsByCell ) 
@@ -2689,8 +4242,9 @@ class CentroidsWithTorusCorrection extends Stat {
 		
 	}
 		
-	/* Compute centroids for all cells on the grid, returning an object with a key
-	for each cellid and as "value" the array with coordinates of the centroid. */
+	/** This method computes the centroids of all cells on the grid. 
+	@return {CellObject} with an {@link ArrayCoordinate} of the centroid for each cell
+	 on the grid (see {@link computeCentroidOfCell}). */
 	compute(){
 		// Get object with arrays of pixels for each cell on the grid, and get
 		// the array for the current cell.
@@ -2707,27 +4261,57 @@ class CentroidsWithTorusCorrection extends Stat {
 	}
 }
 
-/*	Computes the centroid of a cell. When the cell resides on a torus, the
-	centroid may be well outside the cell, and other stats may be preferable. 
+/**	This Stat computes the centroid of a cell. When the cell resides on a torus, the
+	centroid may be well outside the cell, and other stats may be preferable (e.g.
+	{@link CentroidsWithTorusCorrection}).
+	
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed two cells, run a little, and get their centroids
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	*	torus:false,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell(1)
+	* gm.seedCell(1)
+	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
+	*
+	* C.getStat( CPM.Centroids ) 
 */
-
 class Centroids extends Stat {
+
+	/** The set model method of class CentroidsWithTorusCorrection.
+	@param {GridBasedModel} M - the model to compute centroids on. */
 	set model( M ){
+	
+		/** The model to compute centroids on. 
+		@type {GridBasedModel}*/
 		this.M = M;
 		// Half the grid dimensions; if pixels with the same cellid are further apart,
 		// we assume they are on the border of the grid and that we need to correct
 		// their positions to compute the centroid.
+		/** @ignore */
 		this.halfsize = new Array( this.M.ndim).fill(0);
 		for( let i = 0 ; i < this.M.ndim ; i ++ ){
 			this.halfsize[i] = this.M.extents[i]/2;
 		}
 	}
+	/** @ignore */
 	constructor( conf ){
 		super(conf);
 	}
-	/* Compute the centroid of a specific cell with id = <cellid>. 
-	The cellpixels object is given as an argument so that it only has to be requested
-	once for all cells together. */
+	/** This method computes the centroid of a specific cell. 
+		@param {CellId} cellid the unique cell id of the cell to get centroid of.
+		@param {CellArrayObject} cellpixels object produced by {@link PixelsByCell}, 
+		with keys for each cellid
+		and as corresponding value the pixel coordinates of their pixels.
+		@returns {ArrayCoordinate} coordinate of the centroid.
+	*/
 	computeCentroidOfCell( cellid, cellpixels  ){
 	
 		//let cellpixels = this.M.getStat( PixelsByCell ) 
@@ -2760,8 +4344,9 @@ class Centroids extends Stat {
 		
 	}
 		
-	/* Compute centroids for all cells on the grid, returning an object with a key
-	for each cellid and as "value" the array with coordinates of the centroid. */
+	/** Compute centroids for all cells on the grid. 
+	@return {CellObject} with an {@link ArrayCoordinate} of the centroid for each cell
+	 on the grid (see {@link computeCentroidOfCell}). */
 	compute(){
 		// Get object with arrays of pixels for each cell on the grid, and get
 		// the array for the current cell.
@@ -2776,17 +4361,160 @@ class Centroids extends Stat {
 	}
 }
 
-/* This class contains methods that should be executed once per monte carlo step.
-   Examples are cell division, cell death etc.
- */
+/** This stat computes a list of all cell ids of the cells that border to "cell" and 
+	belong to a different cellid, also giving the interface length for each contact. 
+	@experimental 
+	@example
+	* let CPM = require("path/to/build")
+	* 
+	* // Set up a CPM and manipulator
+	* let C = new CPM.CPM( [300,300], {
+	* 	T:20, 
+	* 	torus:false,
+	* 	J:[[0,20],[20,10]], 
+	* 	V:[0,200], 
+	* 	LAMBDA_V:[0,2]
+	* })
+	* let gm = new CPM.GridManipulator( C )
+	* 
+	* // Seed a cells, run a little, then divide it
+	* gm.seedCell(1)
+	* for( let t = 0; t < 50; t++ ){
+	* 	C.timeStep()
+	* }
+	* gm.divideCell(1)
+	* 
+	* // Get neighborlist
+	* console.log(  C.getStat( CPM.CellNeighborList ) )	
+	*/	
+class CellNeighborList extends Stat {
 
+
+	/** The set model function of CellNeighborList requires an object of type CPM.
+	@param {CPM} M The CPM to compute bordering cells for.*/
+	set model( M ){
+		if( M instanceof CPM ){
+			/** The CPM to compute borderpixels for.
+			@type {CPM} */
+			this.M = M;
+		} else {
+			throw( "The stat CellNeighborList is only implemented for CPMs, where cellborderpixels are stored!" )
+		}
+		
+	}
+
+	/** The getNeighborsOfCell method of CellNeighborList computes a list of all pixels
+		that border to "cell" and belong to a different cellid.
+		@param {CellId} cellid the unique cell id of the cell to get neighbors from.
+		@param {CellArrayObject} cellborderpixels object produced by {@link BorderPixelsByCell}, with keys for each cellid
+		and as corresponding value the border pixel indices of their pixels.
+		@returns {CellObject} a dictionairy with keys = neighbor cell ids, and 
+		values = number of neighbor cellpixels at the border.
+	*/
+	getNeighborsOfCell( cellid, cellborderpixels ){
+				
+		let neigh_cell_amountborder = { };
+		let cbp = cellborderpixels[cellid];
+		
+		//loop over border pixels of cell
+		for ( let cellpix = 0; cellpix < cbp.length; cellpix++ ) {
+
+			//get neighbouring pixels of borderpixel of cell
+			let neighbours_of_borderpixel_cell = this.M.neigh( cbp[cellpix] );
+
+			//don't add a pixel in cell more than twice
+			//loop over neighbouring pixels and store the parent cell if it is different from
+			//cell, add or increment the key corresponding to the neighbor in the dictionairy
+			for ( let neighborpix of neighbours_of_borderpixel_cell ) {
+				
+				let neighbor_id = this.M.pixt( neighborpix );
+
+				if (neighbor_id != cellid) {
+					neigh_cell_amountborder[neighbor_id] = neigh_cell_amountborder[neighbor_id]+1 || 1;
+				}
+			}
+		}
+		return neigh_cell_amountborder
+
+	
+	}
+	
+	/** The compute method of CellNeighborList computes for each cell on the grid 
+		a list of all pixels at its border that belong to a different cellid.
+		@returns {CellObject} a dictionairy with keys = cell ids, and 
+		values = an object produced by {@link getNeighborsOfCell} (which has keys for each
+		neighboring cellid and values the number of contacting pixels for that cell).
+	*/
+	compute(){
+		
+		let cellborderpixels = this.M.getStat( PixelsByCell );
+		let neighborlist = {};
+		
+		// the this.M.cellIDs() iterator returns non-background cellids on the grid.
+		for( let i of this.M.cellIDs() ){
+			neighborlist[i] = this.getNeighborsOfCell( i, cellborderpixels );
+		}
+		
+		return neighborlist
+
+	}
+}
+
+/** This class contains methods that should be executed once per Monte Carlo Step.
+ Examples are cell division, cell death etc.
+ 
+ Methods are written for CPMs, but some of the methods may also apply to other
+	models of class ({@link GridBasedModel}, e.g. the cell seeding methods) 
+	or even a general grid ({@link Grid}, e.g. the {@link makePlane} and {@link changeKind} 
+	methods).
+	
+ @example
+ // Build CPM and attach a gridmanipulator 
+ let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
+ let gm = new CPM.GridManipulator( C )
+ */
 class GridManipulator {
+	/** Constructor of class GridManipulator.
+	@param {CPM|GridBasedModel|Grid} C - the model whose grid you wish to manipulate.
+	Methods are written for CPMs, but some of the methods may also apply to other
+	models of class ({@link GridBasedModel}, e.g. the cell seeding methods) 
+	or even a general grid ({@link Grid}, e.g. the {@link makePlane} and {@link changeKind} 
+	methods).
+	*/
 	constructor( C ){
+		/** The model whose grid we are manipulating.
+		@type {CPM|GridBasedModel|Grid}*/
 		this.C = C;
 	}
-	/* Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
+	/** Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
 	 * Try a specified number of times, then give up if grid is too full. 
-	 * The first cell will always be seeded at the midpoint of the grid. */
+	 * The first cell will always be seeded at the midpoint of the grid. 
+	 
+	 See also {@link seedCellAt} to seed a cell on a predefined position.
+	 
+	 @param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
+	 parameters that will be used for that cell.
+	 @param {number} [max_attempts = 10000] - number of tries allowed. The method will
+	 attempt to seed a cell at a random position, but this will fail if the position is 
+	 already occupied. After max_attempts fails, it will not try again. This can happen
+	 if the grid is very full.
+	 @return {CellId} - the {@link CellId} of the newly seeded cell, or 0 if the seeding
+	 has failed.
+	 
+	 @example
+	 * // Build CPM and attach a gridmanipulator
+	 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
+	 * let gm = new CPM.GridManipulator( C )
+	 *
+	 * // Seed some cells
+	 * gm.seedCell( 1 )
+	 * gm.seedCell( 1 )
+	 *
+	 * // Check which pixels are nonzero. One is always the grid midpoint.
+	 * for( let p of C.pixels() ){
+	 * 	console.log( p )
+	 * }
+	 */
 	seedCell( kind, max_attempts = 10000 ){
 		let p = this.C.midpoint;
 		while( this.C.pixt( p ) != 0 && max_attempts-- > 0 ){
@@ -2801,12 +4529,67 @@ class GridManipulator {
 		this.C.setpix( p, newid );
 		return newid
 	}
-	/* Seed a new cell of celltype "kind" onto position "p".*/
+	/**  Seed a new cell of celltype "kind" onto position "p".
+		This succeeds regardless of whether there is already a cell there.
+		
+		See also {@link seedCell} to seed a cell on a random position.
+		
+		@param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
+		parameters that will be used for that cell.
+		@param {ArrayCoordinate} p - position to seed the cell at. 
+		@return {CellId} - the {@link CellId} of the newly seeded cell, or 0 if the seeding
+		has failed.
+		
+	 @example
+	 * // Build CPM and attach a gridmanipulator
+	 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
+	 * let gm = new CPM.GridManipulator( C )
+	 *
+	 * // Seed some cells
+	 * gm.seedCellAt( 1, [2,4] )
+	 * gm.seedCellAt( 1, [9,3] )
+	 *
+	 * // Check which pixels are nonzero. These should be the positions defined above.
+	 * for( let p of C.pixels() ){
+	 * 	console.log( p )
+	 * }
+	 */
 	seedCellAt( kind, p ){
 		const newid = this.C.makeNewCellID( kind );
 		this.C.setpix( p, newid );
 		return newid
 	}
+	
+	/**  Seed "n" cells of celltype "kind" at random points lying within a circle 
+		surrounding "center" with radius "radius". 
+		
+		See also {@link seedCell} to seed a cell on a random position in the entire grid,
+		and {@link seedCellAt} to seed a cell at a specific position.
+		
+		@param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
+		parameters that will be used for that cell.
+		@param {number} n - the number of cells to seed (must be integer).
+		@param {ArrayCoordinate} center - position on the grid where the center of the
+		circle should be.
+		@param {number} radius - the radius of the circle to seed cells in.
+		@param {number} max_attempts - the maximum number of attempts to seed a cell.
+		Seeding can fail if the randomly chosen position is outside the circle, or if 
+		there is already a cell there. After max_attempts the method will stop trying
+		and throw an error.
+		
+	 @example
+	 * // Build CPM and attach a gridmanipulator
+	 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
+	 * let gm = new CPM.GridManipulator( C )
+	 *
+	 * // Seed cells within a circle
+	 * gm.seedCellsInCircle( 1, 10, [50,30], 20 )
+	 *
+	 * // Check which pixels are nonzero. These should be within the circle.
+	 * for( let p of C.pixels() ){
+	 * 	console.log( p )
+	 * }
+	 */
 	seedCellsInCircle( kind, n, center, radius, max_attempts = 10000 ){
 		if( !max_attempts ){
 			max_attempts = 10*n;
@@ -2821,16 +4604,32 @@ class GridManipulator {
 			for( let i = 0 ; i < p.length ; i ++ ){
 				d += (p[i]-center[i])*(p[i]-center[i]);
 			}
-			if( d < radius*radius ){
+			if( d < radius*radius && this.C.pixt(p) == 0 ){
 				this.seedCellAt( kind, p );
 				n--;
 			}
 		}
 	}
-	/* Add an entire plane to an array of pixel coordinates. This array is given 
-	as first argument but can be empty. The plane is specified by setting the x/y/z
-	coordinate (coded by coord = 0/1/2 for x/y/z) to a fixed value [coordvalue], while
-	letting the other coordinates range from their min value 0 to their max value. */
+	/** Helper method to set an entire plane or line of pixels to a certain CellId at once.
+	The method takes an existing array of coordinates (which can be empty) and adds the pixels
+	of the specified plane to it. See {@link changeKind} for a method that sets such a 
+	pixel set to a new value.
+	
+	The plane is specified by fixing one coordinate (x,y,or z) to a fixed value, and
+	letting the others range from their min value 0 to their max value.
+	
+	@param {ArrayCoordinate[]} voxels - Existing array of pixels; this can be empty [].
+	@param {number} coord - the dimension to fix the coordinate of: 0 = x, 1 = y, 2 = z.
+	@param {number} coordvalue - the value of the coordinate in the fixed dimension; location
+	of the plane.
+	@return {ArrayCoordinate[]} the updated array of pixels. 
+	
+	@example
+	* let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+	* let gm = new CPM.GridManipulator( C )
+	* let myline = gm.makePlane( [], 0, 2 )
+	* gm.changeKind( myline, 1 )
+	*/
 	makePlane ( voxels, coord, coordvalue ){
 		let x,y,z;
 		let minc = [0,0,0];
@@ -2858,9 +4657,19 @@ class GridManipulator {
 
 		return voxels
 	}
-	/* Convert all pixels in a given array to a specific cellkind:
+	/** Helper method that converts all pixels in a given array to a specific cellkind:
 	   changes the pixels defined by voxels (array of coordinates p) into
-	   the given cellkind. */
+	   the given cellkind. 
+	
+	@param {ArrayCoordinate[]} voxels - Array of pixels to change.
+	@param {CellKind} cellkind - cellkind to change these pixels into.
+	   
+	@example
+	* let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+	* let gm = new CPM.GridManipulator( C )
+	* let myline = gm.makePlane( [], 0, 2 )
+	* gm.changeKind( myline, 1 )
+	*/
 	changeKind ( voxels, cellkind ){
 		
 		let newid = this.C.makeNewCellID( cellkind );
@@ -2870,8 +4679,33 @@ class GridManipulator {
 		
 	}
 
-	/* Let cell t divide by splitting it along a line perpendicular to
-	 * its major axis. */
+	/** Let cell "id" divide by splitting it along a line perpendicular to
+	 * its major axis. 
+	 
+	 @param {CellId} id - the id of the cell that needs to divide.
+	 @return {CellId} the id of the newly generated daughter cell.
+	   
+		@example
+		* let C = new CPM.CPM( [10,10], {
+		* 	T:20, 
+		*	J:[[0,20],[20,10]], 
+		*	V:[0,200], 
+		*	LAMBDA_V:[0,2] 
+		* })
+		* let gm = new CPM.GridManipulator( C )
+		*
+		* // Seed a single cell
+		* gm.seedCell( 1 )
+		* 
+		* // Perform some Monte Carlo Steps before dividing the cell
+		* for( let t = 0; t < 100; t++ ){
+		* 	C.timeStep()
+		* }
+		* gm.divideCell( 1 )
+		* 
+		* // Check which pixels belong to which cell. Should be roughly half half.
+		* C.getStat( PixelsByCell )
+	 */
 	divideCell( id ){
 		let C = this.C;
 		if( C.ndim != 2 || C.conf.torus ){
@@ -2943,27 +4777,70 @@ class GridManipulator {
 /**
  * This is a constraint in which each cell has a preferred direction of migration. 
  * This direction is only dependent on the cell, not on the specific pixel of a cell.
+ * 
+ * This constraint works with torus as long as the field size is large enough. 
  */
-
 class PersistenceConstraint extends SoftConstraint {
+
+	/** The constructor of the PersistenceConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_DIR - strength of the persistenceconstraint per cellkind.
+	@param {PerKindNonNegative} [conf.DELTA_T = [10,10,...]] - the number of MCS over which the current direction is 
+	determined. Eg if DELTA_T = 10 for a cellkind, then its current direction is given by
+	the vector from its centroid 10 MCS ago to its centroid now.
+	@param {PerKindProb} conf.PERSIST - persistence per cellkind. If this is 1, its new
+	target direction is exactly equal to its current direction. If it is lower than 1, 
+	angular noise is added accordingly. 
+	*/
 	constructor( conf ){
 		super( conf );
+		
+		/** Cache centroids over the previous conf.DELTA_T MCS to determine directions.
+		@type {CellObject}
+		*/
 		this.cellcentroidlists = {};
+		/** Target direction of movement of each cell.
+		@type {CellObject}
+		*/
 		this.celldirections = {};
 	}
+	
+	/** Set the CPM attached to this constraint.
+	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
+	
+		/** @ignore */
 		this.halfsize = new Array(C.ndim).fill(0);
+		
+		/** The CPM this constraint acts on.
+		@type {CPM}*/
 		this.C = C;
 		for( let i = 0 ; i < C.ndim ; i ++ ){
 			this.halfsize[i] = C.extents[i]/2;
 		}
-
-	}
-	confChecker(){
-		this.confCheckCellNonNegative( "LAMBDA_DIR" );
+		this.confChecker();
 	}
 	
-	deltaH ( sourcei, targeti, src_type ) {
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_DIR", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "PERSIST", "KindArray", "Probability" );
+	}
+	
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not used by this
+	 method, but is supplied for consistency with other SoftConstraints. The CPM will always
+	 call this method supplying the tgt_type as fourth argument.
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	/* eslint-disable no-unused-vars*/
+	deltaH ( sourcei, targeti, src_type, tgt_type ) {
 		if( src_type == 0 || !(src_type in this.celldirections) ) return 0
 		let b = this.celldirections[src_type];
 		let p1 = this.C.grid.i2p(sourcei), p2 = this.C.grid.i2p(targeti);
@@ -2982,6 +4859,11 @@ class PersistenceConstraint extends SoftConstraint {
 		}
 		return - dp
 	}
+	
+	/** Normalize a vector a by its length.
+	@param {number[]} a - vector to normalize.
+	@return {number[]} normalized version of this vector.
+	@private*/
 	normalize( a ){
 		let norm = 0;
 		for( let i = 0 ; i < a.length ; i ++ ){
@@ -2992,14 +4874,22 @@ class PersistenceConstraint extends SoftConstraint {
 			a[i] /= norm;
 		}
 	}
-	// this function samples a random number from a normal distribution
+	/** this function samples a random number from a normal distribution
+	@param {number} [mu=0] - mean of the normal distribution.
+	@param {number} [sigma=1] - SD of the normal distribution.
+	@return {number} the random number generated.
+	@private
+	*/
 	sampleNorm (mu=0, sigma=1) {
 		let u1 = this.C.random();
 		let u2 = this.C.random();
 		let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(Math.PI*2 * u2);
 		return z0 * sigma + mu
 	}
-	// this function samples a random direction vector with length 1
+	/** This function samples a random direction vector with length 1
+	@param {number} [n=3] - number of dimensions of the space to make the vector in.
+	@return {number[]} - a normalized direction vector.
+	*/
 	randDir (n=3) {
 		let dir = [];
 		while(n-- > 0){
@@ -3008,9 +4898,20 @@ class PersistenceConstraint extends SoftConstraint {
 		this.normalize(dir);
 		return dir
 	}
+	/** Change the target direction of a cell to a given vector.
+		@param {CellId} t - the cellid of the cell to change the direction of.
+		@param {number[]} dx - the new direction this cell should get.
+	*/
 	setDirection( t, dx ){
 		this.celldirections[t] = dx;
 	}
+	
+	/** After each MCS, update the target direction of each cell based on its actual
+	direction over the last {conf.DELTA_T[cellkind]} steps, and some angular noise
+	depending on {conf.PERSIST[cellkind]}.
+	@listens {CPM#timeStep} because when the CPM has finished an MCS, cells have new 
+	centroids and their direction must be updated. 
+	*/
 	postMCSListener(){
 		let centroids;
 		if( this.C.conf.torus ){
@@ -3044,10 +4945,14 @@ class PersistenceConstraint extends SoftConstraint {
 				let dx = [];
 				for( let j = 0 ; j < l.length ; j ++ ){
 					dx[j] = ci[j] - l[j];
-					if( dx[j] > this.halfsize[j] ){
-						dx[j] -= this.C.extents[j];
-					} else if( dx[j] < -this.halfsize[j] ){
-						dx[j] += this.C.extents[j];
+					
+					// torus correction; do only if CPM actually has a torus.
+					if( this.C.torus ){
+						if( dx[j] > this.halfsize[j] ){
+							dx[j] -= this.C.extents[j];
+						} else if( dx[j] < -this.halfsize[j] ){
+							dx[j] += this.C.extents[j];
+						}					
 					}
 				}
 				// apply angular diffusion to target direction if needed
@@ -3069,11 +4974,70 @@ class PersistenceConstraint extends SoftConstraint {
 	}
 }
 
-class PreferredDirectionConstraint extends Constraint {
-	get CONSTRAINT_TYPE() {
-		return "soft"
+/** Implements a global bias direction of motion.
+	This constraint computes the *unnormalized* dot product 
+	between copy attempt vector and target direction vector.
+
+	Supply the target direction vector in normalized form, or 
+	use the length of the vector to influence the strength 
+	of this bias.
+
+	Works for torus grids, if they are "big enough".
+	
+	 * @example
+	 * // Build a CPM and add the constraint
+	 * let CPM = require( "path/to/build" )
+	 * let C = new CPM.CPM( [200,200], { T : 20 } )
+	 * C.add( new CPM.PreferredDirectionConstraint( {
+	 * 	LAMBDA_DIR : [0,50], 
+	 * 	DIR : [[0,0],[1,1]]
+	 * } ) )
+	*/
+class PreferredDirectionConstraint extends SoftConstraint {
+
+	
+	/** The constructor of the PreferredDirectionConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_DIR - strength of the constraint per cellkind.
+	@param {ArrayCoordinate[]} conf.DIR 'vector' with the preferred direction. This is
+	an array with the {@link ArrayCoordinate}s of the start and endpoints of this vector. 
+	*/
+	constructor(conf){
+		super(conf);
 	}
-	deltaH( src_i, tgt_i, src_type ){
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_DIR", "KindArray", "NonNegative" );
+		
+		// Custom check for the attractionpoint
+		checker.confCheckPresenceOf( "DIR" );
+		let pt = this.conf["DIR"];
+		if( !( pt instanceof Array ) ){
+			throw( "DIR must be an array with the start and end coordinate of the preferred direction vector!" )
+		}
+		for( let p of pt ){
+		
+			if( !checker.isCoordinate(p) ){
+				throw("DIR elements must be coordinate arrays with the same dimensions as the grid!")
+			}
+		}
+	}
+	
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not actually
+	 used but is given for consistency with other soft constraints; the CPM always calls
+	 this method with four arguments.
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	/* eslint-disable no-unused-vars*/
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
 		let l = this.conf["LAMBDA_DIR"][this.C.cellKind( src_type )];
 		if( !l ){
 			return 0
@@ -3104,43 +5068,187 @@ class PreferredDirectionConstraint extends Constraint {
 	}
 }
 
+/** 
+ * This class implements a constraint for cells moving up a chemotactic gradient.
+ * It checks the chemokine gradient in the direction of the attempted copy, and 
+ * rewards copy attempts that go up the gradient. This effect is stronger when the
+ * gradient is steep. Copy attempts going to a lower chemokine value are punished.
+ * 
+ * The grid with the chemokine must be supplied, see the {@link constructor}.
+ *
+ * @example
+ * // Build a chemotaxis field
+ * let CPM = require( "path/to/build" )
+ * let chemogrid = new CPM.Grid2D( [200,200], true, "Float32" )
+ * chemogrid.setpix( [100,100], 100 )
+ * 
+ * // Build a CPM with the constraint
+ * let C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5]	
+ * })
+ * C.add( new CPM.ChemotaxisConstraint( {
+ * 	LAMBDA_CH : [0,5000],
+ * 	CH_FIELD : chemogrid
+ * } ) )
+ */
 class ChemotaxisConstraint extends SoftConstraint {
+
+	/** Set the CPM attached to this constraint.
+	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
+		/** The CPM this constraint acts on.
+		@type {CPM}*/
 		this.C = C;
+		
+		this.confChecker();
+		this.checkField();
 	}
+	
+	/** @todo add checks for dimensions, better check for type.*/
+	checkField(){
+		if( !( this.field instanceof CoarseGrid || this.field instanceof Grid2D ) ){
+			throw( "CH_FIELD must be a CoarseGrid or a Grid2D!" )
+		}
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
 	confChecker(){
-		this.confCheckCellNonNegative( "LAMBDA_CH" );
-		this.confCheckPresenceOf( "CH_FIELD" );
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_CH", "KindArray", "NonNegative" );
+
+		// Custom check for the chemotactic field
+		checker.confCheckPresenceOf( "CH_FIELD" );
 	}
 
+	/** The constructor of the ChemotaxisConstraint requires a conf object with a parameter
+	and a chemotactic field.
+	@todo what kinds of grids are allowed for the chemotactic field? Do we need to check
+	somewhere that its properties "match" that of the CPM? (That is, the same resolution and
+	torus properties)?
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_CH - chemotactic sensitivity per cellkind.
+	@param {CoarseGrid|Grid2D} conf.CH_FIELD - the chemotactic field where the chemokine lives.
+	*/
 	constructor( conf ){
 		super( conf );
+		
+		/** @todo is this ever used? */
 		this.conf = conf;
+		/** The field where the chemokine lives.
+		@type {CoarseGrid|Grid2D}*/
 		this.field = conf.CH_FIELD;
 		if( this.field instanceof CoarseGrid ){
 			this.deltaH = this.deltaHCoarse;
 		}
 	}
 
-	deltaHCoarse( sourcei, targeti, src_type ){
+	/** Method to compute the Hamiltonian if the chemotactic field is a {@link CoarseGrid}.
+		This method is used instead of the regular {@link deltaH} whenever this is true.
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not actually
+	 used by this method, but is supplied for compatibility; the CPM will always call the
+	 deltaH method with all 4 arguments.
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.
+	 @private */
+	/* eslint-disable no-unused-vars*/
+	deltaHCoarse( sourcei, targeti, src_type, tgt_type ){
 		let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti );
 		let delta = this.field.pixt( tp ) - this.field.pixt( sp );
 		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)];
 		return -delta*lambdachem
 	}
 
-	deltaH( sourcei, targeti, src_type  ){
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not actually
+	 used by this method, but is supplied for compatibility; the CPM will always call the
+	 deltaH method with all 4 arguments.
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/
+	/* eslint-disable no-unused-vars*/
+	deltaH( sourcei, targeti, src_type, tgt_type  ){
 		let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei );
 		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)];
 		return -delta*lambdachem
 	}
 }
 
-class AttractionPointConstraint extends Constraint {
-	get CONSTRAINT_TYPE() {
-		return "soft"
+/** Implements a global bias direction of motion.
+	This constraint computes the *unnormalized* dot product 
+	between copy attempt vector and target direction vector.
+
+	Supply the target direction vector in normalized form, or 
+	use the length of the vector to influence the strength 
+	of this bias.
+
+	Works for torus grids, if they are "big enough".
+	Automatic adding is currently not supported, so you'll have to add it
+	using the {@link CPM#add} method.
+	
+	 * @example
+	 * // Build a CPM and add the constraint
+	 * let CPM = require( "path/to/build" )
+	 * let C = new CPM.CPM( [200,200], { T : 20 } )
+	 * C.add( new CPM.AttractionPointConstraint( {
+	 * 	LAMBDA_ATTRACTIONPOINT : [0,100],
+	 * 	ATTRACTIONPOINT: [100,100],
+	 * } ) )
+	 * 
+	 * // We can even add a second one at a different location
+	 * C.add( new CPM.AttractionPointConstraint( {
+	 * 	LAMBDA_ATTRACTIONPOINT : [0,100],
+	 * 	ATTRACTIONPOINT: [50,50],
+	 * } ) )
+ */
+
+class AttractionPointConstraint extends SoftConstraint {
+
+	/** The constructor of an AttractionPointConstraint requires a conf object with 
+	two parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_ATTRACTIONPOINT - strength of the constraint per cellkind.
+	@param {ArrayCoordinate} conf.ATTRACTIONPOINT coordinate of the attractionpoint.
+	*/
+	constructor( conf ){
+		super( conf );		
 	}
-	deltaH( src_i, tgt_i, src_type ){
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_ATTRACTIONPOINT", "KindArray", "NonNegative" );
+		
+		// Custom check for the attractionpoint
+		checker.confCheckPresenceOf( "ATTRACTIONPOINT" );
+		let pt = this.conf["ATTRACTIONPOINT"];
+		if( !checker.isCoordinate(pt) ){
+			throw( "ATTRACTIONPOINT must be a coordinate array with the same dimensions as the grid!" )
+		}
+	}
+
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not actually
+	 used but is given for consistency with other soft constraints; the CPM always calls
+	 this method with four arguments.
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	/* eslint-disable no-unused-vars*/
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
 		let l = this.conf["LAMBDA_ATTRACTIONPOINT"][this.C.cellKind( src_type )];
 		if( !l ){
 			return 0
@@ -3173,17 +5281,221 @@ class AttractionPointConstraint extends Constraint {
 	}
 }
 
-/** 
- * Forbids that cells exceed or fall below a certain size range. 
+/* 
+	todo:
+	- what about the potential when a focal point detaches?
+	- postsetpixlistener needs sourcei. This is now done with a bit of a hack,
+	by caching the source of every deltaH evaluation - which should be equal to
+	the source used for the setpix event. But this may go wrong if things ever happen
+	in parallel.
+	Alternative: let the setpix method have an optional sourcei input argument that it
+	can pass on to its listeners?
  */
 
-class HardVolumeRangeConstraint extends HardConstraint {
 
+/** @experimental */
+class ProtrusionConstraint extends SoftConstraint {
+	constructor( conf ){
+		super( conf );
+
+		this.focalpoints = { 
+			num : {},
+			points : {} }; // track all the cell's focal points
+		
+		
+		this._lastrequestedcopy = [];
+		
+	}
+	
 	confChecker(){
-		this.confCheckCellNonNegative( "LAMBDA_VRANGE_MAX" );
-		this.confCheckCellNonNegative( "LAMBDA_VRANGE_MIN" );
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "P_DETACH", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "G_PROTRUSION", "KindArray", "NonNegative" );
+		// add one for N_Protrusion.
+	}
+	
+	G( kind ){
+		return this.conf["G_PROTRUSION"][kind]
+	}
+	
+	distance( p1, p2 ){
+		let dim = p1.length;
+		let distance = 0;
+		for( let d = 0; d < dim; d++ ){
+			distance += ( p1[d] - p2[d] )*( p1[d] - p2[d] );
+		}
+		return Math.sqrt( distance )
+	}
+	
+	getCentroid( cellid ){
+	
+		let centroids;
+		if( this.C.torus ){
+			centroids = this.C.getStat( CentroidsWithTorusCorrection );
+		} else {
+			centroids = this.C.getStat( Centroids );
+		}
+		
+		return centroids[cellid] 
+	}
+	
+	/* ======= Protrusion constraint ======= */
+
+	/* Hamiltonian computation */ 
+	deltaH ( sourcei, targeti, src_type, tgt_type ){
+
+		let deltaH = 0;
+		const src_kind = this.C.cellKind( src_type );
+		const tgt_kind = this.C.cellKind( tgt_type );
+		
+		// Penalty P_detach if a focal point detaches (if the copy goes into
+		// a focal point)
+		if( this.isFocalPoint( targeti ) ){
+			deltaH += this.conf["P_DETACH"][tgt_kind];
+		}
+		
+		// If the source is a focal point, this means the focal point will move.
+		// This will change its distance to the center of mass of the cell, and thus
+		// the potential in H. Update it accordingly. 
+		if( this.isFocalPoint( sourcei ) ){
+			let centroid = this.getCentroid( src_type );
+		
+			let sourcep = this.C.grid.i2p( sourcei );
+			let targetp = this.C.grid.i2p( targeti );
+		
+			let H_before = this.G( src_kind ) / this.distance( sourcep, centroid );
+			let H_after = this.G( src_kind ) / this.distance( targetp, centroid );
+			
+			deltaH += H_after - H_before;
+			
+		}
+		
+		this._lastrequestedcopy = [sourcei, targeti, src_type, tgt_type];
+		
+		return deltaH
+	}
+	
+	addFocalPoint( i, cellid ){
+		if( !( cellid in this.focalpoints["num"] ) ){
+			this.focalpoints["num"][cellid] = 0;
+		}
+		
+		if( i in this.focalpoints["points"] ){
+			throw( "Cannot add focal point i " + i + " : is already a focal point!")
+		}
+		if( this.C.grid.pixti(i) != cellid ){
+			throw("Something went wrong! point " + i + " does not belong to cellid " + cellid + "!")
+		}
+		
+		this.focalpoints["points"][i] = true;
+		this.focalpoints["num"][cellid]++;
+	}
+	removeFocalPoint( i, cellid ){
+		if( !(i in this.focalpoints["points"] ) ){
+			this.log( cellid );
+			this.log( this.C.grid.pixti(i));
+			throw("Cannot remove focalpoint " + i + " : i is not a focal point!")
+
+		}
+		if( !( this.C.grid.pixti(i) == cellid ) ){
+			this.log( cellid );
+			this.log( this.C.grid.pixti(i));
+			throw("Something went wrong! focalpoint " + i + " does not belong to cellid " + cellid + "!")
+		}
+	
+		delete this.focalpoints["points"][i];
+		this.focalpoints["num"][cellid]--;
+	}
+	currentNumberFocalPoints( cellid ){
+		if( cellid in this.focalpoints["num"] ){
+			return this.focalpoints["num"][cellid]
+		}
+		return 0
+	}
+	isFocalPoint( i ){
+		return ( i in this.focalpoints["points"] )
+	}
+	lastSource(){
+		return this._lastrequestedcopy[0] || NaN
+	}
+	log( message ){
+		/* eslint-disable no-console*/
+		console.log(message);
 	}
 
+	/* eslint-disable no-unused-vars*/
+	postSetpixListener( i, t_old, t ){
+		
+		let kind = this.C.cellKind( t );
+		
+		// If i was a focalpoint of t_old, it is now lost.
+		if( this.isFocalPoint(i) ){
+			this.removeFocalPoint( i, t_old );
+		}
+		
+		// The point can only become a focal point if N_PROTRUSION of this kind is nonzero
+		// and if the new cell is non-background
+		if( t != 0 && this.conf["N_PROTRUSION"][kind] > 0 ){
+			// This point becomes a focal point of the new cell t in two cases: 
+		
+			// 1) A copy from a focal point moves that focal point from the sourcei to i,
+			// but only if the number of focal points is not already too large. If that is the
+			// case, drop it. (This should only happen when the N_PROTRUSION) changes during
+			// the simulation, eg via HTML controls.
+			let sourcei = this.lastSource();
+			if( this.isFocalPoint( sourcei ) && this.currentNumberFocalPoints(t) <= this.conf["N_PROTRUSION"][kind] ){
+				this.removeFocalPoint( sourcei, t );
+				this.addFocalPoint( i, t );
+			}
+		
+			// 2) If the copy did not come from a focalpoint, but the cell that has just 
+			// gained a pixel (t) has too few focal points, this pixel becomes a focalpoint.
+			else if( this.currentNumberFocalPoints(t) < this.conf["N_PROTRUSION"][kind] ){
+				this.addFocalPoint( i, t );
+			}
+		}
+	}
+
+}
+
+/** 
+ * This constraint forbids that cells exceed or fall below a certain size range. 
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], {T : 4})
+ * C.add( new CPM.HardVolumeRangeConstraint( {
+ * 	LAMBDA_VRANGE_MIN : [0,1],
+ * 	LAMBDA_VRANGE_MAX : [0,2]
+ * } ) )
+ */
+class HardVolumeRangeConstraint extends HardConstraint {
+
+	/** The constructor of the HardVolumeRangeConstraint requires a conf object with two parameters.
+	@param {object} conf - parameter object for this constraint.
+	@param {PerKindNonNegative} conf.LAMBDA_VRANGE_MIN - minimum volume of each cellkind.
+	@param {PerKindNonNegative} conf.LAMBDA_VRANGE_MAX - maximum volume of each cellkind.
+	*/
+	constructor( conf ){
+		super(conf);
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_VRANGE_MAX", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "LAMBDA_VRANGE_MIN", "KindArray", "NonNegative" );
+	}
+
+	/** Method for hard constraints to compute whether the copy attempt fulfills the rule.
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {boolean} whether the copy attempt satisfies the constraint.*/ 
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 		// volume gain of src cell
 		if( src_type != 0 && this.C.getVolume(src_type) + 1 > 
@@ -3200,72 +5512,149 @@ class HardVolumeRangeConstraint extends HardConstraint {
 }
 
 class Simulation {
+	/** The constructor of class Simulation takes two arguments.
+		@param {object} config - overall configuration settings. This is an object
+		with multiple entries, see below.
+		@param {GridSize} config.field_size - size of the CPM to build.
+		@param {object} config.conf - configuration settings for the CPM;
+		see its {@link CPM#constructor} for details.
+		@param {object} simsettings - configuration settings for the simulation 
+		itself and for controlling the outputs. See the parameters below for details.
+		@param {number[]} simsettings.NRCELLS - array with number of cells to seed for
+			every non-background {@link CellKind}.
+		@param {number} simsettings.BURNIN - number of MCS to run before the actual
+			simulation starts (let cells get their target volume before starting).
+		@param {number} simsettings.RUNTIME - number of MCS the simulation should run.
+			Only necessary if you plan to use the {@link run} method.
+		@param {number} [ simsettings.IMGFRAMERATE = 1 ]- draw the grid every [x] MCS.
+		@param {number} [ simsettings.LOGRATE = 1 ] - log stats every [x] MCS.
+		@param {object} [ simsettings.LOGSTATS = {browser:false,node:true} ] - 
+			whether stats should be logged in browser and node.
+		@param {boolean} [ simsettings.SAVEIMG = false ] - should images be saved? (node only).
+		@param {string} [ simsettings.SAVEPATH ] - where should images be saved? You only have
+			to give this argument when SAVEIMG = true. 
+		@param {string} [ simsettings.EXPNAME = "myexp" ] - string used to construct the
+			filename of any saved image. 
+		@param {HexColor} [ simsettings.CANVASCOLOR = "FFFFFF" ] - color to draw the background in; defaults to white.
+		@param {HexColor[]} [ simsettings.CELLCOLOR ] - color to draw each non-background 
+			{@link CellKind} in. If left unspecified, the {@link Canvas} will use black.
+		@param {boolean[]} [simsettings.ACTCOLOR ] - should activities of the {@link ActivityConstraint}
+			be drawn for each {@link CellKind}? If left unspecified, these are not drawn.
+		@param {boolean[]} [simsettings.SHOWBORDERS ] - should borders of each {@link CellKind}
+			be drawn? Defaults to false.
+		@param {HexColor[]} [simsettings.BORDERCOL ] - color to draw cellborders of
+			each {@link CellKind} in. Defaults to black. 
+		*/
 	constructor( config, custommethods ){
 	
+		// ========= configuration and custom methods
+		
 		custommethods = custommethods || {};
 	
 		// overwrite default method if methods are supplied in custommethods
 		// these can be initializeGrid(), drawCanvas(), logStats(),
 		// postMCSListener().
 		for( let m of Object.keys( custommethods ) ){
+		
+			/** Any function suplied in the custommethods argument to
+			the {@link constructor} is bound to the object. */
 			this[m] = custommethods[m];
 		}
 		
-	
-		// Configuration of the simulation environment
+		/** Configuration of the simulation environment 
+		@type {object}*/
 		this.conf = config.simsettings;
-		this.imgrate = this.conf["IMGFRAMERATE"] || 1;
-		this.lograte = this.conf["LOGRATE"] || 1;
 		
-		// See if code is run in browser or via node, which will be used
-		// below to determine what the output should be.
+		// ========= controlling outputs
+		
+		/** Draw the canvas every [rate] MCS.
+		@type {number}*/
+		this.imgrate = this.conf["IMGFRAMERATE"] || 1;
+		
+		/** Log stats every [rate] MCS.
+		@type {number}*/
+		this.lograte = this.conf["LOGRATE"] || 1;
 		if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
+			/** See if code is run in browser or via node, which will be used
+			below to determine what the output should be.
+			@type {string}*/
 			this.mode = "browser";
 		} else {
 			this.mode = "node";
 		}
-		
-		// Log stats or not
+		/** Log stats or not
+		@type {boolean}*/
 		this.logstats = this.conf["STATSOUT"] || { browser: false, node: true };
 		this.logstats = this.logstats[this.mode];
 		
-		// Saving images
+		/** Saving images or not.
+		@type {boolean}*/
 		this.saveimg = this.conf["SAVEIMG"] || false;
+		/** Where to save images.
+		@type {string}*/
 		this.savepath = this.conf["SAVEPATH"] || "undefined";
 		
 		if( this.saveimg && this.savepath === "undefined" ){
 			throw( "You need to specify the SAVEPATH option in the configuration object of your simulation!")
 		}
 		
-		// Save the time of the simulation.
+		// ========= tracking simulation progress
+		
+		/** Track the time of the simulation. 
+		@type {number}*/
 		this.time = 0;
+		
+		/** Should the simulation be running? Change this to pause;
+		see the {@link toggleRunning} method.
+		@private
+		@type {boolean}*/
 		this.running = true;
 		
-		// Make CPM object and add constraints
+		// ========= Attached objects
+		
+		/** Make CPM object based on configuration settings and attach it.
+		@type {CPM} */
 		this.C = new CPM( config.field_size, config.conf );
 				
-		// To add canvas / gridmanipulator automatically when required. This will set
-		// their values in helpClasses to 'true', so they don't have to be added again.
+		/** See if objects of class {@link Canvas} and {@link GridManipulator} already 
+		exist. These are added automatically when required. This will set
+		their values in helpClasses to 'true', so they don't have to be added again.
+		@type {object}*/
 		this.helpClasses = { gm: false, canvas: false };
 		
+		
+		// ========= Begin.
 		// Initialize the grid and run the burnin.
 		this.initializeGrid();
 		this.runBurnin();
 		
 	}
 
-	// Add GridManipulator/Canvas objects when required.
+	/** Adds a {@link GridManipulator} object when required. */
 	addGridManipulator(){
+		/** Attached {@link GridManipulator} object.
+		@type {GridManipulator}*/
 		this.gm = new GridManipulator( this.C );
 		this.helpClasses[ "gm" ] = true;
 	}
+	
+	/** Adds a {@link Canvas} object when required. */
 	addCanvas(){
 		let zoom = this.conf.zoom || 2;
+		/** Attached {@link Canvas} object.
+		@type {Canvas}*/
 		this.Cim = new Canvas( this.C, {zoom:zoom} );
 		this.helpClasses[ "canvas" ] = true;
 	}
 	
-	// Method to initialize the Grid should be implemented in each simulation.
+	/** Method to initialize the Grid should be implemented in each simulation. 
+	The default method checks in the simsettings.NRCELLS array how many cells to
+	seed for each {@CellKind}, and does this (at random positions). 
+	
+	Often you'll want to do other things here. In that case you can use the 
+	custommethods argument of the {@link constructor} to overwrite this with your
+	own initializeGrid method.
+	*/
 	initializeGrid(){
 	
 		// add the initializer if not already there
@@ -3290,6 +5679,10 @@ class Simulation {
 
 	}
 	
+	/** Run the brunin period as defined by simsettings.BURNIN : run this number
+	of MCS before the {@link time} of this simulation object starts ticking, and 
+	before we start drawing etc. 
+	*/	
 	runBurnin(){
 		// Simulate the burnin phase
 		let burnin = this.conf["BURNIN"] || 0;
@@ -3299,19 +5692,25 @@ class Simulation {
 	}
 
 	
-	// draw the canvas
+	/** Method to draw the canvas.
+	The default method draws the canvas, cells, cellborders, and activityvalues
+	as specified in the simsettings object (see the {@link constructor} for details).
+	
+	This will be enough for most scenarios, but if you want to draw more complicated stuff,
+	you can use the custommethods argument of the {@link constructor} to overwrite 
+	this with your own drawCanvas method.
+	*/
 	drawCanvas(){
 	
 		// Add the canvas if required
 		if( !this.helpClasses["canvas"] ){ this.addCanvas(); }
 	
 		// Clear canvas and draw stroma border
-		this.Cim.clear( this.conf["CANVASCOLOR"] );
-		
-		
+		this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" );
+
 
 		// Draw each cellkind appropriately
-		let cellcolor=this.conf["CELLCOLOR"], actcolor=this.conf["ACTCOLOR"], 
+		let cellcolor=( this.conf["CELLCOLOR"] || [] ), actcolor=this.conf["ACTCOLOR"], 
 			nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"];
 		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 		
@@ -3324,14 +5723,14 @@ class Simulation {
 			if(  cellborders[ cellkind  ]  ){
 				let bordercol = "000000";
 				if( this.conf.hasOwnProperty("BORDERCOL") ){
-					bordercol = this.conf["BORDERCOL"][cellkind];
+					bordercol = this.conf["BORDERCOL"][cellkind] || "000000";
 				}
 				this.Cim.drawOnCellBorders( cellkind+1, bordercol );
 			}
 			
 			// if there is an activity constraint, draw activity values depending on color.
 			if( this.C.conf["LAMBDA_ACT"] !== undefined && this.C.conf["LAMBDA_ACT"][ cellkind + 1 ] > 0 ){ //this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
-				if( actcolor[ cellkind ] ){
+				if( ( actcolor[ cellkind ] ) ){
 					this.Cim.drawActivityValues( cellkind + 1 );//, this.constraints["ActivityConstraint"] )
 				}			
 			}
@@ -3340,11 +5739,23 @@ class Simulation {
 		
 	}
 	
-	// Computing and logging stats
+	/** Method to log statistics.
+	The default method logs time, {@link CellId}, {@link CellKind}, and the 
+	{@ArrayCoordinate} of the cell's centroid to the console.
+	
+	If you want to compute other stats (see subclasses of {@link Stat} for options)
+	you can use the custommethods argument of the {@link constructor} to overwrite 
+	this with your own drawCanvas method.
+	*/
 	logStats(){
 		
 		// compute centroids for all cells
-		let allcentroids = this.C.getStat( CentroidsWithTorusCorrection );
+		let allcentroids; 
+		if( this.C.torus ){
+			allcentroids = this.C.getStat( CentroidsWithTorusCorrection );
+		} else {
+			allcentroids = this.C.getStat( Centroids );
+		} 
 		
 		for( let cid of this.C.cellIDs() ){
 		
@@ -3358,12 +5769,16 @@ class Simulation {
 
 	}
 	
-	// Listener for something that needs to be done after every monte carlo step.
+	/** Listener for something that needs to be done after every monte carlo step.
+	This method is empty but can be overwritten via the custommethods 
+	argument of the {@link constructor}.*/
 	postMCSListener(){
 	
 	}
 	
-	// Function for creating outputs
+	/** This automatically creates all outputs (images and logged stats) at the correct
+	rates. See the {@link constructor} documentation for options on how to control these
+	outputs. */
 	createOutputs(){
 		// Draw the canvas every IMGFRAMERATE steps
 		if( this.imgrate > 0 && this.time % this.imgrate == 0 ){
@@ -3386,7 +5801,8 @@ class Simulation {
 		}
 	}
 	
-	// Run a montecarlostep and produce outputs if required.
+	/** Run a montecarlostep, produce outputs if required, run any {@link postMCSListener},
+	and update the time. */
 	step(){
 		if( this.running ){
 			this.C.monteCarloStep();
@@ -3396,12 +5812,14 @@ class Simulation {
 		}
 	}
 	
-	// toggle running
+	/** Use this to pause or restart the simulation from an HTML page. */
 	toggleRunning(){
 		this.running = !this.running;
 	}
 	
-	// Run the entire simulation.
+	/** Run the entire simulation. This function is meant for nodejs, as you'll
+	want to perform individual {@link step}s in a requestAnimationFrame for an 
+	animation in a HTML page. */
 	run(){
 		while( this.time < this.conf["RUNTIME"] ){
 		
@@ -3421,8 +5839,10 @@ exports.CPM = CPM;
 exports.GridBasedModel = GridBasedModel;
 exports.Stat = Stat;
 exports.PixelsByCell = PixelsByCell;
+exports.BorderPixelsByCell = BorderPixelsByCell;
 exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
 exports.Centroids = Centroids;
+exports.CellNeighborList = CellNeighborList;
 exports.Grid2D = Grid2D;
 exports.Grid3D = Grid3D;
 exports.GridManipulator = GridManipulator;
@@ -3437,6 +5857,7 @@ exports.PersistenceConstraint = PersistenceConstraint;
 exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
 exports.ChemotaxisConstraint = ChemotaxisConstraint;
 exports.AttractionPointConstraint = AttractionPointConstraint;
+exports.ProtrusionConstraint = ProtrusionConstraint;
 exports.HardConstraint = HardConstraint;
 exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 exports.BarrierConstraint = BarrierConstraint;

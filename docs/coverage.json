@@ -1,7 +1,7 @@
 {
-  "coverage": "11.54%",
-  "expectCount": 433,
-  "actualCount": 50,
+  "coverage": "90.42%",
+  "expectCount": 376,
+  "actualCount": 340,
   "files": {
     "src/Canvas.js": {
       "expectCount": 37,
@@ -17,600 +17,206 @@
       "expectCount": 20,
       "actualCount": 1,
       "undocumentLines": [
-        6,
-        7,
         8,
-        15,
-        35,
-        48,
-        53,
-        79,
-        89,
-        116,
-        149,
-        168,
-        197,
-        210,
-        230,
-        272,
-        282,
-        312,
-        326
+        9,
+        10,
+        17,
+        37,
+        50,
+        55,
+        81,
+        91,
+        118,
+        151,
+        170,
+        199,
+        212,
+        232,
+        274,
+        284,
+        314,
+        328
       ]
     },
     "src/grid/CoarseGrid.js": {
       "expectCount": 6,
-      "actualCount": 0,
-      "undocumentLines": [
-        6,
-        7,
-        8,
-        12,
-        13,
-        16
-      ]
+      "actualCount": 6,
+      "undocumentLines": []
     },
     "src/grid/Grid.js": {
       "expectCount": 24,
-      "actualCount": 0,
-      "undocumentLines": [
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        12,
-        17,
-        21,
-        25,
-        29,
-        38,
-        46,
-        51,
-        53,
-        61,
-        65,
-        69,
-        73,
-        81,
-        89,
-        98
-      ]
+      "actualCount": 24,
+      "undocumentLines": []
     },
     "src/grid/Grid2D.js": {
       "expectCount": 13,
-      "actualCount": 0,
-      "undocumentLines": [
-        6,
-        7,
-        9,
-        10,
-        19,
-        27,
-        39,
-        62,
-        96,
-        144,
-        195,
-        198,
-        201
-      ]
+      "actualCount": 13,
+      "undocumentLines": []
     },
     "src/grid/Grid3D.js": {
       "expectCount": 13,
-      "actualCount": 0,
-      "undocumentLines": [
-        6,
-        7,
-        11,
-        15,
-        16,
-        17,
-        18,
-        19,
-        24,
-        29,
-        34,
-        51,
-        70
-      ]
+      "actualCount": 13,
+      "undocumentLines": []
     },
     "src/grid/GridManipulator.js": {
       "expectCount": 9,
-      "actualCount": 0,
-      "undocumentLines": [
-        8,
-        9,
-        10,
-        15,
-        30,
-        35,
-        59,
-        89,
-        100
-      ]
-    },
-    "src/grid/Margolus2D.js": {
-      "expectCount": 9,
-      "actualCount": 0,
-      "undocumentLines": [
-        5,
-        6,
-        16,
-        22,
-        29,
-        60,
-        81,
-        87,
-        117
-      ]
+      "actualCount": 9,
+      "undocumentLines": []
     },
     "src/hamiltonian/ActivityConstraint.js": {
       "expectCount": 11,
-      "actualCount": 0,
-      "undocumentLines": [
-        12,
-        13,
-        16,
-        20,
-        27,
-        41,
-        71,
-        98,
-        131,
-        138,
-        144
-      ]
-    },
-    "src/hamiltonian/ActivityConstraintOld.js": {
-      "expectCount": 9,
-      "actualCount": 0,
-      "undocumentLines": [
-        12,
-        13,
-        16,
-        20,
-        34,
-        64,
-        91,
-        124,
-        140
-      ]
+      "actualCount": 11,
+      "undocumentLines": []
     },
     "src/hamiltonian/ActivityMultiBackground.js": {
-      "expectCount": 14,
-      "actualCount": 2,
-      "undocumentLines": [
-        24,
-        28,
-        34,
-        35,
-        38,
-        45,
-        65,
-        110,
-        137,
-        170,
-        177,
-        183
-      ]
+      "expectCount": 9,
+      "actualCount": 9,
+      "undocumentLines": []
     },
     "src/hamiltonian/Adhesion.js": {
-      "expectCount": 5,
-      "actualCount": 0,
-      "undocumentLines": [
-        7,
-        9,
-        15,
-        21,
-        31
-      ]
-    },
-    "src/hamiltonian/AdhesionMultiBackground.js": {
-      "expectCount": 9,
-      "actualCount": 0,
-      "undocumentLines": [
-        11,
-        13,
-        17,
-        18,
-        22,
-        35,
-        43,
-        67,
-        81
-      ]
+      "expectCount": 6,
+      "actualCount": 6,
+      "undocumentLines": []
     },
     "src/hamiltonian/AttractionPointConstraint.js": {
-      "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        15,
-        16,
-        19
-      ]
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
     },
     "src/hamiltonian/AutoAdderConfig.js": {
       "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        14
-      ]
+      "actualCount": 1,
+      "undocumentLines": []
     },
     "src/hamiltonian/BarrierConstraint.js": {
-      "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        7,
-        8,
-        12
-      ]
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
     },
     "src/hamiltonian/ChemotaxisConstraint.js": {
-      "expectCount": 9,
-      "actualCount": 0,
-      "undocumentLines": [
-        4,
-        5,
-        6,
-        8,
-        13,
-        15,
-        16,
-        22,
-        29
-      ]
-    },
-    "src/hamiltonian/ChemotaxisConstraintOld.js": {
-      "expectCount": 31,
-      "actualCount": 0,
-      "undocumentLines": [
-        39,
-        41,
-        42,
-        49,
-        50,
-        52,
-        55,
-        59,
-        63,
-        65,
-        77,
-        78,
-        81,
-        97,
-        99,
-        100,
-        101,
-        102,
-        104,
-        105,
-        106,
-        107,
-        111,
-        123,
-        128,
-        143,
-        158,
-        163,
-        167,
-        182,
-        198
-      ]
+      "expectCount": 10,
+      "actualCount": 10,
+      "undocumentLines": []
     },
     "src/hamiltonian/Constraint.js": {
-      "expectCount": 20,
-      "actualCount": 0,
+      "expectCount": 8,
+      "actualCount": 7,
       "undocumentLines": [
-        2,
-        3,
-        6,
-        9,
-        10,
-        12,
-        13,
-        20,
-        24,
-        31,
-        41,
-        59,
-        64,
-        73,
-        83,
-        107,
-        112,
-        122,
-        135,
-        140
+        26
       ]
     },
     "src/hamiltonian/HardConstraint.js": {
-      "expectCount": 5,
-      "actualCount": 0,
-      "undocumentLines": [
-        3,
-        4,
-        10,
-        11,
-        14
-      ]
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/hamiltonian/HardVolumeRangeConstraint.js": {
-      "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        7,
-        9,
-        14
-      ]
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
+    "src/hamiltonian/ParameterChecker.js": {
+      "expectCount": 18,
+      "actualCount": 18,
+      "undocumentLines": []
     },
     "src/hamiltonian/PerimeterConstraint.js": {
       "expectCount": 6,
-      "actualCount": 0,
-      "undocumentLines": [
-        7,
-        8,
-        10,
-        12,
-        17,
-        48
-      ]
+      "actualCount": 6,
+      "undocumentLines": []
     },
     "src/hamiltonian/PersistenceConstraint.js": {
       "expectCount": 14,
-      "actualCount": 0,
-      "undocumentLines": [
-        10,
-        11,
-        13,
-        14,
-        16,
-        17,
-        18,
-        24,
-        28,
-        47,
-        58,
-        65,
-        73,
-        76
-      ]
+      "actualCount": 14,
+      "undocumentLines": []
     },
     "src/hamiltonian/PreferredDirectionConstraint.js": {
-      "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        15,
-        16,
-        19
-      ]
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
     },
     "src/hamiltonian/ProtrusionConstraint.js": {
-      "expectCount": 10,
-      "actualCount": 0,
+      "expectCount": 16,
+      "actualCount": 1,
       "undocumentLines": [
-        10,
-        11,
-        14,
-        18,
+        20,
         23,
-        27,
-        31,
-        40,
-        48,
-        80
+        28,
+        32,
+        39,
+        43,
+        52,
+        67,
+        100,
+        115,
+        131,
+        137,
+        140,
+        143,
+        149
       ]
     },
     "src/hamiltonian/SoftConstraint.js": {
       "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        4,
-        5,
-        9
-      ]
-    },
-    "src/hamiltonian/TestLogger.js": {
-      "expectCount": 4,
-      "actualCount": 0,
-      "undocumentLines": [
-        7,
-        8,
-        12,
-        15
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/hamiltonian/VolumeConstraint.js": {
-      "expectCount": 4,
-      "actualCount": 0,
-      "undocumentLines": [
-        7,
-        8,
-        13,
-        28
-      ]
+      "expectCount": 5,
+      "actualCount": 5,
+      "undocumentLines": []
     },
     "src/models/CA.js": {
       "expectCount": 5,
-      "actualCount": 0,
-      "undocumentLines": [
-        9,
-        10,
-        12,
-        15,
-        17
-      ]
+      "actualCount": 5,
+      "undocumentLines": []
     },
     "src/models/CPM.js": {
-      "expectCount": 32,
-      "actualCount": 0,
-      "undocumentLines": [
-        12,
-        13,
-        17,
-        19,
-        22,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31,
-        40,
-        45,
-        53,
-        62,
-        72,
-        114,
-        134,
-        139,
-        143,
-        148,
-        153,
-        157,
-        167,
-        186,
-        189,
-        226,
-        233,
-        239,
-        266,
-        300
-      ]
+      "expectCount": 29,
+      "actualCount": 29,
+      "undocumentLines": []
     },
     "src/models/GridBasedModel.js": {
       "expectCount": 26,
-      "actualCount": 0,
-      "undocumentLines": [
-        11,
-        13,
-        15,
-        21,
-        25,
-        29,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40,
-        42,
-        43,
-        45,
-        46,
-        49,
-        53,
-        58,
-        64,
-        73,
-        95,
-        100,
-        105,
-        109,
-        127
-      ]
+      "actualCount": 26,
+      "undocumentLines": []
     },
     "src/simulation/Simulation.js": {
       "expectCount": 27,
-      "actualCount": 0,
+      "actualCount": 26,
       "undocumentLines": [
-        6,
-        7,
-        15,
-        20,
-        21,
-        22,
-        27,
-        33,
-        37,
-        38,
-        45,
-        46,
-        49,
-        53,
-        62,
-        63,
-        66,
-        68,
-        73,
-        97,
-        107,
-        148,
-        166,
-        171,
-        194,
-        204,
-        209
+        7
       ]
+    },
+    "src/stats/BorderPixelsByCell.js": {
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
+    "src/stats/CellNeighborList.js": {
+      "expectCount": 5,
+      "actualCount": 5,
+      "undocumentLines": []
     },
     "src/stats/Centroids.js": {
       "expectCount": 7,
-      "actualCount": 0,
-      "undocumentLines": [
-        8,
-        9,
-        10,
-        14,
-        19,
-        25,
-        59
-      ]
+      "actualCount": 7,
+      "undocumentLines": []
     },
     "src/stats/CentroidsWithTorusCorrection.js": {
       "expectCount": 7,
-      "actualCount": 0,
-      "undocumentLines": [
-        8,
-        9,
-        10,
-        14,
-        19,
-        26,
-        81
-      ]
+      "actualCount": 7,
+      "undocumentLines": []
     },
     "src/stats/PixelsByCell.js": {
       "expectCount": 2,
-      "actualCount": 0,
-      "undocumentLines": [
-        9,
-        11
-      ]
-    },
-    "src/stats/PostMCSStats.js": {
-      "expectCount": 13,
-      "actualCount": 0,
-      "undocumentLines": [
-        2,
-        3,
-        4,
-        9,
-        10,
-        11,
-        16,
-        18,
-        33,
-        65,
-        81,
-        90,
-        123
-      ]
+      "actualCount": 2,
+      "undocumentLines": []
     },
     "src/stats/Stat.js": {
       "expectCount": 6,
-      "actualCount": 0,
-      "undocumentLines": [
-        2,
-        8,
-        9,
-        11,
-        12,
-        14
-      ]
+      "actualCount": 6,
+      "undocumentLines": []
     }
   }
 }

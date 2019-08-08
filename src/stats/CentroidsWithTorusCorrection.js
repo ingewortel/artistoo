@@ -1,28 +1,67 @@
-/*	Computes the centroid of a cell when grid has a torus. 
-	Assumption: cell pixels never extend for more than half the size of the grid. 
-*/
 
 import Stat from "./Stat.js"
 import PixelsByCell from "./PixelsByCell.js"
 
+/**	This Stat computes the centroid of a cell when grid has a torus. 
+
+	!!! Assumption: cell pixels never extend for more than half the size of the grid.
+	If this assumption does not hold, centroids may be computed wrongly.
+	
+	See also {@link Centroids} for a version without torus correction.
+		
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed two cells, run a little, and get their centroids
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	* 	torus:true,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell(1)
+	* gm.seedCell(1)
+	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
+	*
+	* C.getStat( CPM.CentroidsWithTorusCorrection ) 
+*/
+
 class CentroidsWithTorusCorrection extends Stat {
+
+	/** The set model method of class CentroidsWithTorusCorrection.
+	@param {GridBasedModel} M - the model to compute centroids on. */
 	set model( M ){
+	
+		/** The model to compute centroids on. 
+		@type {GridBasedModel}*/
 		this.M = M
 		// Half the grid dimensions; if pixels with the same cellid are further apart,
 		// we assume they are on the border of the grid and that we need to correct
 		// their positions to compute the centroid.
+		/** @ignore */
 		this.halfsize = new Array( this.M.ndim).fill(0)
 		for( let i = 0 ; i < this.M.ndim ; i ++ ){
 			this.halfsize[i] = this.M.extents[i]/2
 		}
 	}
+	
+	/** @ignore */
 	constructor( conf ){
 		super(conf)
 	}
 		
-	/* Compute the centroid of a specific cell with id = <cellid>. 
+	/** This method computes the centroid of a specific cell with id = <cellid>. 
 	The cellpixels object is given as an argument so that it only has to be requested
-	once for all cells together. */
+	once for all cells together.
+	@param {CellId} cellid ID number of the cell to get centroid of. 
+	@param {CellArrayObject} cellpixels object produced by {@link PixelsByCell}, 
+	where keys are the cellids
+	of all non-background cells on the grid, and the corresponding value is an array
+	of the pixels belonging to that cell specified by their {@link ArrayCoordinate}.
+	@return {ArrayCoordinate} the centroid of the current cell.
+	*/
 	computeCentroidOfCell( cellid, cellpixels  ){
 	
 		//let cellpixels = this.M.getStat( PixelsByCell ) 
@@ -76,8 +115,9 @@ class CentroidsWithTorusCorrection extends Stat {
 		
 	}
 		
-	/* Compute centroids for all cells on the grid, returning an object with a key
-	for each cellid and as "value" the array with coordinates of the centroid. */
+	/** This method computes the centroids of all cells on the grid. 
+	@return {CellObject} with an {@link ArrayCoordinate} of the centroid for each cell
+	 on the grid (see {@link computeCentroidOfCell}). */
 	compute(){
 		// Get object with arrays of pixels for each cell on the grid, and get
 		// the array for the current cell.

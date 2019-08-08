@@ -1,36 +1,104 @@
-/** A class containing (mostly static) utility functions for dealing with 2D 
- *  and 3D grids. */
-
 import Grid from "./Grid.js"
 
+/** A class containing (mostly static) utility functions for dealing with 3D 
+ 	grids. Extends the Grid class but implements functions specific to the 3D
+ 	grid (such as neighborhoods). 
+ 	
+ 	@example <caption>Neighborhoods on a 3D grid</caption>
+ 	* 
+ 	* let CPM = require("path/to/build")
+ 	* 
+ 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
+ 	* let grid = new CPM.Grid3D( [100,100,100], true )
+ 	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
+ 	* 
+ 	* // Now try a grid without torus; the corner now has fewer neighbors.
+ 	* let grid2 = new CPM.Grid3D( [100,100,100], false )
+ 	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+ 	*/
 class Grid3D extends Grid {
+
+	/** Constructor of the Grid3D object.
+	@param {GridSize} extents - the size of the grid in each dimension 
+	@param {boolean} [torus = true] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right? */
 	constructor( extents, torus = true ){
 		super( extents, torus )
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
+		/** @ignore */
 		this.Z_BITS = 1+Math.floor( Math.log2( this.extents[2] - 1 ) )
 		if( this.X_BITS + this.Y_BITS + this.Z_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
+		/** @ignore */
 		this.Z_MASK = (1 << this.Z_BITS)-1
+		/** @ignore */
 		this.Z_STEP = 1
+		/** @ignore */
 		this.Y_STEP = 1 << (this.Z_BITS)
+		/** @ignore */
 		this.X_STEP = 1 << (this.Z_BITS +this.Y_BITS)
+		/** Array with values for each pixel stored at the position of its 
+			{@link IndexCoordinate}. E.g. the value of pixel with coordinate i is
+			stored as this._pixels[i].
+			@private
+			@type {Uint16Array} */
 		this._pixels = new Uint16Array(this.p2i(extents))
 	}
-	/* 	Convert pixel coordinates to unique pixel ID numbers and back.
-		Depending on this.ndim, the 2D or 3D version will be used by the 
-		wrapper functions p2i and i2p. Use binary encoding for speed. */
+	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
+	
+	See also {@link Grid3D#i2p} for the backward conversion.
+	
+	@param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	@return {IndexCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid3D( [100,100,100], true )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
 	p2i( p ){
 		return ( p[0] << ( this.Z_BITS + this.Y_BITS ) ) + 
 			( p[1] << this.Z_BITS ) + 
 			p[2]
 	}
+	/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
+	
+	See also {@link Grid3D#p2i} for the backward conversion.
+	
+	@param {IndexCoordinate} i - the coordinate of the pixel to convert
+	@return {ArrayCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid3D( [100,100,100], true )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
 	i2p( i ){
 		return [i >> (this.Y_BITS + this.Z_BITS), 
 			( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 	}
+	
+	/** This iterator returns locations and values of all non-zero pixels.
 
+		@return {iPixel} for each pixel, return an array [i,v] where i is
+		the pixel's {@link IndexCoordinate} on the grid, and v its value.
+		
+		@example
+		* let CPM = require( "path/to/build" )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* grid.setpixi( 0, 1 )
+		* grid.setpixi( 1, 5 )
+		* 
+		* // iterator
+		* for( let i of grid.pixelsi() ){
+		* 	console.log( i )
+		* }
+		*/
 	* pixelsi() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -48,6 +116,23 @@ class Grid3D extends Grid {
 		}
 	}
 
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel's array coordinates on the grid, and v its value.
+		
+		@example
+		* let CPM = require( "path/to/build" )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* grid.setpix( [0,0,0], 1 )
+		* grid.setpix( [0,0,1], 5 )
+		* 
+		* // iterator
+		* for( let p of grid.pixels() ){
+		* 	console.log( p )
+		* }
+		*/
 	* pixels() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -67,6 +152,15 @@ class Grid3D extends Grid {
 		}
 	}
 
+	/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels of the pixel at 
+		coordinate i. This function takes the 3D equivalent of the 2D Moore-8 neighborhood, 
+		excluding the pixel itself.
+		@see https://en.wikipedia.org/wiki/Moore_neighborhood
+		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+		setting on this grid, see {@link torus}
+		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	*/
 	neighi( i, torus = this.torus ){
 		let p = this.i2p(i)
 

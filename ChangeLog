@@ -3,6 +3,30 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-08-08 Inge Wortel <ingewortel@gmail.com>
+	* docs : documentation now almost finished. Many src files have been modified to include
+	esdoc syntax for automatic documentation (doxygen-like). Open the docs from 
+	docs/index.html. If functions change, the associated documentation should from now on be
+	changed as well. Note that I have defined some special variable "types" (red entries in
+	the left menu in docs/index.html) that should be used in the documentation when 
+	appropriate. Use "make docs" to update documentation. 
+	* old : new folder for old implementations that don't have to be in the build anymore.
+	* old/AdhesionMultiBackground : moved from src/hamiltonian/... because this constraint
+	doesn't really work.
+	* src/grid/grid-typedef.js : file with some esdoc @typedefs associated with the grid.
+	* src/grid/models/model-typedefs.js : file with esdoc @typedefs associated with the models.
+	* src/grid/stats/stat-typedef.js : file with esdoc @typedefs associated with stats.
+	* src/grid/hamiltonian/constraint-typedef.js : file with esdoc @typedefs associated with constraints.
+	* src/hamiltonian/ParameterChecker.js : moved confCheck functions from Constraint.js
+	to this new class, and changed the functions so that they are more structured.
+	See the documentation for usage. 
+	* src/stats/CellNeighborList.js : new stat ported from the old Stats class, but hasn't
+	been properly tested yet. 
+	* src/stats/BorderPixelsByCell.js : new stat.
+	* build-makeout.bash : keeping track of the makefile dependencies automatically didn't
+	really work, so now this script just makes a special makefile to handle the dependencies.
+	
+
 2019-08-05 Inge Wortel <ingewortel@gmail.com>
 	* app/automatic-index.bash : script automatically generates app/index.js from a standard
 	file app/include-list.txt. This ensures that both the Makefile dependencies and the app index

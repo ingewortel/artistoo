@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 784,
+  "end": 1353,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 23,
+      "line": 32,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 784,
+    "end": 1353,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 23,
+        "line": 32,
         "column": 0
       }
     },
@@ -30,65 +30,63 @@
     "body": [
       {
         "type": "ImportDeclaration",
-        "start": 320,
-        "end": 356,
+        "start": 2,
+        "end": 38,
         "loc": {
           "start": {
-            "line": 8,
+            "line": 3,
             "column": 0
           },
           "end": {
-            "line": 8,
+            "line": 3,
             "column": 36
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 327,
-            "end": 335,
+            "start": 9,
+            "end": 17,
             "loc": {
               "start": {
-                "line": 8,
+                "line": 3,
                 "column": 7
               },
               "end": {
-                "line": 8,
+                "line": 3,
                 "column": 15
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 327,
-              "end": 335,
+              "start": 9,
+              "end": 17,
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 3,
                   "column": 7
                 },
                 "end": {
-                  "line": 8,
+                  "line": 3,
                   "column": 15
                 },
                 "identifierName": "Adhesion"
               },
-              "name": "Adhesion",
-              "leadingComments": null
-            },
-            "leadingComments": null
+              "name": "Adhesion"
+            }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 341,
-          "end": 356,
+          "start": 23,
+          "end": 38,
           "loc": {
             "start": {
-              "line": 8,
+              "line": 3,
               "column": 21
             },
             "end": {
-              "line": 8,
+              "line": 3,
               "column": 36
             }
           },
@@ -97,66 +95,48 @@
             "raw": "\"./Adhesion.js\""
           },
           "value": "./Adhesion.js"
-        },
-        "leadingComments": [
-          {
-            "type": "CommentBlock",
-            "value": " This class enables automatic addition of Hamiltonian terms to a CPM\n * through their parameter names.\n *\n * For each parameter name, we specify one Hamiltonian term. If the parameter\n * is present, then a new instance of this term is initialized with the CPM's\n * configuration as parameter and added to the CPM. ",
-            "start": 0,
-            "end": 318,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 6,
-                "column": 54
-              }
-            }
-          }
-        ]
+        }
       },
       {
         "type": "ImportDeclaration",
-        "start": 357,
-        "end": 409,
+        "start": 39,
+        "end": 91,
         "loc": {
           "start": {
-            "line": 9,
+            "line": 4,
             "column": 0
           },
           "end": {
-            "line": 9,
+            "line": 4,
             "column": 52
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 364,
-            "end": 380,
+            "start": 46,
+            "end": 62,
             "loc": {
               "start": {
-                "line": 9,
+                "line": 4,
                 "column": 7
               },
               "end": {
-                "line": 9,
+                "line": 4,
                 "column": 23
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 364,
-              "end": 380,
+              "start": 46,
+              "end": 62,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 4,
                   "column": 7
                 },
                 "end": {
-                  "line": 9,
+                  "line": 4,
                   "column": 23
                 },
                 "identifierName": "VolumeConstraint"
@@ -167,15 +147,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 386,
-          "end": 409,
+          "start": 68,
+          "end": 91,
           "loc": {
             "start": {
-              "line": 9,
+              "line": 4,
               "column": 29
             },
             "end": {
-              "line": 9,
+              "line": 4,
               "column": 52
             }
           },
@@ -188,44 +168,44 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 410,
-        "end": 466,
+        "start": 92,
+        "end": 148,
         "loc": {
           "start": {
-            "line": 10,
+            "line": 5,
             "column": 0
           },
           "end": {
-            "line": 10,
+            "line": 5,
             "column": 56
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 417,
-            "end": 435,
+            "start": 99,
+            "end": 117,
             "loc": {
               "start": {
-                "line": 10,
+                "line": 5,
                 "column": 7
               },
               "end": {
-                "line": 10,
+                "line": 5,
                 "column": 25
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 417,
-              "end": 435,
+              "start": 99,
+              "end": 117,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 5,
                   "column": 7
                 },
                 "end": {
-                  "line": 10,
+                  "line": 5,
                   "column": 25
                 },
                 "identifierName": "ActivityConstraint"
@@ -236,15 +216,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 441,
-          "end": 466,
+          "start": 123,
+          "end": 148,
           "loc": {
             "start": {
-              "line": 10,
+              "line": 5,
               "column": 31
             },
             "end": {
-              "line": 10,
+              "line": 5,
               "column": 56
             }
           },
@@ -257,44 +237,44 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 467,
-        "end": 525,
+        "start": 149,
+        "end": 207,
         "loc": {
           "start": {
-            "line": 11,
+            "line": 6,
             "column": 0
           },
           "end": {
-            "line": 11,
+            "line": 6,
             "column": 58
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 474,
-            "end": 493,
+            "start": 156,
+            "end": 175,
             "loc": {
               "start": {
-                "line": 11,
+                "line": 6,
                 "column": 7
               },
               "end": {
-                "line": 11,
+                "line": 6,
                 "column": 26
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 474,
-              "end": 493,
+              "start": 156,
+              "end": 175,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 6,
                   "column": 7
                 },
                 "end": {
-                  "line": 11,
+                  "line": 6,
                   "column": 26
                 },
                 "identifierName": "PerimeterConstraint"
@@ -305,15 +285,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 499,
-          "end": 525,
+          "start": 181,
+          "end": 207,
           "loc": {
             "start": {
-              "line": 11,
+              "line": 6,
               "column": 32
             },
             "end": {
-              "line": 11,
+              "line": 6,
               "column": 58
             }
           },
@@ -326,44 +306,44 @@
       },
       {
         "type": "ImportDeclaration",
-        "start": 526,
-        "end": 580,
+        "start": 208,
+        "end": 262,
         "loc": {
           "start": {
-            "line": 12,
+            "line": 7,
             "column": 0
           },
           "end": {
-            "line": 12,
+            "line": 7,
             "column": 54
           }
         },
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
-            "start": 533,
-            "end": 550,
+            "start": 215,
+            "end": 232,
             "loc": {
               "start": {
-                "line": 12,
+                "line": 7,
                 "column": 7
               },
               "end": {
-                "line": 12,
+                "line": 7,
                 "column": 24
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 533,
-              "end": 550,
+              "start": 215,
+              "end": 232,
               "loc": {
                 "start": {
-                  "line": 12,
+                  "line": 7,
                   "column": 7
                 },
                 "end": {
-                  "line": 12,
+                  "line": 7,
                   "column": 24
                 },
                 "identifierName": "BarrierConstraint"
@@ -374,15 +354,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 556,
-          "end": 580,
+          "start": 238,
+          "end": 262,
           "loc": {
             "start": {
-              "line": 12,
+              "line": 7,
               "column": 30
             },
             "end": {
-              "line": 12,
+              "line": 7,
               "column": 54
             }
           },
@@ -390,81 +370,102 @@
             "rawValue": "./BarrierConstraint.js",
             "raw": "\"./BarrierConstraint.js\""
           },
-          "value": "./BarrierConstraint.js"
-        }
+          "value": "./BarrierConstraint.js",
+          "leadingComments": null,
+          "trailingComments": null
+        },
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "* This class enables automatic addition of Hamiltonian terms to a CPM\n * through their parameter names.\n *\n * For each parameter name, we specify one Hamiltonian term. If the parameter\n * is present, then a new instance of this term is initialized with the CPM's\n * configuration as parameter and added to the CPM. \n@type {object}\n@property {Constraint} J - An {@link Adhesion} constraint is added when there is a parameter J.\n@property {Constraint} LAMBDA_V - A {@link VolumeConstraint} is added when there is a parameter LAMBDA_V.\n@property {Constraint} LAMBDA_P - A {@link PerimeterConstraint} is added when there is a parameter LAMBDA_P.\n@property {Constraint} LAMBDA_ACT - An {@link ActivityConstraint} is added when there is a parameter LAMBDA_ACT.\n@property {Constraint} IS_BARRIER - A {@link BarrierConstraint} is added when there is a parameter IS_BARRIER.\n@access package\n",
+            "start": 264,
+            "end": 1150,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 0
+              },
+              "end": {
+                "line": 22,
+                "column": 2
+              }
+            }
+          }
+        ]
       },
       {
         "type": "Identifier",
-        "start": 582,
-        "end": 751,
+        "start": 1151,
+        "end": 1320,
         "loc": {
           "start": {
-            "line": 14,
+            "line": 23,
             "column": 0
           },
           "end": {
-            "line": 20,
+            "line": 29,
             "column": 1
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start": 586,
-            "end": 751,
+            "start": 1155,
+            "end": 1320,
             "loc": {
               "start": {
-                "line": 14,
+                "line": 23,
                 "column": 4
               },
               "end": {
-                "line": 20,
+                "line": 29,
                 "column": 1
               }
             },
             "id": {
               "type": "Identifier",
-              "start": 586,
-              "end": 601,
+              "start": 1155,
+              "end": 1170,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 23,
                   "column": 4
                 },
                 "end": {
-                  "line": 14,
+                  "line": 23,
                   "column": 19
                 },
                 "identifierName": "AutoAdderConfig"
               },
-              "name": "AutoAdderConfig"
+              "name": "AutoAdderConfig",
+              "leadingComments": null
             },
             "init": {
               "type": "ObjectExpression",
-              "start": 604,
-              "end": 751,
+              "start": 1173,
+              "end": 1320,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 23,
                   "column": 22
                 },
                 "end": {
-                  "line": 20,
+                  "line": 29,
                   "column": 1
                 }
               },
               "properties": [
                 {
                   "type": "ObjectProperty",
-                  "start": 607,
-                  "end": 619,
+                  "start": 1176,
+                  "end": 1188,
                   "loc": {
                     "start": {
-                      "line": 15,
+                      "line": 24,
                       "column": 1
                     },
                     "end": {
-                      "line": 15,
+                      "line": 24,
                       "column": 13
                     }
                   },
@@ -473,15 +474,15 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 607,
-                    "end": 608,
+                    "start": 1176,
+                    "end": 1177,
                     "loc": {
                       "start": {
-                        "line": 15,
+                        "line": 24,
                         "column": 1
                       },
                       "end": {
-                        "line": 15,
+                        "line": 24,
                         "column": 2
                       },
                       "identifierName": "J"
@@ -490,15 +491,15 @@
                   },
                   "value": {
                     "type": "Identifier",
-                    "start": 611,
-                    "end": 619,
+                    "start": 1180,
+                    "end": 1188,
                     "loc": {
                       "start": {
-                        "line": 15,
+                        "line": 24,
                         "column": 5
                       },
                       "end": {
-                        "line": 15,
+                        "line": 24,
                         "column": 13
                       },
                       "identifierName": "Adhesion"
@@ -508,15 +509,15 @@
                 },
                 {
                   "type": "ObjectProperty",
-                  "start": 622,
-                  "end": 649,
+                  "start": 1191,
+                  "end": 1218,
                   "loc": {
                     "start": {
-                      "line": 16,
+                      "line": 25,
                       "column": 1
                     },
                     "end": {
-                      "line": 16,
+                      "line": 25,
                       "column": 28
                     }
                   },
@@ -525,15 +526,15 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 622,
-                    "end": 630,
+                    "start": 1191,
+                    "end": 1199,
                     "loc": {
                       "start": {
-                        "line": 16,
+                        "line": 25,
                         "column": 1
                       },
                       "end": {
-                        "line": 16,
+                        "line": 25,
                         "column": 9
                       },
                       "identifierName": "LAMBDA_V"
@@ -542,15 +543,15 @@
                   },
                   "value": {
                     "type": "Identifier",
-                    "start": 633,
-                    "end": 649,
+                    "start": 1202,
+                    "end": 1218,
                     "loc": {
                       "start": {
-                        "line": 16,
+                        "line": 25,
                         "column": 12
                       },
                       "end": {
-                        "line": 16,
+                        "line": 25,
                         "column": 28
                       },
                       "identifierName": "VolumeConstraint"
@@ -560,15 +561,15 @@
                 },
                 {
                   "type": "ObjectProperty",
-                  "start": 652,
-                  "end": 683,
+                  "start": 1221,
+                  "end": 1252,
                   "loc": {
                     "start": {
-                      "line": 17,
+                      "line": 26,
                       "column": 1
                     },
                     "end": {
-                      "line": 17,
+                      "line": 26,
                       "column": 32
                     }
                   },
@@ -577,15 +578,15 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 652,
-                    "end": 662,
+                    "start": 1221,
+                    "end": 1231,
                     "loc": {
                       "start": {
-                        "line": 17,
+                        "line": 26,
                         "column": 1
                       },
                       "end": {
-                        "line": 17,
+                        "line": 26,
                         "column": 11
                       },
                       "identifierName": "LAMBDA_ACT"
@@ -594,15 +595,15 @@
                   },
                   "value": {
                     "type": "Identifier",
-                    "start": 665,
-                    "end": 683,
+                    "start": 1234,
+                    "end": 1252,
                     "loc": {
                       "start": {
-                        "line": 17,
+                        "line": 26,
                         "column": 14
                       },
                       "end": {
-                        "line": 17,
+                        "line": 26,
                         "column": 32
                       },
                       "identifierName": "ActivityConstraint"
@@ -612,15 +613,15 @@
                 },
                 {
                   "type": "ObjectProperty",
-                  "start": 686,
-                  "end": 716,
+                  "start": 1255,
+                  "end": 1285,
                   "loc": {
                     "start": {
-                      "line": 18,
+                      "line": 27,
                       "column": 1
                     },
                     "end": {
-                      "line": 18,
+                      "line": 27,
                       "column": 31
                     }
                   },
@@ -629,15 +630,15 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 686,
-                    "end": 694,
+                    "start": 1255,
+                    "end": 1263,
                     "loc": {
                       "start": {
-                        "line": 18,
+                        "line": 27,
                         "column": 1
                       },
                       "end": {
-                        "line": 18,
+                        "line": 27,
                         "column": 9
                       },
                       "identifierName": "LAMBDA_P"
@@ -646,15 +647,15 @@
                   },
                   "value": {
                     "type": "Identifier",
-                    "start": 697,
-                    "end": 716,
+                    "start": 1266,
+                    "end": 1285,
                     "loc": {
                       "start": {
-                        "line": 18,
+                        "line": 27,
                         "column": 12
                       },
                       "end": {
-                        "line": 18,
+                        "line": 27,
                         "column": 31
                       },
                       "identifierName": "PerimeterConstraint"
@@ -664,15 +665,15 @@
                 },
                 {
                   "type": "ObjectProperty",
-                  "start": 719,
-                  "end": 749,
+                  "start": 1288,
+                  "end": 1318,
                   "loc": {
                     "start": {
-                      "line": 19,
+                      "line": 28,
                       "column": 1
                     },
                     "end": {
-                      "line": 19,
+                      "line": 28,
                       "column": 31
                     }
                   },
@@ -681,15 +682,15 @@
                   "computed": false,
                   "key": {
                     "type": "Identifier",
-                    "start": 719,
-                    "end": 729,
+                    "start": 1288,
+                    "end": 1298,
                     "loc": {
                       "start": {
-                        "line": 19,
+                        "line": 28,
                         "column": 1
                       },
                       "end": {
-                        "line": 19,
+                        "line": 28,
                         "column": 11
                       },
                       "identifierName": "IS_BARRIER"
@@ -698,15 +699,15 @@
                   },
                   "value": {
                     "type": "Identifier",
-                    "start": 732,
-                    "end": 749,
+                    "start": 1301,
+                    "end": 1318,
                     "loc": {
                       "start": {
-                        "line": 19,
+                        "line": 28,
                         "column": 14
                       },
                       "end": {
-                        "line": 19,
+                        "line": 28,
                         "column": 31
                       },
                       "identifierName": "BarrierConstraint"
@@ -715,39 +716,40 @@
                   }
                 }
               ]
-            }
+            },
+            "leadingComments": null
           }
         ],
         "kind": "let",
-        "name": "_",
         "leadingComments": [],
+        "name": "_",
         "trailingComments": []
       },
       {
         "type": "Identifier",
-        "start": 753,
-        "end": 783,
+        "start": 1322,
+        "end": 1352,
         "loc": {
           "start": {
-            "line": 22,
+            "line": 31,
             "column": 0
           },
           "end": {
-            "line": 22,
+            "line": 31,
             "column": 30
           }
         },
         "declaration": {
           "type": "Identifier",
-          "start": 768,
-          "end": 783,
+          "start": 1337,
+          "end": 1352,
           "loc": {
             "start": {
-              "line": 22,
+              "line": 31,
               "column": 15
             },
             "end": {
-              "line": 22,
+              "line": 31,
               "column": 30
             },
             "identifierName": "AutoAdderConfig"
@@ -760,90 +762,91 @@
       },
       {
         "type": "ExportDefaultDeclaration",
-        "start": 753,
-        "end": 783,
+        "start": 1322,
+        "end": 1352,
         "loc": {
           "start": {
-            "line": 22,
+            "line": 31,
             "column": 0
           },
           "end": {
-            "line": 22,
+            "line": 31,
             "column": 30
           }
         },
         "declaration": {
           "type": "VariableDeclaration",
-          "start": 582,
-          "end": 751,
+          "start": 1151,
+          "end": 1320,
           "loc": {
             "start": {
-              "line": 14,
+              "line": 23,
               "column": 0
             },
             "end": {
-              "line": 20,
+              "line": 29,
               "column": 1
             }
           },
           "declarations": [
             {
               "type": "VariableDeclarator",
-              "start": 586,
-              "end": 751,
+              "start": 1155,
+              "end": 1320,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 23,
                   "column": 4
                 },
                 "end": {
-                  "line": 20,
+                  "line": 29,
                   "column": 1
                 }
               },
               "id": {
                 "type": "Identifier",
-                "start": 586,
-                "end": 601,
+                "start": 1155,
+                "end": 1170,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 23,
                     "column": 4
                   },
                   "end": {
-                    "line": 14,
+                    "line": 23,
                     "column": 19
                   },
                   "identifierName": "AutoAdderConfig"
                 },
-                "name": "AutoAdderConfig"
+                "name": "AutoAdderConfig",
+                "leadingComments": null
               },
               "init": {
                 "type": "ObjectExpression",
-                "start": 604,
-                "end": 751,
+                "start": 1173,
+                "end": 1320,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 23,
                     "column": 22
                   },
                   "end": {
-                    "line": 20,
+                    "line": 29,
                     "column": 1
                   }
                 },
                 "properties": [
                   {
                     "type": "ObjectProperty",
-                    "start": 607,
-                    "end": 619,
+                    "start": 1176,
+                    "end": 1188,
                     "loc": {
                       "start": {
-                        "line": 15,
+                        "line": 24,
                         "column": 1
                       },
                       "end": {
-                        "line": 15,
+                        "line": 24,
                         "column": 13
                       }
                     },
@@ -852,15 +855,15 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 607,
-                      "end": 608,
+                      "start": 1176,
+                      "end": 1177,
                       "loc": {
                         "start": {
-                          "line": 15,
+                          "line": 24,
                           "column": 1
                         },
                         "end": {
-                          "line": 15,
+                          "line": 24,
                           "column": 2
                         },
                         "identifierName": "J"
@@ -869,15 +872,15 @@
                     },
                     "value": {
                       "type": "Identifier",
-                      "start": 611,
-                      "end": 619,
+                      "start": 1180,
+                      "end": 1188,
                       "loc": {
                         "start": {
-                          "line": 15,
+                          "line": 24,
                           "column": 5
                         },
                         "end": {
-                          "line": 15,
+                          "line": 24,
                           "column": 13
                         },
                         "identifierName": "Adhesion"
@@ -887,15 +890,15 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 622,
-                    "end": 649,
+                    "start": 1191,
+                    "end": 1218,
                     "loc": {
                       "start": {
-                        "line": 16,
+                        "line": 25,
                         "column": 1
                       },
                       "end": {
-                        "line": 16,
+                        "line": 25,
                         "column": 28
                       }
                     },
@@ -904,15 +907,15 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 622,
-                      "end": 630,
+                      "start": 1191,
+                      "end": 1199,
                       "loc": {
                         "start": {
-                          "line": 16,
+                          "line": 25,
                           "column": 1
                         },
                         "end": {
-                          "line": 16,
+                          "line": 25,
                           "column": 9
                         },
                         "identifierName": "LAMBDA_V"
@@ -921,15 +924,15 @@
                     },
                     "value": {
                       "type": "Identifier",
-                      "start": 633,
-                      "end": 649,
+                      "start": 1202,
+                      "end": 1218,
                       "loc": {
                         "start": {
-                          "line": 16,
+                          "line": 25,
                           "column": 12
                         },
                         "end": {
-                          "line": 16,
+                          "line": 25,
                           "column": 28
                         },
                         "identifierName": "VolumeConstraint"
@@ -939,15 +942,15 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 652,
-                    "end": 683,
+                    "start": 1221,
+                    "end": 1252,
                     "loc": {
                       "start": {
-                        "line": 17,
+                        "line": 26,
                         "column": 1
                       },
                       "end": {
-                        "line": 17,
+                        "line": 26,
                         "column": 32
                       }
                     },
@@ -956,15 +959,15 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 652,
-                      "end": 662,
+                      "start": 1221,
+                      "end": 1231,
                       "loc": {
                         "start": {
-                          "line": 17,
+                          "line": 26,
                           "column": 1
                         },
                         "end": {
-                          "line": 17,
+                          "line": 26,
                           "column": 11
                         },
                         "identifierName": "LAMBDA_ACT"
@@ -973,15 +976,15 @@
                     },
                     "value": {
                       "type": "Identifier",
-                      "start": 665,
-                      "end": 683,
+                      "start": 1234,
+                      "end": 1252,
                       "loc": {
                         "start": {
-                          "line": 17,
+                          "line": 26,
                           "column": 14
                         },
                         "end": {
-                          "line": 17,
+                          "line": 26,
                           "column": 32
                         },
                         "identifierName": "ActivityConstraint"
@@ -991,15 +994,15 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 686,
-                    "end": 716,
+                    "start": 1255,
+                    "end": 1285,
                     "loc": {
                       "start": {
-                        "line": 18,
+                        "line": 27,
                         "column": 1
                       },
                       "end": {
-                        "line": 18,
+                        "line": 27,
                         "column": 31
                       }
                     },
@@ -1008,15 +1011,15 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 686,
-                      "end": 694,
+                      "start": 1255,
+                      "end": 1263,
                       "loc": {
                         "start": {
-                          "line": 18,
+                          "line": 27,
                           "column": 1
                         },
                         "end": {
-                          "line": 18,
+                          "line": 27,
                           "column": 9
                         },
                         "identifierName": "LAMBDA_P"
@@ -1025,15 +1028,15 @@
                     },
                     "value": {
                       "type": "Identifier",
-                      "start": 697,
-                      "end": 716,
+                      "start": 1266,
+                      "end": 1285,
                       "loc": {
                         "start": {
-                          "line": 18,
+                          "line": 27,
                           "column": 12
                         },
                         "end": {
-                          "line": 18,
+                          "line": 27,
                           "column": 31
                         },
                         "identifierName": "PerimeterConstraint"
@@ -1043,15 +1046,15 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 719,
-                    "end": 749,
+                    "start": 1288,
+                    "end": 1318,
                     "loc": {
                       "start": {
-                        "line": 19,
+                        "line": 28,
                         "column": 1
                       },
                       "end": {
-                        "line": 19,
+                        "line": 28,
                         "column": 31
                       }
                     },
@@ -1060,15 +1063,15 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 719,
-                      "end": 729,
+                      "start": 1288,
+                      "end": 1298,
                       "loc": {
                         "start": {
-                          "line": 19,
+                          "line": 28,
                           "column": 1
                         },
                         "end": {
-                          "line": 19,
+                          "line": 28,
                           "column": 11
                         },
                         "identifierName": "IS_BARRIER"
@@ -1077,15 +1080,15 @@
                     },
                     "value": {
                       "type": "Identifier",
-                      "start": 732,
-                      "end": 749,
+                      "start": 1301,
+                      "end": 1318,
                       "loc": {
                         "start": {
-                          "line": 19,
+                          "line": 28,
                           "column": 14
                         },
                         "end": {
-                          "line": 19,
+                          "line": 28,
                           "column": 31
                         },
                         "identifierName": "BarrierConstraint"
@@ -1094,11 +1097,29 @@
                     }
                   }
                 ]
-              }
+              },
+              "leadingComments": null
             }
           ],
           "kind": "let",
-          "leadingComments": [],
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "* This class enables automatic addition of Hamiltonian terms to a CPM\n * through their parameter names.\n *\n * For each parameter name, we specify one Hamiltonian term. If the parameter\n * is present, then a new instance of this term is initialized with the CPM's\n * configuration as parameter and added to the CPM. \n@type {object}\n@property {Constraint} J - An {@link Adhesion} constraint is added when there is a parameter J.\n@property {Constraint} LAMBDA_V - A {@link VolumeConstraint} is added when there is a parameter LAMBDA_V.\n@property {Constraint} LAMBDA_P - A {@link PerimeterConstraint} is added when there is a parameter LAMBDA_P.\n@property {Constraint} LAMBDA_ACT - An {@link ActivityConstraint} is added when there is a parameter LAMBDA_ACT.\n@property {Constraint} IS_BARRIER - A {@link BarrierConstraint} is added when there is a parameter IS_BARRIER.\n@access package\n",
+              "start": 264,
+              "end": 1150,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 0
+                },
+                "end": {
+                  "line": 22,
+                  "column": 2
+                }
+              }
+            }
+          ],
           "trailingComments": []
         }
       }
@@ -1108,38 +1129,22 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": " This class enables automatic addition of Hamiltonian terms to a CPM\n * through their parameter names.\n *\n * For each parameter name, we specify one Hamiltonian term. If the parameter\n * is present, then a new instance of this term is initialized with the CPM's\n * configuration as parameter and added to the CPM. ",
-      "start": 0,
-      "end": 318,
+      "value": "* This class enables automatic addition of Hamiltonian terms to a CPM\n * through their parameter names.\n *\n * For each parameter name, we specify one Hamiltonian term. If the parameter\n * is present, then a new instance of this term is initialized with the CPM's\n * configuration as parameter and added to the CPM. \n@type {object}\n@property {Constraint} J - An {@link Adhesion} constraint is added when there is a parameter J.\n@property {Constraint} LAMBDA_V - A {@link VolumeConstraint} is added when there is a parameter LAMBDA_V.\n@property {Constraint} LAMBDA_P - A {@link PerimeterConstraint} is added when there is a parameter LAMBDA_P.\n@property {Constraint} LAMBDA_ACT - An {@link ActivityConstraint} is added when there is a parameter LAMBDA_ACT.\n@property {Constraint} IS_BARRIER - A {@link BarrierConstraint} is added when there is a parameter IS_BARRIER.\n@access package\n",
+      "start": 264,
+      "end": 1150,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 9,
           "column": 0
         },
         "end": {
-          "line": 6,
-          "column": 54
+          "line": 22,
+          "column": 2
         }
       }
     }
   ],
   "tokens": [
-    {
-      "type": "CommentBlock",
-      "value": " This class enables automatic addition of Hamiltonian terms to a CPM\n * through their parameter names.\n *\n * For each parameter name, we specify one Hamiltonian term. If the parameter\n * is present, then a new instance of this term is initialized with the CPM's\n * configuration as parameter and added to the CPM. ",
-      "start": 0,
-      "end": 318,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 6,
-          "column": 54
-        }
-      }
-    },
     {
       "type": {
         "label": "import",
@@ -1155,15 +1160,15 @@
         "updateContext": null
       },
       "value": "import",
-      "start": 320,
-      "end": 326,
+      "start": 2,
+      "end": 8,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 3,
           "column": 0
         },
         "end": {
-          "line": 8,
+          "line": 3,
           "column": 6
         }
       }
@@ -1181,15 +1186,15 @@
         "binop": null
       },
       "value": "Adhesion",
-      "start": 327,
-      "end": 335,
+      "start": 9,
+      "end": 17,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 3,
           "column": 7
         },
         "end": {
-          "line": 8,
+          "line": 3,
           "column": 15
         }
       }
@@ -1207,15 +1212,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 336,
-      "end": 340,
+      "start": 18,
+      "end": 22,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 3,
           "column": 16
         },
         "end": {
-          "line": 8,
+          "line": 3,
           "column": 20
         }
       }
@@ -1234,15 +1239,15 @@
         "updateContext": null
       },
       "value": "./Adhesion.js",
-      "start": 341,
-      "end": 356,
+      "start": 23,
+      "end": 38,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 3,
           "column": 21
         },
         "end": {
-          "line": 8,
+          "line": 3,
           "column": 36
         }
       }
@@ -1262,15 +1267,15 @@
         "updateContext": null
       },
       "value": "import",
-      "start": 357,
-      "end": 363,
+      "start": 39,
+      "end": 45,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 9,
+          "line": 4,
           "column": 6
         }
       }
@@ -1288,15 +1293,15 @@
         "binop": null
       },
       "value": "VolumeConstraint",
-      "start": 364,
-      "end": 380,
+      "start": 46,
+      "end": 62,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 4,
           "column": 7
         },
         "end": {
-          "line": 9,
+          "line": 4,
           "column": 23
         }
       }
@@ -1314,15 +1319,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 381,
-      "end": 385,
+      "start": 63,
+      "end": 67,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 4,
           "column": 24
         },
         "end": {
-          "line": 9,
+          "line": 4,
           "column": 28
         }
       }
@@ -1341,15 +1346,15 @@
         "updateContext": null
       },
       "value": "./VolumeConstraint.js",
-      "start": 386,
-      "end": 409,
+      "start": 68,
+      "end": 91,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 4,
           "column": 29
         },
         "end": {
-          "line": 9,
+          "line": 4,
           "column": 52
         }
       }
@@ -1369,15 +1374,15 @@
         "updateContext": null
       },
       "value": "import",
-      "start": 410,
-      "end": 416,
+      "start": 92,
+      "end": 98,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 5,
           "column": 0
         },
         "end": {
-          "line": 10,
+          "line": 5,
           "column": 6
         }
       }
@@ -1395,15 +1400,15 @@
         "binop": null
       },
       "value": "ActivityConstraint",
-      "start": 417,
-      "end": 435,
+      "start": 99,
+      "end": 117,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 5,
           "column": 7
         },
         "end": {
-          "line": 10,
+          "line": 5,
           "column": 25
         }
       }
@@ -1421,15 +1426,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 436,
-      "end": 440,
+      "start": 118,
+      "end": 122,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 5,
           "column": 26
         },
         "end": {
-          "line": 10,
+          "line": 5,
           "column": 30
         }
       }
@@ -1448,15 +1453,15 @@
         "updateContext": null
       },
       "value": "./ActivityConstraint.js",
-      "start": 441,
-      "end": 466,
+      "start": 123,
+      "end": 148,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 5,
           "column": 31
         },
         "end": {
-          "line": 10,
+          "line": 5,
           "column": 56
         }
       }
@@ -1476,15 +1481,15 @@
         "updateContext": null
       },
       "value": "import",
-      "start": 467,
-      "end": 473,
+      "start": 149,
+      "end": 155,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 6,
           "column": 0
         },
         "end": {
-          "line": 11,
+          "line": 6,
           "column": 6
         }
       }
@@ -1502,15 +1507,15 @@
         "binop": null
       },
       "value": "PerimeterConstraint",
-      "start": 474,
-      "end": 493,
+      "start": 156,
+      "end": 175,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 6,
           "column": 7
         },
         "end": {
-          "line": 11,
+          "line": 6,
           "column": 26
         }
       }
@@ -1528,15 +1533,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 494,
-      "end": 498,
+      "start": 176,
+      "end": 180,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 6,
           "column": 27
         },
         "end": {
-          "line": 11,
+          "line": 6,
           "column": 31
         }
       }
@@ -1555,15 +1560,15 @@
         "updateContext": null
       },
       "value": "./PerimeterConstraint.js",
-      "start": 499,
-      "end": 525,
+      "start": 181,
+      "end": 207,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 6,
           "column": 32
         },
         "end": {
-          "line": 11,
+          "line": 6,
           "column": 58
         }
       }
@@ -1583,15 +1588,15 @@
         "updateContext": null
       },
       "value": "import",
-      "start": 526,
-      "end": 532,
+      "start": 208,
+      "end": 214,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 7,
           "column": 0
         },
         "end": {
-          "line": 12,
+          "line": 7,
           "column": 6
         }
       }
@@ -1609,15 +1614,15 @@
         "binop": null
       },
       "value": "BarrierConstraint",
-      "start": 533,
-      "end": 550,
+      "start": 215,
+      "end": 232,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 7,
           "column": 7
         },
         "end": {
-          "line": 12,
+          "line": 7,
           "column": 24
         }
       }
@@ -1635,15 +1640,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 551,
-      "end": 555,
+      "start": 233,
+      "end": 237,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 7,
           "column": 25
         },
         "end": {
-          "line": 12,
+          "line": 7,
           "column": 29
         }
       }
@@ -1662,16 +1667,32 @@
         "updateContext": null
       },
       "value": "./BarrierConstraint.js",
-      "start": 556,
-      "end": 580,
+      "start": 238,
+      "end": 262,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 7,
           "column": 30
         },
         "end": {
-          "line": 12,
+          "line": 7,
           "column": 54
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "* This class enables automatic addition of Hamiltonian terms to a CPM\n * through their parameter names.\n *\n * For each parameter name, we specify one Hamiltonian term. If the parameter\n * is present, then a new instance of this term is initialized with the CPM's\n * configuration as parameter and added to the CPM. \n@type {object}\n@property {Constraint} J - An {@link Adhesion} constraint is added when there is a parameter J.\n@property {Constraint} LAMBDA_V - A {@link VolumeConstraint} is added when there is a parameter LAMBDA_V.\n@property {Constraint} LAMBDA_P - A {@link PerimeterConstraint} is added when there is a parameter LAMBDA_P.\n@property {Constraint} LAMBDA_ACT - An {@link ActivityConstraint} is added when there is a parameter LAMBDA_ACT.\n@property {Constraint} IS_BARRIER - A {@link BarrierConstraint} is added when there is a parameter IS_BARRIER.\n@access package\n",
+      "start": 264,
+      "end": 1150,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 22,
+          "column": 2
         }
       }
     },
@@ -1690,15 +1711,15 @@
         "updateContext": null
       },
       "value": "let",
-      "start": 582,
-      "end": 585,
+      "start": 1151,
+      "end": 1154,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 23,
           "column": 0
         },
         "end": {
-          "line": 14,
+          "line": 23,
           "column": 3
         }
       }
@@ -1716,15 +1737,15 @@
         "binop": null
       },
       "value": "AutoAdderConfig",
-      "start": 586,
-      "end": 601,
+      "start": 1155,
+      "end": 1170,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 23,
           "column": 4
         },
         "end": {
-          "line": 14,
+          "line": 23,
           "column": 19
         }
       }
@@ -1743,15 +1764,15 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 602,
-      "end": 603,
+      "start": 1171,
+      "end": 1172,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 23,
           "column": 20
         },
         "end": {
-          "line": 14,
+          "line": 23,
           "column": 21
         }
       }
@@ -1768,15 +1789,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 604,
-      "end": 605,
+      "start": 1173,
+      "end": 1174,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 23,
           "column": 22
         },
         "end": {
-          "line": 14,
+          "line": 23,
           "column": 23
         }
       }
@@ -1794,15 +1815,15 @@
         "binop": null
       },
       "value": "J",
-      "start": 607,
-      "end": 608,
+      "start": 1176,
+      "end": 1177,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 24,
           "column": 1
         },
         "end": {
-          "line": 15,
+          "line": 24,
           "column": 2
         }
       }
@@ -1820,15 +1841,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 609,
-      "end": 610,
+      "start": 1178,
+      "end": 1179,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 24,
           "column": 3
         },
         "end": {
-          "line": 15,
+          "line": 24,
           "column": 4
         }
       }
@@ -1846,15 +1867,15 @@
         "binop": null
       },
       "value": "Adhesion",
-      "start": 611,
-      "end": 619,
+      "start": 1180,
+      "end": 1188,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 24,
           "column": 5
         },
         "end": {
-          "line": 15,
+          "line": 24,
           "column": 13
         }
       }
@@ -1872,15 +1893,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 619,
-      "end": 620,
+      "start": 1188,
+      "end": 1189,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 24,
           "column": 13
         },
         "end": {
-          "line": 15,
+          "line": 24,
           "column": 14
         }
       }
@@ -1898,15 +1919,15 @@
         "binop": null
       },
       "value": "LAMBDA_V",
-      "start": 622,
-      "end": 630,
+      "start": 1191,
+      "end": 1199,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 25,
           "column": 1
         },
         "end": {
-          "line": 16,
+          "line": 25,
           "column": 9
         }
       }
@@ -1924,15 +1945,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 631,
-      "end": 632,
+      "start": 1200,
+      "end": 1201,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 25,
           "column": 10
         },
         "end": {
-          "line": 16,
+          "line": 25,
           "column": 11
         }
       }
@@ -1950,15 +1971,15 @@
         "binop": null
       },
       "value": "VolumeConstraint",
-      "start": 633,
-      "end": 649,
+      "start": 1202,
+      "end": 1218,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 25,
           "column": 12
         },
         "end": {
-          "line": 16,
+          "line": 25,
           "column": 28
         }
       }
@@ -1976,15 +1997,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 649,
-      "end": 650,
+      "start": 1218,
+      "end": 1219,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 25,
           "column": 28
         },
         "end": {
-          "line": 16,
+          "line": 25,
           "column": 29
         }
       }
@@ -2002,15 +2023,15 @@
         "binop": null
       },
       "value": "LAMBDA_ACT",
-      "start": 652,
-      "end": 662,
+      "start": 1221,
+      "end": 1231,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 26,
           "column": 1
         },
         "end": {
-          "line": 17,
+          "line": 26,
           "column": 11
         }
       }
@@ -2028,15 +2049,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 663,
-      "end": 664,
+      "start": 1232,
+      "end": 1233,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 26,
           "column": 12
         },
         "end": {
-          "line": 17,
+          "line": 26,
           "column": 13
         }
       }
@@ -2054,15 +2075,15 @@
         "binop": null
       },
       "value": "ActivityConstraint",
-      "start": 665,
-      "end": 683,
+      "start": 1234,
+      "end": 1252,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 26,
           "column": 14
         },
         "end": {
-          "line": 17,
+          "line": 26,
           "column": 32
         }
       }
@@ -2080,15 +2101,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 683,
-      "end": 684,
+      "start": 1252,
+      "end": 1253,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 26,
           "column": 32
         },
         "end": {
-          "line": 17,
+          "line": 26,
           "column": 33
         }
       }
@@ -2106,15 +2127,15 @@
         "binop": null
       },
       "value": "LAMBDA_P",
-      "start": 686,
-      "end": 694,
+      "start": 1255,
+      "end": 1263,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 27,
           "column": 1
         },
         "end": {
-          "line": 18,
+          "line": 27,
           "column": 9
         }
       }
@@ -2132,15 +2153,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 695,
-      "end": 696,
+      "start": 1264,
+      "end": 1265,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 27,
           "column": 10
         },
         "end": {
-          "line": 18,
+          "line": 27,
           "column": 11
         }
       }
@@ -2158,15 +2179,15 @@
         "binop": null
       },
       "value": "PerimeterConstraint",
-      "start": 697,
-      "end": 716,
+      "start": 1266,
+      "end": 1285,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 27,
           "column": 12
         },
         "end": {
-          "line": 18,
+          "line": 27,
           "column": 31
         }
       }
@@ -2184,15 +2205,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 716,
-      "end": 717,
+      "start": 1285,
+      "end": 1286,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 27,
           "column": 31
         },
         "end": {
-          "line": 18,
+          "line": 27,
           "column": 32
         }
       }
@@ -2210,15 +2231,15 @@
         "binop": null
       },
       "value": "IS_BARRIER",
-      "start": 719,
-      "end": 729,
+      "start": 1288,
+      "end": 1298,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 28,
           "column": 1
         },
         "end": {
-          "line": 19,
+          "line": 28,
           "column": 11
         }
       }
@@ -2236,15 +2257,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 730,
-      "end": 731,
+      "start": 1299,
+      "end": 1300,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 28,
           "column": 12
         },
         "end": {
-          "line": 19,
+          "line": 28,
           "column": 13
         }
       }
@@ -2262,15 +2283,15 @@
         "binop": null
       },
       "value": "BarrierConstraint",
-      "start": 732,
-      "end": 749,
+      "start": 1301,
+      "end": 1318,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 28,
           "column": 14
         },
         "end": {
-          "line": 19,
+          "line": 28,
           "column": 31
         }
       }
@@ -2287,15 +2308,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 750,
-      "end": 751,
+      "start": 1319,
+      "end": 1320,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 29,
           "column": 0
         },
         "end": {
-          "line": 20,
+          "line": 29,
           "column": 1
         }
       }
@@ -2315,15 +2336,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 753,
-      "end": 759,
+      "start": 1322,
+      "end": 1328,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 31,
           "column": 0
         },
         "end": {
-          "line": 22,
+          "line": 31,
           "column": 6
         }
       }
@@ -2343,15 +2364,15 @@
         "updateContext": null
       },
       "value": "default",
-      "start": 760,
-      "end": 767,
+      "start": 1329,
+      "end": 1336,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 31,
           "column": 7
         },
         "end": {
-          "line": 22,
+          "line": 31,
           "column": 14
         }
       }
@@ -2369,15 +2390,15 @@
         "binop": null
       },
       "value": "AutoAdderConfig",
-      "start": 768,
-      "end": 783,
+      "start": 1337,
+      "end": 1352,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 31,
           "column": 15
         },
         "end": {
-          "line": 22,
+          "line": 31,
           "column": 30
         }
       }
@@ -2395,15 +2416,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 784,
-      "end": 784,
+      "start": 1353,
+      "end": 1353,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 32,
           "column": 0
         },
         "end": {
-          "line": 23,
+          "line": 32,
           "column": 0
         }
       }

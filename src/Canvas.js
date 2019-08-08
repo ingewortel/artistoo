@@ -14,25 +14,53 @@ import ActivityMultiBackground from "./hamiltonian/ActivityMultiBackground.js"
  * separately but can access it from CPM.Canvas. */
 class Canvas {
 	/** The Canvas constructor accepts a CPM object C or a Grid2D object.
-	@param {GridBasedModel/Grid2D/CoarseGrid} C the object to draw, which is
-	either an object of class GridBasedModel (either CPM or CA), or a grid (Grid2D or
-	CoarseGrid).
-	@param {object} options Configuration settings, containing: "zoom" (positive number specifying
-	the zoom level to draw with.) */
+	@param {GridBasedModel|Grid2D|CoarseGrid} C - the object to draw, which must be
+	an object of class {@link GridBasedModel} (or its subclasses {@link CPM} and {@link CA}),
+	or a 2D grid ({@link Grid2D} or {@link CoarseGrid}). Drawing of other grids is currently
+	not supported.
+	@param {object} [ options = {} ] - Configuration settings
+	@param {number} [ options.zoom = 1 ]- positive number specifying the zoom level to draw with.
+	@param {number[]} [options.wrap = [0,0,0]] - if nonzero: 'wrap' the grid to these 
+	dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+	
+	@example <caption>A CPM with Canvas</caption>
+	* let CPM = require( "path/to/build" )
+	* 
+	* // Create a CPM, corresponding Canvas and GridManipulator 
+	* // (Use CPM. prefix from outside the module)
+	* let C = new CPM.CPM( [200,200], {
+	* 	T : 20, 
+	* 	J : [[0,20][20,10]], 
+	* 	V:[0,500], 
+	* 	LAMBDA_V:[0,5] 
+	* } )
+	* let Cim = new CPM.Canvas( C, {zoom:2} )
+	* let gm = new CPM.GridManipulator( C )
+	* 
+	* // Seed a cell at [x=100,y=100] and run 100 MCS.
+	* gm.seedCellAt( 1, [100,100] )
+	* for( let t = 0; t < 100; t++ ){
+	* 	C.timeStep()
+	* }
+	* 
+	* // Draw the cell and save an image
+	* Cim.drawCells( 1, "FF0000" )			// draw cells of CellKind 1 in red
+	* Cim.writePNG( "my-cell-t100.png" )
+	*/
 	constructor( C, options ){
 		if( C instanceof GridBasedModel ){
 			/**
 			 * The underlying model that is drawn on the canvas.
-			 * @type {GridBasedModel}
+			 * @type {GridBasedModel|CPM|CA}
 			 */
 			this.C = C
-			/** @private
-			 * @ignore */
+			/** Grid size in each dimension, taken from the CPM or grid object to draw.
+			@type {GridSize} each element is the grid size in that dimension in pixels */
 			this.extents = C.extents
 		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
 			/**
 			 * The underlying grid that is drawn on the canvas.
-			 * @type {Grid2D/CoarseGrid}
+			 * @type {Grid2D|CoarseGrid}
 			 */
 			this.grid = C
 			this.extents = C.extents
@@ -40,7 +68,9 @@ class Canvas {
 		/** Zoom level to draw the canvas with, set to options.zoom or its default value 1.
 		* @type {number}*/
 		this.zoom = (options && options.zoom) || 1
-		/** @ignore*/
+		/** if nonzero: 'wrap' the grid to these dimensions; eg a pixel with x 
+		coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+		@type {number[]} */
 		this.wrap = (options && options.wrap) || [0,0,0]
 		
 		/** Width of the canvas in pixels (in its unzoomed state)
@@ -179,9 +209,11 @@ class Canvas {
 		this.col_b = parseInt( hex.substr(4,2), 16 )
 	}
 
+	/** Hex code string for a color.
+	@typedef {string} HexColor*/
+
 	/** Color the whole grid in color [col], or in black if no argument is given.
-	   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
-	   * it gets the default value of black ("000000").
+	   * @param {HexColor} [ col = "000000" ] -hex code for the color to use, defaults to black.
 	*/
 	clear( col ){
 		col = col || "000000"
@@ -189,8 +221,13 @@ class Canvas {
 		this.ctx.fillRect( 0,0, this.el.width, this.el.height )
 	}
 
+	/** Rendering context of canvas.
+	@see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+	@typedef {object} CanvasRenderingContext2D
+	*/
+
 	/** Return the current drawing context.
-	@return {RenderingContext} current drawing context on the canvas.
+	@return {CanvasRenderingContext2D} current drawing context on the canvas.
 	*/
 	context(){
 		return this.ctx
@@ -211,8 +248,8 @@ class Canvas {
 
 	/** Use to color a grid according to its values. High values are colored in a brighter
 	red. 
-   * @param {Grid2D or CoarseGrid} cc - Optional: the grid to draw values for. If left 
-   * unspecified, the grid that was originally supplied to the constructor is used. 
+   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
+   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
    */
 	drawField( cc ){
 		if( !cc ){
@@ -238,14 +275,15 @@ class Canvas {
 		}
 		this.putImageData()
 	}
-	/** Method for drawing the cell borders for a given cellkind in the color specified in "col"
+	/** @desc Method for drawing the cell borders for a given cellkind in the color specified in "col"
 	(hex format). This function draws a line around the cell (rather than coloring the
 	outer pixels). If [kind] is negative, simply draw all borders.
-   * @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+	
+	See {@link drawOnCellBorders} to color the outer pixels of the cell.
+	
+   * @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
    * positive integer as 0 is reserved for the background.
-   * @param {string} col - Optional: hex code for the color to use. If left unspecified,
-   * it gets the default value of black ("000000").
-   * @see drawOnCellBorders to color the outer pixels of the cell.
+   * @param {HexColor}  [ col = "000000" ] - hex code for the color to use, defaults to black.
    */
 	drawCellBorders( kind, col ){
 		col = col || "000000"
@@ -281,16 +319,17 @@ class Canvas {
 		}
 		this.putImageData()
 	}
-		
+
 	/** Use to show activity values of the act model using a color gradient, for
 		cells in the grid of cellkind "kind". 
 		The constraint holding the activity values can be supplied as an 
 		argument. Otherwise, the current CPM is searched for the first 
 		registered activity constraint and that is then used.
-   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
    positive integer as 0 is reserved for the background.
-   @param {ActivityConstraint or ActivityMultiBackground} A - the constraint object to use.
-   By default this is the first instance of an ActivityConstraint or ActivityMultiBackground
+   @param {ActivityConstraint|ActivityMultiBackground} [ A ] - the constraint object to
+   use, which must be of class {@link ActivityConstraint} or {@link ActivityMultiBackground}
+   If left unspecified, this is the first instance of an ActivityConstraint or ActivityMultiBackground
    object found in the soft_constraints of the attached CPM.
    */
 	drawActivityValues( kind, A ){
@@ -336,12 +375,14 @@ class Canvas {
 	}
 			
 	/** Color outer pixel of all cells of kind [kind] in col [col].
-   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
-   positive integer as 0 is reserved for the background.
-   @param {string} col - Optional: hex code for the color to use. If left unspecified,
-   it gets the default value of black ("000000").
-   @see drawCellBorders to actually draw around the cell rather than coloring the
+	
+	   See {@link drawCellBorders} to actually draw around the cell rather than coloring the
    outer pixels.
+   
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
+   positive integer as 0 is reserved for the background.
+   @param {HexColor} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black ("000000").
    */
 	drawOnCellBorders( kind, col ){
 		col = col || "000000"
@@ -360,9 +401,9 @@ class Canvas {
 
 
 	/** Draw all cells of cellkind "kind" in color col (hex). 
-   @param {integer} kind - Integer specifying the cellkind to color. Should be a 
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
    positive integer as 0 is reserved for the background.
-   @param {string/function} col - Optional: hex code for the color to use. If left unspecified,
+   @param {HexColor|function} col - Optional: hex code for the color to use. If left unspecified,
    it gets the default value of black ("000000"). col can also be a function that
 	returns a hex value for a cell id.
    */

@@ -6,8 +6,13 @@
 
 /** This class implements a data structure with constant-time insertion, deletion, and random
     sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
-    pixels at cell borders. */
+    pixels at cell borders. Elements in this set must be unique.*/
 class DiceSet{
+
+	/** An object of class MersenneTwister. 
+	@see https://github.com/pigulla/mersennetwister
+	@typedef {object} MersenneTwister
+	*/
 
 	/** The constructor of class DiceSet takes a MersenneTwister object as input, to allow
 	seeding of the random number generator used for random sampling.
@@ -26,7 +31,7 @@ class DiceSet{
 		//this.indices = {}
 
 		/** Use an array for constant time random sampling of pixels at the border of cells.
-		@type {array} */
+		@type {number[]} */
 		this.elements = []
 
 		/** The number of elements currently present in the DiceSet. 
@@ -38,10 +43,13 @@ class DiceSet{
 		this.mt = mt
 	}
 
+	/** Unique identifier of some element. This can be a number (integer) or a string,
+	but it must uniquely identify one element in a set.
+	@typedef {number|string} uniqueID*/
+
 	/** Insert a new element. It is added as an index in the indices, and pushed
 	to the end of the elements array.
-	@param {unique ID} v The element to add. Can be a number or a string, but it must be
-	unique as it should also be a unique identifier in the indices object.
+	@param {uniqueID} v The element to add.
 	*/
 	insert( v ){
 		if( this.indices[v] ){
@@ -56,9 +64,7 @@ class DiceSet{
 	}
 
 	/** Remove element v.
-	@param {unique ID} v The element to remove. Can be a number or a string, but it must be
-	unique as it should also be a unique identifier in the indices object (which is used
-	to remove it).
+	@param {uniqueID} v The element to remove. 
 	*/
 	remove( v ){
 		// Check whether element is present before it can be removed.
@@ -86,8 +92,7 @@ class DiceSet{
 		this.indices[e] = i
 	}
 	/** Check if the DiceSet already contains element v. 
-	@param {unique ID} v The element to check presence of. Can be a number or a string, but it must be
-	unique as it should also be a unique identifier in the indices object.
+	@param {uniqueID} v The element to check presence of. 
 	@return {boolean} true or false depending on whether the element is present or not.
 	*/
 	contains( v ){
@@ -96,7 +101,7 @@ class DiceSet{
 	}
 	
 	/** Sample a random element from v.
-	@return {unique ID} the element sampled.
+	@return {uniqueID} the element sampled.
 	*/
 	sample(){
 		return this.elements[Math.floor(this.mt.rnd()*this.length)]
