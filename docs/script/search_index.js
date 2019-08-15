@@ -24,6 +24,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "cpmjs/src/hamiltonian/autoadderconfig.js~autoadderconfig",
+    "variable/index.html#static-variable-AutoAdderConfig",
+    "<span>AutoAdderConfig</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/AutoAdderConfig.js</span>",
+    "variable"
+  ],
+  [
     "cpmjs/src/hamiltonian/barrierconstraint.js~barrierconstraint",
     "class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html",
     "<span>BarrierConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/BarrierConstraint.js</span>",
@@ -984,6 +990,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/grid/gridmanipulator.js~gridmanipulator#killcell",
+    "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-killCell",
+    "src/grid/GridManipulator.js~GridManipulator#killCell",
+    "method"
+  ],
+  [
     "src/grid/gridmanipulator.js~gridmanipulator#makeplane",
     "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makePlane",
     "src/grid/GridManipulator.js~GridManipulator#makePlane",
@@ -1737,6 +1749,12 @@ window.esdocSearchIndex = [
     "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#log",
     "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-log",
     "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#log",
+    "method"
+  ],
+  [
+    "src/hamiltonian/protrusionconstraint.js~protrusionconstraint#postmcslistener",
+    "class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html#instance-method-postMCSListener",
+    "src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint#postMCSListener",
     "method"
   ],
   [

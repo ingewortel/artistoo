@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
@@ -210,11 +211,11 @@ class ProtrusionConstraint extends SoftConstraint {
 			throw(&quot;Cannot remove focalpoint &quot; + i + &quot; : i is not a focal point!&quot;)
 
 		}
-		if( !( this.C.grid.pixti(i) == cellid ) ){
+		/*if( !( this.C.grid.pixti(i) == cellid ) ){
 			this.log( cellid )
 			this.log( this.C.grid.pixti(i))
 			throw(&quot;Something went wrong! focalpoint &quot; + i + &quot; does not belong to cellid &quot; + cellid + &quot;!&quot;)
-		}
+		}*/
 	
 		delete this.focalpoints[&quot;points&quot;][i]
 		this.focalpoints[&quot;num&quot;][cellid]--
@@ -234,6 +235,17 @@ class ProtrusionConstraint extends SoftConstraint {
 	log( message ){
 		/* eslint-disable no-console*/
 		console.log(message)
+	}
+
+	postMCSListener(){
+		// remove all focalpoints that are no longer at the border.
+		for( let fp of Object.keys( this.focalpoints[&quot;points&quot;] ) ){
+			if( !this.C.borderpixels.contains( fp ) ){
+				let cellid = this.C.pixti(fp)
+				this.removeFocalPoint( fp, cellid )
+			}
+		}
+		
 	}
 
 	/* eslint-disable no-unused-vars*/
@@ -256,9 +268,11 @@ class ProtrusionConstraint extends SoftConstraint {
 			// case, drop it. (This should only happen when the N_PROTRUSION) changes during
 			// the simulation, eg via HTML controls.
 			let sourcei = this.lastSource()
-			if( this.isFocalPoint( sourcei ) &amp;&amp; this.currentNumberFocalPoints(t) &lt;= this.conf[&quot;N_PROTRUSION&quot;][kind] ){
+			if( this.isFocalPoint( sourcei ) ){
 				this.removeFocalPoint( sourcei, t )
-				this.addFocalPoint( i, t )
+				if( this.currentNumberFocalPoints(t) &lt;= this.conf[&quot;N_PROTRUSION&quot;][kind] ){
+					this.addFocalPoint( i, t )
+				} 
 			}
 		
 			// 2) If the copy did not come from a focalpoint, but the cell that has just 

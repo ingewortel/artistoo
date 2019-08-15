@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
@@ -190,14 +191,19 @@ class ActivityMultiBackground extends ActivityConstraint {
 		}
 	}
 	
-	/** Get the background voxels from the conf object and store them in a correct format
-	in this.bgvoxels. This only has to be done once.
-	@private */	
-	setBackgroundVoxels(){
+	/** Get the background voxels from input argument or the conf object and store them in a correct format
+	in this.bgvoxels. This only has to be done once, but can be called from outside to
+	change the background voxels during a simulation (eg in a HTML page).
+	 */	
+	setBackgroundVoxels( voxels ){
 	
-		for( let bgkind = 0; bgkind &lt; this.conf[&quot;BACKGROUND_VOXELS&quot;].length; bgkind++ ){
+		voxels = voxels || this.conf[&quot;BACKGROUND_VOXELS&quot;]
+	
+		// reset if any exist already
+		this.bgvoxels = []
+		for( let bgkind = 0; bgkind &lt; voxels.length; bgkind++ ){
 			this.bgvoxels.push({})
-			for( let v of this.conf[&quot;BACKGROUND_VOXELS&quot;][bgkind] ){
+			for( let v of voxels[bgkind] ){
 				this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true
 			}
 		}

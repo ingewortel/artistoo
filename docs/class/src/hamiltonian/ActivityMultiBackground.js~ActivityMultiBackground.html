@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
@@ -357,15 +358,9 @@ the constructor, and that they are of the right format.</p>
       
     </td>
   </tr>
-</tbody>
-</table>
-<table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Private Methods</td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
+<tr data-ice="target">
     <td>
-      <span class="access" data-ice="access">private</span>
+      <span class="access" data-ice="access">public</span>
       
       
       
@@ -377,13 +372,13 @@ the constructor, and that they are of the right format.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-setBackgroundVoxels">setBackgroundVoxels</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html#instance-method-setBackgroundVoxels">setBackgroundVoxels</a></span></span><span class="code" data-ice="signature">(voxels: <span>*</span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Get the background voxels from the conf object and store them in a correct format
+        <div data-ice="description"><p>Get the background voxels from input argument or the conf object and store them in a correct format
 in this.bgvoxels.</p>
 </div>
       </div>
@@ -1259,7 +1254,7 @@ is not the case.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/ActivityMultiBackground.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ActivityMultiBackground.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
@@ -1343,34 +1338,49 @@ to copy into.</p>
   
   
 </div>
-<h2 data-ice="title">Private Methods</h2>
-
 <div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-setBackgroundVoxels">
-    <span class="access" data-ice="access">private</span>
+    <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">setBackgroundVoxels</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">setBackgroundVoxels</span><span class="code" data-ice="signature">(voxels: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/ActivityMultiBackground.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ActivityMultiBackground.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Get the background voxels from the conf object and store them in a correct format
-in this.bgvoxels. This only has to be done once.</p>
+  <div data-ice="description"><p>Get the background voxels from input argument or the conf object and store them in a correct format
+in this.bgvoxels. This only has to be done once, but can be called from outside to
+change the background voxels during a simulation (eg in a HTML page).</p>
 </div>
 
   
 
-  <div data-ice="properties">
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">voxels</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
 </div>
 
   

@@ -18,7 +18,6 @@ import BarrierConstraint from "./BarrierConstraint.js"
 @property {Constraint} LAMBDA_P - A {@link PerimeterConstraint} is added when there is a parameter LAMBDA_P.
 @property {Constraint} LAMBDA_ACT - An {@link ActivityConstraint} is added when there is a parameter LAMBDA_ACT.
 @property {Constraint} IS_BARRIER - A {@link BarrierConstraint} is added when there is a parameter IS_BARRIER.
-@access package
 */
 let AutoAdderConfig = {
 	J : Adhesion,

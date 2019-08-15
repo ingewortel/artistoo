@@ -1,7 +1,7 @@
 {
-  "coverage": "90.42%",
-  "expectCount": 376,
-  "actualCount": 340,
+  "coverage": "90.21%",
+  "expectCount": 378,
+  "actualCount": 341,
   "files": {
     "src/Canvas.js": {
       "expectCount": 37,
@@ -59,8 +59,8 @@
       "undocumentLines": []
     },
     "src/grid/GridManipulator.js": {
-      "expectCount": 9,
-      "actualCount": 9,
+      "expectCount": 10,
+      "actualCount": 10,
       "undocumentLines": []
     },
     "src/hamiltonian/ActivityConstraint.js": {
@@ -136,7 +136,7 @@
       "undocumentLines": []
     },
     "src/hamiltonian/ProtrusionConstraint.js": {
-      "expectCount": 16,
+      "expectCount": 17,
       "actualCount": 1,
       "undocumentLines": [
         20,
@@ -153,7 +153,8 @@
         137,
         140,
         143,
-        149
+        148,
+        160
       ]
     },
     "src/hamiltonian/SoftConstraint.js": {
