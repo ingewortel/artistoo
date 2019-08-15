@@ -2359,14 +2359,19 @@ var CPM = (function (exports) {
 			}
 		}
 		
-		/** Get the background voxels from the conf object and store them in a correct format
-		in this.bgvoxels. This only has to be done once.
-		@private */	
-		setBackgroundVoxels(){
+		/** Get the background voxels from input argument or the conf object and store them in a correct format
+		in this.bgvoxels. This only has to be done once, but can be called from outside to
+		change the background voxels during a simulation (eg in a HTML page).
+		 */	
+		setBackgroundVoxels( voxels ){
 		
-			for( let bgkind = 0; bgkind < this.conf["BACKGROUND_VOXELS"].length; bgkind++ ){
+			voxels = voxels || this.conf["BACKGROUND_VOXELS"];
+		
+			// reset if any exist already
+			this.bgvoxels = [];
+			for( let bgkind = 0; bgkind < voxels.length; bgkind++ ){
 				this.bgvoxels.push({});
-				for( let v of this.conf["BACKGROUND_VOXELS"][bgkind] ){
+				for( let v of voxels[bgkind] ){
 					this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true;
 				}
 			}
@@ -3864,7 +3869,6 @@ var CPM = (function (exports) {
 	@property {Constraint} LAMBDA_P - A {@link PerimeterConstraint} is added when there is a parameter LAMBDA_P.
 	@property {Constraint} LAMBDA_ACT - An {@link ActivityConstraint} is added when there is a parameter LAMBDA_ACT.
 	@property {Constraint} IS_BARRIER - A {@link BarrierConstraint} is added when there is a parameter IS_BARRIER.
-	@access package
 	*/
 	let AutoAdderConfig = {
 		J : Adhesion,
@@ -4710,6 +4714,23 @@ var CPM = (function (exports) {
 			@type {CPM|GridBasedModel|Grid}*/
 			this.C = C;
 		}
+		
+		/** @experimental
+		 */
+		killCell( cellid ){
+			let cp = this.C.getStat( PixelsByCell );
+			let cpi = cp[cellid];
+			
+			for( let p of cpi ){
+				this.C.setpixi( this.C.grid.p2i(p), 0 );
+			}
+			
+			// update stats
+			if( "PixelsByCell" in this.C.stat_values ){
+				delete this.C.stat_values["PixelsByCell"][cellid];
+			}
+		}
+		
 		/** Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
 		 * Try a specified number of times, then give up if grid is too full. 
 		 * The first cell will always be seeded at the midpoint of the grid. 
@@ -5821,8 +5842,8 @@ var CPM = (function (exports) {
 			}
 			/** Log stats or not
 			@type {boolean}*/
-			this.logstats = this.conf["STATSOUT"] || { browser: false, node: true };
-			this.logstats = this.logstats[this.mode];
+			this.logstats2 = this.conf["STATSOUT"] || { browser: false, node: true };
+			this.logstats = this.logstats2[this.mode];
 			
 			/** Saving images or not.
 			@type {boolean}*/
