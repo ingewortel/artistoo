@@ -77,8 +77,8 @@ class Simulation {
 		}
 		/** Log stats or not
 		@type {boolean}*/
-		this.logstats = this.conf["STATSOUT"] || { browser: false, node: true }
-		this.logstats = this.logstats[this.mode]
+		this.logstats2 = this.conf["STATSOUT"] || { browser: false, node: true }
+		this.logstats = this.logstats2[this.mode]
 		
 		/** Saving images or not.
 		@type {boolean}*/
