@@ -269,12 +269,85 @@ class Canvas {
 		this.col_b = 0
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				this.col_r =  255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				let colval = 255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				this.col_r = colval
+				//this.col_g = colval
 				this.pxfi([i,j])
 			}
 		}
 		this.putImageData()
 	}
+	/** Use to color a grid according to its values. High values are colored in a brighter
+	red. 
+   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
+   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
+   */
+	drawFieldContour( cc ){
+		if( !cc ){
+			cc = this.grid
+		}
+		let maxval = 0
+		let minval = Math.log(0.1)
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				let p = Math.log(.1+cc.pixt([i,j]))
+				if( maxval < p ){
+					maxval = p
+				}
+				if( minval > p ){
+					minval = p
+				}
+			}
+		}
+		
+		
+		this.getImageData()
+		this.col_g = 0
+		this.col_b = 0
+		this.col_r = 255
+		
+		let step = (maxval-minval)/20
+		for( let v = minval; v < maxval; v+= step ){
+			
+			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				
+					let pixelval = Math.log( .1 + cc.pixt( [i,j] ) )
+					if( Math.abs( v - pixelval ) < 0.05*maxval ){
+						let below = false, above = false
+						for( let n of this.C.grid.neighNeumanni( this.C.grid.p2i( [i,j] ) ) ){
+					
+							let nval = Math.log(0.1 + cc.pixt(this.C.grid.i2p(n)) )
+							if( nval < v ){
+								below = true
+							}
+							if( nval >= v ){
+								above = true
+							}
+							if( above && below ){
+								this.col_r = 150*((v-minval)/(maxval-minval)) + 105
+								this.pxfi( [i,j] )
+								break
+							}
+						}
+					}
+				
+					
+
+				}
+			}
+			
+		}
+		
+			
+		
+
+
+		this.putImageData()
+	}
+	
+	
+	
 	/** @desc Method for drawing the cell borders for a given cellkind in the color specified in "col"
 	(hex format). This function draws a line around the cell (rather than coloring the
 	outer pixels). If [kind] is negative, simply draw all borders.

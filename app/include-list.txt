@@ -47,6 +47,7 @@ module	PreferredDirectionConstraint	src/hamiltonian/PreferredDirectionConstraint
 module	ChemotaxisConstraint	src/hamiltonian/ChemotaxisConstraint.js
 module	AttractionPointConstraint	src/hamiltonian/AttractionPointConstraint.js
 module	ProtrusionConstraint	src/hamiltonian/ProtrusionConstraint.js
+module	ConnectivityConstraint	src/hamiltonian/ConnectivityConstraint.js
 
 # constraints: hard constraints
 module	HardConstraint	src/hamiltonian/HardConstraint.js

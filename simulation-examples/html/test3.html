@@ -59,8 +59,8 @@ let config = {
 		P_DETACH : [0,100]
 		
 		// ActivityConstraint parameters
-		//LAMBDA_ACT : [0,140],			// ActivityConstraint importance per cellkind
-		//MAX_ACT : [0,20],				// Activity memory duration per cellkind
+		//LAMBDA_ACT : [0,200],			// ActivityConstraint importance per cellkind
+		//MAX_ACT : [0,30],				// Activity memory duration per cellkind
 		//ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
 											// "geometric" or "arithmetic" mean?
 	},
@@ -73,14 +73,14 @@ let config = {
 		NRCELLS : [1,0],					// Number of cells to seed for all
 											// non-background cellkinds.
 		// Runtime etc
-		BURNIN : 50,
+		BURNIN : 0,
 		RUNTIME : 1000,
 		RUNTIME_BROWSER : "Inf",
 		
 		// Visualization
 		CANVASCOLOR : "eaecef",
 		CELLCOLOR : ["AAAAAA"],
-		//ACTCOLOR : [true],			// Should pixel activity values be displayed?
+		ACTCOLOR : [true],			// Should pixel activity values be displayed?
 		SHOWBORDERS : [false],				// Should cellborders be displayed?
 		zoom : 4,							// zoom in on canvas with this factor.
 		
@@ -104,6 +104,7 @@ let sim, meter
 function initialize(){
 	sim = new CPM.Simulation( config, {drawCanvas:drawCanvas, drawFocalPoints: drawFocalPoints} )
 	sim.C.add( new CPM.ProtrusionConstraint( sim.C.conf ) )
+	sim.C.add( new CPM.ConnectivityConstraint( { CONNECTED : [false, true] } ) )
 
 	meter = new FPSMeter({left:"auto", right:"5px"})
 	step()
@@ -112,6 +113,7 @@ function initialize(){
 
 function step(){
 	sim.step()
+	//console.log( sim.time )
 	meter.tick()
 	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
 		requestAnimationFrame( step )
@@ -163,7 +165,7 @@ function drawCanvas(){
 function drawFocalPoints(){
 	let pconstraint = this.C.getConstraint( "ProtrusionConstraint" )
 	for( let fp of Object.keys( pconstraint.focalpoints["points"] ) ){
-		this.Cim.col( "FF0000" )
+		this.Cim.col( "0000FF" )
 		this.Cim.pxf( this.C.grid.i2p(fp) )
 	}
 }

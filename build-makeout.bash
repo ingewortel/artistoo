@@ -8,5 +8,5 @@ echo "all : uptodate"
 echo -e "\n"
 
 echo "uptodate :  "$moduledependencies
-echo -e "\t" && touch $@
+echo -e "\t" touch \$@
 

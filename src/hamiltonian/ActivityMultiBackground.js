@@ -99,14 +99,19 @@ class ActivityMultiBackground extends ActivityConstraint {
 		}
 	}
 	
-	/** Get the background voxels from the conf object and store them in a correct format
-	in this.bgvoxels. This only has to be done once.
-	@private */	
-	setBackgroundVoxels(){
+	/** Get the background voxels from input argument or the conf object and store them in a correct format
+	in this.bgvoxels. This only has to be done once, but can be called from outside to
+	change the background voxels during a simulation (eg in a HTML page).
+	 */	
+	setBackgroundVoxels( voxels ){
 	
-		for( let bgkind = 0; bgkind < this.conf["BACKGROUND_VOXELS"].length; bgkind++ ){
+		voxels = voxels || this.conf["BACKGROUND_VOXELS"]
+	
+		// reset if any exist already
+		this.bgvoxels = []
+		for( let bgkind = 0; bgkind < voxels.length; bgkind++ ){
 			this.bgvoxels.push({})
-			for( let v of this.conf["BACKGROUND_VOXELS"][bgkind] ){
+			for( let v of voxels[bgkind] ){
 				this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true
 			}
 		}

@@ -7,7 +7,7 @@ all : build/cpm.js
 MODULE_FILES := $(cat app/include-list.txt | awk '$$1 ~ /^module/{printf "%s ", $$3}' )
 
 build/cpm.js: rollup.config.js app/index.js uptodate
-	node_modules/rollup/bin/rollup -c
+	node_modules/rollup/bin/rollup -c && touch build.make
 
 uptodate : build.make
 	$(MAKE) -f $<

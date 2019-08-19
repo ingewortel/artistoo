@@ -30,6 +30,23 @@ class GridManipulator {
 		@type {CPM|GridBasedModel|Grid}*/
 		this.C = C
 	}
+	
+	/** @experimental
+	 */
+	killCell( cellid ){
+		let cp = this.C.getStat( PixelsByCell )
+		let cpi = cp[cellid]
+		
+		for( let p of cpi ){
+			this.C.setpixi( this.C.grid.p2i(p), 0 )
+		}
+		
+		// update stats
+		if( "PixelsByCell" in this.C.stat_values ){
+			delete this.C.stat_values["PixelsByCell"][cellid]
+		}
+	}
+	
 	/** Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
 	 * Try a specified number of times, then give up if grid is too full. 
 	 * The first cell will always be seeded at the midpoint of the grid. 

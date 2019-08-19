@@ -3,6 +3,10 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-08-19 Inge Wortel <ingewortel@gmail.com>
+	* src/hamiltonian/ConnectivityConstraint.js : Added connectivity constraint. 
+	* src/Canvas.js : Added method to draw contour of chemokine field.
+
 2019-08-08 Inge Wortel <ingewortel@gmail.com>
 	* docs : documentation now almost finished. Many src files have been modified to include
 	esdoc syntax for automatic documentation (doxygen-like). Open the docs from 
