@@ -52,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
@@ -81,6 +82,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
@@ -249,7 +251,7 @@
         
         
         <div data-ice="description"><p>Any function suplied in the custommethods argument to
-the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
+the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
 </div>
       </div>
     </td>
@@ -418,7 +420,35 @@ exist.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html#instance-member-logstats">logstats</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html#instance-member-logstats">logstats</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html#instance-member-logstats2">logstats2</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -1235,7 +1265,7 @@ each <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></sp
   
   
   <div data-ice="description"><p>Any function suplied in the custommethods argument to
-the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
+the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
 </div>
 
   
@@ -1490,7 +1520,50 @@ their values in helpClasses to &apos;true&apos;, so they don&apos;t have to be a
     
     
     
-    <span class="code" data-ice="name">logstats</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="code" data-ice="name">logstats</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/simulation/Simulation.js.html#lineNumber81">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-logstats2">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">logstats2</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
     <span class="right-info">
       
       
@@ -1861,7 +1934,7 @@ see the <span><a href="class/src/simulation/Simulation.js~Simulation.html#instan
   
   
   <div data-ice="description"><p>This automatically creates all outputs (images and logged stats) at the correct
-rates. See the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span> documentation for options on how to control these
+rates. See the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> documentation for options on how to control these
 outputs.</p>
 </div>
 
@@ -1908,9 +1981,9 @@ outputs.</p>
   
   <div data-ice="description"><p>Method to draw the canvas.
 The default method draws the canvas, cells, cellborders, and activityvalues
-as specified in the simsettings object (see the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span> for details).</p>
+as specified in the simsettings object (see the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> for details).</p>
 <p>This will be enough for most scenarios, but if you want to draw more complicated stuff,
-you can use the custommethods argument of the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span> to overwrite 
+you can use the custommethods argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> to overwrite 
 this with your own drawCanvas method.</p>
 </div>
 
@@ -1959,7 +2032,7 @@ this with your own drawCanvas method.</p>
 The default method checks in the simsettings.NRCELLS array how many cells to
 seed for each {@CellKind}, and does this (at random positions). </p>
 <p>Often you&apos;ll want to do other things here. In that case you can use the 
-custommethods argument of the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span> to overwrite this with your
+custommethods argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> to overwrite this with your
 own initializeGrid method.</p>
 </div>
 
@@ -2008,7 +2081,7 @@ own initializeGrid method.</p>
 The default method logs time, <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, and the 
 {@ArrayCoordinate} of the cell&apos;s centroid to the console.</p>
 <p>If you want to compute other stats (see subclasses of <span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span> for options)
-you can use the custommethods argument of the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span> to overwrite 
+you can use the custommethods argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> to overwrite 
 this with your own drawCanvas method.</p>
 </div>
 
@@ -2055,7 +2128,7 @@ this with your own drawCanvas method.</p>
   
   <div data-ice="description"><p>Listener for something that needs to be done after every monte carlo step.
 This method is empty but can be overwritten via the custommethods 
-argument of the <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">constructor</a></span>.</p>
+argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span>.</p>
 </div>
 
   

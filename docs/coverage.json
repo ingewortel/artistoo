@@ -1,11 +1,11 @@
 {
-  "coverage": "90.21%",
-  "expectCount": 378,
-  "actualCount": 341,
+  "coverage": "89.87%",
+  "expectCount": 395,
+  "actualCount": 355,
   "files": {
     "src/Canvas.js": {
-      "expectCount": 37,
-      "actualCount": 37,
+      "expectCount": 38,
+      "actualCount": 38,
       "undocumentLines": []
     },
     "src/DiceSet.js": {
@@ -98,6 +98,13 @@
       "actualCount": 10,
       "undocumentLines": []
     },
+    "src/hamiltonian/ConnectivityConstraint.js": {
+      "expectCount": 12,
+      "actualCount": 11,
+      "undocumentLines": [
+        27
+      ]
+    },
     "src/hamiltonian/Constraint.js": {
       "expectCount": 8,
       "actualCount": 7,
@@ -183,10 +190,11 @@
       "undocumentLines": []
     },
     "src/simulation/Simulation.js": {
-      "expectCount": 27,
+      "expectCount": 28,
       "actualCount": 26,
       "undocumentLines": [
-        7
+        7,
+        81
       ]
     },
     "src/stats/BorderPixelsByCell.js": {
@@ -208,6 +216,13 @@
       "expectCount": 7,
       "actualCount": 7,
       "undocumentLines": []
+    },
+    "src/stats/ConnectedComponentsByCell.js": {
+      "expectCount": 3,
+      "actualCount": 2,
+      "undocumentLines": [
+        29
+      ]
     },
     "src/stats/PixelsByCell.js": {
       "expectCount": 2,

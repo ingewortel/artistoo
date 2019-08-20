@@ -52,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
@@ -81,6 +82,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
@@ -169,8 +171,8 @@ class Simulation {
 		}
 		/** Log stats or not
 		@type {boolean}*/
-		this.logstats = this.conf[&quot;STATSOUT&quot;] || { browser: false, node: true }
-		this.logstats = this.logstats[this.mode]
+		this.logstats2 = this.conf[&quot;STATSOUT&quot;] || { browser: false, node: true }
+		this.logstats = this.logstats2[this.mode]
 		
 		/** Saving images or not.
 		@type {boolean}*/

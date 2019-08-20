@@ -52,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
@@ -81,6 +82,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
@@ -361,12 +363,85 @@ class Canvas {
 		this.col_b = 0
 		for( let i = 0 ; i &lt; cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j &lt; cc.extents[1] ; j ++ ){
-				this.col_r =  255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				let colval = 255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				this.col_r = colval
+				//this.col_g = colval
 				this.pxfi([i,j])
 			}
 		}
 		this.putImageData()
 	}
+	/** Use to color a grid according to its values. High values are colored in a brighter
+	red. 
+   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
+   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
+   */
+	drawFieldContour( cc ){
+		if( !cc ){
+			cc = this.grid
+		}
+		let maxval = 0
+		let minval = Math.log(0.1)
+		for( let i = 0 ; i &lt; cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j &lt; cc.extents[1] ; j ++ ){
+				let p = Math.log(.1+cc.pixt([i,j]))
+				if( maxval &lt; p ){
+					maxval = p
+				}
+				if( minval &gt; p ){
+					minval = p
+				}
+			}
+		}
+		
+		
+		this.getImageData()
+		this.col_g = 0
+		this.col_b = 0
+		this.col_r = 255
+		
+		let step = (maxval-minval)/20
+		for( let v = minval; v &lt; maxval; v+= step ){
+			
+			for( let i = 0 ; i &lt; cc.extents[0] ; i ++ ){
+				for( let j = 0 ; j &lt; cc.extents[1] ; j ++ ){
+				
+					let pixelval = Math.log( .1 + cc.pixt( [i,j] ) )
+					if( Math.abs( v - pixelval ) &lt; 0.05*maxval ){
+						let below = false, above = false
+						for( let n of this.C.grid.neighNeumanni( this.C.grid.p2i( [i,j] ) ) ){
+					
+							let nval = Math.log(0.1 + cc.pixt(this.C.grid.i2p(n)) )
+							if( nval &lt; v ){
+								below = true
+							}
+							if( nval &gt;= v ){
+								above = true
+							}
+							if( above &amp;&amp; below ){
+								this.col_r = 150*((v-minval)/(maxval-minval)) + 105
+								this.pxfi( [i,j] )
+								break
+							}
+						}
+					}
+				
+					
+
+				}
+			}
+			
+		}
+		
+			
+		
+
+
+		this.putImageData()
+	}
+	
+	
+	
 	/** @desc Method for drawing the cell borders for a given cellkind in the color specified in &quot;col&quot;
 	(hex format). This function draws a line around the cell (rather than coloring the
 	outer pixels). If [kind] is negative, simply draw all borders.

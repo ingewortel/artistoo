@@ -52,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
@@ -81,6 +82,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
@@ -98,7 +100,19 @@ PLoS Computational Biology 11(10): e1004280
 <h1 id="how-it-works">How it works</h1><p>This code has been ported over from our older &quot;cpm&quot; repository. This is now an ES6 module, which is compiled trough &quot;rollup&quot; for use in the browser. See the Makefile.</p>
 <h2 id="browser-examples">Browser examples</h2><p>We have the following examples for web-browser CPMs:</p>
 <ul>
-<li><a href="examples/basic-potts-model.html">A simple Ising model</a></li>
+<li><a href="../simulation-examples/html/IsingModel.html">A simple Ising model</a></li>
+<li><a href="../simulation-examples/html/SingleCell.html">A simple 2D CPM cell</a></li>
+<li><a href="../simulation-examples/html/Cellsorting.html">The classic CPM cell sorting example</a></li>
+<li><a href="../simulation-examples/html/CellDivision.html">Dividing CPM cells</a></li>
+<li><a href="../simulation-examples/html/Actmodel.html">A cell moving through active cell migration</a></li>
+<li><a href="../simulation-examples/html/Microchannel.html">Migrating cell in a microchannel</a></li>
+<li><a href="../simulation-examples/html/ActOnMicroPattern.html">Migrating cells on adhesive patterns</a></li>
+<li><a href="../simulation-examples/html/Diffusion.html">Simulating plain diffusion</a></li>
+</ul>
+<p>We also have a few examples of plain cellular automata (CAs):</p>
+<ul>
+<li><a href="../simulation-examples/html/GameOfLife.html">Conway&apos;s Game of Life</a></li>
+<li><a href="../simulation-examples/html/SIR.html">SIR model of a spreading infection</a></li>
 </ul>
 <h2 id="node-examples">Node examples</h2><p>TBD</p>
 </div>

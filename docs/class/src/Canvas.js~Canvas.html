@@ -52,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
@@ -81,6 +82,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
@@ -546,6 +548,35 @@ cells in the grid of cellkind &quot;kind&quot;.</p>
           
           
           <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawField">drawField</a></span></span><span class="code" data-ice="signature">(cc: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Use to color a grid according to its values.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawFieldContour">drawFieldContour</a></span></span><span class="code" data-ice="signature">(cc: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1191,7 +1222,7 @@ coordinate 201 and wrap[0] = 200 is displayed at x = 1.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber408">source</a></span></span>
     </span>
   </h3>
 
@@ -1267,7 +1298,7 @@ object found in the soft_constraints of the attached CPM.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber288">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -1340,7 +1371,7 @@ positive integer as 0 is reserved for the background.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber410">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber483">source</a></span></span>
     </span>
   </h3>
 
@@ -1463,6 +1494,69 @@ unspecified, the grid that was originally supplied to the Canvas constructor is 
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawFieldContour">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawFieldContour</span><span class="code" data-ice="signature">(cc: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber285">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Use to color a grid according to its values. High values are colored in a brighter
+red. </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cc</td>
+      <td data-ice="type" class="code"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>the grid to draw values for. If left 
+unspecified, the grid that was originally supplied to the Canvas constructor is used.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-drawOnCellBorders">
     <span class="access" data-ice="access">public</span>
     
@@ -1474,7 +1568,7 @@ unspecified, the grid that was originally supplied to the Canvas constructor is 
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber387">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -1546,7 +1640,7 @@ it gets the default value of black (&quot;000000&quot;).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber448">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber521">source</a></span></span>
     </span>
   </h3>
 

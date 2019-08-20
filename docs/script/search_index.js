@@ -90,6 +90,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "cpmjs/src/stats/connectedcomponentsbycell.js~connectedcomponentsbycellborder",
+    "class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html",
+    "<span>ConnectedComponentsByCellBorder</span> <span class=\"search-result-import-path\">cpmjs/src/stats/ConnectedComponentsByCell.js</span>",
+    "class"
+  ],
+  [
+    "cpmjs/src/hamiltonian/connectivityconstraint.js~connectivityconstraint",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html",
+    "<span>ConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ConnectivityConstraint.js</span>",
+    "class"
+  ],
+  [
     "cpmjs/src/hamiltonian/constraint.js~constraint",
     "class/src/hamiltonian/Constraint.js~Constraint.html",
     "<span>Constraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/Constraint.js</span>",
@@ -537,6 +549,12 @@ window.esdocSearchIndex = [
     "src/canvas.js~canvas#drawfield",
     "class/src/Canvas.js~Canvas.html#instance-method-drawField",
     "src/Canvas.js~Canvas#drawField",
+    "method"
+  ],
+  [
+    "src/canvas.js~canvas#drawfieldcontour",
+    "class/src/Canvas.js~Canvas.html#instance-method-drawFieldContour",
+    "src/Canvas.js~Canvas#drawFieldContour",
     "method"
   ],
   [
@@ -1312,6 +1330,78 @@ window.esdocSearchIndex = [
     "class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-member-field",
     "src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint#field",
     "member"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js",
+    "file/src/hamiltonian/ConnectivityConstraint.js.html",
+    "src/hamiltonian/ConnectivityConstraint.js",
+    "file"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#c",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-member-C",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#C",
+    "member"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#cpm",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-set-CPM",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#CPM",
+    "member"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#_neighbours",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-member-_neighbours",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#_neighbours",
+    "member"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#borderpixelsbycell",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-member-borderpixelsbycell",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#borderpixelsbycell",
+    "member"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#checkconnected",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-checkConnected",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#checkConnected",
+    "method"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#confchecker",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-confChecker",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#confChecker",
+    "method"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#connectedcomponentsofcellborder",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-connectedComponentsOfCellBorder",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#connectedComponentsOfCellBorder",
+    "method"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#constructor",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#constructor",
+    "method"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#fulfilled",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-fulfilled",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#fulfilled",
+    "method"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#postsetpixlistener",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-postSetpixListener",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#postSetpixListener",
+    "method"
+  ],
+  [
+    "src/hamiltonian/connectivityconstraint.js~connectivityconstraint#updateborderpixels",
+    "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-updateBorderPixels",
+    "src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint#updateBorderPixels",
+    "method"
   ],
   [
     "src/hamiltonian/constraint.js",
@@ -2334,6 +2424,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/simulation/simulation.js~simulation#logstats2",
+    "class/src/simulation/Simulation.js~Simulation.html#instance-member-logstats2",
+    "src/simulation/Simulation.js~Simulation#logstats2",
+    "member"
+  ],
+  [
     "src/simulation/simulation.js~simulation#mode",
     "class/src/simulation/Simulation.js~Simulation.html#instance-member-mode",
     "src/simulation/Simulation.js~Simulation#mode",
@@ -2506,6 +2602,24 @@ window.esdocSearchIndex = [
     "class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html#instance-set-model",
     "src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection#model",
     "member"
+  ],
+  [
+    "src/stats/connectedcomponentsbycell.js",
+    "file/src/stats/ConnectedComponentsByCell.js.html",
+    "src/stats/ConnectedComponentsByCell.js",
+    "file"
+  ],
+  [
+    "src/stats/connectedcomponentsbycell.js~connectedcomponentsbycellborder#compute",
+    "class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html#instance-method-compute",
+    "src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder#compute",
+    "method"
+  ],
+  [
+    "src/stats/connectedcomponentsbycell.js~connectedcomponentsbycellborder#connectedcomponentsofcellborder",
+    "class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder.html#instance-method-connectedComponentsOfCellBorder",
+    "src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCellBorder#connectedComponentsOfCellBorder",
+    "method"
   ],
   [
     "src/stats/pixelsbycell.js",
