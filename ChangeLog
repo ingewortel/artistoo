@@ -3,8 +3,16 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-08-20 Inge Wortel <ingewortel@gmail.com>
+	* src/simulation/Simulation.js : change in default drawing method for cells on the grid.
+	* src/Canvas.js : Changed method to draw a chemokine field, which now uses transparancy
+	and a color of choice rather than only the default red-on-black color.
+	* README.md : Added some links to examples. Note these only work when opening this file
+	from the docs/index.html.
+	* src/hamiltonian/SoftConnectivityConstraint.js : Added soft connectivity constraint (experimental).
+
 2019-08-19 Inge Wortel <ingewortel@gmail.com>
-	* src/hamiltonian/ConnectivityConstraint.js : Added connectivity constraint. 
+	* src/hamiltonian/ConnectivityConstraint.js : Added connectivity constraint (experimental). 
 	* src/Canvas.js : Added method to draw contour of chemokine field.
 
 2019-08-08 Inge Wortel <ingewortel@gmail.com>

@@ -16,7 +16,19 @@ This code has been ported over from our older "cpm" repository. This is now an E
 
 We have the following examples for web-browser CPMs:
 
-* [A simple Ising model](examples/basic-potts-model.html)
+* [A simple Ising model](../simulation-examples/html/IsingModel.html)
+* [A simple 2D CPM cell](../simulation-examples/html/SingleCell.html)
+* [The classic CPM cell sorting example](../simulation-examples/html/Cellsorting.html)
+* [Dividing CPM cells](../simulation-examples/html/CellDivision.html)
+* [A cell moving through active cell migration](../simulation-examples/html/Actmodel.html)
+* [Migrating cell in a microchannel](../simulation-examples/html/Microchannel.html)
+* [Migrating cells on adhesive patterns](../simulation-examples/html/ActOnMicroPattern.html)
+* [Simulating plain diffusion](../simulation-examples/html/Diffusion.html)
+
+We also have a few examples of plain cellular automata (CAs):
+
+* [Conway's Game of Life](../simulation-examples/html/GameOfLife.html)
+* [SIR model of a spreading infection](../simulation-examples/html/SIR.html)
 
 ## Node examples
 

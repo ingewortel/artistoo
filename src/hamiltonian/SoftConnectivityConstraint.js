@@ -1,18 +1,19 @@
 
 
-import HardConstraint from "./HardConstraint.js"
+import SoftConstraint from "./SoftConstraint.js"
 import ParameterChecker from "./ParameterChecker.js"
 
-/** This constraint enforces that cells stay 'connected' throughout any copy attempts.
-Copy attempts that break the cell into two parts are therefore forbidden. To speed things
-up, this constraint only checks if the borderpixels of the cells stay connected.
+/** This constraint encourages that cells stay 'connected' throughout any copy attempts.
+In contrast to the hard version of the {@link ConnectivityConstraint}, this version does
+not completely forbid copy attempts that break the cell connectivity, but punishes them
+through a positive term in the Hamiltonian. 
 @experimental
 */
-class ConnectivityConstraint extends HardConstraint {
+class SoftConnectivityConstraint extends SoftConstraint {
 
 	/** The constructor of the ConnectivityConstraint requires a conf object with one parameter.
 	@param {object} conf - parameter object for this constraint.
-	@param {PerKindBoolean} conf.CONNECTED - should the cellkind be connected or not?
+	@param {PerKindBoolean} conf.LAMBDA_CONNECTIVITY - should the cellkind be connected or not?
 	*/
 	constructor( conf ){
 		super(conf)
@@ -38,7 +39,7 @@ class ConnectivityConstraint extends HardConstraint {
 	is not the case.*/
 	confChecker(){
 		let checker = new ParameterChecker( this.conf, this.C )
-		checker.confCheckParameter( "CONNECTED", "KindArray", "Boolean" )
+		checker.confCheckParameter( "LAMBDA_CONNECTIVITY", "KindArray", "NonNegative" )
 	}
 	
 	/** Update the borderpixels when pixel i changes from t_old into t_new.
@@ -114,11 +115,9 @@ class ConnectivityConstraint extends HardConstraint {
 		
 		//let cbpi = Object.keys( this.borderpixelsbycell[cellid] ), cbpobject = this.borderpixelsbycell[cellid]
 		return this.connectedComponentsOf( this.borderpixelsbycell[cellid] )
-			
-		
 	}
 	
-	
+		
 	/** Get the connected components of a set of pixels.
 	@param {object} pixelobject - an object with as keys the {@link IndexCoordinate}s of the pixels to check.
 	@return {object} an array with an element for every connected component, which is in
@@ -176,10 +175,6 @@ class ConnectivityConstraint extends HardConstraint {
 	*/
 	localConnected( tgt_i, tgt_type ){
 	
-		if( this.C.extents.length != 2 ){
-			return false
-		}
-	
 		let neighbors = 0
 		for( let i of this.C.grid.neighNeumanni(tgt_i) ){
 			if( this.C.pixti(i) != tgt_type ){
@@ -194,40 +189,67 @@ class ConnectivityConstraint extends HardConstraint {
 		
 	}
 	
-	/** This method checks if the connectivity still holds after pixel tgt_i is changed from
+	/** Compute the 'connectivity' of a cell; a number between 0 and 1. If the cell
+	is completely connected, this returns 1. A cell split into many parts gets a 
+	connectivity approaching zero. It also matters how the cell is split: splitting
+	the cell in two near-equal parts results in a lower connectivity than separating
+	one pixel from the rest of the cell.
+	@param {Array} components - an array of arrays (one array per connected component, 
+	in which each entry is the {@link ArrayCoordinate} of a pixel belonging to that component).
+	@param {CellId} cellid - the cell these components belong to.
+	@return {number} connectivity of this cell.*/
+	connectivity( components, cellid ){
+		if( components.length <= 1 ){
+			return 1
+		} else {
+			
+			let Vtot = Object.keys( this.borderpixelsbycell[cellid] ).length
+			let Ci = 0
+			for( let c of components ){
+				let Vc = c.length
+				Ci += (Vc/Vtot)*(Vc/Vtot)
+			}
+			//console.log( Ci )
+			return Ci
+			
+		}
+	}
+	
+	/** This method checks the difference in connectivity when pixel tgt_i is changed from
 	tgt_type to src_type. 
 	@param {IndexCoordinate} tgt_i - the pixel to change
 	@param {CellId} src_type - the new cell for this pixel.
 	@param {CellId} tgt_type - the cell the pixel belonged to previously. 	
+	@return {number} conndiff - the difference: connectivity_after - connectivity_before.
 	*/
 	checkConnected( tgt_i, src_type, tgt_type ){
 	
-		// If local connectivity is preserved, global connectivity holds too.
+		//return this.localConnected( tgt_i, tgt_type )
+		
+	
+		
 		if( this.localConnected( tgt_i, tgt_type ) ){
-			return true
+			return 0
 		}
 	
-		// Otherwise, check connected components of the cell border. Before the copy attempt:
 		let comp1 = this.connectedComponentsOfCellBorder( tgt_type )
-		let length_before = comp1.length
+		let conn1 = this.connectivity( comp1, tgt_type )
 	
 		// Update the borderpixels as if the change occurs
 		this.updateBorderPixels( tgt_i, tgt_type, src_type )
 		let comp = this.connectedComponentsOfCellBorder( tgt_type )
-		let length_after = comp.length
+		let conn2 = this.connectivity( comp, tgt_type )
 		
-		// The src pixels copies its type, so the cell src_type gains a pixel. This
-		// pixel is by definition connected because the copy happens from a neighbor.
-		// So we only have to check if tgt_type remains connected
-		let connected = true
-		if( length_after > length_before ){
-			connected = false
-		}
+		
+		let conndiff = conn2 - conn1
+		if( conn2 > conn1 ){
+			conndiff = -conndiff
+		} 
 		
 		// Change borderpixels back because the copy attempt hasn't actually gone through yet.
 		this.updateBorderPixels( tgt_i, src_type, tgt_type )
 		
-		return connected
+		return conndiff
 		
 	}
 
@@ -238,16 +260,18 @@ class ConnectivityConstraint extends HardConstraint {
 	 @param {CellId} src_type - cellid of the source pixel.
 	 @param {CellId} tgt_type - cellid of the target pixel. 
 	 @return {boolean} whether the copy attempt satisfies the constraint.*/ 
-	fulfilled( src_i, tgt_i, src_type, tgt_type ){
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
+		let lambda = this.conf["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)]
+		
 		// connectedness of tgt cell
-		if( tgt_type != 0 && this.conf["CONNECTED"][this.C.cellKind(tgt_type)] ){
-			return this.checkConnected( tgt_i, src_type, tgt_type )
+		if( tgt_type != 0 && lambda > 0 ){
+			return lambda*this.checkConnected( tgt_i, src_type, tgt_type )
 		}
 		
-		return true
+		return 0
 	}
 }
 
-export default ConnectivityConstraint
+export default SoftConnectivityConstraint

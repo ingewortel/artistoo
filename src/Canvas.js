@@ -120,7 +120,7 @@ class Canvas {
 
 	/** @private
 	@ignore */
-	pxfi( p ){
+	pxfi( p, alpha=1 ){
 		const dy = this.zoom*this.width
 		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4
 		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
@@ -128,7 +128,7 @@ class Canvas {
 				this.px[i+j+off] = this.col_r
 				this.px[i+j+off + 1] = this.col_g
 				this.px[i+j+off + 2] = this.col_b
-				this.px[i+j+off + 3] = 255
+				this.px[i+j+off + 3] = alpha*255
 			}
 		}
 	}
@@ -251,10 +251,11 @@ class Canvas {
    * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
    * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
    */
-	drawField( cc ){
+	drawField( cc, col = "0000FF" ){
 		if( !cc ){
 			cc = this.grid
 		}
+		this.col(col)
 		let maxval = 0
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
@@ -265,27 +266,30 @@ class Canvas {
 			}
 		}
 		this.getImageData()
-		this.col_g = 0
-		this.col_b = 0
+		//this.col_g = 0
+		//this.col_b = 0
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				let colval = 255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
-				this.col_r = colval
+				//let colval = 255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				let alpha = (Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				//this.col_r = colval
 				//this.col_g = colval
-				this.pxfi([i,j])
+				this.pxfi([i,j], alpha)
 			}
 		}
 		this.putImageData()
+		this.ctx.globalAlpha = 1
 	}
 	/** Use to color a grid according to its values. High values are colored in a brighter
 	red. 
    * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
    * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
    */
-	drawFieldContour( cc ){
+	drawFieldContour( cc, nsteps = 10, col = "FFFF00" ){
 		if( !cc ){
 			cc = this.grid
 		}
+		this.col(col)
 		let maxval = 0
 		let minval = Math.log(0.1)
 		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
@@ -302,11 +306,11 @@ class Canvas {
 		
 		
 		this.getImageData()
-		this.col_g = 0
-		this.col_b = 0
-		this.col_r = 255
+		//this.col_g = 0
+		//this.col_b = 0
+		//this.col_r = 255
 		
-		let step = (maxval-minval)/20
+		let step = (maxval-minval)/nsteps
 		for( let v = minval; v < maxval; v+= step ){
 			
 			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
@@ -325,8 +329,9 @@ class Canvas {
 								above = true
 							}
 							if( above && below ){
-								this.col_r = 150*((v-minval)/(maxval-minval)) + 105
-								this.pxfi( [i,j] )
+								//this.col_r = 150*((v-minval)/(maxval-minval)) + 105
+								let alpha = 0.7*((v-minval)/(maxval-minval)) + 0.3
+								this.pxfi( [i,j], alpha )
 								break
 							}
 						}

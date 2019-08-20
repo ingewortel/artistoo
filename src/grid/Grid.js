@@ -18,6 +18,10 @@ class Grid {
 		@type {GridSize}*/
 		this.extents = field_size
 		
+		/** Number of dimensions of the grid.
+		@type {number}*/
+		this.ndim = this.extents.length
+		
 		/** Should the borders of the grid be linked, so that a cell moving
 		out on the left reappears on the right? 
 		@type {boolean}*/

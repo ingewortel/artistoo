@@ -4,7 +4,6 @@ all : build/cpm.js
 
 
 # Dependencies are now kept up to date automatically from the file app/include-list.txt
-MODULE_FILES := $(cat app/include-list.txt | awk '$$1 ~ /^module/{printf "%s ", $$3}' )
 
 build/cpm.js: rollup.config.js app/index.js uptodate
 	node_modules/rollup/bin/rollup -c && touch build.make
@@ -19,7 +18,7 @@ build.make: build-makeout.bash app/include-list.txt
 app/index.js : app/automatic-index.bash app/include-list.txt
 	bash $^ > $@
 	
-docs/index.html : build/cpm.js
+docs/index.html : build/cpm.js README.md
 	node_modules/.bin/esdoc
 
 docs : docs/index.html

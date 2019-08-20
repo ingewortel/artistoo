@@ -218,7 +218,7 @@ class Simulation {
 				if( this.conf.hasOwnProperty("BORDERCOL") ){
 					bordercol = this.conf["BORDERCOL"][cellkind] || "000000"
 				}
-				this.Cim.drawOnCellBorders( cellkind+1, bordercol )
+				this.Cim.drawCellBorders( cellkind+1, bordercol )
 			}
 			
 			// if there is an activity constraint, draw activity values depending on color.
