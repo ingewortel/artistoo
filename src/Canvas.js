@@ -252,6 +252,7 @@ class Canvas {
 	red. 
    * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
    * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
+   * @param {HexColor} [ col = "0000FF" ] - the color to draw the chemokine in.
    */
 	drawField( cc, col = "0000FF" ){
 		if( !cc ){
@@ -286,6 +287,9 @@ class Canvas {
 	red. 
    * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
    * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
+   * @param {number} [nsteps = 10 ] - the number of contour lines to draw. Contour lines
+   * are evenly spaced between the min and max log10 of the chemokine.
+   * @param {HexColor} [ col = "FFFF00" ] - the color to draw contours with.
    */
 	drawFieldContour( cc, nsteps = 10, col = "FFFF00" ){
 		if( !cc ){
