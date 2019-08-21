@@ -1,11 +1,6 @@
 - Check when cached stats should be removed; this now happens after every MCS - but this fails when stuff happens between the MCS and stat computation such that the cached stats are no longer valid (eg cell division).  
 
-- (Inge): check confCheckers and ChemotaxisConstraint
-Fix the many-cells-diffusion example.
-
-- (Inge): implement checks for valid sim configuration files.
-
-- (Inge): current centroid method probably won't work for microchannels, as cells occupy more than 50% of the grid height for a microchannel. The torus correction will go wrong in that case even though there actually shouldn't be a torus correction in the y dimension.
+- (Inge): Fix the many-cells-diffusion example.
 
 - Implement Laplacian / Gradient for 3D lattice
 

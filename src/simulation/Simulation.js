@@ -161,11 +161,9 @@ class Simulation {
 			for( i = 0; i < nrcells[cellkind]; i++ ){
 				// first cell always at the midpoint. Any other cells
 				// randomly.				
-				if( i == 0 ){
-					this.gm.seedCellAt( cellkind+1, this.C.midpoint )
-				} else {
-					this.gm.seedCell( cellkind+1 )
-				}
+				
+				this.gm.seedCell( cellkind+1 )
+				
 			}
 		}
 

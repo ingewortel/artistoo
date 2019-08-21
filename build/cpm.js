@@ -1382,29 +1382,87 @@ var CPM = (function (exports) {
 		@param {ArrayCoordinate} p array coordinates on the high resolution grid.
 		@return {number} interpolated value from the low resolution grid at this position. */
 		pixt( p ){
-			// 2D bilinear interpolation
-			let l = ~~(p[0] / this.upscale);
-			let r = l+1;
-			if( r > this.grid.extents[0] ){
-				r = this.grid.extents[0];
-			}
-			let t = ~~(p[1] / this.upscale);
-			let b = t+1;
-			if( b > this.grid.extents[1] ){
-				b = this.grid.extents[1];
-			}
+		
+			// 2D bilinear interpolation. Find the 4 positions on the original, low resolution grid
+			// that are closest to the requested position p: x-coordinate l,r (left/right) 
+			// and y-coordinate t,b (top/bottom)
+		
+			let positions = this.positions(p); // [t,r,b,l,h,v]
+			let t = positions[0], r = positions[1], b = positions[2], l = positions[3],
+				h = positions[4], v = positions[5];
 
+			// Get the values on those 4 positions
 			let f_lt = this.grid.pixt([l,t]);
 			let f_rt = this.grid.pixt([r,t]);
 			let f_lb = this.grid.pixt([l,b]);
 			let f_rb = this.grid.pixt([r,b]);
 
-			let h = (p[0] % this.upscale) / this.upscale;
+			// Average these weighted by their distance to the current pixel.
 			let f_x_b = f_lb * (1-h) + f_rb * h; 
 			let f_x_t = f_lt * (1-h) + f_rt * h;
 
-			let v = (p[1] % this.upscale) / this.upscale;
 			return f_x_t*(1-v) + f_x_b * v
+		}
+		
+		addValue( p, value ){
+			
+			// 2D bilinear interpolation, the other way around.
+			// Find the 4 positions on the original, low res grid that are closest to the
+			// requested position p
+			
+			let positions = this.positions(p); 
+			let t = positions[0], r = positions[1], b = positions[2], l = positions[3],
+				h = positions[4], v = positions[5];
+				
+			
+			let v_lt = value * (1-h) * (1-v);
+			let v_lb = value * (1-h) * v;
+			let v_rt = value * h * (1-v);
+			let v_rb = value * h * v;
+			
+			
+			this.grid.setpix( [l,t], this.grid.pixt([l,t]) + v_lt );
+			this.grid.setpix( [l,b], this.grid.pixt([l,b]) + v_lb );
+			this.grid.setpix( [r,t], this.grid.pixt([r,t]) + v_rt );
+			this.grid.setpix( [r,b], this.grid.pixt([r,b]) + v_rb );
+			
+		}
+		
+		positions( p ){
+			// Find the 4 positions on the original, low resolution grid
+			// that are closest to the requested position p: x-coordinate l,r (left/right) 
+			// and y-coordinate t,b (top/bottom)
+			let l = ~~(p[0] / this.upscale); // ~~ is a fast alternative for Math.floor
+			let r = l+1;
+			
+			let t = ~~(p[1] / this.upscale);
+			let b = t+1;
+			
+			// Find the horizontal/vertical distances of these positions to p
+			let h = (p[0]%this.upscale)/this.upscale;
+			let v = (p[1]%this.upscale)/this.upscale;
+			
+			// Correct grid boundaries depending on torus
+			if( r > this.grid.extents[0] ){
+				if( this.grid.torus[0] ){
+					r = 0;
+				} else {
+					r = this.grid.extents[0];
+					h = 0.5;
+				}
+			}
+			
+			if( b > this.grid.extents[1] ){
+				if( this.grid.torus[1] ){
+					b = 0;
+				} else {
+					b = this.grid.extents[1];
+					v = 0.5;
+				}
+				
+			}
+			
+			return [t,r,b,l,h,v]
 		}
 
 		/*gradient( p ){
@@ -6583,11 +6641,9 @@ var CPM = (function (exports) {
 				for( i = 0; i < nrcells[cellkind]; i++ ){
 					// first cell always at the midpoint. Any other cells
 					// randomly.				
-					if( i == 0 ){
-						this.gm.seedCellAt( cellkind+1, this.C.midpoint );
-					} else {
-						this.gm.seedCell( cellkind+1 );
-					}
+					
+					this.gm.seedCell( cellkind+1 );
+					
 				}
 			}
 
