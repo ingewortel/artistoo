@@ -10,6 +10,7 @@
 
 # src base folder
 module	Canvas	src/Canvas.js
+module	Canvas3D	src/Canvas3D.js
 module	Stats	src/Stats.js
 module	no-export	src/DiceSet.js
 

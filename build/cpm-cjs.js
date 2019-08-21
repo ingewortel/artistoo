@@ -5,6 +5,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var MersenneTwister = _interopDefault(require('mersennetwister'));
+var THREE = require('three');
+var TrackballControls = _interopDefault(require('three-trackballcontrols'));
 
 /** This base class defines a general grid and provides grid methods that do not depend on
 the coordinate system used. This class is never used on its own, as it does not yet 
@@ -2840,425 +2842,6 @@ class Canvas {
 	}
 }
 
-/** Class for outputting various statistics from a CPM simulation, as for instance
-    the centroids of all cells (which is actually the only thing that's implemented
-    so far) 
-    @private 
-    @ignore */
-
-class Stats {
-	constructor( C ){
-		this.C = C;
-		this.ndim = this.C.ndim;
-	}
-
-	// ------------  FRC NETWORK 
-
-	// for simulation on FRC network. Returns all cells that are in contact with
-	// a stroma cell.
-	cellsOnNetwork(){
-		var px = this.C.cellborderpixels.elements, i,j, N, r = {}, t;
-		for( i = 0 ; i < px.length ; i ++ ){
-			t = this.C.pixti( px[i] );
-			if( r[t] ) continue
-			N = this.C.neighi(  px[i] );
-			for( j = 0 ; j < N.length ; j ++ ){
-				if( this.C.pixti( N[j] ) < 0 ){
-					r[t]=1; break
-				}
-			}
-		}
-		return r
-	}
-	
-	
-	// ------------  CELL LENGTH IN ONE DIMENSION
-	// (this does not work with a grid torus).
-		
-	// For computing mean and variance with online algorithm
-	updateOnline( aggregate, value ){
-		
-		var delta, delta2;
-
-		aggregate.count ++;
-		delta = value - aggregate.mean;
-		aggregate.mean += delta/aggregate.count;
-		delta2 = value - aggregate.mean;
-		aggregate.sqd += delta*delta2;
-
-		return aggregate
-	}
-
-	newOnline(){
-		return( { count : 0, mean : 0, sqd : 0 } ) 
-	}
-	// return mean and variance of coordinates in a given dimension for cell t
-	// (dimension as 0,1, or 2)
-	cellStats( t, dim ){
-
-		var aggregate, cpt, j, stats;
-
-		// the cellpixels object can be given as the third argument
-		if( arguments.length == 3){
-			cpt = arguments[2][t];
-		} else {
-			cpt = this.cellpixels()[t];
-		}
-
-		// compute using online algorithm
-		aggregate = this.newOnline();
-
-		// loop over pixels to update the aggregate
-		for( j = 0; j < cpt.length; j++ ){
-			aggregate = this.updateOnline( aggregate, cpt[j][dim] );
-		}
-
-		// get mean and variance
-		stats = { mean : aggregate.mean, variance : aggregate.sqd / ( aggregate.count - 1 ) };
-		return stats
-	}
-
-	// get the length (variance) of cell in a given dimension
-	// does not work with torus!
-	getLengthOf( t, dim ){
-		
-		// get mean and sd in x direction
-		var stats = this.cellStats( t, dim );
-		return stats.variance
-
-	}
-
-	// get the range of coordinates in dim for cell t
-	// does not work with torus!
-	getRangeOf( t, dim ){
-
-		var minc, maxc, cpt, j;
-
-		// the cellpixels object can be given as the third argument
-		if( arguments.length == 3){
-			cpt = arguments[2][t];
-		} else {
-			cpt = this.cellpixels()[t];
-		}
-
-		// loop over pixels to find min and max
-		minc = cpt[0][dim];
-		maxc = cpt[0][dim];
-		for( j = 1; j < cpt.length; j++ ){
-			if( cpt[j][dim] < minc ) minc = cpt[j][dim];
-			if( cpt[j][dim] > maxc ) maxc = cpt[j][dim];
-		}
-		
-		return( maxc - minc )		
-
-	}
-	
-	// ------------  CONNECTEDNESS OF CELLS
-	// ( compatible with torus )
-	
-	// Compute connected components of the cell ( to check connectivity )
-	getConnectedComponentOfCell( t, cellindices ){
-		if( cellindices.length == 0 ){ return }
-
-		var visited = {}, k=1, volume = {}, myself = this;
-
-		var labelComponent = function(seed, k){
-			var q = [parseInt(seed)];
-			visited[q[0]] = 1;
-			volume[k] = 0;
-			while( q.length > 0 ){
-				var e = parseInt(q.pop());
-				volume[k] ++;
-				var ne = myself.C.neighi( e );
-				for( var i = 0 ; i < ne.length ; i ++ ){
-					if( myself.C.pixti( ne[i] ) == t &&
-						!visited.hasOwnProperty(ne[i]) ){
-						q.push(ne[i]);
-						visited[ne[i]]=1;
-					}
-				}
-			}
-		};
-
-		for( var i = 0 ; i < cellindices.length ; i ++ ){
-			if( !visited.hasOwnProperty( cellindices[i] ) ){
-				labelComponent( cellindices[i], k );
-				k++;
-			}
-		}
-
-		return volume
-	}
-
-	getConnectedComponents(){
-	
-		let cpi;
-	
-		if( arguments.length == 1 ){
-			cpi = arguments[0];
-		} else {
-			cpi = this.cellpixelsi();
-		}
-
-		const tx = Object.keys( cpi );
-		let i, volumes = {};
-		for( i = 0 ; i < tx.length ; i ++ ){
-			volumes[tx[i]] = this.getConnectedComponentOfCell( tx[i], cpi[tx[i]] );
-		}
-		return volumes
-	}
-	
-	// Compute probabilities that two pixels taken at random come from the same cell.
-	getConnectedness(){
-	
-		let cpi;
-	
-		if( arguments.length == 1 ){
-			cpi = arguments[0];
-		} else {
-			cpi = this.cellpixelsi();
-		}
-	
-		const v = this.getConnectedComponents( cpi );
-		let s = {}, r = {}, i, j;
-		for( i in v ){
-			s[i] = 0;
-			r[i] = 0;
-			for( j in v[i] ){
-				s[i] += v[i][j];
-			}
-			for( j in v[i] ){
-				r[i] += (v[i][j]/s[i]) * (v[i][j]/s[i]);
-			}
-		}
-		return r
-	}	
-	
-	// ------------  PROTRUSION ANALYSIS: PERCENTAGE ACTIVE / ORDER INDEX 
-	// ( compatible with torus )
-	
-	// Compute percentage of pixels with activity > threshold
-	getPercentageActOfCell( t, cellindices, threshold ){
-		if( cellindices.length == 0 ){ return }
-		var i, count = 0;
-
-		for( i = 0 ; i < cellindices.length ; i ++ ){
-			if( this.C.pxact( cellindices[i] ) > threshold ){
-				count++;
-			}
-		}
-		return 100*(count/cellindices.length)
-	
-	}
-
-	getPercentageAct( threshold ){
-	
-		let cpi;
-	
-		if( arguments.length == 2 ){
-			cpi = arguments[1];
-		} else {
-			cpi = this.cellpixelsi();
-		}
-	
-		const tx = Object.keys( cpi );
-		let i, activities = {};
-		for( i = 0 ; i < tx.length ; i ++ ){
-			activities[tx[i]] = this.getPercentageActOfCell( tx[i], cpi[tx[i]], threshold );
-		}
-		return activities
-	
-	}
-
-	// Computing an order index of the activity gradients within the cell.
-	getGradientAt( t, i ){
-	
-		var gradient = [];
-		
-		// for computing index of neighbors in x,y,z dimension:
-		var diff = [1, this.C.dy, this.C.dz ]; 
-		
-		var d, neigh1, neigh2, t1, t2, ai = this.C.pxact( i ), terms = 0;
-		
-		for( d = 0; d < this.C.ndim; d++ ){
-			// get the two neighbors and their types
-			neigh1 = i - diff[d];
-			neigh2 = i + diff[d];
-			t1 = this.C.cellpixelstype[ neigh1 ];
-			t2 = this.C.cellpixelstype[ neigh2 ];
-			
-			// start with a zero gradient
-			gradient[d] = 0.00;
-			
-			// we will average the difference with the left and right neighbor only if both
-			// belong to the same cell. If only one neighbor belongs to the same cell, we
-			// use that difference. If neither belongs to the same cell, the gradient
-			// stays zero.
-			if( t == t1 ){
-				gradient[d] += ( ai - this.C.pxact( neigh1 ) );
-				terms++;
-			}
-			if( t == t2 ){
-				gradient[d] += ( this.C.pxact( neigh2 ) - ai );
-				terms++;
-			}
-			if( terms != 0 ){
-				gradient[d] = gradient[d] / terms;
-			}		
-						
-		}
-		
-		return gradient
-		
-	}
-
-	// compute the norm of a vector (in array form)
-	norm( v ){
-		var i;
-		var norm = 0;
-		for( i = 0; i < v.length; i++ ){
-			norm += v[i]*v[i];
-		}
-		norm = Math.sqrt( norm );
-		return norm
-	}
-
-	getOrderIndexOfCell( t, cellindices ){
-	
-		if( cellindices.length == 0 ){ return }
-		
-		// create an array to store the gradient in. Fill it with zeros for all dimensions.
-		var gradientsum = [], d;
-		for( d = 0; d < this.C.ndim; d++ ){
-			gradientsum.push(0.0);
-		}
-		
-		// now loop over the cellindices and add gi/norm(gi) to the gradientsum for each
-		// non-zero local gradient:
-		var j;
-		for( j = 0; j < cellindices.length; j++ ){
-			var g = this.getGradientAt( t, cellindices[j] );
-			var gn = this.norm( g );
-			// we only consider non-zero gradients for the order index
-			if( gn != 0 ){
-				for( d = 0; d < this.C.ndim; d++ ){
-					gradientsum[d] += 100*g[d]/gn/cellindices.length;
-				}
-			}
-		}
-		
-		
-		// finally, return the norm of this summed vector
-		var orderindex = this.norm( gradientsum );
-		return orderindex	
-	}
-
-	getOrderIndices( ){
-		var cpi = this.cellborderpixelsi();
-		var tx = Object.keys( cpi ), i, orderindices = {};
-		for( i = 0 ; i < tx.length ; i ++ ){
-			orderindices[tx[i]] = this.getOrderIndexOfCell( tx[i], cpi[tx[i]] );
-		}
-		return orderindices
-	
-	}
-	
-
-	// returns a list of all cell ids of the cells that border to "cell" and are of a different type
-	// a dictionairy with keys = neighbor cell ids, and 
-	// values = number of "cell"-pixels the neighbor cell borders to
-	cellNeighborsList( cell, cbpi ) {
-		if (!cbpi) {
-			cbpi = this.cellborderpixelsi()[cell];
-		} else {
-			cbpi = cbpi[cell];
-		}
-		let neigh_cell_amountborder = {};
-		//loop over border pixels of cell
-		for ( let cellpix = 0; cellpix < cbpi.length; cellpix++ ) {
-			//get neighbouring pixels of borderpixel of cell
-			let neighbours_of_borderpixel_cell = this.C.neighi(cbpi[cellpix]);
-			//don't add a pixel in cell more than twice
-			//loop over neighbouring pixels and store the parent cell if it is different from
-			//cell, add or increment the key corresponding to the neighbor in the dictionairy
-			for ( let neighborpix = 0; neighborpix < neighbours_of_borderpixel_cell.length;
-				neighborpix ++ ) {
-				let cell_id = this.C.pixti(neighbours_of_borderpixel_cell[neighborpix]);
-				if (cell_id != cell) {
-					neigh_cell_amountborder[cell_id] = neigh_cell_amountborder[cell_id]+1 || 1;
-				}
-			}
-		}
-		return neigh_cell_amountborder
-	}
-
-	// ------------ HELPER FUNCTIONS
-	
-	// TODO all helper functions have been removed from this class.
-	// We should only access cellpixels through the "official" interface
-	// in the CPM class.
-	
-}
-
-/** Extension of the {@link GridBasedModel} class suitable for
-a Cellular Automaton (CA). Currently only supports synchronous CAs.
-
-@example <caption>Conway's Game of Life </caption>
-*	let CPM = require( "path/to/build" )
-*	let C = new CPM.CA( [200,200], {
-*		"UPDATE_RULE": 	function(p,N){
-*			let nalive = 0
-*			for( let pn of N ){
-*				nalive += (this.pixt(pn)==1)
-*			}	
-*			if( this.pixt(p) == 1 ){
-*				if( nalive == 2 || nalive == 3 ){
-*					return 1
-*				}
-*			} else {
-*				if( nalive == 3 ) return 1
-*			}
-*			return 0
-*		}
-*	})
-*	let initialpixels = [ [100,100], [101,100], [102,100], [102,101], [101,102] ]
-*	for( p of initialpixels ){
-*		C.setpix( p, 1 )
-* 	}
-*	// Run it.
-*	for( let t = 0; t < 10; t++ ){ C.timeStep() }
-
-@todo Include asynchronous updating scheme?
-*/
-class CA extends GridBasedModel {
-
-	/** The constructor of class CA.
-	@param {GridSize} extents - the size of the grid of the model.
-	@param {object} conf - configuration options. 
-	@param {boolean} [conf.torus=[true,true,...]] - should the grid have linked borders?
-	@param {number} [seed] - seed for the random number generator. If left unspecified,
-	a random number from the Math.random() generator is used to make one.
-	@param {updatePixelFunction} conf.UPDATE_RULE - the update rule of the CA. 
-	*/
-	constructor( extents, conf ){
-		super( extents, conf );
-		/** Bind the supplied updaterule to the object.
-		@type {updatePixelFunction}*/
-		this.updateRule = conf["UPDATE_RULE"].bind(this);
-	}
-
-	/** A timestep in a CA just applies the update rule and clears any cached stats after
-	doing so. */
-	timeStep(){
-		this.grid.applyLocally( this.updateRule );
-		
-		/** Cached values of these stats. Object with stat name as key and its cached
-		value as value. The cache must be cleared when the grid changes!
-		@type {object} */
-		this.stat_values = {};
-	}
-}
-
 // pass in RNG
 
 /** This class implements a data structure with constant-time insertion, deletion, and random
@@ -4302,6 +3885,695 @@ class BorderPixelsByCell extends Stat {
 			}
 		}
 		return cellborderpixels
+	}
+}
+
+class Canvas3D {
+	
+	constructor( C, options ){
+		if( C instanceof GridBasedModel ){
+			/**
+			 * The underlying model that is drawn on the canvas.
+			 * @type {GridBasedModel|CPM|CA}
+			 */
+			this.C = C;
+			this.grid = this.C.grid;
+			if( !( this.grid instanceof Grid3D ) ){
+				throw("Canvas3D only works with 3D models with grid of class Grid3D!")
+			}
+			
+			
+			
+			/** Grid size in each dimension, taken from the CPM or grid object to draw.
+			@type {GridSize} each element is the grid size in that dimension in pixels */
+			this.extents = C.extents;
+		} 
+		
+		this.step = options.step || 10; 
+		this.zoom =  options.zoom || 1;
+		this.drawgrid = options.drawgrid || true;
+		this.gridColor = options.gridColor || "AAAAAA";
+		this.gridColor = this.getCol( this.gridColor );
+		
+
+		if( typeof document !== "undefined" ){
+			/** @ignore */
+			
+			this.container = document.getElementById("stage");
+			
+		} else {
+			throw("Canvas3D is currently only supported in the browser.")
+		}
+		
+		this.scene = new THREE.Scene();
+		this.drawvoxels = {};
+		this.material = new THREE.MeshLambertMaterial( { color: this.getCol("000000"), transparent: true, opacity : 0.2 } );
+		
+		
+		this.setupCamera();
+		this.controls = new TrackballControls( this.camera, this.container );
+		this.setup();
+
+		
+	}
+	
+	getCol( col ){
+		col = "#" + col;
+		return new THREE.Color( col ).getHex()
+	}
+	
+	setupCamera(){
+	
+		
+		let camera = new THREE.PerspectiveCamera( 45, 1, 1, this.C.extents[2]*100 );
+		
+		// Place the camera at the x,y coordinates of the midpoint, and z coordinate slightly above the grid.
+		let zpos = Math.floor( this.C.extents[2]*3);
+		//camera.position = { x : this.C.extents[0]/2, y: this.C.extents[1]/2, z: zpos}
+		camera.position.set( this.C.extents[0]/2, this.C.extents[1]/2,zpos  );
+		//camera.up.set( -1, 0, 0 )
+		
+		// Viewing direction of the camera
+		let gridMidpoint = [ this.C.extents[0]/2, this.C.extents[1]/2, this.C.extents[2]/2 ];
+		camera.lookAt( new THREE.Vector3( gridMidpoint[0], gridMidpoint[1], gridMidpoint[2] ) );
+		
+		this.camera = camera;
+	
+	}
+	
+	setupControls(){
+	
+		
+		
+		this.controls.rotateSpeed = 1.0;
+		this.controls.zoomSpeed = 1.2;
+		this.controls.panSpeed = 0.8;
+
+		this.controls.noZoom = false;
+		this.controls.noPan = false;
+
+		this.controls.staticMoving = true;
+		this.controls.dynamicDampingFactor = 0.3;
+
+		this.controls.target.set( this.C.midpoint[0], this.C.midpoint[1], this.C.midpoint[2] );
+
+		this.controls.keys = [ 65, 83, 68 ];
+		
+	
+	}
+	
+	
+	drawGrid(){
+		if( this.drawgrid ){
+			
+			let material = new THREE.LineBasicMaterial( { color: this.gridColor , opacity: 0.4, transparent: true } );
+			
+			// plane z = 0
+			let geometry = new THREE.Geometry();
+			for ( let x = 0; x <= this.C.extents[0]; x += this.step ) {
+				geometry.vertices.push( new THREE.Vector3( x, 0, 0 ) );
+				geometry.vertices.push( new THREE.Vector3( x, 0, this.C.extents[2] ) );
+			}
+			for( let z = 0; z <= this.C.extents[2]; z += this.step ){
+				geometry.vertices.push( new THREE.Vector3( 0, 0, z ) );
+				geometry.vertices.push( new THREE.Vector3( this.C.extents[0], 0, z ) );
+			}
+			let line = new THREE.LineSegments( geometry, material );
+			this.scene.add( line );
+			
+			// plane x = 0 
+			geometry = new THREE.Geometry();
+			for ( let y = 0; y <= this.C.extents[1]; y += this.step ) {
+				geometry.vertices.push( new THREE.Vector3( 0, y, 0 ) );
+				geometry.vertices.push( new THREE.Vector3( 0, y, this.C.extents[2] ) );
+			}
+			for( let z = 0; z <= this.C.extents[2]; z += this.step ){
+				geometry.vertices.push( new THREE.Vector3( 0, 0, z ) );
+				geometry.vertices.push( new THREE.Vector3( 0, this.C.extents[1], z ) );
+			}
+			line = new THREE.LineSegments( geometry, material );
+			this.scene.add( line );
+			
+			// plane y = 0 
+			geometry = new THREE.Geometry();
+			for ( let x = 0; x <= this.C.extents[1]; x += this.step ) {
+				geometry.vertices.push( new THREE.Vector3( x, 0, 0 ) );
+				geometry.vertices.push( new THREE.Vector3( x, 0, this.C.extents[2] ) );
+			}
+			for( let z = 0; z <= this.C.extents[2]; z += this.step ){
+				geometry.vertices.push( new THREE.Vector3( 0, 0, z ) );
+				geometry.vertices.push( new THREE.Vector3( this.C.extents[0], 0, z ) );
+			}
+			line = new THREE.LineSegments( geometry, material );
+			this.scene.add( line );
+		}
+
+	}
+	
+	setupLights(){
+		let ambientLight = new THREE.AmbientLight( 0x606060 );
+		this.scene.add( ambientLight );
+
+		let directionalLight = new THREE.DirectionalLight( 0xffffff );
+		directionalLight.position.set( .5, .5, 1 ).normalize();
+		this.scene.add( directionalLight );
+	}
+	
+	setupRenderer(){
+		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+		this.renderer.setClearColor( 0xFFFFFF );
+		//this.renderer.setPixelRatio( window.devicePixelRatio )
+		let w =  this.C.extents[0]*this.zoom/2;
+		let h = this.C.extents[1]*this.zoom/2;
+		this.renderer.setSize( w, h );
+		this.container.appendChild( this.renderer.domElement );
+	}
+	
+	// Initialize a movie frame
+	setup(){	
+	
+	
+		//this.setupCamera()
+		this.setupControls();
+		this.drawGrid();
+		this.setupLights();
+		this.controls.update();
+		this.setupRenderer();		
+	}
+
+	
+	/* DRAWING FUNCTIONS ---------------------- */
+
+	clear(){
+		for( let i of Object.keys( this.drawvoxels ) ){
+			this.drawvoxels[i].visible = false;
+		}
+	}
+
+	setVoxel( pos, color ){
+		let i = this.C.grid.p2i( pos );
+		if( !( i in this.drawvoxels ) ){
+			let material = new THREE.MeshLambertMaterial( { color: this.getCol("000000"), transparent: true, opacity : 0.2 } );
+			let cube = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ),material );
+			cube.position.x = pos[0];
+			cube.position.y = pos[1];
+			cube.position.z = pos[2];
+			this.scene.add(cube);
+			this.drawvoxels[i] = cube;
+		}
+		this.drawvoxels[i].visible = true;
+		this.drawvoxels[i].material.color.setHex( color );
+		//this.drawvoxels[i].material.opacity=.2
+		
+	}
+
+	drawCells( kind, col ){
+		if( ! col ){
+			col = "#000000";
+		}
+		let color;
+		if( typeof col == "string" ){
+			color = this.getCol( col );
+		}
+		
+		// We color only the borderpixels of 3D cells
+		let cellborderpixelsbyid = this.C.getStat( BorderPixelsByCell );
+
+		for( let cid of Object.keys( cellborderpixelsbyid ) ){
+			if( kind < 0 || this.C.cellKind(cid) == kind ){
+				if( typeof col == "function" ){
+					color = this.getCol( col(cid) );
+				}
+				for( let cp of cellborderpixelsbyid[cid] ){
+					this.setVoxel( cp, color );
+				}
+			}
+		}
+	}
+	
+	drawActivityValues( kind, A ){
+		if( !A ){
+			for( let c of this.C.soft_constraints ){
+				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
+					A = c; break
+				}
+			}
+		}
+		if( !A ){
+			throw("Cannot find activity values to draw!")
+		}
+		// cst contains the pixel ids of all non-background/non-stroma cells in
+		// the grid. 
+		let pos, cellid, a;
+		// loop over all pixels belonging to non-background, non-stroma
+		let color = {r:1,g:1,b:0};
+		
+		for( let x of this.C.cellPixels() ){
+			pos = x[0];
+			cellid = x[1];
+
+			// For all pixels that belong to the current kind, compute
+			// color based on activity values, convert to hex, and draw.
+			if( this.C.cellKind(cellid) == kind ){
+				a = A.pxact( this.C.grid.p2i( pos ) )/A.conf["MAX_ACT"][kind];
+				if( a > 0 ){
+					if( a > 0.5 ){
+						color["r"] = 1;
+						color["g"]= (2-2*a);
+					} else {
+						color["r"] = (2*a);
+						color["g"] = 1;
+					}
+					
+					let hexcolor = new THREE.Color( color.r, color.g, color.b ).getHex();
+					this.setVoxel( pos, hexcolor );
+				}
+			}
+		}
+		
+	}
+	
+	render(){
+		this.renderer.render( this.scene, this.camera );
+	}
+}
+
+/** Class for outputting various statistics from a CPM simulation, as for instance
+    the centroids of all cells (which is actually the only thing that's implemented
+    so far) 
+    @private 
+    @ignore */
+
+class Stats {
+	constructor( C ){
+		this.C = C;
+		this.ndim = this.C.ndim;
+	}
+
+	// ------------  FRC NETWORK 
+
+	// for simulation on FRC network. Returns all cells that are in contact with
+	// a stroma cell.
+	cellsOnNetwork(){
+		var px = this.C.cellborderpixels.elements, i,j, N, r = {}, t;
+		for( i = 0 ; i < px.length ; i ++ ){
+			t = this.C.pixti( px[i] );
+			if( r[t] ) continue
+			N = this.C.neighi(  px[i] );
+			for( j = 0 ; j < N.length ; j ++ ){
+				if( this.C.pixti( N[j] ) < 0 ){
+					r[t]=1; break
+				}
+			}
+		}
+		return r
+	}
+	
+	
+	// ------------  CELL LENGTH IN ONE DIMENSION
+	// (this does not work with a grid torus).
+		
+	// For computing mean and variance with online algorithm
+	updateOnline( aggregate, value ){
+		
+		var delta, delta2;
+
+		aggregate.count ++;
+		delta = value - aggregate.mean;
+		aggregate.mean += delta/aggregate.count;
+		delta2 = value - aggregate.mean;
+		aggregate.sqd += delta*delta2;
+
+		return aggregate
+	}
+
+	newOnline(){
+		return( { count : 0, mean : 0, sqd : 0 } ) 
+	}
+	// return mean and variance of coordinates in a given dimension for cell t
+	// (dimension as 0,1, or 2)
+	cellStats( t, dim ){
+
+		var aggregate, cpt, j, stats;
+
+		// the cellpixels object can be given as the third argument
+		if( arguments.length == 3){
+			cpt = arguments[2][t];
+		} else {
+			cpt = this.cellpixels()[t];
+		}
+
+		// compute using online algorithm
+		aggregate = this.newOnline();
+
+		// loop over pixels to update the aggregate
+		for( j = 0; j < cpt.length; j++ ){
+			aggregate = this.updateOnline( aggregate, cpt[j][dim] );
+		}
+
+		// get mean and variance
+		stats = { mean : aggregate.mean, variance : aggregate.sqd / ( aggregate.count - 1 ) };
+		return stats
+	}
+
+	// get the length (variance) of cell in a given dimension
+	// does not work with torus!
+	getLengthOf( t, dim ){
+		
+		// get mean and sd in x direction
+		var stats = this.cellStats( t, dim );
+		return stats.variance
+
+	}
+
+	// get the range of coordinates in dim for cell t
+	// does not work with torus!
+	getRangeOf( t, dim ){
+
+		var minc, maxc, cpt, j;
+
+		// the cellpixels object can be given as the third argument
+		if( arguments.length == 3){
+			cpt = arguments[2][t];
+		} else {
+			cpt = this.cellpixels()[t];
+		}
+
+		// loop over pixels to find min and max
+		minc = cpt[0][dim];
+		maxc = cpt[0][dim];
+		for( j = 1; j < cpt.length; j++ ){
+			if( cpt[j][dim] < minc ) minc = cpt[j][dim];
+			if( cpt[j][dim] > maxc ) maxc = cpt[j][dim];
+		}
+		
+		return( maxc - minc )		
+
+	}
+	
+	// ------------  CONNECTEDNESS OF CELLS
+	// ( compatible with torus )
+	
+	// Compute connected components of the cell ( to check connectivity )
+	getConnectedComponentOfCell( t, cellindices ){
+		if( cellindices.length == 0 ){ return }
+
+		var visited = {}, k=1, volume = {}, myself = this;
+
+		var labelComponent = function(seed, k){
+			var q = [parseInt(seed)];
+			visited[q[0]] = 1;
+			volume[k] = 0;
+			while( q.length > 0 ){
+				var e = parseInt(q.pop());
+				volume[k] ++;
+				var ne = myself.C.neighi( e );
+				for( var i = 0 ; i < ne.length ; i ++ ){
+					if( myself.C.pixti( ne[i] ) == t &&
+						!visited.hasOwnProperty(ne[i]) ){
+						q.push(ne[i]);
+						visited[ne[i]]=1;
+					}
+				}
+			}
+		};
+
+		for( var i = 0 ; i < cellindices.length ; i ++ ){
+			if( !visited.hasOwnProperty( cellindices[i] ) ){
+				labelComponent( cellindices[i], k );
+				k++;
+			}
+		}
+
+		return volume
+	}
+
+	getConnectedComponents(){
+	
+		let cpi;
+	
+		if( arguments.length == 1 ){
+			cpi = arguments[0];
+		} else {
+			cpi = this.cellpixelsi();
+		}
+
+		const tx = Object.keys( cpi );
+		let i, volumes = {};
+		for( i = 0 ; i < tx.length ; i ++ ){
+			volumes[tx[i]] = this.getConnectedComponentOfCell( tx[i], cpi[tx[i]] );
+		}
+		return volumes
+	}
+	
+	// Compute probabilities that two pixels taken at random come from the same cell.
+	getConnectedness(){
+	
+		let cpi;
+	
+		if( arguments.length == 1 ){
+			cpi = arguments[0];
+		} else {
+			cpi = this.cellpixelsi();
+		}
+	
+		const v = this.getConnectedComponents( cpi );
+		let s = {}, r = {}, i, j;
+		for( i in v ){
+			s[i] = 0;
+			r[i] = 0;
+			for( j in v[i] ){
+				s[i] += v[i][j];
+			}
+			for( j in v[i] ){
+				r[i] += (v[i][j]/s[i]) * (v[i][j]/s[i]);
+			}
+		}
+		return r
+	}	
+	
+	// ------------  PROTRUSION ANALYSIS: PERCENTAGE ACTIVE / ORDER INDEX 
+	// ( compatible with torus )
+	
+	// Compute percentage of pixels with activity > threshold
+	getPercentageActOfCell( t, cellindices, threshold ){
+		if( cellindices.length == 0 ){ return }
+		var i, count = 0;
+
+		for( i = 0 ; i < cellindices.length ; i ++ ){
+			if( this.C.pxact( cellindices[i] ) > threshold ){
+				count++;
+			}
+		}
+		return 100*(count/cellindices.length)
+	
+	}
+
+	getPercentageAct( threshold ){
+	
+		let cpi;
+	
+		if( arguments.length == 2 ){
+			cpi = arguments[1];
+		} else {
+			cpi = this.cellpixelsi();
+		}
+	
+		const tx = Object.keys( cpi );
+		let i, activities = {};
+		for( i = 0 ; i < tx.length ; i ++ ){
+			activities[tx[i]] = this.getPercentageActOfCell( tx[i], cpi[tx[i]], threshold );
+		}
+		return activities
+	
+	}
+
+	// Computing an order index of the activity gradients within the cell.
+	getGradientAt( t, i ){
+	
+		var gradient = [];
+		
+		// for computing index of neighbors in x,y,z dimension:
+		var diff = [1, this.C.dy, this.C.dz ]; 
+		
+		var d, neigh1, neigh2, t1, t2, ai = this.C.pxact( i ), terms = 0;
+		
+		for( d = 0; d < this.C.ndim; d++ ){
+			// get the two neighbors and their types
+			neigh1 = i - diff[d];
+			neigh2 = i + diff[d];
+			t1 = this.C.cellpixelstype[ neigh1 ];
+			t2 = this.C.cellpixelstype[ neigh2 ];
+			
+			// start with a zero gradient
+			gradient[d] = 0.00;
+			
+			// we will average the difference with the left and right neighbor only if both
+			// belong to the same cell. If only one neighbor belongs to the same cell, we
+			// use that difference. If neither belongs to the same cell, the gradient
+			// stays zero.
+			if( t == t1 ){
+				gradient[d] += ( ai - this.C.pxact( neigh1 ) );
+				terms++;
+			}
+			if( t == t2 ){
+				gradient[d] += ( this.C.pxact( neigh2 ) - ai );
+				terms++;
+			}
+			if( terms != 0 ){
+				gradient[d] = gradient[d] / terms;
+			}		
+						
+		}
+		
+		return gradient
+		
+	}
+
+	// compute the norm of a vector (in array form)
+	norm( v ){
+		var i;
+		var norm = 0;
+		for( i = 0; i < v.length; i++ ){
+			norm += v[i]*v[i];
+		}
+		norm = Math.sqrt( norm );
+		return norm
+	}
+
+	getOrderIndexOfCell( t, cellindices ){
+	
+		if( cellindices.length == 0 ){ return }
+		
+		// create an array to store the gradient in. Fill it with zeros for all dimensions.
+		var gradientsum = [], d;
+		for( d = 0; d < this.C.ndim; d++ ){
+			gradientsum.push(0.0);
+		}
+		
+		// now loop over the cellindices and add gi/norm(gi) to the gradientsum for each
+		// non-zero local gradient:
+		var j;
+		for( j = 0; j < cellindices.length; j++ ){
+			var g = this.getGradientAt( t, cellindices[j] );
+			var gn = this.norm( g );
+			// we only consider non-zero gradients for the order index
+			if( gn != 0 ){
+				for( d = 0; d < this.C.ndim; d++ ){
+					gradientsum[d] += 100*g[d]/gn/cellindices.length;
+				}
+			}
+		}
+		
+		
+		// finally, return the norm of this summed vector
+		var orderindex = this.norm( gradientsum );
+		return orderindex	
+	}
+
+	getOrderIndices( ){
+		var cpi = this.cellborderpixelsi();
+		var tx = Object.keys( cpi ), i, orderindices = {};
+		for( i = 0 ; i < tx.length ; i ++ ){
+			orderindices[tx[i]] = this.getOrderIndexOfCell( tx[i], cpi[tx[i]] );
+		}
+		return orderindices
+	
+	}
+	
+
+	// returns a list of all cell ids of the cells that border to "cell" and are of a different type
+	// a dictionairy with keys = neighbor cell ids, and 
+	// values = number of "cell"-pixels the neighbor cell borders to
+	cellNeighborsList( cell, cbpi ) {
+		if (!cbpi) {
+			cbpi = this.cellborderpixelsi()[cell];
+		} else {
+			cbpi = cbpi[cell];
+		}
+		let neigh_cell_amountborder = {};
+		//loop over border pixels of cell
+		for ( let cellpix = 0; cellpix < cbpi.length; cellpix++ ) {
+			//get neighbouring pixels of borderpixel of cell
+			let neighbours_of_borderpixel_cell = this.C.neighi(cbpi[cellpix]);
+			//don't add a pixel in cell more than twice
+			//loop over neighbouring pixels and store the parent cell if it is different from
+			//cell, add or increment the key corresponding to the neighbor in the dictionairy
+			for ( let neighborpix = 0; neighborpix < neighbours_of_borderpixel_cell.length;
+				neighborpix ++ ) {
+				let cell_id = this.C.pixti(neighbours_of_borderpixel_cell[neighborpix]);
+				if (cell_id != cell) {
+					neigh_cell_amountborder[cell_id] = neigh_cell_amountborder[cell_id]+1 || 1;
+				}
+			}
+		}
+		return neigh_cell_amountborder
+	}
+
+	// ------------ HELPER FUNCTIONS
+	
+	// TODO all helper functions have been removed from this class.
+	// We should only access cellpixels through the "official" interface
+	// in the CPM class.
+	
+}
+
+/** Extension of the {@link GridBasedModel} class suitable for
+a Cellular Automaton (CA). Currently only supports synchronous CAs.
+
+@example <caption>Conway's Game of Life </caption>
+*	let CPM = require( "path/to/build" )
+*	let C = new CPM.CA( [200,200], {
+*		"UPDATE_RULE": 	function(p,N){
+*			let nalive = 0
+*			for( let pn of N ){
+*				nalive += (this.pixt(pn)==1)
+*			}	
+*			if( this.pixt(p) == 1 ){
+*				if( nalive == 2 || nalive == 3 ){
+*					return 1
+*				}
+*			} else {
+*				if( nalive == 3 ) return 1
+*			}
+*			return 0
+*		}
+*	})
+*	let initialpixels = [ [100,100], [101,100], [102,100], [102,101], [101,102] ]
+*	for( p of initialpixels ){
+*		C.setpix( p, 1 )
+* 	}
+*	// Run it.
+*	for( let t = 0; t < 10; t++ ){ C.timeStep() }
+
+@todo Include asynchronous updating scheme?
+*/
+class CA extends GridBasedModel {
+
+	/** The constructor of class CA.
+	@param {GridSize} extents - the size of the grid of the model.
+	@param {object} conf - configuration options. 
+	@param {boolean} [conf.torus=[true,true,...]] - should the grid have linked borders?
+	@param {number} [seed] - seed for the random number generator. If left unspecified,
+	a random number from the Math.random() generator is used to make one.
+	@param {updatePixelFunction} conf.UPDATE_RULE - the update rule of the CA. 
+	*/
+	constructor( extents, conf ){
+		super( extents, conf );
+		/** Bind the supplied updaterule to the object.
+		@type {updatePixelFunction}*/
+		this.updateRule = conf["UPDATE_RULE"].bind(this);
+	}
+
+	/** A timestep in a CA just applies the update rule and clears any cached stats after
+	doing so. */
+	timeStep(){
+		this.grid.applyLocally( this.updateRule );
+		
+		/** Cached values of these stats. Object with stat name as key and its cached
+		value as value. The cache must be cleared when the grid changes!
+		@type {object} */
+		this.stat_values = {};
 	}
 }
 
@@ -6586,6 +6858,7 @@ class Simulation {
 // NOTE : This file is now auto-generated by app/automatic-index.bash when you compile the build using 'make'.
 
 exports.Canvas = Canvas;
+exports.Canvas3D = Canvas3D;
 exports.Stats = Stats;
 exports.CA = CA;
 exports.CPM = CPM;
