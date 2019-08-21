@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CellSorting</title>
+<title>Cellsorting</title>
 <style type="text/css">
 body{
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
@@ -33,7 +33,7 @@ let config = {
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
-		torus : true,						// Should the grid have linked borders?
+		torus : [true,true],						// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 15,								// CPM temperature
 
@@ -107,7 +107,7 @@ function initialize(){
 function step(){
 	sim.step()
 	meter.tick()
-	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME"] ){
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
 		requestAnimationFrame( step )
 	}
 }
@@ -129,7 +129,7 @@ function initializeGrid(){
 </script>
 </head>
 <body onload="initialize()">
-<h1>CellSorting</h1>
+<h1>Cellsorting</h1>
 <p>
 Cells sorting themselves through differential adhesion.
 </p>

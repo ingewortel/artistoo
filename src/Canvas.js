@@ -54,6 +54,8 @@ class Canvas {
 			 * @type {GridBasedModel|CPM|CA}
 			 */
 			this.C = C
+			this.grid = this.C.grid
+			
 			/** Grid size in each dimension, taken from the CPM or grid object to draw.
 			@type {GridSize} each element is the grid size in that dimension in pixels */
 			this.extents = C.extents
@@ -319,9 +321,9 @@ class Canvas {
 					let pixelval = Math.log( .1 + cc.pixt( [i,j] ) )
 					if( Math.abs( v - pixelval ) < 0.05*maxval ){
 						let below = false, above = false
-						for( let n of this.C.grid.neighNeumanni( this.C.grid.p2i( [i,j] ) ) ){
+						for( let n of this.grid.neighNeumanni( this.grid.p2i( [i,j] ) ) ){
 					
-							let nval = Math.log(0.1 + cc.pixt(this.C.grid.i2p(n)) )
+							let nval = Math.log(0.1 + cc.pixt(this.grid.i2p(n)) )
 							if( nval < v ){
 								below = true
 							}

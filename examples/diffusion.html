@@ -11,7 +11,7 @@
 
 let w = 61, m = (w-1)/2, D = 0.1545706
 
-var g = new CPM.Grid2D([w,w], true, "Float32"),
+var g = new CPM.Grid2D([w,w], [true,true], "Float32"),
 	gi = new CPM.CoarseGrid( g, 10 )
 
 var c = new CPM.Canvas(gi,{zoom:1})

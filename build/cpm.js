@@ -241,9 +241,13 @@ var CPM = (function (exports) {
 		@param {GridSize} field_size array of field size in each dimension. E.g. [100,200] for
 		a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
 		numbers.
-		@param {boolean} [torus=true] - should the borders of the grid be linked, so that a cell moving
-		out on the left reappears on the right? */
-		constructor( field_size, torus = true ){
+		@param {boolean[]} [torus=[true,true,...]] - should the borders of the grid be linked, so that a cell moving
+		out on the left reappears on the right? Should be an array specifying whether the
+		torus holds in each dimension; eg [true,false] for a torus in x but not y dimension. */
+		constructor( field_size, torus ){
+		
+			torus = torus || [];
+		
 			/** field_size array of field size in each dimension. E.g. [100,200] for
 			a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
 			numbers.
@@ -255,8 +259,16 @@ var CPM = (function (exports) {
 			this.ndim = this.extents.length;
 			
 			/** Should the borders of the grid be linked, so that a cell moving
-			out on the left reappears on the right? 
-			@type {boolean}*/
+			out on the left reappears on the right? Torus can be specified for
+			each dimension separately.
+			@type {boolean[]}*/
+			if( torus.length == 0 ){
+				for( let d = 0; d < this.ndim; d++ ){
+					torus.push( true );
+				}
+			} else if ( torus.length != this.ndim ){
+				throw( "Torus should be specified for each dimension, or not at all!" )
+			}
 			this.torus = torus;
 			
 			
@@ -499,7 +511,7 @@ var CPM = (function (exports) {
 	 	* let CPM = require("path/to/build")
 	 	* 
 	 	* // Make a grid with a chemokine, add some chemokine at the middle pixel
-	 	* let chemogrid = new CPM.Grid2D( [100,100], true, "Float32" )
+	 	* let chemogrid = new CPM.Grid2D( [100,100], [true,true], "Float32" )
 	 	* chemogrid.setpix( [50,50], 100 )
 	 	* 
 	 	* // Measure chemokine at different spots before and after diffusion
@@ -515,11 +527,11 @@ var CPM = (function (exports) {
 	 	* let CPM = require("path/to/build")
 	 	* 
 	 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0]
-	 	* let grid = new CPM.Grid2D( [100,100], true )
+	 	* let grid = new CPM.Grid2D( [100,100], [true,true] )
 	 	* console.log( grid.neigh( [0,0] ) ) // returns coordinates of 8 neighbors
 	 	* 
 	 	* // Now try a grid without torus; the corner now has fewer neighbors.
-	 	* let grid2 = new CPM.Grid2D( [100,100], false )
+	 	* let grid2 = new CPM.Grid2D( [100,100], [false,false] )
 	 	* console.log( grid2.neigh( [0,0] ) ) // returns only 3 neighbors
 	 	* 
 	 	* // Or try a Neumann neighborhood using the iterator
@@ -532,11 +544,12 @@ var CPM = (function (exports) {
 
 		/** Constructor of the Grid2D object.
 		@param {GridSize} extents - the size of the grid in each dimension 
-		@param {boolean} [torus = true] - should the borders of the grid be linked, so that a cell moving
-		out on the left reappears on the right?
+		@param {boolean[]} [torus=[true,true]] - should the borders of the grid be linked, so that a cell moving
+		out on the left reappears on the right? Should be an array specifying whether the
+		torus holds in each dimension; eg [true,false] for a torus in x but not y dimension.
 		@param {string} [datatype="Uint16"] - What datatype are the values associated with each
 		pixel on the grid? Choose from "Uint16" or "Float32". */
-		constructor( extents, torus=true, datatype="Uint16" ){
+		constructor( extents, torus=[true,true], datatype="Uint16" ){
 			super( extents, torus );
 			
 			/** @ignore */
@@ -572,7 +585,7 @@ var CPM = (function (exports) {
 			@example
 			* let CPM = require( "path/to/build" )
 			* // make a grid and set some values
-			* let grid = new CPM.Grid2D( [100,100], true )
+			* let grid = new CPM.Grid2D( [100,100], [true,true] )
 			* grid.setpixi( 0, 1 )
 			* grid.setpixi( 1, 5 )
 			* 
@@ -601,7 +614,7 @@ var CPM = (function (exports) {
 			@example
 			* let CPM = require( "path/to/build" )
 			* // make a grid and set some values
-			* let grid = new CPM.Grid2D( [100,100], true )
+			* let grid = new CPM.Grid2D( [100,100], [true,true] )
 			* grid.setpix( [0,0], 1 )
 			* grid.setpix( [0,1], 5 )
 			* 
@@ -676,7 +689,7 @@ var CPM = (function (exports) {
 			pixel itself.
 			@see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
 			@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-			@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+			@param {boolean[]} [torus=[true,true]] - does the grid have linked borders? Defaults to the
 			setting on this grid, see {@link torus}
 			@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
 		*/
@@ -692,7 +705,7 @@ var CPM = (function (exports) {
 
 			// left border
 			if( i < this.extents[1] ){
-				if( torus ){
+				if( torus[0] ){
 					l += this.extents[0] * this.X_STEP;
 					yield l;
 				} 
@@ -701,7 +714,7 @@ var CPM = (function (exports) {
 			}
 			// right border
 			if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
-				if( torus ){
+				if( torus[0] ){
 					r -= this.extents[0] * this.X_STEP;
 					yield r;
 				}
@@ -710,7 +723,7 @@ var CPM = (function (exports) {
 			}
 			// top border
 			if( i % this.X_STEP == 0 ){
-				if( torus ){
+				if( torus[1] ){
 					t += this.extents[1];
 					yield t;
 				} 
@@ -719,7 +732,7 @@ var CPM = (function (exports) {
 			}
 			// bottom border
 			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
-				if( torus ){
+				if( torus[1] ){
 					b -= this.extents[1];
 					yield b;
 				} 
@@ -752,7 +765,7 @@ var CPM = (function (exports) {
 			// 
 			// left border
 			if( i < this.extents[1] ){
-				if( torus ){
+				if( torus[0] ){
 					add = this.extents[0] * this.X_STEP;
 				}
 				tl += add; l += add; bl += add; 	
@@ -760,15 +773,16 @@ var CPM = (function (exports) {
 			
 			// right border
 			if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
-				if( torus ){
+				if( torus[0] ){
 					add = -this.extents[0] * this.X_STEP;
 				}
 				tr += add; r += add; br += add;
 			}
 
+			add = NaN;
 			// top border
 			if( i % this.X_STEP == 0 ){
-				if( torus ){
+				if( torus[1] ){
 					add = this.extents[1];
 				}
 				tl += add; tm += add; tr += add;	
@@ -776,12 +790,12 @@ var CPM = (function (exports) {
 			
 			// bottom border
 			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
-				if( torus ){
+				if( torus[1] ){
 					add = -this.extents[1];
 				}
 				bl += add; bm += add; br += add;
 			}
-			if( !torus ){
+			if( !(torus[0]&&torus[1]) ){
 				return [ tl, l, bl, tm, bm, tr, r, br ].filter( isFinite )
 			} else {
 				return [ tl, l, bl, tm, bm, tr, r, br ]
@@ -796,7 +810,7 @@ var CPM = (function (exports) {
 		@return {IndexCoordinate} the converted coordinate. 
 		
 		@example 
-		* let grid = new CPM.Grid2D( [100,100], true )
+		* let grid = new CPM.Grid2D( [100,100], [true,true] )
 		* let p = grid.i2p( 5 )
 		* console.log( p )
 		* console.log( grid.p2i( p ))
@@ -812,7 +826,7 @@ var CPM = (function (exports) {
 		@return {ArrayCoordinate} the converted coordinate. 
 		
 		@example 
-		* let grid = new CPM.Grid2D( [100,100], true )
+		* let grid = new CPM.Grid2D( [100,100], [true,true] )
 		* let p = grid.i2p( 5 )
 		* console.log( p )
 		* console.log( grid.p2i( p ))
@@ -831,7 +845,7 @@ var CPM = (function (exports) {
 			
 			let dx=0;
 			if( i < this.extents[1] ){ // left border
-				if( torus ){
+				if( torus[0] ){
 					l += this.extents[0] * this.X_STEP;
 					dx = ((this._pixels[r]-this._pixels[i])+
 						(this._pixels[i]-this._pixels[l]))/2;
@@ -840,7 +854,7 @@ var CPM = (function (exports) {
 				}
 			} else { 
 				if( i >= this.X_STEP*( this.extents[0] - 1 ) ){ // right border
-					if( torus ){
+					if( torus[0] ){
 						r -= this.extents[0] * this.X_STEP;
 						dx = ((this._pixels[r]-this._pixels[i])+
 							(this._pixels[i]-this._pixels[l]))/2;
@@ -855,7 +869,7 @@ var CPM = (function (exports) {
 
 			let dy=0;
 			if( i % this.X_STEP == 0 ){ // top border
-				if( torus ){
+				if( torus[1] ){
 					t += this.extents[1];
 					dy = ((this._pixels[b]-this._pixels[i])+
 						(this._pixels[i]-this._pixels[t]))/2;
@@ -864,7 +878,7 @@ var CPM = (function (exports) {
 				}
 			} else { 
 				if( (i+1-this.extents[1]) % this.X_STEP == 0 ){ // bottom border
-					if( torus ){
+					if( torus[1] ){
 						b -= this.extents[1];
 						dy = ((this._pixels[b]-this._pixels[i])+
 							(this._pixels[i]-this._pixels[t]))/2;
@@ -891,20 +905,24 @@ var CPM = (function (exports) {
 	 	* let CPM = require("path/to/build")
 	 	* 
 	 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
-	 	* let grid = new CPM.Grid3D( [100,100,100], true )
+	 	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 	 	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
 	 	* 
 	 	* // Now try a grid without torus; the corner now has fewer neighbors.
-	 	* let grid2 = new CPM.Grid3D( [100,100,100], false )
+	 	* let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
 	 	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+	 	*
+	 	* // Or try a torus in one dimension
+	 	* let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
+	 	* console.log( grid2.neigh( [0,0,0] ) ) 
 	 	*/
 	class Grid3D extends Grid {
 
 		/** Constructor of the Grid3D object.
 		@param {GridSize} extents - the size of the grid in each dimension 
-		@param {boolean} [torus = true] - should the borders of the grid be linked, so that a cell moving
+		@param {boolean[]} [torus = [true,true,true]] - should the borders of the grid be linked, so that a cell moving
 		out on the left reappears on the right? */
-		constructor( extents, torus = true ){
+		constructor( extents, torus = [true,true,true] ){
 			super( extents, torus );
 			// Check that the grid size is not too big to store pixel ID in 32-bit number,
 			// and allow fast conversion of coordinates to unique ID numbers.
@@ -936,7 +954,7 @@ var CPM = (function (exports) {
 		@return {IndexCoordinate} the converted coordinate. 
 		
 		@example 
-		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 		* let p = grid.i2p( 5 )
 		* console.log( p )
 		* console.log( grid.p2i( p ))
@@ -954,7 +972,7 @@ var CPM = (function (exports) {
 		@return {ArrayCoordinate} the converted coordinate. 
 		
 		@example 
-		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 		* let p = grid.i2p( 5 )
 		* console.log( p )
 		* console.log( grid.p2i( p ))
@@ -972,7 +990,7 @@ var CPM = (function (exports) {
 			@example
 			* let CPM = require( "path/to/build" )
 			* // make a grid and set some values
-			* let grid = new CPM.Grid3D( [100,100,100], true )
+			* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 			* grid.setpixi( 0, 1 )
 			* grid.setpixi( 1, 5 )
 			* 
@@ -1006,7 +1024,7 @@ var CPM = (function (exports) {
 			@example
 			* let CPM = require( "path/to/build" )
 			* // make a grid and set some values
-			* let grid = new CPM.Grid3D( [100,100,100], true )
+			* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 			* grid.setpix( [0,0,0], 1 )
 			* grid.setpix( [0,0,1], 5 )
 			* 
@@ -1039,7 +1057,7 @@ var CPM = (function (exports) {
 			excluding the pixel itself.
 			@see https://en.wikipedia.org/wiki/Moore_neighborhood
 			@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-			@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+			@param {boolean[]} [torus=[true,true,true]] - does the grid have linked borders? Defaults to the
 			setting on this grid, see {@link torus}
 			@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
 		*/
@@ -1049,13 +1067,13 @@ var CPM = (function (exports) {
 			let xx = [];
 			for( let d = 0 ; d <= 2 ; d ++ ){
 				if( p[d] == 0 ){
-					if( torus ){
+					if( torus[d] ){
 						xx[d] = [p[d],this.extents[d]-1,p[d]+1];
 					} else {
 						xx[d] = [p[d],p[d]+1];
 					}
 				} else if( p[d] == this.extents[d]-1 ){
-					if( torus ){
+					if( torus[d] ){
 						xx[d] = [p[d],p[d]-1,0];
 					} else {
 						xx[d] = [p[d],p[d]-1];
@@ -1092,7 +1110,7 @@ var CPM = (function (exports) {
 		@param {GridSize} extents - the size of the grid of the model.
 		@param {object} conf - configuration options. See below for its elements,
 		but subclasses can have more.
-		@param {boolean} [conf.torus=true] - should the grid have linked borders?
+		@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
 		@param {number} [seed] - seed for the random number generator. If left unspecified,
 		a random number from the Math.random() generator is used to make one.  */
 		constructor( extents, conf ){
@@ -1102,7 +1120,11 @@ var CPM = (function (exports) {
 			@type {MersenneTwister}*/
 			this.mt = new MersenneTwister( seed );
 			if( !("torus" in conf) ){
-				conf["torus"] = true;
+				let torus = [];
+				for( let d = 0; d < extents.length; d++ ){
+					torus.push( true );
+				}
+				conf["torus"] = torus;
 			}
 
 			// Attributes based on input parameters
@@ -1180,7 +1202,7 @@ var CPM = (function (exports) {
 		/** Get neighbourhood of position p, using neighborhood functions of the underlying
 		grid class.
 		@param {ArrayCoordinate} p - coordinate of a pixel to get the neighborhood of.
-		@param {boolean} [torus]  Does the grid have linked borders? If left unspecified,
+		@param {boolean[]} [torus=[true,true,...]]  Does the grid have linked borders? If left unspecified,
 		this is determined by this.conf.torus.*/
 		neigh(p, torus=this.conf.torus){
 			let g = this.grid;
@@ -1262,7 +1284,7 @@ var CPM = (function (exports) {
 		
 		@example
 		* let CPM = require( "path/to/dir")
-		* let C = new CPM.CPM( [200,200], {T:20, torus:false} )
+		* let C = new CPM.CPM( [200,200], {T:20, torus:[false,false]} )
 		* let gm = new CPM.GridManipulator( C )
 		* gm.seedCell( 1 )
 		* gm.seedCell( 1 )
@@ -1307,7 +1329,7 @@ var CPM = (function (exports) {
 	   * let CPM = require( "path/to/build" )
 	   * 
 	   * // Define a grid with float values for chemokine values, and set the middle pixel
-	   * let chemogrid = new CPM.Grid2D( [50,50], true, "Float32" )
+	   * let chemogrid = new CPM.Grid2D( [50,50], [true,true], "Float32" )
 	   * chemogrid.setpix( [99,99], 100 )
 	   * 
 	   * // Make a coarse grid at 5x as high resolution, which is then 500x500 pixels.
@@ -1325,7 +1347,7 @@ var CPM = (function (exports) {
 	   * let Cim2 = new CPM.Canvas( chemogrid, {zoom:5} )
 	   * Cim2.drawField()
 	*/
-	class CoarseGrid {
+	class CoarseGrid extends Grid2D {
 		/** The constructor of class CoarseGrid takes a low resolution grid as input
 		and a factor 'upscale', which is how much bigger the dimensions of the high
 		resolution grid are (must be a constant factor). 
@@ -1333,12 +1355,15 @@ var CPM = (function (exports) {
 		@param {number} upscale The (integer) factor to magnify the original grid with. */
 		constructor( grid, upscale = 3 ){
 		
+			let extents = new Array( grid.extents.length );
+			for( let i = 0 ; i < grid.extents.length ; i++ ){
+				extents[i] = upscale * grid.extents[i];
+			}
+			super( extents, grid.torus, "Float32" );
+		
 			/** Size of the new grid in all dimensions.
 			@type {GridSize} with a non-negative integer number for each dimension. */
-			this.extents = new Array( grid.extents.length );
-			for( let i = 0 ; i < grid.extents.length ; i++ ){
-				this.extents[i] = upscale * grid.extents[i];
-			}
+			this.extents = extents;
 			/** The original, low-resolution grid. 
 			@type {Grid2D}*/
 			this.grid = grid;
@@ -2490,6 +2515,8 @@ var CPM = (function (exports) {
 				 * @type {GridBasedModel|CPM|CA}
 				 */
 				this.C = C;
+				this.grid = this.C.grid;
+				
 				/** Grid size in each dimension, taken from the CPM or grid object to draw.
 				@type {GridSize} each element is the grid size in that dimension in pixels */
 				this.extents = C.extents;
@@ -2755,9 +2782,9 @@ var CPM = (function (exports) {
 						let pixelval = Math.log( .1 + cc.pixt( [i,j] ) );
 						if( Math.abs( v - pixelval ) < 0.05*maxval ){
 							let below = false, above = false;
-							for( let n of this.C.grid.neighNeumanni( this.C.grid.p2i( [i,j] ) ) ){
+							for( let n of this.grid.neighNeumanni( this.grid.p2i( [i,j] ) ) ){
 						
-								let nval = Math.log(0.1 + cc.pixt(this.C.grid.i2p(n)) );
+								let nval = Math.log(0.1 + cc.pixt(this.grid.i2p(n)) );
 								if( nval < v ){
 									below = true;
 								}
@@ -3370,7 +3397,7 @@ var CPM = (function (exports) {
 		/** The constructor of class CA.
 		@param {GridSize} extents - the size of the grid of the model.
 		@param {object} conf - configuration options. 
-		@param {boolean} [conf.torus=true] - should the grid have linked borders?
+		@param {boolean} [conf.torus=[true,true,...]] - should the grid have linked borders?
 		@param {number} [seed] - seed for the random number generator. If left unspecified,
 		a random number from the Math.random() generator is used to make one.
 		@param {updatePixelFunction} conf.UPDATE_RULE - the update rule of the CA. 
@@ -3972,7 +3999,7 @@ var CPM = (function (exports) {
 		{@link Constraint} subclasses for options. For some constraints, adding its
 		paramter to the CPM conf object automatically adds the constraint; see 
 		{@link AutoAdderConfig} to see for which constraints this is supported.
-		@param {boolean} [conf.torus=true] - should the grid have linked borders?
+		@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
 		@param {number} [seed] - seed for the random number generator. If left unspecified,
 		a random number from the Math.random() generator is used to make one.
 		*/
@@ -4453,7 +4480,7 @@ var CPM = (function (exports) {
 		* // Make a CPM, seed two cells, run a little, and get their centroids
 		* let C = new CPM.CPM( [100,100], { 
 		* 	T:20,
-		* 	torus:true,
+		* 	torus:[true,true],
 		* 	J:[[0,20],[20,10]],
 		* 	V:[0,200],
 		* 	LAMBDA_V:[0,2]
@@ -4525,7 +4552,7 @@ var CPM = (function (exports) {
 					// holds AFTER the first pixel (so for j > 0), when we actually have
 					// an idea of where the cell is.
 					let dx = pixels[j][dim] - mi;
-					if( j > 0 ){
+					if( this.M.grid.torus[dim] && j > 0 ){
 						// If distance is greater than half the grid size, correct the
 						// coordinate.
 						if( dx > hsi ){
@@ -4582,7 +4609,7 @@ var CPM = (function (exports) {
 		* // Make a CPM, seed two cells, run a little, and get their centroids
 		* let C = new CPM.CPM( [100,100], { 
 		* 	T:20,
-		*	torus:false,
+		*	torus:[false,false],
 		* 	J:[[0,20],[20,10]],
 		* 	V:[0,200],
 		* 	LAMBDA_V:[0,2]
@@ -4603,6 +4630,22 @@ var CPM = (function (exports) {
 			/** The model to compute centroids on. 
 			@type {GridBasedModel}*/
 			this.M = M;
+			
+			/* Check if the grid has a torus; if so, warn that this method may not be
+			appropriate. */
+			let torus = false;
+			for( let d = 0; d < this.M.ndim; d++ ){
+				if( this.M.grid.torus[d] ){
+					torus = true;
+					break
+				}
+			}
+			
+			if(torus){
+				// eslint-disable-next-line no-console
+				console.warn( "Your model grid has a torus, and the 'Centroids' stat is not compatible with torus! Consider using 'CentroidsWithTorusCorrection' instead." );
+			}
+			
 			// Half the grid dimensions; if pixels with the same cellid are further apart,
 			// we assume they are on the border of the grid and that we need to correct
 			// their positions to compute the centroid.
@@ -4681,7 +4724,7 @@ var CPM = (function (exports) {
 		* // Set up a CPM and manipulator
 		* let C = new CPM.CPM( [300,300], {
 		* 	T:20, 
-		* 	torus:false,
+		* 	torus:[false,false],
 		* 	J:[[0,20],[20,10]], 
 		* 	V:[0,200], 
 		* 	LAMBDA_V:[0,2]
@@ -5036,7 +5079,13 @@ var CPM = (function (exports) {
 		 */
 		divideCell( id ){
 			let C = this.C;
-			if( C.ndim != 2 || C.conf.torus ){
+			let torus = false;
+			for( let i of C.conf.torus ){
+				if( C.conf.torus[i]){
+					torus = true;
+				}
+			}
+			if( C.ndim != 2 || torus ){
 				throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
 			}
 			let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id];
@@ -5175,10 +5224,13 @@ var CPM = (function (exports) {
 			let a = [];
 			for( let i = 0 ; i < p1.length ; i ++ ){
 				a[i] = p2[i]-p1[i];
-				if( a[i] > this.halfsize[i] ){
-					a[i] -= this.C.extents[i];
-				} else if( a[i] < -this.halfsize[i] ){
-					a[i] += this.C.extents[i];
+				// Correct for torus if necessary
+				if( this.C.grid.torus[i] ){
+					if( a[i] > this.halfsize[i] ){
+						a[i] -= this.C.extents[i];
+					} else if( a[i] < -this.halfsize[i] ){
+						a[i] += this.C.extents[i];
+					}
 				}
 			}
 			let dp = 0;
@@ -5274,8 +5326,8 @@ var CPM = (function (exports) {
 					for( let j = 0 ; j < l.length ; j ++ ){
 						dx[j] = ci[j] - l[j];
 						
-						// torus correction; do only if CPM actually has a torus.
-						if( this.C.torus ){
+						// torus correction; do only if CPM actually has a torus in this dimension.
+						if( this.C.grid.torus[j] ){
 							if( dx[j] > this.halfsize[j] ){
 								dx[j] -= this.C.extents[j];
 							} else if( dx[j] < -this.halfsize[j] ){
@@ -5380,7 +5432,7 @@ var CPM = (function (exports) {
 				let si = this.C.extents[i];
 				// direction of the copy attempt on this coordinate is from p1 to p2
 				let dx = p2[i] - p1[i];
-				if( torus ){
+				if( torus[i] ){
 					// If distance is greater than half the grid size, correct the
 					// coordinate.
 					if( dx > si/2 ){
@@ -5407,7 +5459,7 @@ var CPM = (function (exports) {
 	 * @example
 	 * // Build a chemotaxis field
 	 * let CPM = require( "path/to/build" )
-	 * let chemogrid = new CPM.Grid2D( [200,200], true, "Float32" )
+	 * let chemogrid = new CPM.Grid2D( [200,200], [true,true], "Float32" )
 	 * chemogrid.setpix( [100,100], 100 )
 	 * 
 	 * // Build a CPM with the constraint
@@ -5593,7 +5645,7 @@ var CPM = (function (exports) {
 				let si = this.C.extents[i];
 				// direction of the copy attempt on this coordinate is from p1 to p2
 				let dx = p2[i] - p1[i];
-				if( torus ){
+				if( torus[i] ){
 					// If distance is greater than half the grid size, correct the
 					// coordinate.
 					if( dx > si/2 ){
@@ -5658,7 +5710,7 @@ var CPM = (function (exports) {
 		getCentroid( cellid ){
 		
 			let centroids;
-			if( this.C.torus ){
+			if( this.C.torus.some( function(value){return value}) ){
 				centroids = this.C.getStat( CentroidsWithTorusCorrection );
 			} else {
 				centroids = this.C.getStat( Centroids );
@@ -6610,7 +6662,13 @@ var CPM = (function (exports) {
 			
 			// compute centroids for all cells
 			let allcentroids; 
-			if( this.C.torus ){
+			let torus = false;
+			for( let d = 0; d < this.C.grid.ndim; d++ ){
+				if( this.C.grid.torus[d] ){
+					torus = true;
+				}
+			}
+			if( torus ){
 				allcentroids = this.C.getStat( CentroidsWithTorusCorrection );
 			} else {
 				allcentroids = this.C.getStat( Centroids );

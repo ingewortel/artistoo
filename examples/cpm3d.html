@@ -49,7 +49,7 @@ function setupCPM(conf){
 	const dimension = 3
   	C = new CPM.CPM( [w,w,w], {
   		T : 20,
-  		torus : true,
+  		torus : [true,true,true],
   		nCellKinds : 1,
   		J: [[0,20], [20,100]],
   		V: [0,500],

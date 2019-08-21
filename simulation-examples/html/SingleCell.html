@@ -33,7 +33,7 @@ let config = {
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
-		torus : true,						// Should the grid have linked borders?
+		torus : [true,true],				// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		// Constraint parameters. 
@@ -47,6 +47,7 @@ let config = {
 		// VolumeConstraint parameters
 		LAMBDA_V : [0,50],				// VolumeConstraint importance per cellkind
 		V : [0,500]						// Target volume of each cellkind
+		
 
 	},
 	
@@ -86,7 +87,7 @@ let sim, meter
 
 
 function initialize(){
-	sim = new CPM.Simulation( config )
+	sim = new CPM.Simulation( config, {} )
 
 
 	meter = new FPSMeter({left:"auto", right:"5px"})
@@ -97,7 +98,7 @@ function initialize(){
 function step(){
 	sim.step()
 	meter.tick()
-	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME"] ){
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
 		requestAnimationFrame( step )
 	}
 }

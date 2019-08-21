@@ -52,7 +52,7 @@ class ProtrusionConstraint extends SoftConstraint {
 	getCentroid( cellid ){
 	
 		let centroids
-		if( this.C.torus ){
+		if( this.C.torus.some( function(value){return value}) ){
 			centroids = this.C.getStat( CentroidsWithTorusCorrection )
 		} else {
 			centroids = this.C.getStat( Centroids )

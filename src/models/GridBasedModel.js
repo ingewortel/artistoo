@@ -17,7 +17,7 @@ class GridBasedModel {
 	@param {GridSize} extents - the size of the grid of the model.
 	@param {object} conf - configuration options. See below for its elements,
 	but subclasses can have more.
-	@param {boolean} [conf.torus=true] - should the grid have linked borders?
+	@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
 	@param {number} [seed] - seed for the random number generator. If left unspecified,
 	a random number from the Math.random() generator is used to make one.  */
 	constructor( extents, conf ){
@@ -27,7 +27,11 @@ class GridBasedModel {
 		@type {MersenneTwister}*/
 		this.mt = new MersenneTwister( seed )
 		if( !("torus" in conf) ){
-			conf["torus"] = true
+			let torus = []
+			for( let d = 0; d < extents.length; d++ ){
+				torus.push( true )
+			}
+			conf["torus"] = torus
 		}
 
 		// Attributes based on input parameters
@@ -105,7 +109,7 @@ class GridBasedModel {
 	/** Get neighbourhood of position p, using neighborhood functions of the underlying
 	grid class.
 	@param {ArrayCoordinate} p - coordinate of a pixel to get the neighborhood of.
-	@param {boolean} [torus]  Does the grid have linked borders? If left unspecified,
+	@param {boolean[]} [torus=[true,true,...]]  Does the grid have linked borders? If left unspecified,
 	this is determined by this.conf.torus.*/
 	neigh(p, torus=this.conf.torus){
 		let g = this.grid
@@ -187,7 +191,7 @@ class GridBasedModel {
 	
 	@example
 	* let CPM = require( "path/to/dir")
-	* let C = new CPM.CPM( [200,200], {T:20, torus:false} )
+	* let C = new CPM.CPM( [200,200], {T:20, torus:[false,false]} )
 	* let gm = new CPM.GridManipulator( C )
 	* gm.seedCell( 1 )
 	* gm.seedCell( 1 )

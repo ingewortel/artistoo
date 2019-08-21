@@ -9,7 +9,7 @@ import Grid from "./Grid.js"
  	* let CPM = require("path/to/build")
  	* 
  	* // Make a grid with a chemokine, add some chemokine at the middle pixel
- 	* let chemogrid = new CPM.Grid2D( [100,100], true, "Float32" )
+ 	* let chemogrid = new CPM.Grid2D( [100,100], [true,true], "Float32" )
  	* chemogrid.setpix( [50,50], 100 )
  	* 
  	* // Measure chemokine at different spots before and after diffusion
@@ -25,11 +25,11 @@ import Grid from "./Grid.js"
  	* let CPM = require("path/to/build")
  	* 
  	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0]
- 	* let grid = new CPM.Grid2D( [100,100], true )
+ 	* let grid = new CPM.Grid2D( [100,100], [true,true] )
  	* console.log( grid.neigh( [0,0] ) ) // returns coordinates of 8 neighbors
  	* 
  	* // Now try a grid without torus; the corner now has fewer neighbors.
- 	* let grid2 = new CPM.Grid2D( [100,100], false )
+ 	* let grid2 = new CPM.Grid2D( [100,100], [false,false] )
  	* console.log( grid2.neigh( [0,0] ) ) // returns only 3 neighbors
  	* 
  	* // Or try a Neumann neighborhood using the iterator
@@ -42,11 +42,12 @@ class Grid2D extends Grid {
 
 	/** Constructor of the Grid2D object.
 	@param {GridSize} extents - the size of the grid in each dimension 
-	@param {boolean} [torus = true] - should the borders of the grid be linked, so that a cell moving
-	out on the left reappears on the right?
+	@param {boolean[]} [torus=[true,true]] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right? Should be an array specifying whether the
+	torus holds in each dimension; eg [true,false] for a torus in x but not y dimension.
 	@param {string} [datatype="Uint16"] - What datatype are the values associated with each
 	pixel on the grid? Choose from "Uint16" or "Float32". */
-	constructor( extents, torus=true, datatype="Uint16" ){
+	constructor( extents, torus=[true,true], datatype="Uint16" ){
 		super( extents, torus )
 		
 		/** @ignore */
@@ -82,7 +83,7 @@ class Grid2D extends Grid {
 		@example
 		* let CPM = require( "path/to/build" )
 		* // make a grid and set some values
-		* let grid = new CPM.Grid2D( [100,100], true )
+		* let grid = new CPM.Grid2D( [100,100], [true,true] )
 		* grid.setpixi( 0, 1 )
 		* grid.setpixi( 1, 5 )
 		* 
@@ -111,7 +112,7 @@ class Grid2D extends Grid {
 		@example
 		* let CPM = require( "path/to/build" )
 		* // make a grid and set some values
-		* let grid = new CPM.Grid2D( [100,100], true )
+		* let grid = new CPM.Grid2D( [100,100], [true,true] )
 		* grid.setpix( [0,0], 1 )
 		* grid.setpix( [0,1], 5 )
 		* 
@@ -186,7 +187,7 @@ class Grid2D extends Grid {
 		pixel itself.
 		@see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
 		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-		@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+		@param {boolean[]} [torus=[true,true]] - does the grid have linked borders? Defaults to the
 		setting on this grid, see {@link torus}
 		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
 	*/
@@ -202,7 +203,7 @@ class Grid2D extends Grid {
 
 		// left border
 		if( i < this.extents[1] ){
-			if( torus ){
+			if( torus[0] ){
 				l += this.extents[0] * this.X_STEP
 				yield l
 			} 
@@ -211,7 +212,7 @@ class Grid2D extends Grid {
 		}
 		// right border
 		if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
-			if( torus ){
+			if( torus[0] ){
 				r -= this.extents[0] * this.X_STEP
 				yield r
 			}
@@ -220,7 +221,7 @@ class Grid2D extends Grid {
 		}
 		// top border
 		if( i % this.X_STEP == 0 ){
-			if( torus ){
+			if( torus[1] ){
 				t += this.extents[1]
 				yield t
 			} 
@@ -229,7 +230,7 @@ class Grid2D extends Grid {
 		}
 		// bottom border
 		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
-			if( torus ){
+			if( torus[1] ){
 				b -= this.extents[1]
 				yield b
 			} 
@@ -262,7 +263,7 @@ class Grid2D extends Grid {
 		// 
 		// left border
 		if( i < this.extents[1] ){
-			if( torus ){
+			if( torus[0] ){
 				add = this.extents[0] * this.X_STEP
 			}
 			tl += add; l += add; bl += add 	
@@ -270,15 +271,16 @@ class Grid2D extends Grid {
 		
 		// right border
 		if( i >= this.X_STEP*( this.extents[0] - 1 ) ){
-			if( torus ){
+			if( torus[0] ){
 				add = -this.extents[0] * this.X_STEP
 			}
 			tr += add; r += add; br += add
 		}
 
+		add = NaN
 		// top border
 		if( i % this.X_STEP == 0 ){
-			if( torus ){
+			if( torus[1] ){
 				add = this.extents[1]
 			}
 			tl += add; tm += add; tr += add	
@@ -286,12 +288,12 @@ class Grid2D extends Grid {
 		
 		// bottom border
 		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
-			if( torus ){
+			if( torus[1] ){
 				add = -this.extents[1]
 			}
 			bl += add; bm += add; br += add
 		}
-		if( !torus ){
+		if( !(torus[0]&&torus[1]) ){
 			return [ tl, l, bl, tm, bm, tr, r, br ].filter( isFinite )
 		} else {
 			return [ tl, l, bl, tm, bm, tr, r, br ]
@@ -306,7 +308,7 @@ class Grid2D extends Grid {
 	@return {IndexCoordinate} the converted coordinate. 
 	
 	@example 
-	* let grid = new CPM.Grid2D( [100,100], true )
+	* let grid = new CPM.Grid2D( [100,100], [true,true] )
 	* let p = grid.i2p( 5 )
 	* console.log( p )
 	* console.log( grid.p2i( p ))
@@ -322,7 +324,7 @@ class Grid2D extends Grid {
 	@return {ArrayCoordinate} the converted coordinate. 
 	
 	@example 
-	* let grid = new CPM.Grid2D( [100,100], true )
+	* let grid = new CPM.Grid2D( [100,100], [true,true] )
 	* let p = grid.i2p( 5 )
 	* console.log( p )
 	* console.log( grid.p2i( p ))
@@ -341,7 +343,7 @@ class Grid2D extends Grid {
 		
 		let dx=0
 		if( i < this.extents[1] ){ // left border
-			if( torus ){
+			if( torus[0] ){
 				l += this.extents[0] * this.X_STEP
 				dx = ((this._pixels[r]-this._pixels[i])+
 					(this._pixels[i]-this._pixels[l]))/2
@@ -350,7 +352,7 @@ class Grid2D extends Grid {
 			}
 		} else { 
 			if( i >= this.X_STEP*( this.extents[0] - 1 ) ){ // right border
-				if( torus ){
+				if( torus[0] ){
 					r -= this.extents[0] * this.X_STEP
 					dx = ((this._pixels[r]-this._pixels[i])+
 						(this._pixels[i]-this._pixels[l]))/2
@@ -365,7 +367,7 @@ class Grid2D extends Grid {
 
 		let dy=0
 		if( i % this.X_STEP == 0 ){ // top border
-			if( torus ){
+			if( torus[1] ){
 				t += this.extents[1]
 				dy = ((this._pixels[b]-this._pixels[i])+
 					(this._pixels[i]-this._pixels[t]))/2
@@ -374,7 +376,7 @@ class Grid2D extends Grid {
 			}
 		} else { 
 			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){ // bottom border
-				if( torus ){
+				if( torus[1] ){
 					b -= this.extents[1]
 					dy = ((this._pixels[b]-this._pixels[i])+
 						(this._pixels[i]-this._pixels[t]))/2

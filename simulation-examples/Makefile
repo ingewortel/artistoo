@@ -3,7 +3,7 @@
 
 all : node-examples html-examples
 
-EXAMPLES=CollectiveMigration SIR ActOnMicroPattern GameOfLife Chemotaxis Diffusion DirectedMotionTargetPoint DirectedMotionLinear CellDivision SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis CellSorting ActModel Microchannel
+EXAMPLES=CollectiveMigration SIR ActOnMicroPattern GameOfLife Chemotaxis Diffusion DirectedMotionTargetPoint DirectedMotionLinear CellDivision SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis Cellsorting ActModel Microchannel
 
 html :
 	mkdir -p $@

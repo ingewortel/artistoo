@@ -12,7 +12,7 @@ visualizations. */
 
 
 let C,Cim,t=0, meter, A
-	let cells = []
+	let cells = [], maxtime = 100000, burnin_time = 50
 
 function seedCell( k ){
 	let x = C.ran(0,249), y = C.ran(0,249)
@@ -37,7 +37,7 @@ function initialize(){
 		J : [ [0,20], [20,0] ],
 		T : 20,
 		ACT_MEAN : "geometric",
-		torus : true
+		torus : [true,true]
 	})
 
 	// Create a canvas to draw on

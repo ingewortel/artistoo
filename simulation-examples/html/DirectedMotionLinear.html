@@ -33,7 +33,7 @@ let config = {
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
-		torus : true,						// Should the grid have linked borders?
+		torus : [true,true],						// Should the grid have linked borders?
 		seed : 2,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		
@@ -115,7 +115,7 @@ sim.C.add( Cdir )
 function step(){
 	sim.step()
 	meter.tick()
-	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME"] ){
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
 		requestAnimationFrame( step )
 	}
 }

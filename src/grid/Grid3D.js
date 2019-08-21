@@ -9,20 +9,24 @@ import Grid from "./Grid.js"
  	* let CPM = require("path/to/build")
  	* 
  	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
- 	* let grid = new CPM.Grid3D( [100,100,100], true )
+ 	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
  	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
  	* 
  	* // Now try a grid without torus; the corner now has fewer neighbors.
- 	* let grid2 = new CPM.Grid3D( [100,100,100], false )
+ 	* let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
  	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+ 	*
+ 	* // Or try a torus in one dimension
+ 	* let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
+ 	* console.log( grid2.neigh( [0,0,0] ) ) 
  	*/
 class Grid3D extends Grid {
 
 	/** Constructor of the Grid3D object.
 	@param {GridSize} extents - the size of the grid in each dimension 
-	@param {boolean} [torus = true] - should the borders of the grid be linked, so that a cell moving
+	@param {boolean[]} [torus = [true,true,true]] - should the borders of the grid be linked, so that a cell moving
 	out on the left reappears on the right? */
-	constructor( extents, torus = true ){
+	constructor( extents, torus = [true,true,true] ){
 		super( extents, torus )
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
 		// and allow fast conversion of coordinates to unique ID numbers.
@@ -54,7 +58,7 @@ class Grid3D extends Grid {
 	@return {IndexCoordinate} the converted coordinate. 
 	
 	@example 
-	* let grid = new CPM.Grid3D( [100,100,100], true )
+	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 	* let p = grid.i2p( 5 )
 	* console.log( p )
 	* console.log( grid.p2i( p ))
@@ -72,7 +76,7 @@ class Grid3D extends Grid {
 	@return {ArrayCoordinate} the converted coordinate. 
 	
 	@example 
-	* let grid = new CPM.Grid3D( [100,100,100], true )
+	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 	* let p = grid.i2p( 5 )
 	* console.log( p )
 	* console.log( grid.p2i( p ))
@@ -90,7 +94,7 @@ class Grid3D extends Grid {
 		@example
 		* let CPM = require( "path/to/build" )
 		* // make a grid and set some values
-		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 		* grid.setpixi( 0, 1 )
 		* grid.setpixi( 1, 5 )
 		* 
@@ -124,7 +128,7 @@ class Grid3D extends Grid {
 		@example
 		* let CPM = require( "path/to/build" )
 		* // make a grid and set some values
-		* let grid = new CPM.Grid3D( [100,100,100], true )
+		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
 		* grid.setpix( [0,0,0], 1 )
 		* grid.setpix( [0,0,1], 5 )
 		* 
@@ -157,7 +161,7 @@ class Grid3D extends Grid {
 		excluding the pixel itself.
 		@see https://en.wikipedia.org/wiki/Moore_neighborhood
 		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-		@param {boolean} [torus] - does the grid have linked borders? Defaults to the
+		@param {boolean[]} [torus=[true,true,true]] - does the grid have linked borders? Defaults to the
 		setting on this grid, see {@link torus}
 		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
 	*/
@@ -167,13 +171,13 @@ class Grid3D extends Grid {
 		let xx = []
 		for( let d = 0 ; d <= 2 ; d ++ ){
 			if( p[d] == 0 ){
-				if( torus ){
+				if( torus[d] ){
 					xx[d] = [p[d],this.extents[d]-1,p[d]+1]
 				} else {
 					xx[d] = [p[d],p[d]+1]
 				}
 			} else if( p[d] == this.extents[d]-1 ){
-				if( torus ){
+				if( torus[d] ){
 					xx[d] = [p[d],p[d]-1,0]
 				} else {
 					xx[d] = [p[d],p[d]-1]

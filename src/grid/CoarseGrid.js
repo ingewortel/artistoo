@@ -1,3 +1,5 @@
+import Grid2D from "./Grid2D.js"
+
 /** This class encapsulates a lower-resolution grid and makes it
    visible as a higher-resolution grid. Only exact subsampling by
    a constant factor per dimension is supported. 
@@ -13,7 +15,7 @@
    * let CPM = require( "path/to/build" )
    * 
    * // Define a grid with float values for chemokine values, and set the middle pixel
-   * let chemogrid = new CPM.Grid2D( [50,50], true, "Float32" )
+   * let chemogrid = new CPM.Grid2D( [50,50], [true,true], "Float32" )
    * chemogrid.setpix( [99,99], 100 )
    * 
    * // Make a coarse grid at 5x as high resolution, which is then 500x500 pixels.
@@ -31,7 +33,7 @@
    * let Cim2 = new CPM.Canvas( chemogrid, {zoom:5} )
    * Cim2.drawField()
 */
-class CoarseGrid {
+class CoarseGrid extends Grid2D {
 	/** The constructor of class CoarseGrid takes a low resolution grid as input
 	and a factor 'upscale', which is how much bigger the dimensions of the high
 	resolution grid are (must be a constant factor). 
@@ -39,12 +41,15 @@ class CoarseGrid {
 	@param {number} upscale The (integer) factor to magnify the original grid with. */
 	constructor( grid, upscale = 3 ){
 	
+		let extents = new Array( grid.extents.length )
+		for( let i = 0 ; i < grid.extents.length ; i++ ){
+			extents[i] = upscale * grid.extents[i]
+		}
+		super( extents, grid.torus, "Float32" )
+	
 		/** Size of the new grid in all dimensions.
 		@type {GridSize} with a non-negative integer number for each dimension. */
-		this.extents = new Array( grid.extents.length )
-		for( let i = 0 ; i < grid.extents.length ; i++ ){
-			this.extents[i] = upscale * grid.extents[i]
-		}
+		this.extents = extents
 		/** The original, low-resolution grid. 
 		@type {Grid2D}*/
 		this.grid = grid

@@ -9,9 +9,13 @@ class Grid {
 	@param {GridSize} field_size array of field size in each dimension. E.g. [100,200] for
 	a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
 	numbers.
-	@param {boolean} [torus=true] - should the borders of the grid be linked, so that a cell moving
-	out on the left reappears on the right? */
-	constructor( field_size, torus = true ){
+	@param {boolean[]} [torus=[true,true,...]] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right? Should be an array specifying whether the
+	torus holds in each dimension; eg [true,false] for a torus in x but not y dimension. */
+	constructor( field_size, torus ){
+	
+		torus = torus || []
+	
 		/** field_size array of field size in each dimension. E.g. [100,200] for
 		a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
 		numbers.
@@ -23,8 +27,16 @@ class Grid {
 		this.ndim = this.extents.length
 		
 		/** Should the borders of the grid be linked, so that a cell moving
-		out on the left reappears on the right? 
-		@type {boolean}*/
+		out on the left reappears on the right? Torus can be specified for
+		each dimension separately.
+		@type {boolean[]}*/
+		if( torus.length == 0 ){
+			for( let d = 0; d < this.ndim; d++ ){
+				torus.push( true )
+			}
+		} else if ( torus.length != this.ndim ){
+			throw( "Torus should be specified for each dimension, or not at all!" )
+		}
 		this.torus = torus
 		
 		

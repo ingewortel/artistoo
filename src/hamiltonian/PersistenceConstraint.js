@@ -76,10 +76,13 @@ class PersistenceConstraint extends SoftConstraint {
 		let a = []
 		for( let i = 0 ; i < p1.length ; i ++ ){
 			a[i] = p2[i]-p1[i]
-			if( a[i] > this.halfsize[i] ){
-				a[i] -= this.C.extents[i]
-			} else if( a[i] < -this.halfsize[i] ){
-				a[i] += this.C.extents[i]
+			// Correct for torus if necessary
+			if( this.C.grid.torus[i] ){
+				if( a[i] > this.halfsize[i] ){
+					a[i] -= this.C.extents[i]
+				} else if( a[i] < -this.halfsize[i] ){
+					a[i] += this.C.extents[i]
+				}
 			}
 		}
 		let dp = 0
@@ -175,8 +178,8 @@ class PersistenceConstraint extends SoftConstraint {
 				for( let j = 0 ; j < l.length ; j ++ ){
 					dx[j] = ci[j] - l[j]
 					
-					// torus correction; do only if CPM actually has a torus.
-					if( this.C.torus ){
+					// torus correction; do only if CPM actually has a torus in this dimension.
+					if( this.C.grid.torus[j] ){
 						if( dx[j] > this.halfsize[j] ){
 							dx[j] -= this.C.extents[j]
 						} else if( dx[j] < -this.halfsize[j] ){

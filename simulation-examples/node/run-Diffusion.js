@@ -7,18 +7,17 @@ let CPM = require("../../build/cpm-cjs.js")
 
 // Configuration
 let conf = {
-	w : 61,					// dimensions of the grid to build
+	w : 41,					// dimensions of the grid to build
 	D : 0.1545706,			// Diffusion coefficient
 	res : 10,				// 'Resolution' of the coarse grid
 	zoom : 1,				// zoom for displaying the grid
-	torus: true,			// Should grid boundaries be connected?
-	runtime : 20
+	torus: [true,true],		// Should grid boundaries be connected?
+	runtime : 500
 }
 
-conf["m"]=(conf.w-1)/2		// midpoint of the grid
+conf["m"]=Math.floor((conf.w-1)/2)		// midpoint of the grid
 
 let grid, diffusiongrid, Cim, t = 0, s = 0, meter
-
 
 // Setup the grid and needed objects
 function setup(){
@@ -30,7 +29,7 @@ function setup(){
 
 // Place something on the grid
 function initializeGrid(){
-	grid.setpix( [conf.m,conf.m], 1 )
+	grid.setpix( [conf.m,conf.m], 10000 )
 }
 
 
@@ -50,6 +49,7 @@ function diffusionStep(){
 
 // Produce output, like drawing on the canvas and logging stats
 function output(){
+	Cim.clear("FFFFFF")
 	Cim.drawField( diffusiongrid )
 	console.log( t, s, 4 * 6.2 * 1E-5 * (t/10) )
 }

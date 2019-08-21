@@ -32,7 +32,7 @@ function setupCPM(conf){
 	const w = conf.w || 200
 	C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : false,
+		torus : [false,false],
 		J: [[0,20], [20,100]] ,
 		V: [0,500], 
 		LAMBDA_V: [0,50]

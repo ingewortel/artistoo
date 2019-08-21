@@ -15,7 +15,7 @@ import ParameterChecker from "./ParameterChecker.js"
  * @example
  * // Build a chemotaxis field
  * let CPM = require( "path/to/build" )
- * let chemogrid = new CPM.Grid2D( [200,200], true, "Float32" )
+ * let chemogrid = new CPM.Grid2D( [200,200], [true,true], "Float32" )
  * chemogrid.setpix( [100,100], 100 )
  * 
  * // Build a CPM with the constraint

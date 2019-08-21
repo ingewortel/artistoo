@@ -75,7 +75,7 @@ let config = {
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
-		torus : true,						// Should the grid have linked borders?
+		torus : [true,true],				// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		

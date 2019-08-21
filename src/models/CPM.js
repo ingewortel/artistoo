@@ -17,7 +17,7 @@ class CPM extends GridBasedModel {
 	{@link Constraint} subclasses for options. For some constraints, adding its
 	paramter to the CPM conf object automatically adds the constraint; see 
 	{@link AutoAdderConfig} to see for which constraints this is supported.
-	@param {boolean} [conf.torus=true] - should the grid have linked borders?
+	@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
 	@param {number} [seed] - seed for the random number generator. If left unspecified,
 	a random number from the Math.random() generator is used to make one.
 	*/

@@ -79,7 +79,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 			let si = this.C.extents[i]
 			// direction of the copy attempt on this coordinate is from p1 to p2
 			let dx = p2[i] - p1[i]
-			if( torus ){
+			if( torus[i] ){
 				// If distance is greater than half the grid size, correct the
 				// coordinate.
 				if( dx > si/2 ){

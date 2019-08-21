@@ -10,7 +10,7 @@ let CPM = require("../../build/cpm-cjs.js")
 let conf = {
 	gsize : [200,200],		// dimensions of the grid to build
 	zoom : 3,				// zoom for displaying the grid
-	torus: true,			// Should grid boundaries be connected?
+	torus: [true,true],			// Should grid boundaries be connected?
 	runtime : 1000
 }
 

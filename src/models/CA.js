@@ -38,7 +38,7 @@ class CA extends GridBasedModel {
 	/** The constructor of class CA.
 	@param {GridSize} extents - the size of the grid of the model.
 	@param {object} conf - configuration options. 
-	@param {boolean} [conf.torus=true] - should the grid have linked borders?
+	@param {boolean} [conf.torus=[true,true,...]] - should the grid have linked borders?
 	@param {number} [seed] - seed for the random number generator. If left unspecified,
 	a random number from the Math.random() generator is used to make one.
 	@param {updatePixelFunction} conf.UPDATE_RULE - the update rule of the CA. 

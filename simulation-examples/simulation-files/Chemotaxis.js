@@ -36,7 +36,7 @@ let pconstraint = new CPM.PersistenceConstraint(
 )
 sim.C.add( pconstraint ) */
 /* START ADDCONSTRAINTS Do not remove this line */
-sim.g = new CPM.Grid2D([sim.C.extents[0]/10,sim.C.extents[1]/10], true, "Float32"),
+sim.g = new CPM.Grid2D([sim.C.extents[0]/10,sim.C.extents[1]/10], config.torus, "Float32"),
 sim.gi = new CPM.CoarseGrid( sim.g, 10 ),
 
 sim.C.add( new CPM.ChemotaxisConstraint( {
@@ -77,7 +77,7 @@ function drawCanvas(){
 		// Add the canvas if required
 		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
 		this.Cim.drawField( this.gi )
-		this.Cim.drawCellBorders( -1, "FFFFFF" )
+		this.Cim.drawCellBorders( -1, "000000" )
 		
 }
 
@@ -102,7 +102,7 @@ let config = {
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
-		torus : true,						// Should the grid have linked borders?
+		torus : [true,true],						// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		D : 0.05,

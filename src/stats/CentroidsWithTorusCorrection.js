@@ -15,7 +15,7 @@ import PixelsByCell from "./PixelsByCell.js"
 	* // Make a CPM, seed two cells, run a little, and get their centroids
 	* let C = new CPM.CPM( [100,100], { 
 	* 	T:20,
-	* 	torus:true,
+	* 	torus:[true,true],
 	* 	J:[[0,20],[20,10]],
 	* 	V:[0,200],
 	* 	LAMBDA_V:[0,2]
@@ -87,7 +87,7 @@ class CentroidsWithTorusCorrection extends Stat {
 				// holds AFTER the first pixel (so for j > 0), when we actually have
 				// an idea of where the cell is.
 				let dx = pixels[j][dim] - mi
-				if( j > 0 ){
+				if( this.M.grid.torus[dim] && j > 0 ){
 					// If distance is greater than half the grid size, correct the
 					// coordinate.
 					if( dx > hsi ){

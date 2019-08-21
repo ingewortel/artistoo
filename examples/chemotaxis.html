@@ -12,11 +12,11 @@
 
 let w = 600, h=600, m=h/2, D = 0.05, meter, zoom=1
 
-var g = new CPM.Grid2D([w/10,h/10], true, "Float32"),
+var g = new CPM.Grid2D([w/10,h/10], [true,true], "Float32"),
 	gi = new CPM.CoarseGrid( g, 10 ),
 	C = new CPM.CPM( [w,h], {
 		T:20, 
-		torus: true, 
+		torus: [true,true], 
 		J: [[0,20], [20,100]],
 		V: [0,250], 
 		LAMBDA_V: [0,50] ,		
@@ -56,7 +56,10 @@ function timestep(){
 	meter.tick()
 	if( t % 20 == 0 ){
 		Ci.drawField( gi )
-		Ci.drawCellBorders( -1, "FFFFFF" )
+		//Ci.drawFieldContour( gi )
+		Ci.drawCells(1,"000000")
+		Ci.drawCellBorders( -1, "AAAAAA" )
+		
 	}
 	if( t-- > 0 ){
 		requestAnimationFrame( timestep )

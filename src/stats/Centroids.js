@@ -13,7 +13,7 @@ import PixelsByCell from "./PixelsByCell.js"
 	* // Make a CPM, seed two cells, run a little, and get their centroids
 	* let C = new CPM.CPM( [100,100], { 
 	* 	T:20,
-	*	torus:false,
+	*	torus:[false,false],
 	* 	J:[[0,20],[20,10]],
 	* 	V:[0,200],
 	* 	LAMBDA_V:[0,2]
@@ -34,6 +34,22 @@ class Centroids extends Stat {
 		/** The model to compute centroids on. 
 		@type {GridBasedModel}*/
 		this.M = M
+		
+		/* Check if the grid has a torus; if so, warn that this method may not be
+		appropriate. */
+		let torus = false
+		for( let d = 0; d < this.M.ndim; d++ ){
+			if( this.M.grid.torus[d] ){
+				torus = true
+				break
+			}
+		}
+		
+		if(torus){
+			// eslint-disable-next-line no-console
+			console.warn( "Your model grid has a torus, and the 'Centroids' stat is not compatible with torus! Consider using 'CentroidsWithTorusCorrection' instead." )
+		}
+		
 		// Half the grid dimensions; if pixels with the same cellid are further apart,
 		// we assume they are on the border of the grid and that we need to correct
 		// their positions to compute the centroid.

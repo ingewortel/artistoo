@@ -16,7 +16,7 @@ let conf = {
 	D : 0.1545706,			// Diffusion coefficient
 	res : 10,				// 'Resolution' of the coarse grid
 	zoom : 1,				// zoom for displaying the grid
-	torus: true,			// Should grid boundaries be connected?
+	torus: [true,true],		// Should grid boundaries be connected?
 	runtime : 20
 }
 

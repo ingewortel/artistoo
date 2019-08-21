@@ -3,6 +3,34 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-08-21 Inge Wortel <ingewortel@gmail.com>
+	* src/grid/Grid.js : The torus property is now an array with a boolean value for 
+	each dimension separately. It is therefore now possible to have a torus in x dimension,
+	but not in y-dimension. Methods listening to the torus are also compatible with this
+	update now.
+	* src/grid/Grid2D.js : Made neighborhood computation compatible with new specification
+	of the torus property.
+	* src/grid/Grid3D.js : idem.
+	* src/grid/CoarseGrid.js : is now an extension of the Grid2D class so that neighborhood
+	methods are also available when a CoarseGrid is supplied to a Canvas.
+	* src/grid/GridManipulator.js : now also compatible with the new way of specifying a torus.
+	* docs : removed from git for now because it's annoying. Type 'make docs' to create them locally.
+	* src/hamiltonian/ChemotaxisConstraint.js : updated jsdoc example code with new torus syntax.
+	* src/hamiltonian/ProtrusionConstraint.js : updated with new torus syntax.
+	* src/hamiltonian/PreferredDirectionConstraint.js : updated with new torus syntax.
+	* src/hamiltonian/AttractionPointConstraint.js : updated with new torus syntax.
+	* src/hamiltonian/PersistenceConstraint.js: updated with new torus syntax.
+	* src/models/CPM.js : updated jsdoc comments with new torus syntax.
+	* src/models/CA.js : updated jsdoc comments with new torus syntax.
+	* src/models/GridBasedModel.js : made compatible with new torus syntax.
+	* src/simulation/Simulation.js : centroid computation now compatible with new torus syntax.
+	* src/stats/CentroidsWithTorusCorrection.js : now compatible with new torus syntax, performing
+	the correction only in the necessary dimensions.
+	* src/stats/CellNeighborList.js : updated jsdoc example with new torus syntax.
+	* src/stats/Centroids.js : included check for torus and warning not to use this stat if there is.
+	* examples/* : made compatible with new torus syntax.
+	* simulation-examples/* made compatible with new torus syntax.
+
 2019-08-20 Inge Wortel <ingewortel@gmail.com>
 	* src/simulation/Simulation.js : change in default drawing method for cells on the grid.
 	* src/Canvas.js : Changed method to draw a chemokine field, which now uses transparancy

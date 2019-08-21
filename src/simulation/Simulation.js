@@ -244,7 +244,13 @@ class Simulation {
 		
 		// compute centroids for all cells
 		let allcentroids 
-		if( this.C.torus ){
+		let torus = false
+		for( let d = 0; d < this.C.grid.ndim; d++ ){
+			if( this.C.grid.torus[d] ){
+				torus = true
+			}
+		}
+		if( torus ){
 			allcentroids = this.C.getStat( CentroidsWithTorusCorrection )
 		} else {
 			allcentroids = this.C.getStat( Centroids )

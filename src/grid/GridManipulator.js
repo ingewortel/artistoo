@@ -269,7 +269,13 @@ class GridManipulator {
 	 */
 	divideCell( id ){
 		let C = this.C
-		if( C.ndim != 2 || C.conf.torus ){
+		let torus = false
+		for( let i of C.conf.torus ){
+			if( C.conf.torus[i]){
+				torus = true
+			}
+		}
+		if( C.ndim != 2 || torus ){
 			throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
 		}
 		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id]

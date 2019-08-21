@@ -13,7 +13,7 @@ import CPM from "../models/CPM.js"
 	* // Set up a CPM and manipulator
 	* let C = new CPM.CPM( [300,300], {
 	* 	T:20, 
-	* 	torus:false,
+	* 	torus:[false,false],
 	* 	J:[[0,20],[20,10]], 
 	* 	V:[0,200], 
 	* 	LAMBDA_V:[0,2]
