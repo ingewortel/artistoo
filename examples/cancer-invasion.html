@@ -8,7 +8,7 @@
 let C, Ci, Cm, zoom=2, Cim, cid=0, w=200, J_TC_TUMOR = 100, burnin_time = 25,
 	cancer_cell_division_rate = 0.02, skin_cell_death_rate = 0.2,
 	skin_cell_min_volume = 0.8, homing_rate_t_cells = 0.2, max_nr_t_cells = 25,
-	meter, t=0
+	meter, t=0, lastnewdiv, lastdiv
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
@@ -21,6 +21,8 @@ function draw(){
 
 	// Cancer cell in black
 	Cim.drawCells( 3, "000000" )
+	
+	Cim.drawCells( 4, "0000FF")
 
 	Cim.drawCellBorders( -1, "DDDDDD" )
 }
@@ -33,6 +35,14 @@ function timestep(){
 		draw()
 	}
 
+	//console.log( "1 " + C.cellKind(479) )
+	divideCancerCells()
+	//console.log( "2 " + C.cellKind(479) )
+	killTooSmallCells()
+	//console.log( "3 " + C.cellKind(479) )
+	//homeTCells()
+	
+
 	//Cm.prepare()
 	//Cm.divideCells2D( 3, 0.1 ) //cancer_cell_division_rate / C.countCells( 3 ) )
 	/*Cm.killTooSmallCells( 1, skin_cell_death_rate, skin_cell_min_volume )
@@ -42,6 +52,73 @@ function timestep(){
 
 	requestAnimationFrame( timestep )
 }
+
+function homeTCells(){
+	let current_t_cells = 0
+	for( let i of C.cellIDs() ){
+		if( C.cellKind(i) == 2 ){
+			current_t_cells++
+		}
+	}
+
+	if( C.random() < homing_rate_t_cells && current_t_cells < max_nr_t_cells ){
+		let found = false
+		let p
+		while( !found ){
+			p = C.grid.i2p( C.borderpixels.sample() )
+		
+			if( C.cellKind( C.pixt(p) ) == 1 ){
+				found = true
+			}
+		}
+		Cm.seedCellAt( 2, p )
+		C.stat_values = {}
+	}
+}
+
+function divideCancerCells(){
+	
+	let current_cancer = 0
+	for( let i of C.cellIDs() ){
+		if( C.cellKind( i ) == 3 ){
+			current_cancer++
+		}
+	}
+	
+	let divrate = 3*cancer_cell_division_rate / current_cancer
+	
+	// Loop over the cellids to find cancer cells. Let them divide with a
+	// probability( cancer cell division rate).
+	for( let i of C.cellIDs() ){
+		if( C.cellKind( i ) == 3 ){
+			if( C.getVolume(i) > 0.8*C.conf["V"][3] && C.random() < divrate ){
+				lastnewdiv = Cm.divideCell(i)
+				lastdiv = i
+				//console.log(newid)
+				C.stat_values = {}
+			}
+		}
+	}
+	
+}
+
+function killTooSmallCells(){
+	for( let i of C.cellIDs() ){
+		if( C.cellKind(i) == 1 ){
+			if( C.getVolume(i) < skin_cell_min_volume*C.conf["V"][1] && C.random() < skin_cell_death_rate ){
+				//let cp = C.getStat(CPM.PixelsByCell)[i]
+				C.setCellKind( i, 4 )
+				
+				//Cm.changeKind( cp, 4 )
+				//console.log(i)
+				//Cm.killCell(i)
+				C.stat_values = {}
+			}
+		}
+	}
+}
+
+
 
 function seedGrid(){
 	// Seed epidermal cell layer
@@ -63,34 +140,37 @@ function seedGrid(){
 
 function initialize(){
 	// Create a new CPM, canvas, and stats object
-	C = new CPM.CPM( [w,w], {
+	C = new CPM.CPM( [1.5*w,w], {
 		seed : 2,
-		nCellKinds : 4,
-		LAMBDA_CONNECTIVITY : [0,0,0,1000,0],
-		LAMBDA_CHEMOTAXIS : [0,0,400,0,0],
+		//nCellKinds : 4,
+		//LAMBDA_CONNECTIVITY : [0,0,0,1000,0],
+		//LAMBDA_CHEMOTAXIS : [0,0,400,0,0],
 		T : 20,
-		GRADIENT_TYPE : "radial",
-		GRADIENT_DIRECTION : [w/2,w/2],
+		torus: [false,false],
+		//GRADIENT_TYPE : "radial",
+		//GRADIENT_DIRECTION : [w/2,w/2],
 		J : [ 
-		 [0,20,20,20,20], 
-				[20,100,40,100,0], // epidermal cells
-				[20,40,40,J_TC_TUMOR,0], // T cells
-				[20,100,J_TC_TUMOR,20,0], // Cancer cells
-				[20,0,0,0,0] 
+		 		[0,20,20,20,20], 
+				[20,100,40,100,20], // epidermal cells
+				[20,40,40,J_TC_TUMOR,20], // T cells
+				[20,100,J_TC_TUMOR,20,20], // Cancer cells
+				[20,20,20,20,20] 
 		],
-		LAMBDA_V : [0,50,50,50,50],
+		LAMBDA_V : [0,50,50,50,0],
 		V : [0,152,100,152,0],
-		P: [0,145,130,145,0], 
-		LAMBDA_P:[0,2,1,2,0],
+		P: [0,145,120,145,0], 
+		LAMBDA_P:[0,2,2,2,0],
 		MAX_ACT: [0,0,20,0,0], 
-		LAMBDA_ACT:[0,0,1000,0,0],
+		LAMBDA_ACT:[0,0,800,0,0],
 		ACT_MEAN: "geometric"
 	})
+	
+	//C.add( new CPM.AttractionPointConstraint( ) )
 
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( new CPM.VolumeConstraint( C.conf ) )
-	C.add( new CPM.PerimeterConstraint( C.conf ) )
-	C.add( new CPM.ActivityConstraint( C.conf ) )
+	//C.add( new CPM.Adhesion( C.conf ) )
+	//C.add( new CPM.VolumeConstraint( C.conf ) )
+	//C.add( new CPM.PerimeterConstraint( C.conf ) )
+	//C.add( new CPM.ActivityConstraint( C.conf ) )
 
 
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
