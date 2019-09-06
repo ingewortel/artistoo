@@ -29,6 +29,9 @@ class CPM extends GridBasedModel {
 		/** Number of non-background cells currently on the grid.
 		@type{number}*/
 		this.nr_cells = 0
+		/** Highest cell ID previously assigned. 
+		@type{number}*/
+		this.last_cell_id = 0
 		/** track border pixels for speed 
 		@type {DiceSet}*/
 		this.borderpixels = new DiceSet( this.mt )
@@ -422,7 +425,7 @@ class CPM extends GridBasedModel {
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
 	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind ){
-		const newid = ++ this.nr_cells
+		const newid = ++ this.last_cell_id
 		this.cellvolume[newid] = 0
 		this.setCellKind( newid, kind )
 		return newid

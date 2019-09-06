@@ -53703,6 +53703,9 @@ var CPM = (function (exports) {
 			/** Number of non-background cells currently on the grid.
 			@type{number}*/
 			this.nr_cells = 0;
+			/** Highest cell ID previously assigned. 
+			@type{number}*/
+			this.last_cell_id = 0;
 			/** track border pixels for speed 
 			@type {DiceSet}*/
 			this.borderpixels = new DiceSet( this.mt );
@@ -54096,7 +54099,7 @@ var CPM = (function (exports) {
 		   @param {CellKind} kind - cellkind of the cell that has to be made.
 		   @return {CellId} of the new cell.*/
 		makeNewCellID ( kind ){
-			const newid = ++ this.nr_cells;
+			const newid = ++ this.last_cell_id;
 			this.cellvolume[newid] = 0;
 			this.setCellKind( newid, kind );
 			return newid
@@ -55460,12 +55463,7 @@ var CPM = (function (exports) {
 		 */
 		divideCell( id ){
 			let C = this.C;
-			let torus = false;
-			for( let i of C.conf.torus ){
-				if( C.conf.torus[i]){
-					torus = true;
-				}
-			}
+			let torus = C.conf.torus.indexOf(true) >= 0;
 			if( C.ndim != 2 || torus ){
 				throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
 			}
@@ -55506,10 +55504,11 @@ var CPM = (function (exports) {
 			// create a new ID for the second cell
 			let nid = C.makeNewCellID( C.cellKind( id ) );
 
+			console.log( "made new cell id: ", nid );
+
+			let sidea = 0, sideb = 0;
+
 			// Loop over the pixels belonging to this cell
-			//let sidea = 0, sideb = 0
-			//let pix_id = []
-			//let pix_nid = []
 			for( let j = 0 ; j < cp.length ; j ++ ){
 				// coordinates of current cell relative to center of mass
 				x2 = cp[j][0]-com[0];
@@ -55519,15 +55518,18 @@ var CPM = (function (exports) {
 				// set it to the new type
 				side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
 				if( side > 0 ){
-					//sidea ++
+					sidea ++;
 					C.setpix( cp[j], nid ); 
 					//pix_nid.push( cp[j] )
+				} else {
+					//pix_id.push( cp[j] )
+					sideb ++;
 				}
 			}
+			console.log( sidea, sideb );
 			//cp[id] = pix_id
 			//cp[nid] = pix_nid
 			C.stat_values = {}; // remove cached stats or this will crash!!!
-			//console.log( sidea, sideb )
 			return nid
 		}
 	}
