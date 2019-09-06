@@ -310,10 +310,6 @@ class GridManipulator {
 		// create a new ID for the second cell
 		let nid = C.makeNewCellID( C.cellKind( id ) )
 
-		console.log( "made new cell id: ", nid )
-
-		let sidea = 0, sideb = 0
-
 		// Loop over the pixels belonging to this cell
 		for( let j = 0 ; j < cp.length ; j ++ ){
 			// coordinates of current cell relative to center of mass
@@ -324,15 +320,12 @@ class GridManipulator {
 			// set it to the new type
 			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0)
 			if( side > 0 ){
-				sidea ++
 				C.setpix( cp[j], nid ) 
 				//pix_nid.push( cp[j] )
 			} else {
 				//pix_id.push( cp[j] )
-				sideb ++
 			}
 		}
-		console.log( sidea, sideb )
 		//cp[id] = pix_id
 		//cp[nid] = pix_nid
 		C.stat_values = {} // remove cached stats or this will crash!!!
