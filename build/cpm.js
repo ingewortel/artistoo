@@ -3616,8 +3616,7 @@ var CPM = (function (exports) {
 		{@link CellId}. Energies are given as non-negative numbers.
 		*/
 		constructor( conf ){
-			super( conf );
-			this.debug = conf.debug || false;
+			super( conf );		
 		}
 
 		/** This method checks that all required parameters are present in the object supplied to
@@ -3635,15 +3634,6 @@ var CPM = (function (exports) {
 		@private
 		*/
 		J( t1, t2 ){
-			if( this.debug ){
-				if( this.C.cellKind(t1) == 3 || this.C.cellKind(t2) == 3 ){
-				//if( this.conf["J"][this.C.cellKind(t1)] == "undefined" ){
-					let k1 = this.C.cellKind(t1), k2 = this.C.cellKind(t2);
-					console.log( "Cells " + t1 +  "," + t2 + " : " + k1 + "," + k2 );
-					console.log( this.conf["J"][this.C.cellKind(t1)]);
-					console.log( this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]);
-				}
-			}
 			return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
 		}
 		/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
@@ -4083,6 +4073,9 @@ var CPM = (function (exports) {
 			/** Number of non-background cells currently on the grid.
 			@type{number}*/
 			this.nr_cells = 0;
+			/** Highest cell ID previously assigned. 
+			@type{number}*/
+			this.last_cell_id = 0;
 			/** track border pixels for speed 
 			@type {DiceSet}*/
 			this.borderpixels = new DiceSet( this.mt );
@@ -4416,7 +4409,6 @@ var CPM = (function (exports) {
 				// if this was the last pixel belonging to this cell, 
 				// remove the cell altogether.
 				if( this.cellvolume[t_old] == 0 ){
-					//console.log("removing cell " + t_old )
 					delete this.cellvolume[t_old];
 					delete this.t2k[t_old];
 					this.nr_cells--;
@@ -4477,7 +4469,7 @@ var CPM = (function (exports) {
 		   @param {CellKind} kind - cellkind of the cell that has to be made.
 		   @return {CellId} of the new cell.*/
 		makeNewCellID ( kind ){
-			const newid = ++ this.nr_cells;
+			const newid = ++ this.last_cell_id;
 			this.cellvolume[newid] = 0;
 			this.setCellKind( newid, kind );
 			return newid
@@ -5152,12 +5144,7 @@ var CPM = (function (exports) {
 		 */
 		divideCell( id ){
 			let C = this.C;
-			let torus = false;
-			for( let i of C.conf.torus ){
-				if( C.conf.torus[i]){
-					torus = true;
-				}
-			}
+			let torus = C.conf.torus.indexOf(true) >= 0;
 			if( C.ndim != 2 || torus ){
 				throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
 			}
@@ -5201,6 +5188,7 @@ var CPM = (function (exports) {
 			//let pix_id = []
 			//let pix_nid = []
 			//let sidea = 0, sideb=0
+
 			for( let j = 0 ; j < cp.length ; j ++ ){
 				// coordinates of current cell relative to center of mass
 				x2 = cp[j][0]-com[0];
@@ -5212,15 +5200,14 @@ var CPM = (function (exports) {
 				if( side > 0 ){
 					//sidea++
 					C.setpix( cp[j], nid ); 
-					console.log( cp[j] + " " + C.cellKind( id ) );
+					// console.log( cp[j] + " " + C.cellKind( id ) )
 					//pix_nid.push( cp[j] )
 				}
 			}
-			console.log( "3 " + C.cellKind( id ) );
+			//console.log( "3 " + C.cellKind( id ) )
 			//cp[id] = pix_id
 			//cp[nid] = pix_nid
 			C.stat_values = {}; // remove cached stats or this will crash!!!
-			//console.log( sidea, sideb )
 			return nid
 		}
 	}

@@ -269,12 +269,7 @@ class GridManipulator {
 	 */
 	divideCell( id ){
 		let C = this.C
-		let torus = false
-		for( let i of C.conf.torus ){
-			if( C.conf.torus[i]){
-				torus = true
-			}
-		}
+		let torus = C.conf.torus.indexOf(true) >= 0
 		if( C.ndim != 2 || torus ){
 			throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
 		}
@@ -318,6 +313,7 @@ class GridManipulator {
 		//let pix_id = []
 		//let pix_nid = []
 		//let sidea = 0, sideb=0
+
 		for( let j = 0 ; j < cp.length ; j ++ ){
 			// coordinates of current cell relative to center of mass
 			x2 = cp[j][0]-com[0]
@@ -329,18 +325,18 @@ class GridManipulator {
 			if( side > 0 ){
 				//sidea++
 				C.setpix( cp[j], nid ) 
-				console.log( cp[j] + " " + C.cellKind( id ) )
+				// console.log( cp[j] + " " + C.cellKind( id ) )
 				//pix_nid.push( cp[j] )
 			} else {
 				//pix_id.push( cp[j] )
 				//sideb++
+
 			}
 		}
-		console.log( "3 " + C.cellKind( id ) )
+		//console.log( "3 " + C.cellKind( id ) )
 		//cp[id] = pix_id
 		//cp[nid] = pix_nid
 		C.stat_values = {} // remove cached stats or this will crash!!!
-		//console.log( sidea, sideb )
 		return nid
 	}
 }
