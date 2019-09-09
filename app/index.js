@@ -3,7 +3,6 @@
 //	should serve as dependencies.
  
 import Canvas from "../src/Canvas.js" 
-import Canvas3D from "../src/Canvas3D.js" 
 import Stats from "../src/Stats.js" 
  
 import CA from "../src/models/CA.js" 
@@ -44,7 +43,6 @@ import Simulation from "../src/simulation/Simulation.js"
  
 export {
 	Canvas,
-	Canvas3D,
 	Stats,
 	CA,
 	CPM,

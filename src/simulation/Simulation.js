@@ -133,10 +133,10 @@ class Simulation {
 	
 	/** Adds a {@link Canvas} object when required. */
 	addCanvas(){
-		let zoom = this.conf.zoom || 2
+		//let zoom = this.conf.zoom || 2
 		/** Attached {@link Canvas} object.
 		@type {Canvas}*/
-		this.Cim = new Canvas( this.C, {zoom:zoom} )
+		this.Cim = new Canvas( this.C, this.conf )
 		this.helpClasses[ "canvas" ] = true
 	}
 	

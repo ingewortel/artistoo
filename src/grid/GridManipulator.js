@@ -281,8 +281,6 @@ class GridManipulator {
 		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id]
 		let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2
 
-			
-
 		// Loop over the pixels belonging to this cell
 		for( let j = 0 ; j < cp.length ; j ++ ){
 			cx = cp[j][0] - com[0] // x position rel to centroid
@@ -319,6 +317,7 @@ class GridManipulator {
 		//let sidea = 0, sideb = 0
 		//let pix_id = []
 		//let pix_nid = []
+		//let sidea = 0, sideb=0
 		for( let j = 0 ; j < cp.length ; j ++ ){
 			// coordinates of current cell relative to center of mass
 			x2 = cp[j][0]-com[0]
@@ -328,14 +327,16 @@ class GridManipulator {
 			// set it to the new type
 			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0)
 			if( side > 0 ){
-				//sidea ++
+				//sidea++
 				C.setpix( cp[j], nid ) 
+				console.log( cp[j] + " " + C.cellKind( id ) )
 				//pix_nid.push( cp[j] )
 			} else {
 				//pix_id.push( cp[j] )
-				//sideb ++
+				//sideb++
 			}
 		}
+		console.log( "3 " + C.cellKind( id ) )
 		//cp[id] = pix_id
 		//cp[nid] = pix_nid
 		C.stat_values = {} // remove cached stats or this will crash!!!

@@ -34,7 +34,7 @@ class Canvas3D {
 		
 		this.step = options.step || 10 
 		this.zoom =  options.zoom || 1
-		this.drawgrid = options.drawgrid || true
+		this.drawgrid = options["drawgrid"] || false
 		this.gridColor = options.gridColor || "AAAAAA"
 		this.gridColor = this.getCol( this.gridColor )
 		
@@ -193,7 +193,9 @@ class Canvas3D {
 		}
 	}
 
-	setVoxel( pos, color ){
+	setVoxel( pos, color, opacity ){
+		opacity = opacity || .2
+	
 		let i = this.C.grid.p2i( pos )
 		if( !( i in this.drawvoxels ) ){
 			let material = new THREE.MeshLambertMaterial( { color: this.getCol("000000"), transparent: true, opacity : 0.2 } )
@@ -206,11 +208,13 @@ class Canvas3D {
 		}
 		this.drawvoxels[i].visible = true
 		this.drawvoxels[i].material.color.setHex( color )
-		//this.drawvoxels[i].material.opacity=.2
+		this.drawvoxels[i].material.opacity=opacity
 		
 	}
 
-	drawCells( kind, col ){
+	drawCells( kind, col, opacity ){
+	
+		opacity = opacity || 0.2
 		if( ! col ){
 			col = "#000000"
 		}
@@ -228,7 +232,7 @@ class Canvas3D {
 					color = this.getCol( col(cid) )
 				}
 				for( let cp of cellborderpixelsbyid[cid] ){
-					this.setVoxel( cp, color )
+					this.setVoxel( cp, color, opacity )
 				}
 			}
 		}
