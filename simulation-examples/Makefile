@@ -25,7 +25,7 @@ node/run-%.js : write-node.bash simulation-files/%.js | node/output/img/%
 
 
 test-node-examples : $(foreach e, $(EXAMPLES), test-node-$(e) )
-test-node-% : node/run-%.js
+test-node-% : node/run-%.js | node/output/img/%
 	@cd node && node run-$*.js >> tmpout-$*.txt && rm tmpout-$*.txt && \
 	echo $* "  : OK "
 	
