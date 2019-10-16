@@ -11,8 +11,6 @@
 		"mersennetwister": "^0.2.3",
 		"rollup": "^1.2.3",
 		"rollup-plugin-eslint": "^5.0.0",
-		"three": "^0.107.0",
-		"three-trackballcontrols": "0.0.8",
 		"websocket": "^1.0.28"
 	},
 	"devDependencies": {
