@@ -1,3 +1,7 @@
+
+
+- Remove THREE.js from all dependencies and make it optional
+
 - Check when cached stats should be removed; this now happens after every MCS - but this fails when stuff happens between the MCS and stat computation such that the cached stats are no longer valid (eg cell division).  
 
 - (Inge): Fix the many-cells-diffusion example.
