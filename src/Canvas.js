@@ -409,14 +409,16 @@ class Canvas {
 		The constraint holding the activity values can be supplied as an 
 		argument. Otherwise, the current CPM is searched for the first 
 		registered activity constraint and that is then used.
-   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
-   positive integer as 0 is reserved for the background.
+   @param {CellKind} kind - Integer specifying the cellkind to color. If negative, draw
+   	values for all cellkinds.
    @param {ActivityConstraint|ActivityMultiBackground} [ A ] - the constraint object to
    use, which must be of class {@link ActivityConstraint} or {@link ActivityMultiBackground}
    If left unspecified, this is the first instance of an ActivityConstraint or ActivityMultiBackground
    object found in the soft_constraints of the attached CPM.
+   @param {Function} [col] - a function that returns a color for a number in [0,1] as an array of red/green/blue values,
+    for example, [255,0,0] would be the color red. If unspecified, a green-to-red heatmap is used.
    */
-	drawActivityValues( kind, A ){
+	drawActivityValues( kind, A, col ){
 		if( !A ){
 			for( let c of this.C.soft_constraints ){
 				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
@@ -427,9 +429,22 @@ class Canvas {
 		if( !A ){
 			throw("Cannot find activity values to draw!")
 		}
+		if( !col ){
+			col = function(a){
+				let r = [0,0,0]
+				if( a > 0.5 ){
+					r[0] = 255
+					r[1] = (2-2*a)*255
+				} else {
+					r[0] = (2*a)*255
+					r[1] = 255
+				}
+				return r
+			}
+		}
 		// cst contains the pixel ids of all non-background/non-stroma cells in
 		// the grid. 
-		let ii, sigma, a
+		let ii, sigma, a, k
 		// loop over all pixels belonging to non-background, non-stroma
 		this.col("FF0000")
 		this.getImageData()
@@ -438,11 +453,12 @@ class Canvas {
 		for( let x of this.C.cellPixels() ){
 			ii = x[0]
 			sigma = x[1]
+			k = this.C.cellKind(sigma)
 
 			// For all pixels that belong to the current kind, compute
 			// color based on activity values, convert to hex, and draw.
-			if( this.C.cellKind(sigma) == kind ){
-				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][kind]
+			if( ( kind < 0 && A.conf["MAX_ACT"][k] > 0 ) || k == kind ){
+				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][k]
 				if( a > 0 ){
 					if( a > 0.5 ){
 						this.col_r = 255
@@ -451,6 +467,10 @@ class Canvas {
 						this.col_r = (2*a)*255
 						this.col_g = 255
 					}
+					let r = col( a )
+					this.col_r = r[0]
+					this.col_g = r[1]
+					this.col_b = r[2]
 					this.pxfi( ii )
 				}
 			}

@@ -25,6 +25,8 @@ module	BorderPixelsByCell	src/stats/BorderPixelsByCell.js
 module	CentroidsWithTorusCorrection	src/stats/CentroidsWithTorusCorrection.js
 module	Centroids	src/stats/Centroids.js
 module 	CellNeighborList	src/stats/CellNeighborList.js
+module	ConnectedComponentsByCell	src/stats/ConnectedComponentsByCell.js
+module	Connectedness	src/stats/Connectedness.js
 
 # grids
 module	Grid2D	src/grid/Grid2D.js

@@ -2704,14 +2704,16 @@ class Canvas {
 		The constraint holding the activity values can be supplied as an 
 		argument. Otherwise, the current CPM is searched for the first 
 		registered activity constraint and that is then used.
-   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
-   positive integer as 0 is reserved for the background.
+   @param {CellKind} kind - Integer specifying the cellkind to color. If negative, draw
+   	values for all cellkinds.
    @param {ActivityConstraint|ActivityMultiBackground} [ A ] - the constraint object to
    use, which must be of class {@link ActivityConstraint} or {@link ActivityMultiBackground}
    If left unspecified, this is the first instance of an ActivityConstraint or ActivityMultiBackground
    object found in the soft_constraints of the attached CPM.
+   @param {Function} [col] - a function that returns a color for a number in [0,1] as an array of red/green/blue values,
+    for example, [255,0,0] would be the color red. If unspecified, a green-to-red heatmap is used.
    */
-	drawActivityValues( kind, A ){
+	drawActivityValues( kind, A, col ){
 		if( !A ){
 			for( let c of this.C.soft_constraints ){
 				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
@@ -2722,9 +2724,22 @@ class Canvas {
 		if( !A ){
 			throw("Cannot find activity values to draw!")
 		}
+		if( !col ){
+			col = function(a){
+				let r = [0,0,0];
+				if( a > 0.5 ){
+					r[0] = 255;
+					r[1] = (2-2*a)*255;
+				} else {
+					r[0] = (2*a)*255;
+					r[1] = 255;
+				}
+				return r
+			};
+		}
 		// cst contains the pixel ids of all non-background/non-stroma cells in
 		// the grid. 
-		let ii, sigma, a;
+		let ii, sigma, a, k;
 		// loop over all pixels belonging to non-background, non-stroma
 		this.col("FF0000");
 		this.getImageData();
@@ -2733,11 +2748,12 @@ class Canvas {
 		for( let x of this.C.cellPixels() ){
 			ii = x[0];
 			sigma = x[1];
+			k = this.C.cellKind(sigma);
 
 			// For all pixels that belong to the current kind, compute
 			// color based on activity values, convert to hex, and draw.
-			if( this.C.cellKind(sigma) == kind ){
-				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][kind];
+			if( ( kind < 0 && A.conf["MAX_ACT"][k] > 0 ) || k == kind ){
+				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][k];
 				if( a > 0 ){
 					if( a > 0.5 ){
 						this.col_r = 255;
@@ -2746,6 +2762,10 @@ class Canvas {
 						this.col_r = (2*a)*255;
 						this.col_g = 255;
 					}
+					let r = col( a );
+					this.col_r = r[0];
+					this.col_g = r[1];
+					this.col_b = r[2];
 					this.pxfi( ii );
 				}
 			}
@@ -4652,6 +4672,145 @@ class CellNeighborList extends Stat {
 		
 		return neighborlist
 
+	}
+}
+
+/** This Stat creates an object with the connected components of each cell on the grid. 
+	Keys are the {@link CellId} of all cells on the grid, corresponding values are objects
+	where each element is a connected component. Each element of that array contains 
+	the {@link ArrayCoordinate} for that pixel.
+	
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed a cell, and get the ConnectedComponentsByCell
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell(1)
+	* gm.seedCell(1)
+	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
+	* C.getStat( CPM.ConnectedComponentsByCell )
+*/
+class ConnectedComponentsByCell extends Stat {
+
+
+	connectedComponentsOfCell( cellid ){
+	
+		const cbp = this.M.getStat( PixelsByCell );
+		const cbpi = cbp[cellid];
+		let M = this.M;
+	
+	
+		let visited = {}, k=0, pixels = [];
+		let labelComponent = function(seed, k){
+			let q = [seed];
+			visited[q[0]] = 1;
+			pixels[k] = [];
+			while( q.length > 0 ){
+				let e = q.pop();
+				pixels[k].push( M.grid.i2p(e) );
+				let ne = M.grid.neighi( e );
+				for( let i = 0 ; i < ne.length ; i ++ ){
+					if( M.pixti( ne[i] ) == cellid &&
+						!(ne[i] in visited) ){
+						q.push(ne[i]);
+						visited[ne[i]]=1;
+					}
+				}
+			}
+		};
+		for( let i = 0 ; i < cbpi.length ; i ++ ){
+			let pi = this.M.grid.p2i( cbpi[i] );
+			if( !(pi in visited) ){
+				labelComponent( pi, k );
+				k++;
+			}
+		}
+		return pixels
+	}
+
+	/** The compute method of ConnectedComponentsByCell creates an object with 
+	connected components of the border of each cell on the grid.
+	@return {CellObject} object with for each cell on the grid
+	an object of components. These components in turn consist of the pixels 
+	(specified by {@link ArrayCoordinate}) belonging to that cell.
+	*/
+	compute(){
+		// initialize the object
+		let components = { };
+		// The this.M.pixels() iterator returns coordinates and cellid for all 
+		// non-background pixels on the grid. See the appropriate Grid class for
+		// its implementation.
+		for( let ci of this.M.cellIDs() ){
+			components[ci] = this.connectedComponentsOfCell( ci );
+		}
+		return components
+	}
+}
+
+/** This Stat computes the 'connectedness' of cells on the grid. 
+	Keys are the {@link CellId} of all cells on the grid, corresponding values the
+	connectedness of the corresponding cell. 
+	
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed a cell, and get the Connectedness
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell(1)
+	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
+	* C.getStat( CPM.Connectedness )
+*/
+class Connectedness extends Stat {
+
+
+	connectednessOfCell( cellid ){
+	
+		let ccbc = this.M.getStat( ConnectedComponentsByCell );
+		const v = ccbc[cellid];
+	
+		//let s = {}, r = {}, i, j
+		let s = 0, r = 0;
+		
+		for( let comp in v ){
+			let volume = comp.length;
+			s += volume;
+		}
+		for( let comp in v ){
+			let volume = comp.length;
+			r += (volume/s)*(volume/s);
+		}
+		
+		return r
+
+	}
+
+	/** The compute method of Connectedness creates an object with 
+	connectedness of each cell on the grid.
+	@return {CellObject} object with for each cell on the grid
+	a connectedness value. 
+	*/
+	compute(){
+		// initialize the object
+		let connectedness = { };
+		// The this.M.pixels() iterator returns coordinates and cellid for all 
+		// non-background pixels on the grid. See the appropriate Grid class for
+		// its implementation.
+		for( let ci of this.M.cellIDs() ){
+			connectedness[ci] = this.connectednessOfCell( ci );
+		}
+		return connectedness
 	}
 }
 
@@ -6595,6 +6754,8 @@ exports.BorderPixelsByCell = BorderPixelsByCell;
 exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
 exports.Centroids = Centroids;
 exports.CellNeighborList = CellNeighborList;
+exports.ConnectedComponentsByCell = ConnectedComponentsByCell;
+exports.Connectedness = Connectedness;
 exports.Grid2D = Grid2D;
 exports.Grid3D = Grid3D;
 exports.GridManipulator = GridManipulator;
