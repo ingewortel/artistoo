@@ -32,12 +32,12 @@ class Connectedness extends Stat {
 		//let s = {}, r = {}, i, j
 		let s = 0, r = 0
 		
-		for( let comp in v ){
-			let volume = comp.length
+		for( let comp in Object.keys( v ) ){
+			let volume = v[comp].length
 			s += volume
 		}
-		for( let comp in v ){
-			let volume = comp.length
+		for( let comp in Object.keys( v ) ){
+			let volume = v[comp].length
 			r += (volume/s)*(volume/s)
 		}
 		
