@@ -2049,7 +2049,8 @@ class ActivityConstraint extends SoftConstraint {
 }
 
 /**
- * Implements the preferred direction constraint.
+ * This is a constraint in which each cell has a preferred direction of migration. 
+ * This direction is only dependent on the cell, not on the specific pixel of a cell.
  */
 
 class PreferredDirectionConstraint extends SoftConstraint {
@@ -2080,7 +2081,6 @@ class PreferredDirectionConstraint extends SoftConstraint {
 				a[i] += this.C.extents[i];
 			}
 		}
-
 		let dp = 0;
 		for( let i = 0 ; i < a.length ; i ++ ){
 			dp += a[i]*b[i];
@@ -2113,10 +2113,15 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		this.normalize(dir);
 		return dir
 	}
+	setDirection( t, dx ){
+		this.celldirections[t] = dx;
+	}
 	postMCSListener(){
 		for( let t of this.C.cellIDs() ){
 			const k = this.C.cellKind(t);
 			let ld = this.conf["LAMBDA_DIR"][k];
+			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][k] ? 
+					this.conf["DELTA_T"][k] : 10;
 			if( ld == 0 ){
 				delete this.cellcentroidlists[t];
 				delete this.celldirections[t];
@@ -2124,15 +2129,17 @@ class PreferredDirectionConstraint extends SoftConstraint {
 			}
 			if( !(t in this.cellcentroidlists ) ){
 				this.cellcentroidlists[t] = [];
-				// this will work for all numbers of dimensions
 				this.celldirections[t] = this.randDir(this.C.ndim);
-				// let rang = this.C.random()*Math.PI*2
-				// this.celldirections[t] = [Math.cos(rang),Math.sin(rang)]
 			}
 			let ci = this.Cs.centroidWithTorusCorrection( t );
 			this.cellcentroidlists[t].unshift(ci);
-			if( this.cellcentroidlists[t].length == 10 ){
-				let l = this.cellcentroidlists[t].pop(), dx = [];
+			if( this.cellcentroidlists[t].length >= dt ){
+				// note, dt could change during execution
+				let l;
+				while( this.cellcentroidlists[t].length >= dt ){
+					l = this.cellcentroidlists[t].pop();
+				}
+				let dx = [];
 				for( let j = 0 ; j < l.length ; j ++ ){
 					dx[j] = ci[j] - l[j];
 					if( dx[j] > this.halfsize[j] ){
@@ -2141,17 +2148,20 @@ class PreferredDirectionConstraint extends SoftConstraint {
 						dx[j] += this.C.extents[j];
 					}
 				}
-				let per = this.conf["PERSIST"][this.C.cellKind(t)];
-				this.normalize(dx);
-				this.normalize(this.celldirections[t]);
-				for( let j = 0 ; j < dx.length ; j ++ ){
-					dx[j] = (1-per)*dx[j] + per*this.celldirections[t][j];
+				// apply angular diffusion to target direction if needed
+				let per = this.conf["PERSIST"][k];
+				if( per < 1 ){
+					this.normalize(dx);
+					this.normalize(this.celldirections[t]);
+					for( let j = 0 ; j < dx.length ; j ++ ){
+						dx[j] = (1-per)*dx[j] + per*this.celldirections[t][j];
+					}
+					this.normalize(dx);
+					for( let j = 0 ; j < dx.length ; j ++ ){
+						dx[j] *= ld;
+					}
+					this.celldirections[t] = dx;
 				}
-				this.normalize(dx);
-				for( let j = 0 ; j < dx.length ; j ++ ){
-					dx[j] *= ld;
-				}
-				this.celldirections[t] = dx;
 			}
 		}
 	}
