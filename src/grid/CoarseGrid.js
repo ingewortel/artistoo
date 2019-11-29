@@ -90,6 +90,12 @@ class CoarseGrid extends Grid2D {
 		return f_x_t*(1-v) + f_x_b * v
 	}
 	
+	/** This method takes as input a coordinate on the bigger grid, and 'adds' additional
+	value to it by adding the proper amount to the corresponding positions on the low
+	resolution grid.
+	@param {ArrayCoordinate} p array coordinates on the high resolution grid.
+	@param {number} value - value that should be added to this position.
+	*/
 	addValue( p, value ){
 		
 		// 2D bilinear interpolation, the other way around.
@@ -113,7 +119,8 @@ class CoarseGrid extends Grid2D {
 		this.grid.setpix( [r,b], this.grid.pixt([r,b]) + v_rb )
 		
 	}
-	
+	/** @private 
+	@ignore */
 	positions( p ){
 		// Find the 4 positions on the original, low resolution grid
 		// that are closest to the requested position p: x-coordinate l,r (left/right) 

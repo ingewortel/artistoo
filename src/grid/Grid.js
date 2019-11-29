@@ -26,10 +26,7 @@ class Grid {
 		@type {number}*/
 		this.ndim = this.extents.length
 		
-		/** Should the borders of the grid be linked, so that a cell moving
-		out on the left reappears on the right? Torus can be specified for
-		each dimension separately.
-		@type {boolean[]}*/
+		
 		if( torus.length == 0 ){
 			for( let d = 0; d < this.ndim; d++ ){
 				torus.push( true )
@@ -37,6 +34,10 @@ class Grid {
 		} else if ( torus.length != this.ndim ){
 			throw( "Torus should be specified for each dimension, or not at all!" )
 		}
+		/** Should the borders of the grid be linked, so that a cell moving
+		out on the left reappears on the right? Torus can be specified for
+		each dimension separately.
+		@type {boolean[]}*/
 		this.torus = torus
 		
 		

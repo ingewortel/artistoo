@@ -54,16 +54,17 @@ class Canvas {
 			 * @type {GridBasedModel|CPM|CA}
 			 */
 			this.C = C
+			/**
+			 * The underlying grid that is drawn on the canvas.
+			 * @type {Grid2D|CoarseGrid}
+			 */
 			this.grid = this.C.grid
 			
 			/** Grid size in each dimension, taken from the CPM or grid object to draw.
 			@type {GridSize} each element is the grid size in that dimension in pixels */
 			this.extents = C.extents
 		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
-			/**
-			 * The underlying grid that is drawn on the canvas.
-			 * @type {Grid2D|CoarseGrid}
-			 */
+			
 			this.grid = C
 			this.extents = C.extents
 		}
@@ -111,7 +112,9 @@ class Canvas {
 		this.ctx.lineCap="butt"
 	}
 	
-	
+	/** Give the canvas element an ID supplied as argument. Useful for building an HTML
+	page where you want to get this canvas by its ID. 
+	@param {string} idstring - the name to give the canvas element.*/
 	setCanvasId( idstring ){
 		this.el.id = idstring
 	}
@@ -551,7 +554,13 @@ class Canvas {
 		this.putImageData()
 	}
 	
-	
+	/** General drawing function to draw all pixels in a supplied set in a given color. 
+	@param {ArrayCoordinate[]} pixelarray - an array of {@link ArrayCoordinate of pixels
+	to color.}
+	@param {HexColor|function} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black ("000000"). col can also be a function that
+	returns a hex value for a cell id.
+	*/
 	drawPixelSet( pixelarray, col ){
 		if( ! col ){
 			col = "000000"
