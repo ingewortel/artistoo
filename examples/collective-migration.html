@@ -11,8 +11,8 @@
 visualizations. */
 
 
-let C,Cim,t=0, burnin_time=50, maxtime=500000, meter, A
-	let cells = []
+let C,Cim,t=0, meter, A
+	let cells = [], maxtime = 100000, burnin_time = 50
 
 function seedCell( k ){
 	let x = C.ran(0,249), y = C.ran(0,249)
@@ -26,6 +26,7 @@ function initialize(){
 
 	// Create a CPM object
 	C = new CPM.CPM( [250,250], {
+		nCellKinds : 1,
 		LAMBDA_CONNECTIVITY : [0,0],
 		LAMBDA_P : [0,2],
 		LAMBDA_V : [0,50],
@@ -36,18 +37,11 @@ function initialize(){
 		J : [ [0,20], [20,0] ],
 		T : 20,
 		ACT_MEAN : "geometric",
-		torus : true
+		torus : [true,true]
 	})
-	C.add( new CPM.Adhesion( C.conf ) )
-	C.add( new CPM.VolumeConstraint( C.conf ) )
-	C.add( new CPM.PerimeterConstraint( C.conf ) )
-	A = new CPM.ActivityConstraint( C.conf )
-	C.add( A )
-
 
 	// Create a canvas to draw on
 	Cim = new CPM.Canvas( C, {zoom:2} )
-	//Cs = new CPMStats( C )
 
 	C.stop = true
 	C.rate = 2

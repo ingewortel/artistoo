@@ -6,7 +6,7 @@ C = new CPM.CPM( [w, w, 2], {
 	LAMBDA_VRANGE_MAX : [0,2],
 	T : 4,
 	seed: 7,
-	torus: false
+	torus: [false,false,false]
 })
 C.add( new CPM.HardVolumeRangeConstraint( C.conf ) )
 new CPM.GridInitializer( C ).seedCell( 1 )

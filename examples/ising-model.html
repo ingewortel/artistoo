@@ -26,7 +26,7 @@ function timestep(){
 	let vol = C.getVolume(cid)
 
 	// If either the background or cell disappears: re-seed the grid randomly.
-	if( vol==1 || vol==(C.field_size.x-1)*(C.field_size.y-1) ){
+	if( vol==1 || vol==(C.extents[0]-1)*(C.extents[1]-1) ){
 		seedGrid()
 	}
 	requestAnimationFrame( timestep )
@@ -37,8 +37,8 @@ function seedGrid(){
 	cid = C.makeNewCellID(1)
 	// For all non-stromaborder pixels in the grid: assign it randomly
 	// to either background or cell.
-	for( let i = 1 ; i < C.field_size.x ; i ++ ){
-		for( let j = 1 ; j < C.field_size.y ; j ++ ){	
+	for( let i = 1 ; i < C.extents[0] ; i ++ ){
+		for( let j = 1 ; j < C.extents[1] ; j ++ ){	
 			if( C.random() < 0.49 ){
 				C.setpix( [ i,j ], cid )
 			} else {
@@ -54,10 +54,18 @@ function initialize(){
 	// Create a new CPM, canvas, and stats object
 	C = new CPM.CPM( [w,w], {
 		seed : 1,
+		nCellKinds: 1,
 		J : [ [NaN,20], [20,100] ],
 		T : 0.01,
 	})
-	C.add( new CPM.Adhesion( C.conf ) )
+	C.add( CPM.Adhesion )
+
+	C.add( new CPM.Adhesion( { 
+		J : [ [NaN,20], [20,100] ]
+	} )
+
+
+	C.add( new CPM.PixelsByCell( ) )
 	Cim = new CPM.Canvas( C, {zoom:zoom} )
 	// Start simulation
 	meter = new FPSMeter({left:"auto", right:"5px"})

@@ -13,10 +13,10 @@ canvas{ border: 1px solid black }
 let zoom=1, w = 250, t = 5000
 
 
-let C,meter
+var C,meter
+
 function timestep(){
-	meter.tickStart()
-	C.monteCarloStep()
+	C.timeStep()
 	meter.tick()
 	if( t-- > 0 ){
 		requestAnimationFrame( timestep )
@@ -30,13 +30,13 @@ function initialize(){
 function setupCPM(conf){
 	const zoom = conf.zoom || 1
 	const w = conf.w || 200
-	let C = new CPM.CPM( [w,w], {
+	C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : false
+		torus : [false,false],
+		J: [[0,20], [20,100]] ,
+		V: [0,500], 
+		LAMBDA_V: [0,50]
 	})
-	C.add( new CPM.Adhesion( { J: [[0,20], [20,100]] } ) )
-	C.add( new CPM.VolumeConstraint( { V: [0,500], 
-		LAMBDA_V: [0,50] } ) )
 	
 	let Cim = new CPM.Canvas( C, {zoom:zoom} )
 
@@ -50,7 +50,7 @@ function setupCPM(conf){
 		Cim.drawCellBorders( 1, "000000" )
 	}} )
 
-	let Gi = new CPM.GridInitializer(C)
+	let Gi = new CPM.GridManipulator(C)
 	Gi.seedCell(1)
 
 	// Start simulation

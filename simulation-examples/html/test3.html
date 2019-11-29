@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Cells with protrusions</title>
+<style type="text/css">
+body{
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 10px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="../../build/cpm.js"></script>
+<script src="../fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [100,100],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],				// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 20,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+
+		
+		// Adhesion parameters:
+		J : [ [0,20], [20,0] ],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],				// VolumeConstraint importance per cellkind
+		V : [0,500],					// Target volume of each cellkind
+		
+		// PerimeterConstraint parameters
+		LAMBDA_P : [0,2],				// PerimeterConstraint importance per cellkind
+		P : [0,340],					// Target perimeter of each cellkind
+		
+		N_PROTRUSION : [0,5],
+		G_PROTRUSION : [0,500],
+		P_DETACH : [0,100]
+		
+		// ActivityConstraint parameters
+		//LAMBDA_ACT : [0,200],			// ActivityConstraint importance per cellkind
+		//MAX_ACT : [0,30],				// Activity memory duration per cellkind
+		//ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
+											// "geometric" or "arithmetic" mean?
+	},
+	
+	// Simulation setup and configuration: this controls stuff like grid initialization,
+	// runtime, and what the output should look like.
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1,0],					// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["AAAAAA"],
+		ACTCOLOR : [true],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [false],				// Should cellborders be displayed?
+		zoom : 4,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : true,						// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/Protrusion",	// ... And save the image in this folder.
+		EXPNAME : "CollectiveProtrusion",					// Used for the filename of output images.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	sim = new CPM.Simulation( config, {drawCanvas:drawCanvas, drawFocalPoints: drawFocalPoints} )
+	sim.C.add( new CPM.ProtrusionConstraint( sim.C.conf ) )
+	sim.C.add( new CPM.ConnectivityConstraint( { CONNECTED : [false, true] } ) )
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+
+function step(){
+	sim.step()
+	//console.log( sim.time )
+	meter.tick()
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+
+/* The following custom methods are used for control buttons on the html page.*/
+function drawCanvas(){
+	
+		// Add the canvas if required
+		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
+	
+		// Clear canvas and draw stroma border
+		this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" )
+
+
+		// Draw each cellkind appropriately
+		let cellcolor=( this.conf["CELLCOLOR"] || [] ), actcolor=this.conf["ACTCOLOR"], 
+			nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
+		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+		
+			// draw the cells of each kind in the right color
+			if( cellcolor[ cellkind ] != -1 ){
+				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
+			}
+			
+			// Draw borders if required
+			if(  cellborders[ cellkind  ]  ){
+				let bordercol = "000000"
+				if( this.conf.hasOwnProperty("BORDERCOL") ){
+					bordercol = this.conf["BORDERCOL"][cellkind] || "000000"
+				}
+				this.Cim.drawOnCellBorders( cellkind+1, bordercol )
+			}
+			
+			// if there is an activity constraint, draw activity values depending on color.
+			if( this.C.conf["LAMBDA_ACT"] !== undefined && this.C.conf["LAMBDA_ACT"][ cellkind + 1 ] > 0 ){ //this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
+				if( ( actcolor[ cellkind ] ) ){
+					this.Cim.drawActivityValues( cellkind + 1 )//, this.constraints["ActivityConstraint"] )
+				}			
+			}
+
+		}
+		this.drawFocalPoints()	
+	}
+	
+function drawFocalPoints(){
+	let pconstraint = this.C.getConstraint( "ProtrusionConstraint" )
+	for( let fp of Object.keys( pconstraint.focalpoints["points"] ) ){
+		this.Cim.col( "0000FF" )
+		this.Cim.pxf( this.C.grid.i2p(fp) )
+	}
+}
+
+function startsim(){
+	if( !sim.running ){
+		sim.running = true
+	}
+}
+function stopsim(){
+	sim.running = false
+}
+function seedCell( k ){
+	sim.gm.seedCell(k)
+}
+function seedCells( ncells ){
+	for( let i = 0; i < ncells; i++ ){
+		seedCell( 1 )
+	}
+}
+function killCell(){
+	let t
+	let cells = Object.keys( sim.C.getStat( CPM.PixelsByCell ) )
+	if( cells.length > 0 ){
+		t = cells.pop()
+		for( let cp of sim.C.cellPixels() ){
+			if( cp[1] == t ){
+				sim.C.setpix( cp[0], 0 )
+			}
+		}
+	}
+	sim.C.stat_values = {}
+
+}
+function killAllCells(){
+	let cells = Object.keys( sim.C.getStat( CPM.PixelsByCell ) )
+	if( cells.length == 0 ) return
+	for( let cp of sim.C.cellPixels() ){
+		sim.C.setpix( cp[0], 0 )
+	}
+}
+
+</script>
+</head>
+<body onload="initialize()">
+<h1>CollectiveMigration</h1>
+<p>
+<br>
+<button onclick="startsim()">start</button>
+<button onclick="stopsim()">stop</button>
+<button onclick="seedCells(1)">seed cell</button>
+<button onclick="seedCells(10)">+10 cells</button>
+<button onclick="seedCells(100)">+100 cells</button>
+<button onclick="killCell()">remove cell</button>
+<button onclick="killAllCells()">remove all cells</button>
+<br>
+
+
+<div class="slidecontainer">
+<form autocomplete="off">
+<table>
+<tr>
+	<td>Adhesion<sub>cell-matrix</sub></td><td>
+	<input type="text" value="20" id="jte" oninput="sim.C.conf.J[1][0]=sim.C.conf.J[0][1]=parseInt(this.value)">
+	</td>
+	<td>Adhesion<sub>cell-cell</sub></td><td>
+	<input type="text" value="0" id="jtt" oninput="sim.C.conf.J[1][1]=parseInt(this.value)">
+	</td>
+</tr>
+<tr>
+	<td>Volume</td><td>
+		<input type="text" value="500" id="volume" oninput="if(this.value>0){sim.C.conf.V[1]=this.value}">
+	</td>
+	<td>&lambda;<sub>Volume</sub></td><td>
+		<input type="text" value="50" id="lvolume" oninput="sim.C.conf.LAMBDA_V[1]=this.value">
+	</td>
+</tr>
+<tr>
+	<td>Perimeter</td><td>
+		<input type="text" value="340" id="perimeter" oninput="sim.C.conf.P[1]=this.value">
+	</td>
+	<td>&lambda;<sub>P</sub></td><td>
+		<input type="text" value="2" id="lperim" oninput="sim.C.conf.LAMBDA_P[1]=this.value">
+	</td>
+</tr>
+<tr>
+	<td>P<sub>detach</sub></td><td>
+		<input type="text" value="1000" id="mact" oninput="sim.C.conf.P_DETACH[1]=this.value">
+	</td>
+	<td>G<sub>protr</sub></td><td>
+		<input type="text" value="500" id="lact" oninput="sim.C.conf.G_PROTRUSION[1]=this.value">
+	</td>
+</tr>
+<tr>
+	<td>N<sub>protr</sub></td><td>
+		<input type="text" value="5" id="lact" oninput="sim.C.conf.N_PROTRUSION[1]=this.value">
+	</td>
+</tr>
+<tr>
+	<td>T</td><td>
+	<input type="text" value="20" id="t" oninput="sim.C.conf.T=this.value">
+	</td>
+	<td>Framerate</td><td>
+	<input type="text" value="1" id="frames" oninput="sim.conf['IMGFRAMERATE']=this.value">
+	</td>
+</tr>
+
+</table>
+</form>
+</div>
+</p>
+</body>
+</html>

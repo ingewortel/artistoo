@@ -26,15 +26,16 @@
 			function init() {
 				// Create a CPM object
 				C = new CPM.CPM( [w, w, 4], {
-					torus: false,
+					torus: [false,false,false],
+					nCellKinds: 1,
 					LAMBDA_VRANGE_MIN : [0,1],
 					LAMBDA_VRANGE_MAX : [0,2],
 					T : 4,
 					seed: 7
 				})
 				C.add( new CPM.HardVolumeRangeConstraint( C.conf ) )
-				let Ci = new CPM.GridInitializer( C )
-				Ci.seedCellAt( 1, [C.field_size.x/2,C.field_size.y/2,C.field_size.z/2] )	
+				let Ci = new CPM.GridManipulator( C )
+				Ci.seedCellAt( 1, [C.w/2,w/2,2] )	
 
 				// setup 3D visualization
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 )
@@ -73,9 +74,9 @@
 				//meshes[0].position.x = NaN; meshes[1].position.x = NaN
 				for( x of C.cellPixels() ){
 					console.log( x[0] )
-					meshes[i].position.x = (x[0][0]-C.field_size.x/2)*bs
+					meshes[i].position.x = (x[0][0]-w/2)*bs
 					meshes[i].position.y = (x[0][2])*bs
-					meshes[i].position.z = (x[0][1]-C.field_size.y/2)*bs
+					meshes[i].position.z = (x[0][1]-w/2)*bs
 					i++
 				}
 				//mesh.position.x += 0.5;

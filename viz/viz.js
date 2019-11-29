@@ -31,13 +31,13 @@ function makevoxel( voxset ){
 
 // Initialize a movie frame of w x h pixels
 function init3d( w, h, C ){
-	var i, j, p, draw_grid = 1, x2 = C.field_size.x/2,
-		y2 = C.field_size.y/2, z2 = C.field_size.z/2
+	var i, j, p, draw_grid = 1, x2 = C.extents[0]/2,
+		y2 = C.extents[1], z2 = C.extents[2]/2
 
 	container = document.getElementById( 'stage' )
 
 	camera = new THREE.PerspectiveCamera( 45, 1, 1, 10000 )
-	camera.position.set( x2, y2, z2 + C.field_size.x*1.26 )
+	camera.position.set( x2, y2, z2 + C.extents[0]*1.26 )
 
 	camera.up.set( -1, 0, 0 )
 
@@ -64,7 +64,7 @@ function init3d( w, h, C ){
 	// grid
 
 	if( draw_grid ){
-		var size = C.field_size.x, step = 10;
+		var size = C.extents[0], step = 10;
 		var geometry = new THREE.Geometry();
 		for ( i = 0; i <= size; i += step ) {
 			geometry.vertices.push( new THREE.Vector3( 0, 0, i ) );
@@ -126,17 +126,19 @@ function render3d( max_cells ) {
 	var i = 0, t, k
 	if( arguments.length == 0 ) max_cells = Infinity
 
-	var cp = C.cellborderpixels.elements
+	var cp = C.cellBorderPixels()
 	// var con = Cs.cellsOnNetwork()
 
-	while( cellvoxels.length < cp.length  ){
+	/*while( cellvoxels.length < cp.length  ){
 		makevoxel()
-	}
+	}*/
 
-	for( ; i < cp.length ; i ++ ){
+	for( let p of C.cellBorderPixels() ){
 		// t = C.cellpixelstype[cp[i]]; k = C.cellKind(t)
 		// if( t < max_cells ){
-			var p = C.grid.i2p( cp[i] )
+			p = p[0]
+			
+			if( cellvoxels.length < (i+1) ){ makevoxel() }
 			cellvoxels[i].visible = true
 			cellvoxels[i].position.x = p[0]
 			cellvoxels[i].position.y = p[1]
@@ -155,8 +157,11 @@ function render3d( max_cells ) {
 
 		cellvoxels[i].material.color.setHex( cellBasicColor )
 		cellvoxels[i].material.opacity=0.15
+		i++
 	}
 
+	//i=0
+	
 	for( ; i < cellvoxels.length ; i ++ ){
 		cellvoxels[i].visible = false
 	}

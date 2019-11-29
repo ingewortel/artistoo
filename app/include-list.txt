@@ -1,0 +1,64 @@
+# Enter all modules here that should be included in the build.
+# They will automatically be added to the Makefile and to app/index.js.
+# Format: 	1st col = module, indicating that this should be included.
+#			2nd col = class name, or no-export if class is not to be exported in the build.
+#						In that case the file is added in the makefile because the build
+#						needs updating whenever underlying classes change, but the file
+#						is not added to the app/index.js.
+# 			3rd col = path (from cpmjs home folder)
+# 			(tab-delimited).
+
+# src base folder
+module	Canvas	src/Canvas.js
+module	Stats	src/Stats.js
+module	no-export	src/DiceSet.js
+
+# models
+module	CA	src/models/CA.js
+module	CPM	src/models/CPM.js
+module	GridBasedModel	src/models/GridBasedModel.js
+
+# stats
+module	Stat	src/stats/Stat.js
+module	PixelsByCell	src/stats/PixelsByCell.js
+module	BorderPixelsByCell	src/stats/BorderPixelsByCell.js
+module	CentroidsWithTorusCorrection	src/stats/CentroidsWithTorusCorrection.js
+module	Centroids	src/stats/Centroids.js
+module 	CellNeighborList	src/stats/CellNeighborList.js
+module	ConnectedComponentsByCell	src/stats/ConnectedComponentsByCell.js
+module	Connectedness	src/stats/Connectedness.js
+
+# grids
+module	Grid2D	src/grid/Grid2D.js
+module	Grid3D	src/grid/Grid3D.js
+module	GridManipulator	src/grid/GridManipulator.js
+module	CoarseGrid	src/grid/CoarseGrid.js
+module	no-export	src/grid/Grid.js
+
+# constraints: soft constraints
+module	no-export	src/hamiltonian/Constraint.js
+module	SoftConstraint src/hamiltonian/SoftConstraint.js
+module	no-export	src/hamiltonian/AutoAdderConfig.js
+module	Adhesion	src/hamiltonian/Adhesion.js
+module	VolumeConstraint	src/hamiltonian/VolumeConstraint.js
+module	PerimeterConstraint	src/hamiltonian/PerimeterConstraint.js
+module	ActivityConstraint	src/hamiltonian/ActivityConstraint.js
+module	ActivityMultiBackground	src/hamiltonian/ActivityMultiBackground.js
+module	PersistenceConstraint	src/hamiltonian/PersistenceConstraint.js
+module	PreferredDirectionConstraint	src/hamiltonian/PreferredDirectionConstraint.js
+module	ChemotaxisConstraint	src/hamiltonian/ChemotaxisConstraint.js
+module	AttractionPointConstraint	src/hamiltonian/AttractionPointConstraint.js
+module	ProtrusionConstraint	src/hamiltonian/ProtrusionConstraint.js
+module	ConnectivityConstraint	src/hamiltonian/ConnectivityConstraint.js
+module 	SoftConnectivityConstraint	src/hamiltonian/SoftConnectivityConstraint.js
+
+# constraints: hard constraints
+module	HardConstraint	src/hamiltonian/HardConstraint.js
+module	HardVolumeRangeConstraint	src/hamiltonian/HardVolumeRangeConstraint.js
+module	BarrierConstraint	src/hamiltonian/BarrierConstraint.js
+module	BorderConstraint	src/hamiltonian/BorderConstraint.js
+
+# simulation
+module	Simulation	src/simulation/Simulation.js
+
+# cat app/include-list.txt | awk -F '\t' '!($1 ~ /^#/) && !($1 ~ /^no-export/) && (NF > 0){print "import", $1 , "from", $2}; (NF==0){print " "}; !($1 ~ /^#/) && !($1 ~ /^no-export/){printf "%s, ", $1}' 

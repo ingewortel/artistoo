@@ -7,15 +7,14 @@
 "use strict"
 
 let C, zoom=2, Cim, cid=0, w=200, meter
-let A = new CPM.ActivityConstraint( { MAX_ACT : [0,30],
-		LAMBDA_ACT: [0,300], ACT_MEAN: "geometric" } )
+
 
 function draw(){
 	// Clear the canvas (in the backgroundcolor white), and redraw:
 	Cim.clear( "FFFFFF" )
 	// The cell in red
 	Cim.drawCells( 1, "000000" )
-	Cim.drawActivityValues( 1, A )
+	Cim.drawActivityValues( 1 )
 }
 
 function timestep(){
@@ -30,16 +29,16 @@ function timestep(){
 function initialize(){
 	C = new CPM.CPM( [w,w], {
 		seed : 1,
-		T : 10
+		T : 10, 
+		V: [0,500], 
+		LAMBDA_V: [0,5],
+		J: [[0,10], [10,0]],
+		MAX_ACT : [0,30],
+		LAMBDA_ACT: [0,300], 
+		ACT_MEAN: "geometric",
+		P: [0,260],
+		LAMBDA_P: [0,2]
 	})
-
-	C.add( new CPM.VolumeConstraint( { V: [0,500], 
-		LAMBDA_V: [0,5] } ) )
-	C.add( new CPM.Adhesion( { J: [[0,10], [10,0]] } ) )
-	C.add( A )
-	C.add( new CPM.PerimeterConstraint( { P: [0,260],
-		LAMBDA_P: [0,2] } ) )
-
 
 	let cid = C.makeNewCellID(1)
 	C.setpix( C.grid.midpoint, cid )
@@ -52,6 +51,6 @@ function initialize(){
 </script>
 </head>
 <body onload="initialize()">
-<h1>Basic Act model.</h1>
+<p>Basic Act model.</p>
 </body>
 </html>

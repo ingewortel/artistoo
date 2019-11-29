@@ -23,7 +23,7 @@ function setupCPM(conf){
 	const w = conf.w || 40
 	let C = new CPM.CPM( [w,w], {
 		T : 20,
-		torus : true
+		torus : [true,true]
 	})
 	Cs = new CPM.PostMCSStats()
 	C.add( Cs )

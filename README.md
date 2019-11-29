@@ -16,12 +16,20 @@ This code has been ported over from our older "cpm" repository. This is now an E
 
 We have the following examples for web-browser CPMs:
 
-* [A simple Ising model](examples/ising-model.html)
-* [A single moving cell](examples/single-cell.html)
-* [A 2D random walk](examples/randomwalk.html)
-* [A 3D random walk](examples/randomwalk3d.html)
-* [A clump of two celltypes sorting via differential adhesion](examples/cellsorting.html)
-* [A simulation of an epidermis packed with keratinocytes](examples/epidermis.html)
+
+* [A simple Ising model](../simulation-examples/html/IsingModel.html)
+* [A simple 2D CPM cell](../simulation-examples/html/SingleCell.html)
+* [The classic CPM cell sorting example](../simulation-examples/html/Cellsorting.html)
+* [Dividing CPM cells](../simulation-examples/html/CellDivision.html)
+* [A cell moving through active cell migration](../simulation-examples/html/Actmodel.html)
+* [Migrating cell in a microchannel](../simulation-examples/html/Microchannel.html)
+* [Migrating cells on adhesive patterns](../simulation-examples/html/ActOnMicroPattern.html)
+* [Simulating plain diffusion](../simulation-examples/html/Diffusion.html)
+
+We also have a few examples of plain cellular automata (CAs):
+
+* [Conway's Game of Life](../simulation-examples/html/GameOfLife.html)
+* [SIR model of a spreading infection](../simulation-examples/html/SIR.html)
 
 ## Node examples
 
