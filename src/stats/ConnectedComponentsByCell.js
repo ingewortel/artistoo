@@ -25,7 +25,11 @@ import PixelsByCell from "./PixelsByCell.js"
 */
 class ConnectedComponentsByCell extends Stat {
 
-
+	/** This method computes the connected components of a specific cell. 
+		@param {CellId} cellid the unique cell id of the cell to get connected components of.
+		@returns {object} object of cell connected components. These components in turn consist of the pixels 
+	(specified by {@link ArrayCoordinate}) belonging to that cell.
+	*/
 	connectedComponentsOfCell( cellid ){
 	
 		const cbp = this.M.getStat( PixelsByCell )

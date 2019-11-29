@@ -25,6 +25,8 @@ class ConnectivityConstraint extends HardConstraint {
 	
 	/** The set CPM method attaches the CPM to the constraint. */
 	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
 		this.C = C
 		
 		/** Private property used by {@link updateBorderPixels} to track borders. 

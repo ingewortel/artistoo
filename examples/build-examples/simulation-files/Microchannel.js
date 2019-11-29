@@ -1,7 +1,7 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /* START DESCRIPTION Do not remove this line */
-Act cells moving in a microchannnel.
+Act cells moving in a microchannel.
 /* END DESCRIPTION Do not remove this line */
 /* ================= DECLARE CUSTOM METHODS ===================== */
 
@@ -84,12 +84,12 @@ let config = {
 
 	// Grid settings
 	ndim : 2,
-	field_size : [500, 12],
+	field_size : [300, 15],
 	
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
-		torus : [true,true],						// Should the grid have linked borders?
+		torus : [true,false],						// Should the grid have linked borders?
 		seed : 1,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		
@@ -99,7 +99,7 @@ let config = {
 		// First value is always cellkind 0 (the background) and is often not used.
 		
 		// Adhesion parameters:
-		J : [ [NaN,20], [20,100]],
+		J : [ [NaN,20], [20,5] ],
 		
 		// VolumeConstraint parameters
 		LAMBDA_V : [0,30],				// VolumeConstraint importance per cellkind
@@ -107,14 +107,14 @@ let config = {
 		
 		// PerimeterConstraint parameters
 		LAMBDA_P : [0,2],				// PerimeterConstraint importance per cellkind
-		P : [0,360],					// Target perimeter of each cellkind
+		P : [0,300],					// Target perimeter of each cellkind
 		
 		// ActivityConstraint parameters
 		LAMBDA_ACT : [0,500],			// ActivityConstraint importance per cellkind
-		MAX_ACT : [0,30],				// Activity memory duration per cellkind
+		MAX_ACT : [0,40],				// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
 											// "geometric" or "arithmetic" mean?
-
+								
 	},
 	
 	// Simulation setup and configuration: this controls stuff like grid initialization,
@@ -125,14 +125,14 @@ let config = {
 		NRCELLS : [3],					// Number of cells to seed for all
 											// non-background cellkinds.
 		// Runtime etc
-		BURNIN : 500,
+		BURNIN : 100,
 		RUNTIME : 1000,
 		RUNTIME_BROWSER : "Inf",
 		
 		// Visualization
 		CANVASCOLOR : "eaecef",
 		CELLCOLOR : ["000000"],
-		ACTCOLOR : [true],			// Should pixel activity values be displayed?
+		ACTCOLOR : [true],					// Should pixel activity values be displayed?
 		SHOWBORDERS : [false],				// Should cellborders be displayed?
 		zoom : 2,							// zoom in on canvas with this factor.
 		
@@ -144,10 +144,11 @@ let config = {
 		EXPNAME : "Microchannel",					// Used for the filename of output images.
 		
 		// Output stats etc
-		STATSOUT : { browser: true, node: true }, // Should stats be computed?
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
 		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
 
 	}
 }
+
 /*	---------------------------------- */
 /* Do not remove this line: END CONFIGURATION */

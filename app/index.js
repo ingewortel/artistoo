@@ -3,7 +3,6 @@
 //	should serve as dependencies.
  
 import Canvas from "../src/Canvas.js" 
-import Stats from "../src/Stats.js" 
  
 import CA from "../src/models/CA.js" 
 import CPM from "../src/models/CPM.js" 
@@ -33,7 +32,6 @@ import PersistenceConstraint from "../src/hamiltonian/PersistenceConstraint.js"
 import PreferredDirectionConstraint from "../src/hamiltonian/PreferredDirectionConstraint.js" 
 import ChemotaxisConstraint from "../src/hamiltonian/ChemotaxisConstraint.js" 
 import AttractionPointConstraint from "../src/hamiltonian/AttractionPointConstraint.js" 
-import ProtrusionConstraint from "../src/hamiltonian/ProtrusionConstraint.js" 
 import ConnectivityConstraint from "../src/hamiltonian/ConnectivityConstraint.js" 
 import SoftConnectivityConstraint from "../src/hamiltonian/SoftConnectivityConstraint.js" 
  
@@ -46,7 +44,6 @@ import Simulation from "../src/simulation/Simulation.js"
  
 export {
 	Canvas,
-	Stats,
 	CA,
 	CPM,
 	GridBasedModel,
@@ -72,7 +69,6 @@ export {
 	PreferredDirectionConstraint,
 	ChemotaxisConstraint,
 	AttractionPointConstraint,
-	ProtrusionConstraint,
 	ConnectivityConstraint,
 	SoftConnectivityConstraint,
 	HardConstraint,
@@ -81,4 +77,3 @@ export {
 	BorderConstraint,
 	Simulation
 }
-

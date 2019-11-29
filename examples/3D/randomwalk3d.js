@@ -1,4 +1,4 @@
-let CPM = require("../build/cpm-cjs.js")
+let CPM = require("../../build/cpm-cjs.js")
 let w = 20
 // Create a CPM object
 C = new CPM.CPM( [w, w, 2], {
@@ -9,7 +9,7 @@ C = new CPM.CPM( [w, w, 2], {
 	torus: [false,false,false]
 })
 C.add( new CPM.HardVolumeRangeConstraint( C.conf ) )
-new CPM.GridInitializer( C ).seedCell( 1 )
+new CPM.GridManipulator( C ).seedCell( 1 )
 
 let t = 1000
 while(t-- > 0){

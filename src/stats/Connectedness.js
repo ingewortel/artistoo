@@ -23,7 +23,9 @@ import ConnectedComponentsByCell from "./ConnectedComponentsByCell.js"
 */
 class Connectedness extends Stat {
 
-
+	/** This method computes the connectedness of a specific cell. 
+	@return {number} the connectedness value of this cell, a number between 0 and 1.
+	*/
 	connectednessOfCell( cellid ){
 	
 		let ccbc = this.M.getStat( ConnectedComponentsByCell )

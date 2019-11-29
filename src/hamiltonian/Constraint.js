@@ -23,8 +23,13 @@ class Constraint {
 	get CONSTRAINT_TYPE() {
 		throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
 	}
+	
+	/** Get the parameters of this constraint from the conf object. 
+	@return {object} conf - configuration settings for this constraint, containing the
+	relevant parameters.
+	*/
 	get parameters(){
-		return null
+		return this.conf
 	}
 	/** The constructor of a constraint takes a configuration object.
 	This method is usually overwritten by the actual constraint so that the entries

@@ -1,6 +1,6 @@
 /** Run a basic Ising model. */
 
-let CPM = require("../build/cpm-cjs.js")
+let CPM = require("../../build/cpm-cjs.js")
 
 let w = parseInt(process.argv[2]) || 100
 
@@ -16,9 +16,9 @@ let cid = C.makeNewCellID(1)
 
 // For all non-stromaborder pixels in the grid: assign it randomly
 // to either background or cell.
-for( let i = 0 ; i < C.field_size.x ; i ++ ){
-	for( let j = 0 ; j < C.field_size.y ; j ++ ){
-		for( let k = 0 ; k < C.field_size.z ; k ++ ){ 
+for( let i = 0 ; i < C.extents[0] ; i ++ ){
+	for( let j = 0 ; j < C.extents[1] ; j ++ ){
+		for( let k = 0 ; k < C.extents[2]; k ++ ){ 
 			if( C.random() <= 0.5 ){
 				C.setpix( [i, j, k], cid )
 			}
@@ -41,8 +41,8 @@ ctx.fillStyle="#FFFFFF"
 ctx.fillRect( 0,0, w,w )
 
 ctx.fillStyle="#FF0000"
-for( let i = 0 ; i < C.field_size.x ; i ++ ){
-	for( let j = 0 ; j < C.field_size.y ; j ++ ){
+for( let i = 0 ; i < C.extents[0] ; i ++ ){
+	for( let j = 0 ; j < C.extents[1] ; j ++ ){
 		if( C.pixt( [i,j,0]) ){
 			ctx.fillRect( i, j, 1, 1 )
 		}
