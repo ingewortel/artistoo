@@ -9,7 +9,6 @@
 		"fs": "0.0.1-security",
 		"mathjs": "^5.8.0",
 		"mersenne-twister": "^1.1.0",
-		"mersennetwister": "^0.2.3",
 		"rollup": "^1.2.3",
 		"rollup-plugin-eslint": "^5.0.0",
 		"websocket": "^1.0.28"
