@@ -43,6 +43,7 @@ We have the following examples for web-browser CPMs:
 * [Cells moving with a preferred direction](./examples/html/ManyCellsPrefDir.html)
 * [Particle following a random walk](./examples/RandomWalk.html)
 
+
 We also have a few examples of plain cellular automata (CAs):
 
 * [Conway's Game of Life](./examples/html/GameOfLife.html)
@@ -53,7 +54,9 @@ We also have a few examples of plain cellular automata (CAs):
 Simulations can also be run from the command line using nodejs. The first time you do this,
 you have to install several dependencies. Go to the base folder of this package and run
 
-```npm install```
+```
+npm install
+```
 
 which will automatically install the dependencies as supplied in the `package.json` file.
 
@@ -61,7 +64,8 @@ Here's an example of how to run the node script:
 
 ```
 cd examples/node
-node run-ActModel.js```
+node run-ActModel.js
+```
 
 This may give an error the first time, because the script is trying to store images of
 the simulation to a file `output/img/ActModel` which does not exist. Create this directory
