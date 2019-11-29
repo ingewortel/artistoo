@@ -15,19 +15,28 @@ This code has been ported over from our older "cpm" repository. This is now an E
 
 We have the following examples for web-browser CPMs:
 
-* [A simple Ising model](../simulation-examples/html/IsingModel.html)
-* [A simple 2D CPM cell](../simulation-examples/html/SingleCell.html)
-* [The classic CPM cell sorting example](../simulation-examples/html/Cellsorting.html)
-* [Dividing CPM cells](../simulation-examples/html/CellDivision.html)
-* [A cell moving through active cell migration](../simulation-examples/html/Actmodel.html)
-* [Migrating cell in a microchannel](../simulation-examples/html/Microchannel.html)
-* [Migrating cells on adhesive patterns](../simulation-examples/html/ActOnMicroPattern.html)
-* [Simulating plain diffusion](../simulation-examples/html/Diffusion.html)
+* [A simple Ising model](./examples/html/IsingModel.html)
+* [A simple 2D CPM cell](./examples/html/SingleCell.html)
+* [The classic CPM cell sorting example](./examples/html/Cellsorting.html)
+* [Dividing CPM cells](./examples/html/CellDivision.html)
+* [A cell moving through active cell migration](./examples/html/Actmodel.html)
+* [Migrating cell in a microchannel](./examples/html/Microchannel.html)
+* [Migrating cells on adhesive patterns](./examples/html/ActOnMicroPattern.html)
+* [Simulating plain diffusion](./examples/html/Diffusion.html)
+* [Cells moving up a chemokine gradient](./examples/html/Chemotaxis.html)
+* [Multiple cells migrating together, interactive web page](./examples/html/CollectiveMigration.html)
+* [Cells moving towards a target point](./examples/html/DirectedMotionTargetPoint.html)
+* [Cells moving in the same global direction](./examples/html/DirectedMotionLinear.html)
+* [A layer of tightly packed epidermal cells](./examples/html/Epidermis.html)
+* [T cells moving in the epidermis](./examples/html/EpidermisWithTCells.html)
+* [Cells producing a chemokine with other cells responding to it](./examples/ManyCellsDiffusion.html)
+* [Cells moving with a preferred direction](./examples/html/ManyCellsPrefDir.html)
+* [Particle following a random walk](./examples/RandomWalk.html)
 
 We also have a few examples of plain cellular automata (CAs):
 
-* [Conway's Game of Life](../simulation-examples/html/GameOfLife.html)
-* [SIR model of a spreading infection](../simulation-examples/html/SIR.html)
+* [Conway's Game of Life](./examples/html/GameOfLife.html)
+* [SIR model of a spreading infection](./examples/html/SIR.html)
 
 ## Node examples
 

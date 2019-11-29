@@ -22,3 +22,5 @@ docs/index.html : build/cpm.js README.md
 	node_modules/.bin/esdoc
 
 docs : docs/index.html
+	cat $< | sed 's:./examples:../examples:g' > docs/index2.html && \
+	mv docs/index2.html docs/index.html
