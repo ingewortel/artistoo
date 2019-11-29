@@ -10,7 +10,7 @@
 class DiceSet{
 
 	/** An object of class MersenneTwister. 
-	@see https://github.com/pigulla/mersennetwister
+	@see https://www.npmjs.com/package/mersenne-twister
 	@typedef {object} MersenneTwister
 	*/
 
@@ -104,7 +104,7 @@ class DiceSet{
 	@return {uniqueID} the element sampled.
 	*/
 	sample(){
-		return this.elements[Math.floor(this.mt.rnd()*this.length)]
+		return this.elements[Math.floor(this.mt.random()*this.length)]
 	}
 }
 

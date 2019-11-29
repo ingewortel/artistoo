@@ -243,15 +243,6 @@ class CPM extends GridBasedModel {
 		this.t2k[ t ] = k
 	}
 	
-	/* ------------- MATH HELPER FUNCTIONS --------------- */
-	/* These can go, they are implemented in the GridBasedMOdel.
-	random (){
-		return this.mt.rnd()
-	}
-	// Random integer number between incl_min and incl_max 
-	ran (incl_min, incl_max) {
-		return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
-	}*/
 	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 

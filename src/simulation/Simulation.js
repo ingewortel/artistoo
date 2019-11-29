@@ -200,6 +200,9 @@ class Simulation {
 		this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" )
 
 
+		// Call the drawBelow method for if it is defined. 
+		this.drawBelow()
+
 		// Draw each cellkind appropriately
 		let cellcolor=( this.conf["CELLCOLOR"] || [] ), actcolor=this.conf["ACTCOLOR"], 
 			nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
@@ -228,7 +231,31 @@ class Simulation {
 
 		}
 		
+		// Call the drawOnTop() method for if it is defined. 
+		this.drawOnTop()
+		
 	}
+	
+	/** Methods drawBelow and {@link drawOnTop} allow you to draw extra stuff below and
+	on top of the output from {@link drawCanvas}, respectively. You can use them if you
+	wish to visualize additional properties but don't want to remove the standard visualization.
+	They are called at the beginning and end of {@link drawCanvas}, so they do not work
+	if you overwrite this method. 
+	*/
+	drawBelow(){
+	
+	}
+	
+	/** Methods drawBelow and {@link drawOnTop} allow you to draw extra stuff below and
+	on top of the output from {@link drawCanvas}, respectively. You can use them if you
+	wish to visualize additional properties but don't want to remove the standard visualization.
+	They are called at the beginning and end of {@link drawCanvas}, so they do not work
+	if you overwrite this method. 
+	*/
+	drawOnTop(){
+	
+	}
+	
 	
 	/** Method to log statistics.
 	The default method logs time, {@link CellId}, {@link CellKind}, and the 

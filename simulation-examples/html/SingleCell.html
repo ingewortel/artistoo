@@ -77,7 +77,7 @@ let config = {
 		EXPNAME : "SingleCell",				// Used for the filename of output images.
 		
 		// Output stats etc
-		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		STATSOUT : { browser: true, node: true }, // Should stats be computed?
 		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
 
 	}
@@ -87,7 +87,9 @@ let sim, meter
 
 
 function initialize(){
-	sim = new CPM.Simulation( config, {} )
+	sim = new CPM.Simulation( config, {
+		logStats: logStats
+	} )
 
 
 	meter = new FPSMeter({left:"auto", right:"5px"})
@@ -102,6 +104,24 @@ function step(){
 		requestAnimationFrame( step )
 	}
 }
+
+	function logStats(){
+		
+		let conns = this.C.getStat( CPM.Connectedness )
+		
+		
+		for( let cid of this.C.cellIDs() ){
+		
+			let conn = conns[cid]
+			
+			
+			// eslint-disable-next-line no-console
+			console.log( this.time + "\t" + cid + "\t" + 
+				this.C.cellKind(cid) + "\t" + conn )
+			
+		}
+
+	}
 
 
 </script>

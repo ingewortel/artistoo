@@ -1,6 +1,6 @@
 "use strict"
 
-import MersenneTwister from "mersennetwister"
+import MersenneTwister from "mersenne-twister"
 import Grid2D from "../grid/Grid2D.js"
 import Grid3D from "../grid/Grid3D.js"
 
@@ -170,7 +170,7 @@ class GridBasedModel {
 	/** Get a random number from the seeded number generator.
 	@return {number} a random number between 0 and 1, uniformly sampled.*/
 	random (){
-		return this.mt.rnd()
+		return this.mt.random()
 	}
 
 	/** Get a random integer number between incl_min and incl_max, uniformly sampled.

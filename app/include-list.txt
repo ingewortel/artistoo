@@ -56,6 +56,7 @@ module 	SoftConnectivityConstraint	src/hamiltonian/SoftConnectivityConstraint.js
 module	HardConstraint	src/hamiltonian/HardConstraint.js
 module	HardVolumeRangeConstraint	src/hamiltonian/HardVolumeRangeConstraint.js
 module	BarrierConstraint	src/hamiltonian/BarrierConstraint.js
+module	BorderConstraint	src/hamiltonian/BorderConstraint.js
 
 # simulation
 module	Simulation	src/simulation/Simulation.js

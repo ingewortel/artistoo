@@ -43,25 +43,22 @@ let config = {
 		// First value is always cellkind 0 (the background) and is often not used.
 		
 		// Adhesion parameters:
-		J : [ [NaN,20,0], [20,100,5], [0,5,0] ],
+		J : [ [NaN,20], [20,100]],
 		
 		// VolumeConstraint parameters
-		LAMBDA_V : [0,30,NaN],				// VolumeConstraint importance per cellkind
-		V : [0,500,NaN],					// Target volume of each cellkind
+		LAMBDA_V : [0,30],				// VolumeConstraint importance per cellkind
+		V : [0,500],					// Target volume of each cellkind
 		
 		// PerimeterConstraint parameters
-		LAMBDA_P : [0,2,NaN],				// PerimeterConstraint importance per cellkind
-		P : [0,360,NaN],					// Target perimeter of each cellkind
+		LAMBDA_P : [0,2],				// PerimeterConstraint importance per cellkind
+		P : [0,360],					// Target perimeter of each cellkind
 		
 		// ActivityConstraint parameters
-		LAMBDA_ACT : [0,200,NaN],			// ActivityConstraint importance per cellkind
-		MAX_ACT : [0,30,NaN],				// Activity memory duration per cellkind
-		ACT_MEAN : "geometric",				// Is neighborhood activity computed as a
+		LAMBDA_ACT : [0,500],			// ActivityConstraint importance per cellkind
+		MAX_ACT : [0,30],				// Activity memory duration per cellkind
+		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
 											// "geometric" or "arithmetic" mean?
-								
-		// BarrierConstraint parameters		
-		IS_BARRIER : [false,false,true]		// Specify for each cellkind if the barrier
-											// constraint applies to it.
+
 	},
 	
 	// Simulation setup and configuration: this controls stuff like grid initialization,
@@ -69,7 +66,7 @@ let config = {
 	simsettings : {
 	
 		// Cells on the grid
-		NRCELLS : [3,0],					// Number of cells to seed for all
+		NRCELLS : [3],					// Number of cells to seed for all
 											// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
@@ -78,9 +75,9 @@ let config = {
 		
 		// Visualization
 		CANVASCOLOR : "eaecef",
-		CELLCOLOR : ["000000","AAAAAA"],
-		ACTCOLOR : [true,false],			// Should pixel activity values be displayed?
-		SHOWBORDERS : [false,false],				// Should cellborders be displayed?
+		CELLCOLOR : ["000000"],
+		ACTCOLOR : [true],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [false],				// Should cellborders be displayed?
 		zoom : 2,							// zoom in on canvas with this factor.
 		
 		// Output images
@@ -105,8 +102,10 @@ function initialize(){
 	 	the simulation object.*/
 	 let custommethods = {
 	 	initializeGrid : initializeGrid,
-	 	buildChannel : buildChannel
+	 	buildChannel : buildChannel,
+	 	drawBelow : drawBelow
 	 }
+	 
 	sim = new CPM.Simulation( config, custommethods )
 
 
@@ -127,6 +126,11 @@ function step(){
 
 /* The following custom methods will be added to the simulation object
 below. */
+
+function drawBelow(){
+	this.Cim.drawPixelSet( this.channelvoxels, "AAAAAA" ) 
+}
+
 function initializeGrid(){
 	
 		// add the initializer if not already there
@@ -152,13 +156,14 @@ function initializeGrid(){
 	
 function buildChannel(){
 		
-		let channelvoxels
 	
-		channelvoxels = this.gm.makePlane( [], 1, 0 )
+		this.channelvoxels = this.gm.makePlane( [], 1, 0 )
 		let gridheight = this.C.extents[1]
-		channelvoxels = this.gm.makePlane( channelvoxels, 1, gridheight-1 )
+		this.channelvoxels = this.gm.makePlane( this.channelvoxels, 1, gridheight-1 )
 		
-		this.gm.changeKind( channelvoxels, 2)
+		this.C.add( new CPM.BorderConstraint({
+			BARRIER_VOXELS : this.channelvoxels
+		}) )
 		
 }
 

@@ -40,6 +40,7 @@ import SoftConnectivityConstraint from "../src/hamiltonian/SoftConnectivityConst
 import HardConstraint from "../src/hamiltonian/HardConstraint.js" 
 import HardVolumeRangeConstraint from "../src/hamiltonian/HardVolumeRangeConstraint.js" 
 import BarrierConstraint from "../src/hamiltonian/BarrierConstraint.js" 
+import BorderConstraint from "../src/hamiltonian/BorderConstraint.js" 
  
 import Simulation from "../src/simulation/Simulation.js" 
  
@@ -77,5 +78,6 @@ export {
 	HardConstraint,
 	HardVolumeRangeConstraint,
 	BarrierConstraint,
+	BorderConstraint,
 	Simulation
 }

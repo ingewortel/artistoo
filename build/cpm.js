@@ -1,234 +1,216 @@
 var CPM = (function (exports) {
 	'use strict';
 
-	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+	/*
+	  https://github.com/banksean wrapped Makoto Matsumoto and Takuji Nishimura's code in a namespace
+	  so it's better encapsulated. Now you can have multiple random number generators
+	  and they won't stomp all over eachother's state.
 
-	function createCommonjsModule(fn, module) {
-		return module = { exports: {} }, fn(module, module.exports), module.exports;
-	}
+	  If you want to use this as a substitute for Math.random(), use the random()
+	  method like so:
 
-	var MersenneTwister = createCommonjsModule(function (module, exports) {
-	(function (root, factory) {
+	  var m = new MersenneTwister();
+	  var randomNumber = m.random();
 
-	    {
-	        module.exports = factory();
-	    }
-	}(commonjsGlobal, function () {
+	  You can also call the other genrand_{foo}() methods on the instance.
 
-	    var MAX_INT = 4294967296.0,
-	        N = 624,
-	        M = 397,
-	        UPPER_MASK = 0x80000000,
-	        LOWER_MASK = 0x7fffffff,
-	        MATRIX_A = 0x9908b0df;
+	  If you want to use a specific seed in order to get a repeatable random
+	  sequence, pass an integer into the constructor:
 
-	    /**
-	     * Instantiates a new Mersenne Twister.
-	     *
-	     * @constructor
-	     * @alias module:MersenneTwister
-	     * @since 0.1.0
-	     * @param {number=} seed The initial seed value.
-	     */
-	    var MersenneTwister = function (seed) {
-	        if (typeof seed === 'undefined') {
-	            seed = new Date().getTime();
-	        }
+	  var m = new MersenneTwister(123);
 
-	        this.mt = new Array(N);
-	        this.mti = N + 1;
+	  and that will always produce the same random sequence.
 
-	        this.seed(seed);
-	    };
+	  Sean McCullough (banksean@gmail.com)
+	*/
 
-	    /**
-	     * Initializes the state vector by using one unsigned 32-bit integer "seed", which may be zero.
-	     *
-	     * @since 0.1.0
-	     * @param {number} seed The seed value.
-	     */
-	    MersenneTwister.prototype.seed = function (seed) {
-	        var s;
+	/*
+	   A C-program for MT19937, with initialization improved 2002/1/26.
+	   Coded by Takuji Nishimura and Makoto Matsumoto.
 
-	        this.mt[0] = seed >>> 0;
+	   Before using, initialize the state by using init_seed(seed)
+	   or init_by_array(init_key, key_length).
 
-	        for (this.mti = 1; this.mti < N; this.mti++) {
-	            s = this.mt[this.mti - 1] ^ (this.mt[this.mti - 1] >>> 30);
-	            this.mt[this.mti] =
-	                (((((s & 0xffff0000) >>> 16) * 1812433253) << 16) + (s & 0x0000ffff) * 1812433253) + this.mti;
-	            this.mt[this.mti] >>>= 0;
-	        }
-	    };
+	   Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
+	   All rights reserved.
 
-	    /**
-	     * Initializes the state vector by using an array key[] of unsigned 32-bit integers of the specified length. If
-	     * length is smaller than 624, then each array of 32-bit integers gives distinct initial state vector. This is
-	     * useful if you want a larger seed space than 32-bit word.
-	     *
-	     * @since 0.1.0
-	     * @param {array} vector The seed vector.
-	     */
-	    MersenneTwister.prototype.seedArray = function (vector) {
-	        var i = 1,
-	            j = 0,
-	            k = N > vector.length ? N : vector.length,
-	            s;
+	   Redistribution and use in source and binary forms, with or without
+	   modification, are permitted provided that the following conditions
+	   are met:
 
-	        this.seed(19650218);
+	     1. Redistributions of source code must retain the above copyright
+	        notice, this list of conditions and the following disclaimer.
 
-	        for (; k > 0; k--) {
-	            s = this.mt[i-1] ^ (this.mt[i-1] >>> 30);
+	     2. Redistributions in binary form must reproduce the above copyright
+	        notice, this list of conditions and the following disclaimer in the
+	        documentation and/or other materials provided with the distribution.
 
-	            this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525))) +
-	                vector[j] + j;
-	            this.mt[i] >>>= 0;
-	            i++;
-	            j++;
-	            if (i >= N) {
-	                this.mt[0] = this.mt[N - 1];
-	                i = 1;
-	            }
-	            if (j >= vector.length) {
-	                j = 0;
-	            }
-	        }
+	     3. The names of its contributors may not be used to endorse or promote
+	        products derived from this software without specific prior written
+	        permission.
 
-	        for (k = N - 1; k; k--) {
-	            s = this.mt[i - 1] ^ (this.mt[i - 1] >>> 30);
-	            this.mt[i] =
-	                (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1566083941) << 16) + (s & 0x0000ffff) * 1566083941)) - i;
-	            this.mt[i] >>>= 0;
-	            i++;
-	            if (i >= N) {
-	                this.mt[0] = this.mt[N - 1];
-	                i = 1;
-	            }
-	        }
+	   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+	   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+	   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+	   A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+	   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+	   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+	   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+	   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+	   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+	   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+	   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-	        this.mt[0] = 0x80000000;
-	    };
 
-	    /**
-	     * Generates a random unsigned 32-bit integer.
-	     *
-	     * @since 0.1.0
-	     * @returns {number}
-	     */
-	    MersenneTwister.prototype.int = function () {
-	        var y,
-	            kk,
-	            mag01 = new Array(0, MATRIX_A);
+	   Any feedback is very welcome.
+	   http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+	   email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
+	*/
 
-	        if (this.mti >= N) {
-	            if (this.mti === N + 1) {
-	                this.seed(5489);
-	            }
+	var MersenneTwister = function(seed) {
+		if (seed == undefined) {
+			seed = new Date().getTime();
+		}
 
-	            for (kk = 0; kk < N - M; kk++) {
-	                y = (this.mt[kk] & UPPER_MASK) | (this.mt[kk + 1] & LOWER_MASK);
-	                this.mt[kk] = this.mt[kk + M] ^ (y >>> 1) ^ mag01[y & 1];
-	            }
+		/* Period parameters */
+		this.N = 624;
+		this.M = 397;
+		this.MATRIX_A = 0x9908b0df;   /* constant vector a */
+		this.UPPER_MASK = 0x80000000; /* most significant w-r bits */
+		this.LOWER_MASK = 0x7fffffff; /* least significant r bits */
 
-	            for (; kk < N - 1; kk++) {
-	                y = (this.mt[kk] & UPPER_MASK) | (this.mt[kk + 1] & LOWER_MASK);
-	                this.mt[kk] = this.mt[kk + (M - N)] ^ (y >>> 1) ^ mag01[y & 1];
-	            }
+		this.mt = new Array(this.N); /* the array for the state vector */
+		this.mti=this.N+1; /* mti==N+1 means mt[N] is not initialized */
 
-	            y = (this.mt[N - 1] & UPPER_MASK) | (this.mt[0] & LOWER_MASK);
-	            this.mt[N - 1] = this.mt[M - 1] ^ (y >>> 1) ^ mag01[y & 1];
-	            this.mti = 0;
-	        }
+		if (seed.constructor == Array) {
+			this.init_by_array(seed, seed.length);
+		}
+		else {
+			this.init_seed(seed);
+		}
+	};
 
-	        y = this.mt[this.mti++];
+	/* initializes mt[N] with a seed */
+	/* origin name init_genrand */
+	MersenneTwister.prototype.init_seed = function(s) {
+		this.mt[0] = s >>> 0;
+		for (this.mti=1; this.mti<this.N; this.mti++) {
+			var s = this.mt[this.mti-1] ^ (this.mt[this.mti-1] >>> 30);
+			this.mt[this.mti] = (((((s & 0xffff0000) >>> 16) * 1812433253) << 16) + (s & 0x0000ffff) * 1812433253)
+			+ this.mti;
+			/* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
+			/* In the previous versions, MSBs of the seed affect   */
+			/* only MSBs of the array mt[].                        */
+			/* 2002/01/09 modified by Makoto Matsumoto             */
+			this.mt[this.mti] >>>= 0;
+			/* for >32 bit machines */
+		}
+	};
 
-	        y ^= (y >>> 11);
-	        y ^= (y << 7) & 0x9d2c5680;
-	        y ^= (y << 15) & 0xefc60000;
-	        y ^= (y >>> 18);
+	/* initialize by an array with array-length */
+	/* init_key is the array for initializing keys */
+	/* key_length is its length */
+	/* slight change for C++, 2004/2/26 */
+	MersenneTwister.prototype.init_by_array = function(init_key, key_length) {
+		var i, j, k;
+		this.init_seed(19650218);
+		i=1; j=0;
+		k = (this.N>key_length ? this.N : key_length);
+		for (; k; k--) {
+			var s = this.mt[i-1] ^ (this.mt[i-1] >>> 30);
+			this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525)))
+			+ init_key[j] + j; /* non linear */
+			this.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
+			i++; j++;
+			if (i>=this.N) { this.mt[0] = this.mt[this.N-1]; i=1; }
+			if (j>=key_length) j=0;
+		}
+		for (k=this.N-1; k; k--) {
+			var s = this.mt[i-1] ^ (this.mt[i-1] >>> 30);
+			this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1566083941) << 16) + (s & 0x0000ffff) * 1566083941))
+			- i; /* non linear */
+			this.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
+			i++;
+			if (i>=this.N) { this.mt[0] = this.mt[this.N-1]; i=1; }
+		}
 
-	        return y >>> 0;
-	    };
+		this.mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */
+	};
 
-	    /**
-	     * Generates a random unsigned 31-bit integer.
-	     *
-	     * @since 0.1.0
-	     * @returns {number}
-	     */
-	    MersenneTwister.prototype.int31 = function () {
-	        return this.int() >>> 1;
-	    };
+	/* generates a random number on [0,0xffffffff]-interval */
+	/* origin name genrand_int32 */
+	MersenneTwister.prototype.random_int = function() {
+		var y;
+		var mag01 = new Array(0x0, this.MATRIX_A);
+		/* mag01[x] = x * MATRIX_A  for x=0,1 */
 
-	    /**
-	     * Generates a random real in the interval [0;1] with 32-bit resolution.
-	     *
-	     * @since 0.1.0
-	     * @returns {number}
-	     */
-	    MersenneTwister.prototype.real = function () {
-	        return this.int() * (1.0 / (MAX_INT - 1));
-	    };
+		if (this.mti >= this.N) { /* generate N words at one time */
+			var kk;
 
-	    /**
-	     * Generates a random real in the interval ]0;1[ with 32-bit resolution.
-	     *
-	     * @since 0.1.0
-	     * @returns {number}
-	     */
-	    MersenneTwister.prototype.realx = function () {
-	        return (this.int() + 0.5) * (1.0 / MAX_INT);
-	    };
+			if (this.mti == this.N+1)  /* if init_seed() has not been called, */
+				this.init_seed(5489);  /* a default initial seed is used */
 
-	    /**
-	     * Generates a random real in the interval [0;1[ with 32-bit resolution.
-	     *
-	     * @since 0.1.0
-	     * @returns {number}
-	     */
-	    MersenneTwister.prototype.rnd = function () {
-	        return this.int() * (1.0 / MAX_INT);
-	    };
+			for (kk=0;kk<this.N-this.M;kk++) {
+				y = (this.mt[kk]&this.UPPER_MASK)|(this.mt[kk+1]&this.LOWER_MASK);
+				this.mt[kk] = this.mt[kk+this.M] ^ (y >>> 1) ^ mag01[y & 0x1];
+			}
+			for (;kk<this.N-1;kk++) {
+				y = (this.mt[kk]&this.UPPER_MASK)|(this.mt[kk+1]&this.LOWER_MASK);
+				this.mt[kk] = this.mt[kk+(this.M-this.N)] ^ (y >>> 1) ^ mag01[y & 0x1];
+			}
+			y = (this.mt[this.N-1]&this.UPPER_MASK)|(this.mt[0]&this.LOWER_MASK);
+			this.mt[this.N-1] = this.mt[this.M-1] ^ (y >>> 1) ^ mag01[y & 0x1];
 
-	    /**
-	     * Generates a random real in the interval [0;1[ with 32-bit resolution.
-	     *
-	     * Same as .rnd() method - for consistency with Math.random() interface.
-	     *
-	     * @since 0.2.0
-	     * @returns {number}
-	     */
-	    MersenneTwister.prototype.random = MersenneTwister.prototype.rnd;
+			this.mti = 0;
+		}
 
-	    /**
-	     * Generates a random real in the interval [0;1[ with 53-bit resolution.
-	     *
-	     * @since 0.1.0
-	     * @returns {number}
-	     */
-	    MersenneTwister.prototype.rndHiRes = function () {
-	        var a = this.int() >>> 5,
-	            b = this.int() >>> 6;
+		y = this.mt[this.mti++];
 
-	        return (a * 67108864.0 + b) * (1.0 / 9007199254740992.0);
-	    };
+		/* Tempering */
+		y ^= (y >>> 11);
+		y ^= (y << 7) & 0x9d2c5680;
+		y ^= (y << 15) & 0xefc60000;
+		y ^= (y >>> 18);
 
-	    var instance = new MersenneTwister();
+		return y >>> 0;
+	};
 
-	    /**
-	     * A static version of [rnd]{@link module:MersenneTwister#rnd} on a randomly seeded instance.
-	     *
-	     * @static
-	     * @function random
-	     * @memberof module:MersenneTwister
-	     * @returns {number}
-	     */
-	    MersenneTwister.random = function () {
-	        return instance.rnd();
-	    };
+	/* generates a random number on [0,0x7fffffff]-interval */
+	/* origin name genrand_int31 */
+	MersenneTwister.prototype.random_int31 = function() {
+		return (this.random_int()>>>1);
+	};
 
-	    return MersenneTwister;
-	}));
-	});
+	/* generates a random number on [0,1]-real-interval */
+	/* origin name genrand_real1 */
+	MersenneTwister.prototype.random_incl = function() {
+		return this.random_int()*(1.0/4294967295.0);
+		/* divided by 2^32-1 */
+	};
+
+	/* generates a random number on [0,1)-real-interval */
+	MersenneTwister.prototype.random = function() {
+		return this.random_int()*(1.0/4294967296.0);
+		/* divided by 2^32 */
+	};
+
+	/* generates a random number on (0,1)-real-interval */
+	/* origin name genrand_real3 */
+	MersenneTwister.prototype.random_excl = function() {
+		return (this.random_int() + 0.5)*(1.0/4294967296.0);
+		/* divided by 2^32 */
+	};
+
+	/* generates a random number on [0,1) with 53-bit resolution*/
+	/* origin name genrand_res53 */
+	MersenneTwister.prototype.random_long = function() {
+		var a=this.random_int()>>>5, b=this.random_int()>>>6;
+		return (a*67108864.0+b)*(1.0/9007199254740992.0);
+	};
+
+	/* These real versions are due to Isaku Wada, 2002/01/09 added */
+
+	var mersenneTwister = MersenneTwister;
 
 	/** This base class defines a general grid and provides grid methods that do not depend on
 	the coordinate system used. This class is never used on its own, as it does not yet 
@@ -1118,7 +1100,7 @@ var CPM = (function (exports) {
 			
 			/** Attach a random number generation with a seed.
 			@type {MersenneTwister}*/
-			this.mt = new MersenneTwister( seed );
+			this.mt = new mersenneTwister( seed );
 			if( !("torus" in conf) ){
 				let torus = [];
 				for( let d = 0; d < extents.length; d++ ){
@@ -1263,7 +1245,7 @@ var CPM = (function (exports) {
 		/** Get a random number from the seeded number generator.
 		@return {number} a random number between 0 and 1, uniformly sampled.*/
 		random (){
-			return this.mt.rnd()
+			return this.mt.random()
 		}
 
 		/** Get a random integer number between incl_min and incl_max, uniformly sampled.
@@ -2629,6 +2611,11 @@ var CPM = (function (exports) {
 			this.ctx.lineWidth = .2;
 			this.ctx.lineCap="butt";
 		}
+		
+		
+		setCanvasId( idstring ){
+			this.el.id = idstring;
+		}
 
 
 		/* Several internal helper functions (used by drawing functions below) : */
@@ -3061,6 +3048,21 @@ var CPM = (function (exports) {
 						this.pxfi( cp );
 					}
 				}
+			}
+			this.putImageData();
+		}
+		
+		
+		drawPixelSet( pixelarray, col ){
+			if( ! col ){
+				col = "000000";
+			}
+			if( typeof col == "string" ){
+				this.col(col);
+			}
+			this.getImageData();
+			for( let p of pixelarray ){
+				this.pxfi( p );
 			}
 			this.putImageData();
 		}
@@ -3605,7 +3607,7 @@ var CPM = (function (exports) {
 		@return {uniqueID} the element sampled.
 		*/
 		sample(){
-			return this.elements[Math.floor(this.mt.rnd()*this.length)]
+			return this.elements[Math.floor(this.mt.random()*this.length)]
 		}
 	}
 
@@ -4307,15 +4309,6 @@ var CPM = (function (exports) {
 			this.t2k[ t ] = k;
 		}
 		
-		/* ------------- MATH HELPER FUNCTIONS --------------- */
-		/* These can go, they are implemented in the GridBasedMOdel.
-		random (){
-			return this.mt.rnd()
-		}
-		// Random integer number between incl_min and incl_max 
-		ran (incl_min, incl_max) {
-			return Math.floor(this.random() * (1.0 + incl_max - incl_min)) + incl_min
-		}*/
 		
 		/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
@@ -6642,6 +6635,143 @@ var CPM = (function (exports) {
 		}
 	}
 
+	/** 
+	 * This constraint allows a set of "barrier" background pixels, into 
+	 * which copy attempts are forbidden.
+	 * @example
+	 * // Build a CPM and add the constraint
+	 * let CPM = require( "path/to/build" )
+	 * let C = new CPM.CPM( [200,200], {
+	 * 	T : 20,
+	 * 	J : [[0,20],[20,10]],
+	 * 	V : [0,500],
+	 * 	LAMBDA_V : [0,5],
+	 * })
+	 * 
+	 * // Build a barrier and add the border constraint
+	 * let border = []
+	 * let channelwidth = 10
+	 * for( let x = 0; x < C.extents[0]; x++ ){
+	 * 	let ymin = Math.floor( C.extents[1]/2 )
+	 *  let ymax = ymin + channelwidth
+	 *  border.push( [x,ymin] )
+	 *  border.push( [x,ymax] )
+	 * }
+	 * 
+	 * C.add( new CPM.BorderConstraint( {
+	 * 	BARRIER_VOXELS : border
+	 * } ) )
+	 * 
+	 * // Seed a cell
+	 * let gm = new CPM.GridManipulator( C )
+	 * gm.seedCell(1)
+	 */
+	class BorderConstraint extends HardConstraint {
+
+		/** Creates an instance of the ActivityMultiBackground constraint 
+		* @param {object} conf - Configuration object with the parameters.
+		* ACT_MEAN is a single string determining whether the activity mean should be computed
+		* using a "geometric" or "arithmetic" mean. 
+		*/
+		/** The constructor of the ActivityConstraint requires a conf object with parameters.
+		@param {object} conf - parameter object for this constraint
+		@param {string} [conf.ACT_MEAN="geometric"] - should local mean activity be measured with an
+		"arithmetic" or a "geometric" mean?
+		@param {PerKindArray} conf.LAMBDA_ACT_MBG - strength of the activityconstraint per cellkind and per background.
+		@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
+		@param {Array} conf.BACKGROUND_VOXELS - an array where each element represents a different background type.
+		This is again an array of {@ArrayCoordinate}s of the pixels belonging to that backgroundtype. These pixels
+		will have the LAMBDA_ACT_MBG value of that backgroundtype, instead of the standard value.
+		*/
+		constructor( conf ){
+			super( conf );
+		
+			/** Store which pixels are barrier pixels. Each entry has key the {@IndexCoordinate} of
+			the pixel, and value equal to true.
+			@type {object}*/
+			this.barriervoxels = {};
+			
+			/** Track if this.barriervoxels has been set.
+			@type {boolean}*/
+			this.setup = false;
+		}
+		
+		
+		
+		/** This method checks that all required parameters are present in the object supplied to
+		the constructor, and that they are of the right format. It throws an error when this
+		is not the case.*/
+		confChecker(){
+			let checker = new ParameterChecker( this.conf, this.C );
+
+			checker.confCheckPresenceOf( "BARRIER_VOXELS" );
+			let barriervox = this.conf["BARRIER_VOXELS"];
+			// Barrier voxels must be an array of arrays
+			if( !(barriervox instanceof Array) ){
+				throw( "Parameter BARRIER_VOXELS should be an array!" )
+			} 
+			// Elements of the initial array must be arrays.
+			for( let e of barriervox ){
+				
+				let isCoordinate = true;
+				if( !(e instanceof Array)){
+					isCoordinate = false;
+				} else if( e.length != this.C.extents.length ){
+					isCoordinate = false;
+				}
+				if( !isCoordinate ){
+					throw( "Parameter BARRIER_VOXELS: elements should be ArrayCoordinates; arrays of length " + this.C.extents.length + "!" )
+					
+				}
+				
+			}
+		}
+		
+		/** Get the background voxels from input argument or the conf object and store them in a correct format
+		in this.barriervoxels. This only has to be done once, but can be called from outside to
+		change the background voxels during a simulation (eg in a HTML page).
+		@param {ArrayCoordinate[]} voxels - the pixels that should act as barrier.
+		 */	
+		setBarrierVoxels( voxels ){
+		
+			voxels = voxels || this.conf["BARRIER_VOXELS"];
+		
+			// reset if any exist already
+			this.barriervoxels = {};
+			for( let v of voxels ){
+				this.barriervoxels[ this.C.grid.p2i(v) ] = true;
+			}
+			this.setup = true;
+
+		}
+		
+		/** Method for hard constraints to compute whether the copy attempt fulfills the rule.
+		 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+		 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+		 to copy into.
+		 @param {CellId} src_type - cellid of the source pixel.
+		 @param {CellId} tgt_type - cellid of the target pixel. 
+		 @return {boolean} whether the copy attempt satisfies the constraint.*/ 
+		// eslint-disable-next-line no-unused-vars
+		fulfilled( src_i, tgt_i, src_type, tgt_type ){
+		
+			if( !this.setup ){
+				this.setBarrierVoxels();
+			}
+		
+			// If the target pixel is a barrier pixel, forbid the copy attempt.
+			if( tgt_i in this.barriervoxels ){
+				return false
+			}
+			
+			// Otherwise accept it.
+			return true
+		}
+
+
+
+	}
+
 	class Simulation {
 		/** The constructor of class Simulation takes two arguments.
 			@param {object} config - overall configuration settings. This is an object
@@ -6838,6 +6968,9 @@ var CPM = (function (exports) {
 			this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" );
 
 
+			// Call the drawBelow method for if it is defined. 
+			this.drawBelow();
+
 			// Draw each cellkind appropriately
 			let cellcolor=( this.conf["CELLCOLOR"] || [] ), actcolor=this.conf["ACTCOLOR"], 
 				nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"];
@@ -6866,7 +6999,31 @@ var CPM = (function (exports) {
 
 			}
 			
+			// Call the drawOnTop() method for if it is defined. 
+			this.drawOnTop();
+			
 		}
+		
+		/** Methods drawBelow and {@link drawOnTop} allow you to draw extra stuff below and
+		on top of the output from {@link drawCanvas}, respectively. You can use them if you
+		wish to visualize additional properties but don't want to remove the standard visualization.
+		They are called at the beginning and end of {@link drawCanvas}, so they do not work
+		if you overwrite this method. 
+		*/
+		drawBelow(){
+		
+		}
+		
+		/** Methods drawBelow and {@link drawOnTop} allow you to draw extra stuff below and
+		on top of the output from {@link drawCanvas}, respectively. You can use them if you
+		wish to visualize additional properties but don't want to remove the standard visualization.
+		They are called at the beginning and end of {@link drawCanvas}, so they do not work
+		if you overwrite this method. 
+		*/
+		drawOnTop(){
+		
+		}
+		
 		
 		/** Method to log statistics.
 		The default method logs time, {@link CellId}, {@link CellKind}, and the 
@@ -7000,6 +7157,7 @@ var CPM = (function (exports) {
 	exports.HardConstraint = HardConstraint;
 	exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 	exports.BarrierConstraint = BarrierConstraint;
+	exports.BorderConstraint = BorderConstraint;
 	exports.Simulation = Simulation;
 
 	return exports;

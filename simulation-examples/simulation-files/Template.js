@@ -124,12 +124,9 @@ let config = {
 		// ActivityConstraint parameters
 		LAMBDA_ACT : [0,200,NaN],			// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,30,NaN],				// Activity memory duration per cellkind
-		ACT_MEAN : "geometric",				// Is neighborhood activity computed as a
+		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
 											// "geometric" or "arithmetic" mean?
 								
-		// BarrierConstraint parameters		
-		IS_BARRIER : [false,false,true]		// Specify for each cellkind if the barrier
-											// constraint applies to it.
 	},
 	
 	// Simulation setup and configuration: this controls stuff like grid initialization,

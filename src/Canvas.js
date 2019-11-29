@@ -110,6 +110,11 @@ class Canvas {
 		this.ctx.lineWidth = .2
 		this.ctx.lineCap="butt"
 	}
+	
+	
+	setCanvasId( idstring ){
+		this.el.id = idstring
+	}
 
 
 	/* Several internal helper functions (used by drawing functions below) : */
@@ -542,6 +547,21 @@ class Canvas {
 					this.pxfi( cp )
 				}
 			}
+		}
+		this.putImageData()
+	}
+	
+	
+	drawPixelSet( pixelarray, col ){
+		if( ! col ){
+			col = "000000"
+		}
+		if( typeof col == "string" ){
+			this.col(col)
+		}
+		this.getImageData()
+		for( let p of pixelarray ){
+			this.pxfi( p )
 		}
 		this.putImageData()
 	}
