@@ -16,7 +16,12 @@ This code has been ported over from our older "cpm" repository. This is now an E
 
 We have the following examples for web-browser CPMs:
 
-* [A simple Ising model](examples/basic-potts-model.html)
+* [A simple Ising model](examples/ising-model.html)
+* [A single moving cell](examples/single-cell.html)
+* [A 2D random walk](examples/randomwalk.html)
+* [A 3D random walk](examples/randomwalk3d.html)
+* [A clump of two celltypes sorting via differential adhesion](examples/cellsorting.html)
+* [A simulation of an epidermis packed with keratinocytes](examples/epidermis.html)
 
 ## Node examples
 

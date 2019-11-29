@@ -41,7 +41,7 @@ for( let i = 0 ; i < burnin ; i ++ ){
 // actual simulation
 for( i = 0 ; i < maxtime ; i ++ ){
 	C.monteCarloStep()
-	//Cstat.centroids()
+	Cstat.centroids()
 	//console.log( Cstat.getConnectedness() )
 	if( i % framerate == 0 ){
 		console.log( i )
