@@ -25,7 +25,11 @@ import BorderPixelsByCell from "./BorderPixelsByCell.js"
 */
 class ConnectedComponentsByCellBorder extends Stat {
 
-
+	/** This method computes the connected components of the border of a specific cell. 
+		@param {CellId} cellid the unique cell id of the cell to get the border's connected components of.
+		@returns {object} object of cell border connected components. These components in turn consist of the pixels 
+	(specified by {@link ArrayCoordinate}) belonging to that cell border.
+	*/
 	connectedComponentsOfCellBorder( cellid ){
 	
 		/* Note that to get connected components, we only need to look at cellborderpixels. */

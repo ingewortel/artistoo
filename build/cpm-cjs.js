@@ -1366,8 +1366,13 @@ class Constraint {
 	get CONSTRAINT_TYPE() {
 		throw("You need to implement the 'CONSTRAINT_TYPE' getter for this constraint!")
 	}
+	
+	/** Get the parameters of this constraint from the conf object. 
+	@return {object} conf - configuration settings for this constraint, containing the
+	relevant parameters.
+	*/
 	get parameters(){
-		return null
+		return this.conf
 	}
 	/** The constructor of a constraint takes a configuration object.
 	This method is usually overwritten by the actual constraint so that the entries
@@ -4366,7 +4371,11 @@ class CellNeighborList extends Stat {
 */
 class ConnectedComponentsByCell extends Stat {
 
-
+	/** This method computes the connected components of a specific cell. 
+		@param {CellId} cellid the unique cell id of the cell to get connected components of.
+		@returns {object} object of cell connected components. These components in turn consist of the pixels 
+	(specified by {@link ArrayCoordinate}) belonging to that cell.
+	*/
 	connectedComponentsOfCell( cellid ){
 	
 		const cbp = this.M.getStat( PixelsByCell );
@@ -4442,7 +4451,9 @@ class ConnectedComponentsByCell extends Stat {
 */
 class Connectedness extends Stat {
 
-
+	/** This method computes the connectedness of a specific cell. 
+	@return {number} the connectedness value of this cell, a number between 0 and 1.
+	*/
 	connectednessOfCell( cellid ){
 	
 		let ccbc = this.M.getStat( ConnectedComponentsByCell );
@@ -5325,196 +5336,6 @@ class AttractionPointConstraint extends SoftConstraint {
 	}
 }
 
-/* 
-	todo:
-	- what about the potential when a focal point detaches?
-	- postsetpixlistener needs sourcei. This is now done with a bit of a hack,
-	by caching the source of every deltaH evaluation - which should be equal to
-	the source used for the setpix event. But this may go wrong if things ever happen
-	in parallel.
-	Alternative: let the setpix method have an optional sourcei input argument that it
-	can pass on to its listeners?
- */
-
-
-/** @experimental */
-class ProtrusionConstraint extends SoftConstraint {
-	constructor( conf ){
-		super( conf );
-
-		this.focalpoints = { 
-			num : {},
-			points : {} }; // track all the cell's focal points
-		
-		
-		this._lastrequestedcopy = [];
-		
-	}
-	
-	confChecker(){
-		let checker = new ParameterChecker( this.conf, this.C );
-		checker.confCheckParameter( "P_DETACH", "KindArray", "NonNegative" );
-		checker.confCheckParameter( "G_PROTRUSION", "KindArray", "NonNegative" );
-		// add one for N_Protrusion.
-	}
-	
-	G( kind ){
-		return this.conf["G_PROTRUSION"][kind]
-	}
-	
-	distance( p1, p2 ){
-		let dim = p1.length;
-		let distance = 0;
-		for( let d = 0; d < dim; d++ ){
-			distance += ( p1[d] - p2[d] )*( p1[d] - p2[d] );
-		}
-		return Math.sqrt( distance )
-	}
-	
-	getCentroid( cellid ){
-	
-		let centroids;
-		if( this.C.torus.some( function(value){return value}) ){
-			centroids = this.C.getStat( CentroidsWithTorusCorrection );
-		} else {
-			centroids = this.C.getStat( Centroids );
-		}
-		
-		return centroids[cellid] 
-	}
-	
-	/* ======= Protrusion constraint ======= */
-
-	/* Hamiltonian computation */ 
-	deltaH ( sourcei, targeti, src_type, tgt_type ){
-
-		let deltaH = 0;
-		const src_kind = this.C.cellKind( src_type );
-		const tgt_kind = this.C.cellKind( tgt_type );
-		
-		// Penalty P_detach if a focal point detaches (if the copy goes into
-		// a focal point)
-		if( this.isFocalPoint( targeti ) ){
-			deltaH += this.conf["P_DETACH"][tgt_kind];
-		}
-		
-		// If the source is a focal point, this means the focal point will move.
-		// This will change its distance to the center of mass of the cell, and thus
-		// the potential in H. Update it accordingly. 
-		if( this.isFocalPoint( sourcei ) ){
-			let centroid = this.getCentroid( src_type );
-		
-			let sourcep = this.C.grid.i2p( sourcei );
-			let targetp = this.C.grid.i2p( targeti );
-		
-			let H_before = this.G( src_kind ) / this.distance( sourcep, centroid );
-			let H_after = this.G( src_kind ) / this.distance( targetp, centroid );
-			
-			deltaH += H_after - H_before;
-			
-		}
-		
-		this._lastrequestedcopy = [sourcei, targeti, src_type, tgt_type];
-		
-		return deltaH
-	}
-	
-	addFocalPoint( i, cellid ){
-		if( !( cellid in this.focalpoints["num"] ) ){
-			this.focalpoints["num"][cellid] = 0;
-		}
-		
-		if( i in this.focalpoints["points"] ){
-			throw( "Cannot add focal point i " + i + " : is already a focal point!")
-		}
-		if( this.C.grid.pixti(i) != cellid ){
-			throw("Something went wrong! point " + i + " does not belong to cellid " + cellid + "!")
-		}
-		
-		this.focalpoints["points"][i] = true;
-		this.focalpoints["num"][cellid]++;
-	}
-	removeFocalPoint( i, cellid ){
-		if( !(i in this.focalpoints["points"] ) ){
-			this.log( cellid );
-			this.log( this.C.grid.pixti(i));
-			throw("Cannot remove focalpoint " + i + " : i is not a focal point!")
-
-		}
-		/*if( !( this.C.grid.pixti(i) == cellid ) ){
-			this.log( cellid )
-			this.log( this.C.grid.pixti(i))
-			throw("Something went wrong! focalpoint " + i + " does not belong to cellid " + cellid + "!")
-		}*/
-	
-		delete this.focalpoints["points"][i];
-		this.focalpoints["num"][cellid]--;
-	}
-	currentNumberFocalPoints( cellid ){
-		if( cellid in this.focalpoints["num"] ){
-			return this.focalpoints["num"][cellid]
-		}
-		return 0
-	}
-	isFocalPoint( i ){
-		return ( i in this.focalpoints["points"] )
-	}
-	lastSource(){
-		return this._lastrequestedcopy[0] || NaN
-	}
-	log( message ){
-		/* eslint-disable no-console*/
-		console.log(message);
-	}
-
-	postMCSListener(){
-		// remove all focalpoints that are no longer at the border.
-		for( let fp of Object.keys( this.focalpoints["points"] ) ){
-			if( !this.C.borderpixels.contains( fp ) ){
-				let cellid = this.C.pixti(fp);
-				this.removeFocalPoint( fp, cellid );
-			}
-		}
-		
-	}
-
-	/* eslint-disable no-unused-vars*/
-	postSetpixListener( i, t_old, t ){
-		
-		let kind = this.C.cellKind( t );
-		
-		// If i was a focalpoint of t_old, it is now lost.
-		if( this.isFocalPoint(i) ){
-			this.removeFocalPoint( i, t_old );
-		}
-		
-		// The point can only become a focal point if N_PROTRUSION of this kind is nonzero
-		// and if the new cell is non-background
-		if( t != 0 && this.conf["N_PROTRUSION"][kind] > 0 ){
-			// This point becomes a focal point of the new cell t in two cases: 
-		
-			// 1) A copy from a focal point moves that focal point from the sourcei to i,
-			// but only if the number of focal points is not already too large. If that is the
-			// case, drop it. (This should only happen when the N_PROTRUSION) changes during
-			// the simulation, eg via HTML controls.
-			let sourcei = this.lastSource();
-			if( this.isFocalPoint( sourcei ) ){
-				this.removeFocalPoint( sourcei, t );
-				if( this.currentNumberFocalPoints(t) <= this.conf["N_PROTRUSION"][kind] ){
-					this.addFocalPoint( i, t );
-				} 
-			}
-		
-			// 2) If the copy did not come from a focalpoint, but the cell that has just 
-			// gained a pixel (t) has too few focal points, this pixel becomes a focalpoint.
-			else if( this.currentNumberFocalPoints(t) < this.conf["N_PROTRUSION"][kind] ){
-				this.addFocalPoint( i, t );
-			}
-		}
-	}
-
-}
-
 /** This constraint enforces that cells stay 'connected' throughout any copy attempts.
 Copy attempts that break the cell into two parts are therefore forbidden. To speed things
 up, this constraint only checks if the borderpixels of the cells stay connected.
@@ -5537,6 +5358,8 @@ class ConnectivityConstraint extends HardConstraint {
 	
 	/** The set CPM method attaches the CPM to the constraint. */
 	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
 		this.C = C;
 		
 		/** Private property used by {@link updateBorderPixels} to track borders. 
@@ -5785,6 +5608,8 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	
 	/** The set CPM method attaches the CPM to the constraint. */
 	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
 		this.C = C;
 		
 		/** Private property used by {@link updateBorderPixels} to track borders. 
@@ -6223,6 +6048,14 @@ class BorderConstraint extends HardConstraint {
 
 }
 
+/** 
+This class provides some boilerplate code for creating simulations easily.
+It comes with defaults for seeding cells, drawing, logging of statistics, saving output
+images, and running the simulation. Each of these default methods can be overwritten
+by the user while keeping the other default methods intact. See the {@link constructor}
+for details on how to configure a simulation.
+@see ../examples
+*/
 class Simulation {
 	/** The constructor of class Simulation takes two arguments.
 		@param {object} config - overall configuration settings. This is an object
@@ -6286,17 +6119,25 @@ class Simulation {
 		/** Log stats every [rate] MCS.
 		@type {number}*/
 		this.lograte = this.conf["LOGRATE"] || 1;
-		if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
-			/** See if code is run in browser or via node, which will be used
+		
+		/** See if code is run in browser or via node, which will be used
 			below to determine what the output should be.
 			@type {string}*/
+		this.mode = "node";
+		if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
+			
 			this.mode = "browser";
-		} else {
-			this.mode = "node";
-		}
-		/** Log stats or not
+		} 
+		
+		/** Log stats or not.
 		@type {boolean}*/
+		this.logstats = false;
+		
+		/** Log stats or not, specified for both browser and node mode.
+		@type {object} */
 		this.logstats2 = this.conf["STATSOUT"] || { browser: false, node: true };
+		
+		
 		this.logstats = this.logstats2[this.mode];
 		
 		/** Saving images or not.
@@ -6601,7 +6442,6 @@ exports.PersistenceConstraint = PersistenceConstraint;
 exports.PreferredDirectionConstraint = PreferredDirectionConstraint;
 exports.ChemotaxisConstraint = ChemotaxisConstraint;
 exports.AttractionPointConstraint = AttractionPointConstraint;
-exports.ProtrusionConstraint = ProtrusionConstraint;
 exports.ConnectivityConstraint = ConnectivityConstraint;
 exports.SoftConnectivityConstraint = SoftConnectivityConstraint;
 exports.HardConstraint = HardConstraint;

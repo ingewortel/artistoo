@@ -32,7 +32,6 @@ import PersistenceConstraint from "../src/hamiltonian/PersistenceConstraint.js"
 import PreferredDirectionConstraint from "../src/hamiltonian/PreferredDirectionConstraint.js" 
 import ChemotaxisConstraint from "../src/hamiltonian/ChemotaxisConstraint.js" 
 import AttractionPointConstraint from "../src/hamiltonian/AttractionPointConstraint.js" 
-import ProtrusionConstraint from "../src/hamiltonian/ProtrusionConstraint.js" 
 import ConnectivityConstraint from "../src/hamiltonian/ConnectivityConstraint.js" 
 import SoftConnectivityConstraint from "../src/hamiltonian/SoftConnectivityConstraint.js" 
  
@@ -70,7 +69,6 @@ export {
 	PreferredDirectionConstraint,
 	ChemotaxisConstraint,
 	AttractionPointConstraint,
-	ProtrusionConstraint,
 	ConnectivityConstraint,
 	SoftConnectivityConstraint,
 	HardConstraint,

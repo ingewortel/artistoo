@@ -4,6 +4,14 @@ import GridManipulator from "../grid/GridManipulator.js"
 import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
 import Centroids from "../stats/Centroids.js"
 
+/** 
+This class provides some boilerplate code for creating simulations easily.
+It comes with defaults for seeding cells, drawing, logging of statistics, saving output
+images, and running the simulation. Each of these default methods can be overwritten
+by the user while keeping the other default methods intact. See the {@link constructor}
+for details on how to configure a simulation.
+@see ../examples
+*/
 class Simulation {
 	/** The constructor of class Simulation takes two arguments.
 		@param {object} config - overall configuration settings. This is an object
@@ -67,17 +75,25 @@ class Simulation {
 		/** Log stats every [rate] MCS.
 		@type {number}*/
 		this.lograte = this.conf["LOGRATE"] || 1
-		if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
-			/** See if code is run in browser or via node, which will be used
+		
+		/** See if code is run in browser or via node, which will be used
 			below to determine what the output should be.
 			@type {string}*/
+		this.mode = "node"
+		if( typeof window !== "undefined" && typeof window.document !== "undefined" ){
+			
 			this.mode = "browser"
-		} else {
-			this.mode = "node"
-		}
-		/** Log stats or not
+		} 
+		
+		/** Log stats or not.
 		@type {boolean}*/
+		this.logstats = false
+		
+		/** Log stats or not, specified for both browser and node mode.
+		@type {object} */
 		this.logstats2 = this.conf["STATSOUT"] || { browser: false, node: true }
+		
+		
 		this.logstats = this.logstats2[this.mode]
 		
 		/** Saving images or not.

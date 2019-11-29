@@ -47,7 +47,6 @@ module	PersistenceConstraint	src/hamiltonian/PersistenceConstraint.js
 module	PreferredDirectionConstraint	src/hamiltonian/PreferredDirectionConstraint.js
 module	ChemotaxisConstraint	src/hamiltonian/ChemotaxisConstraint.js
 module	AttractionPointConstraint	src/hamiltonian/AttractionPointConstraint.js
-module	ProtrusionConstraint	src/hamiltonian/ProtrusionConstraint.js
 module	ConnectivityConstraint	src/hamiltonian/ConnectivityConstraint.js
 module 	SoftConnectivityConstraint	src/hamiltonian/SoftConnectivityConstraint.js
 
