@@ -1,7 +1,6 @@
-# cpm
-Cellular Potts Model implementation
+# CPMjs
 
-Implements a simple Cellular Potts Model in javascript. Code includes the extension for cell migration published in 
+Implements a simple Cellular Potts Model in JavaScript. Code includes the extension for cell migration published in 
 
 Ioana Niculescu, Johannes Textor, Rob J. de Boer:
 __Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration__

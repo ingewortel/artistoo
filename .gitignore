@@ -1,2 +1,4 @@
 *.swp
 docs/
+build.make
+node_modules
