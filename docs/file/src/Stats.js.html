@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/Stats.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/Stats.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** Class for outputting various statistics from a CPM simulation, as for instance
+    the centroids of all cells (which is actually the only thing that&apos;s implemented
+    so far) 
+    @private 
+    @ignore */
+
+class Stats {
+	constructor( C ){
+		this.C = C
+		this.ndim = this.C.ndim
+	}
+
+	// ------------  FRC NETWORK 
+
+	// for simulation on FRC network. Returns all cells that are in contact with
+	// a stroma cell.
+	cellsOnNetwork(){
+		var px = this.C.cellborderpixels.elements, i,j, N, r = {}, t
+		for( i = 0 ; i &lt; px.length ; i ++ ){
+			t = this.C.pixti( px[i] )
+			if( r[t] ) continue
+			N = this.C.neighi(  px[i] )
+			for( j = 0 ; j &lt; N.length ; j ++ ){
+				if( this.C.pixti( N[j] ) &lt; 0 ){
+					r[t]=1; break
+				}
+			}
+		}
+		return r
+	}
+	
+	
+	// ------------  CELL LENGTH IN ONE DIMENSION
+	// (this does not work with a grid torus).
+		
+	// For computing mean and variance with online algorithm
+	updateOnline( aggregate, value ){
+		
+		var delta, delta2
+
+		aggregate.count ++
+		delta = value - aggregate.mean
+		aggregate.mean += delta/aggregate.count
+		delta2 = value - aggregate.mean
+		aggregate.sqd += delta*delta2
+
+		return aggregate
+	}
+
+	newOnline(){
+		return( { count : 0, mean : 0, sqd : 0 } ) 
+	}
+	// return mean and variance of coordinates in a given dimension for cell t
+	// (dimension as 0,1, or 2)
+	cellStats( t, dim ){
+
+		var aggregate, cpt, j, stats
+
+		// the cellpixels object can be given as the third argument
+		if( arguments.length == 3){
+			cpt = arguments[2][t]
+		} else {
+			cpt = this.cellpixels()[t]
+		}
+
+		// compute using online algorithm
+		aggregate = this.newOnline()
+
+		// loop over pixels to update the aggregate
+		for( j = 0; j &lt; cpt.length; j++ ){
+			aggregate = this.updateOnline( aggregate, cpt[j][dim] )
+		}
+
+		// get mean and variance
+		stats = { mean : aggregate.mean, variance : aggregate.sqd / ( aggregate.count - 1 ) }
+		return stats
+	}
+
+	// get the length (variance) of cell in a given dimension
+	// does not work with torus!
+	getLengthOf( t, dim ){
+		
+		// get mean and sd in x direction
+		var stats = this.cellStats( t, dim )
+		return stats.variance
+
+	}
+
+	// get the range of coordinates in dim for cell t
+	// does not work with torus!
+	getRangeOf( t, dim ){
+
+		var minc, maxc, cpt, j
+
+		// the cellpixels object can be given as the third argument
+		if( arguments.length == 3){
+			cpt = arguments[2][t]
+		} else {
+			cpt = this.cellpixels()[t]
+		}
+
+		// loop over pixels to find min and max
+		minc = cpt[0][dim]
+		maxc = cpt[0][dim]
+		for( j = 1; j &lt; cpt.length; j++ ){
+			if( cpt[j][dim] &lt; minc ) minc = cpt[j][dim]
+			if( cpt[j][dim] &gt; maxc ) maxc = cpt[j][dim]
+		}
+		
+		return( maxc - minc )		
+
+	}
+	
+	// ------------  CONNECTEDNESS OF CELLS
+	// ( compatible with torus )
+	
+	// Compute connected components of the cell ( to check connectivity )
+	getConnectedComponentOfCell( t, cellindices ){
+		if( cellindices.length == 0 ){ return }
+
+		var visited = {}, k=1, volume = {}, myself = this
+
+		var labelComponent = function(seed, k){
+			var q = [parseInt(seed)]
+			visited[q[0]] = 1
+			volume[k] = 0
+			while( q.length &gt; 0 ){
+				var e = parseInt(q.pop())
+				volume[k] ++
+				var ne = myself.C.neighi( e )
+				for( var i = 0 ; i &lt; ne.length ; i ++ ){
+					if( myself.C.pixti( ne[i] ) == t &amp;&amp;
+						!visited.hasOwnProperty(ne[i]) ){
+						q.push(ne[i])
+						visited[ne[i]]=1
+					}
+				}
+			}
+		}
+
+		for( var i = 0 ; i &lt; cellindices.length ; i ++ ){
+			if( !visited.hasOwnProperty( cellindices[i] ) ){
+				labelComponent( cellindices[i], k )
+				k++
+			}
+		}
+
+		return volume
+	}
+
+	getConnectedComponents(){
+	
+		let cpi
+	
+		if( arguments.length == 1 ){
+			cpi = arguments[0]
+		} else {
+			cpi = this.cellpixelsi()
+		}
+
+		const tx = Object.keys( cpi )
+		let i, volumes = {}
+		for( i = 0 ; i &lt; tx.length ; i ++ ){
+			volumes[tx[i]] = this.getConnectedComponentOfCell( tx[i], cpi[tx[i]] )
+		}
+		return volumes
+	}
+	
+	// Compute probabilities that two pixels taken at random come from the same cell.
+	getConnectedness(){
+	
+		let cpi
+	
+		if( arguments.length == 1 ){
+			cpi = arguments[0]
+		} else {
+			cpi = this.cellpixelsi()
+		}
+	
+		const v = this.getConnectedComponents( cpi )
+		let s = {}, r = {}, i, j
+		for( i in v ){
+			s[i] = 0
+			r[i] = 0
+			for( j in v[i] ){
+				s[i] += v[i][j]
+			}
+			for( j in v[i] ){
+				r[i] += (v[i][j]/s[i]) * (v[i][j]/s[i])
+			}
+		}
+		return r
+	}	
+	
+	// ------------  PROTRUSION ANALYSIS: PERCENTAGE ACTIVE / ORDER INDEX 
+	// ( compatible with torus )
+	
+	// Compute percentage of pixels with activity &gt; threshold
+	getPercentageActOfCell( t, cellindices, threshold ){
+		if( cellindices.length == 0 ){ return }
+		var i, count = 0
+
+		for( i = 0 ; i &lt; cellindices.length ; i ++ ){
+			if( this.C.pxact( cellindices[i] ) &gt; threshold ){
+				count++
+			}
+		}
+		return 100*(count/cellindices.length)
+	
+	}
+
+	getPercentageAct( threshold ){
+	
+		let cpi
+	
+		if( arguments.length == 2 ){
+			cpi = arguments[1]
+		} else {
+			cpi = this.cellpixelsi()
+		}
+	
+		const tx = Object.keys( cpi )
+		let i, activities = {}
+		for( i = 0 ; i &lt; tx.length ; i ++ ){
+			activities[tx[i]] = this.getPercentageActOfCell( tx[i], cpi[tx[i]], threshold )
+		}
+		return activities
+	
+	}
+
+	// Computing an order index of the activity gradients within the cell.
+	getGradientAt( t, i ){
+	
+		var gradient = []
+		
+		// for computing index of neighbors in x,y,z dimension:
+		var diff = [1, this.C.dy, this.C.dz ] 
+		
+		var d, neigh1, neigh2, t1, t2, ai = this.C.pxact( i ), terms = 0
+		
+		for( d = 0; d &lt; this.C.ndim; d++ ){
+			// get the two neighbors and their types
+			neigh1 = i - diff[d]
+			neigh2 = i + diff[d]
+			t1 = this.C.cellpixelstype[ neigh1 ]
+			t2 = this.C.cellpixelstype[ neigh2 ]
+			
+			// start with a zero gradient
+			gradient[d] = 0.00
+			
+			// we will average the difference with the left and right neighbor only if both
+			// belong to the same cell. If only one neighbor belongs to the same cell, we
+			// use that difference. If neither belongs to the same cell, the gradient
+			// stays zero.
+			if( t == t1 ){
+				gradient[d] += ( ai - this.C.pxact( neigh1 ) )
+				terms++
+			}
+			if( t == t2 ){
+				gradient[d] += ( this.C.pxact( neigh2 ) - ai )
+				terms++
+			}
+			if( terms != 0 ){
+				gradient[d] = gradient[d] / terms
+			}		
+						
+		}
+		
+		return gradient
+		
+	}
+
+	// compute the norm of a vector (in array form)
+	norm( v ){
+		var i
+		var norm = 0
+		for( i = 0; i &lt; v.length; i++ ){
+			norm += v[i]*v[i]
+		}
+		norm = Math.sqrt( norm )
+		return norm
+	}
+
+	getOrderIndexOfCell( t, cellindices ){
+	
+		if( cellindices.length == 0 ){ return }
+		
+		// create an array to store the gradient in. Fill it with zeros for all dimensions.
+		var gradientsum = [], d
+		for( d = 0; d &lt; this.C.ndim; d++ ){
+			gradientsum.push(0.0)
+		}
+		
+		// now loop over the cellindices and add gi/norm(gi) to the gradientsum for each
+		// non-zero local gradient:
+		var j
+		for( j = 0; j &lt; cellindices.length; j++ ){
+			var g = this.getGradientAt( t, cellindices[j] )
+			var gn = this.norm( g )
+			// we only consider non-zero gradients for the order index
+			if( gn != 0 ){
+				for( d = 0; d &lt; this.C.ndim; d++ ){
+					gradientsum[d] += 100*g[d]/gn/cellindices.length
+				}
+			}
+		}
+		
+		
+		// finally, return the norm of this summed vector
+		var orderindex = this.norm( gradientsum )
+		return orderindex	
+	}
+
+	getOrderIndices( ){
+		var cpi = this.cellborderpixelsi()
+		var tx = Object.keys( cpi ), i, orderindices = {}
+		for( i = 0 ; i &lt; tx.length ; i ++ ){
+			orderindices[tx[i]] = this.getOrderIndexOfCell( tx[i], cpi[tx[i]] )
+		}
+		return orderindices
+	
+	}
+	
+
+	// returns a list of all cell ids of the cells that border to &quot;cell&quot; and are of a different type
+	// a dictionairy with keys = neighbor cell ids, and 
+	// values = number of &quot;cell&quot;-pixels the neighbor cell borders to
+	cellNeighborsList( cell, cbpi ) {
+		if (!cbpi) {
+			cbpi = this.cellborderpixelsi()[cell]
+		} else {
+			cbpi = cbpi[cell]
+		}
+		let neigh_cell_amountborder = {}
+		//loop over border pixels of cell
+		for ( let cellpix = 0; cellpix &lt; cbpi.length; cellpix++ ) {
+			//get neighbouring pixels of borderpixel of cell
+			let neighbours_of_borderpixel_cell = this.C.neighi(cbpi[cellpix])
+			//don&apos;t add a pixel in cell more than twice
+			//loop over neighbouring pixels and store the parent cell if it is different from
+			//cell, add or increment the key corresponding to the neighbor in the dictionairy
+			for ( let neighborpix = 0; neighborpix &lt; neighbours_of_borderpixel_cell.length;
+				neighborpix ++ ) {
+				let cell_id = this.C.pixti(neighbours_of_borderpixel_cell[neighborpix])
+				if (cell_id != cell) {
+					neigh_cell_amountborder[cell_id] = neigh_cell_amountborder[cell_id]+1 || 1
+				}
+			}
+		}
+		return neigh_cell_amountborder
+	}
+
+	// ------------ HELPER FUNCTIONS
+	
+	// TODO all helper functions have been removed from this class.
+	// We should only access cellpixels through the &quot;official&quot; interface
+	// in the CPM class.
+	
+}
+
+
+export default Stats
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

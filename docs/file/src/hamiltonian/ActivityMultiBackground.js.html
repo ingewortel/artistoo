@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/hamiltonian/ActivityMultiBackground.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/hamiltonian/ActivityMultiBackground.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+
+import ActivityConstraint from &quot;./ActivityConstraint.js&quot;
+import ParameterChecker from &quot;./ParameterChecker.js&quot;
+/**
+ * The ActivityMultiBackground constraint implements the activity constraint of Potts models,
+ but allows users to specify locations on the grid where LAMBDA_ACT is different. 
+ See {@link ActivityConstraint} for the normal version of this constraint.
+ See {@link ActivityMultiBackground#constructor} for an explanation of the parameters.
+ */
+class ActivityMultiBackground extends ActivityConstraint {
+
+	/** Creates an instance of the ActivityMultiBackground constraint 
+	* @param {object} conf - Configuration object with the parameters.
+	* ACT_MEAN is a single string determining whether the activity mean should be computed
+	* using a &quot;geometric&quot; or &quot;arithmetic&quot; mean. 
+	*/
+	/** The constructor of the ActivityConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {string} [conf.ACT_MEAN=&quot;geometric&quot;] - should local mean activity be measured with an
+	&quot;arithmetic&quot; or a &quot;geometric&quot; mean?
+	@param {PerKindArray} conf.LAMBDA_ACT_MBG - strength of the activityconstraint per cellkind and per background.
+	@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
+	@param {Array} conf.BACKGROUND_VOXELS - an array where each element represents a different background type.
+	This is again an array of {@ArrayCoordinate}s of the pixels belonging to that backgroundtype. These pixels
+	will have the LAMBDA_ACT_MBG value of that backgroundtype, instead of the standard value.
+	*/
+	constructor( conf ){
+		super( conf )
+
+		/** Activity of all cellpixels with a non-zero activity is stored in this object,
+		with the {@link IndexCoordinate} of each pixel as key and its current activity as
+		value. When the activity reaches 0, the pixel is removed from the object until it
+		is added again. 
+		@type {object}*/
+		this.cellpixelsact = {} // activity of cellpixels with a non-zero activity
+		
+		/** Wrapper: select function to compute activities based on ACT_MEAN in conf.
+		Default is to use the {@link activityAtGeom} for a geometric mean.
+		@type {function}*/
+		this.activityAt = this.activityAtGeom
+		if( this.conf.ACT_MEAN == &quot;arithmetic&quot; ){
+			this.activityAt = this.activityAtArith
+		} 
+		
+		/** Store which pixels belong to which background type 
+		@type {Array}*/
+		this.bgvoxels = []
+		
+		/** Track if this.bgvoxels has been set.
+		@type {boolean}*/
+		this.setup = false
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C )
+		checker.confCheckParameter( &quot;ACT_MEAN&quot;, &quot;SingleValue&quot;, &quot;String&quot;, [ &quot;geometric&quot;, &quot;arithmetic&quot; ] )
+		checker.confCheckPresenceOf( &quot;LAMBDA_ACT_MBG&quot; )
+		checker.confCheckParameter( &quot;MAX_ACT&quot;, &quot;KindArray&quot;, &quot;NonNegative&quot; )
+		
+		// Custom checks
+		checker.confCheckStructureKindArray( this.conf[&quot;LAMBDA_ACT_MBG&quot;], &quot;LAMBDA_ACT_MBG&quot; )
+		for( let e of this.conf[&quot;LAMBDA_ACT_MBG&quot;] ){
+			for( let i of e ){
+				if( !checker.isNonNegative(i) ){
+					throw(&quot;Elements of LAMBDA_ACT_MBG must be non-negative numbers!&quot;)
+				}
+			}
+		}
+		checker.confCheckPresenceOf( &quot;BACKGROUND_VOXELS&quot; )
+		let bgvox = this.conf[&quot;BACKGROUND_VOXELS&quot;]
+		// Background voxels must be an array of arrays
+		if( !(bgvox instanceof Array) ){
+			throw( &quot;Parameter BACKGROUND_VOXELS should be an array of at least two arrays!&quot; )
+		} else if ( bgvox.length &lt; 2 ){
+			throw( &quot;Parameter BACKGROUND_VOXELS should be an array of at least two arrays!&quot; )
+		}
+		// Elements of the initial array must be arrays.
+		for( let e of bgvox ){
+			if( !(e instanceof Array) ){
+				throw( &quot;Parameter BACKGROUND_VOXELS should be an array of at least two arrays!&quot; )
+			}
+			
+			// Entries of this array must be pixel coordinates, which are arrays of length C.extents.length
+			for( let ee of e ){
+				let isCoordinate = true
+				if( !(ee instanceof Array) ){
+					isCoordinate = false
+				} else if ( ee.length != this.C.extents.length ){
+					isCoordinate = false
+				}
+				if( !isCoordinate ){
+					throw( &quot;Parameter BACKGROUND_VOXELS: subarray elements should be ArrayCoordinates; arrays of length &quot; + this.C.extents.length + &quot;!&quot; )
+				}
+			}
+		}
+	}
+	
+	/** Get the background voxels from input argument or the conf object and store them in a correct format
+	in this.bgvoxels. This only has to be done once, but can be called from outside to
+	change the background voxels during a simulation (eg in a HTML page).
+	 */	
+	setBackgroundVoxels( voxels ){
+	
+		voxels = voxels || this.conf[&quot;BACKGROUND_VOXELS&quot;]
+	
+		// reset if any exist already
+		this.bgvoxels = []
+		for( let bgkind = 0; bgkind &lt; voxels.length; bgkind++ ){
+			this.bgvoxels.push({})
+			for( let v of voxels[bgkind] ){
+				this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true
+			}
+		}
+		this.setup = true
+
+	}
+	
+	/* ======= ACT MODEL ======= */
+
+	/* Act model : compute local activity values within cell around pixel i.
+	 * Depending on settings in conf, this is an arithmetic (activityAtArith)
+	 * or geometric (activityAtGeom) mean of the activities of the neighbors
+	 * of pixel i.
+	 */
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	deltaH ( sourcei, targeti, src_type, tgt_type ){
+	
+		if( ! this.setup ){
+			this.setBackgroundVoxels()
+		}
+
+		let deltaH = 0, maxact, lambdaact
+		const src_kind = this.C.cellKind( src_type )
+		const tgt_kind = this.C.cellKind( tgt_type )
+		let bgindex1 = 0, bgindex2 = 0
+		
+		for( let bgkind = 0; bgkind &lt; this.bgvoxels.length; bgkind++ ){
+			if( sourcei in this.bgvoxels[bgkind] ){
+				bgindex1 = bgkind
+			}
+			if( targeti in this.bgvoxels[bgkind] ){
+				bgindex2 = bgkind
+			}
+		}
+		
+
+		// use parameters for the source cell, unless that is the background.
+		// In that case, use parameters of the target cell.
+		if( src_type != 0 ){
+			maxact = this.conf[&quot;MAX_ACT&quot;][src_kind]
+			lambdaact = this.conf[&quot;LAMBDA_ACT_MBG&quot;][src_kind][bgindex1]
+		} else {
+			// special case: punishment for a copy attempt from background into
+			// an active cell. This effectively means that the active cell retracts,
+			// which is different from one cell pushing into another (active) cell.
+			maxact = this.conf[&quot;MAX_ACT&quot;][tgt_kind]
+			lambdaact = this.conf[&quot;LAMBDA_ACT_MBG&quot;][tgt_kind][bgindex2]
+		}
+		if( !maxact || !lambdaact ){
+			return 0
+		}
+
+		// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
+		// or activityAtGeom, depending on conf (see constructor).	
+		deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact
+		return deltaH
+	}
+
+
+
+}
+
+export default ActivityMultiBackground
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

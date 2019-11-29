@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/grid/Grid.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/grid/Grid.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** This base class defines a general grid and provides grid methods that do not depend on
+the coordinate system used. This class is never used on its own, as it does not yet 
+contain methods for neighborhood computation etc (which depend on the coordinate system). 
+Coordinate system-dependent methods are implemented in extensions
+of the Grid class, for example Grid2D and Grid3D. */
+class Grid {
+
+	/** The grid constructor.
+	@param {GridSize} field_size array of field size in each dimension. E.g. [100,200] for
+	a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
+	numbers.
+	@param {boolean[]} [torus=[true,true,...]] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right? Should be an array specifying whether the
+	torus holds in each dimension; eg [true,false] for a torus in x but not y dimension. */
+	constructor( field_size, torus ){
+	
+		torus = torus || []
+	
+		/** field_size array of field size in each dimension. E.g. [100,200] for
+		a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
+		numbers.
+		@type {GridSize}*/
+		this.extents = field_size
+		
+		/** Number of dimensions of the grid.
+		@type {number}*/
+		this.ndim = this.extents.length
+		
+		
+		if( torus.length == 0 ){
+			for( let d = 0; d &lt; this.ndim; d++ ){
+				torus.push( true )
+			}
+		} else if ( torus.length != this.ndim ){
+			throw( &quot;Torus should be specified for each dimension, or not at all!&quot; )
+		}
+		/** Should the borders of the grid be linked, so that a cell moving
+		out on the left reappears on the right? Torus can be specified for
+		each dimension separately.
+		@type {boolean[]}*/
+		this.torus = torus
+		
+		
+		/* These are used for rapid conversion between array and index coordinates,
+		but not documented as they should not be used from outside.*/
+		/** @ignore */
+		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) )
+		/** @ignore */
+		this.Y_BITS = 1+Math.floor( Math.log2( this.extents[1] - 1 ) )
+		/** @ignore */
+		this.Y_MASK = (1 &lt;&lt; this.Y_BITS)-1
+		
+		/** Array coordinates to the middle pixel on the grid.
+		@type {ArrayCoordinate}
+		*/
+		this.midpoint = this.extents.map( i =&gt; Math.round((i-1)/2) )
+	}
+
+	/** The neigh method returns the neighborhood of a pixel p.
+	This function uses array coordinates as input and output arguments, but
+	internally calls a method &apos;neighi&apos; which computes neighborhoods using
+	index-coordinates. Since neighbordhoods depend on the coordinate system,
+	the &apos;neighi&apos; method is defined in the extension class for that specific coordinate system.
+	@param {ArrayCoordinate} p array coordinates of a specific pixel
+	@param {boolean} torus are borders of the grid linked so that a cell leaving on the
+	right re-enters the grid on the left?
+	@return {ArrayCoordinate[]} an array of neighbors of pixel p, where each element contains the array
+	coordinates of the neighbor in question.*/
+	neigh(p, torus = this.torus){
+		let g = this
+		return g.neighi( this.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+	}
+
+	/** The setpix method changes the value of a pixel p on the grid to t.
+	@param {ArrayCoordinate} p array coordinates of the pixel to change the value of
+	@param {number} t the value to assign to this pixel. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
+	setpix( p, t ){
+		this._pixels[this.p2i(p)] = t
+	}
+
+	/** The setpixi method changes the value of a pixel i on the grid to t.
+	@param {IndexCoordinate} i index coordinates of the pixel to change the value of
+	@param {number} t the value to assign to this pixel. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
+	setpixi( i, t ){
+		this._pixels[i] = t
+	}
+
+	/** The pixt method finds the current value of a pixel p on the grid.
+	@param {ArrayCoordinate} p array coordinates of the pixel to find the value of
+	@return {number} t the value of p on the grid. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
+	pixt( p ){
+		return this._pixels[this.p2i(p)]
+	}
+
+	/** The pixti method finds the current value of a pixel i on the grid.
+	@param {IndexCoordinate} i index coordinates of the pixel to find the value of
+	@return {number} t the value of i on the grid. This can be integers or 
+	floating point numbers, depending on the grid subclass used (see eg Grid2D).
+	This method acts on the private array this._pixels, which must be defined
+	in the grid subclass.*/
+	pixti( i ){
+		return this._pixels[i]
+	}
+
+	/** A pixel on the grid.
+	@typedef {Object[]} Pixel
+	@property {ArrayCoordinate} Pixel[0] - pixel coordinate
+	@property {number} Pixel[1] - pixel value
+	*/
+	
+	/** A pixel on the grid.
+	@typedef {Object[]} iPixel
+	@property {IndexCoordinate} Pixel[0] - pixel coordinate
+	@property {number} Pixel[1] - pixel value
+	*/
+
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		This method isn&apos;t actually called because the subclasses implement
+		it themselves due to efficiency reasons. It serves as a template to
+		document the functionality. 
+		@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel&apos;s array coordinates on the grid, and v its value.*/
+	* pixels() {
+		for( let i of this.pixelsi() ){
+			if( this._pixels[i] &gt; 0 ){
+				yield [this.i2p(i),this._pixels[i]] 
+			}
+		}
+	}
+
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		This method isn&apos;t actually called because the subclasses implement
+		it themselves due to efficiency reasons. It serves as a template to
+		document the functionality. 
+		@abstrac
+		@return {undefined} for each pixel, because this method should be implemented
+		in a grid subclass.*/
+	* pixelsi() {
+		//throw(&quot;Iterator &apos;pixelsi&apos; not implemented!&quot;)
+		yield undefined
+	}
+
+	/** This method pre-allocates an array of the correct datatype to make
+	a copy of the current pixel values. Values are not actually copied yet.
+	@return {Uint16Array|Float32Array} an array with an element for each pixel.
+	The datatype is determined by the datatype of this._pixels (implemented in the
+	subclass), which can be either Uint16Array or Float32Array.*/
+	pixelsbuffer() {
+	
+		/** For storing a copy of all pixel values; eg for synchronous updating of some
+		sort.
+		@type {Uint16Array|Float32Array}*/
+		this._pixelsbuffer = []
+	
+		if( this._pixels instanceof Uint16Array ){
+			this._pixelsbuffer = new Uint16Array(this._pixels.length)
+		} else if( this._pixels instanceof Float32Array ){
+			this._pixelsbuffer = new Float32Array(this._pixels.length)
+		} else {
+			throw(&quot;unsupported datatype: &quot; + (typeof this._pixels))
+		}
+	}
+
+	/** Template method to compute the gradient at location i on the grid
+	(location given in index coordinates).
+	This method throws an error, which is overwritten when a subclass 
+	implements a gradienti method.
+	@param {IndexCoordinate} i index coordinate of a pixel to compute the gradient at. 
+	@see https://en.wikipedia.org/wiki/Gradient*/
+	gradienti( i ){
+		throw(&quot;method &apos;gradienti&apos; not implemented! &quot;+i)
+	}
+
+	/** Method to compute the gradient at location p on the grid
+	(location given in array coordinates). It internally calls the gradienti
+	method using index coordinates, which should be implemented in the grid
+	subclass.
+	@param {ArrayCoordinate} p array coordinates of a pixel p to compute the gradient at
+	@return {number} the gradient at position p.
+	@see https://en.wikipedia.org/wiki/Gradient*/
+	gradient( p ){
+		return this.gradienti( this.p2i( p ) )
+	}
+
+	/** Method to compute the laplacian at location p on the grid
+	(location given in array coordinates). It internally calls the laplaciani
+	method that does the same but uses index coordinates.
+	@param {ArrayCoordinate} p array coordinates of a pixel p to compute the laplacian at
+	@return {number} the laplacian at position p.
+	@see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions */
+	laplacian( p ){
+		return this.laplaciani( this.p2i( p ) )
+	}
+
+	/** Method to compute the laplacian at location i on the grid
+	(location given in index coordinates). It internally uses the 
+	neighNeumanni method to compute a Neumann neighborhood, which should
+	be implemented in the grid subclass.
+	@param {IndexCoordinate} i index coordinates of a pixel to compute the laplacian at
+	@return {number} the laplacian at position p.
+	@see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions */
+	laplaciani( i ){
+		let L = 0, n = 0
+		for( let x of this.neighNeumanni(i) ){
+			L += this.pixti( x ); n ++
+		} 
+		return L - n * this.pixti( i )
+	}
+
+	/** Perform a diffusion step on the grid, updating the values of all pixels 
+	according to Fick&apos;s second law of diffusion.
+	@param {number} D diffusion coefficient 
+	@see https://en.wikipedia.org/wiki/Diffusion#Fick&apos;s_law_and_equations
+	@see https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Mesh_Laplacians
+	*/
+	diffusion( D ){
+		// For synchronous updating of the grid: compute updated values in a copy
+		// of the current pixels
+		if( ! this._pixelsbuffer ) this.pixelsbuffer()
+		for( let i of this.pixelsi() ){
+			// Diffusion: new value is current value + change.
+			// the change is given by the diffusion coefficient D times the laplacian.
+			this._pixelsbuffer[i] = this.pixti( i ) + D * this.laplaciani( i )
+		}
+		// swap the copy and the original
+		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer]
+	}
+
+	
+	/**
+	 Function that updates a gridpoint depending on its current value and that of its
+	 neighbors.
+	 @typedef {function} updatePixelFunction
+	 @param {ArrayCoordinate} p - pixel to update
+	 @param {ArrayCoordinate[]} neighbors - coordinates of neighbors of p
+	 @return {number} value - the updated value, based on the current value of p and
+	 its neighbors.
+	 */
+
+	/** Apply a function to all pixel values on the grid. It acts on this._pixels,
+	which is implemented in the grid subclass.
+	@param {updatePixelFunction} f - the function to apply to each pixel. */
+	applyLocally( f ){
+		if( ! this._pixelsbuffer ) this.pixelsbuffer()
+		for( let i of this.pixelsi() ){
+			let p = this.i2p(i)
+			this._pixelsbuffer[i] = f( p, this.neigh(p) ) 
+		}
+		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer]		
+	}
+	
+	/** Multiply all pixel values on the grid with a constant factor r. 
+	This method acts on this._pixels, which is implemented in the grid subclass.
+	@param {number} r the multiplication factor. */
+	multiplyBy( r ){
+		for( let i of this.pixelsi() ){
+			this._pixels[i] *= r 
+		}
+	}
+
+}
+
+export default Grid
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
