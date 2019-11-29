@@ -3,6 +3,16 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-11-29 Inge Wortel <ingewortel@gmail.com>
+	* README.md : Added more examples and fixed it so that this now works directly from
+	the README, as well as from docs/index.html
+	* src/hamiltonian : removed experimental constraints and updated documentation.
+	* docs/ : updated documentation.
+	* Removed several old files.
+	* simulation-examples : removed this directory and restructured it into examples/.
+	* src/models/GridBasedModel.js : replaced mersennetwister by mersenne-twister, an MIT
+	licensed version.
+
 2019-08-21 Inge Wortel <ingewortel@gmail.com>
 	* src/grid/Grid.js : The torus property is now an array with a boolean value for 
 	each dimension separately. It is therefore now possible to have a torus in x dimension,
