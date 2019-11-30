@@ -57,7 +57,7 @@ let config = {
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
 											// during the simulation?
-		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/CellSorting",				// ... And save the image in this folder.
 		EXPNAME : "CellSorting",					// Used for the filename of output images.
 		

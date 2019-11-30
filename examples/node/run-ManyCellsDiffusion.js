@@ -63,7 +63,7 @@ let config = {
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
 											// during the simulation?
-		IMGFRAMERATE : 10,					// If so, do this every <IMGFRAMERATE> MCS.
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/ManyCellsDiffusion",	// ... And save the image in this folder.
 		EXPNAME : "ManyCellsDiffusion",					// Used for the filename of output images.
 		

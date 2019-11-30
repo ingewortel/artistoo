@@ -4,7 +4,7 @@ let CPM = require("../../build/cpm-cjs.js")
 
 let cid=0, J_TC_TUMOR = 40, cancer_cell_division_rate = 0.005, skin_cell_death_rate = 0.2,
 	skin_cell_min_volume = 0.8, homing_rate_t_cells = 0.005, max_nr_t_cells = 15,
-	lastnewdiv, lastdiv
+	lastnewdiv, lastdiv, T_cell_death_rate = 0.0002
 	
 /*	----------------------------------
 	CONFIGURATION SETTINGS
@@ -36,7 +36,7 @@ let config = {
 		J : [ 
 		 		[0,20,20,20,20], 
 				[20,40,40,100,20], // epidermal cells
-				[20,40,40,J_TC_TUMOR,20], // T cells
+				[20,40,50,J_TC_TUMOR,20], // T cells
 				[20,100,J_TC_TUMOR,100,20], // Cancer cells
 				[20,20,20,20,20] ],
 		
@@ -78,7 +78,7 @@ let config = {
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
 											// during the simulation?
-		IMGFRAMERATE : 5,					// If so, do this every <IMGFRAMERATE> MCS.
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/CancerInvasion",	// ... And save the image in this folder.
 		EXPNAME : "CancerInvasion",					// Used for the filename of output images.
 		
@@ -99,7 +99,8 @@ let custommethods = {
 	postMCSListener : postMCSListener,
 	divideCancerCells : divideCancerCells,
 	killTooSmallCells : killTooSmallCells,
-	homeTCells : homeTCells
+	homeTCells : homeTCells,
+	killTCells : killTCells
 }
 
 let sim = new CPM.Simulation( config, custommethods )
@@ -143,6 +144,7 @@ function postMCSListener(){
 	this.killTooSmallCells()
 	//console.log( "3 " + C.cellKind(479) )
 	this.homeTCells()
+	this.killTCells()
 }
 
 function homeTCells(){
@@ -204,6 +206,17 @@ function killTooSmallCells(){
 				//Cm.changeKind( cp, 4 )
 				//console.log(i)
 				//Cm.killCell(i)
+				this.C.stat_values = {}
+			}
+		}
+	}
+}
+
+function killTCells(){
+	for( let i of this.C.cellIDs() ){
+		if( this.C.cellKind(i) == 2 ){
+			if( this.C.random() < T_cell_death_rate ){
+				this.gm.killCell(i)
 				this.C.stat_values = {}
 			}
 		}
