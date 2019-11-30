@@ -85,5 +85,5 @@ for details.
 To create a movie, run:
 ```
 mkdir -p output/mp4
-ffmpeg -r 60 -f image2 -i output/img/$*/ActModel-t%d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p output/mp4/ActModel.mp4
+ffmpeg -r 60 -f image2 -i output/img/ActModel/ActModel-t%d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p output/mp4/ActModel.mp4
 ```
