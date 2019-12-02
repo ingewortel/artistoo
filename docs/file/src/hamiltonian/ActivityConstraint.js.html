@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/hamiltonian/ActivityConstraint.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/hamiltonian/ActivityConstraint.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import SoftConstraint from &quot;./SoftConstraint.js&quot;
+import ParameterChecker from &quot;./ParameterChecker.js&quot;
+
+/** This class implements the activity constraint of Potts models published in:
+ *
+ *	Niculescu I, Textor J, de Boer RJ (2015) 
+ *	Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration. 
+ *	PLoS Comput Biol 11(10): e1004280. 
+ * 
+ * Pixels recently added to a cell get an &quot;activity&quot;, which then declines with every MCS.
+ * Copy attempts from more active into less active pixels have a higher success rate,
+ * which puts a positive feedback on protrusive activity and leads to cell migration.
+ * 
+ * This constraint is generally used together with {@link Adhesion}, {@link VolumeConstraint},
+ * and {@link PerimeterConstraint}.
+ * 
+ * @see https://doi.org/10.1371/journal.pcbi.1004280
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( &quot;path/to/build&quot; )
+ * let C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5],
+ * 	P : [0,260],
+ * 	LAMBDA_P : [0,2] 	
+ * })
+ * C.add( new CPM.ActivityConstraint( {
+ * 	LAMBDA_ACT : [0,500],
+ * 	MAX_ACT : [0,30],
+ * 	ACT_MEAN : &quot;geometric&quot;
+ * } ) )
+ * 
+ * // Or add automatically by entering the parameters in the CPM
+ * let C2 = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5],
+ * 	P : [0,260],
+ * 	LAMBDA_P : [0,2],
+ * 	LAMBDA_ACT : [0,500],
+ * 	MAX_ACT : [0,30],
+ * 	ACT_MEAN : &quot;geometric&quot;	
+ * })
+ */
+class ActivityConstraint extends SoftConstraint {
+
+	/** The constructor of the ActivityConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {string} [conf.ACT_MEAN=&quot;geometric&quot;] - should local mean activity be measured with an
+	&quot;arithmetic&quot; or a &quot;geometric&quot; mean?
+	@param {PerKindNonNegative} conf.LAMBDA_ACT - strength of the activityconstraint per cellkind.
+	@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
+	*/
+	constructor( conf ){
+		super( conf )
+
+		/** Activity of all cellpixels with a non-zero activity is stored in this object,
+		with the {@link IndexCoordinate} of each pixel as key and its current activity as
+		value. When the activity reaches 0, the pixel is removed from the object until it
+		is added again. 
+		@type {object}*/
+		this.cellpixelsact = {}
+		
+		/** Wrapper: select function to compute activities based on ACT_MEAN in conf.
+		Default is to use the {@link activityAtGeom} for a geometric mean.
+		@type {function}*/
+		this.activityAt = this.activityAtGeom
+		if( this.conf.ACT_MEAN == &quot;arithmetic&quot; ){
+			this.activityAt = this.activityAtArith
+		} 
+		
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C )
+		checker.confCheckParameter( &quot;ACT_MEAN&quot;, &quot;SingleValue&quot;, &quot;String&quot;, [ &quot;geometric&quot;, &quot;arithmetic&quot; ] )
+		checker.confCheckParameter( &quot;LAMBDA_ACT&quot;, &quot;KindArray&quot;, &quot;NonNegative&quot; )
+		checker.confCheckParameter( &quot;MAX_ACT&quot;, &quot;KindArray&quot;, &quot;NonNegative&quot; )
+	}
+	
+	/* ======= ACT MODEL ======= */
+
+	/* Act model : compute local activity values within cell around pixel i.
+	 * Depending on settings in conf, this is an arithmetic (activityAtArith)
+	 * or geometric (activityAtGeom) mean of the activities of the neighbors
+	 * of pixel i.
+	 */
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	deltaH ( sourcei, targeti, src_type, tgt_type ){
+
+		let deltaH = 0, maxact, lambdaact
+		const src_kind = this.C.cellKind( src_type )
+		const tgt_kind = this.C.cellKind( tgt_type )
+
+		// use parameters for the source cell, unless that is the background.
+		// In that case, use parameters of the target cell.
+		if( src_type != 0 ){
+			maxact = this.conf[&quot;MAX_ACT&quot;][src_kind]
+			lambdaact = this.conf[&quot;LAMBDA_ACT&quot;][src_kind]
+		} else {
+			// special case: punishment for a copy attempt from background into
+			// an active cell. This effectively means that the active cell retracts,
+			// which is different from one cell pushing into another (active) cell.
+			maxact = this.conf[&quot;MAX_ACT&quot;][tgt_kind]
+			lambdaact = this.conf[&quot;LAMBDA_ACT&quot;][tgt_kind]
+		}
+		if( !maxact || !lambdaact ){
+			return 0
+		}
+
+		// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
+		// or activityAtGeom, depending on conf (see constructor).	
+		deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact
+		return deltaH
+	}
+
+	/** Activity mean computation methods for arithmetic mean. It computes the mean activity
+		of a pixel and all its neighbors belonging to the same cell.
+		
+		This method is generally called indirectly via {@link activityAt}, which is set
+		based on the value of ACT_MEAN in the configuration object given to the constructor.
+		
+		@param {IndexCoordinate} i - pixel to evaluate local activity at.
+		@return {number} the arithmetic mean of activities in this part of the cell.
+		@private
+	*/
+	activityAtArith( i ){
+		const t = this.C.pixti( i )
+		
+		// no activity for background/stroma
+		if( t &lt;= 0 ){ return 0 }
+		
+		// neighborhood pixels
+		const N = this.C.neighi(i)
+		
+		// r activity summed, nN number of neighbors
+		// we start with the current pixel. 
+		let r = this.pxact(i), nN = 1
+		
+		// loop over neighbor pixels
+		for( let j = 0 ; j &lt; N.length ; j ++ ){ 
+			const tn = this.C.pixti( N[j] ) 
+			
+			// a neighbor only contributes if it belongs to the same cell
+			if( tn == t ){
+				r += this.pxact( N[j] )
+				nN ++ 
+			}
+		}
+
+		// average is summed r divided by num neighbors.
+		return r/nN
+	}
+	/** Activity mean computation methods for geometric mean. It computes the mean activity
+		of a pixel and all its neighbors belonging to the same cell.
+		
+		This method is generally called indirectly via {@link activityAt}, which is set
+		based on the value of ACT_MEAN in the configuration object given to the constructor.
+		
+		@param {IndexCoordinate} i - pixel to evaluate local activity at.
+		@return {number} the geometric mean of activities in this part of the cell.
+		@private
+	*/
+	activityAtGeom ( i ){
+		const t = this.C.pixti( i )
+
+		// no activity for background/stroma
+		if( t &lt;= 0 ){ return 0 }
+		
+		//neighborhood pixels
+		const N = this.C.neighi( i )
+		
+		// r activity product, nN number of neighbors.
+		// we start with the current pixel.
+		let nN = 1, r = this.pxact( i )
+
+		// loop over neighbor pixels
+		for( let j = 0 ; j &lt; N.length ; j ++ ){ 
+			const tn = this.C.pixti( N[j] ) 
+
+			// a neighbor only contributes if it belongs to the same cell.
+			// if it does and has activity 0, the product will also be zero so
+			// we can already return.
+			if( tn == t ){
+				if( this.pxact( N[j] ) == 0 ) return 0
+				r *= this.pxact( N[j] )
+				nN ++ 
+			}
+		}
+		
+		// Geometric mean computation. 
+		return Math.pow(r,1/nN)
+	}
+
+
+	/** Current activity (under the Act model) of the pixel at position i. 
+	@param {IndexCoordinate} i the position of the pixel to evaluate the activity of.
+	@return {number} the current activity of this pixel, which is &gt;= 0.*/
+	pxact ( i ){
+		// If the pixel is not in the cellpixelsact object, it has activity 0.
+		// Otherwise, its activity is stored in the object.
+		return this.cellpixelsact[i] || 0
+	}
+	
+	/** The postSetpixListener of the ActivityConstraint ensures that pixels are 
+	given their maximal activity when they are freshly added to a CPM.
+	@listens {CPM#setpixi} because when a new pixel is set (which is determined in the CPM),
+	its activity must change so that this class knows about the update.
+	@param {IndexCoordinate} i - the coordinate of the pixel that is changed.
+	@param {CellId} t_old - the cellid of this pixel before the copy
+	@param {CellId} t - the cellid of this pixel after the copy.
+	*/
+	/* eslint-disable no-unused-vars*/
+	postSetpixListener( i, t_old, t ){
+		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
+		const k = this.C.cellKind( t )
+		this.cellpixelsact[i] = this.conf[&quot;MAX_ACT&quot;][k]
+	}
+	
+	/** The postMCSListener of the ActivityConstraint ensures that pixel activities
+	decline with one after every MCS.
+	@listens {CPM#timeStep} because when the CPM has finished an MCS, the activities must go down.
+	*/
+	postMCSListener(){
+		// iterate over cellpixelsage and decrease all activities by one.
+		for( let key in this.cellpixelsact ){
+			// activities that reach zero no longer need to be stored.
+			if( --this.cellpixelsact[ key ] &lt;= 0 ){
+				delete this.cellpixelsact[ key ]
+			}
+		}
+	}
+
+
+}
+
+export default ActivityConstraint
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

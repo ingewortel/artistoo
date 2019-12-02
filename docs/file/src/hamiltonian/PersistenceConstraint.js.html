@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/hamiltonian/PersistenceConstraint.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/hamiltonian/PersistenceConstraint.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import SoftConstraint from &quot;./SoftConstraint.js&quot;
+import Centroids from &quot;../stats/Centroids.js&quot;
+import CentroidsWithTorusCorrection from &quot;../stats/CentroidsWithTorusCorrection.js&quot;
+import ParameterChecker from &quot;./ParameterChecker.js&quot;
+
+/**
+ * This is a constraint in which each cell has a preferred direction of migration. 
+ * This direction is only dependent on the cell, not on the specific pixel of a cell.
+ * 
+ * This constraint works with torus as long as the field size is large enough. 
+ */
+class PersistenceConstraint extends SoftConstraint {
+
+	/** The constructor of the PersistenceConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_DIR - strength of the persistenceconstraint per cellkind.
+	@param {PerKindNonNegative} [conf.DELTA_T = [10,10,...]] - the number of MCS over which the current direction is 
+	determined. Eg if DELTA_T = 10 for a cellkind, then its current direction is given by
+	the vector from its centroid 10 MCS ago to its centroid now.
+	@param {PerKindProb} conf.PERSIST - persistence per cellkind. If this is 1, its new
+	target direction is exactly equal to its current direction. If it is lower than 1, 
+	angular noise is added accordingly. 
+	*/
+	constructor( conf ){
+		super( conf )
+		
+		/** Cache centroids over the previous conf.DELTA_T MCS to determine directions.
+		@type {CellObject}
+		*/
+		this.cellcentroidlists = {}
+		/** Target direction of movement of each cell.
+		@type {CellObject}
+		*/
+		this.celldirections = {}
+	}
+	
+	/** Set the CPM attached to this constraint.
+	@param {CPM} C - the CPM to attach.*/
+	set CPM(C){
+	
+		/** @ignore */
+		this.halfsize = new Array(C.ndim).fill(0)
+		
+		/** The CPM this constraint acts on.
+		@type {CPM}*/
+		this.C = C
+		for( let i = 0 ; i &lt; C.ndim ; i ++ ){
+			this.halfsize[i] = C.extents[i]/2
+		}
+		this.confChecker()
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C )
+		checker.confCheckParameter( &quot;LAMBDA_DIR&quot;, &quot;KindArray&quot;, &quot;NonNegative&quot; )
+		checker.confCheckParameter( &quot;PERSIST&quot;, &quot;KindArray&quot;, &quot;Probability&quot; )
+	}
+	
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not used by this
+	 method, but is supplied for consistency with other SoftConstraints. The CPM will always
+	 call this method supplying the tgt_type as fourth argument.
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	/* eslint-disable no-unused-vars*/
+	deltaH ( sourcei, targeti, src_type, tgt_type ) {
+		if( src_type == 0 || !(src_type in this.celldirections) ) return 0
+		let b = this.celldirections[src_type]
+		let p1 = this.C.grid.i2p(sourcei), p2 = this.C.grid.i2p(targeti)
+		let a = []
+		for( let i = 0 ; i &lt; p1.length ; i ++ ){
+			a[i] = p2[i]-p1[i]
+			// Correct for torus if necessary
+			if( this.C.grid.torus[i] ){
+				if( a[i] &gt; this.halfsize[i] ){
+					a[i] -= this.C.extents[i]
+				} else if( a[i] &lt; -this.halfsize[i] ){
+					a[i] += this.C.extents[i]
+				}
+			}
+		}
+		let dp = 0
+		for( let i = 0 ; i &lt; a.length ; i ++ ){
+			dp += a[i]*b[i]
+		}
+		return - dp
+	}
+	
+	/** Normalize a vector a by its length.
+	@param {number[]} a - vector to normalize.
+	@return {number[]} normalized version of this vector.
+	@private*/
+	normalize( a ){
+		let norm = 0
+		for( let i = 0 ; i &lt; a.length ; i ++ ){
+			norm += a[i]*a[i]
+		}
+		norm = Math.sqrt(norm)
+		for( let i = 0 ; i &lt; a.length ; i ++ ){
+			a[i] /= norm
+		}
+	}
+	/** this function samples a random number from a normal distribution
+	@param {number} [mu=0] - mean of the normal distribution.
+	@param {number} [sigma=1] - SD of the normal distribution.
+	@return {number} the random number generated.
+	@private
+	*/
+	sampleNorm (mu=0, sigma=1) {
+		let u1 = this.C.random()
+		let u2 = this.C.random()
+		let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(Math.PI*2 * u2)
+		return z0 * sigma + mu
+	}
+	/** This function samples a random direction vector with length 1
+	@param {number} [n=3] - number of dimensions of the space to make the vector in.
+	@return {number[]} - a normalized direction vector.
+	*/
+	randDir (n=3) {
+		let dir = []
+		while(n-- &gt; 0){
+			dir.push(this.sampleNorm())
+		}
+		this.normalize(dir)
+		return dir
+	}
+	/** Change the target direction of a cell to a given vector.
+		@param {CellId} t - the cellid of the cell to change the direction of.
+		@param {number[]} dx - the new direction this cell should get.
+	*/
+	setDirection( t, dx ){
+		this.celldirections[t] = dx
+	}
+	
+	/** After each MCS, update the target direction of each cell based on its actual
+	direction over the last {conf.DELTA_T[cellkind]} steps, and some angular noise
+	depending on {conf.PERSIST[cellkind]}.
+	@listens {CPM#timeStep} because when the CPM has finished an MCS, cells have new 
+	centroids and their direction must be updated. 
+	*/
+	postMCSListener(){
+		let centroids
+		if( this.C.conf.torus ){
+			centroids = this.C.getStat( CentroidsWithTorusCorrection )
+		} else {
+			centroids = this.C.getStat( Centroids )
+		}
+		for( let t of this.C.cellIDs() ){
+			const k = this.C.cellKind(t)
+			let ld = this.conf[&quot;LAMBDA_DIR&quot;][k]
+			let dt = this.conf[&quot;DELTA_T&quot;] &amp;&amp; this.conf[&quot;DELTA_T&quot;][k] ? 
+				this.conf[&quot;DELTA_T&quot;][k] : 10
+			if( ld == 0 ){
+				delete this.cellcentroidlists[t]
+				delete this.celldirections[t]
+				continue
+			}
+			if( !(t in this.cellcentroidlists ) ){
+				this.cellcentroidlists[t] = []
+				this.celldirections[t] = this.randDir(this.C.ndim)
+			}
+
+			let ci = centroids[t]
+			this.cellcentroidlists[t].unshift(ci)
+			if( this.cellcentroidlists[t].length &gt;= dt ){
+				// note, dt could change during execution
+				let l
+				while( this.cellcentroidlists[t].length &gt;= dt ){
+					l = this.cellcentroidlists[t].pop()
+				}
+				let dx = []
+				for( let j = 0 ; j &lt; l.length ; j ++ ){
+					dx[j] = ci[j] - l[j]
+					
+					// torus correction; do only if CPM actually has a torus in this dimension.
+					if( this.C.grid.torus[j] ){
+						if( dx[j] &gt; this.halfsize[j] ){
+							dx[j] -= this.C.extents[j]
+						} else if( dx[j] &lt; -this.halfsize[j] ){
+							dx[j] += this.C.extents[j]
+						}					
+					}
+				}
+				// apply angular diffusion to target direction if needed
+				let per = this.conf[&quot;PERSIST&quot;][k]
+				if( per &lt; 1 ){
+					this.normalize(dx)
+					this.normalize(this.celldirections[t])
+					for( let j = 0 ; j &lt; dx.length ; j ++ ){
+						dx[j] = (1-per)*dx[j] + per*this.celldirections[t][j]
+					}
+					this.normalize(dx)
+					for( let j = 0 ; j &lt; dx.length ; j ++ ){
+						dx[j] *= ld
+					}
+					this.celldirections[t] = dx
+				}
+			}
+		}
+	}
+}
+
+export default PersistenceConstraint 
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

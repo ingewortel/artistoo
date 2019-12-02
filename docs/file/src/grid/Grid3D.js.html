@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/grid/Grid3D.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/grid/Grid3D.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Grid from &quot;./Grid.js&quot;
+
+/** A class containing (mostly static) utility functions for dealing with 3D 
+ 	grids. Extends the Grid class but implements functions specific to the 3D
+ 	grid (such as neighborhoods). 
+ 	
+ 	@example &lt;caption&gt;Neighborhoods on a 3D grid&lt;/caption&gt;
+ 	* 
+ 	* let CPM = require(&quot;path/to/build&quot;)
+ 	* 
+ 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
+ 	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+ 	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
+ 	* 
+ 	* // Now try a grid without torus; the corner now has fewer neighbors.
+ 	* let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
+ 	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+ 	*
+ 	* // Or try a torus in one dimension
+ 	* let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
+ 	* console.log( grid2.neigh( [0,0,0] ) ) 
+ 	*/
+class Grid3D extends Grid {
+
+	/** Constructor of the Grid3D object.
+	@param {GridSize} extents - the size of the grid in each dimension 
+	@param {boolean[]} [torus = [true,true,true]] - should the borders of the grid be linked, so that a cell moving
+	out on the left reappears on the right? */
+	constructor( extents, torus = [true,true,true] ){
+		super( extents, torus )
+		// Check that the grid size is not too big to store pixel ID in 32-bit number,
+		// and allow fast conversion of coordinates to unique ID numbers.
+		/** @ignore */
+		this.Z_BITS = 1+Math.floor( Math.log2( this.extents[2] - 1 ) )
+		if( this.X_BITS + this.Y_BITS + this.Z_BITS &gt; 32 ){
+			throw(&quot;Field size too large -- field cannot be represented as 32-bit number&quot;)
+		}
+		/** @ignore */
+		this.Z_MASK = (1 &lt;&lt; this.Z_BITS)-1
+		/** @ignore */
+		this.Z_STEP = 1
+		/** @ignore */
+		this.Y_STEP = 1 &lt;&lt; (this.Z_BITS)
+		/** @ignore */
+		this.X_STEP = 1 &lt;&lt; (this.Z_BITS +this.Y_BITS)
+		/** Array with values for each pixel stored at the position of its 
+			{@link IndexCoordinate}. E.g. the value of pixel with coordinate i is
+			stored as this._pixels[i].
+			@private
+			@type {Uint16Array} */
+		this._pixels = new Uint16Array(this.p2i(extents))
+	}
+	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
+	
+	See also {@link Grid3D#i2p} for the backward conversion.
+	
+	@param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	@return {IndexCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
+	p2i( p ){
+		return ( p[0] &lt;&lt; ( this.Z_BITS + this.Y_BITS ) ) + 
+			( p[1] &lt;&lt; this.Z_BITS ) + 
+			p[2]
+	}
+	/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
+	
+	See also {@link Grid3D#p2i} for the backward conversion.
+	
+	@param {IndexCoordinate} i - the coordinate of the pixel to convert
+	@return {ArrayCoordinate} the converted coordinate. 
+	
+	@example 
+	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	* let p = grid.i2p( 5 )
+	* console.log( p )
+	* console.log( grid.p2i( p ))
+	*/
+	i2p( i ){
+		return [i &gt;&gt; (this.Y_BITS + this.Z_BITS), 
+			( i &gt;&gt; this.Z_BITS ) &amp; this.Y_MASK, i &amp; this.Z_MASK ]
+	}
+	
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		@return {iPixel} for each pixel, return an array [i,v] where i is
+		the pixel&apos;s {@link IndexCoordinate} on the grid, and v its value.
+		
+		@example
+		* let CPM = require( &quot;path/to/build&quot; )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+		* grid.setpixi( 0, 1 )
+		* grid.setpixi( 1, 5 )
+		* 
+		* // iterator
+		* for( let i of grid.pixelsi() ){
+		* 	console.log( i )
+		* }
+		*/
+	* pixelsi() {
+		let ii = 0, c = 0
+		for( let i = 0 ; i &lt; this.extents[0] ; i ++ ){
+			let d = 0
+			for( let j = 0 ; j &lt; this.extents[1] ; j ++ ){
+				for( let k = 0 ; k &lt; this.extents[2] ; k ++ ){
+					yield ii
+					ii++
+				}
+				d += this.Y_STEP
+				ii = c + d
+			}
+			c += this.X_STEP
+			ii = c
+		}
+	}
+
+	/** This iterator returns locations and values of all non-zero pixels.
+
+		@return {Pixel} for each pixel, return an array [p,v] where p are
+		the pixel&apos;s array coordinates on the grid, and v its value.
+		
+		@example
+		* let CPM = require( &quot;path/to/build&quot; )
+		* // make a grid and set some values
+		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+		* grid.setpix( [0,0,0], 1 )
+		* grid.setpix( [0,0,1], 5 )
+		* 
+		* // iterator
+		* for( let p of grid.pixels() ){
+		* 	console.log( p )
+		* }
+		*/
+	* pixels() {
+		let ii = 0, c = 0
+		for( let i = 0 ; i &lt; this.extents[0] ; i ++ ){
+			let d = 0
+			for( let j = 0 ; j &lt; this.extents[1] ; j ++ ){
+				for( let k = 0 ; k &lt; this.extents[2] ; k ++ ){
+					if( this._pixels[ii] &gt; 0 ){
+						yield [[i,j,k], this._pixels[ii]]
+					}
+					ii++
+				}
+				d += this.Y_STEP
+				ii = c + d
+			}
+			c += this.X_STEP
+			ii = c
+		}
+	}
+
+	/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels of the pixel at 
+		coordinate i. This function takes the 3D equivalent of the 2D Moore-8 neighborhood, 
+		excluding the pixel itself.
+		@see https://en.wikipedia.org/wiki/Moore_neighborhood
+		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		@param {boolean[]} [torus=[true,true,true]] - does the grid have linked borders? Defaults to the
+		setting on this grid, see {@link torus}
+		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	*/
+	neighi( i, torus = this.torus ){
+		let p = this.i2p(i)
+
+		let xx = []
+		for( let d = 0 ; d &lt;= 2 ; d ++ ){
+			if( p[d] == 0 ){
+				if( torus[d] ){
+					xx[d] = [p[d],this.extents[d]-1,p[d]+1]
+				} else {
+					xx[d] = [p[d],p[d]+1]
+				}
+			} else if( p[d] == this.extents[d]-1 ){
+				if( torus[d] ){
+					xx[d] = [p[d],p[d]-1,0]
+				} else {
+					xx[d] = [p[d],p[d]-1]
+				}
+			} else {
+				xx[d] = [p[d],p[d]-1,p[d]+1]
+			}
+		}
+		let r = [], first=true
+		for( let x of xx[0] ){
+			for( let y of xx[1] ){
+				for( let z of xx[2] ){
+					if( first ){
+						first = false 
+					} else {
+						r.push( this.p2i( [x,y,z] ) )
+					}
+				}
+			}
+		}
+		return r
+	}
+}
+
+export default Grid3D 
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

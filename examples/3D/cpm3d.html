@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>3D CPM</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		body
+		{
+			background-color: white;
+			margin: 5 ; padding: 5;
+		}
+	</style>
+
+
+<script src="../../build/cpm.js"></script>
+<script src="../fpsmeter.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
+<script type="text/javascript" src="../../viz/TrackballControls.js"></script>
+<script type="text/javascript" src="../../viz/viz.js"></script>
+<script type="text/javascript">
+
+	// Optional: set some parameters via the url
+var urlParams = new URLSearchParams(window.location.search)
+var mesh_step = parseInt(urlParams.get("meshStep")) || 15
+let ncells = parseInt(urlParams.get("ncells")) || 1
+
+/* Global variables that are not model parameters
+	stopit tracks whether the simulation is running.
+*/
+let stopit = 0// track whether the simulation is running (start/stop button)
+
+
+let zoom=1, w = 50, t = 5000
+let C,meter
+
+function initialize(){
+	C = setupCPM({zoom:zoom,w:w})
+	init3d( 500, 500, C )
+}
+
+function mainloop(){
+	C.monteCarloStep()
+}
+
+let pdc, Cs
+
+function setupCPM(conf){
+  	const zoom = conf.zoom || 1
+  	const w = conf.w || 40
+	const dimension = 3
+  	C = new CPM.CPM( [w,w,w], {
+  		T : 20,
+  		torus : [true,true,true],
+  		nCellKinds : 1,
+  		J: [[0,20], [20,100]],
+  		V: [0,500],
+  		LAMBDA_V: [0,50],
+  		LAMBDA_DIR: [0,300], 
+  		PERSIST: [0,0.8], 
+  	})
+  	C.add( new CPM.Adhesion( C.conf ) )
+  	C.add( new CPM.VolumeConstraint( C.conf ) )
+  	pdc = new CPM.PersistenceConstraint( C.conf )
+  	C.add( pdc )
+
+  	let Cim = new CPM.Canvas( C, {zoom:zoom} )
+
+	C.add( { postMCSListener : function(){
+  		// Display every 'draw_each' steps.
+		render3d()
+		controls && controls.update()
+  		if( C.time > 5000 ){
+  			stopit = 1
+  			C.time = 0
+  		}
+	    	meter.tick()
+
+  		if( !stopit  ){
+  			requestAnimationFrame( mainloop )
+  		}
+  	}} )
+
+	let Gi = new CPM.GridManipulator(C)
+  	for( let i = 0 ; i < ncells ; i ++ ){
+  		Gi.seedCell(1)
+  	}
+
+  	// Start simulation
+  	meter = new FPSMeter({left:"auto", right:"5px"})
+  	return C
+}
+
+function startanim(){
+	stopit=0
+	requestAnimationFrame( mainloop )
+}
+
+function stopanim(){
+	stopit=1
+}
+
+</script>
+</head>
+<body onload="initialize();startanim()">
+
+<div style="width:600px; margin:auto">
+
+<!--<div id="sliders">
+</div>-->
+<p></p>
+<div id="stage">
+</div>
+
+<div>
+  <button onclick="startanim()">start </button>
+  <button onclick="stopanim()">stop </button>
+  <button onclick="reset()"> reset </button>
+  <button onclick="requestAnimationFrame( mainloop )">step simulation</button>
+
+</div>
+</div>
+
+</body>
+</html>

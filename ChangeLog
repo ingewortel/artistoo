@@ -3,6 +3,195 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-11-29 Inge Wortel <ingewortel@gmail.com>
+	* README.md : Added more examples and fixed it so that this now works directly from
+	the README, as well as from docs/index.html
+	* src/hamiltonian : removed experimental constraints and updated documentation.
+	* docs/ : updated documentation.
+	* Removed several old files.
+	* simulation-examples : removed this directory and restructured it into examples/.
+	* src/models/GridBasedModel.js : replaced mersennetwister by mersenne-twister, an MIT
+	licensed version.
+
+2019-08-21 Inge Wortel <ingewortel@gmail.com>
+	* src/grid/Grid.js : The torus property is now an array with a boolean value for 
+	each dimension separately. It is therefore now possible to have a torus in x dimension,
+	but not in y-dimension. Methods listening to the torus are also compatible with this
+	update now.
+	* src/grid/Grid2D.js : Made neighborhood computation compatible with new specification
+	of the torus property.
+	* src/grid/Grid3D.js : idem.
+	* src/grid/CoarseGrid.js : is now an extension of the Grid2D class so that neighborhood
+	methods are also available when a CoarseGrid is supplied to a Canvas.
+	* src/grid/GridManipulator.js : now also compatible with the new way of specifying a torus.
+	* docs : removed from git for now because it's annoying. Type 'make docs' to create them locally.
+	* src/hamiltonian/ChemotaxisConstraint.js : updated jsdoc example code with new torus syntax.
+	* src/hamiltonian/ProtrusionConstraint.js : updated with new torus syntax.
+	* src/hamiltonian/PreferredDirectionConstraint.js : updated with new torus syntax.
+	* src/hamiltonian/AttractionPointConstraint.js : updated with new torus syntax.
+	* src/hamiltonian/PersistenceConstraint.js: updated with new torus syntax.
+	* src/models/CPM.js : updated jsdoc comments with new torus syntax.
+	* src/models/CA.js : updated jsdoc comments with new torus syntax.
+	* src/models/GridBasedModel.js : made compatible with new torus syntax.
+	* src/simulation/Simulation.js : centroid computation now compatible with new torus syntax.
+	* src/stats/CentroidsWithTorusCorrection.js : now compatible with new torus syntax, performing
+	the correction only in the necessary dimensions.
+	* src/stats/CellNeighborList.js : updated jsdoc example with new torus syntax.
+	* src/stats/Centroids.js : included check for torus and warning not to use this stat if there is.
+	* examples/* : made compatible with new torus syntax.
+	* simulation-examples/* made compatible with new torus syntax.
+
+2019-08-20 Inge Wortel <ingewortel@gmail.com>
+	* src/simulation/Simulation.js : change in default drawing method for cells on the grid.
+	* src/Canvas.js : Changed method to draw a chemokine field, which now uses transparancy
+	and a color of choice rather than only the default red-on-black color.
+	* README.md : Added some links to examples. Note these only work when opening this file
+	from the docs/index.html.
+	* src/hamiltonian/SoftConnectivityConstraint.js : Added soft connectivity constraint (experimental).
+
+2019-08-19 Inge Wortel <ingewortel@gmail.com>
+	* src/hamiltonian/ConnectivityConstraint.js : Added connectivity constraint (experimental). 
+	* src/Canvas.js : Added method to draw contour of chemokine field.
+
+2019-08-08 Inge Wortel <ingewortel@gmail.com>
+	* docs : documentation now almost finished. Many src files have been modified to include
+	esdoc syntax for automatic documentation (doxygen-like). Open the docs from 
+	docs/index.html. If functions change, the associated documentation should from now on be
+	changed as well. Note that I have defined some special variable "types" (red entries in
+	the left menu in docs/index.html) that should be used in the documentation when 
+	appropriate. Use "make docs" to update documentation. 
+	* old : new folder for old implementations that don't have to be in the build anymore.
+	* old/AdhesionMultiBackground : moved from src/hamiltonian/... because this constraint
+	doesn't really work.
+	* src/grid/grid-typedef.js : file with some esdoc @typedefs associated with the grid.
+	* src/grid/models/model-typedefs.js : file with esdoc @typedefs associated with the models.
+	* src/grid/stats/stat-typedef.js : file with esdoc @typedefs associated with stats.
+	* src/grid/hamiltonian/constraint-typedef.js : file with esdoc @typedefs associated with constraints.
+	* src/hamiltonian/ParameterChecker.js : moved confCheck functions from Constraint.js
+	to this new class, and changed the functions so that they are more structured.
+	See the documentation for usage. 
+	* src/stats/CellNeighborList.js : new stat ported from the old Stats class, but hasn't
+	been properly tested yet. 
+	* src/stats/BorderPixelsByCell.js : new stat.
+	* build-makeout.bash : keeping track of the makefile dependencies automatically didn't
+	really work, so now this script just makes a special makefile to handle the dependencies.
+	
+
+2019-08-05 Inge Wortel <ingewortel@gmail.com>
+	* app/automatic-index.bash : script automatically generates app/index.js from a standard
+	file app/include-list.txt. This ensures that both the Makefile dependencies and the app index
+	can be kept up to date from a single file. See app/include-list.txt. 
+	* app/include-list.txt : file that keeps track of which modules are used in the build,
+	and which should be exported. See this file for the format. 
+	* Makefile : app/index.js and makefile dependencies now kept up to date automatically from app/include-list.txt.
+	* src : Moved all source code into a folder src/. This will help generating 
+	automatic documentation using esdoc.
+	* app/index.js : Fixed the new paths using the src folder.
+	* Makefile : Fixed the new paths using the src folder.
+	* node_modules : installed "esdoc": "^1.1.0" and "esdoc-standard-plugin": "^1.0.0",
+	and these are added to package.json.
+	* docs : Added documentation using esdoc (not finished yet, but accessible from
+	docs/index.html)
+
+2019-08-01 Inge Wortel <ingewortel@gmail.com>
+	* hamiltonian/AdhesionMultiBackground.js : Added a new form of the adhesion constraint,
+	where a set of pixels on the grid is given different parameters when it is background.
+	* hamiltonian/ActivityMultiBackground.js : Idem for the Act model. This allows building
+	adhesive micropatterns on the substrate for the cell to move on.
+	* simulation-examples : new examples added for the GameOfLife CA, and one for the
+	micropatterned substrate.
+
+2019-07-16 Inge Wortel <ingewortel@gmail.com>
+	* grid/GridManipulator.js : reset stats after cell division, because
+	the cellpixels stat is out of date
+	* models/CPM.js : added a method getConstraint() to retrieve a 
+	constraint by name. This is useful for drawing methods that need
+	attributes stored in the constraint object.
+	* simulation/Simulation.js : Made compatible with the new version of 
+	the CPM in which constraints are added automatically.
+	
+	* simulation-examples/new-simulation.bash : changed this so that 
+	it now works differently. Run with 
+		"bash new-simulation.bash <simulation-name>", 
+	which will produce a file simulation-files/<simulation-name>.js
+	that serves as a template for the html/node files.
+	This file is produced from simulation-files/Template.js, and contains
+	both configuration object and custom code for that simulation.
+	See the provided examples for details. After editing the template in
+	simulation-files/<simulation-name>.js, type "make" from the 
+	simulation-examples folder to produce the html and node files.
+	* simulation-examples/write-example-html.bash and write-example-node.bash
+	have been adjusted to use the new method.
+	* simulation-examples/Makefile : this now contains a target 
+	"test-node-examples", which runs all the examples in the
+	simulation-examples/node folder, to see if they work without any errors.
+	
+2019-07-18 Johannes <johannes.textor@gmx.de>
+	* PreferredDirectionConstraint.js: Renamed to to PersistenceConstraint
+    * Constraint.js: confChecker no longer obligatory as this makes implementing new
+    custrom constraints unnecessarily bureaucratic. Instead the method will be called
+    when available.
+
+2019-07-13 Inge Wortel <ingewortel@gmail.com>
+	* hamiltonian/ActivityConstraint.js : changed the name of the old version
+	to hamiltonian/ActivityConstraintOld.js and the name of the new version
+	to hamiltonian/ActivityConstraint.js, and updated app/index.js and Makefile
+	accordingly. For the difference between those two versions, see entry of 
+	2019-03-09 in this ChangeLog.
+	* I have now made it obligatory for every constraint to implement a 
+	confChecker() method, which checks if the required configuration parameters
+	are actually present in the supplied conf object and have the right format.
+	See the code in the main Constraint.js class for some default checker methods
+	that should be usable for most constraints you can imagine. Note that some
+	examples may not work right now if the nCellKinds is not present in the conf.
+
+2019-07-12 Inge Wortel <ingewortel@gmail.com>
+	* stats/CentroidsWithTorusCorrection.js : fixed it so it works now.
+	* simulation/Simulation.js : added a class for setting up a simulation
+	that removes a lot of the boilerplate code. Still trying to work out 
+	what should and should not be in there by default, but it's a start.
+	* simulation-examples : started a new folder for examples generated
+	using simulation classes. This way, the node and html examples can be
+	generated automatically from a single file. To do this, call
+	'bash new-simulation.bash' <mysim> <basic/custom> from the simulation-examples/ folder. This
+	will set up a new config file in simulation-files, which
+	you can then edit. It will also add the simulation to the Makefile.
+	If <basic>, the StandardSimulation.js class is used; otherwise, the boilerplate
+	code for a new class is generated in <mysim>.js.
+	You can then adjust the config and class files, and type 'make' to
+	produce the node/html examples.
+	* simulation-examples/Makefile : This automatically generates a node and
+	html version of each example.
+	* simulation-examples/write-example-html.bash : Writes an html version
+	of a simulation. 
+	* simulation-examples/write-example-node.bash : Writes a node version
+	of a simulation.
+	* simulation-examples/new-simulation.bash : Sets up a new simulation
+	which you can then edit. See above.
+	* simulation-examples/simulation-files/Microchannel.js : example
+	of creating a Microchannel simulation.
+	* simulation-examples/simulation-files/Microchannel-config.js : configuration
+	for the Microchannel simulation.
+
+2019-07-09 Johannes Textor <johannes.textor@gmx.de>
+	* grid/GridManipulator.js : Added this new class, and removed the 
+	existing "GridInitializer" class. There seems to be no good reason
+	to let these be two separate classes.
+	* examples/cancer-invasion.js : Made this example work as it was,
+	but now without the separate "CPMChemotaxis" class which will be 
+	removed soon.
+
+2019-07-04 Inge Wortel <ingewortel@gmail.com>
+	* hamiltonian/BarrierConstraint.js : new hard constraint to replace
+	the "stroma" celltype in the previous version. Basically, this 
+	constraint sets one cellkind as "barrier" cellkind. Copy attempts
+	from or into pixels with this cellkind are forbidden. Which cellkinds
+	are barrier are defined in the conf object in the IS_BARRIER array,
+	with a boolean value for each cellkind.
+	* grid/GridInitializer.js : added functions to define a plane on
+	the grid and to set all pixels in that plane to a certain cellkind.
+	This can be used to build microchannels, for example.
+
 2019-03-20 Johannes Textor <johannes.textor@gmx.de>
 	* stats/PostMCSStats.js : new class for parameters that can be
 	computed after each Monte Carlo steps. Includes an event listener that

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/hamiltonian/ProtrusionConstraint.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/hamiltonian/ProtrusionConstraint.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* 
+	todo:
+	- what about the potential when a focal point detaches?
+	- postsetpixlistener needs sourcei. This is now done with a bit of a hack,
+	by caching the source of every deltaH evaluation - which should be equal to
+	the source used for the setpix event. But this may go wrong if things ever happen
+	in parallel.
+	Alternative: let the setpix method have an optional sourcei input argument that it
+	can pass on to its listeners?
+ */
+
+import SoftConstraint from &quot;./SoftConstraint.js&quot;
+import ParameterChecker from &quot;./ParameterChecker.js&quot;
+import Centroids from &quot;../stats/Centroids.js&quot;
+import CentroidsWithTorusCorrection from &quot;../stats/CentroidsWithTorusCorrection.js&quot;
+
+
+/** @experimental */
+class ProtrusionConstraint extends SoftConstraint {
+	constructor( conf ){
+		super( conf )
+
+		this.focalpoints = { 
+			num : {},
+			points : {} } // track all the cell&apos;s focal points
+		
+		
+		this._lastrequestedcopy = []
+		
+	}
+	
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C )
+		checker.confCheckParameter( &quot;P_DETACH&quot;, &quot;KindArray&quot;, &quot;NonNegative&quot; )
+		checker.confCheckParameter( &quot;G_PROTRUSION&quot;, &quot;KindArray&quot;, &quot;NonNegative&quot; )
+		// add one for N_Protrusion.
+	}
+	
+	G( kind ){
+		return this.conf[&quot;G_PROTRUSION&quot;][kind]
+	}
+	
+	distance( p1, p2 ){
+		let dim = p1.length
+		let distance = 0
+		for( let d = 0; d &lt; dim; d++ ){
+			distance += ( p1[d] - p2[d] )*( p1[d] - p2[d] )
+		}
+		return Math.sqrt( distance )
+	}
+	
+	getCentroid( cellid ){
+	
+		let centroids
+		if( this.C.torus.some( function(value){return value}) ){
+			centroids = this.C.getStat( CentroidsWithTorusCorrection )
+		} else {
+			centroids = this.C.getStat( Centroids )
+		}
+		
+		return centroids[cellid] 
+	}
+	
+	/* ======= Protrusion constraint ======= */
+
+	/* Hamiltonian computation */ 
+	deltaH ( sourcei, targeti, src_type, tgt_type ){
+
+		let deltaH = 0
+		const src_kind = this.C.cellKind( src_type )
+		const tgt_kind = this.C.cellKind( tgt_type )
+		
+		// Penalty P_detach if a focal point detaches (if the copy goes into
+		// a focal point)
+		if( this.isFocalPoint( targeti ) ){
+			deltaH += this.conf[&quot;P_DETACH&quot;][tgt_kind]
+		}
+		
+		// If the source is a focal point, this means the focal point will move.
+		// This will change its distance to the center of mass of the cell, and thus
+		// the potential in H. Update it accordingly. 
+		if( this.isFocalPoint( sourcei ) ){
+			let centroid = this.getCentroid( src_type )
+		
+			let sourcep = this.C.grid.i2p( sourcei )
+			let targetp = this.C.grid.i2p( targeti )
+		
+			let H_before = this.G( src_kind ) / this.distance( sourcep, centroid )
+			let H_after = this.G( src_kind ) / this.distance( targetp, centroid )
+			
+			deltaH += H_after - H_before
+			
+		}
+		
+		this._lastrequestedcopy = [sourcei, targeti, src_type, tgt_type]
+		
+		return deltaH
+	}
+	
+	addFocalPoint( i, cellid ){
+		if( !( cellid in this.focalpoints[&quot;num&quot;] ) ){
+			this.focalpoints[&quot;num&quot;][cellid] = 0
+		}
+		
+		if( i in this.focalpoints[&quot;points&quot;] ){
+			throw( &quot;Cannot add focal point i &quot; + i + &quot; : is already a focal point!&quot;)
+		}
+		if( this.C.grid.pixti(i) != cellid ){
+			throw(&quot;Something went wrong! point &quot; + i + &quot; does not belong to cellid &quot; + cellid + &quot;!&quot;)
+		}
+		
+		this.focalpoints[&quot;points&quot;][i] = true
+		this.focalpoints[&quot;num&quot;][cellid]++
+	}
+	removeFocalPoint( i, cellid ){
+		if( !(i in this.focalpoints[&quot;points&quot;] ) ){
+			this.log( cellid )
+			this.log( this.C.grid.pixti(i))
+			throw(&quot;Cannot remove focalpoint &quot; + i + &quot; : i is not a focal point!&quot;)
+
+		}
+		/*if( !( this.C.grid.pixti(i) == cellid ) ){
+			this.log( cellid )
+			this.log( this.C.grid.pixti(i))
+			throw(&quot;Something went wrong! focalpoint &quot; + i + &quot; does not belong to cellid &quot; + cellid + &quot;!&quot;)
+		}*/
+	
+		delete this.focalpoints[&quot;points&quot;][i]
+		this.focalpoints[&quot;num&quot;][cellid]--
+	}
+	currentNumberFocalPoints( cellid ){
+		if( cellid in this.focalpoints[&quot;num&quot;] ){
+			return this.focalpoints[&quot;num&quot;][cellid]
+		}
+		return 0
+	}
+	isFocalPoint( i ){
+		return ( i in this.focalpoints[&quot;points&quot;] )
+	}
+	lastSource(){
+		return this._lastrequestedcopy[0] || NaN
+	}
+	log( message ){
+		/* eslint-disable no-console*/
+		console.log(message)
+	}
+
+	postMCSListener(){
+		// remove all focalpoints that are no longer at the border.
+		for( let fp of Object.keys( this.focalpoints[&quot;points&quot;] ) ){
+			if( !this.C.borderpixels.contains( fp ) ){
+				let cellid = this.C.pixti(fp)
+				this.removeFocalPoint( fp, cellid )
+			}
+		}
+		
+	}
+
+	/* eslint-disable no-unused-vars*/
+	postSetpixListener( i, t_old, t ){
+		
+		let kind = this.C.cellKind( t )
+		
+		// If i was a focalpoint of t_old, it is now lost.
+		if( this.isFocalPoint(i) ){
+			this.removeFocalPoint( i, t_old )
+		}
+		
+		// The point can only become a focal point if N_PROTRUSION of this kind is nonzero
+		// and if the new cell is non-background
+		if( t != 0 &amp;&amp; this.conf[&quot;N_PROTRUSION&quot;][kind] &gt; 0 ){
+			// This point becomes a focal point of the new cell t in two cases: 
+		
+			// 1) A copy from a focal point moves that focal point from the sourcei to i,
+			// but only if the number of focal points is not already too large. If that is the
+			// case, drop it. (This should only happen when the N_PROTRUSION) changes during
+			// the simulation, eg via HTML controls.
+			let sourcei = this.lastSource()
+			if( this.isFocalPoint( sourcei ) ){
+				this.removeFocalPoint( sourcei, t )
+				if( this.currentNumberFocalPoints(t) &lt;= this.conf[&quot;N_PROTRUSION&quot;][kind] ){
+					this.addFocalPoint( i, t )
+				} 
+			}
+		
+			// 2) If the copy did not come from a focalpoint, but the cell that has just 
+			// gained a pixel (t) has too few focal points, this pixel becomes a focalpoint.
+			else if( this.currentNumberFocalPoints(t) &lt; this.conf[&quot;N_PROTRUSION&quot;][kind] ){
+				this.addFocalPoint( i, t )
+			}
+		}
+	}
+
+}
+
+export default ProtrusionConstraint
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

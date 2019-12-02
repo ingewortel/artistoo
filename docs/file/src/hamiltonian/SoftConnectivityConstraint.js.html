@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/hamiltonian/SoftConnectivityConstraint.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/hamiltonian/SoftConnectivityConstraint.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+
+import SoftConstraint from &quot;./SoftConstraint.js&quot;
+import ParameterChecker from &quot;./ParameterChecker.js&quot;
+
+/** This constraint encourages that cells stay &apos;connected&apos; throughout any copy attempts.
+In contrast to the hard version of the {@link ConnectivityConstraint}, this version does
+not completely forbid copy attempts that break the cell connectivity, but punishes them
+through a positive term in the Hamiltonian. 
+@experimental
+*/
+class SoftConnectivityConstraint extends SoftConstraint {
+
+	/** The constructor of the ConnectivityConstraint requires a conf object with one parameter.
+	@param {object} conf - parameter object for this constraint.
+	@param {PerKindBoolean} conf.LAMBDA_CONNECTIVITY - should the cellkind be connected or not?
+	*/
+	constructor( conf ){
+		super(conf)
+		
+		/** Object tracking the borderpixels of each cell. This is kept up to date after
+		every copy attempt.
+		@type {CellObject}*/
+		this.borderpixelsbycell = {}
+	}
+	
+	/** The set CPM method attaches the CPM to the constraint. */
+	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
+		this.C = C
+		
+		/** Private property used by {@link updateBorderPixels} to track borders. 
+		@private
+		@type {Uint16Array} */
+		this._neighbours = new Uint16Array(this.C.grid.p2i(this.C.extents))
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C )
+		checker.confCheckParameter( &quot;LAMBDA_CONNECTIVITY&quot;, &quot;KindArray&quot;, &quot;NonNegative&quot; )
+	}
+	
+	/** Update the borderpixels when pixel i changes from t_old into t_new.
+	@param {IndexCoordinate} i - the pixel to change
+	@param {CellId} t_old - the cell the pixel belonged to previously
+	@param {CellId} t_new - the cell the pixel belongs to now. */
+	updateBorderPixels( i, t_old, t_new  ){
+		if( t_old == t_new ) return
+		if( !(t_new in this.borderpixelsbycell) ){
+			this.borderpixelsbycell[t_new] = {}
+		}
+		const Ni = this.C.grid.neighi( i )
+		const wasborder = this._neighbours[i] &gt; 0
+		// current neighbors of pixel i, set counter to zero and loop over nbh.
+		this._neighbours[i] = 0
+		for( let ni of Ni  ){
+			// type of the neighbor.
+			const nt = this.C.grid.pixti(ni)
+			
+			// If type is not the t_new of pixel i, nbi++ because the neighbor belongs
+			// to a different cell. 
+			if( nt != t_new ){
+				this._neighbours[i] ++ 
+			}
+			
+			// If neighbor type is t_old, the border of t_old may have to be adjusted. 
+			// It gets an extra neighbor because the current pixel becomes t_new.
+			if( nt == t_old ){
+				// If this wasn&apos;t a borderpixel of t_old, it now becomes one because
+				// it has a neighbor belonging to t_new
+				if( this._neighbours[ni] ++ == 0 ){
+					if( !(t_old in this.borderpixelsbycell) ){
+						this.borderpixelsbycell[t_old] = {}
+					}
+					this.borderpixelsbycell[t_old][ni] = true
+				}
+
+			}
+			// If type is t_new, the neighbor may no longer be a borderpixel
+			if( nt == t_new ){
+				if( --this._neighbours[ni] == 0 &amp;&amp; ( ni in this.borderpixelsbycell[t_new] ) ){
+					delete this.borderpixelsbycell[t_new][ni]
+				}
+			}
+		}
+		// Case 1: 
+		// If current pixel is a borderpixel, add it to those of the current cell.
+		if( this._neighbours[i] &gt; 0 ){
+			this.borderpixelsbycell[t_new][i]=true
+		}
+		
+		// Case 2:
+		// Current pixel was a borderpixel. Remove from the old cell. 
+		if( wasborder ){
+			// It was a borderpixel from the old cell, but no longer belongs to that cell.
+			if( i in this.borderpixelsbycell[t_old] ){ 
+				delete this.borderpixelsbycell[t_old][i]
+			}
+		}
+		
+	}
+	
+	/** Get the connected components of the borderpixels of the current cell.
+	@param {CellId} cellid - cell to check the connected components of.
+	@return {object} an array with an element for every connected component, which is in
+	turn an array of the {@link ArrayCoordinate}s of the pixels belonging to that component.  */
+	connectedComponentsOfCellBorder( cellid ){
+	
+		/* Note that to get number of connected components, we only need to look at cellborderpixels. */
+		if( !( cellid in this.borderpixelsbycell ) ){
+			return []
+		}
+		
+		//let cbpi = Object.keys( this.borderpixelsbycell[cellid] ), cbpobject = this.borderpixelsbycell[cellid]
+		return this.connectedComponentsOf( this.borderpixelsbycell[cellid] )
+	}
+	
+		
+	/** Get the connected components of a set of pixels.
+	@param {object} pixelobject - an object with as keys the {@link IndexCoordinate}s of the pixels to check.
+	@return {object} an array with an element for every connected component, which is in
+	turn an array of the {@link ArrayCoordinate}s of the pixels belonging to that component.  */
+	connectedComponentsOf( pixelobject ){
+	
+		let cbpi = Object.keys( pixelobject )
+		
+		let visited = {}, k=0, pixels = [], C = this.C
+		let labelComponent = function(seed, k){
+			let q = [seed]
+			let cellid = C.pixti(q)
+			visited[q[0]] = 1
+			pixels[k] = []
+			while( q.length &gt; 0 ){
+				let e = q.pop()
+				pixels[k].push(C.grid.i2p(e) )
+				let ne = C.grid.neighi( e )
+				for( let i = 0 ; i &lt; ne.length ; i ++ ){
+					if( C.pixti( ne[i] ) == cellid &amp;&amp;
+						!(ne[i] in visited) &amp;&amp; (ne[i] in pixelobject) ){
+						q.push(ne[i])
+						visited[ne[i]]=1
+					}
+				}
+			}
+		}
+		for( let i = 0 ; i &lt; cbpi.length ; i ++ ){
+			let pi = cbpi[i]
+			if( !(pi in visited) ){
+				labelComponent( pi, k )
+				k++
+			}
+		}
+		return pixels
+	}
+
+	/** The postSetpixListener of the ConnectivityConstraint updates the internally
+	tracked borderpixels after every copy.
+	@param {IndexCoordinate} i - the pixel to change
+	@param {CellId} t_old - the cell the pixel belonged to previously
+	@param {CellId} t - the cell the pixel belongs to now.	
+	*/
+	postSetpixListener(  i, t_old, t ){
+		this.updateBorderPixels( i, t_old, t )
+	}	
+	
+	/** To speed things up: first check if a pixel change disrupts the local connectivity
+	in its direct neighborhood. If local connectivity is not disrupted, we don&apos;t have to
+	check global connectivity at all. This currently only works in 2D, so it returns 
+	false for 3D (ensuring that connectivity is checked globally).
+	@param {IndexCoordinate} tgt_i - the pixel to change
+	@param {CellId} tgt_type - the cell the pixel belonged to before the copy attempt.
+	@return {boolean} does the local neighborhood remain connected if this pixel changes?
+	*/
+	localConnected( tgt_i, tgt_type ){
+	
+		let neighbors = 0
+		for( let i of this.C.grid.neighNeumanni(tgt_i) ){
+			if( this.C.pixti(i) != tgt_type ){
+				neighbors++
+			}
+		}
+		
+		if( neighbors &gt;= 2 ){
+			return false
+		}
+		return true
+		
+	}
+	
+	/** Compute the &apos;connectivity&apos; of a cell; a number between 0 and 1. If the cell
+	is completely connected, this returns 1. A cell split into many parts gets a 
+	connectivity approaching zero. It also matters how the cell is split: splitting
+	the cell in two near-equal parts results in a lower connectivity than separating
+	one pixel from the rest of the cell.
+	@param {Array} components - an array of arrays (one array per connected component, 
+	in which each entry is the {@link ArrayCoordinate} of a pixel belonging to that component).
+	@param {CellId} cellid - the cell these components belong to.
+	@return {number} connectivity of this cell.*/
+	connectivity( components, cellid ){
+		if( components.length &lt;= 1 ){
+			return 1
+		} else {
+			
+			let Vtot = Object.keys( this.borderpixelsbycell[cellid] ).length
+			let Ci = 0
+			for( let c of components ){
+				let Vc = c.length
+				Ci += (Vc/Vtot)*(Vc/Vtot)
+			}
+			//console.log( Ci )
+			return Ci
+			
+		}
+	}
+	
+	/** This method checks the difference in connectivity when pixel tgt_i is changed from
+	tgt_type to src_type. 
+	@param {IndexCoordinate} tgt_i - the pixel to change
+	@param {CellId} src_type - the new cell for this pixel.
+	@param {CellId} tgt_type - the cell the pixel belonged to previously. 	
+	@return {number} conndiff - the difference: connectivity_after - connectivity_before.
+	*/
+	checkConnected( tgt_i, src_type, tgt_type ){
+	
+		//return this.localConnected( tgt_i, tgt_type )
+		
+	
+		
+		if( this.localConnected( tgt_i, tgt_type ) ){
+			return 0
+		}
+	
+		let comp1 = this.connectedComponentsOfCellBorder( tgt_type )
+		let conn1 = this.connectivity( comp1, tgt_type )
+	
+		// Update the borderpixels as if the change occurs
+		this.updateBorderPixels( tgt_i, tgt_type, src_type )
+		let comp = this.connectedComponentsOfCellBorder( tgt_type )
+		let conn2 = this.connectivity( comp, tgt_type )
+		
+		
+		let conndiff = conn2 - conn1
+		if( conn2 &gt; conn1 ){
+			conndiff = -conndiff
+		} 
+		
+		// Change borderpixels back because the copy attempt hasn&apos;t actually gone through yet.
+		this.updateBorderPixels( tgt_i, src_type, tgt_type )
+		
+		return conndiff
+		
+	}
+
+	/** Method for hard constraints to compute whether the copy attempt fulfills the rule.
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {boolean} whether the copy attempt satisfies the constraint.*/ 
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
+		// connectedness of src cell cannot change if it was connected in the first place.
+		
+		let lambda = this.conf[&quot;LAMBDA_CONNECTIVITY&quot;][this.C.cellKind(tgt_type)]
+		
+		// connectedness of tgt cell
+		if( tgt_type != 0 &amp;&amp; lambda &gt; 0 ){
+			return lambda*this.checkConnected( tgt_i, src_type, tgt_type )
+		}
+		
+		return 0
+	}
+}
+
+export default SoftConnectivityConstraint
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
