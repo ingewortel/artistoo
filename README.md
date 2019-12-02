@@ -39,6 +39,7 @@ We have the following examples for web-browser CPMs:
 * [Cells moving in the same global direction](./examples/html/DirectedMotionLinear.html)
 * [A layer of tightly packed epidermal cells](./examples/html/Epidermis.html)
 * [T cells moving in the epidermis](./examples/html/EpidermisWithTCells.html)
+* [T cells invading a growing tumor](./examples/html/CancerInvasion.html)
 * [Cells producing a chemokine with other cells responding to it](./examples/ManyCellsDiffusion.html)
 * [Cells moving with a preferred direction](./examples/html/ManyCellsPrefDir.html)
 * [Particle following a random walk](./examples/RandomWalk.html)
