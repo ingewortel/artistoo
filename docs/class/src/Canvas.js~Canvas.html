@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">Canvas | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="header-notice">
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Canvas from &apos;<span><a href="file/src/Canvas.js.html#lineNumber15">cpmjs/src/Canvas.js</a></span>&apos;</code></pre></div>
+  <span data-ice="access">public</span>
+  <span data-ice="kind">class</span>
+  
+  
+  
+  <span data-ice="source">| <span><a href="file/src/Canvas.js.html#lineNumber15">source</a></span></span>
+</div>
+
+<div class="self-detail detail">
+  <h1 data-ice="name">Canvas</h1>
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <div class="description" data-ice="description"><p>Class for taking a CPM grid and displaying it in either browser or with nodejs.
+Note: when using this class from outside the module, you don&apos;t need to import it
+separately but can access it from CPM.Canvas.</p>
+</div>
+  
+
+  
+
+  
+
+  
+
+  
+</div>
+
+
+
+<div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(C: <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> | <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The Canvas constructor accepts a CPM object C or a Grid2D object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-member-C">C</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> | <span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM">CPM</a></span> | <span><a href="class/src/models/CA.js~CA.html">CA</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The underlying model that is drawn on the canvas.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-member-extents">extents</a></span></span><span class="code" data-ice="signature">: <span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Grid size in each dimension, taken from the CPM or grid object to draw.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-member-grid">grid</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The underlying grid that is drawn on the canvas.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-member-height">height</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Height of the canvas in pixels (in its unzoomed state)</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-member-width">width</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Width of the canvas in pixels (in its unzoomed state)</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-member-wrap">wrap</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>if nonzero: &apos;wrap&apos; the grid to these dimensions; eg a pixel with x 
+coordinate 201 and wrap[0] = 200 is displayed at x = 1.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-member-zoom">zoom</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Zoom level to draw the canvas with, set to options.zoom or its default value 1.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-clear">clear</a></span></span><span class="code" data-ice="signature">(col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Color the whole grid in color [col], or in black if no argument is given.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-context">context</a></span></span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Return the current drawing context.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawActivityValues">drawActivityValues</a></span></span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, A: <span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span> | <span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span>, col: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Use to show activity values of the act model using a color gradient, for
+cells in the grid of cellkind &quot;kind&quot;.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawCellBorders">drawCellBorders</a></span></span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method for drawing the cell borders for a given cellkind in the color specified in &quot;col&quot;
+(hex format).</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawCells">drawCells</a></span></span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Draw all cells of cellkind &quot;kind&quot; in color col (hex).</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawField">drawField</a></span></span><span class="code" data-ice="signature">(cc: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Use to color a grid according to its values.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawFieldContour">drawFieldContour</a></span></span><span class="code" data-ice="signature">(cc: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>, nsteps: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Use to color a grid according to its values.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawOnCellBorders">drawOnCellBorders</a></span></span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Color outer pixel of all cells of kind [kind] in col [col].</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawPixelSet">drawPixelSet</a></span></span><span class="code" data-ice="signature">(pixelarray: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>General drawing function to draw all pixels in a supplied set in a given color.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-setCanvasId">setCanvasId</a></span></span><span class="code" data-ice="signature">(idstring: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Give the canvas element an ID supplied as argument.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html#instance-method-writePNG">writePNG</a></span></span><span class="code" data-ice="signature">(fname: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Draw grid to the png file &quot;fname&quot;.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+
+
+
+
+<div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-constructor-constructor">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(C: <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> | <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber50">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The Canvas constructor accepts a CPM object C or a Grid2D object.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">C</td>
+      <td data-ice="type" class="code"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> | <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the object to draw, which must be
+an object of class <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> (or its subclasses <span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM">CPM</a></span> and <span><a href="class/src/models/CA.js~CA.html">CA</a></span>),
+or a 2D grid (<span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> or <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>). Drawing of other grids is currently
+not supported.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">options</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  {} </li></ul></td>
+      <td data-ice="description"><p>Configuration settings</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.zoom</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  1 </li></ul></td>
+      <td data-ice="description"><p>positive number specifying the zoom level to draw with.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.wrap</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  [0,0,0]</li></ul></td>
+      <td data-ice="description"><p>if nonzero: &apos;wrap&apos; the grid to these 
+dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is displayed at x = 1.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      <div class="example-caption" data-ice="exampleCaption">A CPM with Canvas</div>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">let CPM = require( &quot;path/to/build&quot; )
+
+// Create a CPM, corresponding Canvas and GridManipulator 
+// (Use CPM. prefix from outside the module)
+let C = new CPM.CPM( [200,200], {
+	T : 20, 
+	J : [[0,20][20,10]], 
+	V:[0,500], 
+	LAMBDA_V:[0,5] 
+} )
+let Cim = new CPM.Canvas( C, {zoom:2} )
+let gm = new CPM.GridManipulator( C )
+
+// Seed a cell at [x=100,y=100] and run 100 MCS.
+gm.seedCellAt( 1, [100,100] )
+for( let t = 0; t &lt; 100; t++ ){
+	C.timeStep()
+}
+
+// Draw the cell and save an image
+Cim.drawCells( 1, &quot;FF0000&quot; )			// draw cells of CellKind 1 in red
+Cim.writePNG( &quot;my-cell-t100.png&quot; )</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-C">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">C</span><span class="code" data-ice="signature">: <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> | <span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM">CPM</a></span> | <span><a href="class/src/models/CA.js~CA.html">CA</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber56">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The underlying model that is drawn on the canvas.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-extents">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">extents</span><span class="code" data-ice="signature">: <span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber65">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Grid size in each dimension, taken from the CPM or grid object to draw.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-grid">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">grid</span><span class="code" data-ice="signature">: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber61">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The underlying grid that is drawn on the canvas.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-height">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">height</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber84">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Height of the canvas in pixels (in its unzoomed state)</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-width">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">width</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber81">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Width of the canvas in pixels (in its unzoomed state)</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-wrap">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">wrap</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber77">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>if nonzero: &apos;wrap&apos; the grid to these dimensions; eg a pixel with x 
+coordinate 201 and wrap[0] = 200 is displayed at x = 1.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-zoom">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">zoom</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber73">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Zoom level to draw the canvas with, set to options.zoom or its default value 1.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-clear">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">clear</span><span class="code" data-ice="signature">(col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber228">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Color the whole grid in color [col], or in black if no argument is given.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  &quot;000000&quot; </li></ul></td>
+      <td data-ice="description"><p>hex code for the color to use, defaults to black.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-context">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">context</span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber242">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Return the current drawing context.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>current drawing context on the canvas.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawActivityValues">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawActivityValues</span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, A: <span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span> | <span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span>, col: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber429">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Use to show activity values of the act model using a color gradient, for
+cells in the grid of cellkind &quot;kind&quot;. 
+The constraint holding the activity values can be supplied as an 
+argument. Otherwise, the current CPM is searched for the first 
+registered activity constraint and that is then used.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">kind</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Integer specifying the cellkind to color. If negative, draw
+values for all cellkinds.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">A</td>
+      <td data-ice="type" class="code"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span> | <span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>the constraint object to
+use, which must be of class <span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span> or <span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span>
+If left unspecified, this is the first instance of an ActivityConstraint or ActivityMultiBackground
+object found in the soft_constraints of the attached CPM.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>a function that returns a color for a number in [0,1] as an array of red/green/blue values,
+for example, [255,0,0] would be the color red. If unspecified, a green-to-red heatmap is used.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawCellBorders">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawCellBorders</span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber380">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Method for drawing the cell borders for a given cellkind in the color specified in &quot;col&quot;
+(hex format). This function draws a line around the cell (rather than coloring the
+outer pixels). If [kind] is negative, simply draw all borders.</p>
+<p>See <span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawOnCellBorders">drawOnCellBorders</a></span> to color the outer pixels of the cell.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">kind</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Integer specifying the cellkind to color. Should be a 
+positive integer as 0 is reserved for the background.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  &quot;000000&quot; </li></ul></td>
+      <td data-ice="description"><p>hex code for the color to use, defaults to black.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawCells">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawCells</span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber522">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Draw all cells of cellkind &quot;kind&quot; in color col (hex). </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">kind</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Integer specifying the cellkind to color. Should be a 
+positive integer as 0 is reserved for the background.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Optional: hex code for the color to use. If left unspecified,
+it gets the default value of black (&quot;000000&quot;). col can also be a function that
+returns a hex value for a cell id.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawField">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawField</span><span class="code" data-ice="signature">(cc: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber265">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Use to color a grid according to its values. High values are colored in a brighter
+red. </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cc</td>
+      <td data-ice="type" class="code"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>the grid to draw values for. If left 
+unspecified, the grid that was originally supplied to the Canvas constructor is used.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  &quot;0000FF&quot; </li></ul></td>
+      <td data-ice="description"><p>the color to draw the chemokine in.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawFieldContour">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawFieldContour</span><span class="code" data-ice="signature">(cc: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span>, nsteps: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber302">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Use to color a grid according to its values. High values are colored in a brighter
+red. </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cc</td>
+      <td data-ice="type" class="code"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>the grid to draw values for. If left 
+unspecified, the grid that was originally supplied to the Canvas constructor is used.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">nsteps</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  10 </li></ul></td>
+      <td data-ice="description"><p>the number of contour lines to draw. Contour lines
+are evenly spaced between the min and max log10 of the chemokine.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default:  &quot;FFFF00&quot; </li></ul></td>
+      <td data-ice="description"><p>the color to draw contours with.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawOnCellBorders">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawOnCellBorders</span><span class="code" data-ice="signature">(kind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber499">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Color outer pixel of all cells of kind [kind] in col [col].</p>
+<p>See <span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawCellBorders">drawCellBorders</a></span> to actually draw around the cell rather than coloring the
+outer pixels.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">kind</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Integer specifying the cellkind to color. Should be a 
+positive integer as 0 is reserved for the background.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Optional: hex code for the color to use. If left unspecified,
+it gets the default value of black (&quot;000000&quot;).</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-drawPixelSet">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">drawPixelSet</span><span class="code" data-ice="signature">(pixelarray: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, col: <span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber564">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>General drawing function to draw all pixels in a supplied set in a given color. </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">pixelarray</td>
+      <td data-ice="type" class="code"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>an array of {@link ArrayCoordinate of pixels
+to color.}</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">col</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Optional: hex code for the color to use. If left unspecified,
+it gets the default value of black (&quot;000000&quot;). col can also be a function that
+returns a hex value for a cell id.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setCanvasId">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">setCanvasId</span><span class="code" data-ice="signature">(idstring: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber118">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Give the canvas element an ID supplied as argument. Useful for building an HTML
+page where you want to get this canvas by its ID. </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">idstring</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the name to give the canvas element.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-writePNG">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">writePNG</span><span class="code" data-ice="signature">(fname: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber581">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Draw grid to the png file &quot;fname&quot;. </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">fname</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Path to the file to write. Any parent folders in this path must
+already exist.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

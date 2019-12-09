@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/Canvas.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/Canvas.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+&quot;use strict&quot;
+
+import GridBasedModel from &quot;./models/GridBasedModel.js&quot;
+import Grid2D from &quot;./grid/Grid2D.js&quot;
+import CoarseGrid from &quot;./grid/CoarseGrid.js&quot;
+import PixelsByCell from &quot;./stats/PixelsByCell.js&quot;
+import ActivityConstraint from &quot;./hamiltonian/ActivityConstraint.js&quot;
+import ActivityMultiBackground from &quot;./hamiltonian/ActivityMultiBackground.js&quot;
+
+/** 
+ * Class for taking a CPM grid and displaying it in either browser or with nodejs.
+ * Note: when using this class from outside the module, you don&apos;t need to import it
+ * separately but can access it from CPM.Canvas. */
+class Canvas {
+	/** The Canvas constructor accepts a CPM object C or a Grid2D object.
+	@param {GridBasedModel|Grid2D|CoarseGrid} C - the object to draw, which must be
+	an object of class {@link GridBasedModel} (or its subclasses {@link CPM} and {@link CA}),
+	or a 2D grid ({@link Grid2D} or {@link CoarseGrid}). Drawing of other grids is currently
+	not supported.
+	@param {object} [ options = {} ] - Configuration settings
+	@param {number} [ options.zoom = 1 ]- positive number specifying the zoom level to draw with.
+	@param {number[]} [options.wrap = [0,0,0]] - if nonzero: &apos;wrap&apos; the grid to these 
+	dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+	
+	@example &lt;caption&gt;A CPM with Canvas&lt;/caption&gt;
+	* let CPM = require( &quot;path/to/build&quot; )
+	* 
+	* // Create a CPM, corresponding Canvas and GridManipulator 
+	* // (Use CPM. prefix from outside the module)
+	* let C = new CPM.CPM( [200,200], {
+	* 	T : 20, 
+	* 	J : [[0,20][20,10]], 
+	* 	V:[0,500], 
+	* 	LAMBDA_V:[0,5] 
+	* } )
+	* let Cim = new CPM.Canvas( C, {zoom:2} )
+	* let gm = new CPM.GridManipulator( C )
+	* 
+	* // Seed a cell at [x=100,y=100] and run 100 MCS.
+	* gm.seedCellAt( 1, [100,100] )
+	* for( let t = 0; t &lt; 100; t++ ){
+	* 	C.timeStep()
+	* }
+	* 
+	* // Draw the cell and save an image
+	* Cim.drawCells( 1, &quot;FF0000&quot; )			// draw cells of CellKind 1 in red
+	* Cim.writePNG( &quot;my-cell-t100.png&quot; )
+	*/
+	constructor( C, options ){
+		if( C instanceof GridBasedModel ){
+			/**
+			 * The underlying model that is drawn on the canvas.
+			 * @type {GridBasedModel|CPM|CA}
+			 */
+			this.C = C
+			/**
+			 * The underlying grid that is drawn on the canvas.
+			 * @type {Grid2D|CoarseGrid}
+			 */
+			this.grid = this.C.grid
+			
+			/** Grid size in each dimension, taken from the CPM or grid object to draw.
+			@type {GridSize} each element is the grid size in that dimension in pixels */
+			this.extents = C.extents
+		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
+			
+			this.grid = C
+			this.extents = C.extents
+		}
+		/** Zoom level to draw the canvas with, set to options.zoom or its default value 1.
+		* @type {number}*/
+		this.zoom = (options &amp;&amp; options.zoom) || 1
+		/** if nonzero: &apos;wrap&apos; the grid to these dimensions; eg a pixel with x 
+		coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+		@type {number[]} */
+		this.wrap = (options &amp;&amp; options.wrap) || [0,0,0]
+		
+		/** Width of the canvas in pixels (in its unzoomed state)
+		* @type {number}*/
+		this.width = this.wrap[0]
+		/** Height of the canvas in pixels (in its unzoomed state)
+		* @type {number}*/
+		this.height = this.wrap[1]
+
+		if( this.width == 0 || this.extents[0] &lt; this.width ){
+			this.width = this.extents[0]
+		}
+		if( this.height == 0 || this.extents[1] &lt; this.height ){
+			this.height = this.extents[1]
+		}
+
+		if( typeof document !== &quot;undefined&quot; ){
+			/** @ignore */
+			this.el = document.createElement(&quot;canvas&quot;)
+			this.el.width = this.width*this.zoom
+			this.el.height = this.height*this.zoom//extents[1]*this.zoom
+			var parent_element = (options &amp;&amp; options.parentElement) || document.body
+			parent_element.appendChild( this.el )
+		} else {
+			const {createCanvas} = require(&quot;canvas&quot;)
+			/** @ignore */
+			this.el = createCanvas( this.width*this.zoom,
+				this.height*this.zoom )
+			/** @ignore */
+			this.fs = require(&quot;fs&quot;)
+		}
+
+		/** @ignore */
+		this.ctx = this.el.getContext(&quot;2d&quot;)
+		this.ctx.lineWidth = .2
+		this.ctx.lineCap=&quot;butt&quot;
+	}
+	
+	/** Give the canvas element an ID supplied as argument. Useful for building an HTML
+	page where you want to get this canvas by its ID. 
+	@param {string} idstring - the name to give the canvas element.*/
+	setCanvasId( idstring ){
+		this.el.id = idstring
+	}
+
+
+	/* Several internal helper functions (used by drawing functions below) : */
+	
+	/** @private 
+	@ignore*/
+	pxf( p ){
+		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom )
+	}
+
+	/** @private
+	@ignore */
+	pxfi( p, alpha=1 ){
+		const dy = this.zoom*this.width
+		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4
+		for( let i = 0 ; i &lt; this.zoom*4 ; i += 4 ){
+			for( let j = 0 ; j &lt; this.zoom*dy*4 ; j += dy*4 ){
+				this.px[i+j+off] = this.col_r
+				this.px[i+j+off + 1] = this.col_g
+				this.px[i+j+off + 2] = this.col_b
+				this.px[i+j+off + 3] = alpha*255
+			}
+		}
+	}
+
+	/** @private
+	@ignore */
+	pxfir( p ){
+		const dy = this.zoom*this.width
+		const off = (p[1]*dy + p[0])*4
+		this.px[off] = this.col_r
+		this.px[off + 1] = this.col_g
+		this.px[off + 2] = this.col_b
+		this.px[off + 3] = 255
+	}
+
+	/** @private 
+	@ignore*/
+	getImageData(){
+		/** @ignore */
+		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom)
+		/** @ignore */
+		this.px = this.image_data.data
+	}
+
+	/** @private 
+	@ignore*/
+	putImageData(){
+		this.ctx.putImageData(this.image_data, 0, 0)
+	}
+
+	/** @private 
+	@ignore*/
+	pxfnozoom( p ){
+		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 )
+	}
+
+	/** draw a line left (l), right (r), down (d), or up (u) of pixel p 
+	@private 
+	@ignore */
+	pxdrawl( p ){
+		for( let i = this.zoom*p[1] ; i &lt; this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*p[0],i] )
+		}
+	}
+
+	/** @private 
+	@ignore */
+	pxdrawr( p ){
+		for( let i = this.zoom*p[1] ; i &lt; this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*(p[0]+1),i] )
+		}
+	}
+	/** @private 
+	@ignore */
+	pxdrawd( p ){
+		for( let i = this.zoom*p[0] ; i &lt; this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*(p[1]+1)] )
+		}
+	}
+	/** @private 
+	@ignore */
+	pxdrawu( p ){
+		for( let i = this.zoom*p[0] ; i &lt; this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*p[1]] )
+		}
+	}
+	
+	/** For easier color naming 
+	@private
+	@ignore */
+	col( hex ){
+		this.ctx.fillStyle=&quot;#&quot;+hex
+		/** @ignore */
+		this.col_r = parseInt( hex.substr(0,2), 16 )
+		/** @ignore */
+		this.col_g = parseInt( hex.substr(2,2), 16 )
+		/** @ignore */
+		this.col_b = parseInt( hex.substr(4,2), 16 )
+	}
+
+	/** Hex code string for a color.
+	@typedef {string} HexColor*/
+
+	/** Color the whole grid in color [col], or in black if no argument is given.
+	   * @param {HexColor} [ col = &quot;000000&quot; ] -hex code for the color to use, defaults to black.
+	*/
+	clear( col ){
+		col = col || &quot;000000&quot;
+		this.ctx.fillStyle=&quot;#&quot;+col
+		this.ctx.fillRect( 0,0, this.el.width, this.el.height )
+	}
+
+	/** Rendering context of canvas.
+	@see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+	@typedef {object} CanvasRenderingContext2D
+	*/
+
+	/** Return the current drawing context.
+	@return {CanvasRenderingContext2D} current drawing context on the canvas.
+	*/
+	context(){
+		return this.ctx
+	}
+	/** @private 
+	@ignore */
+	p2pdraw( p ){
+		var dim
+		for( dim = 0; dim &lt; p.length; dim++ ){
+			if( this.wrap[dim] != 0 ){
+				p[dim] = p[dim] % this.wrap[dim]
+			}
+		}
+		return p
+	}
+
+	/* DRAWING FUNCTIONS ---------------------- */
+
+	/** Use to color a grid according to its values. High values are colored in a brighter
+	red. 
+   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
+   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
+   * @param {HexColor} [ col = &quot;0000FF&quot; ] - the color to draw the chemokine in.
+   */
+	drawField( cc, col = &quot;0000FF&quot; ){
+		if( !cc ){
+			cc = this.grid
+		}
+		this.col(col)
+		let maxval = 0
+		for( let i = 0 ; i &lt; cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j &lt; cc.extents[1] ; j ++ ){
+				let p = Math.log(.1+cc.pixt([i,j]))
+				if( maxval &lt; p ){
+					maxval = p
+				}
+			}
+		}
+		this.getImageData()
+		//this.col_g = 0
+		//this.col_b = 0
+		for( let i = 0 ; i &lt; cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j &lt; cc.extents[1] ; j ++ ){
+				//let colval = 255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				let alpha = (Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				//this.col_r = colval
+				//this.col_g = colval
+				this.pxfi([i,j], alpha)
+			}
+		}
+		this.putImageData()
+		this.ctx.globalAlpha = 1
+	}
+	/** Use to color a grid according to its values. High values are colored in a brighter
+	red. 
+   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
+   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
+   * @param {number} [nsteps = 10 ] - the number of contour lines to draw. Contour lines
+   * are evenly spaced between the min and max log10 of the chemokine.
+   * @param {HexColor} [ col = &quot;FFFF00&quot; ] - the color to draw contours with.
+   */
+	drawFieldContour( cc, nsteps = 10, col = &quot;FFFF00&quot; ){
+		if( !cc ){
+			cc = this.grid
+		}
+		this.col(col)
+		let maxval = 0
+		let minval = Math.log(0.1)
+		for( let i = 0 ; i &lt; cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j &lt; cc.extents[1] ; j ++ ){
+				let p = Math.log(.1+cc.pixt([i,j]))
+				if( maxval &lt; p ){
+					maxval = p
+				}
+				if( minval &gt; p ){
+					minval = p
+				}
+			}
+		}
+		
+		
+		this.getImageData()
+		//this.col_g = 0
+		//this.col_b = 0
+		//this.col_r = 255
+		
+		let step = (maxval-minval)/nsteps
+		for( let v = minval; v &lt; maxval; v+= step ){
+			
+			for( let i = 0 ; i &lt; cc.extents[0] ; i ++ ){
+				for( let j = 0 ; j &lt; cc.extents[1] ; j ++ ){
+				
+					let pixelval = Math.log( .1 + cc.pixt( [i,j] ) )
+					if( Math.abs( v - pixelval ) &lt; 0.05*maxval ){
+						let below = false, above = false
+						for( let n of this.grid.neighNeumanni( this.grid.p2i( [i,j] ) ) ){
+					
+							let nval = Math.log(0.1 + cc.pixt(this.grid.i2p(n)) )
+							if( nval &lt; v ){
+								below = true
+							}
+							if( nval &gt;= v ){
+								above = true
+							}
+							if( above &amp;&amp; below ){
+								//this.col_r = 150*((v-minval)/(maxval-minval)) + 105
+								let alpha = 0.7*((v-minval)/(maxval-minval)) + 0.3
+								this.pxfi( [i,j], alpha )
+								break
+							}
+						}
+					}
+				
+					
+
+				}
+			}
+			
+		}
+		
+			
+		
+
+
+		this.putImageData()
+	}
+	
+	
+	
+	/** @desc Method for drawing the cell borders for a given cellkind in the color specified in &quot;col&quot;
+	(hex format). This function draws a line around the cell (rather than coloring the
+	outer pixels). If [kind] is negative, simply draw all borders.
+	
+	See {@link drawOnCellBorders} to color the outer pixels of the cell.
+	
+   * @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
+   * positive integer as 0 is reserved for the background.
+   * @param {HexColor}  [ col = &quot;000000&quot; ] - hex code for the color to use, defaults to black.
+   */
+	drawCellBorders( kind, col ){
+		col = col || &quot;000000&quot;
+		let pc, pu, pd, pl, pr, pdraw
+		this.col( col )
+		this.getImageData()
+		// cst contains indices of pixels at the border of cells
+		for( let x of this.C.cellBorderPixels() ){
+			let p = x[0]
+			if( kind &lt; 0 || this.C.cellKind(x[1]) == kind ){
+				pdraw = this.p2pdraw( p )
+
+				pc = this.C.pixt( [p[0],p[1]] )
+				pr = this.C.pixt( [p[0]+1,p[1]] )
+				pl = this.C.pixt( [p[0]-1,p[1]] )		
+				pd = this.C.pixt( [p[0],p[1]+1] )
+				pu = this.C.pixt( [p[0],p[1]-1] )
+
+				if( pc != pl  ){
+					this.pxdrawl( pdraw )
+				}
+				if( pc != pr ){
+					this.pxdrawr( pdraw )
+				}
+				if( pc != pd ){
+					this.pxdrawd( pdraw )
+				}
+				if( pc != pu ){
+					this.pxdrawu( pdraw )
+				}
+			}
+
+		}
+		this.putImageData()
+	}
+
+	/** Use to show activity values of the act model using a color gradient, for
+		cells in the grid of cellkind &quot;kind&quot;. 
+		The constraint holding the activity values can be supplied as an 
+		argument. Otherwise, the current CPM is searched for the first 
+		registered activity constraint and that is then used.
+   @param {CellKind} kind - Integer specifying the cellkind to color. If negative, draw
+   	values for all cellkinds.
+   @param {ActivityConstraint|ActivityMultiBackground} [ A ] - the constraint object to
+   use, which must be of class {@link ActivityConstraint} or {@link ActivityMultiBackground}
+   If left unspecified, this is the first instance of an ActivityConstraint or ActivityMultiBackground
+   object found in the soft_constraints of the attached CPM.
+   @param {Function} [col] - a function that returns a color for a number in [0,1] as an array of red/green/blue values,
+    for example, [255,0,0] would be the color red. If unspecified, a green-to-red heatmap is used.
+   */
+	drawActivityValues( kind, A, col ){
+		if( !A ){
+			for( let c of this.C.soft_constraints ){
+				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
+					A = c; break
+				}
+			}
+		}
+		if( !A ){
+			throw(&quot;Cannot find activity values to draw!&quot;)
+		}
+		if( !col ){
+			col = function(a){
+				let r = [0,0,0]
+				if( a &gt; 0.5 ){
+					r[0] = 255
+					r[1] = (2-2*a)*255
+				} else {
+					r[0] = (2*a)*255
+					r[1] = 255
+				}
+				return r
+			}
+		}
+		// cst contains the pixel ids of all non-background/non-stroma cells in
+		// the grid. 
+		let ii, sigma, a, k
+		// loop over all pixels belonging to non-background, non-stroma
+		this.col(&quot;FF0000&quot;)
+		this.getImageData()
+		this.col_b = 0
+		//this.col_g = 0
+		for( let x of this.C.cellPixels() ){
+			ii = x[0]
+			sigma = x[1]
+			k = this.C.cellKind(sigma)
+
+			// For all pixels that belong to the current kind, compute
+			// color based on activity values, convert to hex, and draw.
+			if( ( kind &lt; 0 &amp;&amp; A.conf[&quot;MAX_ACT&quot;][k] &gt; 0 ) || k == kind ){
+				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf[&quot;MAX_ACT&quot;][k]
+				if( a &gt; 0 ){
+					if( a &gt; 0.5 ){
+						this.col_r = 255
+						this.col_g = (2-2*a)*255
+					} else {
+						this.col_r = (2*a)*255
+						this.col_g = 255
+					}
+					let r = col( a )
+					this.col_r = r[0]
+					this.col_g = r[1]
+					this.col_b = r[2]
+					this.pxfi( ii )
+				}
+			}
+		}
+		this.putImageData()
+	}
+			
+	/** Color outer pixel of all cells of kind [kind] in col [col].
+	
+	   See {@link drawCellBorders} to actually draw around the cell rather than coloring the
+   outer pixels.
+   
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
+   positive integer as 0 is reserved for the background.
+   @param {HexColor} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black (&quot;000000&quot;).
+   */
+	drawOnCellBorders( kind, col ){
+		col = col || &quot;000000&quot;
+		this.getImageData()
+		this.col( col )
+		for( let p of this.C.cellBorderPixels() ){
+			if( kind &lt; 0 || this.C.cellKind(p[1]) == kind ){
+				if( typeof col == &quot;function&quot; ){
+					this.col( col(p[1]) )
+				}
+				this.pxfi( p[0] )
+			}
+		}
+		this.putImageData()
+	}
+
+
+	/** Draw all cells of cellkind &quot;kind&quot; in color col (hex). 
+   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
+   positive integer as 0 is reserved for the background.
+   @param {HexColor|function} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black (&quot;000000&quot;). col can also be a function that
+	returns a hex value for a cell id.
+   */
+	drawCells( kind, col ){
+		if( ! col ){
+			col = &quot;000000&quot;
+		}
+		if( typeof col == &quot;string&quot; ){
+			this.col(col)
+		}
+		// Object cst contains pixel index of all pixels belonging to non-background,
+		// non-stroma cells.
+
+		let cellpixelsbyid = this.C.getStat( PixelsByCell )
+
+		/*for( let x of this.C.pixels() ){
+			if( kind &lt; 0 || this.C.cellKind(x[1]) == kind ){
+				if( !cellpixelsbyid[x[1]] ){
+					cellpixelsbyid[x[1]] = []
+				}
+				cellpixelsbyid[x[1]].push( x[0] )
+			}
+		}*/
+
+		this.getImageData()
+		for( let cid of Object.keys( cellpixelsbyid ) ){
+			if( kind &lt; 0 || this.C.cellKind(cid) == kind ){
+				if( typeof col == &quot;function&quot; ){
+					this.col( col(cid) )
+				}
+				for( let cp of cellpixelsbyid[cid] ){
+					this.pxfi( cp )
+				}
+			}
+		}
+		this.putImageData()
+	}
+	
+	/** General drawing function to draw all pixels in a supplied set in a given color. 
+	@param {ArrayCoordinate[]} pixelarray - an array of {@link ArrayCoordinate of pixels
+	to color.}
+	@param {HexColor|function} col - Optional: hex code for the color to use. If left unspecified,
+   it gets the default value of black (&quot;000000&quot;). col can also be a function that
+	returns a hex value for a cell id.
+	*/
+	drawPixelSet( pixelarray, col ){
+		if( ! col ){
+			col = &quot;000000&quot;
+		}
+		if( typeof col == &quot;string&quot; ){
+			this.col(col)
+		}
+		this.getImageData()
+		for( let p of pixelarray ){
+			this.pxfi( p )
+		}
+		this.putImageData()
+	}
+
+	/** Draw grid to the png file &quot;fname&quot;. 
+	@param {string} fname Path to the file to write. Any parent folders in this path must
+	already exist.*/
+	writePNG( fname ){
+	
+		try {
+			this.fs.writeFileSync(fname, this.el.toBuffer())
+		}
+		catch (err) {
+			if (err.code === &quot;ENOENT&quot;) {
+				let message = &quot;Canvas.writePNG: cannot write to file &quot; + fname + 
+					&quot;, are you sure the directory exists?&quot;
+				throw(message)
+			}
+		}
+	
+	}
+}
+
+export default Canvas
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

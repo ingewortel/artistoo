@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/Canvas3D.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas3D.js~Canvas3D.html">Canvas3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ProtrusionConstraint.js~ProtrusionConstraint.html">ProtrusionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/Canvas3D.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+&quot;use strict&quot;
+
+import GridBasedModel from &quot;./models/GridBasedModel.js&quot;
+import Grid3D from &quot;./grid/Grid3D.js&quot;
+import * as THREE from &quot;three&quot;
+import TrackballControls from &quot;three-trackballcontrols&quot;
+//import PixelsByCell from &quot;./stats/PixelsByCell.js&quot;
+import BorderPixelsByCell from &quot;./stats/BorderPixelsByCell.js&quot;
+import ActivityConstraint from &quot;./hamiltonian/ActivityConstraint.js&quot;
+import ActivityMultiBackground from &quot;./hamiltonian/ActivityMultiBackground.js&quot;
+
+
+class Canvas3D {
+	
+	constructor( C, options ){
+		if( C instanceof GridBasedModel ){
+			/**
+			 * The underlying model that is drawn on the canvas.
+			 * @type {GridBasedModel|CPM|CA}
+			 */
+			this.C = C
+			this.grid = this.C.grid
+			if( !( this.grid instanceof Grid3D ) ){
+				throw(&quot;Canvas3D only works with 3D models with grid of class Grid3D!&quot;)
+			}
+			
+			
+			
+			/** Grid size in each dimension, taken from the CPM or grid object to draw.
+			@type {GridSize} each element is the grid size in that dimension in pixels */
+			this.extents = C.extents
+		} 
+		
+		this.step = options.step || 10 
+		this.zoom =  options.zoom || 1
+		this.drawgrid = options.drawgrid || true
+		this.gridColor = options.gridColor || &quot;AAAAAA&quot;
+		this.gridColor = this.getCol( this.gridColor )
+		
+
+		if( typeof document !== &quot;undefined&quot; ){
+			/** @ignore */
+			
+			this.container = document.getElementById(&quot;stage&quot;)
+			
+		} else {
+			throw(&quot;Canvas3D is currently only supported in the browser.&quot;)
+		}
+		
+		this.scene = new THREE.Scene()
+		this.drawvoxels = {}
+		this.material = new THREE.MeshLambertMaterial( { color: this.getCol(&quot;000000&quot;), transparent: true, opacity : 0.2 } )
+		
+		
+		this.setupCamera()
+		this.controls = new TrackballControls( this.camera, this.container )
+		this.setup()
+
+		
+	}
+	
+	getCol( col ){
+		col = &quot;#&quot; + col
+		return new THREE.Color( col ).getHex()
+	}
+	
+	setupCamera(){
+	
+		
+		let camera = new THREE.PerspectiveCamera( 45, 1, 1, this.C.extents[2]*100 )
+		
+		// Place the camera at the x,y coordinates of the midpoint, and z coordinate slightly above the grid.
+		let zpos = Math.floor( this.C.extents[2]*3)
+		//camera.position = { x : this.C.extents[0]/2, y: this.C.extents[1]/2, z: zpos}
+		camera.position.set( this.C.extents[0]/2, this.C.extents[1]/2,zpos  )
+		//camera.up.set( -1, 0, 0 )
+		
+		// Viewing direction of the camera
+		let gridMidpoint = [ this.C.extents[0]/2, this.C.extents[1]/2, this.C.extents[2]/2 ]
+		camera.lookAt( new THREE.Vector3( gridMidpoint[0], gridMidpoint[1], gridMidpoint[2] ) )
+		
+		this.camera = camera
+	
+	}
+	
+	setupControls(){
+	
+		
+		
+		this.controls.rotateSpeed = 1.0
+		this.controls.zoomSpeed = 1.2
+		this.controls.panSpeed = 0.8
+
+		this.controls.noZoom = false
+		this.controls.noPan = false
+
+		this.controls.staticMoving = true
+		this.controls.dynamicDampingFactor = 0.3
+
+		this.controls.target.set( this.C.midpoint[0], this.C.midpoint[1], this.C.midpoint[2] )
+
+		this.controls.keys = [ 65, 83, 68 ]
+		
+	
+	}
+	
+	
+	drawGrid(){
+		if( this.drawgrid ){
+			
+			let material = new THREE.LineBasicMaterial( { color: this.gridColor , opacity: 0.4, transparent: true } )
+			
+			// plane z = 0
+			let geometry = new THREE.Geometry()
+			for ( let x = 0; x &lt;= this.C.extents[0]; x += this.step ) {
+				geometry.vertices.push( new THREE.Vector3( x, 0, 0 ) )
+				geometry.vertices.push( new THREE.Vector3( x, 0, this.C.extents[2] ) )
+			}
+			for( let z = 0; z &lt;= this.C.extents[2]; z += this.step ){
+				geometry.vertices.push( new THREE.Vector3( 0, 0, z ) )
+				geometry.vertices.push( new THREE.Vector3( this.C.extents[0], 0, z ) )
+			}
+			let line = new THREE.LineSegments( geometry, material )
+			this.scene.add( line )
+			
+			// plane x = 0 
+			geometry = new THREE.Geometry()
+			for ( let y = 0; y &lt;= this.C.extents[1]; y += this.step ) {
+				geometry.vertices.push( new THREE.Vector3( 0, y, 0 ) )
+				geometry.vertices.push( new THREE.Vector3( 0, y, this.C.extents[2] ) )
+			}
+			for( let z = 0; z &lt;= this.C.extents[2]; z += this.step ){
+				geometry.vertices.push( new THREE.Vector3( 0, 0, z ) )
+				geometry.vertices.push( new THREE.Vector3( 0, this.C.extents[1], z ) )
+			}
+			line = new THREE.LineSegments( geometry, material )
+			this.scene.add( line )
+			
+			// plane y = 0 
+			geometry = new THREE.Geometry()
+			for ( let x = 0; x &lt;= this.C.extents[1]; x += this.step ) {
+				geometry.vertices.push( new THREE.Vector3( x, 0, 0 ) )
+				geometry.vertices.push( new THREE.Vector3( x, 0, this.C.extents[2] ) )
+			}
+			for( let z = 0; z &lt;= this.C.extents[2]; z += this.step ){
+				geometry.vertices.push( new THREE.Vector3( 0, 0, z ) )
+				geometry.vertices.push( new THREE.Vector3( this.C.extents[0], 0, z ) )
+			}
+			line = new THREE.LineSegments( geometry, material )
+			this.scene.add( line )
+		}
+
+	}
+	
+	setupLights(){
+		let ambientLight = new THREE.AmbientLight( 0x606060 )
+		this.scene.add( ambientLight )
+
+		let directionalLight = new THREE.DirectionalLight( 0xffffff )
+		directionalLight.position.set( .5, .5, 1 ).normalize()
+		this.scene.add( directionalLight )
+	}
+	
+	setupRenderer(){
+		this.renderer = new THREE.WebGLRenderer( { antialias: true } )
+		this.renderer.setClearColor( 0xFFFFFF )
+		//this.renderer.setPixelRatio( window.devicePixelRatio )
+		let w =  this.C.extents[0]*this.zoom/2
+		let h = this.C.extents[1]*this.zoom/2
+		this.renderer.setSize( w, h )
+		this.container.appendChild( this.renderer.domElement )
+	}
+	
+	// Initialize a movie frame
+	setup(){	
+	
+	
+		//this.setupCamera()
+		this.setupControls()
+		this.drawGrid()
+		this.setupLights()
+		this.controls.update()
+		this.setupRenderer()		
+	}
+
+	
+	/* DRAWING FUNCTIONS ---------------------- */
+
+	clear(){
+		for( let i of Object.keys( this.drawvoxels ) ){
+			this.drawvoxels[i].visible = false
+		}
+	}
+
+	setVoxel( pos, color ){
+		let i = this.C.grid.p2i( pos )
+		if( !( i in this.drawvoxels ) ){
+			let material = new THREE.MeshLambertMaterial( { color: this.getCol(&quot;000000&quot;), transparent: true, opacity : 0.2 } )
+			let cube = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ),material )
+			cube.position.x = pos[0]
+			cube.position.y = pos[1]
+			cube.position.z = pos[2]
+			this.scene.add(cube)
+			this.drawvoxels[i] = cube
+		}
+		this.drawvoxels[i].visible = true
+		this.drawvoxels[i].material.color.setHex( color )
+		//this.drawvoxels[i].material.opacity=.2
+		
+	}
+
+	drawCells( kind, col ){
+		if( ! col ){
+			col = &quot;#000000&quot;
+		}
+		let color
+		if( typeof col == &quot;string&quot; ){
+			color = this.getCol( col )
+		}
+		
+		// We color only the borderpixels of 3D cells
+		let cellborderpixelsbyid = this.C.getStat( BorderPixelsByCell )
+
+		for( let cid of Object.keys( cellborderpixelsbyid ) ){
+			if( kind &lt; 0 || this.C.cellKind(cid) == kind ){
+				if( typeof col == &quot;function&quot; ){
+					color = this.getCol( col(cid) )
+				}
+				for( let cp of cellborderpixelsbyid[cid] ){
+					this.setVoxel( cp, color )
+				}
+			}
+		}
+	}
+	
+	drawActivityValues( kind, A ){
+		if( !A ){
+			for( let c of this.C.soft_constraints ){
+				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
+					A = c; break
+				}
+			}
+		}
+		if( !A ){
+			throw(&quot;Cannot find activity values to draw!&quot;)
+		}
+		// cst contains the pixel ids of all non-background/non-stroma cells in
+		// the grid. 
+		let pos, cellid, a
+		// loop over all pixels belonging to non-background, non-stroma
+		let color = {r:1,g:1,b:0}
+		
+		for( let x of this.C.cellPixels() ){
+			pos = x[0]
+			cellid = x[1]
+
+			// For all pixels that belong to the current kind, compute
+			// color based on activity values, convert to hex, and draw.
+			if( this.C.cellKind(cellid) == kind ){
+				a = A.pxact( this.C.grid.p2i( pos ) )/A.conf[&quot;MAX_ACT&quot;][kind]
+				if( a &gt; 0 ){
+					if( a &gt; 0.5 ){
+						color[&quot;r&quot;] = 1
+						color[&quot;g&quot;]= (2-2*a)
+					} else {
+						color[&quot;r&quot;] = (2*a)
+						color[&quot;g&quot;] = 1
+					}
+					
+					let hexcolor = new THREE.Color( color.r, color.g, color.b ).getHex()
+					this.setVoxel( pos, hexcolor )
+				}
+			}
+		}
+		
+	}
+	
+	render(){
+		this.renderer.render( this.scene, this.camera )
+	}
+}
+
+export default Canvas3D
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
