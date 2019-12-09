@@ -99,13 +99,15 @@
 <strong>Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration</strong>
 PLoS Computational Biology 11(10): e1004280
 <a href="http://dx.doi.org/10.1371/journal.pcbi.1004280">http://dx.doi.org/10.1371/journal.pcbi.1004280</a></p>
-<h1 id="how-it-works">How it works</h1><p>This code has been ported over from our older &quot;cpm&quot; repository. This is now an ES6 module, 
+<h2 id="documentation">Documentation</h2><p>Full documentation is available on <a href="https://ingewortel.github.io/cpmjs.github.io">Github pages</a>; or
+see below for a brief description.</p>
+<h2 id="how-it-works">How it works</h2><p>This code has been ported over from our older &quot;cpm&quot; repository. This is now an ES6 module, 
 which is compiled trough &quot;rollup&quot; for use in the browser. Users who wish to use this version
 of CPMjs can use the compiled code in the <code>build/</code> folder as it is; there is no
 need to compile anything. See below for examples and how to use them.</p>
 <p>Developers can extend the code with their own modules; documentation will follow later
 (see the Makefile).</p>
-<h2 id="browser-examples">Browser examples</h2><p>CPMjs can be used to create interactive simulations in the webbrowser. We have implemented
+<h3 id="browser-examples">Browser examples</h3><p>CPMjs can be used to create interactive simulations in the webbrowser. We have implemented
 several examples showing various processes that can be simulated with a CPM; see the
 links below. (Please note that these examples may not work properly in Internet Explorer). </p>
 <p>We have the following examples for web-browser CPMs (see also <code>examples/html</code>):</p>
@@ -114,7 +116,7 @@ links below. (Please note that these examples may not work properly in Internet 
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/SingleCell.html">A simple 2D CPM cell</a></li>
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/Cellsorting.html">The classic CPM cell sorting example</a></li>
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/CellDivision.html">Dividing CPM cells</a></li>
-<li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/Actmodel.html">A cell moving through active cell migration</a></li>
+<li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/ActModel.html">A cell moving through active cell migration</a></li>
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/Microchannel.html">Migrating cell in a microchannel</a></li>
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/ActOnMicroPattern.html">Migrating cells on adhesive patterns</a></li>
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/Diffusion.html">Simulating plain diffusion</a></li>
@@ -133,7 +135,7 @@ links below. (Please note that these examples may not work properly in Internet 
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/GameOfLife.html">Conway&apos;s Game of Life</a></li>
 <li><a href="https://ingewortel.github.io/cpmjs.github.io/examples/SIR.html">SIR model of a spreading infection</a></li>
 </ul>
-<h2 id="node-examples">Node examples</h2><p>Simulations can also be run from the command line using nodejs. The first time you do this,
+<h3 id="node-examples">Node examples</h3><p>Simulations can also be run from the command line using nodejs. The first time you do this,
 you have to install several dependencies. Go to the base folder of this package and run</p>
 <pre><code><code class="source-code prettyprint">npm install</code>
 </code></pre><p>which will automatically install the dependencies as supplied in the <code>package.json</code> file.</p>

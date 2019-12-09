@@ -9,7 +9,7 @@ http://dx.doi.org/10.1371/journal.pcbi.1004280
 
 ## Documentation
 
-Full documentation is available [here](https://ingewortel.github.io/cpmjs.github.io); or
+Full documentation is available on [Github pages](https://ingewortel.github.io/cpmjs.github.io); or
 see below for a brief description.
 
 ## How it works
