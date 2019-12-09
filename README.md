@@ -7,7 +7,12 @@ __Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration__
 PLoS Computational Biology 11(10): e1004280
 http://dx.doi.org/10.1371/journal.pcbi.1004280
 
-# How it works
+## Documentation
+
+Full documentation is available [here](https://ingewortel.github.io/cpmjs.github.io); or
+see below for a brief description.
+
+## How it works
 
 This code has been ported over from our older "cpm" repository. This is now an ES6 module, 
 which is compiled trough "rollup" for use in the browser. Users who wish to use this version
@@ -17,7 +22,7 @@ need to compile anything. See below for examples and how to use them.
 Developers can extend the code with their own modules; documentation will follow later
 (see the Makefile).
 
-## Browser examples
+### Browser examples
 
 CPMjs can be used to create interactive simulations in the webbrowser. We have implemented
 several examples showing various processes that can be simulated with a CPM; see the
@@ -29,7 +34,7 @@ We have the following examples for web-browser CPMs (see also `examples/html`):
 * [A simple 2D CPM cell](https://ingewortel.github.io/cpmjs.github.io/examples/SingleCell.html)
 * [The classic CPM cell sorting example](https://ingewortel.github.io/cpmjs.github.io/examples/Cellsorting.html)
 * [Dividing CPM cells](https://ingewortel.github.io/cpmjs.github.io/examples/CellDivision.html)
-* [A cell moving through active cell migration](https://ingewortel.github.io/cpmjs.github.io/examples/Actmodel.html)
+* [A cell moving through active cell migration](https://ingewortel.github.io/cpmjs.github.io/examples/ActModel.html)
 * [Migrating cell in a microchannel](https://ingewortel.github.io/cpmjs.github.io/examples/Microchannel.html)
 * [Migrating cells on adhesive patterns](https://ingewortel.github.io/cpmjs.github.io/examples/ActOnMicroPattern.html)
 * [Simulating plain diffusion](https://ingewortel.github.io/cpmjs.github.io/examples/Diffusion.html)
@@ -49,7 +54,7 @@ We also have a few examples of plain cellular automata (CAs):
 * [Conway's Game of Life](https://ingewortel.github.io/cpmjs.github.io/examples/GameOfLife.html)
 * [SIR model of a spreading infection](https://ingewortel.github.io/cpmjs.github.io/examples/SIR.html)
 
-## Node examples
+### Node examples
 
 Simulations can also be run from the command line using nodejs. The first time you do this,
 you have to install several dependencies. Go to the base folder of this package and run
