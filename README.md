@@ -23,31 +23,31 @@ CPMjs can be used to create interactive simulations in the webbrowser. We have i
 several examples showing various processes that can be simulated with a CPM; see the
 links below. (Please note that these examples may not work properly in Internet Explorer). 
 
-We have the following examples for web-browser CPMs:
+We have the following examples for web-browser CPMs (see also `examples/html`):
 
-* [A simple Ising model](./examples/html/IsingModel.html)
-* [A simple 2D CPM cell](./examples/html/SingleCell.html)
-* [The classic CPM cell sorting example](./examples/html/Cellsorting.html)
-* [Dividing CPM cells](./examples/html/CellDivision.html)
-* [A cell moving through active cell migration](./examples/html/Actmodel.html)
-* [Migrating cell in a microchannel](./examples/html/Microchannel.html)
-* [Migrating cells on adhesive patterns](./examples/html/ActOnMicroPattern.html)
-* [Simulating plain diffusion](./examples/html/Diffusion.html)
-* [Cells moving up a chemokine gradient](./examples/html/Chemotaxis.html)
-* [Multiple cells migrating together, interactive web page](./examples/html/CollectiveMigration.html)
-* [Cells moving towards a target point](./examples/html/DirectedMotionTargetPoint.html)
-* [Cells moving in the same global direction](./examples/html/DirectedMotionLinear.html)
-* [A layer of tightly packed epidermal cells](./examples/html/Epidermis.html)
-* [T cells moving in the epidermis](./examples/html/EpidermisWithTCells.html)
-* [Cells producing a chemokine with other cells responding to it](./examples/ManyCellsDiffusion.html)
-* [Cells moving with a preferred direction](./examples/html/ManyCellsPrefDir.html)
-* [Particle following a random walk](./examples/RandomWalk.html)
+* [A simple Ising model](https://ingewortel.github.io/cpmjs.github.io/examples/IsingModel.html)
+* [A simple 2D CPM cell](https://ingewortel.github.io/cpmjs.github.io/examples/html/SingleCell.html)
+* [The classic CPM cell sorting example](https://ingewortel.github.io/cpmjs.github.io/examples/html/Cellsorting.html)
+* [Dividing CPM cells](https://ingewortel.github.io/cpmjs.github.io/examples/html/CellDivision.html)
+* [A cell moving through active cell migration](https://ingewortel.github.io/cpmjs.github.io/examples/html/Actmodel.html)
+* [Migrating cell in a microchannel](https://ingewortel.github.io/cpmjs.github.io/examples/html/Microchannel.html)
+* [Migrating cells on adhesive patterns](https://ingewortel.github.io/cpmjs.github.io/examples/html/ActOnMicroPattern.html)
+* [Simulating plain diffusion](https://ingewortel.github.io/cpmjs.github.io/examples/html/Diffusion.html)
+* [Cells moving up a chemokine gradient](https://ingewortel.github.io/cpmjs.github.io/examples/html/Chemotaxis.html)
+* [Multiple cells migrating together, interactive web page](https://ingewortel.github.io/cpmjs.github.io/examples/html/CollectiveMigration.html)
+* [Cells moving towards a target point](https://ingewortel.github.io/cpmjs.github.io/examples/html/DirectedMotionTargetPoint.html)
+* [Cells moving in the same global direction](https://ingewortel.github.io/cpmjs.github.io/examples/html/DirectedMotionLinear.html)
+* [A layer of tightly packed epidermal cells](https://ingewortel.github.io/cpmjs.github.io/examples/html/Epidermis.html)
+* [T cells moving in the epidermis](https://ingewortel.github.io/cpmjs.github.io/examples/html/EpidermisWithTCells.html)
+* [Cells producing a chemokine with other cells responding to it](https://ingewortel.github.io/cpmjs.github.io/examples/ManyCellsDiffusion.html)
+* [Cells moving with a preferred direction](https://ingewortel.github.io/cpmjs.github.io/examples/html/ManyCellsPrefDir.html)
+* [Particle following a random walk](https://ingewortel.github.io/cpmjs.github.io/examples/RandomWalk.html)
 
 
 We also have a few examples of plain cellular automata (CAs):
 
-* [Conway's Game of Life](./examples/html/GameOfLife.html)
-* [SIR model of a spreading infection](./examples/html/SIR.html)
+* [Conway's Game of Life](https://ingewortel.github.io/cpmjs.github.io/examples/html/GameOfLife.html)
+* [SIR model of a spreading infection](https://ingewortel.github.io/cpmjs.github.io/examples/html/SIR.html)
 
 ## Node examples
 
@@ -78,7 +78,7 @@ node run-ActModel.js
 
 This will print some output to the console; typically the centroid of each 
 cell at each timepoint. See the node script and the 
-[Simulation class](./docs/class/src/simulation/Simulation.js~Simulation.html)
+[Simulation class](https://ingewortel.github.io/cpmjs.github.io/class/src/simulation/Simulation.js~Simulation.html)
 for details.
 
 
