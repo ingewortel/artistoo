@@ -124,7 +124,7 @@
   <div class="description" data-ice="description"><p>This class provides some boilerplate code for creating simulations easily.
 It comes with defaults for seeding cells, drawing, logging of statistics, saving output
 images, and running the simulation. Each of these default methods can be overwritten
-by the user while keeping the other default methods intact. See the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span>
+by the user while keeping the other default methods intact. See the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span>
 for details on how to configure a simulation.</p>
 </div>
   
@@ -259,7 +259,7 @@ for details on how to configure a simulation.</p>
         
         
         <div data-ice="description"><p>Any function suplied in the custommethods argument to
-the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
+the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
 </div>
       </div>
     </td>
@@ -1334,7 +1334,7 @@ each <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></sp
   
   
   <div data-ice="description"><p>Any function suplied in the custommethods argument to
-the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
+the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span> is bound to the object.</p>
 </div>
 
   
@@ -2004,7 +2004,7 @@ see the <span><a href="class/src/simulation/Simulation.js~Simulation.html#instan
   
   
   <div data-ice="description"><p>This automatically creates all outputs (images and logged stats) at the correct
-rates. See the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> documentation for options on how to control these
+rates. See the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span> documentation for options on how to control these
 outputs.</p>
 </div>
 
@@ -2099,9 +2099,9 @@ if you overwrite this method. </p>
   
   <div data-ice="description"><p>Method to draw the canvas.
 The default method draws the canvas, cells, cellborders, and activityvalues
-as specified in the simsettings object (see the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> for details).</p>
+as specified in the simsettings object (see the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span> for details).</p>
 <p>This will be enough for most scenarios, but if you want to draw more complicated stuff,
-you can use the custommethods argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> to overwrite 
+you can use the custommethods argument of the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span> to overwrite 
 this with your own drawCanvas method.</p>
 </div>
 
@@ -2198,7 +2198,7 @@ if you overwrite this method. </p>
 The default method checks in the simsettings.NRCELLS array how many cells to
 seed for each {@CellKind}, and does this (at random positions). </p>
 <p>Often you&apos;ll want to do other things here. In that case you can use the 
-custommethods argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> to overwrite this with your
+custommethods argument of the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span> to overwrite this with your
 own initializeGrid method.</p>
 </div>
 
@@ -2247,7 +2247,7 @@ own initializeGrid method.</p>
 The default method logs time, <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, and the 
 {@ArrayCoordinate} of the cell&apos;s centroid to the console.</p>
 <p>If you want to compute other stats (see subclasses of <span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span> for options)
-you can use the custommethods argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span> to overwrite 
+you can use the custommethods argument of the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span> to overwrite 
 this with your own drawCanvas method.</p>
 </div>
 
@@ -2294,7 +2294,7 @@ this with your own drawCanvas method.</p>
   
   <div data-ice="description"><p>Listener for something that needs to be done after every monte carlo step.
 This method is empty but can be overwritten via the custommethods 
-argument of the <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span>.</p>
+argument of the <span><a href="class/src/Canvas.js~Canvas.html#instance-constructor-constructor">constructor</a></span>.</p>
 </div>
 
   
