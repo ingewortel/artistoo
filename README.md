@@ -47,7 +47,7 @@ We have the following examples for web-browser CPMs (see also `examples/html`):
 * [Cells producing a chemokine with other cells responding to it](https://ingewortel.github.io/cpmjs.github.io/examples/ManyCellsDiffusion.html)
 * [Cells moving with a preferred direction](https://ingewortel.github.io/cpmjs.github.io/examples/ManyCellsPrefDir.html)
 * [Particle following a random walk](https://ingewortel.github.io/cpmjs.github.io/examples/RandomWalk.html)
-
+* [T cells invading a growing tumor](https://ingewortel.github.io/cpmjs.github.io/examples/CancerInvasion.html)
 
 We also have a few examples of plain cellular automata (CAs):
 
