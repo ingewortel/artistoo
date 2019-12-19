@@ -34,6 +34,7 @@ import ChemotaxisConstraint from "../src/hamiltonian/ChemotaxisConstraint.js"
 import AttractionPointConstraint from "../src/hamiltonian/AttractionPointConstraint.js" 
 import ConnectivityConstraint from "../src/hamiltonian/ConnectivityConstraint.js" 
 import SoftConnectivityConstraint from "../src/hamiltonian/SoftConnectivityConstraint.js" 
+import LocalConnectivityConstraint from "../src/hamiltonian/LocalConnectivityConstraint.js" 
  
 import HardConstraint from "../src/hamiltonian/HardConstraint.js" 
 import HardVolumeRangeConstraint from "../src/hamiltonian/HardVolumeRangeConstraint.js" 
@@ -71,6 +72,7 @@ export {
 	AttractionPointConstraint,
 	ConnectivityConstraint,
 	SoftConnectivityConstraint,
+	LocalConnectivityConstraint,
 	HardConstraint,
 	HardVolumeRangeConstraint,
 	BarrierConstraint,

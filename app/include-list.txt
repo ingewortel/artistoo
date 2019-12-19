@@ -49,6 +49,7 @@ module	ChemotaxisConstraint	src/hamiltonian/ChemotaxisConstraint.js
 module	AttractionPointConstraint	src/hamiltonian/AttractionPointConstraint.js
 module	ConnectivityConstraint	src/hamiltonian/ConnectivityConstraint.js
 module 	SoftConnectivityConstraint	src/hamiltonian/SoftConnectivityConstraint.js
+module	LocalConnectivityConstraint	src/hamiltonian/LocalConnectivityConstraint.js
 
 # constraints: hard constraints
 module	HardConstraint	src/hamiltonian/HardConstraint.js
