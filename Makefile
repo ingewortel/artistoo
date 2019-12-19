@@ -34,3 +34,10 @@ docs : docs/index.html docs-examples
 
 #cat $< | sed 's:./examples:../examples:g' | sed 's:./docs:../docs:g' > docs/index2.html && \
 #mv docs/index2.html docs/index.html
+
+
+# testing:
+
+test-all :
+	node node_modules/jasmine/bin/jasmine.js
+	
