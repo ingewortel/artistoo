@@ -99,11 +99,11 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 		let conn = this.connectedComponentsOf( nbhobj )
 		//console.log(conn.length)
 		
-		let connected = 1
+		let disconnected = 0
 		if( conn.length > 1 ){
-			connected = 0
+			disconnected = 1
 		}
-		return connected
+		return disconnected
 		
 	}
 	
