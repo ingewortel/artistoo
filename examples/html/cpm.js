@@ -6244,6 +6244,8 @@ var CPM = (function (exports) {
 			if( this.C.ndim != 2 ){
 				throw("You are trying to add a SoftLocalConnectivityConstraint to a 3D CPM, but this constraint is currently only supported in 2D!")
 			}
+			
+			this.confChecker();
 		}
 		
 		/** This method checks that all required parameters are present in the object supplied to
