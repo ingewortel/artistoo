@@ -6020,12 +6020,20 @@ class LocalConnectivityConstraint extends HardConstraint {
 */
 class SoftLocalConnectivityConstraint extends SoftConstraint {
 
-	/** The constructor of the SoftLocalConnectivityConstraint requires a conf object with one parameter.
+	/** The constructor of the SoftLocalConnectivityConstraint requires a conf object with one or two parameters.
 	@param {object} conf - parameter object for this constraint.
 	@param {PerKindBoolean} conf.LAMBDA_CONNECTIVITY - strength of the penalty for breaking connectivity.
+	#param {string} conf.NBH_TYPE - should a Neumann (default) or Moore neighborhood be used to determine
+	whether the cell locally stays connected? The default is Neumann since the Moore neighborhood tends to
+	give artefacts. Also, LAMBDA should be much higher if the Moore neighborhood is used. 
 	*/
 	constructor( conf ){
 		super(conf);
+		
+		/** Should a Neumann or Moore neighborhood be used for determining connectivity?
+		See {@link SoftLocalConnectivityConstraint#constructor} for details.
+		@type {string}*/
+		this.nbhtype = "Neumann";
 	}
 	
 	/** The set CPM method attaches the CPM to the constraint. It checks whether the
@@ -6048,6 +6056,23 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 	confChecker(){
 		let checker = new ParameterChecker( this.conf, this.C );
 		checker.confCheckParameter( "LAMBDA_CONNECTIVITY", "KindArray", "NonNegative" );
+
+		//
+		if( "NBH_TYPE" in this.conf ){
+			let v = this.conf["NBH_TYPE"];
+			let values = [ "Neumann", "Moore" ];
+			let found = false;
+			for( let val of values ){
+				if( val == v ){
+					found = true;
+					this.nbhtype = val;
+				}
+			}
+			if( !found ){
+				throw( "In the SoftLocalConnectivityConstraint, NBH_TYPE must be either 'Neumann' or 'Moore'")
+			}
+		}
+
 	}
 	
 	/** Get the connected components of a set of pixels.
@@ -6058,7 +6083,7 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 	
 		let cbpi = Object.keys( pixelobject );
 		
-		let visited = {}, k=0, pixels = [], C = this.C;
+		let visited = {}, k=0, pixels = [], C = this.C, nbhtype = this.nbhtype;
 		let labelComponent = function(seed, k){
 			let q = [seed];
 			let cellid = C.pixti(q);
@@ -6067,14 +6092,33 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 			while( q.length > 0 ){
 				let e = q.pop();
 				pixels[k].push(C.grid.i2p(e) );
-				//let ne = C.grid.neighi( e )
-				for( let i of C.grid.neighNeumanni( e ) ){
-					if( C.pixti( i ) == cellid &&
-						!(i in visited) && (i in pixelobject) ){
-						q.push(i);
-						visited[i]=1;
+				
+				if( nbhtype == "Neumann" ){
+					for( let i of C.grid.neighNeumanni( e ) ){
+						if( C.pixti( i ) == cellid &&
+							!(i in visited) && (i in pixelobject) ){
+							q.push(i);
+							visited[i]=1;
+						}
 					}
+				} else {
+					let ne = C.grid.neighi(e);
+					for( let j = 0; j < ne.length; j++ ){
+					
+						let i = ne[j];
+						if( C.pixti( i ) == cellid &&
+							!(i in visited) && (i in pixelobject) ){
+							q.push(i);
+							visited[i]=1;
+						}
+					}
+				
 				}
+				
+				
+				
+				//let ne = C.grid.neighi( e )
+				
 			}
 		};
 		for( let i = 0 ; i < cbpi.length ; i ++ ){
