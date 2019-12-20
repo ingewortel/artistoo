@@ -5810,6 +5810,8 @@ var CPM = (function (exports) {
 			every copy attempt.
 			@type {CellObject}*/
 			this.borderpixelsbycell = {};
+			
+			this.components = [];
 		}
 		
 		/** The set CPM method attaches the CPM to the constraint. */
@@ -5907,7 +5909,6 @@ var CPM = (function (exports) {
 			return this.connectedComponentsOf( this.borderpixelsbycell[cellid] )
 		}
 		
-			
 		/** Get the connected components of a set of pixels.
 		@param {object} pixelobject - an object with as keys the {@link IndexCoordinate}s of the pixels to check.
 		@return {object} an array with an element for every connected component, which is in
@@ -5936,7 +5937,7 @@ var CPM = (function (exports) {
 				}
 			};
 			for( let i = 0 ; i < cbpi.length ; i ++ ){
-				let pi = cbpi[i];
+				let pi = parseInt( cbpi[i] );
 				if( !(pi in visited) ){
 					labelComponent( pi, k );
 					k++;
@@ -5944,7 +5945,7 @@ var CPM = (function (exports) {
 			}
 			return pixels
 		}
-
+			
 		/** The postSetpixListener of the ConnectivityConstraint updates the internally
 		tracked borderpixels after every copy.
 		@param {IndexCoordinate} i - the pixel to change
@@ -5954,6 +5955,7 @@ var CPM = (function (exports) {
 		postSetpixListener(  i, t_old, t ){
 			this.updateBorderPixels( i, t_old, t );
 		}	
+		
 		
 		/** To speed things up: first check if a pixel change disrupts the local connectivity
 		in its direct neighborhood. If local connectivity is not disrupted, we don't have to
@@ -5965,17 +5967,28 @@ var CPM = (function (exports) {
 		*/
 		localConnected( tgt_i, tgt_type ){
 		
-			let neighbors = 0;
-			for( let i of this.C.grid.neighNeumanni(tgt_i) ){
-				if( this.C.pixti(i) != tgt_type ){
-					neighbors++;
+			// Get neighbors of the target pixel
+			let nbh = this.C.grid.neighi( tgt_i );
+			
+			// object storing the neighbors of tgt_type
+			let nbhobj = {};
+			
+			for( let n of nbh ){
+			
+				// add it and its neighbors to the neighborhood object
+				if( this.C.pixti(n) == tgt_type ){
+					nbhobj[n] = true;
 				}
 			}
 			
-			if( neighbors >= 2 ){
-				return false
-			}
-			return true
+			// Get connected components.
+			let conn = this.connectedComponentsOf( nbhobj );
+			this.components = conn;
+			//console.log(conn.length)
+			
+			let connected = ( conn.length == 1 );
+			//console.log(connected)
+			return connected
 			
 		}
 		
@@ -6020,21 +6033,47 @@ var CPM = (function (exports) {
 			
 			if( this.localConnected( tgt_i, tgt_type ) ){
 				return 0
-			}
+			} 
+			
+			/*else {
+				let conn_new = this.connectivity( this.components, tgt_type )
+				
+				// current components
+				let nbh = this.C.grid.neighi( tgt_i )
+				let nbhobj = {}
+				nbhobj[tgt_i] = true
+			
+				for( let n of nbh ){
+					if( this.C.pixti(n) == tgt_type ){
+						nbhobj[n] = true
+					}
+				}
+				
+				this.components = this.connectedComponentsOf( nbhobj )
+				let conn_old = this.connectivity( this.components, tgt_type )
+				
+				let conndiff = conn_old - conn_new
+				return conndiff
+				
+				
+				
+			}*/
+			
+			
 		
 			let comp1 = this.connectedComponentsOfCellBorder( tgt_type );
-			let conn1 = this.connectivity( comp1, tgt_type );
+			let conn1 = Math.pow( (1-this.connectivity( comp1, tgt_type )),2 );
 		
 			// Update the borderpixels as if the change occurs
 			this.updateBorderPixels( tgt_i, tgt_type, src_type );
 			let comp = this.connectedComponentsOfCellBorder( tgt_type );
-			let conn2 = this.connectivity( comp, tgt_type );
+			let conn2 = Math.pow((1-this.connectivity( comp, tgt_type )),2);
 			
 			
 			let conndiff = conn2 - conn1;
-			if( conn2 > conn1 ){
-				conndiff = -conndiff;
-			} 
+			/*if( conn2 > conn1 ){
+				conndiff = -conndiff
+			} */
 			
 			// Change borderpixels back because the copy attempt hasn't actually gone through yet.
 			this.updateBorderPixels( tgt_i, src_type, tgt_type );
