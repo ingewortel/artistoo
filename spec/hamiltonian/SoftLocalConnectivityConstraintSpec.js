@@ -22,6 +22,20 @@ describe("SoftLocalConnectivityConstraint", function() {
         C.add( new CPM.SoftLocalConnectivityConstraint({}) );
     }).toThrow("Cannot find parameter LAMBDA_CONNECTIVITY in the conf object!");
   });
+  it("should throw an error when NBH_TYPE is set incorrectly", function() {
+  	expect(function() {
+        C.add( new CPM.SoftLocalConnectivityConstraint({ LAMBDA_CONNECTIVITY : [0,1000], NBH_TYPE : "a" }) );
+    }).toThrow("In the SoftLocalConnectivityConstraint, NBH_TYPE must be either 'Neumann' or 'Moore'");
+    
+    expect(function() {
+        C.add( new CPM.SoftLocalConnectivityConstraint({ LAMBDA_CONNECTIVITY : [0,1000], NBH_TYPE : 1}) );
+    }).toThrow("In the SoftLocalConnectivityConstraint, NBH_TYPE must be either 'Neumann' or 'Moore'");
+    
+    expect(function() {
+        C.add( new CPM.SoftLocalConnectivityConstraint({ LAMBDA_CONNECTIVITY : [0,1000], NBH_TYPE : [1,2] }) );
+    }).toThrow("In the SoftLocalConnectivityConstraint, NBH_TYPE must be either 'Neumann' or 'Moore'");
+    
+  });
 
 /* Testing the connected components method for specific cases */
   describe("when computing connected components", function() {
@@ -51,6 +65,36 @@ describe("SoftLocalConnectivityConstraint", function() {
 		expect( C.getConstraint("SoftLocalConnectivityConstraint").connectedComponentsOf(nbhobj).length).toEqual(5);
 		
 	});
+	it("should listen to the neighborhood type property correctly", function(){
+		
+		// diagonal connections don't count as connections if the Neumann neighborhood is used (default)
+		nbhobj = {}
+		for( let x = 0; x < 5; x++ ){
+			nbhobj[ C.grid.p2i([x,x]) ] = true
+		}
+		expect( C.getConstraint("SoftLocalConnectivityConstraint").connectedComponentsOf(nbhobj).length).toEqual(5);
+	
+	
+		// ... but this case is connected when the Moore neighborhood is used
+		C.getConstraint("SoftLocalConnectivityConstraint").nbhtype = "Moore"
+		expect( C.getConstraint("SoftLocalConnectivityConstraint").connectedComponentsOf(nbhobj).length).toEqual(1);
+		
+		// ... and this should be again 5 when we switch back to Neumann
+		C.getConstraint("SoftLocalConnectivityConstraint").nbhtype = "Neumann"
+		expect( C.getConstraint("SoftLocalConnectivityConstraint").connectedComponentsOf(nbhobj).length).toEqual(5);
+		
+		// Or we can start from scratch:
+		let C2 = new CPM.CPM( [100,100], {T:20})
+		  C2.add( new CPM.SoftLocalConnectivityConstraint( {
+			LAMBDA_CONNECTIVITY : [0,1000],
+			NBH_TYPE : "Moore"
+		  }))
+		expect( C2.getConstraint("SoftLocalConnectivityConstraint").connectedComponentsOf(nbhobj).length).toEqual(1);
+		
+		
+	
+	
+	});	
 	it("should listen to the grid torus property correctly", function() {
 		let nbhobj = {}
 		
