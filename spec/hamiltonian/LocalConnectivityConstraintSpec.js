@@ -1,6 +1,7 @@
 /* 
 	TODO
 	- implement some checks for a 3D CPM
+	- further test paramchecker
 	- implement a stress test (somewhere else?): run a simulation at parameters where the cell has risk of
 	breaking, and test at several times whether the connectedness remains intact.
 
@@ -9,15 +10,10 @@
 
 describe("LocalConnectivityConstraint", function() {
   let CPM = require('../../build/cpm-cjs.js');
-  let C = 
+  let C
   
   beforeEach(function() {
-    C = new CPM.CPM( [100,100], {
-		T : 20,
-		J : [[0,20],[20,10]],
-		V : [0,200],
-		LAMBDA_V : [0,5]
-	  })
+	  C = new CPM.CPM( [100,100], {T:20})
 	  C.add( new CPM.LocalConnectivityConstraint( {
 		CONNECTED : [false,true]
 	  }))
@@ -33,6 +29,7 @@ describe("LocalConnectivityConstraint", function() {
 
 /* Testing the connected components method for specific cases */
   describe("when computing connected components", function() {
+  
 	it("should return only one component in connected case", function() {
 		let nbhobj = {}
 		for( let x = 0; x < 5; x++ ){
@@ -71,10 +68,7 @@ describe("LocalConnectivityConstraint", function() {
 		// now change torus to false in one or both dimensions while keeping the same nbhobj
 		let C_notorus = new CPM.CPM( [100,100], {
 			T : 20,
-			torus : [false,false],
-			J : [[0,20],[20,10]],
-			V : [0,200],
-			LAMBDA_V : [0,5]
+			torus : [false,false]
 		  })
 		 C_notorus.add( new CPM.LocalConnectivityConstraint( {
 			CONNECTED : [false,true]
@@ -83,10 +77,7 @@ describe("LocalConnectivityConstraint", function() {
 		
 		let C_ytorus = new CPM.CPM( [100,100], {
 			T : 20,
-			torus : [false,true],
-			J : [[0,20],[20,10]],
-			V : [0,200],
-			LAMBDA_V : [0,5]
+			torus : [false,true]
 		  })
 		 C_ytorus.add( new CPM.LocalConnectivityConstraint( {
 			CONNECTED : [false,true]
@@ -95,10 +86,7 @@ describe("LocalConnectivityConstraint", function() {
 		 
 		 let C_xtorus = new CPM.CPM( [100,100], {
 			T : 20,
-			torus : [true,false],
-			J : [[0,20],[20,10]],
-			V : [0,200],
-			LAMBDA_V : [0,5]
+			torus : [true,false]
 		  })
 		 C_xtorus.add( new CPM.LocalConnectivityConstraint( {
 			CONNECTED : [false,true]
