@@ -28,6 +28,7 @@ module	ConnectedComponentsByCell	src/stats/ConnectedComponentsByCell.js
 module	Connectedness	src/stats/Connectedness.js
 
 # grids
+module	Grid	src/grid/Grid.js
 module	Grid2D	src/grid/Grid2D.js
 module	Grid3D	src/grid/Grid3D.js
 module	GridManipulator	src/grid/GridManipulator.js

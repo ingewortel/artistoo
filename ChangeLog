@@ -3,6 +3,13 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-12-30 Inge Wortel <ingewortel@gmail.com>
+	* spec/grid/GridSpec.js : tests added for the Grid superclass.
+	* app/include-list.txt : Grid superclass added to the build so it can be tested more easily.
+	* src/grid/Grid.js : errors added when methods are called that should be implemented in the subclass but haven't been. Added setter/getter for the private pixels array so that an error can be thrown when this is undefined. Check for negative/floating point values when grid is Uint16, because this gives weird bugs if you try to set such a value on the grid.
+	* src/grid/Grid2D/3D.js : save datatype as a grid property so the isValidValue method knows which values are valid on a grid instance.
+
+
 2019-11-29 Inge Wortel <ingewortel@gmail.com>
 	* README.md : Added more examples and fixed it so that this now works directly from
 	the README, as well as from docs/index.html

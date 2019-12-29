@@ -43,12 +43,15 @@ class Grid3D extends Grid {
 		this.Y_STEP = 1 << (this.Z_BITS)
 		/** @ignore */
 		this.X_STEP = 1 << (this.Z_BITS +this.Y_BITS)
-		/** Array with values for each pixel stored at the position of its 
-			{@link IndexCoordinate}. E.g. the value of pixel with coordinate i is
-			stored as this._pixels[i].
-			@private
-			@type {Uint16Array} */
-		this._pixels = new Uint16Array(this.p2i(extents))
+		/** Array with values for each pixel stored at the position of its
+		 * {@link IndexCoordinate}. E.g. the value of pixel with coordinate i
+		 * is stored as this._pixelArray[i].
+		 * 	Note that this array is accessed indirectly via the
+		 * {@link _pixels} set- and get methods.
+		 * @private
+		 * @type {Uint16Array} */
+		this._pixelArray = new Uint16Array(this.p2i(extents))
+		this.datatype = "Uint16"
 	}
 	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
 	
@@ -170,13 +173,13 @@ class Grid3D extends Grid {
 
 		let xx = []
 		for( let d = 0 ; d <= 2 ; d ++ ){
-			if( p[d] == 0 ){
+			if( p[d] === 0 ){
 				if( torus[d] ){
 					xx[d] = [p[d],this.extents[d]-1,p[d]+1]
 				} else {
 					xx[d] = [p[d],p[d]+1]
 				}
-			} else if( p[d] == this.extents[d]-1 ){
+			} else if( p[d] === this.extents[d]-1 ){
 				if( torus[d] ){
 					xx[d] = [p[d],p[d]-1,0]
 				} else {

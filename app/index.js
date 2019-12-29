@@ -17,6 +17,7 @@ import CellNeighborList from "../src/stats/CellNeighborList.js"
 import ConnectedComponentsByCell from "../src/stats/ConnectedComponentsByCell.js" 
 import Connectedness from "../src/stats/Connectedness.js" 
  
+import Grid from "../src/grid/Grid.js" 
 import Grid2D from "../src/grid/Grid2D.js" 
 import Grid3D from "../src/grid/Grid3D.js" 
 import GridManipulator from "../src/grid/GridManipulator.js" 
@@ -57,6 +58,7 @@ export {
 	CellNeighborList,
 	ConnectedComponentsByCell,
 	Connectedness,
+	Grid,
 	Grid2D,
 	Grid3D,
 	GridManipulator,
