@@ -7,6 +7,7 @@
 
 */
 
+/** @test {LocalConnectivityConstraint} */
 describe("LocalConnectivityConstraint", function () {
 	let CPM = require("../../build/cpm-cjs.js")
 	let C, conn
@@ -35,6 +36,7 @@ describe("LocalConnectivityConstraint", function () {
 
 	describe( "[ Unit tests ]", function() {
 		/* Testing the connected components method for specific cases */
+		/** @test {LocalConnectivityConstraint#connectedComponentsOf} */
 		describe("method [ connectedComponentsOf ]", function () {
 
 			beforeEach(function () {
@@ -117,6 +119,7 @@ describe("LocalConnectivityConstraint", function () {
 	describe( "[ Integration tests ]", function() {
 
 		/* Integration test: Testing the parameter checker for this constraint*/
+		/** @test {LocalConnectivityConstraint#confChecker} */
 		describe("integration with ParameterChecker", function () {
 			it("should throw an error when CONNECTED parameter is unspecified", function () {
 				expect(function () {
@@ -171,10 +174,12 @@ describe("LocalConnectivityConstraint", function () {
 				tgt_type = C.pixti(tgt_i)
 			})
 
+			/** @test {LocalConnectivityConstraint#checkConnected} */
 			it("#checkConnected should return false", function () {
 				expect(C.getConstraint("LocalConnectivityConstraint").checkConnected(tgt_i, src_type, tgt_type)).toBeFalsy()
 			})
 
+			/** @test {LocalConnectivityConstraint#fulfilled} */
 			describe("and when CONNECTED for the tgt cellKind", function () {
 				it("is true, constraint should not be fulfilled", function () {
 					expect(C.getConstraint("LocalConnectivityConstraint").fulfilled(src_i, tgt_i, src_type, tgt_type)).toBeFalsy()
