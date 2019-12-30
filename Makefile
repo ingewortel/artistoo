@@ -39,9 +39,15 @@ docs : docs/index.html docs-examples
 
 
 # testing:
-
-test-all :
-	@echo "...Running automated tests using jasmine..." &&\
+test-jasmine :
+	@echo "...Running automated method tests using jasmine..." &&\
 	bash run-tests.bash
 
-	
+test-examples :
+	@echo "...Testing if the examples still work..." &&\
+	cd examples/build-examples && $(MAKE) -f Makefile test-node-examples
+
+test-all :
+	@echo "...Running automated tests..." &&\
+	$(MAKE) -j 1 test-jasmine &&\
+	$(MAKE) test-examples
