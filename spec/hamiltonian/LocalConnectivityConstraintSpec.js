@@ -155,13 +155,12 @@ describe("LocalConnectivityConstraint", function () {
 					return 0
 				})
 				C.grid.neighi.and.callFake( function(i){
-					let arr = [ i - 1, i + 1 ]
-					return arr
+					return [ i - 1, i + 1 ]
 				})
 				C.grid.i2p.and.callFake( function(i){
 					return [0,i]
 				})
-				C.grid.p2i.and.callFake( function(){
+				C.grid.p2i.and.callFake( function(p){
 					return p[1]
 				})
 				C.cellKind.and.callFake( function(t){
