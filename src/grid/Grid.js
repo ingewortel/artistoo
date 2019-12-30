@@ -52,6 +52,7 @@ class Grid {
 		 * 	@private
 		 * 	*/
 		this._pixelArray = undefined
+		this.datatype = undefined
 		
 		/* These are used for rapid conversion between array and index
 		coordinates, but not documented as they should not be used from outside.
@@ -103,8 +104,9 @@ class Grid {
 	 * @param {ArrayCoordinate} p - the coordinate of the pixel to convert
 	 * @return {IndexCoordinate} the converted coordinate.
 	 */
+	//eslint-disable-next-line no-unused-vars
 	p2i ( p ){
-		throw( "A p2i method should be implemented in every Grid subclass!"+p)
+		throw( "A p2i method should be implemented in every Grid subclass!")
 	}
 
 	/** Method for conversion from an {@link IndexCoordinate} to an
@@ -126,10 +128,13 @@ class Grid {
 	 * @abstract
 	 * @param {IndexCoordinate} i - the coordinate of the pixel to get neighbors
 	 * for.
+	 * @param {boolean[]} torus are borders of the grid linked so that a cell
+	 * leaving on the right re-enters the grid on the left?
 	 * @return {IndexCoordinate[]} an array of neighbors.
 	 */
-	neighi ( i ){
-		throw( "A neighi method should be implemented in every Grid subclass!"+i)
+	//eslint-disable-next-line no-unused-vars
+	neighi ( i, torus = this.torus ){
+		throw( "A neighi method should be implemented in every Grid subclass!")
 	}
 
 	/** The neigh method returns the neighborhood of a pixel p. This function
@@ -329,21 +334,34 @@ class Grid {
 	 */
 	//eslint-disable-next-line no-unused-vars,require-yield
 	* neighNeumanni ( i, torus = this.torus ){
-		throw( "You are trying to call the method neighNeumanni, but haven't" +
+		throw( "Trying to call the method neighNeumanni, but you haven't " +
 			"implemented this method in the Grid subclass you are using!")
 	}
 
 	/** Method to compute the laplacian at location i on the grid (location
 	 * given in index coordinates). It internally uses the neighNeumanni method
 	 * to compute a Neumann neighborhood, which should be implemented in the
-	 * grid subclass.
+	 * grid subclass. It then uses the finite difference method (see link) with
+	 * h = 1.
 	 * @param {IndexCoordinate} i index coordinates of a pixel to compute the
 	 * laplacian at
 	 * @return {number} the laplacian at position p.
 	 * @see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions
+	 * @see https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Finite_differences
 	 * */
 	laplaciani( i ){
 		let L = 0, n = 0
+
+		// For now: forbid computing a laplacian on an integer grid as it makes
+		// no sense and could happen by accident if you forget to specify the
+		// datatype.
+		// If this is too strict, we can set an option to overrule this error.
+		// This way you still get to see it if you try this by accident.
+		if( this.datatype === "Uint16" ){
+			throw("Diffusion/laplacian methods do not work on a Uint16 grid! " +
+				"Consider setting datatype='Float32'.")
+		}
+
 		//noinspection JSUnresolvedFunction
 		for( let x of this.neighNeumanni(i) ){
 			L += this.pixti( x ); n ++

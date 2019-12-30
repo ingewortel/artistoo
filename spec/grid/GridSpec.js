@@ -258,6 +258,89 @@ describe("Grid", function () {
 			})
 		})
 
+		/** @test {Grid#laplaciani} */
+		describe( " laplacian(i) method ", function() {
+			let grid2Db, grid2D
+
+			beforeEach( function(){
+				grid2D =  new CPM.Grid2D( [100,100] )
+				grid2Db = new CPM.Grid2D( [100,100], [false,false], "Float32" )
+			})
+
+			it( "should work on Float32 grids", function(){
+				expect( function(){ grid2Db.laplaciani(1) } ).not.toThrow()
+				expect( function(){ grid2Db.laplacian([1,1] ) } ).not.toThrow()
+			})
+
+			it( "should throw a warning when you try to call it on Uint16 grid", function(){
+				expect( function(){ grid2D.laplaciani(1) } ).toThrow()
+				expect( function(){ grid2D.laplacian([1,1] ) } ).toThrow()
+			})
+
+			describe( " should compute laplacian correctly ", function() {
+
+				// spy on the neighNeumanni method by returning always pixels 1,2,3,4
+				beforeEach( function (){
+					grid2Db.neighNeumanni = function * (){
+						for( let i = 0; i < 4; i++ ){
+							yield i+1
+						}
+					}
+				})
+
+
+				it( " case 1 : everything zero ", function(){
+					// spy on pixti method to let it always return 0
+					spyOn( grid2Db, "pixti" ).and.returnValue(0)
+
+					// check that the spying works, this value of 1000 should not
+					// be detected.
+					grid2Db.setpixi( 1, 1000 )
+
+					// check that laplacian returns zero
+					expect( grid2Db.laplaciani(0) ).toEqual(0)
+
+				})
+
+				it( " case 2 : everything a positive value ", function(){
+
+					spyOn( grid2Db, "pixti" ).and.callFake( function( i ){
+						return i*1000
+					})
+					expect( grid2Db.laplaciani(0) ).toEqual( 10000 )
+
+				})
+
+				it( " case 3 : everything a negative value ", function(){
+					spyOn( grid2Db, "pixti" ).and.callFake( function( i ){
+						return -i*1000
+					})
+					expect( grid2Db.laplaciani(0) ).toEqual( -10000 )
+				})
+
+				it( " case 4 : floating point values ", function(){
+					spyOn( grid2Db, "pixti" ).and.callFake( function( i ){
+						return i*1000 + 0.1* Math.random()
+					})
+					expect( grid2Db.laplaciani(0) ).toBeCloseTo( 10000, 0 )
+				})
+
+				it( " case 4 : positive and negative floating point values ", function(){
+					spyOn( grid2Db, "pixti" ).and.callFake( function( i ){
+						if( i >= 1 && i <= 4 ){
+							let num = 1000 + 0.1* Math.random()
+							if( i % 2 === 0 ){ return -num }
+							return num
+						}
+						return 0
+					})
+					expect( grid2Db.laplaciani(0) ).toBeCloseTo( 0, 0 )
+				})
+
+			})
+
+		})
+
 
 	})
 
@@ -278,7 +361,8 @@ describe("Grid", function () {
 		})
 
 		it( "should be possible to build a custom Grid subclass" , function(){
-			expect( function(){ let g = new MyGrid( [ 50,50 ] ) } ).not.toThrow()
+			//eslint-disable-next-line no-unused-vars
+			expect( function(){ new MyGrid( [ 50,50 ] ) } ).not.toThrow()
 			let g = new MyGrid( [ 50,50 ] )
 			expect( g.extents[0] ).toEqual(50)
 		})
@@ -341,10 +425,59 @@ describe("Grid", function () {
 		 * @test {Grid#gradient}
 		 * */
 		it( "should throw error when gradienti not implemented", function(){
-			expect( function(){g.neigh([0,0])}).toThrow()
-			expect( function(){g.neighi(0)}).toThrow()
+			expect( function(){g.gradient([0,0])}).toThrow()
+			expect( function(){g.gradienti(0)}).toThrow()
 		})
 
+		/** @test{Grid#gradienti}
+		 * @test {Grid#gradient}
+		 * */
+		it( "gradient should work as soon as gradienti and p2i are implemented.", function(){
+			spyOn( g, "p2i" ).and.returnValue( 0 )
+			spyOn( g, "gradienti" ).and.callFake( function(i){ return i + 10 } )
+			expect( function(){ g.gradient([0,0] ) } ).not.toThrow()
+			expect( g.gradient( [0,0] ) ).toEqual(10)
+		})
+
+		/** @test{Grid#neighNeumanni}
+		 * @test {Grid#laplacian}
+		 * @test {Grid#laplaciani}
+		 * */
+		it( "laplaciani should throw error when neighNeumanni not implemented", function(){
+			let message = "Trying to call the method neighNeumanni, but you haven't " +
+				"implemented this method in the Grid subclass you are using!"
+			expect( function(){g.laplaciani(0)}).toThrow(message)
+		})
+
+		/** @test{Grid#neighNeumanni}
+		 * @test {Grid#laplacian}
+		 * @test {Grid#laplaciani}
+		 * */
+		it( "laplacian should throw error when p2i/neighNeumanni not implemented", function(){
+			let message = "A p2i method should be implemented in every Grid subclass!"
+			expect( function(){g.laplacian([0,0] ) } ).toThrow(message)
+
+			// should still throw error when p2i is implemented but neighNeumanni is not
+			spyOn( g, "p2i" ).and.returnValue(0)
+			message = "Trying to call the method neighNeumanni, but you haven't " +
+				"implemented this method in the Grid subclass you are using!"
+			expect( function(){g.laplacian([0,0] ) } ).toThrow(message)
+		})
+
+		/** @test{Grid#neighNeumanni}
+		 * @test {Grid#laplacian}
+		 * @test {Grid#laplaciani}
+		 * */
+		it( "laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist", function(){
+
+			spyOn( g, "p2i" ).and.returnValue(0)
+			g.neighNeumanni = function* (){
+				for( let k = 0; k < 4; k++ ){ yield k + 1 }
+			}
+			g._pixelArray = new Float32Array(1000)
+			expect( function(){g.laplacian([0,0] ) } ).not.toThrow()
+
+		})
 
 	})
 
