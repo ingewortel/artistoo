@@ -4,35 +4,103 @@ yyyy-mm-dd Your Name <your@email.com>
 ###
 
 2019-12-30 Inge Wortel <ingewortel@gmail.com>
-	* spec/grid/GridSpec.js : tests added for the Grid superclass.
-	* app/include-list.txt : Grid superclass added to the build so it can be tested more easily.
-	* src/grid/Grid.js : errors added when methods are called that should be implemented in the subclass but haven't been. Added setter/getter for the private pixels array so that an error can be thrown when this is undefined. Check for negative/floating point values when grid is Uint16, because this gives weird bugs if you try to set such a value on the grid.
-	* src/grid/Grid2D/3D.js : save datatype as a grid property so the isValidValue method knows which values are valid on a grid instance.
+    * Added a copy of the fpsmeter package to the right folder in the examples
+    folder to fix a problem with the 3D examples not working.
+    * .eslintrc.js : added compatibility with jasmine (for the WebStorm editor).
+    * .esdoc.json : set up the config so that also an overview of tests is
+    listed, and a link to the github repo.
+    * spec/LocalConnectivityConstraintSpec.js : Updated doc blocks to link tests
+    to the documentation with the @test tag. Minor bug fixed.
 
+
+2019-12-29 Inge Wortel <ingewortel@gmail.com>
+	* spec/grid/GridSpec.js : tests added for the Grid superclass.
+	* app/include-list.txt : Grid superclass added to the build so it can
+	be tested more easily.
+	* src/grid/Grid.js : errors added when methods are called that should be
+	implemented in the subclass but haven't been. Added setter/getter for the
+	private pixels array so that an error can be thrown when this is undefined.
+	Check for negative/floating point values when grid is Uint16, because this
+	gives weird bugs if you try to set such a value on the grid.
+	* src/grid/Grid2D/3D.js : save datatype as a grid property so the
+	isValidValue method knows which values are valid on a grid instance.
+	* spec/LocalConnectivityConstraintSpec.js : Updated tests.
+	* src/hamiltonian/LocalConnectivityConstraint.js : Updated docs.
+
+2019-12-20 Inge Wortel <ingewortel@gmail.com>
+    * src/hamiltonian/SoftLocalConnectivityConstraint.js : changed code so that
+    the neighborhood type used to compute connectivity can be changed through
+    the conf object (NBH_TYPE key).
+    * spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js : added tests for
+    this constraint.
+    * src/hamiltonian/SoftLocalConnectivityConstraint.js : added this version of
+    the local connectivity constraint, where copy attempts disrupting
+    connectivity are not forbidden explicitly but strongly discouraged via a
+    large deltaH penalty.
+    * spec/hamiltonian/LocalConnectivityConstraintSpec.js : added tests for this
+    constraint.
+
+2019-12-19 Inge Wortel <ingewortel@gmail.com>
+    * spec/ : Set up interface for automated testing using jasmine, where tests
+    go in this folder.
+    * spec/grid/GridSpec.js : initial tests for the Grid.js superclass.
+    * spec/hamiltonian/LocalConnectivityConstraintSpec.js : initial tests for
+    the local connectivity constraint.
+    * src/hamiltonian/LocalConnectivityConstraint.js : added this constraint.
+
+2019-12-17 Inge Wortel <ingewortel@gmail.com>
+    * docs : updated.
+
+2019-12-13 Inge Wortel <ingewortel@gmail.com>
+    * README.md : Added tumor infiltration example to the list.
+    * docs/index.html : Tumor infiltration example is now in here too.
+
+2019-12-09 Inge Wortel <ingewortel@gmail.com>
+    * Set up github pages for this repo.
+    * README.md : small changes.
+    * examples/ : examples html folder restructured so it doesn't depend on
+    any other folder and can be copied into the docs.
+
+2019-12-02 : Inge Wortel <ingewortel@gmail.com>
+    * README.md : Added cancer invasion example to the docs.
+
+2019-11-30 Inge Wortel <ingewortel@gmail.com>
+    * README.md : fixed mistake in example code.
+    * examples/ : imgrate in the examples set to 1 so that ffmpeg works.
+    * examples/ : CancerInvasion example added.
+    * LICENSE : created an MIT license.
+    * docs/ : updated and added to the repo.
 
 2019-11-29 Inge Wortel <ingewortel@gmail.com>
-	* README.md : Added more examples and fixed it so that this now works directly from
-	the README, as well as from docs/index.html
-	* src/hamiltonian : removed experimental constraints and updated documentation.
+	* README.md : Added more examples and fixed it so that this now works
+	directly from the README, as well as from docs/index.html
+	* src/hamiltonian : removed experimental constraints and updated
+	documentation.
 	* docs/ : updated documentation.
 	* Removed several old files.
-	* simulation-examples : removed this directory and restructured it into examples/.
-	* src/models/GridBasedModel.js : replaced mersennetwister by mersenne-twister, an MIT
-	licensed version.
+	* simulation-examples : removed this directory and restructured it into
+	examples/.
+	* src/models/GridBasedModel.js : replaced mersennetwister by
+	mersenne-twister, an MIT licensed version.
+	* examples/3D/ : 3D examples added.
 
 2019-08-21 Inge Wortel <ingewortel@gmail.com>
-	* src/grid/Grid.js : The torus property is now an array with a boolean value for 
-	each dimension separately. It is therefore now possible to have a torus in x dimension,
-	but not in y-dimension. Methods listening to the torus are also compatible with this
-	update now.
-	* src/grid/Grid2D.js : Made neighborhood computation compatible with new specification
-	of the torus property.
+	* src/grid/Grid.js : The torus property is now an array with a boolean
+	value for each dimension separately. It is therefore now possible to have a
+	torus in x dimension, but not in y-dimension. Methods listening to the torus
+	are also compatible with this update now.
+	* src/grid/Grid2D.js : Made neighborhood computation compatible with new
+	specification of the torus property.
 	* src/grid/Grid3D.js : idem.
-	* src/grid/CoarseGrid.js : is now an extension of the Grid2D class so that neighborhood
-	methods are also available when a CoarseGrid is supplied to a Canvas.
-	* src/grid/GridManipulator.js : now also compatible with the new way of specifying a torus.
-	* docs : removed from git for now because it's annoying. Type 'make docs' to create them locally.
-	* src/hamiltonian/ChemotaxisConstraint.js : updated jsdoc example code with new torus syntax.
+	* src/grid/CoarseGrid.js : is now an extension of the Grid2D class so that
+	neighborhood methods are also available when a CoarseGrid is supplied to a
+	Canvas.
+	* src/grid/GridManipulator.js : now also compatible with the new way of
+	specifying a torus.
+	* docs : removed from git for now because it's annoying. Type 'make docs' to
+	create them locally.
+	* src/hamiltonian/ChemotaxisConstraint.js : updated jsdoc example code with
+	new torus syntax.
 	* src/hamiltonian/ProtrusionConstraint.js : updated with new torus syntax.
 	* src/hamiltonian/PreferredDirectionConstraint.js : updated with new torus syntax.
 	* src/hamiltonian/AttractionPointConstraint.js : updated with new torus syntax.
@@ -40,73 +108,92 @@ yyyy-mm-dd Your Name <your@email.com>
 	* src/models/CPM.js : updated jsdoc comments with new torus syntax.
 	* src/models/CA.js : updated jsdoc comments with new torus syntax.
 	* src/models/GridBasedModel.js : made compatible with new torus syntax.
-	* src/simulation/Simulation.js : centroid computation now compatible with new torus syntax.
-	* src/stats/CentroidsWithTorusCorrection.js : now compatible with new torus syntax, performing
+	* src/simulation/Simulation.js : centroid computation now compatible with
+	new torus syntax.
+	* src/stats/CentroidsWithTorusCorrection.js : now compatible with new torus
+	syntax, performing
 	the correction only in the necessary dimensions.
 	* src/stats/CellNeighborList.js : updated jsdoc example with new torus syntax.
-	* src/stats/Centroids.js : included check for torus and warning not to use this stat if there is.
+	* src/stats/Centroids.js : included check for torus and warning not to use
+	this stat if there is.
 	* examples/* : made compatible with new torus syntax.
 	* simulation-examples/* made compatible with new torus syntax.
 
 2019-08-20 Inge Wortel <ingewortel@gmail.com>
-	* src/simulation/Simulation.js : change in default drawing method for cells on the grid.
-	* src/Canvas.js : Changed method to draw a chemokine field, which now uses transparancy
+	* src/simulation/Simulation.js : change in default drawing method for cells
+	on the grid.
+	* src/Canvas.js : Changed method to draw a chemokine field, which now uses
+	transparency
 	and a color of choice rather than only the default red-on-black color.
-	* README.md : Added some links to examples. Note these only work when opening this file
+	* README.md : Added some links to examples. Note these only work when
+	opening this file
 	from the docs/index.html.
-	* src/hamiltonian/SoftConnectivityConstraint.js : Added soft connectivity constraint (experimental).
+	* src/hamiltonian/SoftConnectivityConstraint.js : Added soft connectivity
+	constraint (experimental).
 
 2019-08-19 Inge Wortel <ingewortel@gmail.com>
-	* src/hamiltonian/ConnectivityConstraint.js : Added connectivity constraint (experimental). 
+	* src/hamiltonian/ConnectivityConstraint.js : Added connectivity constraint
+	(experimental).
 	* src/Canvas.js : Added method to draw contour of chemokine field.
 
 2019-08-08 Inge Wortel <ingewortel@gmail.com>
-	* docs : documentation now almost finished. Many src files have been modified to include
-	esdoc syntax for automatic documentation (doxygen-like). Open the docs from 
-	docs/index.html. If functions change, the associated documentation should from now on be
-	changed as well. Note that I have defined some special variable "types" (red entries in
-	the left menu in docs/index.html) that should be used in the documentation when 
+	* docs : documentation now almost finished. Many src files have been
+	modified to include esdoc syntax for automatic documentation (doxygen-like).
+	Open the docs from docs/index.html. If functions change, the associated
+	documentation should from now on be changed as well. Note that I have
+	defined some special variable "types" (red entries in the left menu in
+	docs/index.html) that should be used in the documentation when
 	appropriate. Use "make docs" to update documentation. 
-	* old : new folder for old implementations that don't have to be in the build anymore.
-	* old/AdhesionMultiBackground : moved from src/hamiltonian/... because this constraint
-	doesn't really work.
-	* src/grid/grid-typedef.js : file with some esdoc @typedefs associated with the grid.
-	* src/grid/models/model-typedefs.js : file with esdoc @typedefs associated with the models.
-	* src/grid/stats/stat-typedef.js : file with esdoc @typedefs associated with stats.
-	* src/grid/hamiltonian/constraint-typedef.js : file with esdoc @typedefs associated with constraints.
-	* src/hamiltonian/ParameterChecker.js : moved confCheck functions from Constraint.js
-	to this new class, and changed the functions so that they are more structured.
-	See the documentation for usage. 
-	* src/stats/CellNeighborList.js : new stat ported from the old Stats class, but hasn't
-	been properly tested yet. 
+	* old : new folder for old implementations that don't have to be in the
+	build anymore.
+	* old/AdhesionMultiBackground : moved from src/hamiltonian/... because
+	this constraint doesn't really work.
+	* src/grid/grid-typedef.js : file with some esdoc @typedefs associated with
+	the grid.
+	* src/grid/models/model-typedefs.js : file with esdoc @typedefs associated
+	with the models.
+	* src/grid/stats/stat-typedef.js : file with esdoc @typedefs associated
+	with stats.
+	* src/grid/hamiltonian/constraint-typedef.js : file with esdoc @typedefs
+	associated with constraints.
+	* src/hamiltonian/ParameterChecker.js : moved confCheck functions from
+	Constraint.js to this new class, and changed the functions so that they
+	are more structured. See the documentation for usage.
+	* src/stats/CellNeighborList.js : new stat ported from the old Stats class,
+	but hasn't been properly tested yet.
 	* src/stats/BorderPixelsByCell.js : new stat.
-	* build-makeout.bash : keeping track of the makefile dependencies automatically didn't
-	really work, so now this script just makes a special makefile to handle the dependencies.
+	* build-makeout.bash : keeping track of the makefile dependencies
+	automatically didn't really work, so now this script just makes a special
+	makefile to handle the dependencies.
 	
 
 2019-08-05 Inge Wortel <ingewortel@gmail.com>
-	* app/automatic-index.bash : script automatically generates app/index.js from a standard
-	file app/include-list.txt. This ensures that both the Makefile dependencies and the app index
-	can be kept up to date from a single file. See app/include-list.txt. 
-	* app/include-list.txt : file that keeps track of which modules are used in the build,
-	and which should be exported. See this file for the format. 
-	* Makefile : app/index.js and makefile dependencies now kept up to date automatically from app/include-list.txt.
-	* src : Moved all source code into a folder src/. This will help generating 
+	* app/automatic-index.bash : script automatically generates app/index.js
+	from a standard file app/include-list.txt. This ensures that both the
+	Makefile dependencies and the app index can be kept up to date from a single
+	file. See app/include-list.txt.
+	* app/include-list.txt : file that keeps track of which modules are used in
+	the build, and which should be exported. See this file for the format.
+	* Makefile : app/index.js and makefile dependencies now kept up to date
+	automatically from app/include-list.txt.
+	* src : Moved all source code into a folder src/. This will help generating
 	automatic documentation using esdoc.
 	* app/index.js : Fixed the new paths using the src folder.
 	* Makefile : Fixed the new paths using the src folder.
-	* node_modules : installed "esdoc": "^1.1.0" and "esdoc-standard-plugin": "^1.0.0",
-	and these are added to package.json.
-	* docs : Added documentation using esdoc (not finished yet, but accessible from
-	docs/index.html)
+	* node_modules : installed "esdoc": "^1.1.0" and "esdoc-standard-plugin":
+	"^1.0.0", and these are added to package.json.
+	* docs : Added documentation using esdoc (not finished yet, but accessible
+	from docs/index.html)
 
 2019-08-01 Inge Wortel <ingewortel@gmail.com>
-	* hamiltonian/AdhesionMultiBackground.js : Added a new form of the adhesion constraint,
-	where a set of pixels on the grid is given different parameters when it is background.
-	* hamiltonian/ActivityMultiBackground.js : Idem for the Act model. This allows building
-	adhesive micropatterns on the substrate for the cell to move on.
-	* simulation-examples : new examples added for the GameOfLife CA, and one for the
-	micropatterned substrate.
+	* hamiltonian/AdhesionMultiBackground.js : Added a new form of the adhesion
+	constraint, where a set of pixels on the grid is given different parameters
+	when it is background.
+	* hamiltonian/ActivityMultiBackground.js : Idem for the Act model. This
+	allows building adhesive micropatterns on the substrate for the cell to
+	move on.
+	* simulation-examples : new examples added for the GameOfLife CA, and one
+	for the micropatterned substrate.
 
 2019-07-16 Inge Wortel <ingewortel@gmail.com>
 	* grid/GridManipulator.js : reset stats after cell division, because
@@ -116,7 +203,6 @@ yyyy-mm-dd Your Name <your@email.com>
 	attributes stored in the constraint object.
 	* simulation/Simulation.js : Made compatible with the new version of 
 	the CPM in which constraints are added automatically.
-	
 	* simulation-examples/new-simulation.bash : changed this so that 
 	it now works differently. Run with 
 		"bash new-simulation.bash <simulation-name>", 
@@ -135,9 +221,9 @@ yyyy-mm-dd Your Name <your@email.com>
 	
 2019-07-18 Johannes <johannes.textor@gmx.de>
 	* PreferredDirectionConstraint.js: Renamed to to PersistenceConstraint
-    * Constraint.js: confChecker no longer obligatory as this makes implementing new
-    custrom constraints unnecessarily bureaucratic. Instead the method will be called
-    when available.
+    * Constraint.js: confChecker no longer obligatory as this makes implementing
+    new custom constraints unnecessarily bureaucratic. Instead the method will
+    be called when available.
 
 2019-07-13 Inge Wortel <ingewortel@gmail.com>
 	* hamiltonian/ActivityConstraint.js : changed the name of the old version
@@ -160,11 +246,11 @@ yyyy-mm-dd Your Name <your@email.com>
 	* simulation-examples : started a new folder for examples generated
 	using simulation classes. This way, the node and html examples can be
 	generated automatically from a single file. To do this, call
-	'bash new-simulation.bash' <mysim> <basic/custom> from the simulation-examples/ folder. This
-	will set up a new config file in simulation-files, which
-	you can then edit. It will also add the simulation to the Makefile.
-	If <basic>, the StandardSimulation.js class is used; otherwise, the boilerplate
-	code for a new class is generated in <mysim>.js.
+	'bash new-simulation.bash' <mysim> <basic/custom> from the
+	simulation-examples/ folder. This will set up a new config file in
+	simulation-files, which you can then edit. It will also add the simulation
+	to the Makefile. If <basic>, the StandardSimulation.js class is used;
+	otherwise, the boilerplate code for a new class is generated in <mysim>.js.
 	You can then adjust the config and class files, and type 'make' to
 	produce the node/html examples.
 	* simulation-examples/Makefile : This automatically generates a node and
@@ -190,7 +276,7 @@ yyyy-mm-dd Your Name <your@email.com>
 
 2019-07-04 Inge Wortel <ingewortel@gmail.com>
 	* hamiltonian/BarrierConstraint.js : new hard constraint to replace
-	the "stroma" celltype in the previous version. Basically, this 
+	the "stroma" celltype in the previous version. Basically, this
 	constraint sets one cellkind as "barrier" cellkind. Copy attempts
 	from or into pixels with this cellkind are forbidden. Which cellkinds
 	are barrier are defined in the conf object in the IS_BARRIER array,
@@ -212,7 +298,7 @@ yyyy-mm-dd Your Name <your@email.com>
 	I removed all methods that now have an implementation in this file
 	from Stats.js and TODO: Stats.js should no longer exist in the future.
 	* hamiltonian/PreferredDirectionConstraint : new constraint that
-	implements Beltman-style direcetional persistence. Includes a
+	implements Beltman-style directional persistence. Includes a
 	parameter that controls the amount of angular diffusion.
 	* examples/many-cells.html : new example showcasing the persistent
 	direction constraint
@@ -229,14 +315,14 @@ yyyy-mm-dd Your Name <your@email.com>
 	constraint where missing
 
 2019-03-09 Inge Wortel <ingewortel@gmail.com>
-	* hamiltonian/ActivityConstraint2.js : Added new implementation of the activity
-	constraint that directly tracks activity values in an object instead of their birth
-	time. This implementation should be more efficient because pixels are removed once
-	their activity reaches zero.
+	* hamiltonian/ActivityConstraint2.js : Added new implementation of the
+	activity constraint that directly tracks activity values in an object
+	instead of their birth time. This implementation should be more efficient
+	because pixels are removed once their activity reaches zero.
 		!!! We may want to make a test that checks if two implementations do the same
 		thing?
-	* app/index.js : use ActivityConstraint2.js instead of ActivityConstraint.js for
-	the build.
+	* app/index.js : use ActivityConstraint2.js instead of ActivityConstraint.js
+	for the build.
 	* examples/actmodel.html : fixed bug because of change in CPM.js file. Added a 
 	perimeter constraint to the cell.
 
@@ -264,7 +350,7 @@ yyyy-mm-dd Your Name <your@email.com>
 	* Makefile : changed call to rollup to a direct call to the rollup binary in 
 	node_modules, so it doesn't require a global install.
 	* hamiltonian/SoftConstraint.js : fixed typo in filename. 
-	* hamiltonian/SoftConstraint.js ( deltaH ) : Disabled eslint error on unused variables
-	for this method. 
-	* hamiltonian/HardConstraint.js ( fulfilled ): Disabled eslint error on unused variables
-	for this  method. 
+	* hamiltonian/SoftConstraint.js ( deltaH ) : Disabled eslint error on
+	unused variables for this method.
+	* hamiltonian/HardConstraint.js ( fulfilled ): Disabled eslint error on
+	unused variables for this  method.
