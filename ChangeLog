@@ -11,6 +11,11 @@ yyyy-mm-dd Your Name <your@email.com>
     listed, and a link to the github repo.
     * spec/LocalConnectivityConstraintSpec.js : Updated doc blocks to link tests
     to the documentation with the @test tag. Minor bug fixed.
+    * examples/build-examples/Makefile : set up automatic generation of node
+    scripts with short burnin & runtime for rapid automatic testing of all the
+    examples.
+    * Makefile : split testing procedure (target test-all) into jasmine spec
+    tests and separate testing of the examples.
 
 
 2019-12-29 Inge Wortel <ingewortel@gmail.com>
