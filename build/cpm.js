@@ -331,8 +331,9 @@ var CPM = (function (exports) {
 		 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
 		 * @return {ArrayCoordinate} the converted coordinate.
 		 */
+		//eslint-disable-next-line no-unused-vars
 		i2p ( i ){
-			throw( "An i2p method should be implemented in every Grid subclass!"+i)
+			throw( "An i2p method should be implemented in every Grid subclass!")
 		}
 
 		/** Method returning the (Moore) neighborhood of a pixel based on its
@@ -455,12 +456,18 @@ var CPM = (function (exports) {
 		 * @abstract
 		 * @return {Pixel} for each pixel, return an array [p,v] where p are
 		 * the pixel's array coordinates on the grid, and v its value.*/
+		//eslint-disable-next-line require-yield
 		* pixels() {
+			//noinspection JSValidateTypes
+			throw("Iterator 'pixels' not implemented!")
+
+			/*
+			// example code:
 			for( let i of this.pixelsi() ){
 				if( this._pixels[i] > 0 ){
-					yield [this.i2p(i),this._pixels[i]];
+					yield [this.i2p(i),this._pixels[i]]
 				}
-			}
+			}*/
 		}
 
 		/** This iterator returns locations and values of all non-zero pixels.
@@ -506,8 +513,9 @@ var CPM = (function (exports) {
 		 * @param {IndexCoordinate} i index coordinate of a pixel to compute the
 		 * gradient at.
 		 * @see https://en.wikipedia.org/wiki/Gradient*/
+		//eslint-disable-next-line no-unused-vars
 		gradienti( i ){
-			throw("method 'gradienti' not implemented! "+i)
+			throw("method 'gradienti' not implemented! ")
 		}
 
 		/** Method to compute the gradient at location p on the grid (location

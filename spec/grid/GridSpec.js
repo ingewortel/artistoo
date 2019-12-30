@@ -1,3 +1,4 @@
+/** @test {Grid}*/
 describe("Grid", function () {
 	let CPM = require("../../build/cpm-cjs.js")
 	//eslint-disable-next-line no-unused-vars
@@ -272,7 +273,7 @@ describe("Grid", function () {
 				expect( function(){ grid2Db.laplacian([1,1] ) } ).not.toThrow()
 			})
 
-			it( "should throw a warning when you try to call it on Uint16 grid", function(){
+			it( "should throw error when you try to call it on Uint16 grid", function(){
 				expect( function(){ grid2D.laplaciani(1) } ).toThrow()
 				expect( function(){ grid2D.laplacian([1,1] ) } ).toThrow()
 			})
@@ -341,6 +342,31 @@ describe("Grid", function () {
 
 		})
 
+		/** @test {Grid#diffusion} */
+		describe( " diffusion method ", function() {
+			let grid2Db, grid2D
+
+			beforeEach(function () {
+				grid2D = new CPM.Grid2D([200, 200])
+				grid2Db = new CPM.Grid2D([200, 200], [false, false], "Float32")
+			})
+
+			it("can be called on Float32 grids", function () {
+				expect(function () {
+					grid2Db.diffusion(0.01)
+				}).not.toThrow()
+			})
+
+			it("should throw error when you try to call it on Uint16 grid", function () {
+				let message = "Diffusion/laplacian methods do not work on a Uint16 grid! " +
+					"Consider setting datatype='Float32'."
+				expect(function () {
+					grid2D.diffusion(1)
+				}).toThrow(message)
+			})
+
+		})
+
 
 	})
 
@@ -404,21 +430,6 @@ describe("Grid", function () {
 			expect( function(){ for( let p of g.pixels() ){ pixels.push(p) } }).toThrow()
 			expect( function(){ for( let p of g.pixelsi() ){ pixels.push(p) } }).toThrow()
 			expect( pixels.length ).toEqual(0)
-
-			// but pixels works if pixelsi is implemented along with i2p and p2i
-			g._pixelArray = [0,1,2]
-
-			spyOn( g, "p2i" ).and.returnValue( 0 )
-			spyOn( g, "i2p" ).and.returnValue( [0,0] )
-
-			g.pixelsi = function* (){
-				yield 1
-			}
-
-			for( let p of g.pixels() ){ pixels.push(p) }
-			expect( function(){ for( let p of g.pixels() ){ pixels.push(p) } }).not.toThrow()
-
-
 		})
 
 		/** @test{Grid#gradienti}

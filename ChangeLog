@@ -3,6 +3,13 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2019-12-31 Inge Wortel <ingewortel@gmail.com>
+    * spec/grid/GridExtensionSpec.js : added a file of tests that should be
+    met for any grid subclass. It also has a section of tests that only need
+    to be fulfilled by grid subclasses that implement diffusion.
+    * src/grid/Grid.js : minor changes in the errors thrown.
+    * build : updated.
+
 2019-12-30 Inge Wortel <ingewortel@gmail.com>
     * Added a copy of the fpsmeter package to the right folder in the examples
     folder to fix a problem with the 3D examples not working.
