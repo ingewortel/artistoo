@@ -561,6 +561,17 @@ var CPM = (function (exports) {
 		 * */
 		laplaciani( i ){
 			let L = 0, n = 0;
+
+			// For now: forbid computing a laplacian on an integer grid as it makes
+			// no sense and could happen by accident if you forget to specify the
+			// datatype.
+			// If this is too strict, we can set an option to overrule this error.
+			// This way you still get to see it if you try this by accident.
+			if( this.datatype === "Uint16" ){
+				throw("Diffusion/laplacian methods do not work on a Uint16 grid! " +
+					"Consider setting datatype='Float32'.")
+			}
+
 			//noinspection JSUnresolvedFunction
 			for( let x of this.neighNeumanni(i) ){
 				L += this.pixti( x ); n ++;

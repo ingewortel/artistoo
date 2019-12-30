@@ -446,6 +446,17 @@ class Grid {
 	 * */
 	laplaciani( i ){
 		let L = 0, n = 0
+
+		// For now: forbid computing a laplacian on an integer grid as it makes
+		// no sense and could happen by accident if you forget to specify the
+		// datatype.
+		// If this is too strict, we can set an option to overrule this error.
+		// This way you still get to see it if you try this by accident.
+		if( this.datatype === &quot;Uint16&quot; ){
+			throw(&quot;Diffusion/laplacian methods do not work on a Uint16 grid! &quot; +
+				&quot;Consider setting datatype=&apos;Float32&apos;.&quot;)
+		}
+
 		//noinspection JSUnresolvedFunction
 		for( let x of this.neighNeumanni(i) ){
 			L += this.pixti( x ); n ++
