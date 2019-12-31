@@ -1,12 +1,16 @@
-/** This file contains some general tests that every Grid subclass should pass:
- * for having a _pixelArray, and the p2i/i2p/neighi methods and the pixels(i)
- * generators.
- * Other methods that should be implemented in grid subclasses (gradienti,
- * laplaciani, neighNeumanni) are not enforced since they are not used by all
- * CPMs.
+/** General tests that every Grid subclass should pass
  * @test {Grid2D}
  * @test {Grid3D} */
 describe("Subclasses extending the Grid superclass", function () {
+	/*
+	Testing for having a _pixelArray, and the p2i/i2p/neighi methods and the
+	pixels(i) generators.
+	Other methods that should be implemented in grid subclasses (gradienti,
+	laplaciani, neighNeumanni) are not enforced since they are not used by all
+	CPMs.
+	*/
+
+
 	let CPM = require("../../build/cpm-cjs.js")
 	let testObjects = [], testNames = []
 	let addTestObject = function( object, name ){
@@ -116,9 +120,8 @@ describe("Subclasses extending the Grid superclass", function () {
 	}
 })
 
-/** Additional tests for grid subclasses that should be able to handle diffusion.
- * @test {Grid2D}
- * @test {Grid3D} */
+/** Grid subclasses supporting diffusion.
+ * @test {Grid2D} */
 describe("Grid subclasses supporting diffusion", function () {
 
 	let CPM = require("../../build/cpm-cjs.js")

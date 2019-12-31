@@ -229,7 +229,7 @@ class Grid {
 	 * @property {number} Pixel[1] - pixel value
 	 * */
 	
-	/** A pixel on the grid.
+	/* /** A pixel on the grid.
 	 * @typedef {Object[]} iPixel
 	 * @property {IndexCoordinate} Pixel[0] - pixel coordinate
 	 * @property {number} Pixel[1] - pixel value
@@ -256,12 +256,12 @@ class Grid {
 		}*/
 	}
 
-	/** This iterator returns locations and values of all non-zero pixels.
+	/** This iterator returns locations all pixels including background.
 	 * This method isn't actually called because the subclasses implement
 	 * it themselves due to efficiency reasons. It serves as a template to
 	 * document the functionality.
 	 * @abstract
-	 * @return {undefined} for each pixel, because this method should be
+	 * @return {IndexCoordinate} for each pixel, because this method should be
 	 * implemented in a grid subclass.
 	 * */
 	//eslint-disable-next-line require-yield
@@ -298,6 +298,7 @@ class Grid {
 	 * implements a gradienti method.
 	 * @param {IndexCoordinate} i index coordinate of a pixel to compute the
 	 * gradient at.
+	 * @return {number[]} the gradient
 	 * @see https://en.wikipedia.org/wiki/Gradient*/
 	//eslint-disable-next-line no-unused-vars
 	gradienti( i ){

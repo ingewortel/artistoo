@@ -8,6 +8,9 @@ yyyy-mm-dd Your Name <your@email.com>
     met for any grid subclass. It also has a section of tests that only need
     to be fulfilled by grid subclasses that implement diffusion.
     * src/grid/Grid.js : minor changes in the errors thrown.
+    * src/grid/Grid2D.js : minor changes in docs etc.
+    * spec/grid/Grid2DSpec.js : rigorous tests for neighborhood and gradient
+    methods added.
     * build : updated.
 
 2019-12-30 Inge Wortel <ingewortel@gmail.com>
