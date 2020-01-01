@@ -146,7 +146,7 @@ describe("Grid subclasses supporting diffusion", function () {
 			p.push(0)
 		}
 
-		describe(subclassName, function () {
+		describe( " [ subclass " + subclassName + " ] ", function () {
 
 			it( "should support a Float datatype", function() {
 

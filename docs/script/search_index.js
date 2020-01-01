@@ -246,255 +246,357 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "grid2d grid3d src/grid/grid2d.js~grid2d,grid2d src/grid/grid3d.js~grid3d,grid3d",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber4",
+    "General tests that every Grid subclass should pass",
+    "test"
+  ],
+  [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber1",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber47",
+    "General tests that every Grid subclass should pass ",
+    "test"
+  ],
+  [
+    "grid2d#i2p grid2d#p2i grid3d#p2i grid3d#i2p src/grid/grid2d.js~grid2d#i2p,grid2d#i2p src/grid/grid2d.js~grid2d#p2i,grid2d#p2i src/grid/grid3d.js~grid3d#p2i,grid3d#p2i src/grid/grid3d.js~grid3d#i2p,grid3d#i2p",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber74",
+    "General tests that every Grid subclass should pass  i2p and p2i should be inverse for valid grid coordinates",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber49",
+    "General tests that every Grid subclass should pass  should all have a _pixelArray",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber94",
+    "General tests that every Grid subclass should pass  should all have a neighi method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber54",
+    "General tests that every Grid subclass should pass  should all have a p2i method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber62",
+    "General tests that every Grid subclass should pass  should all have an i2p method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber102",
+    "General tests that every Grid subclass should pass  should all have pixels(i) generator methods",
+    "test"
+  ],
+  [
+    "grid src/grid/grid.js~grid,grid",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber2",
     "Grid",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber347",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber373",
     "Grid  [ class extension ] ",
     "test"
   ],
   [
     "grid#gradient src/grid/grid.js~grid#gradient,grid#gradient",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber435",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber446",
     "Grid  [ class extension ]  gradient should work as soon as gradienti and p2i are implemented.",
     "test"
   ],
   [
     "grid#laplacian grid#laplaciani src/grid/grid.js~grid#laplacian,grid#laplacian src/grid/grid.js~grid#laplaciani,grid#laplaciani",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber456",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber467",
     "Grid  [ class extension ]  laplacian should throw error when p2i/neighNeumanni not implemented",
     "test"
   ],
   [
     "grid#laplacian grid#laplaciani src/grid/grid.js~grid#laplacian,grid#laplacian src/grid/grid.js~grid#laplaciani,grid#laplaciani",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber471",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber482",
     "Grid  [ class extension ]  laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist",
     "test"
   ],
   [
     "grid#laplacian grid#laplaciani src/grid/grid.js~grid#laplacian,grid#laplacian src/grid/grid.js~grid#laplaciani,grid#laplaciani",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber446",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber457",
     "Grid  [ class extension ]  laplaciani should throw error when neighNeumanni not implemented",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber363",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber389",
     "Grid  [ class extension ]  should be possible to build a custom Grid subclass",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber359",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber385",
     "Grid  [ class extension ]  should be possible to extend with a method",
     "test"
   ],
   [
     "grid#_pixels src/grid/grid.js~grid#_pixels,grid#_pixels",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber371",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber397",
     "Grid  [ class extension ]  should throw an error when _pixelArray is not set in subclass",
     "test"
   ],
   [
     "grid#gradient src/grid/grid.js~grid#gradient,grid#gradient",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber427",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber438",
     "Grid  [ class extension ]  should throw error when gradienti not implemented",
     "test"
   ],
   [
     "grid#neigh src/grid/grid.js~grid#neigh,grid#neigh",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber387",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber413",
     "Grid  [ class extension ]  should throw error when neighi not implemented",
     "test"
   ],
   [
     "grid#pixels src/grid/grid.js~grid#pixels,grid#pixels",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber401",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber427",
     "Grid  [ class extension ]  should throw error when pixels/pixelsi not implemented",
     "test"
   ],
   [
     "grid#p2i grid#i2p src/grid/grid.js~grid#p2i,grid#p2i src/grid/grid.js~grid#i2p,grid#i2p",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber379",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber405",
     "Grid  [ class extension ]  superclass should throw error when p2i/i2p not implemented",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber12",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber13",
     "Grid  [ unit tests ] ",
     "test"
   ],
   [
     "grid#constructor src/grid/grid.js~grid#constructor,grid#constructor",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber14",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber15",
     "Grid  [ unit tests ]   constructor ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber58",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber59",
     "Grid  [ unit tests ]   constructor  should be able to handle a different size in each dimension",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber52",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber53",
     "Grid  [ unit tests ]   constructor  should be able to handle different torus settings for each dimension",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber43",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber44",
     "Grid  [ unit tests ]   constructor  should by default set torus = true in each dimension",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber63",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber64",
     "Grid  [ unit tests ]   constructor  should compute a midpoint at the correct position",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber33",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber34",
     "Grid  [ unit tests ]   constructor  should set a size for each dimension",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber38",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber39",
     "Grid  [ unit tests ]   constructor  should set a torus property in each dimension",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber16",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber17",
     "Grid  [ unit tests ]   constructor  should throw an error when torus is specified for an incorrect number of dimensions",
     "test"
   ],
   [
+    "grid#diffusion src/grid/grid.js~grid#diffusion,grid#diffusion",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber346",
+    "Grid  [ unit tests ]   diffusion method ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber354",
+    "Grid  [ unit tests ]   diffusion method  can be called on Float32 grids",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber360",
+    "Grid  [ unit tests ]   diffusion method  should throw error when you try to call it on Uint16 grid",
+    "test"
+  ],
+  [
     "grid#laplaciani src/grid/grid.js~grid#laplaciani,grid#laplaciani",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber262",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber263",
     "Grid  [ unit tests ]   laplacian(i) method ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber280",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber281",
     "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber292",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber293",
     "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 1 : everything zero ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber305",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber306",
     "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 2 : everything a positive value ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber314",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber315",
     "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 3 : everything a negative value ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber321",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber322",
     "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 4 : floating point values ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber328",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber329",
     "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 4 : positive and negative floating point values ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber275",
-    "Grid  [ unit tests ]   laplacian(i) method  should throw a warning when you try to call it on Uint16 grid",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber276",
+    "Grid  [ unit tests ]   laplacian(i) method  should throw error when you try to call it on Uint16 grid",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber270",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber271",
     "Grid  [ unit tests ]   laplacian(i) method  should work on Float32 grids",
     "test"
   ],
   [
     "grid#neigh src/grid/grid.js~grid#neigh,grid#neigh",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber75",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber76",
     "Grid  [ unit tests ]   neigh method ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber113",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber114",
     "Grid  [ unit tests ]   neigh method   should listen to torus for each dimension",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber105",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber106",
     "Grid  [ unit tests ]   neigh method   should return an array coordinate",
     "test"
   ],
   [
     "grid#pixelsbuffer src/grid/grid.js~grid#pixelsbuffer,grid#pixelsbuffer",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber239",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber240",
     "Grid  [ unit tests ]   pixelsBuffer method ",
     "test"
   ],
   [
     "",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber247",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber248",
     "Grid  [ unit tests ]   pixelsBuffer method  should work on Float32 and Uint16 grids",
     "test"
   ],
   [
     "grid#pixt grid#pixti src/grid/grid.js~grid#pixt,grid#pixt src/grid/grid.js~grid#pixti,grid#pixti",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber212",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber213",
     "Grid  [ unit tests ]   pixt(i) methods ",
     "test"
   ],
   [
     "grid#pixt grid#pixti src/grid/grid.js~grid#pixt,grid#pixt src/grid/grid.js~grid#pixti,grid#pixti",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber226",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber227",
     "Grid  [ unit tests ]   pixt(i) methods  pixt(i) can show types on the grid.",
     "test"
   ],
   [
     "grid#setpix grid#setpixi src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber137",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber138",
     "Grid  [ unit tests ]   setpix(i) methods ",
     "test"
   ],
   [
     "grid#setpix grid#setpixi grid#_isvalidvalue src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi src/grid/grid.js~grid#_isvalidvalue,grid#_isvalidvalue",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber167",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber168",
     "Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs",
     "test"
   ],
   [
     "grid#setpix grid#setpixi src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber154",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber155",
     "Grid  [ unit tests ]   setpix(i) methods  can be called",
     "test"
   ],
   [
     "grid#setpix grid#setpixi src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi",
-    "test-file/spec/grid/GridSpec.js.html#lineNumber182",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber183",
     "Grid  [ unit tests ]   setpix(i) methods  store values in the Grid correctly",
+    "test"
+  ],
+  [
+    "grid2d src/grid/grid2d.js~grid2d,grid2d",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber125",
+    "Grid subclasses supporting diffusion.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber149",
+    "Grid subclasses supporting diffusion. ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber158",
+    "Grid subclasses supporting diffusion.  should be able to store Floating point and negative numbers",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber167",
+    "Grid subclasses supporting diffusion.  should have a gradienti method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber175",
+    "Grid subclasses supporting diffusion.  should have a neighNeumanni generator",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber151",
+    "Grid subclasses supporting diffusion.  should support a Float datatype",
     "test"
   ],
   [
@@ -588,6 +690,132 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "grid2d src/grid/grid2d.js~grid2d,grid2d",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber5",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber108",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "grid2d#gradienti src/grid/grid2d.js~grid2d#gradienti,grid2d#gradienti",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber324",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  gradienti method should return correct gradients",
+    "test"
+  ],
+  [
+    "grid2d#neighneumanni src/grid/grid2d.js~grid2d#neighneumanni,grid2d#neighneumanni",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber225",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors",
+    "test"
+  ],
+  [
+    "grid2d#neighneumanni src/grid/grid2d.js~grid2d#neighneumanni,grid2d#neighneumanni",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber252",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases: ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber271",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [0,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber293",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [0,yMax] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber282",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [xMax,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber303",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [xMax,yMax] ",
+    "test"
+  ],
+  [
+    "grid2d#neighi src/grid/grid2d.js~grid2d#neighi,grid2d#neighi",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber147",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases: ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber163",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [0,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber189",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [0,yMax] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber175",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [xMax,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber202",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [xMax,yMax] ",
+    "test"
+  ],
+  [
+    "grid2d#neighi grid2d#neighisimple src/grid/grid2d.js~grid2d#neighi,grid2d#neighi grid2d#neighisimple,grid2d#neighisimple",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber121",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return same results as neighiSimple",
+    "test"
+  ],
+  [
+    "grid2d#pixelsi src/grid/grid2d.js~grid2d#pixelsi,grid2d#pixelsi",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber111",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  pixelsi generator reports correct IndexCoordinates",
+    "test"
+  ],
+  [
+    "grid3d src/grid/grid3d.js~grid3d,grid3d",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber5",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber67",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "grid3d#neighi src/grid/grid3d.js~grid3d#neighi,grid3d#neighi",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber79",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases: ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber98",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [0,0,0] ",
+    "test"
+  ],
+  [
+    "grid3d#pixelsi src/grid/grid3d.js~grid3d#pixelsi,grid3d#pixelsi",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber70",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  pixelsi generator reports correct IndexCoordinates",
+    "test"
+  ],
+  [
     "",
     "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber7",
     "SoftLocalConnectivityConstraint",
@@ -664,6 +892,24 @@ window.esdocSearchIndex = [
     "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber166",
     "SoftLocalConnectivityConstraint when copy attempt would disrupt local connectivity and when LAMBDA_CONNECTIVITY for the tgt celltype is zero, constraint should return deltaH zero",
     "test"
+  ],
+  [
+    "spec/grid/grid2dspec.js",
+    "test-file/spec/grid/Grid2DSpec.js.html",
+    "spec/grid/Grid2DSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/grid/grid3dspec.js",
+    "test-file/spec/grid/Grid3DSpec.js.html",
+    "spec/grid/Grid3DSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/grid/gridextensionspec.js",
+    "test-file/spec/grid/GridExtensionSpec.js.html",
+    "spec/grid/GridExtensionSpec.js",
+    "testFile"
   ],
   [
     "spec/grid/gridspec.js",
@@ -1254,6 +1500,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/grid/grid.js~grid#datatype",
+    "class/src/grid/Grid.js~Grid.html#instance-member-datatype",
+    "src/grid/Grid.js~Grid#datatype",
+    "member"
+  ],
+  [
     "src/grid/grid.js~grid#diffusion",
     "class/src/grid/Grid.js~Grid.html#instance-method-diffusion",
     "src/grid/Grid.js~Grid#diffusion",
@@ -1389,12 +1641,6 @@ window.esdocSearchIndex = [
     "src/grid/grid.js~grid.pixel",
     "typedef/index.html#static-typedef-Pixel",
     "src/grid/Grid.js~Grid.Pixel",
-    "typedef"
-  ],
-  [
-    "src/grid/grid.js~grid.ipixel",
-    "typedef/index.html#static-typedef-iPixel",
-    "src/grid/Grid.js~Grid.iPixel",
     "typedef"
   ],
   [

@@ -44,6 +44,9 @@ parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/src/stats/Connected
 parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/src/stats/PixelsByCell.js
 parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/src/stats/Stat.js
 parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/src/stats/stat-typedef.js
+parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/spec/grid/Grid2DSpec.js
+parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/spec/grid/Grid3DSpec.js
+parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/spec/grid/GridExtensionSpec.js
 parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/spec/grid/GridSpec.js
 parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/spec/hamiltonian/LocalConnectivityConstraintSpec.js
 parse: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js
@@ -152,6 +155,9 @@ output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/image
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/script/search_index.js
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/source.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/grid/Grid2DSpec.js.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/grid/Grid3DSpec.js.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/grid/GridExtensionSpec.js.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/grid/GridSpec.js.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html

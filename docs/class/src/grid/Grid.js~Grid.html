@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -136,7 +135,13 @@ Grid class, for example Grid2D and Grid3D.</p>
 
   
 
-  
+  <div data-ice="tests">
+    <h4>Test:</h4>
+    <ul>
+      
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber2">Grid</a></span></li>
+</ul>
+  </div>
 
   
 </div>
@@ -184,6 +189,34 @@ Grid class, for example Grid2D and Grid3D.</p>
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-member-datatype">datatype</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -536,7 +569,7 @@ given in array coordinates).</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-gradienti">gradienti</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-gradienti">gradienti</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -744,7 +777,7 @@ Grid subclass if the laplacian (see below) is used.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-neighi">neighi</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-neighi">neighi</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, torus: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -863,13 +896,13 @@ a copy of the current pixel values.</p>
           
           
           <span data-ice="generator">*</span>
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-pixelsi">pixelsi</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-pixelsi">pixelsi</a></span></span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>This iterator returns locations and values of all non-zero pixels.</p>
+        <div data-ice="description"><p>This iterator returns locations all pixels including background.</p>
 </div>
       </div>
     </td>
@@ -1112,7 +1145,7 @@ dimension; eg [true,false] for a torus in x but not y dimension.</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber14">Grid  [ unit tests ]   constructor </a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber15">Grid  [ unit tests ]   constructor </a></span></li>
 </ul>
   </div>
 
@@ -1122,6 +1155,49 @@ dimension; eg [true,false] for a torus in x but not y dimension.</p>
 </div>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-datatype">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">datatype</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber55">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 <div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-extents">
     <span class="access" data-ice="access">public</span>
@@ -1180,7 +1256,7 @@ be positive integer numbers.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber70">source</a></span></span>
     </span>
   </h3>
 
@@ -1365,7 +1441,7 @@ each dimension separately.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -1409,7 +1485,7 @@ subclass.</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber371">Grid  [ class extension ]  should throw an error when _pixelArray is not set in subclass</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber397">Grid  [ class extension ]  should throw an error when _pixelArray is not set in subclass</a></span></li>
 </ul>
   </div>
 
@@ -1428,7 +1504,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber91">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -1472,7 +1548,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber273">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
@@ -1520,7 +1596,7 @@ of some sort.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber400">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber413">source</a></span></span>
     </span>
   </h3>
 
@@ -1582,7 +1658,7 @@ this._pixels, which is implemented in the grid subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber374">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber387">source</a></span></span>
     </span>
   </h3>
 
@@ -1627,7 +1703,13 @@ according to Fick&apos;s second law of diffusion.</p>
 
   
 
-  
+  <div data-ice="tests">
+    <h4>Test:</h4>
+    <ul>
+      
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber346">Grid  [ unit tests ]   diffusion method </a></span></li>
+</ul>
+  </div>
 
   <div data-ice="see"><h4>See:</h4><ul><li><span><a href="https://en.wikipedia.org/wiki/Diffusion#Fick&apos;s_law_and_equations">https://en.wikipedia.org/wiki/Diffusion#Fick&apos;s_law_and_equations</a></span></li>
 <li><span><a href="https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Mesh_Laplacians">https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Mesh_Laplacians</a></span></li></ul></div>
@@ -1645,7 +1727,7 @@ according to Fick&apos;s second law of diffusion.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber303">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber316">source</a></span></span>
     </span>
   </h3>
 
@@ -1710,8 +1792,8 @@ the gradient at</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber427">Grid  [ class extension ]  should throw error when gradienti not implemented</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber435">Grid  [ class extension ]  gradient should work as soon as gradienti and p2i are implemented.</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber438">Grid  [ class extension ]  should throw error when gradienti not implemented</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber446">Grid  [ class extension ]  gradient should work as soon as gradienti and p2i are implemented.</a></span></li>
 </ul>
   </div>
 
@@ -1726,11 +1808,11 @@ the gradient at</p>
     
     
     
-    <span class="code" data-ice="name">gradienti</span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>)</span>
+    <span class="code" data-ice="name">gradienti</span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber304">source</a></span></span>
     </span>
   </h3>
 
@@ -1766,7 +1848,20 @@ gradient at.</p>
 </div>
 </div>
 
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>the gradient</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
 
   
 
@@ -1795,7 +1890,7 @@ gradient at.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber121">source</a></span></span>
     </span>
   </h3>
 
@@ -1859,7 +1954,7 @@ This method should be implemented in the subclass, see
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber379">Grid  [ class extension ]  superclass should throw error when p2i/i2p not implemented</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber405">Grid  [ class extension ]  superclass should throw error when p2i/i2p not implemented</a></span></li>
 </ul>
   </div>
 
@@ -1878,7 +1973,7 @@ This method should be implemented in the subclass, see
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber315">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber328">source</a></span></span>
     </span>
   </h3>
 
@@ -1942,9 +2037,9 @@ laplacian at</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber446">Grid  [ class extension ]  laplaciani should throw error when neighNeumanni not implemented</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber456">Grid  [ class extension ]  laplacian should throw error when p2i/neighNeumanni not implemented</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber471">Grid  [ class extension ]  laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber457">Grid  [ class extension ]  laplaciani should throw error when neighNeumanni not implemented</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber467">Grid  [ class extension ]  laplacian should throw error when p2i/neighNeumanni not implemented</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber482">Grid  [ class extension ]  laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist</a></span></li>
 </ul>
   </div>
 
@@ -1963,7 +2058,7 @@ laplacian at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber348">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -2029,10 +2124,10 @@ laplacian at</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber262">Grid  [ unit tests ]   laplacian(i) method </a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber446">Grid  [ class extension ]  laplaciani should throw error when neighNeumanni not implemented</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber456">Grid  [ class extension ]  laplacian should throw error when p2i/neighNeumanni not implemented</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber471">Grid  [ class extension ]  laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber263">Grid  [ unit tests ]   laplacian(i) method </a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber457">Grid  [ class extension ]  laplaciani should throw error when neighNeumanni not implemented</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber467">Grid  [ class extension ]  laplacian should throw error when p2i/neighNeumanni not implemented</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber482">Grid  [ class extension ]  laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist</a></span></li>
 </ul>
   </div>
 
@@ -2052,7 +2147,7 @@ laplacian at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber426">source</a></span></span>
     </span>
   </h3>
 
@@ -2115,7 +2210,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber148">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber153">source</a></span></span>
     </span>
   </h3>
 
@@ -2190,8 +2285,8 @@ element contains the array coordinates of the neighbor in question.</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber75">Grid  [ unit tests ]   neigh method </a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber387">Grid  [ class extension ]  should throw error when neighi not implemented</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber76">Grid  [ unit tests ]   neigh method </a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber413">Grid  [ class extension ]  should throw error when neighi not implemented</a></span></li>
 </ul>
   </div>
 
@@ -2210,7 +2305,7 @@ element contains the array coordinates of the neighbor in question.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber332">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber345">source</a></span></span>
     </span>
   </h3>
 
@@ -2292,11 +2387,11 @@ borders? Defaults to the setting on this grid, see <span><a href="class/src/grid
     <span class="abstract" data-ice="abstract">abstract</span>
     
     
-    <span class="code" data-ice="name">neighi</span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">neighi</span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, torus: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber132">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber137">source</a></span></span>
     </span>
   </h3>
 
@@ -2325,6 +2420,14 @@ This method should be implemented in the subclass, see
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>the coordinate of the pixel to get neighbors
 for.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">torus</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>are borders of the grid linked so that a cell
+leaving on the right re-enters the grid on the left?</p>
 </td>
     </tr>
 </tbody>
@@ -2374,7 +2477,7 @@ for.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber108">source</a></span></span>
     </span>
   </h3>
 
@@ -2438,7 +2541,7 @@ This method should be implemented in the subclass, see
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber379">Grid  [ class extension ]  superclass should throw error when p2i/i2p not implemented</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber405">Grid  [ class extension ]  superclass should throw error when p2i/i2p not implemented</a></span></li>
 </ul>
   </div>
 
@@ -2457,7 +2560,7 @@ This method should be implemented in the subclass, see
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber246">source</a></span></span>
     </span>
   </h3>
 
@@ -2505,7 +2608,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber401">Grid  [ class extension ]  should throw error when pixels/pixelsi not implemented</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber427">Grid  [ class extension ]  should throw error when pixels/pixelsi not implemented</a></span></li>
 </ul>
   </div>
 
@@ -2524,7 +2627,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber268">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber279">source</a></span></span>
     </span>
   </h3>
 
@@ -2572,7 +2675,7 @@ Float32Array.</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber239">Grid  [ unit tests ]   pixelsBuffer method </a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber240">Grid  [ unit tests ]   pixelsBuffer method </a></span></li>
 </ul>
   </div>
 
@@ -2587,18 +2690,18 @@ Float32Array.</p>
     <span class="abstract" data-ice="abstract">abstract</span>
     
     <span data-ice="generator">*</span>
-    <span class="code" data-ice="name">pixelsi</span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></span>
+    <span class="code" data-ice="name">pixelsi</span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber257">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber268">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>This iterator returns locations and values of all non-zero pixels.
+  <div data-ice="description"><p>This iterator returns locations all pixels including background.
 This method isn&apos;t actually called because the subclasses implement
 it themselves due to efficiency reasons. It serves as a template to
 document the functionality.</p>
@@ -2614,7 +2717,7 @@ document the functionality.</p>
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></td>
+          <td class="return-type code" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
           <td class="return-desc" data-ice="returnDescription"><p>for each pixel, because this method should be
 implemented in a grid subclass.</p>
 </td>
@@ -2652,7 +2755,7 @@ implemented in a grid subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber206">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber211">source</a></span></span>
     </span>
   </h3>
 
@@ -2716,8 +2819,8 @@ Grid2D).</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber212">Grid  [ unit tests ]   pixt(i) methods </a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber226">Grid  [ unit tests ]   pixt(i) methods  pixt(i) can show types on the grid.</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber213">Grid  [ unit tests ]   pixt(i) methods </a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber227">Grid  [ unit tests ]   pixt(i) methods  pixt(i) can show types on the grid.</a></span></li>
 </ul>
   </div>
 
@@ -2736,7 +2839,7 @@ Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber222">source</a></span></span>
     </span>
   </h3>
 
@@ -2800,8 +2903,8 @@ Grid2D).</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber212">Grid  [ unit tests ]   pixt(i) methods </a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber226">Grid  [ unit tests ]   pixt(i) methods  pixt(i) can show types on the grid.</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber213">Grid  [ unit tests ]   pixt(i) methods </a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber227">Grid  [ unit tests ]   pixt(i) methods  pixt(i) can show types on the grid.</a></span></li>
 </ul>
   </div>
 
@@ -2820,7 +2923,7 @@ Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
@@ -2878,10 +2981,10 @@ used (see eg Grid2D).</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber137">Grid  [ unit tests ]   setpix(i) methods </a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber154">Grid  [ unit tests ]   setpix(i) methods  can be called</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber167">Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber182">Grid  [ unit tests ]   setpix(i) methods  store values in the Grid correctly</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber138">Grid  [ unit tests ]   setpix(i) methods </a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber155">Grid  [ unit tests ]   setpix(i) methods  can be called</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber168">Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber183">Grid  [ unit tests ]   setpix(i) methods  store values in the Grid correctly</a></span></li>
 </ul>
   </div>
 
@@ -2900,7 +3003,7 @@ used (see eg Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber194">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber199">source</a></span></span>
     </span>
   </h3>
 
@@ -2958,10 +3061,10 @@ or floating point numbers, depending on the grid subclass used
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber137">Grid  [ unit tests ]   setpix(i) methods </a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber154">Grid  [ unit tests ]   setpix(i) methods  can be called</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber167">Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs</a></span></li>
-<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber182">Grid  [ unit tests ]   setpix(i) methods  store values in the Grid correctly</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber138">Grid  [ unit tests ]   setpix(i) methods </a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber155">Grid  [ unit tests ]   setpix(i) methods  can be called</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber168">Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs</a></span></li>
+<li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber183">Grid  [ unit tests ]   setpix(i) methods  store values in the Grid correctly</a></span></li>
 </ul>
   </div>
 
@@ -2982,7 +3085,7 @@ or floating point numbers, depending on the grid subclass used
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber168">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
@@ -3058,7 +3161,7 @@ incorrect value is set.</p>
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber167">Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridSpec.js.html#lineNumber168">Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs</a></span></li>
 </ul>
   </div>
 

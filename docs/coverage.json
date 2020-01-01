@@ -1,6 +1,6 @@
 {
-  "coverage": "99.28%",
-  "expectCount": 422,
+  "coverage": "99.05%",
+  "expectCount": 423,
   "actualCount": 419,
   "files": {
     "src/Canvas.js": {
@@ -19,9 +19,11 @@
       "undocumentLines": []
     },
     "src/grid/Grid.js": {
-      "expectCount": 33,
+      "expectCount": 34,
       "actualCount": 33,
-      "undocumentLines": []
+      "undocumentLines": [
+        55
+      ]
     },
     "src/grid/Grid2D.js": {
       "expectCount": 14,
@@ -34,7 +36,7 @@
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        54
+        55
       ]
     },
     "src/grid/GridManipulator.js": {

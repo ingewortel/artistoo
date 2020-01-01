@@ -3,6 +3,15 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2020-01-01 Inge Wortel <ingewortel@gmail.com>
+    * spec/grid/Grid3DSpec.js : added this file with tests for neighi and
+    pixelsi methods on the 3D grid.
+    * spec/grid/Grid2DSpec.js : extra tests added: testing neighborhoods for
+    specific cases.
+    * spec/grid/GridExtensionSpec.js : doc-blocks only.
+    * build : updated
+
+
 2019-12-31 Inge Wortel <ingewortel@gmail.com>
     * spec/grid/GridExtensionSpec.js : added a file of tests that should be
     met for any grid subclass. It also has a section of tests that only need

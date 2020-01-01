@@ -81,7 +81,7 @@ class Grid2D extends Grid {
 		}
 	}
 
-	/** This iterator returns locations and values of all non-zero pixels.
+	/** This iterator returns locations and values of all pixels.
 	 * Whereas the {@link pixels} generator yields only non-background pixels
 	 * and specifies both their {@link ArrayCoordinate} and value, this
 	 * generator yields all pixels by {@link IndexCoordinate} and does not

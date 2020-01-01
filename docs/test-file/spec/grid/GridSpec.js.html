@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -97,7 +96,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">spec/grid/GridSpec.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">describe(&quot;Grid&quot;, function () {
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** @test {Grid}*/
+describe(&quot;Grid&quot;, function () {
 	let CPM = require(&quot;../../build/cpm-cjs.js&quot;)
 	//eslint-disable-next-line no-unused-vars
 	let grid2d, grid3d, grid
@@ -371,7 +371,7 @@
 				expect( function(){ grid2Db.laplacian([1,1] ) } ).not.toThrow()
 			})
 
-			it( &quot;should throw a warning when you try to call it on Uint16 grid&quot;, function(){
+			it( &quot;should throw error when you try to call it on Uint16 grid&quot;, function(){
 				expect( function(){ grid2D.laplaciani(1) } ).toThrow()
 				expect( function(){ grid2D.laplacian([1,1] ) } ).toThrow()
 			})
@@ -440,6 +440,31 @@
 
 		})
 
+		/** @test {Grid#diffusion} */
+		describe( &quot; diffusion method &quot;, function() {
+			let grid2Db, grid2D
+
+			beforeEach(function () {
+				grid2D = new CPM.Grid2D([200, 200])
+				grid2Db = new CPM.Grid2D([200, 200], [false, false], &quot;Float32&quot;)
+			})
+
+			it(&quot;can be called on Float32 grids&quot;, function () {
+				expect(function () {
+					grid2Db.diffusion(0.01)
+				}).not.toThrow()
+			})
+
+			it(&quot;should throw error when you try to call it on Uint16 grid&quot;, function () {
+				let message = &quot;Diffusion/laplacian methods do not work on a Uint16 grid! &quot; +
+					&quot;Consider setting datatype=&apos;Float32&apos;.&quot;
+				expect(function () {
+					grid2D.diffusion(1)
+				}).toThrow(message)
+			})
+
+		})
+
 
 	})
 
@@ -503,21 +528,6 @@
 			expect( function(){ for( let p of g.pixels() ){ pixels.push(p) } }).toThrow()
 			expect( function(){ for( let p of g.pixelsi() ){ pixels.push(p) } }).toThrow()
 			expect( pixels.length ).toEqual(0)
-
-			// but pixels works if pixelsi is implemented along with i2p and p2i
-			g._pixelArray = [0,1,2]
-
-			spyOn( g, &quot;p2i&quot; ).and.returnValue( 0 )
-			spyOn( g, &quot;i2p&quot; ).and.returnValue( [0,0] )
-
-			g.pixelsi = function* (){
-				yield 1
-			}
-
-			for( let p of g.pixels() ){ pixels.push(p) }
-			expect( function(){ for( let p of g.pixels() ){ pixels.push(p) } }).not.toThrow()
-
-
 		})
 
 		/** @test{Grid#gradienti}

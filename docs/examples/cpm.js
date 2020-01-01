@@ -266,6 +266,7 @@ var CPM = (function (exports) {
 			 * 	@private
 			 * 	*/
 			this._pixelArray = undefined;
+			this.datatype = undefined;
 			
 			/* These are used for rapid conversion between array and index
 			coordinates, but not documented as they should not be used from outside.
@@ -330,8 +331,9 @@ var CPM = (function (exports) {
 		 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
 		 * @return {ArrayCoordinate} the converted coordinate.
 		 */
+		//eslint-disable-next-line no-unused-vars
 		i2p ( i ){
-			throw( "An i2p method should be implemented in every Grid subclass!"+i)
+			throw( "An i2p method should be implemented in every Grid subclass!")
 		}
 
 		/** Method returning the (Moore) neighborhood of a pixel based on its
@@ -341,10 +343,13 @@ var CPM = (function (exports) {
 		 * @abstract
 		 * @param {IndexCoordinate} i - the coordinate of the pixel to get neighbors
 		 * for.
+		 * @param {boolean[]} torus are borders of the grid linked so that a cell
+		 * leaving on the right re-enters the grid on the left?
 		 * @return {IndexCoordinate[]} an array of neighbors.
 		 */
-		neighi ( i ){
-			throw( "A neighi method should be implemented in every Grid subclass!"+i)
+		//eslint-disable-next-line no-unused-vars
+		neighi ( i, torus = this.torus ){
+			throw( "A neighi method should be implemented in every Grid subclass!")
 		}
 
 		/** The neigh method returns the neighborhood of a pixel p. This function
@@ -438,7 +443,7 @@ var CPM = (function (exports) {
 		 * @property {number} Pixel[1] - pixel value
 		 * */
 		
-		/** A pixel on the grid.
+		/* /** A pixel on the grid.
 		 * @typedef {Object[]} iPixel
 		 * @property {IndexCoordinate} Pixel[0] - pixel coordinate
 		 * @property {number} Pixel[1] - pixel value
@@ -451,20 +456,26 @@ var CPM = (function (exports) {
 		 * @abstract
 		 * @return {Pixel} for each pixel, return an array [p,v] where p are
 		 * the pixel's array coordinates on the grid, and v its value.*/
+		//eslint-disable-next-line require-yield
 		* pixels() {
+			//noinspection JSValidateTypes
+			throw("Iterator 'pixels' not implemented!")
+
+			/*
+			// example code:
 			for( let i of this.pixelsi() ){
 				if( this._pixels[i] > 0 ){
-					yield [this.i2p(i),this._pixels[i]];
+					yield [this.i2p(i),this._pixels[i]]
 				}
-			}
+			}*/
 		}
 
-		/** This iterator returns locations and values of all non-zero pixels.
+		/** This iterator returns locations all pixels including background.
 		 * This method isn't actually called because the subclasses implement
 		 * it themselves due to efficiency reasons. It serves as a template to
 		 * document the functionality.
 		 * @abstract
-		 * @return {undefined} for each pixel, because this method should be
+		 * @return {IndexCoordinate} for each pixel, because this method should be
 		 * implemented in a grid subclass.
 		 * */
 		//eslint-disable-next-line require-yield
@@ -501,9 +512,11 @@ var CPM = (function (exports) {
 		 * implements a gradienti method.
 		 * @param {IndexCoordinate} i index coordinate of a pixel to compute the
 		 * gradient at.
+		 * @return {number[]} the gradient
 		 * @see https://en.wikipedia.org/wiki/Gradient*/
+		//eslint-disable-next-line no-unused-vars
 		gradienti( i ){
-			throw("method 'gradienti' not implemented! "+i)
+			throw("method 'gradienti' not implemented! ")
 		}
 
 		/** Method to compute the gradient at location p on the grid (location
@@ -713,23 +726,27 @@ var CPM = (function (exports) {
 			}
 		}
 
-		/** This iterator returns locations and values of all non-zero pixels.
-
-			@return {iPixel} for each pixel, return an array [i,v] where i is
-			the pixel's {@link IndexCoordinate} on the grid, and v its value.
-			
-			@example
-			* let CPM = require( "path/to/build" )
-			* // make a grid and set some values
-			* let grid = new CPM.Grid2D( [100,100], [true,true] )
-			* grid.setpixi( 0, 1 )
-			* grid.setpixi( 1, 5 )
-			* 
-			* // iterator
-			* for( let i of grid.pixelsi() ){
-			* 	console.log( i )
-			* }
-			*/
+		/** This iterator returns locations and values of all pixels.
+		 * Whereas the {@link pixels} generator yields only non-background pixels
+		 * and specifies both their {@link ArrayCoordinate} and value, this
+		 * generator yields all pixels by {@link IndexCoordinate} and does not
+		 * report value.
+		 *
+		 * @return {IndexCoordinate} for each pixel on the grid (including
+		 * background pixels).
+		 *
+		 * @example
+		 * let CPM = require( "path/to/build" )
+		 * // make a grid and set some values
+		 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+		 * grid.setpixi( 0, 1 )
+		 * grid.setpixi( 1, 5 )
+		 *
+		 * // iterator
+		 * for( let i of grid.pixelsi() ){
+		 * 	console.log( i )
+		 * }
+		 */
 		* pixelsi() {
 			let ii = 0, c = 0;
 			for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -743,32 +760,34 @@ var CPM = (function (exports) {
 		}
 		
 		/** This iterator returns locations and values of all non-zero pixels.
-
-			@return {Pixel} for each pixel, return an array [p,v] where p are
-			the pixel's array coordinates on the grid, and v its value.
-			
-			@example
-			* let CPM = require( "path/to/build" )
-			* // make a grid and set some values
-			* let grid = new CPM.Grid2D( [100,100], [true,true] )
-			* grid.setpix( [0,0], 1 )
-			* grid.setpix( [0,1], 5 )
-			* 
-			* // iterator
-			* for( let p of grid.pixels() ){
-			* 	console.log( p )
-			* }
-			*/
+		 * @return {Pixel} for each pixel, return an array [p,v] where p are
+		 * the pixel's array coordinates on the grid, and v its value.
+		 *
+		 * @example
+		 * let CPM = require( "path/to/build" )
+		 * // make a grid and set some values
+		 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+		 * grid.setpix( [0,0], 1 )
+		 * grid.setpix( [0,1], 5 )
+		 *
+		 * // iterator
+		 * for( let p of grid.pixels() ){
+		 * 	console.log( p )
+		 * }
+		 */
 		* pixels() {
 			let ii = 0, c = 0;
 			// Loop over coordinates [i,j] on the grid
-			// For each pixel with cellid != 0 (so non-background pixels), 
+			// For each pixel with cellId != 0 (so non-background pixels),
 			// return an array with in the first element the pixel 
-			// coordinates p = [i,j], and in the second element the cellid of this pixel.
+			// coordinates p = [i,j], and in the second element the cellId of this pixel.
 			for( let i = 0 ; i < this.extents[0] ; i ++ ){
 				for( let j = 0 ; j < this.extents[1] ; j ++ ){
-					if( this._pixels[ii] > 0 ){
-						yield [[i,j], this._pixels[ii]];
+
+					//noinspection JSUnresolvedVariable
+					let pixels = this._pixels;
+					if( pixels[ii] > 0 ){ //check non-background
+						yield [[i,j], pixels[ii]];
 					}
 					ii ++;
 				}
@@ -777,15 +796,17 @@ var CPM = (function (exports) {
 			}
 		}
 
-		/**	??? OLD METHOD
-			@todo check if this method is still used.
-			@ignore
-			Return array of {@link IndexCoordinate} of neighbor pixels of the pixel at 
-			coordinate i. This function takes the 2D Moore neighborhood.
-			@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-			@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+		/**	Simple method for neighborhood computation. This method is not
+		 * actually used in the framework, except to test the less intuitive
+		 * (but faster) neighi method that works directly on index coordinates
+		 * rather than first converting to array positions (which is expensive
+		 * as  neighborhoods are computed very often in the CPM).
+		 * @ignore
+		 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		 * @return {IndexCoordinate[]} - an array of coordinates for all the
+		 * neighbors of i.
 		*/
-		neighisimple( i ){
+		neighiSimple( i ){
 			let p = this.i2p(i);
 			let xx = [];
 			for( let d = 0 ; d <= 1 ; d ++ ){
@@ -819,15 +840,15 @@ var CPM = (function (exports) {
 			return r
 		}
 		
-		/**	Return array of {@link IndexCoordinate} of von Neumann-4 neighbor pixels 
-			of the pixel at 
-			coordinate i. This function takes the 2D Neumann-4 neighborhood, excluding the
-			pixel itself.
-			@see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
-			@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-			@param {boolean[]} [torus=[true,true]] - does the grid have linked borders? Defaults to the
-			setting on this grid, see {@link torus}
-			@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+		/**	Return array of {@link IndexCoordinate} of von Neumann-4 neighbor
+		 * pixels of the pixel at coordinate i. This function takes the 2D
+		 * Neumann-4 neighborhood, excluding the pixel itself.
+		 * @see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+		 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		 * @param {boolean[]} [torus=[true,true]] - does the grid have linked
+		 * borders? Defaults to the setting on this grid, see {@link torus}
+		 * @return {IndexCoordinate[]} - an array of coordinates for all the
+		 * neighbors of i.
 		*/
 		* neighNeumanni( i, torus = this.torus ){
 			// normal computation of neighbor indices (top left-middle-right, 
@@ -858,7 +879,7 @@ var CPM = (function (exports) {
 				yield r;
 			}
 			// top border
-			if( i % this.X_STEP == 0 ){
+			if( i % this.X_STEP === 0 ){
 				if( torus[1] ){
 					t += this.extents[1];
 					yield t;
@@ -867,7 +888,7 @@ var CPM = (function (exports) {
 				yield t;
 			}
 			// bottom border
-			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
+			if( (i+1-this.extents[1]) % this.X_STEP === 0 ){
 				if( torus[1] ){
 					b -= this.extents[1];
 					yield b;
@@ -876,14 +897,15 @@ var CPM = (function (exports) {
 				yield b;
 			}
 		}
-		/**	Return array of {@link IndexCoordinate} of Moore-8 neighbor pixels of the pixel at 
-			coordinate i. This function takes the 2D Moore-8 neighborhood, excluding the
-			pixel itself.
-			@see https://en.wikipedia.org/wiki/Moore_neighborhood
-			@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-			@param {boolean} [torus] - does the grid have linked borders? Defaults to the
-			setting on this grid, see {@link torus}
-			@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+		/**	Return array of {@link IndexCoordinate} of Moore-8 neighbor pixels of
+		 * the pixel at coordinate i. This function takes the 2D Moore-8
+		 * neighborhood, excluding the pixel itself.
+		 * @see https://en.wikipedia.org/wiki/Moore_neighborhood
+		 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		 * @param {boolean[]} [torus] - does the grid have linked borders? Defaults
+		 * to the setting on this grid, see {@link torus}
+		 * @return {IndexCoordinate[]} - an array of coordinates for all the
+		 * neighbors of i.
 		*/
 		neighi( i, torus = this.torus ){	
 			// normal computation of neighbor indices (top left-middle-right, 
@@ -917,7 +939,7 @@ var CPM = (function (exports) {
 
 			add = NaN;
 			// top border
-			if( i % this.X_STEP == 0 ){
+			if( i % this.X_STEP === 0 ){
 				if( torus[1] ){
 					add = this.extents[1];
 				}
@@ -925,7 +947,7 @@ var CPM = (function (exports) {
 			}
 			
 			// bottom border
-			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
+			if( (i+1-this.extents[1]) % this.X_STEP === 0 ){
 				if( torus[1] ){
 					add = -this.extents[1];
 				}
@@ -938,46 +960,53 @@ var CPM = (function (exports) {
 			}
 		}
 		
-		/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
-		
-		See also {@link Grid2D#i2p} for the backward conversion.
-		
-		@param {ArrayCoordinate} p - the coordinate of the pixel to convert
-		@return {IndexCoordinate} the converted coordinate. 
-		
-		@example 
-		* let grid = new CPM.Grid2D( [100,100], [true,true] )
-		* let p = grid.i2p( 5 )
-		* console.log( p )
-		* console.log( grid.p2i( p ))
-		*/
+		/** Method for conversion from an {@link ArrayCoordinate} to an
+		 * {@link IndexCoordinate}.
+		 *
+		 * See also {@link Grid2D#i2p} for the backward conversion.
+		 *
+		 * @param {ArrayCoordinate} p - the coordinate of the pixel to convert
+		 * @return {IndexCoordinate} the converted coordinate.
+		 *
+		 * @example
+		 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+		 * let p = grid.i2p( 5 )
+		 * console.log( p )
+		 * console.log( grid.p2i( p ))
+		 */
 		p2i ( p ){
+			// using bitwise operators for speed.
 			return ( p[0] << this.Y_BITS ) + p[1]
 		}
-		/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
-		
-		See also {@link Grid2D#p2i} for the backward conversion.
-		
-		@param {IndexCoordinate} i - the coordinate of the pixel to convert
-		@return {ArrayCoordinate} the converted coordinate. 
-		
-		@example 
-		* let grid = new CPM.Grid2D( [100,100], [true,true] )
-		* let p = grid.i2p( 5 )
-		* console.log( p )
-		* console.log( grid.p2i( p ))
-		*/
+
+		/** Method for conversion from an {@link IndexCoordinate} to an
+		 * {@link ArrayCoordinate}.
+		 * See also {@link Grid2D#p2i} for the backward conversion.
+		 *
+		 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
+		 * @return {ArrayCoordinate} the converted coordinate.
+		 *
+		 * @example
+		 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+		 * let p = grid.i2p( 5 )
+		 * console.log( p )
+		 * console.log( grid.p2i( p ))
+		 */
 		i2p ( i ){
+			// using bitwise operators for speed.
 			return [i >> this.Y_BITS, i & this.Y_MASK]
 		}
 		
-		/** Method to compute the gradient at location i on the grid
-		(location given as an {@link IndexCoordinate}).
-		@param {IndexCoordinate} i - index coordinate of a pixel to compute the gradient at
-		@return {number[]} the gradient at position i.
-		@see https://en.wikipedia.org/wiki/Gradient*/
+		/** Method to compute the gradient at location i on the grid (location
+		 * given as an {@link IndexCoordinate}).
+		 * @param {IndexCoordinate} i - index coordinate of a pixel to compute the
+		 * gradient at
+		 * @return {number[]} the gradient at position i.
+		 * @see https://en.wikipedia.org/wiki/Gradient */
 		gradienti( i ){
-			let t = i-1, b = i+1, l = i-this.X_STEP, r = i+this.X_STEP, torus = this.torus;
+			let t = i-1, b = i+1, l = i-this.X_STEP, r = i+this.X_STEP,
+				torus = this.torus;
+			//noinspection JSUnresolvedVariable
 			const pixels = this._pixels;
 			
 			let dx;
@@ -1027,38 +1056,37 @@ var CPM = (function (exports) {
 						(pixels[i]-pixels[t]))/2;
 				}
 			}
-			return [
-				dx, dy
-			]
+			return [dx, dy]
 		}
 	}
 
-	/** A class containing (mostly static) utility functions for dealing with 3D 
-	 	grids. Extends the Grid class but implements functions specific to the 3D
-	 	grid (such as neighborhoods). 
-	 	
-	 	@example <caption>Neighborhoods on a 3D grid</caption>
-	 	* 
-	 	* let CPM = require("path/to/build")
-	 	* 
-	 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
-	 	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-	 	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
-	 	* 
-	 	* // Now try a grid without torus; the corner now has fewer neighbors.
-	 	* let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
-	 	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
-	 	*
-	 	* // Or try a torus in one dimension
-	 	* let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
-	 	* console.log( grid2.neigh( [0,0,0] ) ) 
-	 	*/
+	/** A class containing (mostly static) utility functions for dealing with 3D
+	 * 	grids. Extends the Grid class but implements functions specific to the 3D
+	 * 	grid (such as neighborhoods).
+	 *
+	 * @example <caption>Neighborhoods on a 3D grid</caption>
+	 *
+	 * let CPM = require("path/to/build")
+	 *
+	 * // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
+	 *
+	 * // Now try a grid without torus; the corner now has fewer neighbors.
+	 * let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
+	 * console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+	 *
+	 * // Or try a torus in one dimension
+	 * let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
+	 * console.log( grid2.neigh( [0,0,0] ) )
+	 */
 	class Grid3D extends Grid {
 
 		/** Constructor of the Grid3D object.
-		@param {GridSize} extents - the size of the grid in each dimension 
-		@param {boolean[]} [torus = [true,true,true]] - should the borders of the grid be linked, so that a cell moving
-		out on the left reappears on the right? */
+		 * @param {GridSize} extents - the size of the grid in each dimension
+		 * @param {boolean[]} [torus = [true,true,true]] - should the borders of
+		 * the grid be linked, so that a cell moving out on the left reappears on
+		 * the right? */
 		constructor( extents, torus = [true,true,true] ){
 			super( extents, torus );
 			// Check that the grid size is not too big to store pixel ID in 32-bit number,
@@ -1086,59 +1114,66 @@ var CPM = (function (exports) {
 			this._pixelArray = new Uint16Array(this.p2i(extents));
 			this.datatype = "Uint16";
 		}
-		/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
-		
-		See also {@link Grid3D#i2p} for the backward conversion.
-		
-		@param {ArrayCoordinate} p - the coordinate of the pixel to convert
-		@return {IndexCoordinate} the converted coordinate. 
-		
-		@example 
-		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-		* let p = grid.i2p( 5 )
-		* console.log( p )
-		* console.log( grid.p2i( p ))
-		*/
+		/** Method for conversion from an {@link ArrayCoordinate} to an
+		 * {@link IndexCoordinate}.
+		 *
+		 * See also {@link Grid3D#i2p} for the backward conversion.
+		 *
+		 * @param {ArrayCoordinate} p - the coordinate of the pixel to convert
+		 * @return {IndexCoordinate} the converted coordinate.
+		 *
+		 * @example
+		 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+		 * let p = grid.i2p( 5 )
+		 * console.log( p )
+		 * console.log( grid.p2i( p ))
+		 */
 		p2i( p ){
 			return ( p[0] << ( this.Z_BITS + this.Y_BITS ) ) + 
 				( p[1] << this.Z_BITS ) + 
 				p[2]
 		}
-		/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
-		
-		See also {@link Grid3D#p2i} for the backward conversion.
-		
-		@param {IndexCoordinate} i - the coordinate of the pixel to convert
-		@return {ArrayCoordinate} the converted coordinate. 
-		
-		@example 
-		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-		* let p = grid.i2p( 5 )
-		* console.log( p )
-		* console.log( grid.p2i( p ))
-		*/
+		/** Method for conversion from an {@link IndexCoordinate} to an
+		 * {@link ArrayCoordinate}.
+		 *
+		 * See also {@link Grid3D#p2i} for the backward conversion.
+		 *
+		 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
+		 * @return {ArrayCoordinate} the converted coordinate.
+		 *
+		 * @example
+		 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+		 * let p = grid.i2p( 5 )
+		 * console.log( p )
+		 * console.log( grid.p2i( p ))
+		 */
 		i2p( i ){
 			return [i >> (this.Y_BITS + this.Z_BITS), 
 				( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 		}
 		
 		/** This iterator returns locations and values of all non-zero pixels.
-
-			@return {iPixel} for each pixel, return an array [i,v] where i is
-			the pixel's {@link IndexCoordinate} on the grid, and v its value.
-			
-			@example
-			* let CPM = require( "path/to/build" )
-			* // make a grid and set some values
-			* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-			* grid.setpixi( 0, 1 )
-			* grid.setpixi( 1, 5 )
-			* 
-			* // iterator
-			* for( let i of grid.pixelsi() ){
-			* 	console.log( i )
-			* }
-			*/
+		 * Whereas the {@link pixels} generator yields only non-background pixels
+		 * and specifies both their {@link ArrayCoordinate} and value, this
+		 * generator yields all pixels by {@link IndexCoordinate} and does not
+		 * report value.
+		 *
+		 * @return {IndexCoordinate} for each pixel, return its
+		 * {@link IndexCoordinate}.
+		 *
+		 *
+		 * @example
+		 * let CPM = require( "path/to/build" )
+		 * // make a grid and set some values
+		 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+		 * grid.setpixi( 0, 1 )
+		 * grid.setpixi( 1, 5 )
+		 *
+		 * // iterator
+		 * for( let i of grid.pixelsi() ){
+		 * 	console.log( i )
+		 * }
+		 */
 		* pixelsi() {
 			let ii = 0, c = 0;
 			for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -1157,30 +1192,31 @@ var CPM = (function (exports) {
 		}
 
 		/** This iterator returns locations and values of all non-zero pixels.
-
-			@return {Pixel} for each pixel, return an array [p,v] where p are
-			the pixel's array coordinates on the grid, and v its value.
-			
-			@example
-			* let CPM = require( "path/to/build" )
-			* // make a grid and set some values
-			* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-			* grid.setpix( [0,0,0], 1 )
-			* grid.setpix( [0,0,1], 5 )
-			* 
-			* // iterator
-			* for( let p of grid.pixels() ){
-			* 	console.log( p )
-			* }
-			*/
+		 * @return {Pixel} for each pixel, return an array [p,v] where p are
+		 * the pixel's array coordinates on the grid, and v its value.
+		 *
+		 * @example
+		 * let CPM = require( "path/to/build" )
+		 * // make a grid and set some values
+		 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+		 * grid.setpix( [0,0,0], 1 )
+		 * grid.setpix( [0,0,1], 5 )
+		 *
+		 * // iterator
+		 * for( let p of grid.pixels() ){
+		 * 	console.log( p )
+		 * }
+		 */
 		* pixels() {
 			let ii = 0, c = 0;
 			for( let i = 0 ; i < this.extents[0] ; i ++ ){
 				let d = 0;
 				for( let j = 0 ; j < this.extents[1] ; j ++ ){
 					for( let k = 0 ; k < this.extents[2] ; k ++ ){
-						if( this._pixels[ii] > 0 ){
-							yield [[i,j,k], this._pixels[ii]];
+						//noinspection JSUnresolvedVariable
+						let pixels = this._pixels;
+						if( pixels[ii] > 0 ){
+							yield [[i,j,k], pixels[ii]];
 						}
 						ii++;
 					}
@@ -1192,14 +1228,15 @@ var CPM = (function (exports) {
 			}
 		}
 
-		/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels of the pixel at 
-			coordinate i. This function takes the 3D equivalent of the 2D Moore-8 neighborhood, 
-			excluding the pixel itself.
-			@see https://en.wikipedia.org/wiki/Moore_neighborhood
-			@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-			@param {boolean[]} [torus=[true,true,true]] - does the grid have linked borders? Defaults to the
-			setting on this grid, see {@link torus}
-			@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+		/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels
+		 * of the pixel at coordinate i. This function takes the 3D equivalent of
+		 * the 2D Moore-8 neighborhood, excluding the pixel itself.
+		 * @see https://en.wikipedia.org/wiki/Moore_neighborhood
+		 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+		 * @param {boolean[]} [torus=[true,true,true]] - does the grid have linked
+		 * borders? Defaults to the setting on this grid, see {@link torus}
+		 * @return {IndexCoordinate[]} - an array of coordinates for all the
+		 * neighbors of i.
 		*/
 		neighi( i, torus = this.torus ){
 			let p = this.i2p(i);

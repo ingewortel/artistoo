@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -99,32 +98,33 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/grid/Grid3D.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Grid from &quot;./Grid.js&quot;
 
-/** A class containing (mostly static) utility functions for dealing with 3D 
- 	grids. Extends the Grid class but implements functions specific to the 3D
- 	grid (such as neighborhoods). 
- 	
- 	@example &lt;caption&gt;Neighborhoods on a 3D grid&lt;/caption&gt;
- 	* 
- 	* let CPM = require(&quot;path/to/build&quot;)
- 	* 
- 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
- 	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
- 	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
- 	* 
- 	* // Now try a grid without torus; the corner now has fewer neighbors.
- 	* let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
- 	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
- 	*
- 	* // Or try a torus in one dimension
- 	* let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
- 	* console.log( grid2.neigh( [0,0,0] ) ) 
- 	*/
+/** A class containing (mostly static) utility functions for dealing with 3D
+ * 	grids. Extends the Grid class but implements functions specific to the 3D
+ * 	grid (such as neighborhoods).
+ *
+ * @example &lt;caption&gt;Neighborhoods on a 3D grid&lt;/caption&gt;
+ *
+ * let CPM = require(&quot;path/to/build&quot;)
+ *
+ * // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
+ * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+ * console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
+ *
+ * // Now try a grid without torus; the corner now has fewer neighbors.
+ * let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
+ * console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+ *
+ * // Or try a torus in one dimension
+ * let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
+ * console.log( grid2.neigh( [0,0,0] ) )
+ */
 class Grid3D extends Grid {
 
 	/** Constructor of the Grid3D object.
-	@param {GridSize} extents - the size of the grid in each dimension 
-	@param {boolean[]} [torus = [true,true,true]] - should the borders of the grid be linked, so that a cell moving
-	out on the left reappears on the right? */
+	 * @param {GridSize} extents - the size of the grid in each dimension
+	 * @param {boolean[]} [torus = [true,true,true]] - should the borders of
+	 * the grid be linked, so that a cell moving out on the left reappears on
+	 * the right? */
 	constructor( extents, torus = [true,true,true] ){
 		super( extents, torus )
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
@@ -152,59 +152,66 @@ class Grid3D extends Grid {
 		this._pixelArray = new Uint16Array(this.p2i(extents))
 		this.datatype = &quot;Uint16&quot;
 	}
-	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
-	
-	See also {@link Grid3D#i2p} for the backward conversion.
-	
-	@param {ArrayCoordinate} p - the coordinate of the pixel to convert
-	@return {IndexCoordinate} the converted coordinate. 
-	
-	@example 
-	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-	* let p = grid.i2p( 5 )
-	* console.log( p )
-	* console.log( grid.p2i( p ))
-	*/
+	/** Method for conversion from an {@link ArrayCoordinate} to an
+	 * {@link IndexCoordinate}.
+	 *
+	 * See also {@link Grid3D#i2p} for the backward conversion.
+	 *
+	 * @param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	 * @return {IndexCoordinate} the converted coordinate.
+	 *
+	 * @example
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * let p = grid.i2p( 5 )
+	 * console.log( p )
+	 * console.log( grid.p2i( p ))
+	 */
 	p2i( p ){
 		return ( p[0] &lt;&lt; ( this.Z_BITS + this.Y_BITS ) ) + 
 			( p[1] &lt;&lt; this.Z_BITS ) + 
 			p[2]
 	}
-	/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
-	
-	See also {@link Grid3D#p2i} for the backward conversion.
-	
-	@param {IndexCoordinate} i - the coordinate of the pixel to convert
-	@return {ArrayCoordinate} the converted coordinate. 
-	
-	@example 
-	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-	* let p = grid.i2p( 5 )
-	* console.log( p )
-	* console.log( grid.p2i( p ))
-	*/
+	/** Method for conversion from an {@link IndexCoordinate} to an
+	 * {@link ArrayCoordinate}.
+	 *
+	 * See also {@link Grid3D#p2i} for the backward conversion.
+	 *
+	 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
+	 * @return {ArrayCoordinate} the converted coordinate.
+	 *
+	 * @example
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * let p = grid.i2p( 5 )
+	 * console.log( p )
+	 * console.log( grid.p2i( p ))
+	 */
 	i2p( i ){
 		return [i &gt;&gt; (this.Y_BITS + this.Z_BITS), 
 			( i &gt;&gt; this.Z_BITS ) &amp; this.Y_MASK, i &amp; this.Z_MASK ]
 	}
 	
 	/** This iterator returns locations and values of all non-zero pixels.
-
-		@return {iPixel} for each pixel, return an array [i,v] where i is
-		the pixel&apos;s {@link IndexCoordinate} on the grid, and v its value.
-		
-		@example
-		* let CPM = require( &quot;path/to/build&quot; )
-		* // make a grid and set some values
-		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-		* grid.setpixi( 0, 1 )
-		* grid.setpixi( 1, 5 )
-		* 
-		* // iterator
-		* for( let i of grid.pixelsi() ){
-		* 	console.log( i )
-		* }
-		*/
+	 * Whereas the {@link pixels} generator yields only non-background pixels
+	 * and specifies both their {@link ArrayCoordinate} and value, this
+	 * generator yields all pixels by {@link IndexCoordinate} and does not
+	 * report value.
+	 *
+	 * @return {IndexCoordinate} for each pixel, return its
+	 * {@link IndexCoordinate}.
+	 *
+	 *
+	 * @example
+	 * let CPM = require( &quot;path/to/build&quot; )
+	 * // make a grid and set some values
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * grid.setpixi( 0, 1 )
+	 * grid.setpixi( 1, 5 )
+	 *
+	 * // iterator
+	 * for( let i of grid.pixelsi() ){
+	 * 	console.log( i )
+	 * }
+	 */
 	* pixelsi() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i &lt; this.extents[0] ; i ++ ){
@@ -223,30 +230,31 @@ class Grid3D extends Grid {
 	}
 
 	/** This iterator returns locations and values of all non-zero pixels.
-
-		@return {Pixel} for each pixel, return an array [p,v] where p are
-		the pixel&apos;s array coordinates on the grid, and v its value.
-		
-		@example
-		* let CPM = require( &quot;path/to/build&quot; )
-		* // make a grid and set some values
-		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-		* grid.setpix( [0,0,0], 1 )
-		* grid.setpix( [0,0,1], 5 )
-		* 
-		* // iterator
-		* for( let p of grid.pixels() ){
-		* 	console.log( p )
-		* }
-		*/
+	 * @return {Pixel} for each pixel, return an array [p,v] where p are
+	 * the pixel&apos;s array coordinates on the grid, and v its value.
+	 *
+	 * @example
+	 * let CPM = require( &quot;path/to/build&quot; )
+	 * // make a grid and set some values
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * grid.setpix( [0,0,0], 1 )
+	 * grid.setpix( [0,0,1], 5 )
+	 *
+	 * // iterator
+	 * for( let p of grid.pixels() ){
+	 * 	console.log( p )
+	 * }
+	 */
 	* pixels() {
 		let ii = 0, c = 0
 		for( let i = 0 ; i &lt; this.extents[0] ; i ++ ){
 			let d = 0
 			for( let j = 0 ; j &lt; this.extents[1] ; j ++ ){
 				for( let k = 0 ; k &lt; this.extents[2] ; k ++ ){
-					if( this._pixels[ii] &gt; 0 ){
-						yield [[i,j,k], this._pixels[ii]]
+					//noinspection JSUnresolvedVariable
+					let pixels = this._pixels
+					if( pixels[ii] &gt; 0 ){
+						yield [[i,j,k], pixels[ii]]
 					}
 					ii++
 				}
@@ -258,14 +266,15 @@ class Grid3D extends Grid {
 		}
 	}
 
-	/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels of the pixel at 
-		coordinate i. This function takes the 3D equivalent of the 2D Moore-8 neighborhood, 
-		excluding the pixel itself.
-		@see https://en.wikipedia.org/wiki/Moore_neighborhood
-		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-		@param {boolean[]} [torus=[true,true,true]] - does the grid have linked borders? Defaults to the
-		setting on this grid, see {@link torus}
-		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels
+	 * of the pixel at coordinate i. This function takes the 3D equivalent of
+	 * the 2D Moore-8 neighborhood, excluding the pixel itself.
+	 * @see https://en.wikipedia.org/wiki/Moore_neighborhood
+	 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+	 * @param {boolean[]} [torus=[true,true,true]] - does the grid have linked
+	 * borders? Defaults to the setting on this grid, see {@link torus}
+	 * @return {IndexCoordinate[]} - an array of coordinates for all the
+	 * neighbors of i.
 	*/
 	neighi( i, torus = this.torus ){
 		let p = this.i2p(i)
