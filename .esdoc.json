@@ -11,6 +11,14 @@
           "includes": ["(spec|Spec|test|Test)\\.js$"],
           "excludes": ["\\.config\\.js$"]
         },
+        "manual": {
+          "index": "./manual/index.md",
+          "asset": "./manual/asset",
+          "files": [
+            "./manual/installation.md",
+            "./manual/quickstart.md"
+          ]
+        },
         "brand": {
           "repository": "https://github.com/ingewortel/cpmjs"
         }

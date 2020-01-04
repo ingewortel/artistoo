@@ -8,23 +8,23 @@ all : build/cpm.js examples/html/cpm.js
 examples/html/cpm.js : build/cpm.js
 	@cp $< $@
 
-build/cpm.js: rollup.config.js app/index.js uptodate
+build/cpm.js: rollup.config.js app/index.js misc/uptodate
 	@echo '...Building package using node_modules/rollup/bin/rollup...' &&\
-	node_modules/rollup/bin/rollup -c && touch build.make
+	node_modules/rollup/bin/rollup -c && touch misc/build.make
 
-uptodate : build.make
+misc/uptodate : misc/build.make
 	@$(MAKE) -f $<
 	
-build.make: build-makeout.bash app/include-list.txt
+misc/build.make: misc/build-makeout.bash app/include-list.txt
 	@bash $^ > $@
 
 # The app/index.js file is now generated automatically.
 app/index.js : app/automatic-index.bash app/include-list.txt
 	@bash $^ > $@
 
-docs/index.html : build/cpm.js README.md
+docs/index.html : build/cpm.js README.md spec $(shell find manual -type f)
 	@echo  '...Writing documentation with ESDOC, please wait...' &&\
-	node_modules/.bin/esdoc > docs/log.txt
+	node_modules/.bin/esdoc > docs/log.txt && bash misc/fix-docs.bash
 
 docs-examples : examples/html | docs/examples
 	@cp $</* docs/examples/
@@ -41,7 +41,7 @@ docs : docs/index.html docs-examples
 # testing:
 test-jasmine :
 	@echo "...Running automated method tests using jasmine..." &&\
-	bash run-tests.bash
+	bash misc/run-tests.bash
 
 test-examples :
 	@echo "...Testing if the examples still work..." &&\
