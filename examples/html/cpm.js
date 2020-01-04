@@ -7035,7 +7035,7 @@ var CPM = (function (exports) {
 				}
 				
 				// Draw borders if required
-				if(  cellborders[ cellkind  ]  ){
+				if(  this.conf.hasOwnProperty("SHOWBORDERS") && cellborders[ cellkind  ] ){
 					let bordercol = "000000";
 					if( this.conf.hasOwnProperty("BORDERCOL") ){
 						bordercol = this.conf["BORDERCOL"][cellkind] || "000000";

@@ -6640,9 +6640,9 @@ class Simulation {
 			{@link CellKind} in. If left unspecified, the {@link Canvas} will use black.
 		@param {boolean[]} [simsettings.ACTCOLOR ] - should activities of the {@link ActivityConstraint}
 			be drawn for each {@link CellKind}? If left unspecified, these are not drawn.
-		@param {boolean[]} [simsettings.SHOWBORDERS ] - should borders of each {@link CellKind}
+		@param {boolean[]} [simsettings.SHOWBORDERS = false] - should borders of each {@link CellKind}
 			be drawn? Defaults to false.
-		@param {HexColor[]} [simsettings.BORDERCOL ] - color to draw cellborders of
+		@param {HexColor[]} [simsettings.BORDERCOL = "000000"] - color to draw cellborders of
 			each {@link CellKind} in. Defaults to black. 
 		*/
 	constructor( config, custommethods ){
@@ -6824,12 +6824,12 @@ class Simulation {
 		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 		
 			// draw the cells of each kind in the right color
-			if( cellcolor[ cellkind ] != -1 ){
+			if( cellcolor[ cellkind ] !== -1 ){
 				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] );
 			}
 			
 			// Draw borders if required
-			if(  cellborders[ cellkind  ]  ){
+			if(  this.conf.hasOwnProperty("SHOWBORDERS") && cellborders[ cellkind  ] ){
 				let bordercol = "000000";
 				if( this.conf.hasOwnProperty("BORDERCOL") ){
 					bordercol = this.conf["BORDERCOL"][cellkind] || "000000";

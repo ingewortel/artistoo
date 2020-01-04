@@ -3,6 +3,22 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2020-01-03 Inge Wortel <ingewortel@gmail.com>
+    * misc : added this folder for some helper scripts etc, and moved some
+    stuff here.
+    * misc/fix-docs.bash : the ESDOC parser that converts markdown to html
+    doesn't recognize iframes and displays code blocks weirdly if they overflow.
+    This bash script fixes that.
+    * src/simulation/Simulation.js : slight change so that SHOWBORDERS is no
+    longer an obligatory argument in conf (defaults to false now).
+
+2020-01-02 Inge Wortel <ingewortel@gmail.com>
+    * manual : added a folder to write a manual (automatically via ESDOC).
+    Write manual here and add the required pages to .esdoc.json for the index.
+    * manual/index.md : added.
+    * manual/installation.md : added
+    * manual/quickstart.md : added.
+
 2020-01-01 Inge Wortel <ingewortel@gmail.com>
     * spec/grid/Grid3DSpec.js : added this file with tests for neighi and
     pixelsi methods on the 3D grid.
