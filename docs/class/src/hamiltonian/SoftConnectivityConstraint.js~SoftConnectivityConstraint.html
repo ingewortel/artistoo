@@ -13,10 +13,10 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
-  
+  <a href="test.html" data-ice="testLink">Test</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -57,12 +56,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
@@ -259,6 +260,34 @@ through a positive term in the Hamiltonian. </p>
         
         <div data-ice="description"><p>Object tracking the borderpixels of each cell.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html#instance-member-components">components</a></span></span><span class="code" data-ice="signature">: <span><span>*</span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
       </div>
     </td>
     <td>
@@ -913,7 +942,7 @@ are actually present in the conf object and have the right format.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -957,7 +986,7 @@ are actually present in the conf object and have the right format.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber30">source</a></span></span>
     </span>
   </h3>
 
@@ -1034,6 +1063,49 @@ every copy attempt.</p>
   
   
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-components">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">components</span><span class="code" data-ice="signature">: <span><span>*</span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber26">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 <h2 data-ice="title">Private Members</h2>
 
 <div class="detail" data-ice="detail">
@@ -1048,7 +1120,7 @@ every copy attempt.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber38">source</a></span></span>
     </span>
   </h3>
 
@@ -1095,7 +1167,7 @@ every copy attempt.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber227">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber240">source</a></span></span>
     </span>
   </h3>
 
@@ -1184,7 +1256,7 @@ tgt_type to src_type. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -1230,7 +1302,7 @@ is not the case.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber127">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber128">source</a></span></span>
     </span>
   </h3>
 
@@ -1305,7 +1377,7 @@ turn an array of the <span><a href="typedef/index.html#static-typedef-ArrayCoord
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
@@ -1380,7 +1452,7 @@ turn an array of the <span><a href="typedef/index.html#static-typedef-ArrayCoord
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber216">source</a></span></span>
     </span>
   </h3>
 
@@ -1466,7 +1538,7 @@ in which each entry is the <span><a href="typedef/index.html#static-typedef-Arra
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber304">source</a></span></span>
     </span>
   </h3>
 
@@ -1562,7 +1634,7 @@ to copy into.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber178">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber180">source</a></span></span>
     </span>
   </h3>
 
@@ -1646,7 +1718,7 @@ false for 3D (ensuring that connectivity is checked globally).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber166">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber167">source</a></span></span>
     </span>
   </h3>
 
@@ -1722,7 +1794,7 @@ tracked borderpixels after every copy.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber51">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 

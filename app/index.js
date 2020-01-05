@@ -17,6 +17,7 @@ import CellNeighborList from "../src/stats/CellNeighborList.js"
 import ConnectedComponentsByCell from "../src/stats/ConnectedComponentsByCell.js" 
 import Connectedness from "../src/stats/Connectedness.js" 
  
+import Grid from "../src/grid/Grid.js" 
 import Grid2D from "../src/grid/Grid2D.js" 
 import Grid3D from "../src/grid/Grid3D.js" 
 import GridManipulator from "../src/grid/GridManipulator.js" 
@@ -34,6 +35,8 @@ import ChemotaxisConstraint from "../src/hamiltonian/ChemotaxisConstraint.js"
 import AttractionPointConstraint from "../src/hamiltonian/AttractionPointConstraint.js" 
 import ConnectivityConstraint from "../src/hamiltonian/ConnectivityConstraint.js" 
 import SoftConnectivityConstraint from "../src/hamiltonian/SoftConnectivityConstraint.js" 
+import LocalConnectivityConstraint from "../src/hamiltonian/LocalConnectivityConstraint.js" 
+import SoftLocalConnectivityConstraint from "../src/hamiltonian/SoftLocalConnectivityConstraint.js" 
  
 import HardConstraint from "../src/hamiltonian/HardConstraint.js" 
 import HardVolumeRangeConstraint from "../src/hamiltonian/HardVolumeRangeConstraint.js" 
@@ -55,6 +58,7 @@ export {
 	CellNeighborList,
 	ConnectedComponentsByCell,
 	Connectedness,
+	Grid,
 	Grid2D,
 	Grid3D,
 	GridManipulator,
@@ -71,6 +75,8 @@ export {
 	AttractionPointConstraint,
 	ConnectivityConstraint,
 	SoftConnectivityConstraint,
+	LocalConnectivityConstraint,
+	SoftLocalConnectivityConstraint,
 	HardConstraint,
 	HardVolumeRangeConstraint,
 	BarrierConstraint,

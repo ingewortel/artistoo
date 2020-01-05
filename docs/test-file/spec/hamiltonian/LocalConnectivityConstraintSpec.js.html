@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">spec/hamiltonian/LocalConnectivityConstraintSpec.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">spec/hamiltonian/LocalConnectivityConstraintSpec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* 
+	TODO
+	- implement some checks for a 3D CPM
+	- further test paramChecker
+	- implement a stress test (somewhere else?): run a simulation at parameters where the cell has risk of
+	breaking, and test at several times whether the connectedness remains intact.
+
+*/
+
+/** @test {LocalConnectivityConstraint} */
+describe(&quot;LocalConnectivityConstraint&quot;, function () {
+	let CPM = require(&quot;../../build/cpm-cjs.js&quot;)
+	let C, conn
+
+	let fakeNeighi = function(i){
+		//console.log( i + &quot; &quot; + testGrid.neighi( i ) )
+		if( i === 3 ){ return [12674,12675,12676,2,4,130,131,132]}
+		if( i === 259 ){ return [130,131,132,258,260,386,387,388]}
+		if( i === 515 ){ return [386,387,388,514,516,642,643,644]}
+		if( i === 131 ){ return [2,3,4,130,132,258,259,260]}
+		if( i === 387 ){ return [258,259,260,386,388,514,515,516]}
+		if( i === 0 ){ return [12771,12672,12673,99,1,227,128,129]}
+		if( i === 129 ){ return [0,1,2,128,130,256,257,258]}
+		if( i === 258 ){ return [129,130,131,257,259,385,386,387]}
+		if( i === 516 ){ return [258,259,260,386,388,514,515,516]}
+	}
+
+	beforeEach(function () {
+		C = new CPM.CPM([100, 100], {T: 20})
+		conn = new CPM.LocalConnectivityConstraint({
+			CONNECTED: [false, true]
+		})
+		C.add( conn )
+
+	})
+
+	describe( &quot;[ Unit tests ]&quot;, function() {
+		/* Testing the connected components method for specific cases */
+		/** @test {LocalConnectivityConstraint#connectedComponentsOf} */
+		describe(&quot;method [ connectedComponentsOf ]&quot;, function () {
+
+			beforeEach(function () {
+				// Replace the .grid.p2i function with mock code for real unit tests.
+				C = jasmine.createSpyObj(&quot;C&quot;, [ &quot;pixti&quot;,&quot;getConstraint&quot; ])
+				C.grid = jasmine.createSpyObj( &quot;C.grid&quot;, [&quot;p2i&quot;,&quot;i2p&quot;,&quot;neighi&quot;,&quot;pixti&quot;] )
+				C.grid.p2i.and.callFake( function(p) {
+					let x = p[0], y = p[1]
+					// hard code the required values.
+					if( x === 2 &amp;&amp; y === 2 ){ return 258 }
+					if( x === 3 &amp;&amp; y === 3 ){ return 387 }
+					if( x === 4 &amp;&amp; y === 4 ){ return 516 }
+					if( x === 2 &amp;&amp; y === 3 ){ return 259 }
+					if( x === 0 &amp;&amp; y === 3 ){ return 3 }
+					if( x === 4 &amp;&amp; y === 3 ){ return 515 }
+					if( x === 0 &amp;&amp; y === 0 ){ return 0 }
+					if( x === 1 &amp;&amp; y === 3 ){ return 131 }
+					if( x === 1 &amp;&amp; y === 1 ){ return 129 }
+
+					// This should not happen.
+					return NaN
+				})
+				// hard code the neighborhoods returned:
+				C.grid.neighi.and.callFake( function(i){
+					//console.log( i + &quot; &quot; + testGrid.neighi( i ) )
+					return fakeNeighi(i)
+				})
+
+				// i2p always returns the same array, this shouldn&apos;t matter because
+				// only the length of the connected components is tested here.
+				C.grid.i2p.and.returnValue( [0,0] )
+
+				conn = new CPM.LocalConnectivityConstraint({
+					CONNECTED: [false, true]
+				})
+				conn.C = C
+				C.getConstraint.and.callFake( function(){
+					return conn
+				})
+
+				// pixti doesn&apos;t have to work, assume the whole neighborhood is
+				// the same type and just look at whether a pixel is in the
+				// object or not.
+				C.pixti.and.returnValue( 1 )
+				C.grid.pixti.and.returnValue( 1 )
+			})
+
+			it(&quot;should return only one component in connected case&quot;, function () {
+				let nbhObj = {}
+				for (let x = 0; x &lt; 5; x++) {
+					nbhObj[C.grid.p2i([x, 3])] = true
+				}
+				expect(C.getConstraint(&quot;LocalConnectivityConstraint&quot;).connectedComponentsOf(nbhObj).length).toEqual(1)
+
+				nbhObj = {}
+				for (let x = 0; x &lt; 5; x++) {
+					nbhObj[C.grid.p2i([x, x])] = true
+				}
+				expect(C.getConstraint(&quot;LocalConnectivityConstraint&quot;).connectedComponentsOf(nbhObj).length).toEqual(1)
+			})
+			it(&quot;should return multiple components in disconnected case&quot;, function () {
+				let nbhObj = {}
+				for (let x = 0; x &lt; 5; x++) {
+					if (x % 2 === 0) {
+						nbhObj[C.grid.p2i([x, 3])] = true
+					}
+				}
+				expect(C.getConstraint(&quot;LocalConnectivityConstraint&quot;).connectedComponentsOf(nbhObj).length).toEqual(3)
+
+			})
+
+		})
+	})
+
+
+
+	/* Testing if the overall constraint works, specific case*/
+
+
+	describe( &quot;[ Integration tests ]&quot;, function() {
+
+		/* Integration test: Testing the parameter checker for this constraint*/
+		/** @test {LocalConnectivityConstraint#confChecker} */
+		describe(&quot;integration with ParameterChecker&quot;, function () {
+			it(&quot;should throw an error when CONNECTED parameter is unspecified&quot;, function () {
+				expect(function () {
+					//noinspection JSCheckFunctionSignatures
+					C.add(new CPM.LocalConnectivityConstraint({}))
+				}).toThrow(&quot;Cannot find parameter CONNECTED in the conf object!&quot;)
+			})
+		})
+		/* Integration test: constraint as a whole but with a mock CPM*/
+		describe(&quot;when copy attempt would disrupt local connectivity&quot;, function () {
+			let src_i, tgt_i, src_type, tgt_type
+
+			beforeEach(function () {
+				C = jasmine.createSpyObj(&quot;C&quot;, [ &quot;pixti&quot;,&quot;getConstraint&quot;,&quot;cellKind&quot; ])
+				C.grid = jasmine.createSpyObj( &quot;C.grid&quot;, [&quot;neighi&quot;,&quot;pixti&quot;,&quot;i2p&quot;,&quot;p2i&quot;] )
+				conn = new CPM.LocalConnectivityConstraint({
+					CONNECTED: [false, true]
+				})
+				conn.C = C
+				C.getConstraint.and.callFake( function() {return conn})
+				C.pixti.and.callFake(function(i){
+					if( i === 0 || i === 1 || i === 2 ){
+						return 1
+					}
+					return 0
+					//if( i === 258 || i === 387 || i === 516  ){ return 1 }
+
+				})
+				C.grid.pixti.and.callFake( function(i) {
+					if( i === 0 || i === 1 || i === 2 ){
+						return 1
+					}
+					return 0
+				})
+				C.grid.neighi.and.callFake( function(i){
+					return [ i - 1, i + 1 ]
+				})
+				C.grid.i2p.and.callFake( function(i){
+					return [0,i]
+				})
+				C.grid.p2i.and.callFake( function(p){
+					return p[1]
+				})
+				C.cellKind.and.callFake( function(t){
+					if( t === 1 ){return 1 }
+					return 0
+				})
+				src_i = 102 //259 //C.grid.p2i([2, 3])
+				tgt_i = 1 //387 //C.grid.p2i([3, 3])
+				src_type = C.pixti(src_i)
+				tgt_type = C.pixti(tgt_i)
+			})
+
+			/** @test {LocalConnectivityConstraint#checkConnected} */
+			it(&quot;#checkConnected should return false&quot;, function () {
+				expect(C.getConstraint(&quot;LocalConnectivityConstraint&quot;).checkConnected(tgt_i, src_type, tgt_type)).toBeFalsy()
+			})
+
+			/** @test {LocalConnectivityConstraint#fulfilled} */
+			describe(&quot;and when CONNECTED for the tgt cellKind&quot;, function () {
+				it(&quot;is true, constraint should not be fulfilled&quot;, function () {
+					expect(C.getConstraint(&quot;LocalConnectivityConstraint&quot;).fulfilled(src_i, tgt_i, src_type, tgt_type)).toBeFalsy()
+				})
+				it(&quot;is false, constraint should be fulfilled&quot;, function () {
+					C.getConstraint(&quot;LocalConnectivityConstraint&quot;).conf.CONNECTED[1] = false
+					expect(C.getConstraint(&quot;LocalConnectivityConstraint&quot;).fulfilled(src_i, tgt_i, src_type, tgt_type)).toBeTruthy()
+				})
+			})
+
+		})
+
+
+		/* Integration test: method connectedComponentsOf should listen to the torus property*/
+		describe( &quot;method [ connectedComponentsOf ]&quot; , function () {
+
+			it(&quot;should listen to the grid torus property correctly&quot;, function () {
+				let nbhObj = {}
+				let pix = C.grid.p2i([0, 0])
+
+				// add pixel and its whole neighborhood
+				nbhObj[pix] = true
+				for (let n of C.grid.neighi(pix)) {
+					nbhObj[n] = true
+				}
+				expect(C.getConstraint(&quot;LocalConnectivityConstraint&quot;).connectedComponentsOf(nbhObj).length).toEqual(1)
+
+				// now change torus to false in one or both dimensions while keeping the same nbhObj
+				let C_noTorus = new CPM.CPM([100, 100], {
+					T: 20,
+					torus: [false, false]
+				})
+				C_noTorus.add(new CPM.LocalConnectivityConstraint({
+					CONNECTED: [false, true]
+				}))
+				expect(C_noTorus.getConstraint(&quot;LocalConnectivityConstraint&quot;).connectedComponentsOf(nbhObj).length).toEqual(4)
+
+				let C_yTorus = new CPM.CPM([100, 100], {
+					T: 20,
+					torus: [false, true]
+				})
+				C_yTorus.add(new CPM.LocalConnectivityConstraint({
+					CONNECTED: [false, true]
+				}))
+				expect(C_yTorus.getConstraint(&quot;LocalConnectivityConstraint&quot;).connectedComponentsOf(nbhObj).length).toEqual(2)
+
+				let C_xTorus = new CPM.CPM([100, 100], {
+					T: 20,
+					torus: [true, false]
+				})
+				C_xTorus.add(new CPM.LocalConnectivityConstraint({
+					CONNECTED: [false, true]
+				}))
+				expect(C_xTorus.getConstraint(&quot;LocalConnectivityConstraint&quot;).connectedComponentsOf(nbhObj).length).toEqual(2)
+			})
+		})
+	})
+})</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

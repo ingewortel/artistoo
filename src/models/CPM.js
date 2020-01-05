@@ -5,22 +5,26 @@ import DiceSet from "../DiceSet.js"
 import AutoAdderConfig from "../hamiltonian/AutoAdderConfig.js"
 
 
-/** The core CPM class. Can be used for two- or 
- * three-dimensional simulations. 
+/** The core CPM class. Can be used for two- or three-dimensional simulations.
 */
 class CPM extends GridBasedModel {
 
 	/** The constructor of class CA.
-	@param {GridSize} field_size - the size of the grid of the model.
-	@param {object} conf - configuration options; see below. In addition, the conf
-	object can have parameters to constraints added to the CPM. See the different
-	{@link Constraint} subclasses for options. For some constraints, adding its
-	paramter to the CPM conf object automatically adds the constraint; see 
-	{@link AutoAdderConfig} to see for which constraints this is supported.
-	@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
-	@param {number} [seed] - seed for the random number generator. If left unspecified,
-	a random number from the Math.random() generator is used to make one.
-	*/
+	 * @param {GridSize} field_size - the size of the grid of the model.
+	 * @param {object} conf - configuration options; see below. In addition,
+	 * the conf object can have parameters to constraints added to the CPM.
+	 * See the different {@link Constraint} subclasses for options. For some
+	 * constraints, adding its parameter to the CPM conf object automatically
+	 * adds the constraint; see {@link AutoAdderConfig} to see for which
+	 * constraints this is supported.
+	 * @param {boolean[]} [conf.torus=[true,true,...]] - should the grid have
+	 * linked borders?
+	 * @param {number} [conf.T] - the temperature of this CPM. At higher
+	 * temperatures, unfavourable copy attempts are more likely to be accepted.
+	 * @param {number} [conf.seed] - seed for the random number generator. If
+	 * left unspecified, a random number from the Math.random() generator is
+	 * used to make one.
+	 * */
 	constructor( field_size, conf ){
 		super( field_size, conf )
 
@@ -43,10 +47,10 @@ class CPM extends GridBasedModel {
 		//  ---------- Attributes per cell:
 		/** Store the {@CellKind} of each cell on the grid. 
 		@example
-		this.t2k[1] // cellkind of cell with cellid 1
+		this.t2k[1] // cellkind of cell with cellId 1
 		@type {CellObject}
 		*/
-		this.t2k = []	// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
+		this.t2k = []	// cell type ("kind"). Example: this.t2k[1] is the cellKind of cell 1.
 		this.t2k[0] = 0	// Background cell; there is just one cell of this type.
 
 		//  ---------- CPM constraints
@@ -65,7 +69,7 @@ class CPM extends GridBasedModel {
 		/** Object showing which constraints are where in {@link soft_constraints}. Used
 		by the {@link getConstraint} method to find an attached constraint by name.
 		@type {object}*/
-		this.hard_constraints_indices ={}
+		this.hard_constraints_indices = {}
 		/** Array of functions that need to be executed after every {@link setpixi} event.
 		These functions are often implemented in subclasses of {@link Constraint} that
 		need to track some specific property on the grid. 
@@ -92,18 +96,18 @@ class CPM extends GridBasedModel {
 		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
 	}*/
 
-	/** Iterator returning nonbackground pixels on the grid. 
+	/** Iterator returning non-background pixels on the grid.
 	@return {Pixel} for each pixel, return an array [p,v] where p are
 		the pixel's array coordinates on the grid, and v its value.*/
 	* cellPixels() {
 		for( let p of this.grid.pixels() ){
-			if( p[1] != 0 ){
+			if( p[1] !== 0 ){
 				yield p
 			}
 		}
 	}
 
-	/** Iterator returning nonbackground borderpixels on the grid. 
+	/** Iterator returning non-background border pixels on the grid.
 	See {@link cellBorderPixelIndices} for a version returning pixels
 	by their {@link IndexCoordinate} instead of {@link ArrayCoordinate}.
 	
@@ -111,14 +115,14 @@ class CPM extends GridBasedModel {
 		the pixel's array coordinates on the grid, and v its value.*/
 	* cellBorderPixels() {
 		for( let i of this.borderpixels.elements ){
-			const t = this.pixti(i)
-			if( t != 0 ){
+			const t = this.grid.pixti(i)
+			if( t !== 0 ){
 				yield [this.grid.i2p(i),t]
 			}
 		}
 	}
 
-	/** Iterator returning nonbackground borderpixels on the grid. 
+	/** Iterator returning non-background border pixels on the grid.
 	See {@link cellBorderPixels} for a version returning pixels
 	by their {@link ArrayCoordinate} instead of {@link IndexCoordinate}.
 	
@@ -126,8 +130,8 @@ class CPM extends GridBasedModel {
 		the pixel's array coordinates on the grid, and v its value.*/
 	* cellBorderPixelIndices() {
 		for( let i of this.borderpixels.elements ){
-			const t = this.pixti(i)
-			if( t != 0 ){
+			const t = this.grid.pixti(i)
+			if( t !== 0 ){
 				yield [i,t]
 			}
 		}
@@ -139,7 +143,7 @@ class CPM extends GridBasedModel {
 	@param {Constraint} t - the constraint object to add.
 	*/
 	add( t ){
-		let tname = t.constructor.name, i 
+		let tName = t.constructor.name, i
 		if( t.CONSTRAINT_TYPE ){
 			switch( t.CONSTRAINT_TYPE ){
 			
@@ -149,10 +153,10 @@ class CPM extends GridBasedModel {
 				
 				// Write this index to an array in the 
 				// this.soft_constraints_indices object, for lookup later. 
-				if( !this.soft_constraints_indices.hasOwnProperty(tname) ){
-					this.soft_constraints_indices[tname] = []
+				if( !this.soft_constraints_indices.hasOwnProperty(tName) ){
+					this.soft_constraints_indices[tName] = []
 				}
-				this.soft_constraints_indices[tname].push( i-1 )
+				this.soft_constraints_indices[tName].push( i-1 )
 				break
 				
 			case "hard": 
@@ -161,10 +165,10 @@ class CPM extends GridBasedModel {
 				
 				// Write this index to an array in the 
 				// this.soft_constraints_indices object, for lookup later. 
-				if( !this.hard_constraints_indices.hasOwnProperty(tname) ){
-					this.hard_constraints_indices[tname] = []
+				if( !this.hard_constraints_indices.hasOwnProperty(tName) ){
+					this.hard_constraints_indices[tName] = []
 				}
-				this.hard_constraints_indices[tname].push( i-1 )				
+				this.hard_constraints_indices[tName].push( i-1 )
 				break
 			}
 		}

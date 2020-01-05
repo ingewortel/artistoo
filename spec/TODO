@@ -1,0 +1,2 @@
+grid2D/grid3D: it should not be possible to run the constructor with incorrect dimensions.
+Check that dimensions are positive integers and that torus, if specified, is boolean.

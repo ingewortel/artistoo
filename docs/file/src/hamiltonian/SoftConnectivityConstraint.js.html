@@ -13,10 +13,10 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
-  
+  <a href="test.html" data-ice="testLink">Test</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -57,12 +56,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
@@ -119,6 +120,8 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		every copy attempt.
 		@type {CellObject}*/
 		this.borderpixelsbycell = {}
+		
+		this.components = []
 	}
 	
 	/** The set CPM method attaches the CPM to the constraint. */
@@ -216,7 +219,6 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		return this.connectedComponentsOf( this.borderpixelsbycell[cellid] )
 	}
 	
-		
 	/** Get the connected components of a set of pixels.
 	@param {object} pixelobject - an object with as keys the {@link IndexCoordinate}s of the pixels to check.
 	@return {object} an array with an element for every connected component, which is in
@@ -245,7 +247,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 			}
 		}
 		for( let i = 0 ; i &lt; cbpi.length ; i ++ ){
-			let pi = cbpi[i]
+			let pi = parseInt( cbpi[i] )
 			if( !(pi in visited) ){
 				labelComponent( pi, k )
 				k++
@@ -253,7 +255,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		}
 		return pixels
 	}
-
+		
 	/** The postSetpixListener of the ConnectivityConstraint updates the internally
 	tracked borderpixels after every copy.
 	@param {IndexCoordinate} i - the pixel to change
@@ -263,6 +265,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	postSetpixListener(  i, t_old, t ){
 		this.updateBorderPixels( i, t_old, t )
 	}	
+	
 	
 	/** To speed things up: first check if a pixel change disrupts the local connectivity
 	in its direct neighborhood. If local connectivity is not disrupted, we don&apos;t have to
@@ -274,17 +277,28 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	*/
 	localConnected( tgt_i, tgt_type ){
 	
-		let neighbors = 0
-		for( let i of this.C.grid.neighNeumanni(tgt_i) ){
-			if( this.C.pixti(i) != tgt_type ){
-				neighbors++
+		// Get neighbors of the target pixel
+		let nbh = this.C.grid.neighi( tgt_i )
+		
+		// object storing the neighbors of tgt_type
+		let nbhobj = {}
+		
+		for( let n of nbh ){
+		
+			// add it and its neighbors to the neighborhood object
+			if( this.C.pixti(n) == tgt_type ){
+				nbhobj[n] = true
 			}
 		}
 		
-		if( neighbors &gt;= 2 ){
-			return false
-		}
-		return true
+		// Get connected components.
+		let conn = this.connectedComponentsOf( nbhobj )
+		this.components = conn
+		//console.log(conn.length)
+		
+		let connected = ( conn.length == 1 )
+		//console.log(connected)
+		return connected
 		
 	}
 	
@@ -329,21 +343,47 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		
 		if( this.localConnected( tgt_i, tgt_type ) ){
 			return 0
-		}
+		} 
+		
+		/*else {
+			let conn_new = this.connectivity( this.components, tgt_type )
+			
+			// current components
+			let nbh = this.C.grid.neighi( tgt_i )
+			let nbhobj = {}
+			nbhobj[tgt_i] = true
+		
+			for( let n of nbh ){
+				if( this.C.pixti(n) == tgt_type ){
+					nbhobj[n] = true
+				}
+			}
+			
+			this.components = this.connectedComponentsOf( nbhobj )
+			let conn_old = this.connectivity( this.components, tgt_type )
+			
+			let conndiff = conn_old - conn_new
+			return conndiff
+			
+			
+			
+		}*/
+		
+		
 	
 		let comp1 = this.connectedComponentsOfCellBorder( tgt_type )
-		let conn1 = this.connectivity( comp1, tgt_type )
+		let conn1 = Math.pow( (1-this.connectivity( comp1, tgt_type )),2 )
 	
 		// Update the borderpixels as if the change occurs
 		this.updateBorderPixels( tgt_i, tgt_type, src_type )
 		let comp = this.connectedComponentsOfCellBorder( tgt_type )
-		let conn2 = this.connectivity( comp, tgt_type )
+		let conn2 = Math.pow((1-this.connectivity( comp, tgt_type )),2)
 		
 		
 		let conndiff = conn2 - conn1
-		if( conn2 &gt; conn1 ){
+		/*if( conn2 &gt; conn1 ){
 			conndiff = -conndiff
-		} 
+		} */
 		
 		// Change borderpixels back because the copy attempt hasn&apos;t actually gone through yet.
 		this.updateBorderPixels( tgt_i, src_type, tgt_type )

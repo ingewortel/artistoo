@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<base data-ice="baseUrl" href="../">
+<title data-ice="title">Manual | cpmjs</title>
+<link type="text/css" rel="stylesheet" href="css/style.css">
+<link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+<script src="script/prettify/prettify.js"></script>
+<script src="script/manual.js"></script>
+</head>
+<body class="layout-container manual-root manual-index" data-ice="rootContainer">
+
+<header>
+<a href="./">Home</a>
+<a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+<a href="identifiers.html">Reference</a>
+<a href="source.html">Source</a>
+<a href="test.html" data-ice="testLink">Test</a>
+<div class="search-box">
+<span>
+<img src="./image/search.png">
+<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+</span>
+<ul class="search-result"></ul>
+</div>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div class="manual-toc-root">
+
+<div data-ice="manual">
+<ul class="manual-toc">
+
+<li data-ice="manualNav" class="indent-h1" data-link="manual/installation.html"><a href="manual/installation.html" data-ice="link">Getting started</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/installation.html"><a href="manual/installation.html#set-up-cpmjs-in-3-easy-steps" data-ice="link">Set up CPMjs in 3 easy steps</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-1--download-the-repository-" data-ice="link">Step 1: download the repository.</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-2--install-node-dependencies-" data-ice="link">Step 2: install node dependencies.</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-3--link-the-build-in-your-code-" data-ice="link">Step 3: link the build in your code.</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#additional-notes" data-ice="link">Additional notes</a></li>
+</ul>
+</div>
+<div data-ice="manual">
+<ul class="manual-toc">
+
+<li data-ice="manualNav" class="indent-h1" data-link="manual/quickstart.html"><a href="manual/quickstart.html" data-ice="link">Your First Simulation</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#set-up-a-simulation-in-the-web-browser" data-ice="link">Set up a simulation in the web browser</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#an-html-template-page" data-ice="link">An HTML template page</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-1---create-a-basic-html-page" data-ice="link">Step 1 : Create a basic HTML page</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-2---configure-the-header" data-ice="link">Step 2 : Configure the header</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-3---add-javascript" data-ice="link">Step 3 : Add JavaScript</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-4--write-the-body" data-ice="link">Step 4: Write the body</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-5--optional---add-css" data-ice="link">Step 5 (optional): Add CSS</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#set-up-a-simulation-in-nodejs" data-ice="link">Set up a simulation in nodejs</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#writing-your-simulation" data-ice="link">Writing your simulation</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-1--create-a-simulation-object" data-ice="link">Step 1: Create a simulation object</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-2---configure-the-cpm--amp--simulation" data-ice="link">Step 2 : Configure the CPM &amp; Simulation</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-3---tell-the-simulation-to-run" data-ice="link">Step 3 : Tell the simulation to run</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-nodejs" data-ice="link">In nodejs</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-html" data-ice="link">In HTML</a></li>
+</ul>
+</div>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="github-markdown">
+<div class="manual-user-index" data-ice="manualUserIndex"><h1 id="cpmjs">CPMjs</h1><p>This manual is under construction. It currently contains some basic instructions
+on how to get started, but stay tuned for the most recent version! In
+the meantime, see the <a href>examples</a>
+(with provided <a href="https://github.com/ingewortel/cpmjs/tree/master/examples">code</a>)
+and the full <a href="https://ingewortel.github.io/cpmjs.github.io/identifiers.html">method documentation</a>
+to get an idea of what you can do with CPMjs.</p>
+<h2 id="why-cpmjs-">Why CPMjs?</h2><p>CPMjs implements Cellular Potts Models in JavaScript. Yep, you read it correctly:
+JavaScript.</p>
+<p>This somewhat unorthodox choice allowed us to harness some key strengths of web
+programming to provide the following features:</p>
+<ul>
+<li>Build models in the form of interactive and explorable web
+applications that:<ul>
+<li>you can easily share with other users without any fuss:
+your audience needs no special software except a common web browser;</li>
+<li>are just as fast as simulations in traditional modelling
+frameworks!</li>
+</ul>
+</li>
+<li>Unlocking CPM models for new users:<ul>
+<li>biologists can access &amp; modify CPMjs models created by others
+(collaborators, in publications) - without needing to program
+anything themselves;</li>
+<li>a large existing community of web programmers will be able to contribute
+to the framework.</li>
+</ul>
+</li>
+</ul>
+<h3 id="build--share--explore">Build, share, explore</h3><p>Simulation models have traditionally been used by a small group of computational
+biologists with the programming skills required to build them. While the
+<em>results</em> from such models are shared with other biologists in the scientific
+literature, the models themselves are typically not accessible for the target
+audience.</p>
+<p>We think this should change.</p>
+<p>In the age of open science, let&apos;s make computational biology a little more
+transparent. While sharing scripts and making code &quot;open-source&quot; is nice, it
+still won&apos;t make simulation models accessible for a broad audience of biologists.</p>
+<p>We built CPMjs to make simulation models accessible to anyone in three steps:</p>
+<ol>
+<li>You build your model in the form of an explorable web application;</li>
+<li>You <strong>share</strong> this page online either on a private website (before
+publication), or as supplementary material to your paper;</li>
+<li>You let users <strong>explore</strong> your model by allowing them to change parameters
+with something as simple as a mouse click.</li>
+</ol>
+<p>We believe this approach comes with some nice benefits:</p>
+<ul>
+<li><strong>Reviewers</strong> can get a feel of how your model behaves. This will help them
+assess the robustness and validity of results presented in a paper - speeding up
+the peer review process and improving the quality of the scientific literature.</li>
+<li><strong>Readers</strong> can access a simulation as supplementary material to your paper,
+without needing any special software. This will help them understand your
+models in more detail, and build on their conclusions with novel ideas.</li>
+<li><strong>Collaborators</strong> with experimental expertise can be involved in the modelling
+process earlier on, which will foster more close collaborations and improve the
+exchange of ideas.</li>
+<li><strong>Students</strong> can be exposed to simulation modelling early on in their program,
+promoting the use of computational models by a larger audience.</li>
+</ul>
+<h3 id="but-what-about-speed-">But what about speed?</h3><p>Because simulation models tend to be computationally expensive, modelling
+frameworks have traditionally been written in languages with a reputation to
+be fast - such as C++ and Java. A modelling framework implemented in a
+scripting language may therefore come as a surprise. But improvements in the
+JavaScript engines powering common web browsers mean that performance is no
+longer an issue: CPMjs lets you build simulations as web applications without
+loss of speed.</p>
+</div>
+
+
+
+<div class="manual-cards">
+
+<div class="manual-card-wrap" data-ice="cards">
+<div class="manual-card">
+<div data-ice="card"><h1>Getting started</h1><h2>Set up CPMjs in 3 easy steps</h2><h3>Step 1: download the repository.</h3><p><strong>Via the Github website</strong></p><p>Visit the <a href="https://github.com/jtextor/cpmjs">Github repository</a> and click on the
+green &quot;clone or download&quot; button, then select &quot;Download ZIP&quot;:</p><p><img class="screen-shot" src="./manual/asset/github-repo2.png" width="80%"></p><p>Save the zipped folder somewhere on your computer and unzip.</p><p><strong>Via the command line</strong></p><p>Alternatively, in the console, go to the folder where you want to save CPMjs,
+and clone the repository:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">cd folder/to/save-into/
+git clone https://github.com/jtextor/cpmjs.git</code>
+</code></pre><h3>Step 2: install node dependencies.</h3><p>Most users will run CPMjs in browser simulations only and will not need to
+extend the software with custom modules. If that&apos;s you, you can skip this step.
+But if you plan to use CPMjs from the command line using node, or if you plan
+to write your own modules (such as hamiltonian terms), you will need to install
+some node dependencies.</p><p>To do this, go to the <code>cpmjs/</code> folder from the command line and install the
+required packages automatically using <code>npm</code>:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">cd folder/containing/cpmjs
+npm install</code>
+</code></pre><p>If you do not have <code>nodejs</code> and its package manager <code>npm</code>, see
+<a href="https://nodejs.org/en/download/">this page</a> to install them first.</p><h3>Step 3: link the build in your code.</h3><p>You can now use CPMjs! See this <a href="./manual/quickstart.md">tutorial</a> to build your first
+simulation, or start from one of the simulations in the <code>cpmjs/examples/</code>
+folder. In these examples, you will see that the package can be loaded as
+follows:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src=&quot;path/to/cpmjs/build/cpm.js&quot;&gt;&lt;/script&gt;</code>
+</code></pre><p>for html, and</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let CPM = require(&quot;path/to/cpmjs/build/cpm-cjs.js&quot;)</code>
+</code></pre><p>for node scripts.</p><p>When you include these lines in your own scripts, just make sure they contain
+the correct path from your simulation file to the <code>cpmjs/build/</code> folder.</p><h3>Additional notes</h3><p>If you wish to build simulations in a different directory than the <code>cpmjs</code>
+folder, it may be convenient to create a symbolic link to the <code>build</code> folder
+there:</p><pre><code><code class="source-code prettyprint">cd path/to/my/simulations
+ln -s path/to/cpmjs/build build</code>
+</code></pre><p>You can then access the code using:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src=&quot;path/to/my/simulations/build/cpm.js&quot;&gt;&lt;/script&gt;</code>
+</code></pre><p>or</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let CPM = require(&quot;path/to/my/simulations/build/cpm-cjs.js&quot;)</code>
+</code></pre><p>Finally, if you want to run CPMjs simulations with nodejs from this folder,
+you will need to create a link to the installed <code>node_modules</code> from step 2:</p><pre><code class="lang-console"><code class="source-code prettyprint">cd path/to/my/simulations
+ln -s path/to/cpmjs/node_modules node_modules</code>
+</code></pre></div>
+<a data-ice="link" href="manual/installation.html"></a>
+</div>
+</div>
+<div class="manual-card-wrap" data-ice="cards">
+<div class="manual-card">
+<div data-ice="card"><h1>Your First Simulation</h1><p>This tutorial will show you how to build a simple simulation in the web browser
+or in a nodejs script. Choose either
+<a href="#set-up-a-simulation-in-the-web-browser">Set up a simulation in the web browser</a>
+or <a href="#set-up-a-simulation-in-nodejs">Set up a simulation in nodejs</a> to get the
+required template code, and then see
+<a href="#writing-your-simulation">Writing your simulation</a> to start using CPMjs in the
+environment of your choice.</p><p>The simulation we will build is a simple CPM cell:</p><p><div>
+<iframe src="./manual/asset/SingleCell.html" width="350px" height="400px"> </iframe>
+</div>
+
+</p><h2>Set up a simulation in the web browser</h2><p>One way to use CPMjs is to build a simulation in HTML, to open directly in
+your favourite web browser (as long as that favourite web browser is not
+Internet Explorer). The advantage of this method is that it allows you to
+visualize the simulation immediately, and that you can easily explore the
+effect of changing parameters in this manner. However, if you wish to run a
+simulation and store output to your computer, a simulation using nodejs may be
+more appropriate &#x2013; see <a href="#set-up-a-simulation-in-nodejs">Set up a simulation in nodejs</a>
+for details.</p><h3>An HTML template page</h3><p>Unfortunately, writing an HTML page requires quite some boilerplate code. You
+can mostly just copy-paste this for every simulation you build, but let&apos;s go
+through it step by step so you know which parts you may have to adapt. If you
+are familiar with HTML, you may want to just copy the template code and
+continue <a href="#writing-your-simulation">building your simulation</a>.</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;!-- Page setup and title --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;
+charset=UTF-8&quot;&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+body{
+	font-family: &quot;HelveticaNeue-Light&quot;, sans-serif; padding : 15px;
+}
+&lt;/style&gt;
+
+&lt;!-- Sourcing the cpm build --&gt;
+&lt;script src=&quot;../../build/cpm.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+&quot;use strict&quot;
+
+// Simulation code here.
+
+
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Your Page Title&lt;/h1&gt;
+&lt;p&gt;
+Description of your page.
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre><p>We will now go through this step by step.</p><h3>Step 1 : Create a basic HTML page</h3><p>A very simple html page looks like this:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt; &lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre><p>The <code>&lt;html&gt;</code> tag shows where the page starts, and <code>&lt;/html&gt;</code> shows where it ends.
+The page consists of a <em>header</em>, which starts at <code>&lt;head&gt;</code> and ends at <code>&lt;/head&gt;</code>,
+and a <em>body</em>, starting at <code>&lt;body&gt;</code> and ending at <code>&lt;/body&gt;</code>. (In general,
+anything you place in your HTML file starts with <code>&lt;something&gt;</code> and ends with
+<code>&lt;/something&gt;</code>).</p><p>Copy the above code into a file called <code>MyFirstSimulation.html</code>, which you can
+save in the <code>cpmjs/examples/html/</code> folder for now. If you wish to save the file
+elsewhere, please read <a href="./manual/installation.md#additional-notes">these instructions</a>
+first.</p><h3>Step 2 : Configure the header</h3><p>The header of the HTML page is the place that contains some meta-information
+about that page, and will also contain the simulation code.</p><p>First, we will expand the header code above:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;/head&gt;</code>
+</code></pre><p>The additional code in the first line just includes some document settings into
+the header that you will rarely need to change. The only thing you may want to
+change is the second line, where you set the title that will be displayed
+in the open tab in your web browser when you open the page.</p><h3>Step 3 : Add JavaScript</h3><p>We will now add some JavaScript code to the header part of the page:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;script src=&quot;path/to/cpmjs/build/cpm.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+&quot;use strict&quot;
+// Simulation code will go here:
+
+&lt;/script&gt;
+&lt;/head&gt;</code>
+</code></pre><p>The first script just loads the CPMjs package for HTML, which is stored in
+<code>cpmjs/build/cpm.js</code>. Please ensure that the path supplied here is the correct
+path from the folder where you stored <code>MyFirstSimulation.html</code> to the file
+<code>cpmjs/build/cpm.js</code>. If you have stored your simulation in <code>cpmjs/examples/html</code>,
+you can use the path <code>../../build/cpm.js</code></p><p>The second script is where your actual simulation code
+will go later in <a href="#writing-your-simulation">Writing your simulation</a>.
+For now, we&apos;ll leave it empty.</p><h3>Step 4: Write the body</h3><p>Finally, we make some changes to the body of the page:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;body onload=&quot;initialize()&quot;&gt;
+&lt;h1&gt;Your Page Title&lt;/h1&gt;
+&lt;p&gt;
+Description of your page.
+&lt;/p&gt;
+&lt;/body&gt;</code>
+</code></pre><p>In the first line, we tell the HTML page to run the JavaScript function
+<code>intitialize()</code>, which we will define later in
+<a href="#writing-your-simulation">Writing your simulation</a> (between the
+<code>&lt;script&gt;&lt;/script&gt;</code> tags of the page header we just set up).</p><p>The rest of the code just adds a title and a description to the web page.
+The simulation will then be placed below (as in the example shown
+at the top of this page).</p><h3>Step 5 (optional): Add CSS</h3><p>The code we have now added is sufficient to make the page work once we have
+<a href="#writing-your-simulation">added a simulation</a>, but to make it look better we
+may want to add some CSS styling code to the header of the page. The header now
+becomes:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">
+&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+
+&lt;style type=&quot;text/css&quot;&gt;
+body{
+	font-family: &quot;HelveticaNeue-Light&quot;, sans-serif; padding : 15px;
+}
+&lt;/style&gt;
+
+&lt;script src=&quot;path/to/cpmjs/build/cpm.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+&quot;use strict&quot;
+// Simulation code will go here:
+
+&lt;/script&gt;
+&lt;/head&gt;</code>
+</code></pre><p>To see the final result, have a look again at the complete
+<a href="#an-html-template-page">template</a>. You can now proceed with
+<a href="#writing-your-simulation">adding your simulation</a> to this file.</p><h2>Set up a simulation in nodejs</h2><p>Another way to use CPMjs &#x2013; besides using HTML &#x2013; is to use nodejs from the
+console. This method of running CPMjs allows you to print statistics to the
+console and store them in external files, as well as to save images of the
+simulation to create a movie later. To set up a more interactive version
+of your simulation with a live animation, an HTML version may be more
+appropriate &#x2013; see
+<a href="#set-up-a-simulation-in-the-web-browser">Set up a simulation in the web browser</a></p><p>In contrast to a browser simulation, a node simulation requires almost no
+boilerplate code. </p><p>To set up your first node simulation, just create a file <code>MyFirstSimulation.js</code>
+in the folder <code>cpmjs/examples/node/</code>
+(or see <a href="./manual/installation.md#additional-notes">these instructions</a> to create it
+elsewhere). Then add the following line of code to the (still empty) script to
+source the package:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">/* Source the CPM module (cpm-cjs version because this is a node script).*/
+let CPM = require(&quot;../../build/cpm-cjs.js&quot;)</code>
+</code></pre><p>Make sure that the path supplied to <code>require()</code> is the correct path from the
+location of <code>MyFirstSimulation.js</code> to <code>cpmjs/build/cpm-cjs.js</code>.</p><p>You can now proceed with <a href="#writing-your-simulation">adding your simulation</a>.</p><h2>Writing your simulation</h2><p>We are now ready to add some simulation code. The following code goes either
+in between the <code>&lt;script&gt;&lt;/script&gt;</code> tags of your HTML page, or at the bottom of
+your node script.</p><h3>Step 1: Create a simulation object</h3><p>The easiest way to build a simulation in CPMjs is to use the
+<a href="./manual/../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>.
+This class provides some default methods for running the simulation and
+producing outputs, so we won&apos;t have to worry about this yet. </p><p>To construct an object of class simulation, type:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim = new CPM.Simulation( config )</code>
+</code></pre><p>The <code>config</code> contains configuration options; we will take care of this in the
+next step.</p><p>If you are writing an HTML page, you have to define an <code>initialize()</code> function -
+as this is the function that will be run when the page is loaded (see
+<a href="#step-4-write-the-body">this section</a>):</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim
+function initialize(){
+	sim = new CPM.Simulation( config )
+}</code>
+</code></pre><h3>Step 2 : Configure the CPM &amp; Simulation</h3><p>The code above will not work yet because we still need to supply the <code>config</code>
+object. A configuration object for a simulation should look like this:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+	
+	ndim : 2,
+	field_size : [50,50],
+	conf : {
+		
+	},
+	simsettings : {
+		
+	}
+}</code>
+</code></pre><p>(Note: this piece of code should go above the code from the previous step,
+as the <code>config</code> object is needed to construct the simulation object.)</p><p>Here, <code>ndim</code> is the number of dimensions of the grid, <code>field_size</code> is the
+number of pixels in each dimension (in this case: 50 x 50 pixels), <code>conf</code> is
+the configuration object parsed to the
+<a href="./manual/../class/src/models/CPM.js~CPM.html">CPM class</a>, and <code>simsettings</code>
+contains configuration options used directly by the simulation class.</p><p>First, we configure the CPM by setting values in the <code>conf</code> object:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">conf : {
+T : 20, // CPM temperature
+
+// Adhesion parameters:
+J: [[0,20], [20,100]] ,
+
+// VolumeConstraint parameters
+LAMBDA_V : [0,50], // VolumeConstraint importance per cellkind
+V : [0,500] // Target volume of each cellkind
+
+}</code>
+</code></pre><p>The <code>T</code> parameter is the CPM temperature, which determines how strongly the
+model &quot;listens&quot; to the energy constraints given in the CPM. We then add
+an <a href="./manual/../class/src/hamiltonian/Adhesion.js~Adhesion.html">adhesion</a> and
+<a href="./manual/../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">volume constraint</a>
+by supplying their parameters. In this case, we will have only one type of cell
+and the background, so parameters are arrays of length 2 (or a 2 by 2 matrix
+for the adhesion parameters).</p><p>Finally, we need to supply some settings for the simulation class itself in
+<code>simsettings</code>:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">simsettings : {
+NRCELLS : [1],
+RUNTIME : 500,
+CANVASCOLOR : &quot;eaecef&quot;,
+zoom : 4
+}</code>
+</code></pre><p>This ensures that one cell is seeded on the grid before the simulation, the
+simulation runs for 500 MCS (in node; in the browser it will just keep running),
+the background of the grid is colored gray, and the grid is drawn at 4x zoom.</p><p>The full <code>config</code> object becomes:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+
+// Grid settings
+ndim : 2,
+field_size : [100,100],
+
+// CPM parameters and configuration
+conf : {
+T : 20, // CPM temperature
+
+// Adhesion parameters:
+J: [[0,20], [20,100]] ,
+
+// VolumeConstraint parameters
+LAMBDA_V : [0,50], // VolumeConstraint importance per cellkind
+V : [0,500] // Target volume of each cellkind
+},
+
+// Simulation setup and configuration
+simsettings : {
+// Cells on the grid
+NRCELLS : [1], // Number of cells to seed for all
+// non-background cellkinds.
+
+RUNTIME : 500, // Only used in node
+
+CANVASCOLOR : &quot;eaecef&quot;,
+zoom : 4 // zoom in on canvas with this factor.
+}
+}</code>
+</code></pre><h3>Step 3 : Tell the simulation to run</h3><p>We are now almost ready; the only thing still missing is a command in the script
+that tells the simulation to start running. This works slightly differently in
+the browser- and nodejs versions.</p><h4>In nodejs</h4><p>In nodejs, getting the simulation to run is easy: just call the <code>run()</code> method
+of the simulation class after creating the simulation object. We get:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+	...
+}
+let sim = new CPM.Simulation( config )
+sim.run()</code>
+</code></pre><p>You are now ready to run your simulation. From your console, run the script with
+node:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">node path/to/MyFirstSimulation.js</code>
+</code></pre><h4>In HTML</h4><p>In HTML, we create a function that runs a single step, and then make sure that
+this function is called from the <code>initialize()</code> function:</p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+...
+}
+let sim
+function initialize(){
+sim = new CPM.Simulation( config )
+}
+function step(){
+sim.step()
+requestAnimationFrame( step )
+}</code>
+</code></pre><p>To see your simulation, open your file MyFirstSimulation.html in the web
+browser (any except Internet Explorer; but we recommend Chrome because it is fast).</p></div>
+<a data-ice="link" href="manual/quickstart.html"></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="footer">
+Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

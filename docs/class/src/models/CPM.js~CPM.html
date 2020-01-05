@@ -13,10 +13,10 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
-  
+  <a href="test.html" data-ice="testLink">Test</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -57,12 +56,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
@@ -95,13 +96,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import CPM from &apos;<span><a href="file/src/models/CPM.js.html#lineNumber11">cpmjs/src/models/CPM.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import CPM from &apos;<span><a href="file/src/models/CPM.js.html#lineNumber10">cpmjs/src/models/CPM.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/models/CPM.js.html#lineNumber11">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/models/CPM.js.html#lineNumber10">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -121,8 +122,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>The core CPM class. Can be used for two- or 
-three-dimensional simulations. </p>
+  <div class="description" data-ice="description"><p>The core CPM class. Can be used for two- or three-dimensional simulations.</p>
 </div>
   
 
@@ -155,7 +155,7 @@ three-dimensional simulations. </p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(field_size: <span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span>, conf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>, seed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(field_size: <span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span>, conf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -582,13 +582,13 @@ three-dimensional simulations. </p>
           
           
           <span data-ice="generator">*</span>
-          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-method-cellBorderPixelIndices">cellBorderPixelIndices</a></span></span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-method-cellBorderPixelIndices">cellBorderPixelIndices</a></span></span><span class="code" data-ice="signature">(): <span>iPixel</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Iterator returning nonbackground borderpixels on the grid.</p>
+        <div data-ice="description"><p>Iterator returning non-background border pixels on the grid.</p>
 </div>
       </div>
     </td>
@@ -617,7 +617,7 @@ three-dimensional simulations. </p>
       <div>
         
         
-        <div data-ice="description"><p>Iterator returning nonbackground borderpixels on the grid.</p>
+        <div data-ice="description"><p>Iterator returning non-background border pixels on the grid.</p>
 </div>
       </div>
     </td>
@@ -675,7 +675,7 @@ three-dimensional simulations. </p>
       <div>
         
         
-        <div data-ice="description"><p>Iterator returning nonbackground pixels on the grid.</p>
+        <div data-ice="description"><p>Iterator returning non-background pixels on the grid.</p>
 </div>
       </div>
     </td>
@@ -1725,11 +1725,11 @@ grid class.</p>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(field_size: <span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span>, conf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>, seed: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(field_size: <span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span>, conf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 
@@ -1760,11 +1760,12 @@ grid class.</p>
       <td data-ice="name" class="code" data-depth="0">conf</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>configuration options; see below. In addition, the conf
-object can have parameters to constraints added to the CPM. See the different
-<span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span> subclasses for options. For some constraints, adding its
-paramter to the CPM conf object automatically adds the constraint; see 
-<span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span> to see for which constraints this is supported.</p>
+      <td data-ice="description"><p>configuration options; see below. In addition,
+the conf object can have parameters to constraints added to the CPM.
+See the different <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span> subclasses for options. For some
+constraints, adding its parameter to the CPM conf object automatically
+adds the constraint; see <span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span> to see for which
+constraints this is supported.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1772,15 +1773,25 @@ paramter to the CPM conf object automatically adds the constraint; see
       <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [true,true,...]</li></ul></td>
-      <td data-ice="description"><p>should the grid have linked borders?</p>
+      <td data-ice="description"><p>should the grid have
+linked borders?</p>
 </td>
     </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">seed</td>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">conf.T</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>seed for the random number generator. If left unspecified,
-a random number from the Math.random() generator is used to make one.</p>
+      <td data-ice="description"><p>the temperature of this CPM. At higher
+temperatures, unfavourable copy attempts are more likely to be accepted.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">conf.seed</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>seed for the random number generator. If
+left unspecified, a random number from the Math.random() generator is
+used to make one.</p>
 </td>
     </tr>
 </tbody>
@@ -1820,7 +1831,7 @@ a random number from the Math.random() generator is used to make one.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
@@ -1864,7 +1875,7 @@ a random number from the Math.random() generator is used to make one.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -1909,7 +1920,7 @@ These are used to determine which copy attempts are allowed in a <span><a href="
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber68">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber72">source</a></span></span>
     </span>
   </h3>
 
@@ -1954,7 +1965,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber38">source</a></span></span>
     </span>
   </h3>
 
@@ -1999,7 +2010,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber35">source</a></span></span>
     </span>
   </h3>
 
@@ -2044,7 +2055,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
@@ -2090,7 +2101,7 @@ need to track some specific property on the grid. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber73">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber77">source</a></span></span>
     </span>
   </h3>
 
@@ -2136,7 +2147,7 @@ need to track some specific property on the grid. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber60">source</a></span></span>
     </span>
   </h3>
 
@@ -2181,7 +2192,7 @@ These are used to determine <span><a href="class/src/hamiltonian/ActivityConstra
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber60">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber64">source</a></span></span>
     </span>
   </h3>
 
@@ -2226,7 +2237,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber325">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 
@@ -2271,7 +2282,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 
@@ -2301,7 +2312,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">this.t2k[1] // cellkind of cell with cellid 1</code></pre>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">this.t2k[1] // cellkind of cell with cellId 1</code></pre>
     </div>
 </div>
 
@@ -2324,7 +2335,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -2371,7 +2382,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber141">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber145">source</a></span></span>
     </span>
   </h3>
 
@@ -2430,18 +2441,18 @@ Any postSetpixListeners and postMCSListeners are also executed at the appropriat
     
     
     <span data-ice="generator">*</span>
-    <span class="code" data-ice="name">cellBorderPixelIndices</span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span>
+    <span class="code" data-ice="name">cellBorderPixelIndices</span><span class="code" data-ice="signature">(): <span>iPixel</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber127">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber131">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Iterator returning nonbackground borderpixels on the grid. 
+  <div data-ice="description"><p>Iterator returning non-background border pixels on the grid.
 See <span><a href="class/src/models/CPM.js~CPM.html#instance-method-cellBorderPixels">cellBorderPixels</a></span> for a version returning pixels
 by their <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> instead of <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>.</p>
 </div>
@@ -2456,7 +2467,7 @@ by their <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">Array
     <table>
       <tbody>
         <tr>
-          <td class="return-type code" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></td>
+          <td class="return-type code" data-ice="returnType"><span>iPixel</span></td>
           <td class="return-desc" data-ice="returnDescription"><p>for each pixel, return an array [p,v] where p are
 the pixel&apos;s array coordinates on the grid, and v its value.</p>
 </td>
@@ -2494,14 +2505,14 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber116">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Iterator returning nonbackground borderpixels on the grid. 
+  <div data-ice="description"><p>Iterator returning non-background border pixels on the grid.
 See <span><a href="class/src/models/CPM.js~CPM.html#instance-method-cellBorderPixelIndices">cellBorderPixelIndices</a></span> for a version returning pixels
 by their <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> instead of <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>.</p>
 </div>
@@ -2554,7 +2565,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 
@@ -2629,14 +2640,14 @@ Overwrites <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Iterator returning nonbackground pixels on the grid. </p>
+  <div data-ice="description"><p>Iterator returning non-background pixels on the grid.</p>
 </div>
 
   
@@ -2687,7 +2698,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber257">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
@@ -2783,7 +2794,7 @@ to copy into.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 
@@ -2857,7 +2868,7 @@ to copy into.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber197">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber201">source</a></span></span>
     </span>
   </h3>
 
@@ -2946,7 +2957,7 @@ return the num-th one added to the CPM.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber226">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -3020,7 +3031,7 @@ return the num-th one added to the CPM.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber418">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber422">source</a></span></span>
     </span>
   </h3>
 
@@ -3095,7 +3106,7 @@ for this cell in the relevant arrays (cellvolume, t2k).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber270">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber274">source</a></span></span>
     </span>
   </h3>
 
@@ -3141,7 +3152,7 @@ with earlier version. Internally, it just calls <span><a href="class/src/models/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber219">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber223">source</a></span></span>
     </span>
   </h3>
 
@@ -3215,7 +3226,7 @@ with earlier version. Internally, it just calls <span><a href="class/src/models/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber242">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber246">source</a></span></span>
     </span>
   </h3>
 
@@ -3283,7 +3294,7 @@ with earlier version. Internally, it just calls <span><a href="class/src/models/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber353">source</a></span></span>
     </span>
   </h3>
 
@@ -3354,7 +3365,7 @@ add postSetpixListeners for all the constraints, to keep track of relevant infor
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber289">source</a></span></span>
     </span>
   </h3>
 
@@ -3404,7 +3415,7 @@ contains border pixels of the background.</span></li></ul></div>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber382">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber386">source</a></span></span>
     </span>
   </h3>
 

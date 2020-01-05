@@ -13,10 +13,10 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
-  
+  <a href="test.html" data-ice="testLink">Test</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -57,12 +56,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
@@ -383,6 +384,93 @@ to the corresponding value on the resized small grid via bilinear interpolation.
   
   <tr data-ice="target">
     <td>
+      <span class="access" data-ice="access">private</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-get-_pixels">_pixels</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Return the array this._pixelArray, which should be set in the grid
+subclass.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-set-_pixels">_pixels</a></span></span><span class="code" data-ice="signature">(pixels: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Set or update the private this._pixelArray.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-member-datatype">datatype</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
       <span class="access" data-ice="access">public</span>
       
       
@@ -513,14 +601,44 @@ each dimension separately.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-member-_pixelArray">_pixelArray</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Array with values for each pixel stored at the position of its
+    <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-member-_pixelsbuffer">_pixelsbuffer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>For storing a copy of all pixel values; eg for synchronous updating of some
-sort.</p>
+        <div data-ice="description"><p>For storing a copy of all pixel values; eg for synchronous updating
+of some sort.</p>
 </div>
       </div>
     </td>
@@ -578,7 +696,7 @@ sort.</p>
       <div>
         
         
-        <div data-ice="description"><p>Perform a diffusion step on the grid, updating the values of all pixels 
+        <div data-ice="description"><p>Perform a diffusion step on the grid, updating the values of all pixels
 according to Fick&apos;s second law of diffusion.</p>
 </div>
       </div>
@@ -608,8 +726,8 @@ according to Fick&apos;s second law of diffusion.</p>
       <div>
         
         
-        <div data-ice="description"><p>Method to compute the gradient at location p on the grid
-(location given in array coordinates).</p>
+        <div data-ice="description"><p>Method to compute the gradient at location p on the grid (location
+given in array coordinates).</p>
 </div>
       </div>
     </td>
@@ -632,7 +750,7 @@ according to Fick&apos;s second law of diffusion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-gradienti">gradienti</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-gradienti">gradienti</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -640,6 +758,36 @@ according to Fick&apos;s second law of diffusion.</p>
         
         <div data-ice="description"><p>Template method to compute the gradient at location i on the grid
 (location given in index coordinates).</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-i2p">i2p</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method for conversion from an <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> to an
+<span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>.</p>
 </div>
       </div>
     </td>
@@ -698,8 +846,8 @@ according to Fick&apos;s second law of diffusion.</p>
       <div>
         
         
-        <div data-ice="description"><p>Method to compute the laplacian at location i on the grid
-(location given in index coordinates).</p>
+        <div data-ice="description"><p>Method to compute the laplacian at location i on the grid (location
+given in index coordinates).</p>
 </div>
       </div>
     </td>
@@ -751,7 +899,7 @@ according to Fick&apos;s second law of diffusion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-neigh">neigh</a></span></span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>, torus: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-neigh">neigh</a></span></span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>, torus: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -771,7 +919,97 @@ according to Fick&apos;s second law of diffusion.</p>
       <span class="access" data-ice="access">public</span>
       
       
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="generator">*</span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-neighNeumanni">neighNeumanni</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, torus: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A method to compute the Neumann neighborhood should be implemented in the
+Grid subclass if the laplacian (see below) is used.</p>
+</div>
+      </div>
+    </td>
+    <td>
       
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-neighi">neighi</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, torus: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method returning the (Moore) neighborhood of a pixel based on its
+<span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-p2i">p2i</a></span></span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>): <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method for conversion from an <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> to an
+<span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      <span class="abstract" data-ice="abstract">abstract</span>
       <span class="override" data-ice="override"></span>
     </td>
     <td>
@@ -809,7 +1047,7 @@ according to Fick&apos;s second law of diffusion.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-pixelsbuffer">pixelsbuffer</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-pixelsBuffer">pixelsBuffer</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></span>
         </p>
       </div>
       <div>
@@ -830,7 +1068,7 @@ a copy of the current pixel values.</p>
       <span class="access" data-ice="access">public</span>
       
       
-      
+      <span class="abstract" data-ice="abstract">abstract</span>
       <span class="override" data-ice="override"></span>
     </td>
     <td>
@@ -839,13 +1077,13 @@ a copy of the current pixel values.</p>
           
           
           <span data-ice="generator">*</span>
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-pixelsi">pixelsi</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-pixelsi">pixelsi</a></span></span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>This iterator returns locations and values of all non-zero pixels.</p>
+        <div data-ice="description"><p>This iterator returns locations all pixels including background.</p>
 </div>
       </div>
     </td>
@@ -970,14 +1208,7 @@ a copy of the current pixel values.</p>
       
     </td>
   </tr>
-</tbody>
-</table>
-
-<table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">private</span>
       
@@ -991,13 +1222,77 @@ a copy of the current pixel values.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-member-_pixels">_pixels</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-_isValidValue">_isValidValue</a></span></span><span class="code" data-ice="signature">(t: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, tol: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>): <span>void</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Array with values for each pixel stored at the position of its 
+        <div data-ice="description"><p>Check if a value is valid on this type of grid.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-member-datatype">datatype</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-member-_pixelArray">_pixelArray</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Array with values for each pixel stored at the position of its
 <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>.</p>
 </div>
       </div>
@@ -1021,14 +1316,14 @@ a copy of the current pixel values.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-gradienti">gradienti</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-gradienti">gradienti</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>): <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Method to compute the gradient at location i on the grid
-(location given as an <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>).</p>
+        <div data-ice="description"><p>Method to compute the gradient at location i on the grid (location
+given as an <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>).</p>
 </div>
       </div>
     </td>
@@ -1057,7 +1352,8 @@ a copy of the current pixel values.</p>
       <div>
         
         
-        <div data-ice="description"><p>Method for conversion from an <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> to an <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>.</p>
+        <div data-ice="description"><p>Method for conversion from an <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> to an
+<span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>.</p>
 </div>
       </div>
     </td>
@@ -1086,9 +1382,8 @@ a copy of the current pixel values.</p>
       <div>
         
         
-        <div data-ice="description"><p>Return array of <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> of von Neumann-4 neighbor pixels 
-of the pixel at 
-coordinate i.</p>
+        <div data-ice="description"><p>Return array of <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> of von Neumann-4 neighbor
+pixels of the pixel at coordinate i.</p>
 </div>
       </div>
     </td>
@@ -1111,14 +1406,14 @@ coordinate i.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-neighi">neighi</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, torus: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-neighi">neighi</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, torus: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Return array of <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> of Moore-8 neighbor pixels of the pixel at 
-coordinate i.</p>
+        <div data-ice="description"><p>Return array of <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span> of Moore-8 neighbor pixels of
+the pixel at coordinate i.</p>
 </div>
       </div>
     </td>
@@ -1147,7 +1442,8 @@ coordinate i.</p>
       <div>
         
         
-        <div data-ice="description"><p>Method for conversion from an <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> to an <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>.</p>
+        <div data-ice="description"><p>Method for conversion from an <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> to an
+<span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>.</p>
 </div>
       </div>
     </td>
@@ -1199,13 +1495,13 @@ coordinate i.</p>
           
           
           <span data-ice="generator">*</span>
-          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-pixelsi">pixelsi</a></span></span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-pixelsi">pixelsi</a></span></span><span class="code" data-ice="signature">(): <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>This iterator returns locations and values of all non-zero pixels.</p>
+        <div data-ice="description"><p>This iterator returns locations and values of all pixels.</p>
 </div>
       </div>
     </td>
