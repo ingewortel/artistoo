@@ -91,3 +91,4 @@ you will need to create a link to the installed `node_modules` from step 2:
 ```console
 cd path/to/my/simulations
 ln -s path/to/cpmjs/node_modules node_modules
+```
