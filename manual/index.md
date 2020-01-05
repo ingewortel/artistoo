@@ -1,10 +1,11 @@
 # CPMjs
 
-This manual is under construction. Stay tuned for the most recent version! In
+This manual is under construction. It currently contains some basic instructions
+on how to get started, but stay tuned for the most recent version! In
 the meantime, see the [examples]()
 (with provided [code](https://github.com/ingewortel/cpmjs/tree/master/examples))
 and the full [method documentation](https://ingewortel.github.io/cpmjs.github.io/identifiers.html)
-to get started.
+to get an idea of what you can do with CPMjs.
 
 
 ## Why CPMjs?
@@ -17,15 +18,15 @@ programming to provide the following features:
 
 - Build models in the form of interactive and explorable web
 applications that:
-- you can easily share with other users without any fuss:
+    - you can easily share with other users without any fuss:
 your audience needs no special software except a common web browser;
-- are just as fast as simulations in traditional modelling
+    - are just as fast as simulations in traditional modelling
 frameworks!
 - Unlocking CPM models for new users:
-- biologists can access & modify CPMjs models created by others
+    - biologists can access & modify CPMjs models created by others
 (collaborators, in publications) - without needing to program
 anything themselves;
-- a large existing community of web programmers will be able to contribute
+    - a large existing community of web programmers will be able to contribute
 to the framework.
 
 
@@ -76,8 +77,6 @@ JavaScript engines powering common web browsers mean that performance is no
 longer an issue: CPMjs lets you build simulations as web applications without
 loss of speed.
 
-
-### Contribute
 
 
 

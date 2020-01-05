@@ -363,7 +363,7 @@ the browser- and nodejs versions.
 #### In nodejs
 
 In nodejs, getting the simulation to run is easy: just call the `run()` method
-of the simulation class after creating the simulation object:
+of the simulation class after creating the simulation object. We get:
 
 ```$xslt
 let config = {
@@ -400,4 +400,4 @@ function step(){
 ```
 
 To see your simulation, open your file MyFirstSimulation.html in the web 
-browser (not Internet Explorer; we recommend Chrome because it is fast).
+browser (any except Internet Explorer; but we recommend Chrome because it is fast).
