@@ -793,7 +793,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber67",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber66",
     "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ] ",
     "test"
   ],
@@ -805,13 +805,19 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber98",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber99",
     "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [0,0,0] ",
     "test"
   ],
   [
+    "",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber126",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [xMax,yMax,zMax] ",
+    "test"
+  ],
+  [
     "grid3d#pixelsi src/grid/grid3d.js~grid3d#pixelsi,grid3d#pixelsi",
-    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber70",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber69",
     "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  pixelsi generator reports correct IndexCoordinates",
     "test"
   ],

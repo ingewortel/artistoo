@@ -154,6 +154,10 @@ output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/script
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/image
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/script/search_index.js
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/source.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/manual/index.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/manual/installation.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/manual/quickstart.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/manual/asset
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/grid/Grid2DSpec.js.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs-dev/docs/test-file/spec/grid/Grid3DSpec.js.html

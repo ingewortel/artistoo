@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">spec/grid/Grid2DSpec.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">spec/grid/Grid2DSpec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for
+ * more general tests.
+ *
+ * @test {Grid2D}*/
+describe(&quot;Grid2D&quot;, function () {
+	let CPM = require(&quot;../../build/cpm-cjs.js&quot;)
+	//eslint-disable-next-line no-unused-vars
+	let grid2d, grid2dFloat, allPixelArray, simpleNeumanni, randomPixel,
+		samplePixels, borderPixelSample
+
+
+	let setupGrids = function(){
+		grid2d = new CPM.Grid2D([100, 131])
+		grid2dFloat = new CPM.Grid2D([200, 100], [false,false], &quot;Float32&quot; )
+	}
+
+	beforeEach(function () {
+		setupGrids()
+		allPixelArray = []
+		for( let x = 0; x &lt; grid2d.extents[0]; x++ ){
+			for( let y = 0; y &lt; grid2d.extents[1]; y++){
+				allPixelArray.push( [x,y] )
+			}
+		}
+
+		// Return a random pixel
+		randomPixel = function( gridObject ) {
+			let p = []
+			for( let d=0; d &lt; gridObject.ndim; d++ ){
+				p.push( Math.round( Math.random()*( gridObject.extents[d]-1 ) ) )
+			}
+			return p
+		}
+
+		// Return a sample of pixels
+		samplePixels = function( gridObject, n ){
+			let pixelArray = []
+			for( let i = 0; i &lt; n; i++ ){
+				pixelArray.push( randomPixel(gridObject) )
+			}
+			return pixelArray
+		}
+
+		// Return some border pixels on the grid to check torus handling
+		borderPixelSample = function( gridObject ){
+			let borderPixels = []
+			borderPixels.push( [0,0] )
+			borderPixels.push( [gridObject.extents[0]-1, 0 ] )
+			borderPixels.push( [0, gridObject.extents[1]-1 ] )
+			borderPixels.push( [gridObject.extents[0]-1, gridObject.extents[1]-1 ] )
+			borderPixels.push( [0,gridObject.midpoint[1]] )
+			borderPixels.push( [gridObject.midpoint[0],0] )
+			borderPixels.push( [gridObject.extents[0]-1,gridObject.midpoint[1] ] )
+			borderPixels.push( [gridObject.midpoint[0],gridObject.extents[1]-1 ] )
+			return borderPixels
+		}
+
+		// A simple function for the neumann neighborhood is used for testing.
+		simpleNeumanni = function* (i, grid){
+			let p = grid.i2p(i), x = p[0], y = p[1]
+
+			// left
+			let l = [ x-1, y ]
+			if( l[0] &gt;= 0 ){
+				yield grid.p2i(l)
+			} else {
+				if( grid.torus[0] ){
+					l[0] += grid.extents[0]
+					yield grid.p2i(l)
+				}
+			}
+
+			// right
+			let r = [x+1,y]
+			if( r[0] &lt; grid.extents[0] ){
+				yield grid.p2i(r)
+			} else {
+				if( grid.torus[0] ){
+					r[0] -= grid.extents[0]
+					yield grid.p2i(r)
+				}
+			}
+
+			// top
+			let t = [ x, y-1 ]
+			if( t[1] &gt;= 0 ){
+				yield grid.p2i(t)
+			} else {
+				if( grid.torus[1] ){
+					t[1] += grid.extents[1]
+					yield grid.p2i(t)
+				}
+			}
+
+			// bottom
+			let b = [x,y+1]
+			if( b[1] &lt; grid.extents[1] ){
+				yield grid.p2i(b)
+			} else {
+				if( grid.torus[1] ){
+					b[1] -= grid.extents[1]
+					yield grid.p2i(b)
+				}
+			}
+		}
+	})
+
+	describe( &quot; [ unit tests ] &quot;, function () {
+
+		/** @test {Grid2D#pixelsi} */
+		it( &quot;pixelsi generator reports correct IndexCoordinates&quot;, function(){
+			let k = 0
+			for( let i of grid2d.pixelsi() ){
+				expect( grid2d.i2p(i) ).toEqual( allPixelArray[k] )
+				k++
+			}
+		})
+
+		/** @test {Grid2D#neighi}
+		 * @test {Grid2D#neighiSimple} */
+		it( &quot;neighi method should return same results as neighiSimple&quot;, function(){
+
+			let checkNeighi = function( gridObject ){
+
+				// Test neighi for a sample of pixels on the grid.
+				for( let pix of samplePixels( gridObject, 100 ) ){
+					const i = gridObject.p2i( pix )
+					let neigh1 = gridObject.neighiSimple( i )
+					let neigh2 = gridObject.neighi( i )
+					expect( neigh1.sort() ).toEqual( neigh2.sort() )
+				}
+
+				// Specifically check some pixels at the borders as well
+				for( let p of borderPixelSample( gridObject ) ){
+					const i = gridObject.p2i( p )
+					let neigh1 = gridObject.neighiSimple( i )
+					let neigh2 = gridObject.neighi( i )
+					expect( neigh1.sort() ).toEqual( neigh2.sort() )
+				}
+			}
+
+			checkNeighi( grid2d )
+			checkNeighi( grid2dFloat )
+		})
+
+		/** @test {Grid2D#neighi}*/
+		describe( &quot;neighi method should return correct neighbors for specific cases: &quot;, function(){
+
+			let checkExpected = function( gridObject, p, torus, expectedNbh ){
+				const nbh = gridObject.neighi( gridObject.p2i(p), torus )
+				const expectedNbh2 = expectedNbh.map( function(p) {
+					return gridObject.p2i(p)
+				} )
+				expect( nbh.length ).toEqual( expectedNbh2.length )
+				expect( nbh.sort() ).toEqual( expectedNbh2.sort() )
+			}
+
+			// Check if neighborhoods are correct for different torus settings,
+			// for all four corners of a gridObject.
+			let checkNeighi = function( gridObject ) {
+
+				const xMax = gridObject.extents[0] - 1, yMax = gridObject.extents[1] - 1
+				it(&quot;...corner [0,0] &quot;, function () {
+					// case 1: corner point [0,0]
+					checkExpected(gridObject, [0, 0], [false, false],
+						[[0, 1], [1, 1], [1, 0]])
+					checkExpected(gridObject, [0, 0], [false, true],
+						[[0, 1], [1, 1], [1, 0], [0, yMax], [1, yMax]])
+					checkExpected(gridObject, [0, 0], [true, false],
+						[[0, 1], [1, 1], [1, 0], [xMax, 0], [xMax, 1]])
+					checkExpected(gridObject, [0, 0], [true, true],
+						[[0, 1], [1, 1], [1, 0],
+							[xMax, 0], [xMax, 1], [0, yMax], [1, yMax], [xMax, yMax]])
+				})
+				it(&quot;...corner [xMax,0] &quot;, function () {
+					// case 2 : corner point [xMax,0]
+					checkExpected( gridObject, [xMax, 0], [false, false],
+						[[xMax - 1, 0], [xMax - 1, 1], [xMax, 1]])
+					checkExpected( gridObject, [xMax,0], [false,true],
+						[ [xMax - 1, 0], [xMax - 1, 1], [xMax, 1],
+							[xMax-1,yMax], [xMax,yMax] ] )
+					checkExpected( gridObject, [xMax,0], [true,false],
+						[ [xMax - 1, 0], [xMax - 1, 1], [xMax, 1],
+							[0,0], [0,1] ] )
+					checkExpected( gridObject, [xMax,0], [true,true],
+						[ [xMax - 1, 0], [xMax - 1, 1], [xMax, 1],
+							[0,0], [0,1], [xMax-1,yMax], [xMax,yMax], [0,yMax] ] )
+				})
+				it(&quot;...corner [0,yMax] &quot;, function () {
+					checkExpected( gridObject, [0,yMax], [false, false],
+						[[0, yMax-1], [1,yMax], [1,yMax-1]])
+					checkExpected( gridObject, [0,yMax], [false,true],
+						[ [0, yMax-1], [1,yMax], [1,yMax-1],
+							[0,0], [1,0] ] )
+					checkExpected( gridObject, [0,yMax], [true,false],
+						[ [0, yMax-1], [1,yMax], [1,yMax-1],
+							[xMax,yMax], [xMax,yMax-1] ] )
+					checkExpected( gridObject, [0,yMax], [true,true],
+						[  [0, yMax-1], [1,yMax], [1,yMax-1],
+							[0,0], [1,0], [xMax,yMax-1], [xMax,yMax], [xMax,0] ] )
+				})
+				it(&quot;...corner [xMax,yMax] &quot;, function () {
+					checkExpected( gridObject, [xMax,yMax], [false, false],
+						[[xMax, yMax-1], [xMax-1,yMax], [xMax-1,yMax-1]])
+					checkExpected( gridObject, [xMax,yMax], [false, true],
+						[[xMax, yMax-1], [xMax-1,yMax], [xMax-1,yMax-1],
+							[xMax,0], [xMax-1,0] ] )
+					checkExpected( gridObject, [xMax,yMax], [true,false],
+						[[xMax, yMax-1], [xMax-1,yMax], [xMax-1,yMax-1],
+							[0,yMax], [0,yMax-1] ] )
+					checkExpected( gridObject, [xMax,yMax], [true,true],
+						[[xMax, yMax-1], [xMax-1,yMax], [xMax-1,yMax-1],
+							[0,yMax], [0,yMax-1], [xMax,0], [xMax-1,0], [0,0] ] )
+				})
+
+			}
+
+			setupGrids()
+			checkNeighi( grid2d )
+			checkNeighi( grid2dFloat )
+
+		})
+
+		/** @test {Grid2D#neighNeumanni} */
+		it( &quot;neighNeumanni method should return correct neighbors&quot;, function(){
+
+			let checkNeumanni = function( gridObject ){
+				// test neighborhood of 100 random pixels
+				for( let pix of samplePixels( gridObject, 100 ) ){
+					const i = gridObject.p2i( pix )
+					let arr1=[], arr2=[]
+					for( let n of gridObject.neighNeumanni(i) ){ arr1.push(n) }
+					for( let n of simpleNeumanni(i,gridObject) ){ arr2.push(n) }
+					expect( arr1 ).toEqual( arr2 )
+				}
+
+				// Specifically check some pixels at the borders as well
+				for( let p of borderPixelSample( gridObject ) ){
+					const i = gridObject.p2i( p )
+					let arr1=[], arr2=[]
+					for( let n of gridObject.neighNeumanni(i) ){ arr1.push(n) }
+					for( let n of simpleNeumanni(i,gridObject) ){ arr2.push(n) }
+					expect( arr1 ).toEqual( arr2 )
+				}
+			}
+
+			checkNeumanni( grid2d )
+			checkNeumanni( grid2dFloat )
+
+		})
+		/** @test {Grid2D#neighNeumanni}*/
+		describe( &quot;neighNeumanni method should return correct neighbors for specific cases: &quot;, function(){
+
+			let checkExpected = function( gridObject, p, torus, expectedNbh ){
+				let nbh = []
+				for( let n of gridObject.neighNeumanni( gridObject.p2i(p), torus ) ){
+					nbh.push( n )
+				}
+				const expectedNbh2 = expectedNbh.map( function(p) {
+					return gridObject.p2i(p)
+				} )
+				expect( nbh.length ).toEqual( expectedNbh2.length )
+				expect( nbh.sort() ).toEqual( expectedNbh2.sort() )
+			}
+
+			// Check if neighborhoods are correct for different torus settings,
+			// for all four corners of a gridObject.
+			let checkNeighNeumanni = function( gridObject ) {
+
+				const xMax = gridObject.extents[0] - 1, yMax = gridObject.extents[1] - 1
+				it(&quot;...corner [0,0] &quot;, function () {
+					// case 1: corner point [0,0]
+					checkExpected(gridObject, [0, 0], [false, false],
+						[[0, 1], [1, 0]])
+					checkExpected(gridObject, [0, 0], [false, true],
+						[[0, 1], [1, 0], [0, yMax] ])
+					checkExpected(gridObject, [0, 0], [true, false],
+						[[0, 1], [1, 0], [xMax, 0] ])
+					checkExpected(gridObject, [0, 0], [true, true],
+						[[0, 1], [1, 0], [xMax, 0], [0, yMax] ])
+				})
+				it(&quot;...corner [xMax,0] &quot;, function () {
+					// case 2 : corner point [xMax,0]
+					checkExpected( gridObject, [xMax, 0], [false, false],
+						[[xMax - 1, 0], [xMax, 1]])
+					checkExpected( gridObject, [xMax,0], [false,true],
+						[ [xMax - 1, 0], [xMax, 1], [xMax,yMax] ] )
+					checkExpected( gridObject, [xMax,0], [true,false],
+						[ [xMax - 1, 0], [xMax, 1], [0,0] ] )
+					checkExpected( gridObject, [xMax,0], [true,true],
+						[ [xMax - 1, 0], [xMax, 1], [0,0], [xMax,yMax] ] )
+				})
+				it(&quot;...corner [0,yMax] &quot;, function () {
+					checkExpected( gridObject, [0,yMax], [false, false],
+						[[0, yMax-1], [1,yMax] ])
+					checkExpected( gridObject, [0,yMax], [false,true],
+						[ [0, yMax-1], [1,yMax], [0,0] ] )
+					checkExpected( gridObject, [0,yMax], [true,false],
+						[ [0, yMax-1], [1,yMax], [xMax,yMax] ] )
+					checkExpected( gridObject, [0,yMax], [true,true],
+						[  [0, yMax-1], [1,yMax], [0,0], [xMax,yMax] ] )
+				})
+				it(&quot;...corner [xMax,yMax] &quot;, function () {
+					checkExpected( gridObject, [xMax,yMax], [false, false],
+						[[xMax, yMax-1], [xMax-1,yMax] ])
+					checkExpected( gridObject, [xMax,yMax], [false, true],
+						[[xMax, yMax-1], [xMax-1,yMax], [xMax,0] ] )
+					checkExpected( gridObject, [xMax,yMax], [true,false],
+						[[xMax, yMax-1], [xMax-1,yMax], [0,yMax] ] )
+					checkExpected( gridObject, [xMax,yMax], [true,true],
+						[[xMax, yMax-1], [xMax-1,yMax],
+							[0,yMax], [xMax,0] ] )
+				})
+
+			}
+
+			setupGrids()
+			checkNeighNeumanni( grid2d )
+			checkNeighNeumanni( grid2dFloat )
+
+		})
+
+		/** @test {Grid2D#gradienti} */
+		it( &quot;gradienti method should return correct gradients&quot;, function(){
+
+			let simpleGradienti = function(i, grid){
+
+				let p = grid.i2p(i)
+				let vi = grid.pixti(i), dx, dy
+
+				let nbh = []
+				for( let n of simpleNeumanni(i,grid) ){
+					nbh.push(n)
+				}
+
+				let xNeighbors = [NaN, NaN]
+				let yNeighbors = [NaN, NaN]
+				// check which neighbors there are
+				for( let n of nbh ){
+					let pn = grid.i2p(n)
+					// x neighbors
+					if( pn[1] === p[1] ){
+						if( pn[0] &lt; p[0] ){
+							xNeighbors[0] = n
+						} else {
+							xNeighbors[1] = n
+						}
+					}
+
+					// y neighbors
+					if( pn[0] === p[0] ){
+						if( pn[1] &lt; p[1]){
+							yNeighbors[0] = n
+						} else {
+							yNeighbors[1] = n
+						}
+					}
+				}
+
+				// this shouldn&apos;t happen.
+				if( isNaN( xNeighbors[0] ) &amp;&amp; isNaN(xNeighbors[1] ) ){
+					throw( &quot;no x neighbors found!&quot;)
+				}
+				if( isNaN( yNeighbors[0] ) &amp;&amp; isNaN(yNeighbors[1] ) ){
+					throw( &quot;no y neighbors found!&quot;)
+				}
+
+				// compute gradients
+				let grad = function( nArr ){
+					if( isNaN( nArr[0] ) ){
+						return grid.pixti(nArr[1]) - vi
+					}
+					if( isNaN( nArr[1] ) ){
+						return vi - grid.pixti(nArr[0])
+					}
+					return ( ( grid.pixti(nArr[1]) - vi  ) + ( vi - grid.pixti(nArr[0])  ) )/2
+				}
+
+				dx = grad( xNeighbors )
+				dy = grad( yNeighbors )
+
+				return [dx,dy]
+			}
+
+
+			let checkGradienti = function( gridObject ){
+
+				// set some random values on the float grid
+				for( let i of gridObject.pixelsi() ){
+					gridObject.setpixi( i, Math.random()*1000 )
+				}
+
+				// test neighborhood of 100 random pixels
+				for( let pix of samplePixels( gridObject, 100 ) ){
+					const i = gridObject.p2i( pix )
+					expect( gridObject.gradienti(i) ).toEqual( simpleGradienti(i,gridObject) )
+				}
+
+
+				// Specifically check some pixels at the borders as well
+				for( let p of borderPixelSample( gridObject ) ){
+					const i = gridObject.p2i( p )
+					expect( gridObject.gradienti(i) ).toEqual( simpleGradienti(i,gridObject) )
+				}
+			}
+
+			checkGradienti( grid2dFloat )
+
+		})
+
+	})
+})</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

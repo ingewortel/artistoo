@@ -85,6 +85,7 @@ p {
 
 code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  overflow: scroll!important;
 }
 
 pre > code {

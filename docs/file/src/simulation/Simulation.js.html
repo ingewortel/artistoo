@@ -13,7 +13,7 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
   <a href="test.html" data-ice="testLink">Test</a>
@@ -139,9 +139,9 @@ class Simulation {
 			{@link CellKind} in. If left unspecified, the {@link Canvas} will use black.
 		@param {boolean[]} [simsettings.ACTCOLOR ] - should activities of the {@link ActivityConstraint}
 			be drawn for each {@link CellKind}? If left unspecified, these are not drawn.
-		@param {boolean[]} [simsettings.SHOWBORDERS ] - should borders of each {@link CellKind}
+		@param {boolean[]} [simsettings.SHOWBORDERS = false] - should borders of each {@link CellKind}
 			be drawn? Defaults to false.
-		@param {HexColor[]} [simsettings.BORDERCOL ] - color to draw cellborders of
+		@param {HexColor[]} [simsettings.BORDERCOL = &quot;000000&quot;] - color to draw cellborders of
 			each {@link CellKind} in. Defaults to black. 
 		*/
 	constructor( config, custommethods ){
@@ -323,12 +323,12 @@ class Simulation {
 		for( cellkind = 0; cellkind &lt; nrcells.length; cellkind ++ ){
 		
 			// draw the cells of each kind in the right color
-			if( cellcolor[ cellkind ] != -1 ){
+			if( cellcolor[ cellkind ] !== -1 ){
 				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
 			}
 			
 			// Draw borders if required
-			if(  cellborders[ cellkind  ]  ){
+			if(  this.conf.hasOwnProperty(&quot;SHOWBORDERS&quot;) &amp;&amp; cellborders[ cellkind  ] ){
 				let bordercol = &quot;000000&quot;
 				if( this.conf.hasOwnProperty(&quot;BORDERCOL&quot;) ){
 					bordercol = this.conf[&quot;BORDERCOL&quot;][cellkind] || &quot;000000&quot;
