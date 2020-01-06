@@ -174,6 +174,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "cpmjs/src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint",
+    "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html",
+    "<span>LocalConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/LocalConnectivityConstraint.js</span>",
+    "class"
+  ],
+  [
     "cpmjs/src/hamiltonian/parameterchecker.js~parameterchecker",
     "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html",
     "<span>ParameterChecker</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ParameterChecker.js</span>",
@@ -222,6 +228,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "cpmjs/src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html",
+    "<span>SoftLocalConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/SoftLocalConnectivityConstraint.js</span>",
+    "class"
+  ],
+  [
     "cpmjs/src/stats/stat.js~stat",
     "class/src/stats/Stat.js~Stat.html",
     "<span>Stat</span> <span class=\"search-result-import-path\">cpmjs/src/stats/Stat.js</span>",
@@ -232,6 +244,696 @@ window.esdocSearchIndex = [
     "class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html",
     "<span>VolumeConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/VolumeConstraint.js</span>",
     "class"
+  ],
+  [
+    "grid2d grid3d src/grid/grid2d.js~grid2d,grid2d src/grid/grid3d.js~grid3d,grid3d",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber4",
+    "General tests that every Grid subclass should pass",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber47",
+    "General tests that every Grid subclass should pass ",
+    "test"
+  ],
+  [
+    "grid2d#i2p grid2d#p2i grid3d#p2i grid3d#i2p src/grid/grid2d.js~grid2d#i2p,grid2d#i2p src/grid/grid2d.js~grid2d#p2i,grid2d#p2i src/grid/grid3d.js~grid3d#p2i,grid3d#p2i src/grid/grid3d.js~grid3d#i2p,grid3d#i2p",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber74",
+    "General tests that every Grid subclass should pass  i2p and p2i should be inverse for valid grid coordinates",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber49",
+    "General tests that every Grid subclass should pass  should all have a _pixelArray",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber94",
+    "General tests that every Grid subclass should pass  should all have a neighi method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber54",
+    "General tests that every Grid subclass should pass  should all have a p2i method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber62",
+    "General tests that every Grid subclass should pass  should all have an i2p method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber102",
+    "General tests that every Grid subclass should pass  should all have pixels(i) generator methods",
+    "test"
+  ],
+  [
+    "grid src/grid/grid.js~grid,grid",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber2",
+    "Grid",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber373",
+    "Grid  [ class extension ] ",
+    "test"
+  ],
+  [
+    "grid#gradient src/grid/grid.js~grid#gradient,grid#gradient",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber446",
+    "Grid  [ class extension ]  gradient should work as soon as gradienti and p2i are implemented.",
+    "test"
+  ],
+  [
+    "grid#laplacian grid#laplaciani src/grid/grid.js~grid#laplacian,grid#laplacian src/grid/grid.js~grid#laplaciani,grid#laplaciani",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber467",
+    "Grid  [ class extension ]  laplacian should throw error when p2i/neighNeumanni not implemented",
+    "test"
+  ],
+  [
+    "grid#laplacian grid#laplaciani src/grid/grid.js~grid#laplacian,grid#laplacian src/grid/grid.js~grid#laplaciani,grid#laplaciani",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber482",
+    "Grid  [ class extension ]  laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist",
+    "test"
+  ],
+  [
+    "grid#laplacian grid#laplaciani src/grid/grid.js~grid#laplacian,grid#laplacian src/grid/grid.js~grid#laplaciani,grid#laplaciani",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber457",
+    "Grid  [ class extension ]  laplaciani should throw error when neighNeumanni not implemented",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber389",
+    "Grid  [ class extension ]  should be possible to build a custom Grid subclass",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber385",
+    "Grid  [ class extension ]  should be possible to extend with a method",
+    "test"
+  ],
+  [
+    "grid#_pixels src/grid/grid.js~grid#_pixels,grid#_pixels",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber397",
+    "Grid  [ class extension ]  should throw an error when _pixelArray is not set in subclass",
+    "test"
+  ],
+  [
+    "grid#gradient src/grid/grid.js~grid#gradient,grid#gradient",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber438",
+    "Grid  [ class extension ]  should throw error when gradienti not implemented",
+    "test"
+  ],
+  [
+    "grid#neigh src/grid/grid.js~grid#neigh,grid#neigh",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber413",
+    "Grid  [ class extension ]  should throw error when neighi not implemented",
+    "test"
+  ],
+  [
+    "grid#pixels src/grid/grid.js~grid#pixels,grid#pixels",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber427",
+    "Grid  [ class extension ]  should throw error when pixels/pixelsi not implemented",
+    "test"
+  ],
+  [
+    "grid#p2i grid#i2p src/grid/grid.js~grid#p2i,grid#p2i src/grid/grid.js~grid#i2p,grid#i2p",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber405",
+    "Grid  [ class extension ]  superclass should throw error when p2i/i2p not implemented",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber13",
+    "Grid  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "grid#constructor src/grid/grid.js~grid#constructor,grid#constructor",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber15",
+    "Grid  [ unit tests ]   constructor ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber59",
+    "Grid  [ unit tests ]   constructor  should be able to handle a different size in each dimension",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber53",
+    "Grid  [ unit tests ]   constructor  should be able to handle different torus settings for each dimension",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber44",
+    "Grid  [ unit tests ]   constructor  should by default set torus = true in each dimension",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber64",
+    "Grid  [ unit tests ]   constructor  should compute a midpoint at the correct position",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber34",
+    "Grid  [ unit tests ]   constructor  should set a size for each dimension",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber39",
+    "Grid  [ unit tests ]   constructor  should set a torus property in each dimension",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber17",
+    "Grid  [ unit tests ]   constructor  should throw an error when torus is specified for an incorrect number of dimensions",
+    "test"
+  ],
+  [
+    "grid#diffusion src/grid/grid.js~grid#diffusion,grid#diffusion",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber346",
+    "Grid  [ unit tests ]   diffusion method ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber354",
+    "Grid  [ unit tests ]   diffusion method  can be called on Float32 grids",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber360",
+    "Grid  [ unit tests ]   diffusion method  should throw error when you try to call it on Uint16 grid",
+    "test"
+  ],
+  [
+    "grid#laplaciani src/grid/grid.js~grid#laplaciani,grid#laplaciani",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber263",
+    "Grid  [ unit tests ]   laplacian(i) method ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber281",
+    "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber293",
+    "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 1 : everything zero ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber306",
+    "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 2 : everything a positive value ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber315",
+    "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 3 : everything a negative value ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber322",
+    "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 4 : floating point values ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber329",
+    "Grid  [ unit tests ]   laplacian(i) method   should compute laplacian correctly   case 4 : positive and negative floating point values ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber276",
+    "Grid  [ unit tests ]   laplacian(i) method  should throw error when you try to call it on Uint16 grid",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber271",
+    "Grid  [ unit tests ]   laplacian(i) method  should work on Float32 grids",
+    "test"
+  ],
+  [
+    "grid#neigh src/grid/grid.js~grid#neigh,grid#neigh",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber76",
+    "Grid  [ unit tests ]   neigh method ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber114",
+    "Grid  [ unit tests ]   neigh method   should listen to torus for each dimension",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber106",
+    "Grid  [ unit tests ]   neigh method   should return an array coordinate",
+    "test"
+  ],
+  [
+    "grid#pixelsbuffer src/grid/grid.js~grid#pixelsbuffer,grid#pixelsbuffer",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber240",
+    "Grid  [ unit tests ]   pixelsBuffer method ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber248",
+    "Grid  [ unit tests ]   pixelsBuffer method  should work on Float32 and Uint16 grids",
+    "test"
+  ],
+  [
+    "grid#pixt grid#pixti src/grid/grid.js~grid#pixt,grid#pixt src/grid/grid.js~grid#pixti,grid#pixti",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber213",
+    "Grid  [ unit tests ]   pixt(i) methods ",
+    "test"
+  ],
+  [
+    "grid#pixt grid#pixti src/grid/grid.js~grid#pixt,grid#pixt src/grid/grid.js~grid#pixti,grid#pixti",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber227",
+    "Grid  [ unit tests ]   pixt(i) methods  pixt(i) can show types on the grid.",
+    "test"
+  ],
+  [
+    "grid#setpix grid#setpixi src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber138",
+    "Grid  [ unit tests ]   setpix(i) methods ",
+    "test"
+  ],
+  [
+    "grid#setpix grid#setpixi grid#_isvalidvalue src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi src/grid/grid.js~grid#_isvalidvalue,grid#_isvalidvalue",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber168",
+    "Grid  [ unit tests ]   setpix(i) methods   should prohibit setting an invalid type on the grid to avoid bugs",
+    "test"
+  ],
+  [
+    "grid#setpix grid#setpixi src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber155",
+    "Grid  [ unit tests ]   setpix(i) methods  can be called",
+    "test"
+  ],
+  [
+    "grid#setpix grid#setpixi src/grid/grid.js~grid#setpix,grid#setpix src/grid/grid.js~grid#setpixi,grid#setpixi",
+    "test-file/spec/grid/GridSpec.js.html#lineNumber183",
+    "Grid  [ unit tests ]   setpix(i) methods  store values in the Grid correctly",
+    "test"
+  ],
+  [
+    "grid2d src/grid/grid2d.js~grid2d,grid2d",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber125",
+    "Grid subclasses supporting diffusion.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber149",
+    "Grid subclasses supporting diffusion. ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber158",
+    "Grid subclasses supporting diffusion.  should be able to store Floating point and negative numbers",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber167",
+    "Grid subclasses supporting diffusion.  should have a gradienti method",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber175",
+    "Grid subclasses supporting diffusion.  should have a neighNeumanni generator",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridExtensionSpec.js.html#lineNumber151",
+    "Grid subclasses supporting diffusion.  should support a Float datatype",
+    "test"
+  ],
+  [
+    "localconnectivityconstraint src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint,localconnectivityconstraint",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber11",
+    "LocalConnectivityConstraint",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber119",
+    "LocalConnectivityConstraint [ Integration tests ]",
+    "test"
+  ],
+  [
+    "localconnectivityconstraint#confchecker src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#confchecker,localconnectivityconstraint#confchecker",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber123",
+    "LocalConnectivityConstraint [ Integration tests ] integration with ParameterChecker",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber124",
+    "LocalConnectivityConstraint [ Integration tests ] integration with ParameterChecker should throw an error when CONNECTED parameter is unspecified",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber196",
+    "LocalConnectivityConstraint [ Integration tests ] method [ connectedComponentsOf ]",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber198",
+    "LocalConnectivityConstraint [ Integration tests ] method [ connectedComponentsOf ] should listen to the grid torus property correctly",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber132",
+    "LocalConnectivityConstraint [ Integration tests ] when copy attempt would disrupt local connectivity",
+    "test"
+  ],
+  [
+    "localconnectivityconstraint#checkconnected src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#checkconnected,localconnectivityconstraint#checkconnected",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber177",
+    "LocalConnectivityConstraint [ Integration tests ] when copy attempt would disrupt local connectivity #checkConnected should return false",
+    "test"
+  ],
+  [
+    "localconnectivityconstraint#fulfilled src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#fulfilled,localconnectivityconstraint#fulfilled",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber182",
+    "LocalConnectivityConstraint [ Integration tests ] when copy attempt would disrupt local connectivity and when CONNECTED for the tgt cellKind",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber186",
+    "LocalConnectivityConstraint [ Integration tests ] when copy attempt would disrupt local connectivity and when CONNECTED for the tgt cellKind is false, constraint should be fulfilled",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber183",
+    "LocalConnectivityConstraint [ Integration tests ] when copy attempt would disrupt local connectivity and when CONNECTED for the tgt cellKind is true, constraint should not be fulfilled",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber37",
+    "LocalConnectivityConstraint [ Unit tests ]",
+    "test"
+  ],
+  [
+    "localconnectivityconstraint#connectedcomponentsof src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#connectedcomponentsof,localconnectivityconstraint#connectedcomponentsof",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber40",
+    "LocalConnectivityConstraint [ Unit tests ] method [ connectedComponentsOf ]",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber100",
+    "LocalConnectivityConstraint [ Unit tests ] method [ connectedComponentsOf ] should return multiple components in disconnected case",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html#lineNumber87",
+    "LocalConnectivityConstraint [ Unit tests ] method [ connectedComponentsOf ] should return only one component in connected case",
+    "test"
+  ],
+  [
+    "grid2d src/grid/grid2d.js~grid2d,grid2d",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber5",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber108",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "grid2d#gradienti src/grid/grid2d.js~grid2d#gradienti,grid2d#gradienti",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber324",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  gradienti method should return correct gradients",
+    "test"
+  ],
+  [
+    "grid2d#neighneumanni src/grid/grid2d.js~grid2d#neighneumanni,grid2d#neighneumanni",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber225",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors",
+    "test"
+  ],
+  [
+    "grid2d#neighneumanni src/grid/grid2d.js~grid2d#neighneumanni,grid2d#neighneumanni",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber252",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases: ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber271",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [0,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber293",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [0,yMax] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber282",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [xMax,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber303",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighNeumanni method should return correct neighbors for specific cases:  ...corner [xMax,yMax] ",
+    "test"
+  ],
+  [
+    "grid2d#neighi src/grid/grid2d.js~grid2d#neighi,grid2d#neighi",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber147",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases: ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber163",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [0,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber189",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [0,yMax] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber175",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [xMax,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber202",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [xMax,yMax] ",
+    "test"
+  ],
+  [
+    "grid2d#neighi grid2d#neighisimple src/grid/grid2d.js~grid2d#neighi,grid2d#neighi grid2d#neighisimple,grid2d#neighisimple",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber121",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return same results as neighiSimple",
+    "test"
+  ],
+  [
+    "grid2d#pixelsi src/grid/grid2d.js~grid2d#pixelsi,grid2d#pixelsi",
+    "test-file/spec/grid/Grid2DSpec.js.html#lineNumber111",
+    "Rigorous tests for Grid2D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  pixelsi generator reports correct IndexCoordinates",
+    "test"
+  ],
+  [
+    "grid3d src/grid/grid3d.js~grid3d,grid3d",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber5",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber66",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "grid3d#neighi src/grid/grid3d.js~grid3d#neighi,grid3d#neighi",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber79",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases: ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber99",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [0,0,0] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber126",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  neighi method should return correct neighbors for specific cases:  ...corner [xMax,yMax,zMax] ",
+    "test"
+  ],
+  [
+    "grid3d#pixelsi src/grid/grid3d.js~grid3d#pixelsi,grid3d#pixelsi",
+    "test-file/spec/grid/Grid3DSpec.js.html#lineNumber69",
+    "Rigorous tests for Grid3D-specific methods. See GridExtensionSpec.js for\nmore general tests.  [ unit tests ]  pixelsi generator reports correct IndexCoordinates",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber7",
+    "SoftLocalConnectivityConstraint",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber20",
+    "SoftLocalConnectivityConstraint should throw an error when LAMBDA_CONNECTIVITY parameter is not specified",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber25",
+    "SoftLocalConnectivityConstraint should throw an error when NBH_TYPE is set incorrectly",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber41",
+    "SoftLocalConnectivityConstraint when computing connected components",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber98",
+    "SoftLocalConnectivityConstraint when computing connected components should listen to the grid torus property correctly",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber68",
+    "SoftLocalConnectivityConstraint when computing connected components should listen to the neighborhood type property correctly",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber51",
+    "SoftLocalConnectivityConstraint when computing connected components should return multiple components in disconnected case",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber43",
+    "SoftLocalConnectivityConstraint when computing connected components should return only one component in connected case",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber143",
+    "SoftLocalConnectivityConstraint when copy attempt would disrupt local connectivity",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber158",
+    "SoftLocalConnectivityConstraint when copy attempt would disrupt local connectivity #checkConnected should return 1",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber162",
+    "SoftLocalConnectivityConstraint when copy attempt would disrupt local connectivity and when LAMBDA_CONNECTIVITY for the tgt celltype",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber163",
+    "SoftLocalConnectivityConstraint when copy attempt would disrupt local connectivity and when LAMBDA_CONNECTIVITY for the tgt celltype is non-zero, constraint should return positive deltaH",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html#lineNumber166",
+    "SoftLocalConnectivityConstraint when copy attempt would disrupt local connectivity and when LAMBDA_CONNECTIVITY for the tgt celltype is zero, constraint should return deltaH zero",
+    "test"
+  ],
+  [
+    "spec/grid/grid2dspec.js",
+    "test-file/spec/grid/Grid2DSpec.js.html",
+    "spec/grid/Grid2DSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/grid/grid3dspec.js",
+    "test-file/spec/grid/Grid3DSpec.js.html",
+    "spec/grid/Grid3DSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/grid/gridextensionspec.js",
+    "test-file/spec/grid/GridExtensionSpec.js.html",
+    "spec/grid/GridExtensionSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/grid/gridspec.js",
+    "test-file/spec/grid/GridSpec.js.html",
+    "spec/grid/GridSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/hamiltonian/localconnectivityconstraintspec.js",
+    "test-file/spec/hamiltonian/LocalConnectivityConstraintSpec.js.html",
+    "spec/hamiltonian/LocalConnectivityConstraintSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/hamiltonian/softlocalconnectivityconstraintspec.js",
+    "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html",
+    "spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js",
+    "testFile"
   ],
   [
     "src/.external-ecmascript.js~array",
@@ -762,6 +1464,30 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/grid/grid.js~grid#_isvalidvalue",
+    "class/src/grid/Grid.js~Grid.html#instance-method-_isValidValue",
+    "src/grid/Grid.js~Grid#_isValidValue",
+    "method"
+  ],
+  [
+    "src/grid/grid.js~grid#_pixelarray",
+    "class/src/grid/Grid.js~Grid.html#instance-member-_pixelArray",
+    "src/grid/Grid.js~Grid#_pixelArray",
+    "member"
+  ],
+  [
+    "src/grid/grid.js~grid#_pixels",
+    "class/src/grid/Grid.js~Grid.html#instance-get-_pixels",
+    "src/grid/Grid.js~Grid#_pixels",
+    "member"
+  ],
+  [
+    "src/grid/grid.js~grid#_pixels",
+    "class/src/grid/Grid.js~Grid.html#instance-set-_pixels",
+    "src/grid/Grid.js~Grid#_pixels",
+    "member"
+  ],
+  [
     "src/grid/grid.js~grid#_pixelsbuffer",
     "class/src/grid/Grid.js~Grid.html#instance-member-_pixelsbuffer",
     "src/grid/Grid.js~Grid#_pixelsbuffer",
@@ -778,6 +1504,12 @@ window.esdocSearchIndex = [
     "class/src/grid/Grid.js~Grid.html#instance-constructor-constructor",
     "src/grid/Grid.js~Grid#constructor",
     "method"
+  ],
+  [
+    "src/grid/grid.js~grid#datatype",
+    "class/src/grid/Grid.js~Grid.html#instance-member-datatype",
+    "src/grid/Grid.js~Grid#datatype",
+    "member"
   ],
   [
     "src/grid/grid.js~grid#diffusion",
@@ -801,6 +1533,12 @@ window.esdocSearchIndex = [
     "src/grid/grid.js~grid#gradienti",
     "class/src/grid/Grid.js~Grid.html#instance-method-gradienti",
     "src/grid/Grid.js~Grid#gradienti",
+    "method"
+  ],
+  [
+    "src/grid/grid.js~grid#i2p",
+    "class/src/grid/Grid.js~Grid.html#instance-method-i2p",
+    "src/grid/Grid.js~Grid#i2p",
     "method"
   ],
   [
@@ -840,6 +1578,24 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/grid/grid.js~grid#neighneumanni",
+    "class/src/grid/Grid.js~Grid.html#instance-method-neighNeumanni",
+    "src/grid/Grid.js~Grid#neighNeumanni",
+    "method"
+  ],
+  [
+    "src/grid/grid.js~grid#neighi",
+    "class/src/grid/Grid.js~Grid.html#instance-method-neighi",
+    "src/grid/Grid.js~Grid#neighi",
+    "method"
+  ],
+  [
+    "src/grid/grid.js~grid#p2i",
+    "class/src/grid/Grid.js~Grid.html#instance-method-p2i",
+    "src/grid/Grid.js~Grid#p2i",
+    "method"
+  ],
+  [
     "src/grid/grid.js~grid#pixels",
     "class/src/grid/Grid.js~Grid.html#instance-method-pixels",
     "src/grid/Grid.js~Grid#pixels",
@@ -847,8 +1603,8 @@ window.esdocSearchIndex = [
   ],
   [
     "src/grid/grid.js~grid#pixelsbuffer",
-    "class/src/grid/Grid.js~Grid.html#instance-method-pixelsbuffer",
-    "src/grid/Grid.js~Grid#pixelsbuffer",
+    "class/src/grid/Grid.js~Grid.html#instance-method-pixelsBuffer",
+    "src/grid/Grid.js~Grid#pixelsBuffer",
     "method"
   ],
   [
@@ -894,12 +1650,6 @@ window.esdocSearchIndex = [
     "typedef"
   ],
   [
-    "src/grid/grid.js~grid.ipixel",
-    "typedef/index.html#static-typedef-iPixel",
-    "src/grid/Grid.js~Grid.iPixel",
-    "typedef"
-  ],
-  [
     "src/grid/grid.js~grid.updatepixelfunction",
     "typedef/index.html#static-typedef-updatePixelFunction",
     "src/grid/Grid.js~Grid.updatePixelFunction",
@@ -912,9 +1662,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/grid/grid2d.js~grid2d#_pixels",
-    "class/src/grid/Grid2D.js~Grid2D.html#instance-member-_pixels",
-    "src/grid/Grid2D.js~Grid2D#_pixels",
+    "src/grid/grid2d.js~grid2d#_pixelarray",
+    "class/src/grid/Grid2D.js~Grid2D.html#instance-member-_pixelArray",
+    "src/grid/Grid2D.js~Grid2D#_pixelArray",
     "member"
   ],
   [
@@ -922,6 +1672,12 @@ window.esdocSearchIndex = [
     "class/src/grid/Grid2D.js~Grid2D.html#instance-constructor-constructor",
     "src/grid/Grid2D.js~Grid2D#constructor",
     "method"
+  ],
+  [
+    "src/grid/grid2d.js~grid2d#datatype",
+    "class/src/grid/Grid2D.js~Grid2D.html#instance-member-datatype",
+    "src/grid/Grid2D.js~Grid2D#datatype",
+    "member"
   ],
   [
     "src/grid/grid2d.js~grid2d#gradienti",
@@ -972,9 +1728,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/grid/grid3d.js~grid3d#_pixels",
-    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-_pixels",
-    "src/grid/Grid3D.js~Grid3D#_pixels",
+    "src/grid/grid3d.js~grid3d#_pixelarray",
+    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-_pixelArray",
+    "src/grid/Grid3D.js~Grid3D#_pixelArray",
     "member"
   ],
   [
@@ -982,6 +1738,12 @@ window.esdocSearchIndex = [
     "class/src/grid/Grid3D.js~Grid3D.html#instance-constructor-constructor",
     "src/grid/Grid3D.js~Grid3D#constructor",
     "method"
+  ],
+  [
+    "src/grid/grid3d.js~grid3d#datatype",
+    "class/src/grid/Grid3D.js~Grid3D.html#instance-member-datatype",
+    "src/grid/Grid3D.js~Grid3D#datatype",
+    "member"
   ],
   [
     "src/grid/grid3d.js~grid3d#i2p",
@@ -1584,6 +2346,42 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/hamiltonian/localconnectivityconstraint.js",
+    "file/src/hamiltonian/LocalConnectivityConstraint.js.html",
+    "src/hamiltonian/LocalConnectivityConstraint.js",
+    "file"
+  ],
+  [
+    "src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#checkconnected",
+    "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html#instance-method-checkConnected",
+    "src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint#checkConnected",
+    "method"
+  ],
+  [
+    "src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#confchecker",
+    "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html#instance-method-confChecker",
+    "src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint#confChecker",
+    "method"
+  ],
+  [
+    "src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#connectedcomponentsof",
+    "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html#instance-method-connectedComponentsOf",
+    "src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint#connectedComponentsOf",
+    "method"
+  ],
+  [
+    "src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#constructor",
+    "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint#constructor",
+    "method"
+  ],
+  [
+    "src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint#fulfilled",
+    "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html#instance-method-fulfilled",
+    "src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint#fulfilled",
+    "method"
+  ],
+  [
     "src/hamiltonian/parameterchecker.js",
     "file/src/hamiltonian/ParameterChecker.js.html",
     "src/hamiltonian/ParameterChecker.js",
@@ -1884,6 +2682,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/hamiltonian/softconnectivityconstraint.js~softconnectivityconstraint#components",
+    "class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html#instance-member-components",
+    "src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint#components",
+    "member"
+  ],
+  [
     "src/hamiltonian/softconnectivityconstraint.js~softconnectivityconstraint#confchecker",
     "class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html#instance-method-confChecker",
     "src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint#confChecker",
@@ -1954,6 +2758,60 @@ window.esdocSearchIndex = [
     "class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html#instance-method-deltaH",
     "src/hamiltonian/SoftConstraint.js~SoftConstraint#deltaH",
     "method"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js",
+    "file/src/hamiltonian/SoftLocalConnectivityConstraint.js.html",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js",
+    "file"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#c",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-member-C",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#C",
+    "member"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#cpm",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-set-CPM",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#CPM",
+    "member"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#checkconnected",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-method-checkConnected",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#checkConnected",
+    "method"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#confchecker",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-method-confChecker",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#confChecker",
+    "method"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#connectedcomponentsof",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-method-connectedComponentsOf",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#connectedComponentsOf",
+    "method"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#constructor",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#constructor",
+    "method"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#deltah",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-method-deltaH",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#deltaH",
+    "method"
+  ],
+  [
+    "src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint#nbhtype",
+    "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html#instance-member-nbhtype",
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint#nbhtype",
+    "member"
   ],
   [
     "src/hamiltonian/volumeconstraint.js",

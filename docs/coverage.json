@@ -1,7 +1,7 @@
 {
-  "coverage": "100%",
-  "expectCount": 396,
-  "actualCount": 396,
+  "coverage": "99.05%",
+  "expectCount": 423,
+  "actualCount": 419,
   "files": {
     "src/Canvas.js": {
       "expectCount": 40,
@@ -19,19 +19,25 @@
       "undocumentLines": []
     },
     "src/grid/Grid.js": {
-      "expectCount": 25,
-      "actualCount": 25,
-      "undocumentLines": []
+      "expectCount": 34,
+      "actualCount": 33,
+      "undocumentLines": [
+        55
+      ]
     },
     "src/grid/Grid2D.js": {
-      "expectCount": 13,
+      "expectCount": 14,
       "actualCount": 13,
-      "undocumentLines": []
+      "undocumentLines": [
+        65
+      ]
     },
     "src/grid/Grid3D.js": {
-      "expectCount": 13,
+      "expectCount": 14,
       "actualCount": 13,
-      "undocumentLines": []
+      "undocumentLines": [
+        55
+      ]
     },
     "src/grid/GridManipulator.js": {
       "expectCount": 10,
@@ -98,6 +104,11 @@
       "actualCount": 4,
       "undocumentLines": []
     },
+    "src/hamiltonian/LocalConnectivityConstraint.js": {
+      "expectCount": 6,
+      "actualCount": 6,
+      "undocumentLines": []
+    },
     "src/hamiltonian/ParameterChecker.js": {
       "expectCount": 18,
       "actualCount": 18,
@@ -119,13 +130,20 @@
       "undocumentLines": []
     },
     "src/hamiltonian/SoftConnectivityConstraint.js": {
-      "expectCount": 15,
+      "expectCount": 16,
       "actualCount": 15,
-      "undocumentLines": []
+      "undocumentLines": [
+        26
+      ]
     },
     "src/hamiltonian/SoftConstraint.js": {
       "expectCount": 3,
       "actualCount": 3,
+      "undocumentLines": []
+    },
+    "src/hamiltonian/SoftLocalConnectivityConstraint.js": {
+      "expectCount": 9,
+      "actualCount": 9,
       "undocumentLines": []
     },
     "src/hamiltonian/VolumeConstraint.js": {

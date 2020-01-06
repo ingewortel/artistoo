@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<base data-ice="baseUrl" href="../">
+<title data-ice="title">Manual | cpmjs</title>
+<link type="text/css" rel="stylesheet" href="css/style.css">
+<link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+<script src="script/prettify/prettify.js"></script>
+<script src="script/manual.js"></script>
+</head>
+<body class="layout-container manual-root" data-ice="rootContainer">
+
+<header>
+<a href="./">Home</a>
+<a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+<a href="identifiers.html">Reference</a>
+<a href="source.html">Source</a>
+<a href="test.html" data-ice="testLink">Test</a>
+<div class="search-box">
+<span>
+<img src="./image/search.png">
+<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+</span>
+<ul class="search-result"></ul>
+</div>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div class="manual-toc-root">
+
+<div data-ice="manual">
+<ul class="manual-toc">
+
+<li data-ice="manualNav" class="indent-h1" data-link="manual/installation.html"><a href="manual/installation.html" data-ice="link">Getting started</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/installation.html"><a href="manual/installation.html#set-up-cpmjs-in-3-easy-steps" data-ice="link">Set up CPMjs in 3 easy steps</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-1--download-the-repository-" data-ice="link">Step 1: download the repository.</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-2--install-node-dependencies-" data-ice="link">Step 2: install node dependencies.</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-3--link-the-build-in-your-code-" data-ice="link">Step 3: link the build in your code.</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#additional-notes" data-ice="link">Additional notes</a></li>
+</ul>
+</div>
+<div data-ice="manual">
+<ul class="manual-toc">
+
+<li data-ice="manualNav" class="indent-h1" data-link="manual/quickstart.html"><a href="manual/quickstart.html" data-ice="link">Your First Simulation</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#set-up-a-simulation-in-the-web-browser" data-ice="link">Set up a simulation in the web browser</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#an-html-template-page" data-ice="link">An HTML template page</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-1---create-a-basic-html-page" data-ice="link">Step 1 : Create a basic HTML page</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-2---configure-the-header" data-ice="link">Step 2 : Configure the header</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-3---add-javascript" data-ice="link">Step 3 : Add JavaScript</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-4--write-the-body" data-ice="link">Step 4: Write the body</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-5--optional---add-css" data-ice="link">Step 5 (optional): Add CSS</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#set-up-a-simulation-in-nodejs" data-ice="link">Set up a simulation in nodejs</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#writing-your-simulation" data-ice="link">Writing your simulation</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-1--create-a-simulation-object" data-ice="link">Step 1: Create a simulation object</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-2---configure-the-cpm--amp--simulation" data-ice="link">Step 2 : Configure the CPM &amp; Simulation</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-3---tell-the-simulation-to-run" data-ice="link">Step 3 : Tell the simulation to run</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-nodejs" data-ice="link">In nodejs</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-html" data-ice="link">In HTML</a></li>
+</ul>
+</div>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="github-markdown" data-ice="content"><h1 id="getting-started">Getting started</h1><h2 id="set-up-cpmjs-in-3-easy-steps">Set up CPMjs in 3 easy steps</h2><h3 id="step-1--download-the-repository-">Step 1: download the repository.</h3><p><strong>Via the Github website</strong></p>
+<p>Visit the <a href="https://github.com/jtextor/cpmjs">Github repository</a> and click on the
+green &quot;clone or download&quot; button, then select &quot;Download ZIP&quot;:</p>
+<p><img class="screen-shot" src="./manual/asset/github-repo2.png" width="80%"></p>
+<p>Save the zipped folder somewhere on your computer and unzip.</p>
+<p><strong>Via the command line</strong></p>
+<p>Alternatively, in the console, go to the folder where you want to save CPMjs,
+and clone the repository:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">cd folder/to/save-into/
+git clone https://github.com/jtextor/cpmjs.git</code>
+</code></pre>
+<h3 id="step-2--install-node-dependencies-">Step 2: install node dependencies.</h3><p>Most users will run CPMjs in browser simulations only and will not need to
+extend the software with custom modules. If that&apos;s you, you can skip this step.
+But if you plan to use CPMjs from the command line using node, or if you plan
+to write your own modules (such as hamiltonian terms), you will need to install
+some node dependencies.</p>
+<p>To do this, go to the <code>cpmjs/</code> folder from the command line and install the
+required packages automatically using <code>npm</code>:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">cd folder/containing/cpmjs
+npm install</code>
+</code></pre>
+<p>If you do not have <code>nodejs</code> and its package manager <code>npm</code>, see
+<a href="https://nodejs.org/en/download/">this page</a> to install them first.</p>
+<h3 id="step-3--link-the-build-in-your-code-">Step 3: link the build in your code.</h3><p>You can now use CPMjs! See this <a href="./manual/quickstart.md">tutorial</a> to build your first
+simulation, or start from one of the simulations in the <code>cpmjs/examples/</code>
+folder. In these examples, you will see that the package can be loaded as
+follows:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src=&quot;path/to/cpmjs/build/cpm.js&quot;&gt;&lt;/script&gt;</code>
+</code></pre>
+<p>for html, and</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let CPM = require(&quot;path/to/cpmjs/build/cpm-cjs.js&quot;)</code>
+</code></pre>
+<p>for node scripts.</p>
+<p>When you include these lines in your own scripts, just make sure they contain
+the correct path from your simulation file to the <code>cpmjs/build/</code> folder.</p>
+<h3 id="additional-notes">Additional notes</h3><p>If you wish to build simulations in a different directory than the <code>cpmjs</code>
+folder, it may be convenient to create a symbolic link to the <code>build</code> folder
+there:</p>
+<pre><code><code class="source-code prettyprint">cd path/to/my/simulations
+ln -s path/to/cpmjs/build build</code>
+</code></pre><p>You can then access the code using:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src=&quot;path/to/my/simulations/build/cpm.js&quot;&gt;&lt;/script&gt;</code>
+</code></pre>
+<p>or</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let CPM = require(&quot;path/to/my/simulations/build/cpm-cjs.js&quot;)</code>
+</code></pre>
+<p>Finally, if you want to run CPMjs simulations with nodejs from this folder,
+you will need to create a link to the installed <code>node_modules</code> from step 2:</p>
+<pre><code class="lang-console"><code class="source-code prettyprint">cd path/to/my/simulations
+ln -s path/to/cpmjs/node_modules node_modules</code>
+</code></pre>
+</div>
+</div>
+
+<footer class="footer">
+Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

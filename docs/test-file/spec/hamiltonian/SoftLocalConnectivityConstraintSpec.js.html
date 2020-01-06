@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* 
+	TODO
+	
+*/
+
+
+describe(&quot;SoftLocalConnectivityConstraint&quot;, function() {
+  let CPM = require(&apos;../../build/cpm-cjs.js&apos;);
+  let C
+  
+  beforeEach(function() {
+	  C = new CPM.CPM( [100,100], {T:20})
+	  C.add( new CPM.SoftLocalConnectivityConstraint( {
+		LAMBDA_CONNECTIVITY : [0,1000]
+	  }))
+   
+  });
+
+/* Testing the parameter checker for this constraint*/
+  it(&quot;should throw an error when LAMBDA_CONNECTIVITY parameter is not specified&quot;, function() {
+  	expect(function() {
+        C.add( new CPM.SoftLocalConnectivityConstraint({}) );
+    }).toThrow(&quot;Cannot find parameter LAMBDA_CONNECTIVITY in the conf object!&quot;);
+  });
+  it(&quot;should throw an error when NBH_TYPE is set incorrectly&quot;, function() {
+  	expect(function() {
+        C.add( new CPM.SoftLocalConnectivityConstraint({ LAMBDA_CONNECTIVITY : [0,1000], NBH_TYPE : &quot;a&quot; }) );
+    }).toThrow(&quot;In the SoftLocalConnectivityConstraint, NBH_TYPE must be either &apos;Neumann&apos; or &apos;Moore&apos;&quot;);
+    
+    expect(function() {
+        C.add( new CPM.SoftLocalConnectivityConstraint({ LAMBDA_CONNECTIVITY : [0,1000], NBH_TYPE : 1}) );
+    }).toThrow(&quot;In the SoftLocalConnectivityConstraint, NBH_TYPE must be either &apos;Neumann&apos; or &apos;Moore&apos;&quot;);
+    
+    expect(function() {
+        C.add( new CPM.SoftLocalConnectivityConstraint({ LAMBDA_CONNECTIVITY : [0,1000], NBH_TYPE : [1,2] }) );
+    }).toThrow(&quot;In the SoftLocalConnectivityConstraint, NBH_TYPE must be either &apos;Neumann&apos; or &apos;Moore&apos;&quot;);
+    
+  });
+
+/* Testing the connected components method for specific cases */
+  describe(&quot;when computing connected components&quot;, function() {
+  
+	it(&quot;should return only one component in connected case&quot;, function() {
+		let nbhobj = {}
+		for( let x = 0; x &lt; 5; x++ ){
+			nbhobj[ C.grid.p2i([x,3]) ] = true
+		}
+		expect( C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(1);
+		
+	});
+	it(&quot;should return multiple components in disconnected case&quot;, function() {
+		let nbhobj = {}
+		for( let x = 0; x &lt; 5; x++ ){
+			if( x % 2 == 0 ){
+				nbhobj[ C.grid.p2i([x,3]) ] = true
+			}
+		}
+		expect( C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(3);
+		
+		// diagonal connections don&apos;t count as connections
+		nbhobj = {}
+		for( let x = 0; x &lt; 5; x++ ){
+			nbhobj[ C.grid.p2i([x,x]) ] = true
+		}
+		expect( C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(5);
+		
+	});
+	it(&quot;should listen to the neighborhood type property correctly&quot;, function(){
+		
+		// diagonal connections don&apos;t count as connections if the Neumann neighborhood is used (default)
+		nbhobj = {}
+		for( let x = 0; x &lt; 5; x++ ){
+			nbhobj[ C.grid.p2i([x,x]) ] = true
+		}
+		expect( C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(5);
+	
+	
+		// ... but this case is connected when the Moore neighborhood is used
+		C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).nbhtype = &quot;Moore&quot;
+		expect( C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(1);
+		
+		// ... and this should be again 5 when we switch back to Neumann
+		C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).nbhtype = &quot;Neumann&quot;
+		expect( C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(5);
+		
+		// Or we can start from scratch:
+		let C2 = new CPM.CPM( [100,100], {T:20})
+		  C2.add( new CPM.SoftLocalConnectivityConstraint( {
+			LAMBDA_CONNECTIVITY : [0,1000],
+			NBH_TYPE : &quot;Moore&quot;
+		  }))
+		expect( C2.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(1);
+		
+		
+	
+	
+	});	
+	it(&quot;should listen to the grid torus property correctly&quot;, function() {
+		let nbhobj = {}
+		
+		let pix = C.grid.p2i( [0,0] )
+		
+		// add pixel and its whole neighborhood
+		nbhobj[pix] = true
+		for( let n of C.grid.neighi(pix) ){
+			nbhobj[n] = true
+		}
+		expect( C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(1);
+		
+		// now change torus to false in one or both dimensions while keeping the same nbhobj
+		let C_notorus = new CPM.CPM( [100,100], {
+			T : 20,
+			torus : [false,false]
+		  })
+		 C_notorus.add( new CPM.SoftLocalConnectivityConstraint( {
+			LAMBDA_CONNECTIVITY : [0,1000]
+		 }))
+		 expect( C_notorus.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(4);
+		
+		let C_ytorus = new CPM.CPM( [100,100], {
+			T : 20,
+			torus : [false,true]
+		  })
+		 C_ytorus.add( new CPM.SoftLocalConnectivityConstraint( {
+			LAMBDA_CONNECTIVITY : [0,1000]
+		 }))
+		 expect( C_ytorus.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(2);
+		 
+		 let C_xtorus = new CPM.CPM( [100,100], {
+			T : 20,
+			torus : [true,false]
+		  })
+		 C_xtorus.add( new CPM.SoftLocalConnectivityConstraint( {
+			LAMBDA_CONNECTIVITY : [0,1000]
+		 }))
+		 expect( C_xtorus.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).connectedComponentsOf(nbhobj).length).toEqual(2);
+
+		
+	});
+  });
+
+/* Testing if the overall constraint works, specific case*/
+  describe(&quot;when copy attempt would disrupt local connectivity&quot;, function() {
+  	let src_i, tgt_i, src_type, tgt_type 
+  
+    beforeEach(function() {
+      let cid = C.makeNewCellID(1)
+    
+      C.setpix( [2,2], cid )
+      C.setpix( [3,3], cid )
+      C.setpix( [4,4], cid )
+      src_i = C.grid.p2i( [2,3] )
+      tgt_i = C.grid.p2i( [3,3] )
+      src_type = C.pixti( src_i )
+      tgt_type = C.pixti( tgt_i )
+    });
+
+	it(&quot;#checkConnected should return 1&quot;, function() {
+    	expect(C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).checkConnected( tgt_i, src_type, tgt_type ) ).toEqual(1);
+    })
+    
+    describe(&quot;and when LAMBDA_CONNECTIVITY for the tgt celltype&quot;, function() {
+    	it(&quot;is non-zero, constraint should return positive deltaH&quot;, function() {
+		  expect(C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).deltaH( src_i, tgt_i, src_type, tgt_type ) &gt; 0 ).toBeTruthy();
+		}); 
+		it(&quot;is zero, constraint should return deltaH zero&quot;, function() {
+		  C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).conf.LAMBDA_CONNECTIVITY[1]=0
+		  expect(C.getConstraint(&quot;SoftLocalConnectivityConstraint&quot;).deltaH( src_i, tgt_i, src_type, tgt_type ) ).toEqual(0);
+		}); 
+    })
+
+  });
+
+ 
+});</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

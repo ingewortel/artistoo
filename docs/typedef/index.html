@@ -13,10 +13,10 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
-  
+  <a href="test.html" data-ice="testLink">Test</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -41,7 +41,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
@@ -57,12 +56,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
@@ -265,8 +266,8 @@ corresponding value at that key is an array with some values for that cell.</p>
       <div>
         
         
-        <div data-ice="description"><p>An array of arrays containing interaction parameter values for each <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>-
-combination.</p>
+        <div data-ice="description"><p>An array of arrays containing interaction parameter values for each
+<span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span> - combination.</p>
 </div>
       </div>
     </td>
@@ -524,7 +525,7 @@ with each a <span><a href="typedef/index.html#static-typedef-CellKind">CellKind<
           
           
           
-          <span class="code" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -669,35 +670,6 @@ with each a <span><a href="typedef/index.html#static-typedef-CellKind">CellKind<
           
           
           
-          <span class="code" data-ice="name"><span><a href="typedef/index.html#static-typedef-iPixel">iPixel</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span><span>[]</span></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>A pixel on the grid.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
@@ -733,8 +705,8 @@ with each a <span><a href="typedef/index.html#static-typedef-CellKind">CellKind<
       <div>
         
         
-        <div data-ice="description"><p>Function that updates a gridpoint depending on its current value and that of its
-neighbors.</p>
+        <div data-ice="description"><p>Function that updates a gridpoint depending on its current value and
+that of its neighbors.</p>
 </div>
       </div>
     </td>
@@ -771,7 +743,7 @@ neighbors.</p>
 <p>We generally use two types of coordinates. An ArrayCoordinate contains the &apos;regular&apos;
 [x,y] or [x,y,z] pointer to a position on the grid, which is intuitive to use.</p>
 <p>However, for speed, models of class <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> often use a different type
-of coordinates called <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>. See methods <span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-p2i">p2i</a></span> and <span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-i2p">i2p</a></span>
+of coordinates called <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>. See methods <span><a href="class/src/grid/Grid.js~Grid.html#instance-method-p2i">p2i</a></span> and <span><a href="class/src/grid/Grid.js~Grid.html#instance-method-i2p">i2p</a></span>
 of the appropriate grid subclass for conversions between the two.</p>
 </div>
 
@@ -1004,9 +976,10 @@ cellkinds on the grid, e.g. a small and a large cellkind.</p>
   
   
   
-  <div data-ice="description"><p>An array of arrays containing interaction parameter values for each <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>-
-combination. Each element in the array is a non-negative number, and 
-X[n][m] contains the value for an interaction between cellkinds n and m. </p>
+  <div data-ice="description"><p>An array of arrays containing interaction parameter values for each
+<span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span> - combination. Each element in the array is a non-negative
+number, and X[n][m] contains the value for an interaction between cellkinds
+n and m.</p>
 </div>
 
   
@@ -1030,10 +1003,10 @@ X[n][m] contains the value for an interaction between cellkinds n and m. </p>
   <div class="example-doc" data-ice="exampleDoc">
       
       <pre class="prettyprint source-code"><code data-ice="exampleCode">// J[0][0] between two background pixels is always zero.
-// Not that it matters, because the background has a 
+// Not that it matters, because the background has a
 // single cellid of zero -- so there are no pairs
 // of background pixels from different cells anyway.
-let J = [[0,20],[20,10]] </code></pre>
+let J = [[0,20],[20,10]]</code></pre>
     </div>
 </div>
 
@@ -1201,7 +1174,7 @@ For example, for GridSize array g, g[0] is the size in x-dimension, g[1] in y, e
 [x,y] or [x,y,z] pointer to a position on the grid, which is intuitive to use.</p>
 <p>However, for speed, models of class <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> often use a different type
 of coordinates called IndexCoordinate, which is a non-negative integer number. 
-See methods <span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-p2i">p2i</a></span> and <span><a href="class/src/grid/Grid2D.js~Grid2D.html#instance-method-i2p">i2p</a></span> of the appropriate grid subclass for 
+See methods <span><a href="class/src/grid/Grid.js~Grid.html#instance-method-p2i">p2i</a></span> and <span><a href="class/src/grid/Grid.js~Grid.html#instance-method-i2p">i2p</a></span> of the appropriate grid subclass for 
 conversions between the two.</p>
 </div>
 
@@ -1439,7 +1412,7 @@ CellKind k is stored in array[k].</p>
     
     
     
-    <span class="code" data-ice="name">PerKindBoolean</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">PerKindBoolean</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
@@ -1451,8 +1424,8 @@ CellKind k is stored in array[k].</p>
   
   
   <div data-ice="description"><p>An array containing parameter values for each <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>.
-Each element in the array is a boolean, and the value for
-CellKind k is stored in array[k].</p>
+Each element in the array is a boolean, and the value for CellKind k is
+stored in array[k].</p>
 </div>
 
   
@@ -1475,9 +1448,9 @@ CellKind k is stored in array[k].</p>
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">// IS_BARRIER[0] is for the background; cellkind 1 is the &quot;barrier&quot; 
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// IS_BARRIER[0] is for the background; cellkind 1 is the &quot;barrier&quot;
 // and 2 is a real cell.
-let IS_BARRIER = [false,true,false] </code></pre>
+let IS_BARRIER = [false,true,false]</code></pre>
     </div>
 </div>
 
@@ -1531,7 +1504,7 @@ CellKind k is stored in array[k].</p>
   <div class="example-doc" data-ice="exampleDoc">
       
       <pre class="prettyprint source-code"><code data-ice="exampleCode">// V[0] is for the background, V[1] for the first real cellkind.
-let V = [0,500] </code></pre>
+let V = [0,500]</code></pre>
     </div>
 </div>
 
@@ -1584,8 +1557,9 @@ CellKind k is stored in array[k].</p>
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">// PERSIST[0] is for the background, PERSIST[1] for the first real cellkind.
-let PERSIST = [0,0.8] </code></pre>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// PERSIST[0] is for the background
+// PERSIST[1] for the first real cellkind.
+let PERSIST = [0,0.8]</code></pre>
     </div>
 </div>
 
@@ -1715,74 +1689,6 @@ This value can be of type string, boolean, or number.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="static-typedef-iPixel">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">iPixel</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span><span>[]</span></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumberundefined">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>A pixel on the grid.</p>
-</div>
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Properties:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">Pixel[0]</td>
-      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>pixel coordinate</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">Pixel[1]</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>pixel value</p>
-</td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-typedef-uniqueID">
     <span class="access" data-ice="access">public</span>
     
@@ -1846,8 +1752,8 @@ but it must uniquely identify one element in a set.</p>
   
   
   
-  <div data-ice="description"><p>Function that updates a gridpoint depending on its current value and that of its
-neighbors.</p>
+  <div data-ice="description"><p>Function that updates a gridpoint depending on its current value and
+that of its neighbors.</p>
 </div>
 
   
@@ -1885,8 +1791,8 @@ neighbors.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>value - the updated value, based on the current value of p and
-its neighbors.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>value - the updated value, based on the current value
+of p and its neighbors.</p>
 </td>
         </tr>
       </tbody>

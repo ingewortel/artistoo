@@ -6,51 +6,65 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var MersenneTwister = _interopDefault(require('mersenne-twister'));
 
-/** This base class defines a general grid and provides grid methods that do not depend on
-the coordinate system used. This class is never used on its own, as it does not yet 
-contain methods for neighborhood computation etc (which depend on the coordinate system). 
-Coordinate system-dependent methods are implemented in extensions
-of the Grid class, for example Grid2D and Grid3D. */
+/** This base class defines a general grid and provides grid methods that do
+ * not depend on the coordinate system used. This class is never used on its
+ * own, as it does not yet contain methods for neighborhood computation etc
+ * (which depend on the coordinate system).
+ * Coordinate system-dependent methods are implemented in extensions of the
+ * Grid class, for example Grid2D and Grid3D. */
 class Grid {
 
 	/** The grid constructor.
-	@param {GridSize} field_size array of field size in each dimension. E.g. [100,200] for
-	a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
-	numbers.
-	@param {boolean[]} [torus=[true,true,...]] - should the borders of the grid be linked, so that a cell moving
-	out on the left reappears on the right? Should be an array specifying whether the
-	torus holds in each dimension; eg [true,false] for a torus in x but not y dimension. */
+	 * @param {GridSize} field_size array of field size in each dimension.
+	 * E.g. [100,200] for a grid that is 100 pixels wide and 200 pixels high.
+	 * Entries must be positive integer numbers.
+	 * @param {boolean[]} [torus=[true,true,...]] - should the borders of the
+	 * grid be linked, so that a cell moving out on the left reappears on the
+	 * right? Should be an array specifying whether the torus holds in each
+	 * dimension; eg [true,false] for a torus in x but not y dimension. */
 	constructor( field_size, torus ){
 	
 		torus = torus || [];
 	
-		/** field_size array of field size in each dimension. E.g. [100,200] for
-		a grid that is 100 pixels wide and 200 pixels high. Entries must be positive integer
-		numbers.
-		@type {GridSize}*/
+		/** field_size array of field size in each dimension. E.g. [100,200]
+		 * for a grid that is 100 pixels wide and 200 pixels high. Entries must
+		 * be positive integer numbers.
+		 * @type {GridSize}*/
 		this.extents = field_size;
 		
 		/** Number of dimensions of the grid.
-		@type {number}*/
+		 * @type {number}*/
 		this.ndim = this.extents.length;
 		
 		
-		if( torus.length == 0 ){
+		if( torus.length === 0 ){
 			for( let d = 0; d < this.ndim; d++ ){
 				torus.push( true );
 			}
-		} else if ( torus.length != this.ndim ){
-			throw( "Torus should be specified for each dimension, or not at all!" )
+		} else if ( torus.length !== this.ndim ){
+			throw( "Torus should be specified for each dimension, or not " +
+				"at all!" )
 		}
 		/** Should the borders of the grid be linked, so that a cell moving
-		out on the left reappears on the right? Torus can be specified for
-		each dimension separately.
-		@type {boolean[]}*/
+		 * out on the left reappears on the right? Torus can be specified for
+		 * each dimension separately.
+		 * @type {boolean[]}*/
 		this.torus = torus;
+
+		/** Array with values for each pixel stored at the position of its
+		 * 	{@link IndexCoordinate}. E.g. the value of pixel with coordinate
+		 * 	i is stored as this._pixels[i]. This should be implemented in
+		 * 	the grid subclass; see e.g. {@link Grid2D#_pixelArray}.
+		 * 	Note that this array is accessed indirectly via the
+		 * {@link _pixels} set- and get methods.
+		 * 	@private
+		 * 	*/
+		this._pixelArray = undefined;
+		this.datatype = undefined;
 		
-		
-		/* These are used for rapid conversion between array and index coordinates,
-		but not documented as they should not be used from outside.*/
+		/* These are used for rapid conversion between array and index
+		coordinates, but not documented as they should not be used from outside.
+		*/
 		/** @ignore */
 		this.X_BITS = 1+Math.floor( Math.log2( this.extents[0] - 1 ) );
 		/** @ignore */
@@ -59,117 +73,223 @@ class Grid {
 		this.Y_MASK = (1 << this.Y_BITS)-1;
 		
 		/** Array coordinates to the middle pixel on the grid.
-		@type {ArrayCoordinate}
-		*/
+		 * @type {ArrayCoordinate}
+		 * */
 		this.midpoint = this.extents.map( i => Math.round((i-1)/2) );
 	}
 
-	/** The neigh method returns the neighborhood of a pixel p.
-	This function uses array coordinates as input and output arguments, but
-	internally calls a method 'neighi' which computes neighborhoods using
-	index-coordinates. Since neighbordhoods depend on the coordinate system,
-	the 'neighi' method is defined in the extension class for that specific coordinate system.
-	@param {ArrayCoordinate} p array coordinates of a specific pixel
-	@param {boolean} torus are borders of the grid linked so that a cell leaving on the
-	right re-enters the grid on the left?
-	@return {ArrayCoordinate[]} an array of neighbors of pixel p, where each element contains the array
-	coordinates of the neighbor in question.*/
+	/**
+	 * Return the array this._pixelArray, which should be set in the grid
+	 * subclass.
+	 * @returns {Uint16Array|Float32Array}
+	 * @private
+	 */
+	get _pixels(){
+		if ( this._pixelArray !== undefined ){
+			return this._pixelArray
+		}
+		throw("A private array this._pixelArray needs to be generated in every " +
+			" Grid subclass! See its documentation for details.")
+	}
+
+	/**
+	 * Set or update the private this._pixelArray.
+	 * @param {Uint16Array|Float32Array} pixels - array of pixels to set.
+	 * @private
+	 */
+	set _pixels( pixels ){
+		//noinspection JSValidateTypes
+		this._pixelArray = pixels;
+	}
+
+
+
+	/** Method for conversion from an {@link ArrayCoordinate} to an
+	 * {@link IndexCoordinate}.
+	 * This method should be implemented in the subclass, see
+	 * {@link Grid2D#p2i} for an example.
+	 * @abstract
+	 * @param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	 * @return {IndexCoordinate} the converted coordinate.
+	 */
+	//eslint-disable-next-line no-unused-vars
+	p2i ( p ){
+		throw( "A p2i method should be implemented in every Grid subclass!")
+	}
+
+	/** Method for conversion from an {@link IndexCoordinate} to an
+	 * {@link ArrayCoordinate}.
+	 * This method should be implemented in the subclass, see
+	 * {@link Grid2D#i2p} for an example.
+	 * @abstract
+	 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
+	 * @return {ArrayCoordinate} the converted coordinate.
+	 */
+	//eslint-disable-next-line no-unused-vars
+	i2p ( i ){
+		throw( "An i2p method should be implemented in every Grid subclass!")
+	}
+
+	/** Method returning the (Moore) neighborhood of a pixel based on its
+	 * {@link IndexCoordinate}.
+	 * This method should be implemented in the subclass, see
+	 * {@link Grid2D#neighi} for an example.
+	 * @abstract
+	 * @param {IndexCoordinate} i - the coordinate of the pixel to get neighbors
+	 * for.
+	 * @param {boolean[]} torus are borders of the grid linked so that a cell
+	 * leaving on the right re-enters the grid on the left?
+	 * @return {IndexCoordinate[]} an array of neighbors.
+	 */
+	//eslint-disable-next-line no-unused-vars
+	neighi ( i, torus = this.torus ){
+		throw( "A neighi method should be implemented in every Grid subclass!")
+	}
+
+	/** The neigh method returns the neighborhood of a pixel p. This function
+	 * uses array coordinates as input and output arguments, but internally
+	 * calls a method 'neighi' which computes neighborhoods using index-
+	 * coordinates. Since neighborhoods depend on the coordinate system, the
+	 * 'neighi' method is defined in the extension class for that specific
+	 * coordinate system.
+	 * @param {ArrayCoordinate} p array coordinates of a specific pixel
+	 * @param {boolean[]} torus are borders of the grid linked so that a cell
+	 * leaving on the right re-enters the grid on the left?
+	 * @return {ArrayCoordinate[]} an array of neighbors of pixel p, where each
+	 * element contains the array coordinates of the neighbor in question.
+	 * */
 	neigh(p, torus = this.torus){
 		let g = this;
-		return g.neighi( this.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
+		return g.neighi( this.p2i(p), torus ).map( function(i){
+			return g.i2p(i)
+		} )
+	}
+
+	/** Check if a value is valid on this type of grid.
+	 * This function forbids trying to set forbidden (negative/float) values
+	 * on an integer grid, which could cause bugs if the setpix(i) methods try
+	 * to set such a value unnoticed.
+	 * @private
+	 * @param {number} t - the value that would be stored on the grid.
+	 * @param {number} [tol=1e-6] - numeric tolerance for comparing a number
+	 * with its rounded version, to check if it is integer (e.g. setting
+	 * a value 1.5 on an integer grid would throw an error, but setting
+	 * 1.000000000001 would not if the tolerance is 1e-6.
+	 * @return {void} - return without problem or throw an error when an
+	 * incorrect value is set.
+	 * */
+	_isValidValue ( t, tol = 1e-6 ) {
+		if( this.datatype === "Uint16" ){
+			if( t < 0 || Math.abs( t - Math.round(t) ) > tol  ){
+				throw( "You cannot set a negative or floating point number to a Uint16 grid!" )
+			}
+		}
 	}
 
 	/** The setpix method changes the value of a pixel p on the grid to t.
-	@param {ArrayCoordinate} p array coordinates of the pixel to change the value of
-	@param {number} t the value to assign to this pixel. This can be integers or 
-	floating point numbers, depending on the grid subclass used (see eg Grid2D).
-	This method acts on the private array this._pixels, which must be defined
-	in the grid subclass.*/
+	 * @param {ArrayCoordinate} p array coordinates of the pixel to change the
+	 * value of
+	 * @param {number} t the value to assign to this pixel. This can
+	 * be integers or floating point numbers, depending on the grid subclass
+	 * used (see eg Grid2D). */
 	setpix( p, t ){
+		this._isValidValue(t);
 		this._pixels[this.p2i(p)] = t;
 	}
 
 	/** The setpixi method changes the value of a pixel i on the grid to t.
-	@param {IndexCoordinate} i index coordinates of the pixel to change the value of
-	@param {number} t the value to assign to this pixel. This can be integers or 
-	floating point numbers, depending on the grid subclass used (see eg Grid2D).
-	This method acts on the private array this._pixels, which must be defined
-	in the grid subclass.*/
+	 * @param {IndexCoordinate} i index coordinates of the pixel to change the
+	 * value of
+	 * @param {number} t the value to assign to this pixel. This can be integers
+	 * or floating point numbers, depending on the grid subclass used
+	 * (see eg Grid2D).
+	 * */
 	setpixi( i, t ){
+		this._isValidValue(t);
 		this._pixels[i] = t;
 	}
 
 	/** The pixt method finds the current value of a pixel p on the grid.
-	@param {ArrayCoordinate} p array coordinates of the pixel to find the value of
-	@return {number} t the value of p on the grid. This can be integers or 
-	floating point numbers, depending on the grid subclass used (see eg Grid2D).
-	This method acts on the private array this._pixels, which must be defined
-	in the grid subclass.*/
+	 * @param {ArrayCoordinate} p array coordinates of the pixel to find the
+	 * value of
+	 * @return {number} t the value of p on the grid. This can be integers or
+	 * floating point numbers, depending on the grid subclass used (see eg
+	 * Grid2D).
+	 */
 	pixt( p ){
 		return this._pixels[this.p2i(p)]
 	}
 
 	/** The pixti method finds the current value of a pixel i on the grid.
-	@param {IndexCoordinate} i index coordinates of the pixel to find the value of
-	@return {number} t the value of i on the grid. This can be integers or 
-	floating point numbers, depending on the grid subclass used (see eg Grid2D).
-	This method acts on the private array this._pixels, which must be defined
-	in the grid subclass.*/
+	 * @param {IndexCoordinate} i index coordinates of the pixel to find the
+	 * value of
+	 * @return {number} t the value of i on the grid. This can be integers or
+	 * floating point numbers, depending on the grid subclass used (see eg
+	 * Grid2D).
+	*/
 	pixti( i ){
 		return this._pixels[i]
 	}
 
 	/** A pixel on the grid.
-	@typedef {Object[]} Pixel
-	@property {ArrayCoordinate} Pixel[0] - pixel coordinate
-	@property {number} Pixel[1] - pixel value
-	*/
+	 * @typedef {Object[]} Pixel
+	 * @property {ArrayCoordinate} Pixel[0] - pixel coordinate
+	 * @property {number} Pixel[1] - pixel value
+	 * */
 	
-	/** A pixel on the grid.
-	@typedef {Object[]} iPixel
-	@property {IndexCoordinate} Pixel[0] - pixel coordinate
-	@property {number} Pixel[1] - pixel value
-	*/
+	/* /** A pixel on the grid.
+	 * @typedef {Object[]} iPixel
+	 * @property {IndexCoordinate} Pixel[0] - pixel coordinate
+	 * @property {number} Pixel[1] - pixel value
+	 * */
 
 	/** This iterator returns locations and values of all non-zero pixels.
-
-		This method isn't actually called because the subclasses implement
-		it themselves due to efficiency reasons. It serves as a template to
-		document the functionality. 
-		@return {Pixel} for each pixel, return an array [p,v] where p are
-		the pixel's array coordinates on the grid, and v its value.*/
+	 * This method isn't actually called because the subclasses implement
+	 * it themselves due to efficiency reasons. It serves as a template to
+	 * document the functionality.
+	 * @abstract
+	 * @return {Pixel} for each pixel, return an array [p,v] where p are
+	 * the pixel's array coordinates on the grid, and v its value.*/
+	//eslint-disable-next-line require-yield
 	* pixels() {
+		//noinspection JSValidateTypes
+		throw("Iterator 'pixels' not implemented!")
+
+		/*
+		// example code:
 		for( let i of this.pixelsi() ){
 			if( this._pixels[i] > 0 ){
-				yield [this.i2p(i),this._pixels[i]]; 
+				yield [this.i2p(i),this._pixels[i]]
 			}
-		}
+		}*/
 	}
 
-	/** This iterator returns locations and values of all non-zero pixels.
-
-		This method isn't actually called because the subclasses implement
-		it themselves due to efficiency reasons. It serves as a template to
-		document the functionality. 
-		@abstrac
-		@return {undefined} for each pixel, because this method should be implemented
-		in a grid subclass.*/
+	/** This iterator returns locations all pixels including background.
+	 * This method isn't actually called because the subclasses implement
+	 * it themselves due to efficiency reasons. It serves as a template to
+	 * document the functionality.
+	 * @abstract
+	 * @return {IndexCoordinate} for each pixel, because this method should be
+	 * implemented in a grid subclass.
+	 * */
+	//eslint-disable-next-line require-yield
 	* pixelsi() {
-		//throw("Iterator 'pixelsi' not implemented!")
-		yield undefined;
+		throw("Iterator 'pixelsi' not implemented!")
+		//yield undefined
 	}
 
 	/** This method pre-allocates an array of the correct datatype to make
-	a copy of the current pixel values. Values are not actually copied yet.
-	@return {Uint16Array|Float32Array} an array with an element for each pixel.
-	The datatype is determined by the datatype of this._pixels (implemented in the
-	subclass), which can be either Uint16Array or Float32Array.*/
-	pixelsbuffer() {
-	
-		/** For storing a copy of all pixel values; eg for synchronous updating of some
-		sort.
-		@type {Uint16Array|Float32Array}*/
-		this._pixelsbuffer = [];
+	 * a copy of the current pixel values. Values are not actually copied yet.
+	 * @return {Uint16Array|Float32Array} an array with an element for each
+	 * pixel. The datatype is determined by the datatype of this._pixels
+	 * (implemented in the subclass), which can be either Uint16Array or
+	 * Float32Array. */
+	pixelsBuffer() {
+
+		/** For storing a copy of all pixel values; eg for synchronous updating
+		 * of some sort.
+		 * @type {Uint16Array|Float32Array}*/
+		this._pixelsbuffer = new Uint16Array(this._pixels.length);
 	
 		if( this._pixels instanceof Uint16Array ){
 			this._pixelsbuffer = new Uint16Array(this._pixels.length);
@@ -181,61 +301,101 @@ class Grid {
 	}
 
 	/** Template method to compute the gradient at location i on the grid
-	(location given in index coordinates).
-	This method throws an error, which is overwritten when a subclass 
-	implements a gradienti method.
-	@param {IndexCoordinate} i index coordinate of a pixel to compute the gradient at. 
-	@see https://en.wikipedia.org/wiki/Gradient*/
+	 * (location given in index coordinates).
+	 * This method throws an error, which is overwritten when a subclass
+	 * implements a gradienti method.
+	 * @param {IndexCoordinate} i index coordinate of a pixel to compute the
+	 * gradient at.
+	 * @return {number[]} the gradient
+	 * @see https://en.wikipedia.org/wiki/Gradient*/
+	//eslint-disable-next-line no-unused-vars
 	gradienti( i ){
-		throw("method 'gradienti' not implemented! "+i)
+		throw("method 'gradienti' not implemented! ")
 	}
 
-	/** Method to compute the gradient at location p on the grid
-	(location given in array coordinates). It internally calls the gradienti
-	method using index coordinates, which should be implemented in the grid
-	subclass.
-	@param {ArrayCoordinate} p array coordinates of a pixel p to compute the gradient at
-	@return {number} the gradient at position p.
-	@see https://en.wikipedia.org/wiki/Gradient*/
+	/** Method to compute the gradient at location p on the grid (location
+	 * given in array coordinates). It internally calls the gradienti
+	 * method using index coordinates, which should be implemented in the grid
+	 * subclass.
+	 * @param {ArrayCoordinate} p array coordinates of a pixel p to compute
+	 * the gradient at
+	 * @return {number} the gradient at position p.
+	 * @see https://en.wikipedia.org/wiki/Gradient*/
 	gradient( p ){
+		//noinspection JSValidateTypes
 		return this.gradienti( this.p2i( p ) )
 	}
 
 	/** Method to compute the laplacian at location p on the grid
-	(location given in array coordinates). It internally calls the laplaciani
-	method that does the same but uses index coordinates.
-	@param {ArrayCoordinate} p array coordinates of a pixel p to compute the laplacian at
-	@return {number} the laplacian at position p.
-	@see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions */
+	 * (location given in array coordinates). It internally calls the laplaciani
+	 * method that does the same but uses index coordinates.
+	 * @param {ArrayCoordinate} p array coordinates of a pixel p to compute the
+	 * laplacian at
+	 * @return {number} the laplacian at position p.
+	 * @see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions */
 	laplacian( p ){
 		return this.laplaciani( this.p2i( p ) )
 	}
 
-	/** Method to compute the laplacian at location i on the grid
-	(location given in index coordinates). It internally uses the 
-	neighNeumanni method to compute a Neumann neighborhood, which should
-	be implemented in the grid subclass.
-	@param {IndexCoordinate} i index coordinates of a pixel to compute the laplacian at
-	@return {number} the laplacian at position p.
-	@see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions */
+	/**
+	 * A method to compute the Neumann neighborhood should be implemented in the
+	 * Grid subclass if the laplacian (see below) is used.
+	 * This mock function ensures that an error is thrown when there is no
+	 * method called neighNeumanni in the grid subclass.
+	 * @abstract
+	 * @see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+	 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+	 * @param {boolean[]} [torus=[true,true]] - does the grid have linked
+	 * borders? Defaults to the setting on this grid, see {@link torus}
+	 * @return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	 */
+	//eslint-disable-next-line no-unused-vars,require-yield
+	* neighNeumanni ( i, torus = this.torus ){
+		throw( "Trying to call the method neighNeumanni, but you haven't " +
+			"implemented this method in the Grid subclass you are using!")
+	}
+
+	/** Method to compute the laplacian at location i on the grid (location
+	 * given in index coordinates). It internally uses the neighNeumanni method
+	 * to compute a Neumann neighborhood, which should be implemented in the
+	 * grid subclass. It then uses the finite difference method (see link) with
+	 * h = 1.
+	 * @param {IndexCoordinate} i index coordinates of a pixel to compute the
+	 * laplacian at
+	 * @return {number} the laplacian at position p.
+	 * @see https://en.wikipedia.org/wiki/Laplace_operator#Coordinate_expressions
+	 * @see https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Finite_differences
+	 * */
 	laplaciani( i ){
 		let L = 0, n = 0;
+
+		// For now: forbid computing a laplacian on an integer grid as it makes
+		// no sense and could happen by accident if you forget to specify the
+		// datatype.
+		// If this is too strict, we can set an option to overrule this error.
+		// This way you still get to see it if you try this by accident.
+		if( this.datatype === "Uint16" ){
+			throw("Diffusion/laplacian methods do not work on a Uint16 grid! " +
+				"Consider setting datatype='Float32'.")
+		}
+
+		//noinspection JSUnresolvedFunction
 		for( let x of this.neighNeumanni(i) ){
 			L += this.pixti( x ); n ++;
 		} 
 		return L - n * this.pixti( i )
 	}
 
-	/** Perform a diffusion step on the grid, updating the values of all pixels 
-	according to Fick's second law of diffusion.
-	@param {number} D diffusion coefficient 
-	@see https://en.wikipedia.org/wiki/Diffusion#Fick's_law_and_equations
-	@see https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Mesh_Laplacians
-	*/
+	/** Perform a diffusion step on the grid, updating the values of all pixels
+	 * according to Fick's second law of diffusion.
+	 * @param {number} D diffusion coefficient
+	 * @see https://en.wikipedia.org/wiki/Diffusion#Fick's_law_and_equations
+	 * @see https://en.wikipedia.org/wiki/Discrete_Laplace_operator#Mesh_Laplacians
+	 * */
 	diffusion( D ){
 		// For synchronous updating of the grid: compute updated values in a copy
 		// of the current pixels
-		if( ! this._pixelsbuffer ) this.pixelsbuffer();
+		if( ! this._pixelsbuffer ) this.pixelsBuffer();
 		for( let i of this.pixelsi() ){
 			// Diffusion: new value is current value + change.
 			// the change is given by the diffusion coefficient D times the laplacian.
@@ -246,86 +406,87 @@ class Grid {
 	}
 
 	
-	/**
-	 Function that updates a gridpoint depending on its current value and that of its
-	 neighbors.
-	 @typedef {function} updatePixelFunction
-	 @param {ArrayCoordinate} p - pixel to update
-	 @param {ArrayCoordinate[]} neighbors - coordinates of neighbors of p
-	 @return {number} value - the updated value, based on the current value of p and
-	 its neighbors.
+	/** Function that updates a gridpoint depending on its current value and
+	 * that of its neighbors.
+	 * @typedef {function} updatePixelFunction
+	 * @param {ArrayCoordinate} p - pixel to update
+	 * @param {ArrayCoordinate[]} neighbors - coordinates of neighbors of p
+	 * @return {number} value - the updated value, based on the current value
+	 * of p and its neighbors.
 	 */
 
-	/** Apply a function to all pixel values on the grid. It acts on this._pixels,
-	which is implemented in the grid subclass.
-	@param {updatePixelFunction} f - the function to apply to each pixel. */
+	/** Apply a function to all pixel values on the grid. It acts on
+	 * this._pixels, which is implemented in the grid subclass.
+	 * @param {updatePixelFunction} f - the function to apply to each pixel. */
 	applyLocally( f ){
-		if( ! this._pixelsbuffer ) this.pixelsbuffer();
+		if( ! this._pixelsbuffer ) this.pixelsBuffer();
 		for( let i of this.pixelsi() ){
 			let p = this.i2p(i);
 			this._pixelsbuffer[i] = f( p, this.neigh(p) ); 
 		}
-		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];		
+		[this._pixelsbuffer, this._pixels] = [this._pixels, this._pixelsbuffer];
 	}
 	
-	/** Multiply all pixel values on the grid with a constant factor r. 
-	This method acts on this._pixels, which is implemented in the grid subclass.
-	@param {number} r the multiplication factor. */
+	/** Multiply all pixel values on the grid with a constant factor r.
+	 * This method acts on this._pixels, which is implemented in the grid
+	 * subclass.
+	 * @param {number} r the multiplication factor. */
 	multiplyBy( r ){
 		for( let i of this.pixelsi() ){
-			this._pixels[i] *= r; 
+			this._pixels[i] *= r;
 		}
 	}
 
 }
 
-/** A class containing (mostly static) utility functions for dealing with 2D 
- 	grids. Extends the Grid class but implements functions specific to the 2D
- 	grid (such as neighborhoods). 
- 	
-	@example <caption>Diffusion on a 2D chemokine grid</caption>
- 	* 
- 	* let CPM = require("path/to/build")
- 	* 
- 	* // Make a grid with a chemokine, add some chemokine at the middle pixel
- 	* let chemogrid = new CPM.Grid2D( [100,100], [true,true], "Float32" )
- 	* chemogrid.setpix( [50,50], 100 )
- 	* 
- 	* // Measure chemokine at different spots before and after diffusion
- 	* let p1 = [50,50], p2 = [50,51]
- 	* console.log( "p1: " + chemogrid.pixt( p1 ) + ", p2: " + chemogrid.pixt(p2) )
- 	* chemogrid.diffusion( 0.001 )
- 	* console.log( "p1: " + chemogrid.pixt( p1 ) + ", p2: " + chemogrid.pixt(p2) )
- 	* chemogrid.multiplyBy( 0.9 )	 // decay of the chemokine
- 	* console.log( "p1: " + chemogrid.pixt( p1 ) + ", p2: " + chemogrid.pixt(p2) )
- 	
- 	@example <caption>Neighborhoods on a 2D grid</caption>
- 	* 
- 	* let CPM = require("path/to/build")
- 	* 
- 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0]
- 	* let grid = new CPM.Grid2D( [100,100], [true,true] )
- 	* console.log( grid.neigh( [0,0] ) ) // returns coordinates of 8 neighbors
- 	* 
- 	* // Now try a grid without torus; the corner now has fewer neighbors.
- 	* let grid2 = new CPM.Grid2D( [100,100], [false,false] )
- 	* console.log( grid2.neigh( [0,0] ) ) // returns only 3 neighbors
- 	* 
- 	* // Or try a Neumann neighborhood using the iterator
- 	* for( let i of grid.neighNeumanni( 0 ) ){
- 	* 	console.log( grid.i2p(i).join(" ") )
- 	* }
- 	*/
+/** A class containing (mostly static) utility functions for dealing with 2D
+ *  grids. Extends the Grid class but implements functions specific to the 2D
+ *  grid (such as neighborhoods).
+ *
+ *  @example <caption>Diffusion on a 2D chemokine grid</caption>
+ *  let CPM = require("path/to/build")
+ *
+ *  // Make a grid with a chemokine, add some chemokine at the middle pixel
+ * let chemoGrid = new CPM.Grid2D( [100,100], [true,true], "Float32" )
+ * chemoGrid.setpix( [50,50], 100 )
+ *
+ * // Measure chemokine at different spots before and after diffusion
+ * let p1 = [50,50], p2 = [50,51]
+ * console.log( "p1: " + chemoGrid.pixt( p1 ) + ", p2: " + chemoGrid.pixt(p2) )
+ * chemoGrid.diffusion( 0.001 )
+ * console.log( "p1: " + chemoGrid.pixt( p1 ) + ", p2: " + chemoGrid.pixt(p2) )
+ * chemoGrid.multiplyBy( 0.9 )	 // decay of the chemokine
+ * console.log( "p1: " + chemoGrid.pixt( p1 ) + ", p2: " + chemoGrid.pixt(p2) )
+ *
+ * @example <caption>Neighborhoods on a 2D grid</caption>
+ *
+ * let CPM = require("path/to/build")
+ *
+ * // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0]
+ * let grid = new CPM.Grid2D( [100,100], [true,true] )
+ * console.log( grid.neigh( [0,0] ) ) // returns coordinates of 8 neighbors
+ *
+ * // Now try a grid without torus; the corner now has fewer neighbors.
+ * let grid2 = new CPM.Grid2D( [100,100], [false,false] )
+ * console.log( grid2.neigh( [0,0] ) ) // returns only 3 neighbors
+ *
+ * // Or try a Neumann neighborhood using the iterator
+ * for( let i of grid.neighNeumanni( 0 ) ){
+ * 	console.log( grid.i2p(i).join(" ") )
+ * }
+ */
 
 class Grid2D extends Grid {
 
 	/** Constructor of the Grid2D object.
-	@param {GridSize} extents - the size of the grid in each dimension 
-	@param {boolean[]} [torus=[true,true]] - should the borders of the grid be linked, so that a cell moving
-	out on the left reappears on the right? Should be an array specifying whether the
-	torus holds in each dimension; eg [true,false] for a torus in x but not y dimension.
-	@param {string} [datatype="Uint16"] - What datatype are the values associated with each
-	pixel on the grid? Choose from "Uint16" or "Float32". */
+	 * @param {GridSize} extents - the size of the grid in each dimension
+	 * @param {boolean[]} [torus=[true,true]] - should the borders of the grid
+	 * be linked, so that a cell moving out on the left reappears on the right?
+	 * Should be an array specifying whether the torus holds in each dimension;
+	 * eg [true,false] for a torus in x but not y dimension.
+	 * @param {string} [datatype="Uint16"] - What datatype are the values
+	 * associated with each pixel on the grid? Choose from "Uint16" or
+	 * "Float32". */
 	constructor( extents, torus=[true,true], datatype="Uint16" ){
 		super( extents, torus );
 		
@@ -333,44 +494,53 @@ class Grid2D extends Grid {
 		this.X_STEP = 1 << this.Y_BITS; // for neighborhoods based on pixel index
 		/** @ignore */
 		this.Y_MASK = this.X_STEP-1;
-		// Check that the grid size is not too big to store pixel ID in 32-bit number,
-		// and allow fast conversion of coordinates to unique ID numbers.
+		// Check that the grid size is not too big to store pixel ID in 32-bit
+		// number, and allow fast conversion of coordinates to unique
+		// ID numbers.
 		if( this.X_BITS + this.Y_BITS > 32 ){
 			throw("Field size too large -- field cannot be represented as 32-bit number")
 		}
-		// Attributes per pixel:
-		// celltype (identity) of the current pixel.
-		if( datatype == "Uint16" ){
-			/** Array with values for each pixel stored at the position of its 
-			{@link IndexCoordinate}. E.g. the value of pixel with coordinate i is
-			stored as this._pixels[i].
-			@private
-			@type {Uint16Array|Float32Array} */
-			this._pixels = new Uint16Array(this.p2i(this.extents));
-		} else if( datatype == "Float32" ){
-			this._pixels = new Float32Array(this.p2i(this.extents));
+
+		this.datatype = datatype;
+
+		// Attributes per pixel: CellId of the current pixel.
+		if( datatype === "Uint16" ){
+			/** Array with values for each pixel stored at the position of its
+			 * {@link IndexCoordinate}. E.g. the value of pixel with coordinate
+			 * i is stored as this._pixelArray[i].
+			 * 	Note that this array is accessed indirectly via the
+			 * {@link _pixels} set- and get methods.
+			 * @private
+			 * @type {Uint16Array|Float32Array} */
+			this._pixelArray = new Uint16Array(this.p2i(this.extents));
+		} else if( datatype === "Float32" ){
+			this._pixelArray = new Float32Array(this.p2i(this.extents));
 		} else {
 			throw("unsupported datatype: " + datatype)
 		}
 	}
 
-	/** This iterator returns locations and values of all non-zero pixels.
-
-		@return {iPixel} for each pixel, return an array [i,v] where i is
-		the pixel's {@link IndexCoordinate} on the grid, and v its value.
-		
-		@example
-		* let CPM = require( "path/to/build" )
-		* // make a grid and set some values
-		* let grid = new CPM.Grid2D( [100,100], [true,true] )
-		* grid.setpixi( 0, 1 )
-		* grid.setpixi( 1, 5 )
-		* 
-		* // iterator
-		* for( let i of grid.pixelsi() ){
-		* 	console.log( i )
-		* }
-		*/
+	/** This iterator returns locations and values of all pixels.
+	 * Whereas the {@link pixels} generator yields only non-background pixels
+	 * and specifies both their {@link ArrayCoordinate} and value, this
+	 * generator yields all pixels by {@link IndexCoordinate} and does not
+	 * report value.
+	 *
+	 * @return {IndexCoordinate} for each pixel on the grid (including
+	 * background pixels).
+	 *
+	 * @example
+	 * let CPM = require( "path/to/build" )
+	 * // make a grid and set some values
+	 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+	 * grid.setpixi( 0, 1 )
+	 * grid.setpixi( 1, 5 )
+	 *
+	 * // iterator
+	 * for( let i of grid.pixelsi() ){
+	 * 	console.log( i )
+	 * }
+	 */
 	* pixelsi() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -384,32 +554,34 @@ class Grid2D extends Grid {
 	}
 	
 	/** This iterator returns locations and values of all non-zero pixels.
-
-		@return {Pixel} for each pixel, return an array [p,v] where p are
-		the pixel's array coordinates on the grid, and v its value.
-		
-		@example
-		* let CPM = require( "path/to/build" )
-		* // make a grid and set some values
-		* let grid = new CPM.Grid2D( [100,100], [true,true] )
-		* grid.setpix( [0,0], 1 )
-		* grid.setpix( [0,1], 5 )
-		* 
-		* // iterator
-		* for( let p of grid.pixels() ){
-		* 	console.log( p )
-		* }
-		*/
+	 * @return {Pixel} for each pixel, return an array [p,v] where p are
+	 * the pixel's array coordinates on the grid, and v its value.
+	 *
+	 * @example
+	 * let CPM = require( "path/to/build" )
+	 * // make a grid and set some values
+	 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+	 * grid.setpix( [0,0], 1 )
+	 * grid.setpix( [0,1], 5 )
+	 *
+	 * // iterator
+	 * for( let p of grid.pixels() ){
+	 * 	console.log( p )
+	 * }
+	 */
 	* pixels() {
 		let ii = 0, c = 0;
 		// Loop over coordinates [i,j] on the grid
-		// For each pixel with cellid != 0 (so non-background pixels), 
+		// For each pixel with cellId != 0 (so non-background pixels),
 		// return an array with in the first element the pixel 
-		// coordinates p = [i,j], and in the second element the cellid of this pixel.
+		// coordinates p = [i,j], and in the second element the cellId of this pixel.
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
-				if( this._pixels[ii] > 0 ){
-					yield [[i,j], this._pixels[ii]];
+
+				//noinspection JSUnresolvedVariable
+				let pixels = this._pixels;
+				if( pixels[ii] > 0 ){ //check non-background
+					yield [[i,j], pixels[ii]];
 				}
 				ii ++;
 			}
@@ -418,25 +590,27 @@ class Grid2D extends Grid {
 		}
 	}
 
-	/**	??? OLD METHOD
-		@todo check if this method is still used.
-		@ignore
-		Return array of {@link IndexCoordinate} of neighbor pixels of the pixel at 
-		coordinate i. This function takes the 2D Moore neighborhood.
-		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	/**	Simple method for neighborhood computation. This method is not
+	 * actually used in the framework, except to test the less intuitive
+	 * (but faster) neighi method that works directly on index coordinates
+	 * rather than first converting to array positions (which is expensive
+	 * as  neighborhoods are computed very often in the CPM).
+	 * @ignore
+	 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+	 * @return {IndexCoordinate[]} - an array of coordinates for all the
+	 * neighbors of i.
 	*/
-	neighisimple( i ){
+	neighiSimple( i ){
 		let p = this.i2p(i);
 		let xx = [];
 		for( let d = 0 ; d <= 1 ; d ++ ){
-			if( p[d] == 0 ){
+			if( p[d] === 0 ){
 				if( this.torus[d] ){
 					xx[d] = [p[d],this.extents[d]-1,p[d]+1];
 				} else {
 					xx[d] = [p[d],p[d]+1];
 				}
-			} else if( p[d] == this.extents[d]-1 ){
+			} else if( p[d] === this.extents[d]-1 ){
 				if( this.torus[d] ){
 					xx[d] = [p[d],p[d]-1,0];
 				} else {
@@ -460,15 +634,15 @@ class Grid2D extends Grid {
 		return r
 	}
 	
-	/**	Return array of {@link IndexCoordinate} of von Neumann-4 neighbor pixels 
-		of the pixel at 
-		coordinate i. This function takes the 2D Neumann-4 neighborhood, excluding the
-		pixel itself.
-		@see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
-		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-		@param {boolean[]} [torus=[true,true]] - does the grid have linked borders? Defaults to the
-		setting on this grid, see {@link torus}
-		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	/**	Return array of {@link IndexCoordinate} of von Neumann-4 neighbor
+	 * pixels of the pixel at coordinate i. This function takes the 2D
+	 * Neumann-4 neighborhood, excluding the pixel itself.
+	 * @see https://en.wikipedia.org/wiki/Von_Neumann_neighborhood
+	 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+	 * @param {boolean[]} [torus=[true,true]] - does the grid have linked
+	 * borders? Defaults to the setting on this grid, see {@link torus}
+	 * @return {IndexCoordinate[]} - an array of coordinates for all the
+	 * neighbors of i.
 	*/
 	* neighNeumanni( i, torus = this.torus ){
 		// normal computation of neighbor indices (top left-middle-right, 
@@ -499,7 +673,7 @@ class Grid2D extends Grid {
 			yield r;
 		}
 		// top border
-		if( i % this.X_STEP == 0 ){
+		if( i % this.X_STEP === 0 ){
 			if( torus[1] ){
 				t += this.extents[1];
 				yield t;
@@ -508,7 +682,7 @@ class Grid2D extends Grid {
 			yield t;
 		}
 		// bottom border
-		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
+		if( (i+1-this.extents[1]) % this.X_STEP === 0 ){
 			if( torus[1] ){
 				b -= this.extents[1];
 				yield b;
@@ -517,14 +691,15 @@ class Grid2D extends Grid {
 			yield b;
 		}
 	}
-	/**	Return array of {@link IndexCoordinate} of Moore-8 neighbor pixels of the pixel at 
-		coordinate i. This function takes the 2D Moore-8 neighborhood, excluding the
-		pixel itself.
-		@see https://en.wikipedia.org/wiki/Moore_neighborhood
-		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-		@param {boolean} [torus] - does the grid have linked borders? Defaults to the
-		setting on this grid, see {@link torus}
-		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	/**	Return array of {@link IndexCoordinate} of Moore-8 neighbor pixels of
+	 * the pixel at coordinate i. This function takes the 2D Moore-8
+	 * neighborhood, excluding the pixel itself.
+	 * @see https://en.wikipedia.org/wiki/Moore_neighborhood
+	 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+	 * @param {boolean[]} [torus] - does the grid have linked borders? Defaults
+	 * to the setting on this grid, see {@link torus}
+	 * @return {IndexCoordinate[]} - an array of coordinates for all the
+	 * neighbors of i.
 	*/
 	neighi( i, torus = this.torus ){	
 		// normal computation of neighbor indices (top left-middle-right, 
@@ -558,7 +733,7 @@ class Grid2D extends Grid {
 
 		add = NaN;
 		// top border
-		if( i % this.X_STEP == 0 ){
+		if( i % this.X_STEP === 0 ){
 			if( torus[1] ){
 				add = this.extents[1];
 			}
@@ -566,7 +741,7 @@ class Grid2D extends Grid {
 		}
 		
 		// bottom border
-		if( (i+1-this.extents[1]) % this.X_STEP == 0 ){
+		if( (i+1-this.extents[1]) % this.X_STEP === 0 ){
 			if( torus[1] ){
 				add = -this.extents[1];
 			}
@@ -579,126 +754,133 @@ class Grid2D extends Grid {
 		}
 	}
 	
-	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
-	
-	See also {@link Grid2D#i2p} for the backward conversion.
-	
-	@param {ArrayCoordinate} p - the coordinate of the pixel to convert
-	@return {IndexCoordinate} the converted coordinate. 
-	
-	@example 
-	* let grid = new CPM.Grid2D( [100,100], [true,true] )
-	* let p = grid.i2p( 5 )
-	* console.log( p )
-	* console.log( grid.p2i( p ))
-	*/
+	/** Method for conversion from an {@link ArrayCoordinate} to an
+	 * {@link IndexCoordinate}.
+	 *
+	 * See also {@link Grid2D#i2p} for the backward conversion.
+	 *
+	 * @param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	 * @return {IndexCoordinate} the converted coordinate.
+	 *
+	 * @example
+	 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+	 * let p = grid.i2p( 5 )
+	 * console.log( p )
+	 * console.log( grid.p2i( p ))
+	 */
 	p2i ( p ){
+		// using bitwise operators for speed.
 		return ( p[0] << this.Y_BITS ) + p[1]
 	}
-	/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
-	
-	See also {@link Grid2D#p2i} for the backward conversion.
-	
-	@param {IndexCoordinate} i - the coordinate of the pixel to convert
-	@return {ArrayCoordinate} the converted coordinate. 
-	
-	@example 
-	* let grid = new CPM.Grid2D( [100,100], [true,true] )
-	* let p = grid.i2p( 5 )
-	* console.log( p )
-	* console.log( grid.p2i( p ))
-	*/
+
+	/** Method for conversion from an {@link IndexCoordinate} to an
+	 * {@link ArrayCoordinate}.
+	 * See also {@link Grid2D#p2i} for the backward conversion.
+	 *
+	 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
+	 * @return {ArrayCoordinate} the converted coordinate.
+	 *
+	 * @example
+	 * let grid = new CPM.Grid2D( [100,100], [true,true] )
+	 * let p = grid.i2p( 5 )
+	 * console.log( p )
+	 * console.log( grid.p2i( p ))
+	 */
 	i2p ( i ){
+		// using bitwise operators for speed.
 		return [i >> this.Y_BITS, i & this.Y_MASK]
 	}
 	
-	/** Method to compute the gradient at location i on the grid
-	(location given as an {@link IndexCoordinate}).
-	@param {IndexCoordinate} i - index coordinate of a pixel to compute the gradient at
-	@return {number} the gradient at position i.
-	@see https://en.wikipedia.org/wiki/Gradient*/
+	/** Method to compute the gradient at location i on the grid (location
+	 * given as an {@link IndexCoordinate}).
+	 * @param {IndexCoordinate} i - index coordinate of a pixel to compute the
+	 * gradient at
+	 * @return {number[]} the gradient at position i.
+	 * @see https://en.wikipedia.org/wiki/Gradient */
 	gradienti( i ){
-		let t = i-1, b = i+1, l = i-this.X_STEP, r = i+this.X_STEP, torus = this.torus;
+		let t = i-1, b = i+1, l = i-this.X_STEP, r = i+this.X_STEP,
+			torus = this.torus;
+		//noinspection JSUnresolvedVariable
+		const pixels = this._pixels;
 		
-		let dx=0;
+		let dx;
 		if( i < this.extents[1] ){ // left border
 			if( torus[0] ){
 				l += this.extents[0] * this.X_STEP;
-				dx = ((this._pixels[r]-this._pixels[i])+
-					(this._pixels[i]-this._pixels[l]))/2;
+				dx = ((pixels[r]-pixels[i])+
+					(pixels[i]-pixels[l]))/2;
 			} else {
-				dx = this._pixels[r]-this._pixels[i];
+				dx = pixels[r]-pixels[i];
 			}
 		} else { 
 			if( i >= this.X_STEP*( this.extents[0] - 1 ) ){ // right border
 				if( torus[0] ){
 					r -= this.extents[0] * this.X_STEP;
-					dx = ((this._pixels[r]-this._pixels[i])+
-						(this._pixels[i]-this._pixels[l]))/2;
+					dx = ((pixels[r]-pixels[i])+
+						(pixels[i]-pixels[l]))/2;
 				} else {
-					dx = this._pixels[i]-this._pixels[l];
+					dx = pixels[i]-pixels[l];
 				}
 			} else {
-				dx = ((this._pixels[r]-this._pixels[i])+
-					(this._pixels[i]-this._pixels[l]))/2;
+				dx = ((pixels[r]-pixels[i])+
+					(pixels[i]-pixels[l]))/2;
 			}
 		}
 
-		let dy=0;
-		if( i % this.X_STEP == 0 ){ // top border
+		let dy;
+		if( i % this.X_STEP === 0 ){ // top border
 			if( torus[1] ){
 				t += this.extents[1];
-				dy = ((this._pixels[b]-this._pixels[i])+
-					(this._pixels[i]-this._pixels[t]))/2;
+				dy = ((pixels[b]-pixels[i])+
+					(pixels[i]-pixels[t]))/2;
 			}	else {
-				dy = this._pixels[b]-this._pixels[i];
+				dy = pixels[b]-pixels[i];
 			}
 		} else { 
-			if( (i+1-this.extents[1]) % this.X_STEP == 0 ){ // bottom border
+			if( (i+1-this.extents[1]) % this.X_STEP === 0 ){ // bottom border
 				if( torus[1] ){
 					b -= this.extents[1];
-					dy = ((this._pixels[b]-this._pixels[i])+
-						(this._pixels[i]-this._pixels[t]))/2;
+					dy = ((pixels[b]-pixels[i])+
+						(pixels[i]-pixels[t]))/2;
 				} else {
-					dy = this._pixels[i]-this._pixels[t];
+					dy = pixels[i]-pixels[t];
 				}
 			} else {
-				dy = ((this._pixels[b]-this._pixels[i])+
-					(this._pixels[i]-this._pixels[t]))/2;
+				dy = ((pixels[b]-pixels[i])+
+					(pixels[i]-pixels[t]))/2;
 			}
 		}
-		return [
-			dx, dy
-		]
+		return [dx, dy]
 	}
 }
 
-/** A class containing (mostly static) utility functions for dealing with 3D 
- 	grids. Extends the Grid class but implements functions specific to the 3D
- 	grid (such as neighborhoods). 
- 	
- 	@example <caption>Neighborhoods on a 3D grid</caption>
- 	* 
- 	* let CPM = require("path/to/build")
- 	* 
- 	* // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
- 	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
- 	* console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
- 	* 
- 	* // Now try a grid without torus; the corner now has fewer neighbors.
- 	* let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
- 	* console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
- 	*
- 	* // Or try a torus in one dimension
- 	* let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
- 	* console.log( grid2.neigh( [0,0,0] ) ) 
- 	*/
+/** A class containing (mostly static) utility functions for dealing with 3D
+ * 	grids. Extends the Grid class but implements functions specific to the 3D
+ * 	grid (such as neighborhoods).
+ *
+ * @example <caption>Neighborhoods on a 3D grid</caption>
+ *
+ * let CPM = require("path/to/build")
+ *
+ * // Make a grid with a torus, and find the neighborhood of the upper left pixel [0,0,0]
+ * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+ * console.log( grid.neigh( [0,0,0] ) ) // returns coordinates of 26 neighbors (9+8+9)
+ *
+ * // Now try a grid without torus; the corner now has fewer neighbors.
+ * let grid2 = new CPM.Grid3D( [100,100,100], [false,false,false] )
+ * console.log( grid2.neigh( [0,0,0] ) ) // returns only 7 neighbors
+ *
+ * // Or try a torus in one dimension
+ * let grid2 = new CPM.Grid3D( [100,100,100], [true,false,false] )
+ * console.log( grid2.neigh( [0,0,0] ) )
+ */
 class Grid3D extends Grid {
 
 	/** Constructor of the Grid3D object.
-	@param {GridSize} extents - the size of the grid in each dimension 
-	@param {boolean[]} [torus = [true,true,true]] - should the borders of the grid be linked, so that a cell moving
-	out on the left reappears on the right? */
+	 * @param {GridSize} extents - the size of the grid in each dimension
+	 * @param {boolean[]} [torus = [true,true,true]] - should the borders of
+	 * the grid be linked, so that a cell moving out on the left reappears on
+	 * the right? */
 	constructor( extents, torus = [true,true,true] ){
 		super( extents, torus );
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
@@ -716,66 +898,76 @@ class Grid3D extends Grid {
 		this.Y_STEP = 1 << (this.Z_BITS);
 		/** @ignore */
 		this.X_STEP = 1 << (this.Z_BITS +this.Y_BITS);
-		/** Array with values for each pixel stored at the position of its 
-			{@link IndexCoordinate}. E.g. the value of pixel with coordinate i is
-			stored as this._pixels[i].
-			@private
-			@type {Uint16Array} */
-		this._pixels = new Uint16Array(this.p2i(extents));
+		/** Array with values for each pixel stored at the position of its
+		 * {@link IndexCoordinate}. E.g. the value of pixel with coordinate i
+		 * is stored as this._pixelArray[i].
+		 * 	Note that this array is accessed indirectly via the
+		 * {@link _pixels} set- and get methods.
+		 * @private
+		 * @type {Uint16Array} */
+		this._pixelArray = new Uint16Array(this.p2i(extents));
+		this.datatype = "Uint16";
 	}
-	/** Method for conversion from an {@link ArrayCoordinate} to an {@link IndexCoordinate}.
-	
-	See also {@link Grid3D#i2p} for the backward conversion.
-	
-	@param {ArrayCoordinate} p - the coordinate of the pixel to convert
-	@return {IndexCoordinate} the converted coordinate. 
-	
-	@example 
-	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-	* let p = grid.i2p( 5 )
-	* console.log( p )
-	* console.log( grid.p2i( p ))
-	*/
+	/** Method for conversion from an {@link ArrayCoordinate} to an
+	 * {@link IndexCoordinate}.
+	 *
+	 * See also {@link Grid3D#i2p} for the backward conversion.
+	 *
+	 * @param {ArrayCoordinate} p - the coordinate of the pixel to convert
+	 * @return {IndexCoordinate} the converted coordinate.
+	 *
+	 * @example
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * let p = grid.i2p( 5 )
+	 * console.log( p )
+	 * console.log( grid.p2i( p ))
+	 */
 	p2i( p ){
 		return ( p[0] << ( this.Z_BITS + this.Y_BITS ) ) + 
 			( p[1] << this.Z_BITS ) + 
 			p[2]
 	}
-	/** Method for conversion from an {@link IndexCoordinate} to an {@link ArrayCoordinate}.
-	
-	See also {@link Grid3D#p2i} for the backward conversion.
-	
-	@param {IndexCoordinate} i - the coordinate of the pixel to convert
-	@return {ArrayCoordinate} the converted coordinate. 
-	
-	@example 
-	* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-	* let p = grid.i2p( 5 )
-	* console.log( p )
-	* console.log( grid.p2i( p ))
-	*/
+	/** Method for conversion from an {@link IndexCoordinate} to an
+	 * {@link ArrayCoordinate}.
+	 *
+	 * See also {@link Grid3D#p2i} for the backward conversion.
+	 *
+	 * @param {IndexCoordinate} i - the coordinate of the pixel to convert
+	 * @return {ArrayCoordinate} the converted coordinate.
+	 *
+	 * @example
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * let p = grid.i2p( 5 )
+	 * console.log( p )
+	 * console.log( grid.p2i( p ))
+	 */
 	i2p( i ){
 		return [i >> (this.Y_BITS + this.Z_BITS), 
 			( i >> this.Z_BITS ) & this.Y_MASK, i & this.Z_MASK ]
 	}
 	
 	/** This iterator returns locations and values of all non-zero pixels.
-
-		@return {iPixel} for each pixel, return an array [i,v] where i is
-		the pixel's {@link IndexCoordinate} on the grid, and v its value.
-		
-		@example
-		* let CPM = require( "path/to/build" )
-		* // make a grid and set some values
-		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-		* grid.setpixi( 0, 1 )
-		* grid.setpixi( 1, 5 )
-		* 
-		* // iterator
-		* for( let i of grid.pixelsi() ){
-		* 	console.log( i )
-		* }
-		*/
+	 * Whereas the {@link pixels} generator yields only non-background pixels
+	 * and specifies both their {@link ArrayCoordinate} and value, this
+	 * generator yields all pixels by {@link IndexCoordinate} and does not
+	 * report value.
+	 *
+	 * @return {IndexCoordinate} for each pixel, return its
+	 * {@link IndexCoordinate}.
+	 *
+	 *
+	 * @example
+	 * let CPM = require( "path/to/build" )
+	 * // make a grid and set some values
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * grid.setpixi( 0, 1 )
+	 * grid.setpixi( 1, 5 )
+	 *
+	 * // iterator
+	 * for( let i of grid.pixelsi() ){
+	 * 	console.log( i )
+	 * }
+	 */
 	* pixelsi() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
@@ -794,30 +986,31 @@ class Grid3D extends Grid {
 	}
 
 	/** This iterator returns locations and values of all non-zero pixels.
-
-		@return {Pixel} for each pixel, return an array [p,v] where p are
-		the pixel's array coordinates on the grid, and v its value.
-		
-		@example
-		* let CPM = require( "path/to/build" )
-		* // make a grid and set some values
-		* let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
-		* grid.setpix( [0,0,0], 1 )
-		* grid.setpix( [0,0,1], 5 )
-		* 
-		* // iterator
-		* for( let p of grid.pixels() ){
-		* 	console.log( p )
-		* }
-		*/
+	 * @return {Pixel} for each pixel, return an array [p,v] where p are
+	 * the pixel's array coordinates on the grid, and v its value.
+	 *
+	 * @example
+	 * let CPM = require( "path/to/build" )
+	 * // make a grid and set some values
+	 * let grid = new CPM.Grid3D( [100,100,100], [true,true,true] )
+	 * grid.setpix( [0,0,0], 1 )
+	 * grid.setpix( [0,0,1], 5 )
+	 *
+	 * // iterator
+	 * for( let p of grid.pixels() ){
+	 * 	console.log( p )
+	 * }
+	 */
 	* pixels() {
 		let ii = 0, c = 0;
 		for( let i = 0 ; i < this.extents[0] ; i ++ ){
 			let d = 0;
 			for( let j = 0 ; j < this.extents[1] ; j ++ ){
 				for( let k = 0 ; k < this.extents[2] ; k ++ ){
-					if( this._pixels[ii] > 0 ){
-						yield [[i,j,k], this._pixels[ii]];
+					//noinspection JSUnresolvedVariable
+					let pixels = this._pixels;
+					if( pixels[ii] > 0 ){
+						yield [[i,j,k], pixels[ii]];
 					}
 					ii++;
 				}
@@ -829,27 +1022,28 @@ class Grid3D extends Grid {
 		}
 	}
 
-	/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels of the pixel at 
-		coordinate i. This function takes the 3D equivalent of the 2D Moore-8 neighborhood, 
-		excluding the pixel itself.
-		@see https://en.wikipedia.org/wiki/Moore_neighborhood
-		@param {IndexCoordinate} i - location of the pixel to get neighbors of.
-		@param {boolean[]} [torus=[true,true,true]] - does the grid have linked borders? Defaults to the
-		setting on this grid, see {@link torus}
-		@return {IndexCoordinate[]} - an array of coordinates for all the neighbors of i.
+	/**	Return array of {@link IndexCoordinate} of the Moore neighbor pixels
+	 * of the pixel at coordinate i. This function takes the 3D equivalent of
+	 * the 2D Moore-8 neighborhood, excluding the pixel itself.
+	 * @see https://en.wikipedia.org/wiki/Moore_neighborhood
+	 * @param {IndexCoordinate} i - location of the pixel to get neighbors of.
+	 * @param {boolean[]} [torus=[true,true,true]] - does the grid have linked
+	 * borders? Defaults to the setting on this grid, see {@link torus}
+	 * @return {IndexCoordinate[]} - an array of coordinates for all the
+	 * neighbors of i.
 	*/
 	neighi( i, torus = this.torus ){
 		let p = this.i2p(i);
 
 		let xx = [];
 		for( let d = 0 ; d <= 2 ; d ++ ){
-			if( p[d] == 0 ){
+			if( p[d] === 0 ){
 				if( torus[d] ){
 					xx[d] = [p[d],this.extents[d]-1,p[d]+1];
 				} else {
 					xx[d] = [p[d],p[d]+1];
 				}
-			} else if( p[d] == this.extents[d]-1 ){
+			} else if( p[d] === this.extents[d]-1 ){
 				if( torus[d] ){
 					xx[d] = [p[d],p[d]-1,0];
 				} else {
@@ -2316,41 +2510,46 @@ class ActivityMultiBackground extends ActivityConstraint {
 
 }
 
-/** 
- * Class for taking a CPM grid and displaying it in either browser or with nodejs.
- * Note: when using this class from outside the module, you don't need to import it
- * separately but can access it from CPM.Canvas. */
+/**
+ * Class for taking a CPM grid and displaying it in either browser or with
+ *  nodejs.
+ * Note: when using this class from outside the module, you don't need to import
+ *  it separately but can access it from CPM.Canvas. */
 class Canvas {
 	/** The Canvas constructor accepts a CPM object C or a Grid2D object.
-	@param {GridBasedModel|Grid2D|CoarseGrid} C - the object to draw, which must be
-	an object of class {@link GridBasedModel} (or its subclasses {@link CPM} and {@link CA}),
-	or a 2D grid ({@link Grid2D} or {@link CoarseGrid}). Drawing of other grids is currently
-	not supported.
-	@param {object} [ options = {} ] - Configuration settings
-	@param {number} [ options.zoom = 1 ]- positive number specifying the zoom level to draw with.
-	@param {number[]} [options.wrap = [0,0,0]] - if nonzero: 'wrap' the grid to these 
-	dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is displayed at x = 1.
-	
+	@param {GridBasedModel|Grid2D|CoarseGrid} C - the object to draw, which must
+	 be an object of class {@link GridBasedModel} (or its subclasses {@link CPM}
+	 and {@link CA}), or a 2D grid ({@link Grid2D} or {@link CoarseGrid}).
+	 Drawing of other grids is currently not supported.
+	@param {object} [options = {}] - Configuration settings
+	@param {number} [options.zoom = 1]- positive number specifying the zoom
+	 level to draw with.
+	@param {number[]} [options.wrap = [0,0,0]] - if nonzero: 'wrap' the grid to
+	 these dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is
+	 displayed at x = 1.
+	@param {string} [options.parentElement = document.body] - the element on
+	 the html page where the canvas will be appended.
+
 	@example <caption>A CPM with Canvas</caption>
 	* let CPM = require( "path/to/build" )
-	* 
-	* // Create a CPM, corresponding Canvas and GridManipulator 
+	*
+	* // Create a CPM, corresponding Canvas and GridManipulator
 	* // (Use CPM. prefix from outside the module)
 	* let C = new CPM.CPM( [200,200], {
-	* 	T : 20, 
-	* 	J : [[0,20][20,10]], 
-	* 	V:[0,500], 
-	* 	LAMBDA_V:[0,5] 
+	* 	T : 20,
+	* 	J : [[0,20][20,10]],
+	* 	V:[0,500],
+	* 	LAMBDA_V:[0,5]
 	* } )
 	* let Cim = new CPM.Canvas( C, {zoom:2} )
 	* let gm = new CPM.GridManipulator( C )
-	* 
+	*
 	* // Seed a cell at [x=100,y=100] and run 100 MCS.
 	* gm.seedCellAt( 1, [100,100] )
 	* for( let t = 0; t < 100; t++ ){
 	* 	C.timeStep()
 	* }
-	* 
+	*
 	* // Draw the cell and save an image
 	* Cim.drawCells( 1, "FF0000" )			// draw cells of CellKind 1 in red
 	* Cim.writePNG( "my-cell-t100.png" )
@@ -2367,34 +2566,37 @@ class Canvas {
 			 * @type {Grid2D|CoarseGrid}
 			 */
 			this.grid = this.C.grid;
-			
-			/** Grid size in each dimension, taken from the CPM or grid object to draw.
-			@type {GridSize} each element is the grid size in that dimension in pixels */
+
+			/** Grid size in each dimension, taken from the CPM or grid object
+			 * to draw.
+			 * @type {GridSize} each element is the grid size in that dimension
+			 * in pixels */
 			this.extents = C.extents;
 		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
-			
+
 			this.grid = C;
 			this.extents = C.extents;
 		}
-		/** Zoom level to draw the canvas with, set to options.zoom or its default value 1.
-		* @type {number}*/
+		/** Zoom level to draw the canvas with, set to options.zoom or its
+		 * default value 1.
+		 * @type {number}*/
 		this.zoom = (options && options.zoom) || 1;
-		/** if nonzero: 'wrap' the grid to these dimensions; eg a pixel with x 
-		coordinate 201 and wrap[0] = 200 is displayed at x = 1.
-		@type {number[]} */
+		/** if nonzero: 'wrap' the grid to these dimensions; eg a pixel with x
+		 * coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+		 * @type {number[]} */
 		this.wrap = (options && options.wrap) || [0,0,0];
-		
+
 		/** Width of the canvas in pixels (in its unzoomed state)
-		* @type {number}*/
+		 * @type {number}*/
 		this.width = this.wrap[0];
 		/** Height of the canvas in pixels (in its unzoomed state)
-		* @type {number}*/
+		 * @type {number}*/
 		this.height = this.wrap[1];
 
-		if( this.width == 0 || this.extents[0] < this.width ){
+		if( this.width === 0 || this.extents[0] < this.width ){
 			this.width = this.extents[0];
 		}
-		if( this.height == 0 || this.extents[1] < this.height ){
+		if( this.height === 0 || this.extents[1] < this.height ){
 			this.height = this.extents[1];
 		}
 
@@ -2403,7 +2605,7 @@ class Canvas {
 			this.el = document.createElement("canvas");
 			this.el.width = this.width*this.zoom;
 			this.el.height = this.height*this.zoom;//extents[1]*this.zoom
-			var parent_element = (options && options.parentElement) || document.body;
+			let parent_element = (options && options.parentElement) || document.body;
 			parent_element.appendChild( this.el );
 		} else {
 			const {createCanvas} = require("canvas");
@@ -2419,25 +2621,26 @@ class Canvas {
 		this.ctx.lineWidth = .2;
 		this.ctx.lineCap="butt";
 	}
-	
-	/** Give the canvas element an ID supplied as argument. Useful for building an HTML
-	page where you want to get this canvas by its ID. 
-	@param {string} idstring - the name to give the canvas element.*/
-	setCanvasId( idstring ){
-		this.el.id = idstring;
+
+	/** Give the canvas element an ID supplied as argument. Useful for building
+	 * an HTML page where you want to get this canvas by its ID.
+	 * @param {string} idString - the name to give the canvas element.
+	 * */
+	setCanvasId( idString ){
+		this.el.id = idString;
 	}
 
 
 	/* Several internal helper functions (used by drawing functions below) : */
-	
-	/** @private 
-	@ignore*/
+
+	/** @private
+	 * @ignore*/
 	pxf( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom );
 	}
 
 	/** @private
-	@ignore */
+	 * @ignore */
 	pxfi( p, alpha=1 ){
 		const dy = this.zoom*this.width;
 		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
@@ -2452,7 +2655,7 @@ class Canvas {
 	}
 
 	/** @private
-	@ignore */
+	 * @ignore */
 	pxfir( p ){
 		const dy = this.zoom*this.width;
 		const off = (p[1]*dy + p[0])*4;
@@ -2462,8 +2665,8 @@ class Canvas {
 		this.px[off + 3] = 255;
 	}
 
-	/** @private 
-	@ignore*/
+	/** @private
+	 * @ignore*/
 	getImageData(){
 		/** @ignore */
 		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
@@ -2471,52 +2674,52 @@ class Canvas {
 		this.px = this.image_data.data;
 	}
 
-	/** @private 
-	@ignore*/
+	/** @private
+	 * @ignore*/
 	putImageData(){
 		this.ctx.putImageData(this.image_data, 0, 0);
 	}
 
-	/** @private 
-	@ignore*/
+	/** @private
+	 * @ignore*/
 	pxfnozoom( p ){
 		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 );
 	}
 
-	/** draw a line left (l), right (r), down (d), or up (u) of pixel p 
-	@private 
-	@ignore */
+	/** draw a line left (l), right (r), down (d), or up (u) of pixel p
+	 * @private
+	 * @ignore */
 	pxdrawl( p ){
 		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
 			this.pxfir( [this.zoom*p[0],i] );
 		}
 	}
 
-	/** @private 
-	@ignore */
+	/** @private
+	 * @ignore */
 	pxdrawr( p ){
 		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
 			this.pxfir( [this.zoom*(p[0]+1),i] );
 		}
 	}
-	/** @private 
-	@ignore */
+	/** @private
+	 * @ignore */
 	pxdrawd( p ){
 		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
 			this.pxfir( [i,this.zoom*(p[1]+1)] );
 		}
 	}
-	/** @private 
-	@ignore */
+	/** @private
+	 * @ignore */
 	pxdrawu( p ){
 		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
 			this.pxfir( [i,this.zoom*p[1]] );
 		}
 	}
-	
-	/** For easier color naming 
-	@private
-	@ignore */
+
+	/** For easier color naming
+	 * @private
+	 * @ignore */
 	col( hex ){
 		this.ctx.fillStyle="#"+hex;
 		/** @ignore */
@@ -2528,11 +2731,11 @@ class Canvas {
 	}
 
 	/** Hex code string for a color.
-	@typedef {string} HexColor*/
+	 * @typedef {string} HexColor*/
 
 	/** Color the whole grid in color [col], or in black if no argument is given.
-	   * @param {HexColor} [ col = "000000" ] -hex code for the color to use, defaults to black.
-	*/
+	 * @param {HexColor} [col = "000000"] -hex code for the color to use, defaults to black.
+	 */
 	clear( col ){
 		col = col || "000000";
 		this.ctx.fillStyle="#"+col;
@@ -2540,22 +2743,21 @@ class Canvas {
 	}
 
 	/** Rendering context of canvas.
-	@see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
-	@typedef {object} CanvasRenderingContext2D
-	*/
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+	 * @typedef {object} CanvasRenderingContext2D
+	 * */
 
 	/** Return the current drawing context.
-	@return {CanvasRenderingContext2D} current drawing context on the canvas.
-	*/
+	 * @return {CanvasRenderingContext2D} current drawing context on the canvas.
+	 * */
 	context(){
 		return this.ctx
 	}
-	/** @private 
-	@ignore */
+	/** @private
+	 * @ignore */
 	p2pdraw( p ){
-		var dim;
-		for( dim = 0; dim < p.length; dim++ ){
-			if( this.wrap[dim] != 0 ){
+		for( let dim = 0; dim < p.length; dim++ ){
+			if( this.wrap[dim] !== 0 ){
 				p[dim] = p[dim] % this.wrap[dim];
 			}
 		}
@@ -2564,12 +2766,13 @@ class Canvas {
 
 	/* DRAWING FUNCTIONS ---------------------- */
 
-	/** Use to color a grid according to its values. High values are colored in a brighter
-	red. 
-   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
-   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
-   * @param {HexColor} [ col = "0000FF" ] - the color to draw the chemokine in.
-   */
+	/** Use to color a grid according to its values. High values are colored in
+	 * a brighter color.
+	 * @param {Grid2D|CoarseGrid} [cc] - the grid to draw values for. If left
+	 * unspecified, the grid that was originally supplied to the Canvas
+	 * constructor is used.
+	 * @param {HexColor} [col = "0000FF"] - the color to draw the chemokine in.
+	 * */
 	drawField( cc, col = "0000FF" ){
 		if( !cc ){
 			cc = this.grid;
@@ -2599,14 +2802,16 @@ class Canvas {
 		this.putImageData();
 		this.ctx.globalAlpha = 1;
 	}
-	/** Use to color a grid according to its values. High values are colored in a brighter
-	red. 
-   * @param {Grid2D|CoarseGrid} [ cc ] - the grid to draw values for. If left 
-   * unspecified, the grid that was originally supplied to the Canvas constructor is used. 
-   * @param {number} [nsteps = 10 ] - the number of contour lines to draw. Contour lines
-   * are evenly spaced between the min and max log10 of the chemokine.
-   * @param {HexColor} [ col = "FFFF00" ] - the color to draw contours with.
-   */
+	/** Use to color a grid according to its values. High values are colored in
+	 * a brighter color.
+	 * @param {Grid2D|CoarseGrid} [cc] - the grid to draw values for. If left
+	 * unspecified, the grid that was originally supplied to the Canvas
+	 * constructor is used.
+	 * @param {number} [nsteps = 10] - the number of contour lines to draw.
+	 * Contour lines are evenly spaced between the min and max log10 of the
+	 * chemokine.
+	 * @param {HexColor} [col = "FFFF00"] - the color to draw contours with.
+	 * */
 	drawFieldContour( cc, nsteps = 10, col = "FFFF00" ){
 		if( !cc ){
 			cc = this.grid;
@@ -2625,24 +2830,24 @@ class Canvas {
 				}
 			}
 		}
-		
-		
+
+
 		this.getImageData();
 		//this.col_g = 0
 		//this.col_b = 0
 		//this.col_r = 255
-		
+
 		let step = (maxval-minval)/nsteps;
 		for( let v = minval; v < maxval; v+= step ){
-			
+
 			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
 				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				
+
 					let pixelval = Math.log( .1 + cc.pixt( [i,j] ) );
 					if( Math.abs( v - pixelval ) < 0.05*maxval ){
 						let below = false, above = false;
 						for( let n of this.grid.neighNeumanni( this.grid.p2i( [i,j] ) ) ){
-					
+
 							let nval = Math.log(0.1 + cc.pixt(this.grid.i2p(n)) );
 							if( nval < v ){
 								below = true;
@@ -2658,32 +2863,34 @@ class Canvas {
 							}
 						}
 					}
-				
-					
+
+
 
 				}
 			}
-			
+
 		}
-		
-			
-		
+
+
+
 
 
 		this.putImageData();
 	}
-	
-	
-	
-	/** @desc Method for drawing the cell borders for a given cellkind in the color specified in "col"
-	(hex format). This function draws a line around the cell (rather than coloring the
-	outer pixels). If [kind] is negative, simply draw all borders.
-	
-	See {@link drawOnCellBorders} to color the outer pixels of the cell.
-	
-   * @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
-   * positive integer as 0 is reserved for the background.
-   * @param {HexColor}  [ col = "000000" ] - hex code for the color to use, defaults to black.
+
+
+
+	/** @desc Method for drawing the cell borders for a given cellkind in the
+	 * color specified in "col" (hex format). This function draws a line around
+	 * the cell (rather than coloring the outer pixels). If [kind] is negative,
+	 * simply draw all borders.
+	 *
+	 * See {@link drawOnCellBorders} to color the outer pixels of the cell.
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * Should be a positive integer as 0 is reserved for the background.
+	 * @param {HexColor}  [col = "000000"] - hex code for the color to use,
+	 * defaults to black.
    */
 	drawCellBorders( kind, col ){
 		col = col || "000000";
@@ -2693,25 +2900,25 @@ class Canvas {
 		// cst contains indices of pixels at the border of cells
 		for( let x of this.C.cellBorderPixels() ){
 			let p = x[0];
-			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+			if( kind < 0 || this.C.cellKind(x[1]) === kind ){
 				pdraw = this.p2pdraw( p );
 
 				pc = this.C.pixt( [p[0],p[1]] );
 				pr = this.C.pixt( [p[0]+1,p[1]] );
-				pl = this.C.pixt( [p[0]-1,p[1]] );		
+				pl = this.C.pixt( [p[0]-1,p[1]] );
 				pd = this.C.pixt( [p[0],p[1]+1] );
 				pu = this.C.pixt( [p[0],p[1]-1] );
 
-				if( pc != pl  ){
+				if( pc !== pl  ){
 					this.pxdrawl( pdraw );
 				}
-				if( pc != pr ){
+				if( pc !== pr ){
 					this.pxdrawr( pdraw );
 				}
-				if( pc != pd ){
+				if( pc !== pd ){
 					this.pxdrawd( pdraw );
 				}
-				if( pc != pu ){
+				if( pc !== pu ){
 					this.pxdrawu( pdraw );
 				}
 			}
@@ -2721,23 +2928,26 @@ class Canvas {
 	}
 
 	/** Use to show activity values of the act model using a color gradient, for
-		cells in the grid of cellkind "kind". 
-		The constraint holding the activity values can be supplied as an 
-		argument. Otherwise, the current CPM is searched for the first 
-		registered activity constraint and that is then used.
-   @param {CellKind} kind - Integer specifying the cellkind to color. If negative, draw
-   	values for all cellkinds.
-   @param {ActivityConstraint|ActivityMultiBackground} [ A ] - the constraint object to
-   use, which must be of class {@link ActivityConstraint} or {@link ActivityMultiBackground}
-   If left unspecified, this is the first instance of an ActivityConstraint or ActivityMultiBackground
-   object found in the soft_constraints of the attached CPM.
-   @param {Function} [col] - a function that returns a color for a number in [0,1] as an array of red/green/blue values,
-    for example, [255,0,0] would be the color red. If unspecified, a green-to-red heatmap is used.
-   */
+	 * cells in the grid of cellkind "kind". The constraint holding the activity
+	 * values can be supplied as an argument. Otherwise, the current CPM is
+	 * searched for the first registered activity constraint and that is then
+	 * used.
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * If negative, draw values for all cellkinds.
+	 * @param {ActivityConstraint|ActivityMultiBackground} [A] - the constraint
+	 * object to use, which must be of class {@link ActivityConstraint} or
+	 * {@link ActivityMultiBackground} If left unspecified, this is the first
+	 * instance of an ActivityConstraint or ActivityMultiBackground object found
+	 * in the soft_constraints of the attached CPM.
+	 * @param {Function} [col] - a function that returns a color for a number
+	 * in [0,1] as an array of red/green/blue values, for example, [255,0,0]
+	 * would be the color red. If unspecified, a green-to-red heatmap is used.
+	 * */
 	drawActivityValues( kind, A, col ){
 		if( !A ){
 			for( let c of this.C.soft_constraints ){
-				if( c instanceof ActivityConstraint | c instanceof ActivityMultiBackground ){
+				if( c instanceof ActivityConstraint || c instanceof ActivityMultiBackground ){
 					A = c; break
 				}
 			}
@@ -2773,7 +2983,7 @@ class Canvas {
 
 			// For all pixels that belong to the current kind, compute
 			// color based on activity values, convert to hex, and draw.
-			if( ( kind < 0 && A.conf["MAX_ACT"][k] > 0 ) || k == kind ){
+			if( ( kind < 0 && A.conf["MAX_ACT"][k] > 0 ) || k === kind ){
 				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][k];
 				if( a > 0 ){
 					if( a > 0.5 ){
@@ -2793,23 +3003,22 @@ class Canvas {
 		}
 		this.putImageData();
 	}
-			
+
 	/** Color outer pixel of all cells of kind [kind] in col [col].
-	
-	   See {@link drawCellBorders} to actually draw around the cell rather than coloring the
-   outer pixels.
-   
-   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
-   positive integer as 0 is reserved for the background.
-   @param {HexColor} col - Optional: hex code for the color to use. If left unspecified,
-   it gets the default value of black ("000000").
-   */
+	 * See {@link drawCellBorders} to actually draw around the cell rather than
+	 * coloring the outer pixels.
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * Should be a positive integer as 0 is reserved for the background.
+	 * @param {HexColor|function} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black ("000000").
+	 * col can also be a function that returns a hex value for a cell id. */
 	drawOnCellBorders( kind, col ){
 		col = col || "000000";
 		this.getImageData();
 		this.col( col );
 		for( let p of this.C.cellBorderPixels() ){
-			if( kind < 0 || this.C.cellKind(p[1]) == kind ){
+			if( kind < 0 || this.C.cellKind(p[1]) === kind ){
 				if( typeof col == "function" ){
 					this.col( col(p[1]) );
 				}
@@ -2820,13 +3029,14 @@ class Canvas {
 	}
 
 
-	/** Draw all cells of cellkind "kind" in color col (hex). 
-   @param {CellKind} kind - Integer specifying the cellkind to color. Should be a 
-   positive integer as 0 is reserved for the background.
-   @param {HexColor|function} col - Optional: hex code for the color to use. If left unspecified,
-   it gets the default value of black ("000000"). col can also be a function that
-	returns a hex value for a cell id.
-   */
+	/** Draw all cells of cellkind "kind" in color col (hex).
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * Should be a positive integer as 0 is reserved for the background.
+	 * @param {HexColor|function} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black ("000000").
+	 * col can also be a function that returns a hex value for a cell id.
+	 * */
 	drawCells( kind, col ){
 		if( ! col ){
 			col = "000000";
@@ -2850,7 +3060,7 @@ class Canvas {
 
 		this.getImageData();
 		for( let cid of Object.keys( cellpixelsbyid ) ){
-			if( kind < 0 || this.C.cellKind(cid) == kind ){
+			if( kind < 0 || this.C.cellKind(cid) === kind ){
 				if( typeof col == "function" ){
 					this.col( col(cid) );
 				}
@@ -2861,14 +3071,15 @@ class Canvas {
 		}
 		this.putImageData();
 	}
-	
-	/** General drawing function to draw all pixels in a supplied set in a given color. 
-	@param {ArrayCoordinate[]} pixelarray - an array of {@link ArrayCoordinate of pixels
-	to color.}
-	@param {HexColor|function} col - Optional: hex code for the color to use. If left unspecified,
-   it gets the default value of black ("000000"). col can also be a function that
-	returns a hex value for a cell id.
-	*/
+
+	/** General drawing function to draw all pixels in a supplied set in a given
+	 * color.
+	 * @param {ArrayCoordinate[]} pixelarray - an array of
+	 * {@link ArrayCoordinate}s of pixels to color.
+	 * @param {HexColor|function} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black ("000000").
+	 * col can also be a function that returns a hex value for a cell id.
+	 * */
 	drawPixelSet( pixelarray, col ){
 		if( ! col ){
 			col = "000000";
@@ -2883,22 +3094,23 @@ class Canvas {
 		this.putImageData();
 	}
 
-	/** Draw grid to the png file "fname". 
-	@param {string} fname Path to the file to write. Any parent folders in this path must
-	already exist.*/
+	/** Draw grid to the png file "fname".
+	 *
+	 * @param {string} fname Path to the file to write. Any parent folders in
+	 * this path must already exist.*/
 	writePNG( fname ){
-	
+
 		try {
 			this.fs.writeFileSync(fname, this.el.toBuffer());
 		}
 		catch (err) {
 			if (err.code === "ENOENT") {
-				let message = "Canvas.writePNG: cannot write to file " + fname + 
+				let message = "Canvas.writePNG: cannot write to file " + fname +
 					", are you sure the directory exists?";
 				throw(message)
 			}
 		}
-	
+
 	}
 }
 
@@ -3527,22 +3739,26 @@ let AutoAdderConfig = {
 	IS_BARRIER : BarrierConstraint
 };
 
-/** The core CPM class. Can be used for two- or 
- * three-dimensional simulations. 
+/** The core CPM class. Can be used for two- or three-dimensional simulations.
 */
 class CPM extends GridBasedModel {
 
 	/** The constructor of class CA.
-	@param {GridSize} field_size - the size of the grid of the model.
-	@param {object} conf - configuration options; see below. In addition, the conf
-	object can have parameters to constraints added to the CPM. See the different
-	{@link Constraint} subclasses for options. For some constraints, adding its
-	paramter to the CPM conf object automatically adds the constraint; see 
-	{@link AutoAdderConfig} to see for which constraints this is supported.
-	@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
-	@param {number} [seed] - seed for the random number generator. If left unspecified,
-	a random number from the Math.random() generator is used to make one.
-	*/
+	 * @param {GridSize} field_size - the size of the grid of the model.
+	 * @param {object} conf - configuration options; see below. In addition,
+	 * the conf object can have parameters to constraints added to the CPM.
+	 * See the different {@link Constraint} subclasses for options. For some
+	 * constraints, adding its parameter to the CPM conf object automatically
+	 * adds the constraint; see {@link AutoAdderConfig} to see for which
+	 * constraints this is supported.
+	 * @param {boolean[]} [conf.torus=[true,true,...]] - should the grid have
+	 * linked borders?
+	 * @param {number} [conf.T] - the temperature of this CPM. At higher
+	 * temperatures, unfavourable copy attempts are more likely to be accepted.
+	 * @param {number} [conf.seed] - seed for the random number generator. If
+	 * left unspecified, a random number from the Math.random() generator is
+	 * used to make one.
+	 * */
 	constructor( field_size, conf ){
 		super( field_size, conf );
 
@@ -3565,10 +3781,10 @@ class CPM extends GridBasedModel {
 		//  ---------- Attributes per cell:
 		/** Store the {@CellKind} of each cell on the grid. 
 		@example
-		this.t2k[1] // cellkind of cell with cellid 1
+		this.t2k[1] // cellkind of cell with cellId 1
 		@type {CellObject}
 		*/
-		this.t2k = [];	// celltype ("kind"). Example: this.t2k[1] is the celltype of cell 1.
+		this.t2k = [];	// cell type ("kind"). Example: this.t2k[1] is the cellKind of cell 1.
 		this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
 
 		//  ---------- CPM constraints
@@ -3587,7 +3803,7 @@ class CPM extends GridBasedModel {
 		/** Object showing which constraints are where in {@link soft_constraints}. Used
 		by the {@link getConstraint} method to find an attached constraint by name.
 		@type {object}*/
-		this.hard_constraints_indices ={};
+		this.hard_constraints_indices = {};
 		/** Array of functions that need to be executed after every {@link setpixi} event.
 		These functions are often implemented in subclasses of {@link Constraint} that
 		need to track some specific property on the grid. 
@@ -3614,18 +3830,18 @@ class CPM extends GridBasedModel {
 		return g.neighi( g.p2i(p), torus ).map( function(i){ return g.i2p(i) } )
 	}*/
 
-	/** Iterator returning nonbackground pixels on the grid. 
+	/** Iterator returning non-background pixels on the grid.
 	@return {Pixel} for each pixel, return an array [p,v] where p are
 		the pixel's array coordinates on the grid, and v its value.*/
 	* cellPixels() {
 		for( let p of this.grid.pixels() ){
-			if( p[1] != 0 ){
+			if( p[1] !== 0 ){
 				yield p;
 			}
 		}
 	}
 
-	/** Iterator returning nonbackground borderpixels on the grid. 
+	/** Iterator returning non-background border pixels on the grid.
 	See {@link cellBorderPixelIndices} for a version returning pixels
 	by their {@link IndexCoordinate} instead of {@link ArrayCoordinate}.
 	
@@ -3633,14 +3849,14 @@ class CPM extends GridBasedModel {
 		the pixel's array coordinates on the grid, and v its value.*/
 	* cellBorderPixels() {
 		for( let i of this.borderpixels.elements ){
-			const t = this.pixti(i);
-			if( t != 0 ){
+			const t = this.grid.pixti(i);
+			if( t !== 0 ){
 				yield [this.grid.i2p(i),t];
 			}
 		}
 	}
 
-	/** Iterator returning nonbackground borderpixels on the grid. 
+	/** Iterator returning non-background border pixels on the grid.
 	See {@link cellBorderPixels} for a version returning pixels
 	by their {@link ArrayCoordinate} instead of {@link IndexCoordinate}.
 	
@@ -3648,8 +3864,8 @@ class CPM extends GridBasedModel {
 		the pixel's array coordinates on the grid, and v its value.*/
 	* cellBorderPixelIndices() {
 		for( let i of this.borderpixels.elements ){
-			const t = this.pixti(i);
-			if( t != 0 ){
+			const t = this.grid.pixti(i);
+			if( t !== 0 ){
 				yield [i,t];
 			}
 		}
@@ -3661,7 +3877,7 @@ class CPM extends GridBasedModel {
 	@param {Constraint} t - the constraint object to add.
 	*/
 	add( t ){
-		let tname = t.constructor.name, i; 
+		let tName = t.constructor.name, i;
 		if( t.CONSTRAINT_TYPE ){
 			switch( t.CONSTRAINT_TYPE ){
 			
@@ -3671,10 +3887,10 @@ class CPM extends GridBasedModel {
 				
 				// Write this index to an array in the 
 				// this.soft_constraints_indices object, for lookup later. 
-				if( !this.soft_constraints_indices.hasOwnProperty(tname) ){
-					this.soft_constraints_indices[tname] = [];
+				if( !this.soft_constraints_indices.hasOwnProperty(tName) ){
+					this.soft_constraints_indices[tName] = [];
 				}
-				this.soft_constraints_indices[tname].push( i-1 );
+				this.soft_constraints_indices[tName].push( i-1 );
 				break
 				
 			case "hard": 
@@ -3683,10 +3899,10 @@ class CPM extends GridBasedModel {
 				
 				// Write this index to an array in the 
 				// this.soft_constraints_indices object, for lookup later. 
-				if( !this.hard_constraints_indices.hasOwnProperty(tname) ){
-					this.hard_constraints_indices[tname] = [];
+				if( !this.hard_constraints_indices.hasOwnProperty(tName) ){
+					this.hard_constraints_indices[tName] = [];
 				}
-				this.hard_constraints_indices[tname].push( i-1 );				
+				this.hard_constraints_indices[tName].push( i-1 );
 				break
 			}
 		}
@@ -5604,6 +5820,8 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		every copy attempt.
 		@type {CellObject}*/
 		this.borderpixelsbycell = {};
+		
+		this.components = [];
 	}
 	
 	/** The set CPM method attaches the CPM to the constraint. */
@@ -5701,7 +5919,6 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		return this.connectedComponentsOf( this.borderpixelsbycell[cellid] )
 	}
 	
-		
 	/** Get the connected components of a set of pixels.
 	@param {object} pixelobject - an object with as keys the {@link IndexCoordinate}s of the pixels to check.
 	@return {object} an array with an element for every connected component, which is in
@@ -5730,7 +5947,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 			}
 		};
 		for( let i = 0 ; i < cbpi.length ; i ++ ){
-			let pi = cbpi[i];
+			let pi = parseInt( cbpi[i] );
 			if( !(pi in visited) ){
 				labelComponent( pi, k );
 				k++;
@@ -5738,7 +5955,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		}
 		return pixels
 	}
-
+		
 	/** The postSetpixListener of the ConnectivityConstraint updates the internally
 	tracked borderpixels after every copy.
 	@param {IndexCoordinate} i - the pixel to change
@@ -5748,6 +5965,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	postSetpixListener(  i, t_old, t ){
 		this.updateBorderPixels( i, t_old, t );
 	}	
+	
 	
 	/** To speed things up: first check if a pixel change disrupts the local connectivity
 	in its direct neighborhood. If local connectivity is not disrupted, we don't have to
@@ -5759,17 +5977,28 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	*/
 	localConnected( tgt_i, tgt_type ){
 	
-		let neighbors = 0;
-		for( let i of this.C.grid.neighNeumanni(tgt_i) ){
-			if( this.C.pixti(i) != tgt_type ){
-				neighbors++;
+		// Get neighbors of the target pixel
+		let nbh = this.C.grid.neighi( tgt_i );
+		
+		// object storing the neighbors of tgt_type
+		let nbhobj = {};
+		
+		for( let n of nbh ){
+		
+			// add it and its neighbors to the neighborhood object
+			if( this.C.pixti(n) == tgt_type ){
+				nbhobj[n] = true;
 			}
 		}
 		
-		if( neighbors >= 2 ){
-			return false
-		}
-		return true
+		// Get connected components.
+		let conn = this.connectedComponentsOf( nbhobj );
+		this.components = conn;
+		//console.log(conn.length)
+		
+		let connected = ( conn.length == 1 );
+		//console.log(connected)
+		return connected
 		
 	}
 	
@@ -5814,21 +6043,47 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		
 		if( this.localConnected( tgt_i, tgt_type ) ){
 			return 0
-		}
+		} 
+		
+		/*else {
+			let conn_new = this.connectivity( this.components, tgt_type )
+			
+			// current components
+			let nbh = this.C.grid.neighi( tgt_i )
+			let nbhobj = {}
+			nbhobj[tgt_i] = true
+		
+			for( let n of nbh ){
+				if( this.C.pixti(n) == tgt_type ){
+					nbhobj[n] = true
+				}
+			}
+			
+			this.components = this.connectedComponentsOf( nbhobj )
+			let conn_old = this.connectivity( this.components, tgt_type )
+			
+			let conndiff = conn_old - conn_new
+			return conndiff
+			
+			
+			
+		}*/
+		
+		
 	
 		let comp1 = this.connectedComponentsOfCellBorder( tgt_type );
-		let conn1 = this.connectivity( comp1, tgt_type );
+		let conn1 = Math.pow( (1-this.connectivity( comp1, tgt_type )),2 );
 	
 		// Update the borderpixels as if the change occurs
 		this.updateBorderPixels( tgt_i, tgt_type, src_type );
 		let comp = this.connectedComponentsOfCellBorder( tgt_type );
-		let conn2 = this.connectivity( comp, tgt_type );
+		let conn2 = Math.pow((1-this.connectivity( comp, tgt_type )),2);
 		
 		
 		let conndiff = conn2 - conn1;
-		if( conn2 > conn1 ){
-			conndiff = -conndiff;
-		} 
+		/*if( conn2 > conn1 ){
+			conndiff = -conndiff
+		} */
 		
 		// Change borderpixels back because the copy attempt hasn't actually gone through yet.
 		this.updateBorderPixels( tgt_i, src_type, tgt_type );
@@ -5856,6 +6111,306 @@ class SoftConnectivityConstraint extends SoftConstraint {
 		
 		return 0
 	}
+}
+
+/** Version of the {@link ConnectivityConstraint} which only checks local
+ * connectivity.
+ * @experimental
+ * */
+class LocalConnectivityConstraint extends HardConstraint {
+
+	/** The constructor of the LocalConnectivityConstraint requires a conf
+	 * object with one parameter.
+	 * @param {object} conf - parameter object for this constraint.
+	 * @param {PerKindBoolean} conf.CONNECTED - should the cellkind be connected
+	 * or not?
+	 * */
+	constructor( conf ){
+		super(conf);
+	}
+	
+
+	/** This method checks that all required parameters are present in the
+	 * object supplied to the constructor, and that they are of the right
+	 * format. It throws an error when this is not the case.
+	 * */
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "CONNECTED", "KindArray", "Boolean" );
+	}
+	
+	/** Get the connected components of a set of pixels.
+	 * @param {object} pixelObject - an object with as keys the
+	 * {@link IndexCoordinate}s of the pixels to check.
+	 * @return {object} an array with an element for every connected component,
+	 * which is in turn an array of the {@link ArrayCoordinate}s of the pixels
+	 * belonging to that component.
+	 * */
+	connectedComponentsOf( pixelObject ){
+	
+		let cbpi = Object.keys( pixelObject );
+		
+		let visited = {}, k=0, pixels = [], C = this.C;
+		let labelComponent = function(seed, k){
+			let q = [seed];
+			let cellId = C.grid.pixti(q);
+			visited[q[0]] = 1;
+			pixels[k] = [];
+			while( q.length > 0 ){
+				let e = q.pop();
+				pixels[k].push(C.grid.i2p(e) );
+				let ne = C.grid.neighi( e );
+				for( let i = 0 ; i < ne.length ; i ++ ){
+					if( C.grid.pixti( ne[i] ) === cellId &&
+						!(ne[i] in visited) && (ne[i] in pixelObject) ){
+						q.push(ne[i]);
+						visited[ne[i]]=1;
+					}
+				}
+			}
+		};
+		for( let i = 0 ; i < cbpi.length ; i ++ ){
+			let pi = parseInt( cbpi[i] );
+			if( !(pi in visited) ){
+				labelComponent( pi, k );
+				k++;
+			}
+		}
+		return pixels
+	}
+
+	
+	/** This method checks if the connectivity still holds after pixel tgt_i is
+	 * changed from tgt_type to src_type.
+	 * @param {IndexCoordinate} tgt_i - the pixel to change.
+	 * @param {CellId} src_type - the new cell for this pixel.
+	 * @param {CellId} tgt_type - the cell the pixel belonged to previously.
+	 * */
+	checkConnected( tgt_i, src_type, tgt_type ){
+	
+		// Get neighbors of the target pixel
+		let nbh = this.C.grid.neighi( tgt_i );
+		
+		// object storing the neighbors of tgt_type
+		let nbhObj = {};
+		
+		for( let n of nbh ){
+		
+			// add it and its neighbors to the neighborhood object
+			if( this.C.grid.pixti(n) === tgt_type ){
+				nbhObj[n] = true;
+			}
+			
+			/*for( let i of this.C.grid.neighi(n) ){
+			
+				if( ( this.C.grid.pixti(i) == tgt_type ) && !( i == tgt_i ) ){
+					nbhObj[i] = true
+				}
+			}*/
+		}
+		
+		// Get connected components.
+		let conn = this.connectedComponentsOf( nbhObj );
+		
+		return ( conn.length === 1 )
+		
+	}
+
+	/** Method for hard constraints to compute whether the copy attempt fulfills
+	 * the rule.
+	 * @param {IndexCoordinate} src_i - coordinate of the source pixel that
+	 * tries to copy.
+	 * @param {IndexCoordinate} tgt_i - coordinate of the target pixel the
+	 * source is trying to copy into.
+	 * @param {CellId} src_type - cellId of the source pixel.
+	 * @param {CellId} tgt_type - cellId of the target pixel.
+	 * @return {boolean} whether the copy attempt satisfies the constraint.
+	 * */
+	fulfilled( src_i, tgt_i, src_type, tgt_type ){
+		// connectedness of src cell cannot change if it was connected in the first place.
+		
+		// connectedness of tgt cell
+		if( tgt_type !== 0 && this.conf["CONNECTED"][this.C.cellKind(tgt_type)] ){
+			return this.checkConnected( tgt_i, src_type, tgt_type )
+		}
+		
+		return true
+	}
+}
+
+/** Soft version of the {@link ConnectivityConstraint} which only checks local connectivity.
+@experimental
+*/
+class SoftLocalConnectivityConstraint extends SoftConstraint {
+
+	/** The constructor of the SoftLocalConnectivityConstraint requires a conf object with one or two parameters.
+	@param {object} conf - parameter object for this constraint.
+	@param {PerKindBoolean} conf.LAMBDA_CONNECTIVITY - strength of the penalty for breaking connectivity.
+	#param {string} conf.NBH_TYPE - should a Neumann (default) or Moore neighborhood be used to determine
+	whether the cell locally stays connected? The default is Neumann since the Moore neighborhood tends to
+	give artefacts. Also, LAMBDA should be much higher if the Moore neighborhood is used. 
+	*/
+	constructor( conf ){
+		super(conf);
+		
+		/** Should a Neumann or Moore neighborhood be used for determining connectivity?
+		See {@link SoftLocalConnectivityConstraint#constructor} for details.
+		@type {string}*/
+		this.nbhtype = "Neumann";
+	}
+	
+	/** The set CPM method attaches the CPM to the constraint. It checks whether the
+	CPM is 2D or 3D, because this constraint is currently only tested in 2D. */
+	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
+		this.C = C;
+		
+		if( this.C.ndim != 2 ){
+			throw("You are trying to add a SoftLocalConnectivityConstraint to a 3D CPM, but this constraint is currently only supported in 2D!")
+		}
+		
+		this.confChecker();
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_CONNECTIVITY", "KindArray", "NonNegative" );
+
+		//
+		if( "NBH_TYPE" in this.conf ){
+			let v = this.conf["NBH_TYPE"];
+			let values = [ "Neumann", "Moore" ];
+			let found = false;
+			for( let val of values ){
+				if( val == v ){
+					found = true;
+					this.nbhtype = val;
+				}
+			}
+			if( !found ){
+				throw( "In the SoftLocalConnectivityConstraint, NBH_TYPE must be either 'Neumann' or 'Moore'")
+			}
+		}
+
+	}
+	
+	/** Get the connected components of a set of pixels.
+	@param {object} pixelobject - an object with as keys the {@link IndexCoordinate}s of the pixels to check.
+	@return {object} an array with an element for every connected component, which is in
+	turn an array of the {@link ArrayCoordinate}s of the pixels belonging to that component.  */
+	connectedComponentsOf( pixelobject ){
+	
+		let cbpi = Object.keys( pixelobject );
+		
+		let visited = {}, k=0, pixels = [], C = this.C, nbhtype = this.nbhtype;
+		let labelComponent = function(seed, k){
+			let q = [seed];
+			let cellid = C.pixti(q);
+			visited[q[0]] = 1;
+			pixels[k] = [];
+			while( q.length > 0 ){
+				let e = q.pop();
+				pixels[k].push(C.grid.i2p(e) );
+				
+				if( nbhtype == "Neumann" ){
+					for( let i of C.grid.neighNeumanni( e ) ){
+						if( C.pixti( i ) == cellid &&
+							!(i in visited) && (i in pixelobject) ){
+							q.push(i);
+							visited[i]=1;
+						}
+					}
+				} else {
+					let ne = C.grid.neighi(e);
+					for( let j = 0; j < ne.length; j++ ){
+					
+						let i = ne[j];
+						if( C.pixti( i ) == cellid &&
+							!(i in visited) && (i in pixelobject) ){
+							q.push(i);
+							visited[i]=1;
+						}
+					}
+				
+				}
+				
+				
+				
+				//let ne = C.grid.neighi( e )
+				
+			}
+		};
+		for( let i = 0 ; i < cbpi.length ; i ++ ){
+			let pi = parseInt( cbpi[i] );
+			if( !(pi in visited) ){
+				labelComponent( pi, k );
+				k++;
+			}
+		}
+		return pixels
+	}
+
+	/** This method checks if the connectivity still holds after pixel tgt_i is changed from
+	tgt_type to src_type. 
+	@param {IndexCoordinate} tgt_i - the pixel to change
+	@param {CellId} src_type - the new cell for this pixel.
+	@param {CellId} tgt_type - the cell the pixel belonged to previously. 	
+	@return {number} 1 if connectivity is broken, 0 if the connectivity remains. 
+	*/
+	checkConnected( tgt_i, src_type, tgt_type ){
+	
+		// Get neighbors of the target pixel
+		let nbh = this.C.grid.neighi( tgt_i );
+		
+		// object storing the neighbors of tgt_type
+		let nbhobj = {};
+		
+		for( let n of nbh ){
+		
+			// add it and its neighbors to the neighborhood object
+			if( this.C.pixti(n) == tgt_type ){
+				nbhobj[n] = true;
+			}
+		}
+		
+		// Get connected components.
+		let conn = this.connectedComponentsOf( nbhobj );
+		//console.log(conn.length)
+		
+		let disconnected = 0;
+		if( conn.length > 1 ){
+			disconnected = 1;
+		}
+		return disconnected
+		
+	}
+	
+	/** Method for hard constraints to compute whether the copy attempt fulfills the rule.
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {boolean} whether the copy attempt satisfies the constraint.*/ 
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
+		// connectedness of src cell cannot change if it was connected in the first place.
+		
+		let lambda = this.conf["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
+		
+		// connectedness of tgt cell. Only check when the lambda is non-zero.
+		if( tgt_type != 0 && lambda > 0 ){
+			return lambda*this.checkConnected( tgt_i, src_type, tgt_type )
+		}
+		
+		return 0
+	}
+
+	
+
 }
 
 /** 
@@ -6085,9 +6640,9 @@ class Simulation {
 			{@link CellKind} in. If left unspecified, the {@link Canvas} will use black.
 		@param {boolean[]} [simsettings.ACTCOLOR ] - should activities of the {@link ActivityConstraint}
 			be drawn for each {@link CellKind}? If left unspecified, these are not drawn.
-		@param {boolean[]} [simsettings.SHOWBORDERS ] - should borders of each {@link CellKind}
+		@param {boolean[]} [simsettings.SHOWBORDERS = false] - should borders of each {@link CellKind}
 			be drawn? Defaults to false.
-		@param {HexColor[]} [simsettings.BORDERCOL ] - color to draw cellborders of
+		@param {HexColor[]} [simsettings.BORDERCOL = "000000"] - color to draw cellborders of
 			each {@link CellKind} in. Defaults to black. 
 		*/
 	constructor( config, custommethods ){
@@ -6269,12 +6824,12 @@ class Simulation {
 		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 		
 			// draw the cells of each kind in the right color
-			if( cellcolor[ cellkind ] != -1 ){
+			if( cellcolor[ cellkind ] !== -1 ){
 				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] );
 			}
 			
 			// Draw borders if required
-			if(  cellborders[ cellkind  ]  ){
+			if(  this.conf.hasOwnProperty("SHOWBORDERS") && cellborders[ cellkind  ] ){
 				let bordercol = "000000";
 				if( this.conf.hasOwnProperty("BORDERCOL") ){
 					bordercol = this.conf["BORDERCOL"][cellkind] || "000000";
@@ -6428,6 +6983,7 @@ exports.Centroids = Centroids;
 exports.CellNeighborList = CellNeighborList;
 exports.ConnectedComponentsByCell = ConnectedComponentsByCell;
 exports.Connectedness = Connectedness;
+exports.Grid = Grid;
 exports.Grid2D = Grid2D;
 exports.Grid3D = Grid3D;
 exports.GridManipulator = GridManipulator;
@@ -6444,6 +7000,8 @@ exports.ChemotaxisConstraint = ChemotaxisConstraint;
 exports.AttractionPointConstraint = AttractionPointConstraint;
 exports.ConnectivityConstraint = ConnectivityConstraint;
 exports.SoftConnectivityConstraint = SoftConnectivityConstraint;
+exports.LocalConnectivityConstraint = LocalConnectivityConstraint;
+exports.SoftLocalConnectivityConstraint = SoftLocalConnectivityConstraint;
 exports.HardConstraint = HardConstraint;
 exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 exports.BarrierConstraint = BarrierConstraint;

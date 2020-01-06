@@ -7,7 +7,7 @@ __Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration__
 PLoS Computational Biology 11(10): e1004280
 http://dx.doi.org/10.1371/journal.pcbi.1004280
 
-## Documentation
+## Documentation [![Inline docs](http://inch-ci.org/github/ingewortel/cpmjs.svg?branch=master)](http://inch-ci.org/github/ingewortel/cpmjs)
 
 Full documentation is available on [Github pages](https://ingewortel.github.io/cpmjs.github.io); or
 see below for a brief description.
@@ -47,7 +47,7 @@ We have the following examples for web-browser CPMs (see also `examples/html`):
 * [Cells producing a chemokine with other cells responding to it](https://ingewortel.github.io/cpmjs.github.io/examples/ManyCellsDiffusion.html)
 * [Cells moving with a preferred direction](https://ingewortel.github.io/cpmjs.github.io/examples/ManyCellsPrefDir.html)
 * [Particle following a random walk](https://ingewortel.github.io/cpmjs.github.io/examples/RandomWalk.html)
-
+* [T cells invading a growing tumor](https://ingewortel.github.io/cpmjs.github.io/examples/CancerInvasion.html)
 
 We also have a few examples of plain cellular automata (CAs):
 

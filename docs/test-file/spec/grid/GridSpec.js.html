@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">spec/grid/GridSpec.js | cpmjs</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">spec/grid/GridSpec.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** @test {Grid}*/
+describe(&quot;Grid&quot;, function () {
+	let CPM = require(&quot;../../build/cpm-cjs.js&quot;)
+	//eslint-disable-next-line no-unused-vars
+	let grid2d, grid3d, grid
+
+	beforeEach(function () {
+		grid2d = new CPM.Grid2D([100, 100])
+		grid3d = new CPM.Grid3D([100, 100, 100])
+	})
+
+
+	describe( &quot; [ unit tests ] &quot;, function (){
+		/** @test {Grid#constructor} */
+		describe( &quot; constructor &quot;, function(){
+			/* Checking errors thrown by the constructor*/
+			it(&quot;should throw an error when torus is specified for an incorrect number of dimensions&quot;, function () {
+				expect(function () {
+					grid = new CPM.Grid2D([100, 100], [true])
+				}).toThrow(&quot;Torus should be specified for each dimension, or not at all!&quot;)
+				expect(function () {
+					//noinspection JSCheckFunctionSignatures
+					grid = new CPM.Grid2D([100, 100], true)
+				}).toThrow(&quot;Torus should be specified for each dimension, or not at all!&quot;)
+				expect(function () {
+					grid = new CPM.Grid2D([100, 100], [true, true, true])
+				}).toThrow(&quot;Torus should be specified for each dimension, or not at all!&quot;)
+				expect(function () {
+					grid = new CPM.Grid3D([100, 100, 100], [true, true])
+				}).toThrow(&quot;Torus should be specified for each dimension, or not at all!&quot;)
+			})
+
+			/* Checking properties set by the constructor*/
+			it(&quot;should set a size for each dimension&quot;, function () {
+				expect(grid2d.ndim).toEqual(grid2d.extents.length)
+				expect(grid3d.ndim).toEqual(grid3d.extents.length)
+			})
+
+			it(&quot;should set a torus property in each dimension&quot;, function () {
+				expect(grid2d.ndim).toEqual(grid2d.torus.length)
+				expect(grid3d.ndim).toEqual(grid3d.torus.length)
+			})
+
+			it(&quot;should by default set torus = true in each dimension&quot;, function () {
+				for (let i = 0; i &lt; grid2d.ndim; i++) {
+					expect(grid2d.torus[i] = true)
+				}
+				for (let i = 0; i &lt; grid3d.ndim; i++) {
+					expect(grid3d.torus[i] = true)
+				}
+			})
+
+			it(&quot;should be able to handle different torus settings for each dimension&quot;, function () {
+				let grid = new CPM.Grid2D([100, 100], [true, false])
+				expect(grid.torus[0]).toBe(true)
+				expect(grid.torus[1]).toBe(false)
+			})
+
+			it(&quot;should be able to handle a different size in each dimension&quot;, function () {
+				let grid = new CPM.Grid2D([100, 300])
+				expect(grid.extents[0]).not.toEqual(grid.extents[1])
+			})
+
+			it(&quot;should compute a midpoint at the correct position&quot;, function () {
+				expect(grid2d.midpoint.length).toEqual(2)
+				expect(grid3d.midpoint.length).toEqual(3)
+
+				grid2d = new CPM.Grid2D([101, 101])
+				expect((grid2d.midpoint[0] - grid2d.extents[0]/2) &lt;= 1).toBeTruthy()
+				expect((grid2d.midpoint[1] - grid2d.extents[1]/2) &lt;= 1).toBeTruthy()
+				expect((grid3d.midpoint[2] - grid3d.extents[2]/2) &lt;= 1).toBeTruthy()
+			})
+		})
+
+		/** @test {Grid#neigh} */
+		describe( &quot; neigh method &quot;, function(){
+			let g2D
+			beforeEach( function() {
+				// Create a grid 2D object with mock functions except neigh to test the
+				// functionality of the Grid class independently of the
+				// Grid2D and Grid3D subclasses.
+				g2D = new CPM.Grid2D( [100,100] )
+				//g2D = jasmine.createSpyObj(&quot;g2D&quot;, [ &quot;neighi&quot;,&quot;p2i&quot;,&quot;i2p&quot; ])
+				// A mock neighi method for the unit test
+				spyOn( g2D, &quot;neighi&quot; ).and.callFake( function ( i, torus ){
+					let arr = []
+					if( (i-1) &gt;= 0 ){
+						arr.push( i-1 )
+					} else {
+						for( let d = 0; d &lt; torus.length; d++ ){
+							if( torus[d] ) { arr.push( -(1+d )) }
+						}
+					}
+					arr.push( i + 1 )
+
+					return arr
+				})
+				spyOn( g2D, &quot;i2p&quot; ).and.callFake( function(i) {
+					return( [0,i] )
+				})
+				spyOn( g2D, &quot;p2i&quot; ).and.callFake( function(p) {
+					return p[1]
+				})
+			})
+
+			it( &quot; should return an array coordinate&quot;, function(){
+				let nbh = g2D.neigh( [0,0] )
+				for( let i = 0; i &lt; nbh.length; i++ ){
+					let n = nbh[i]
+					expect( n.length ).toEqual( 2 )
+				}
+			})
+
+			it( &quot; should listen to torus for each dimension&quot;,
+				function() {
+					// the mock function adds a neighbor for each dim with a torus.
+					// the mock function should return only one neighbor for [0,0]
+					// when there is no torus.
+					let nNeighbors = g2D.neigh( [0,0], [false,false] ).length
+					expect( nNeighbors ).toEqual(1)
+					nNeighbors = g2D.neigh( [0,0], [false,true] ).length
+					expect( nNeighbors ).toEqual( 2 )
+					nNeighbors = g2D.neigh( [0,0], [true,false] ).length
+					expect( nNeighbors ).toEqual( 2 )
+					nNeighbors = g2D.neigh( [0,0], [true,true] ).length
+					expect( nNeighbors ).toEqual( 3 )
+
+					// torus doesn&apos;t matter when not at &apos;border&apos;
+					nNeighbors =  g2D.neigh( [1,1], [false,false] ).length
+					expect( nNeighbors ).toEqual( 2 )
+					nNeighbors = g2D.neigh( [1,1], [true,true] ).length
+					expect( nNeighbors ).toEqual( 2 )
+				})
+		})
+
+		/** @test {Grid#setpix}
+		 * @test {Grid#setpixi} */
+		describe( &quot; setpix(i) methods &quot;, function() {
+			let grid2D, grid2Db
+
+			beforeEach( function(){
+				grid2D = new CPM.Grid2D( [50,50] )
+				grid2Db = new CPM.Grid2D( [50,50], [false,false],&quot;Float32&quot; )
+				// mock functions of the p2i and i2p implemented in the subclass.
+				spyOn( grid2D, &quot;p2i&quot; ).and.returnValue( 0 )
+				spyOn( grid2D, &quot;i2p&quot; ).and.returnValue( [0,0] )
+				spyOn( grid2Db, &quot;p2i&quot; ).and.returnValue( 0 )
+				spyOn( grid2Db, &quot;i2p&quot; ).and.returnValue( [0,0] )
+			})
+
+			/**
+			 * @test {Grid#setpix}
+			 * @test {Grid#setpixi}
+			 * */
+			it( &quot;can be called&quot;, function(){
+
+				expect( grid2D.pixti( 0 ) ).toEqual( 0 )
+				expect( function(){ grid2D.setpixi( 0, 1 ) } ).not.toThrow()
+				expect( function(){ grid2D.setpix( [0,0], 2 ) } ).not.toThrow()
+				expect( function(){ grid2Db.setpix( [0,0], -1 ) } ).not.toThrow()
+			})
+
+			/**
+			 * @test {Grid#setpix}
+			 * @test {Grid#setpixi}
+			 * @test {Grid#_isValidValue}
+			 * */
+			it( &quot; should prohibit setting an invalid type on the grid to avoid bugs&quot;, function() {
+				expect( function(){ grid2D.setpix( [0,0], -1 ) } ).toThrow()
+				expect( function(){ grid2D.setpix( [0,0], 2.5 ) } ).toThrow()
+				expect( function(){ grid2D.setpixi( 0, -1 ) } ).toThrow()
+				expect( function(){ grid2D.setpixi( 0, 2.5 ) } ).toThrow()
+
+				// but small numeric differences are tolerated
+				expect( function(){ grid2D.setpixi( 0, 1.00000001 )}).not.toThrow()
+				expect( function(){ grid2D.setpix( [0,0], 1.00000001 )}).not.toThrow()
+			})
+
+			/**
+			 * @test {Grid#setpix}
+			 * @test {Grid#setpixi}
+			 * */
+			it( &quot;store values in the Grid correctly&quot;, function(){
+
+				// ---- Case 1 : Uint16 grid
+				// Before setpix, values are zero:
+				expect( grid2D.pixti( 0 ) ).toEqual( 0 )
+				let randomInt1 = Math.round( Math.random()*100 )
+				grid2D.setpixi( 0, randomInt1 )
+				expect( grid2D.pixti( 0 ) ).toEqual( randomInt1 )
+
+				let randomInt2 = Math.round( Math.random()*100 )
+				grid2D.setpix( [0,0], randomInt2 )
+				expect( grid2D.pixti( 0 ) ).toEqual( randomInt2 )
+
+				// --- Case 2 : Float32 grid
+				// It should be possible to set a negative value.
+				expect( function(){ grid2Db.setpix( [0,0], -1 ) } ).not.toThrow()
+				expect( grid2Db.pixti( 0 ) ).toEqual( -1 )
+
+				// ... Or a floating point number
+				let value = 2.345
+				expect( function(){ grid2Db.setpix( [0,0], value ) } ).not.toThrow()
+				expect( grid2Db.pixti( 0 ) ).toBeCloseTo( value, 6 )
+			})
+
+
+
+		})
+
+		/** @test {Grid#pixt}
+		 * @test {Grid#pixti} */
+		describe( &quot; pixt(i) methods &quot;, function() {
+			let grid2D
+
+			beforeEach( function(){
+				grid2D = new CPM.Grid2D( [50,50] )
+				// mock functions of the p2i and i2p implemented in the subclass.
+				spyOn( grid2D, &quot;p2i&quot; ).and.returnValue( 0 )
+				spyOn( grid2D, &quot;i2p&quot; ).and.returnValue( [0,0] )
+			})
+
+			/**
+			 * @test {Grid#pixt}
+			 * @test {Grid#pixti}
+			 * */
+			it( &quot;pixt(i) can show types on the grid.&quot;, function(){
+				// before change, types are always zero.
+				expect( grid2D.pixti( 0 ) ).toEqual( 0 )
+				// pixt uses internally the p2i method from the grid subclass
+				// (but not i2p)
+				expect( grid2D.p2i ).not.toHaveBeenCalled()
+				expect( grid2D.pixt( [0,0] ) ).toEqual( 0 )
+				expect( grid2D.p2i ).toHaveBeenCalledWith( [0,0] )
+				expect( grid2D.i2p ).not.toHaveBeenCalled()
+			})
+		})
+
+		/** @test {Grid#pixelsBuffer} */
+		describe( &quot; pixelsBuffer method &quot;, function() {
+			let grid2D, grid2Db
+
+			beforeEach( function(){
+				grid2D = new CPM.Grid2D( [50,50] )
+				grid2Db = new CPM.Grid2D( [100,100], [false,false], &quot;Float32&quot; )
+			})
+
+			it( &quot;should work on Float32 and Uint16 grids&quot;, function(){
+				// before change, there is no buffer yet
+				expect( grid2D._pixelsbuffer === undefined ).toBeTruthy()
+				expect( grid2Db._pixelsbuffer === undefined ).toBeTruthy()
+
+				// after calling the method, there is.
+				expect( function(){ grid2D.pixelsBuffer() } ).not.toThrow()
+				expect( function(){ grid2Db.pixelsBuffer() } ).not.toThrow()
+				expect( grid2D._pixelsbuffer === undefined ).toBeFalse()
+				expect( grid2Db._pixelsbuffer === undefined ).toBeFalse()
+
+			})
+		})
+
+		/** @test {Grid#laplaciani} */
+		describe( &quot; laplacian(i) method &quot;, function() {
+			let grid2Db, grid2D
+
+			beforeEach( function(){
+				grid2D =  new CPM.Grid2D( [100,100] )
+				grid2Db = new CPM.Grid2D( [100,100], [false,false], &quot;Float32&quot; )
+			})
+
+			it( &quot;should work on Float32 grids&quot;, function(){
+				expect( function(){ grid2Db.laplaciani(1) } ).not.toThrow()
+				expect( function(){ grid2Db.laplacian([1,1] ) } ).not.toThrow()
+			})
+
+			it( &quot;should throw error when you try to call it on Uint16 grid&quot;, function(){
+				expect( function(){ grid2D.laplaciani(1) } ).toThrow()
+				expect( function(){ grid2D.laplacian([1,1] ) } ).toThrow()
+			})
+
+			describe( &quot; should compute laplacian correctly &quot;, function() {
+
+				// spy on the neighNeumanni method by returning always pixels 1,2,3,4
+				beforeEach( function (){
+					grid2Db.neighNeumanni = function * (){
+						for( let i = 0; i &lt; 4; i++ ){
+							yield i+1
+						}
+					}
+				})
+
+
+				it( &quot; case 1 : everything zero &quot;, function(){
+					// spy on pixti method to let it always return 0
+					spyOn( grid2Db, &quot;pixti&quot; ).and.returnValue(0)
+
+					// check that the spying works, this value of 1000 should not
+					// be detected.
+					grid2Db.setpixi( 1, 1000 )
+
+					// check that laplacian returns zero
+					expect( grid2Db.laplaciani(0) ).toEqual(0)
+
+				})
+
+				it( &quot; case 2 : everything a positive value &quot;, function(){
+
+					spyOn( grid2Db, &quot;pixti&quot; ).and.callFake( function( i ){
+						return i*1000
+					})
+					expect( grid2Db.laplaciani(0) ).toEqual( 10000 )
+
+				})
+
+				it( &quot; case 3 : everything a negative value &quot;, function(){
+					spyOn( grid2Db, &quot;pixti&quot; ).and.callFake( function( i ){
+						return -i*1000
+					})
+					expect( grid2Db.laplaciani(0) ).toEqual( -10000 )
+				})
+
+				it( &quot; case 4 : floating point values &quot;, function(){
+					spyOn( grid2Db, &quot;pixti&quot; ).and.callFake( function( i ){
+						return i*1000 + 0.1* Math.random()
+					})
+					expect( grid2Db.laplaciani(0) ).toBeCloseTo( 10000, 0 )
+				})
+
+				it( &quot; case 4 : positive and negative floating point values &quot;, function(){
+					spyOn( grid2Db, &quot;pixti&quot; ).and.callFake( function( i ){
+						if( i &gt;= 1 &amp;&amp; i &lt;= 4 ){
+							let num = 1000 + 0.1* Math.random()
+							if( i % 2 === 0 ){ return -num }
+							return num
+						}
+						return 0
+					})
+					expect( grid2Db.laplaciani(0) ).toBeCloseTo( 0, 0 )
+				})
+
+			})
+
+		})
+
+		/** @test {Grid#diffusion} */
+		describe( &quot; diffusion method &quot;, function() {
+			let grid2Db, grid2D
+
+			beforeEach(function () {
+				grid2D = new CPM.Grid2D([200, 200])
+				grid2Db = new CPM.Grid2D([200, 200], [false, false], &quot;Float32&quot;)
+			})
+
+			it(&quot;can be called on Float32 grids&quot;, function () {
+				expect(function () {
+					grid2Db.diffusion(0.01)
+				}).not.toThrow()
+			})
+
+			it(&quot;should throw error when you try to call it on Uint16 grid&quot;, function () {
+				let message = &quot;Diffusion/laplacian methods do not work on a Uint16 grid! &quot; +
+					&quot;Consider setting datatype=&apos;Float32&apos;.&quot;
+				expect(function () {
+					grid2D.diffusion(1)
+				}).toThrow(message)
+			})
+
+		})
+
+
+	})
+
+	describe( &quot; [ class extension ] &quot;, function (){
+		let g
+
+		class MyGrid extends CPM.Grid {
+			myMethod(){
+				return 1
+			}
+		}
+		beforeEach( function(){
+			g = new MyGrid( [50,50] )
+		})
+
+		it( &quot;should be possible to extend with a method&quot;, function() {
+			expect( g.myMethod() ).toEqual(1)
+		})
+
+		it( &quot;should be possible to build a custom Grid subclass&quot; , function(){
+			//eslint-disable-next-line no-unused-vars
+			expect( function(){ new MyGrid( [ 50,50 ] ) } ).not.toThrow()
+			let g = new MyGrid( [ 50,50 ] )
+			expect( g.extents[0] ).toEqual(50)
+		})
+
+		/** @test {Grid#_pixels} */
+		it( &quot;should throw an error when _pixelArray is not set in subclass&quot;, function(){
+			expect( function(){ g._pixels }).toThrow()
+		})
+
+		/**
+		 * @test {Grid#p2i}
+		 * @test {Grid#i2p}
+		 */
+		it( &quot;superclass should throw error when p2i/i2p not implemented&quot;, function() {
+			expect( function(){ g.p2i( [0,0] ) }).toThrow()
+			expect( function(){ g.i2p( 0 )}).toThrow()
+		})
+
+		/** @test{Grid#neighi}
+		 * @test {Grid#neigh}
+		 * */
+		it( &quot;should throw error when neighi not implemented&quot;, function(){
+			expect( function(){g.neigh([0,0])}).toThrow()
+			expect( function(){g.neighi(0)}).toThrow()
+
+			// but it should work as soon as p2i, i2p, and neighi are defined.
+			spyOn( g, &quot;p2i&quot; ).and.returnValue( 0 )
+			spyOn( g, &quot;i2p&quot; ).and.returnValue( [0,0] )
+			spyOn( g, &quot;neighi&quot; ).and.returnValue( [0] )
+			expect( function(){ g.neigh([0,0])} ).not.toThrow()
+		})
+
+		/** @test{Grid#pixelsi}
+		 * @test {Grid#pixels}
+		 * */
+		it( &quot;should throw error when pixels/pixelsi not implemented&quot;, function(){
+
+			let pixels = []
+			expect( function(){ for( let p of g.pixels() ){ pixels.push(p) } }).toThrow()
+			expect( function(){ for( let p of g.pixelsi() ){ pixels.push(p) } }).toThrow()
+			expect( pixels.length ).toEqual(0)
+		})
+
+		/** @test{Grid#gradienti}
+		 * @test {Grid#gradient}
+		 * */
+		it( &quot;should throw error when gradienti not implemented&quot;, function(){
+			expect( function(){g.gradient([0,0])}).toThrow()
+			expect( function(){g.gradienti(0)}).toThrow()
+		})
+
+		/** @test{Grid#gradienti}
+		 * @test {Grid#gradient}
+		 * */
+		it( &quot;gradient should work as soon as gradienti and p2i are implemented.&quot;, function(){
+			spyOn( g, &quot;p2i&quot; ).and.returnValue( 0 )
+			spyOn( g, &quot;gradienti&quot; ).and.callFake( function(i){ return i + 10 } )
+			expect( function(){ g.gradient([0,0] ) } ).not.toThrow()
+			expect( g.gradient( [0,0] ) ).toEqual(10)
+		})
+
+		/** @test{Grid#neighNeumanni}
+		 * @test {Grid#laplacian}
+		 * @test {Grid#laplaciani}
+		 * */
+		it( &quot;laplaciani should throw error when neighNeumanni not implemented&quot;, function(){
+			let message = &quot;Trying to call the method neighNeumanni, but you haven&apos;t &quot; +
+				&quot;implemented this method in the Grid subclass you are using!&quot;
+			expect( function(){g.laplaciani(0)}).toThrow(message)
+		})
+
+		/** @test{Grid#neighNeumanni}
+		 * @test {Grid#laplacian}
+		 * @test {Grid#laplaciani}
+		 * */
+		it( &quot;laplacian should throw error when p2i/neighNeumanni not implemented&quot;, function(){
+			let message = &quot;A p2i method should be implemented in every Grid subclass!&quot;
+			expect( function(){g.laplacian([0,0] ) } ).toThrow(message)
+
+			// should still throw error when p2i is implemented but neighNeumanni is not
+			spyOn( g, &quot;p2i&quot; ).and.returnValue(0)
+			message = &quot;Trying to call the method neighNeumanni, but you haven&apos;t &quot; +
+				&quot;implemented this method in the Grid subclass you are using!&quot;
+			expect( function(){g.laplacian([0,0] ) } ).toThrow(message)
+		})
+
+		/** @test{Grid#neighNeumanni}
+		 * @test {Grid#laplacian}
+		 * @test {Grid#laplaciani}
+		 * */
+		it( &quot;laplacian(i) should work if p2i, neighNeumanni, and _pixelArray exist&quot;, function(){
+
+			spyOn( g, &quot;p2i&quot; ).and.returnValue(0)
+			g.neighNeumanni = function* (){
+				for( let k = 0; k &lt; 4; k++ ){ yield k + 1 }
+			}
+			g._pixelArray = new Float32Array(1000)
+			expect( function(){g.laplacian([0,0] ) } ).not.toThrow()
+
+		})
+
+	})
+
+
+})
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
