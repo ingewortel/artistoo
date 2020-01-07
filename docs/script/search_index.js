@@ -1266,6 +1266,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/canvas.js~canvas#drawcellsofid",
+    "class/src/Canvas.js~Canvas.html#instance-method-drawCellsOfId",
+    "src/Canvas.js~Canvas#drawCellsOfId",
+    "method"
+  ],
+  [
     "src/canvas.js~canvas#drawfield",
     "class/src/Canvas.js~Canvas.html#instance-method-drawField",
     "src/Canvas.js~Canvas#drawField",

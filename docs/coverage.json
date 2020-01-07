@@ -1,11 +1,11 @@
 {
   "coverage": "99.05%",
-  "expectCount": 423,
-  "actualCount": 419,
+  "expectCount": 424,
+  "actualCount": 420,
   "files": {
     "src/Canvas.js": {
-      "expectCount": 40,
-      "actualCount": 40,
+      "expectCount": 41,
+      "actualCount": 41,
       "undocumentLines": []
     },
     "src/DiceSet.js": {

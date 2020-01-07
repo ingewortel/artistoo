@@ -624,6 +624,37 @@ class Canvas {
 		this.putImageData()
 	}
 
+	/**
+	 * Draw all cells of cellid &quot;id&quot; in color col (hex). Note that this function
+	 * also works for CA.
+	 *
+	 * @param {CellId} id - id of the cell to color.
+	 * @param {HexColor} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black (&quot;000000&quot;).
+	 *
+	 * */
+	drawCellsOfId( id, col ){
+		if( !col ){
+			col = &quot;000000&quot;
+		}
+		if( typeof col == &quot;string&quot; ){
+			this.col(col)
+		}
+
+
+		// Use the pixels() iterator to get the id of all non-background pixels.
+		this.getImageData()
+
+		for( let x of this.C.pixels() ){
+			if( x[1] === id ){
+
+				this.pxfi( x[0] )
+
+			}
+		}
+
+		this.putImageData()
+	}
 
 	/** Draw all cells of cellkind &quot;kind&quot; in color col (hex).
 	 *
