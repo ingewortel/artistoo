@@ -3234,6 +3234,37 @@ var CPM = (function (exports) {
 			this.putImageData();
 		}
 
+		/**
+		 * Draw all cells of cellid "id" in color col (hex). Note that this function
+		 * also works for CA.
+		 *
+		 * @param {CellId} id - id of the cell to color.
+		 * @param {HexColor} col - Optional: hex code for the color to use.
+		 * If left unspecified, it gets the default value of black ("000000").
+		 *
+		 * */
+		drawCellsOfId( id, col ){
+			if( !col ){
+				col = "000000";
+			}
+			if( typeof col == "string" ){
+				this.col(col);
+			}
+
+
+			// Use the pixels() iterator to get the id of all non-background pixels.
+			this.getImageData();
+
+			for( let x of this.C.pixels() ){
+				if( x[1] === id ){
+
+					this.pxfi( x[0] );
+
+				}
+			}
+
+			this.putImageData();
+		}
 
 		/** Draw all cells of cellkind "kind" in color col (hex).
 		 *

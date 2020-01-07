@@ -13,8 +13,8 @@ function draw(){
 	Cim.clear( "FFFFFF" )
 
 	// The cell in red
-	Cim.drawCells( 1, "AA0000" )
-	Cim.drawCells( 2, "AAAAAA" )
+	Cim.drawCellsOfId( 1, "AA0000" )
+	Cim.drawCellsOfId( 2, "AAAAAA" )
 }
 
 
