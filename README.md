@@ -7,7 +7,7 @@ __Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration__
 PLoS Computational Biology 11(10): e1004280
 http://dx.doi.org/10.1371/journal.pcbi.1004280
 
-## Documentation
+## Documentation [![Inline docs](http://inch-ci.org/github/ingewortel/cpmjs.svg?branch=master)](http://inch-ci.org/github/ingewortel/cpmjs)
 
 Full documentation is available on [Github pages](https://ingewortel.github.io/cpmjs.github.io); or
 see below for a brief description.
