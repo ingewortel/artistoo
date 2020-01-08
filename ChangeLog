@@ -3,6 +3,17 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+
+2020-01-08 Inge Wortel <ingewortel@gmail.com>
+    * spec/CanvasSpec.js : adding tests for the Canvas for the bug that prevented
+    drawing on CA grids.
+    * spec/Canvas.js : ensured that methods drawCells, drawOnCellBorders,
+    drawCellBorders do something when applied on a CA model.
+
+2020-01-07 Inge Wortel <ingewortel@gmail.com>
+    * src/Canvas.js : added function to draw pixels on CA grids, as the altered
+    drawCells function no longer worked for CA.
+
 2020-01-03 Inge Wortel <ingewortel@gmail.com>
     * misc : added this folder for some helper scripts etc, and moved some
     stuff here.
