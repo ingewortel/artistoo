@@ -9,8 +9,11 @@ http://dx.doi.org/10.1371/journal.pcbi.1004280
 
 ## Documentation [![Inline docs](http://inch-ci.org/github/ingewortel/cpmjs.svg?branch=master)](http://inch-ci.org/github/ingewortel/cpmjs)
 
-Full documentation is available on [Github pages](https://ingewortel.github.io/cpmjs.github.io); or
-see below for a brief description.
+You can find full documentation of available methods 
+[here](https://ingewortel.github.io/cpmjs.github.io/identifiers.html), or have a look at
+the [manual](https://ingewortel.github.io/cpmjs.github.io/manual/index.html) for tutorials 
+to get started. Alternatively, see below for a brief description and a list of examples.
+
 
 ## How it works
 
