@@ -16,7 +16,8 @@
           "asset": "./manual/asset",
           "files": [
             "./manual/installation.md",
-            "./manual/quickstart.md"
+            "./manual/quickstart.md",
+	    	"./manual/htmlTemplate.md"
           ]
         },
         "brand": {

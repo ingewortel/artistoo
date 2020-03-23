@@ -28,10 +28,12 @@ for details.
 
 ### An HTML template page
 Unfortunately, writing an HTML page requires quite some boilerplate code. You
-can mostly just copy-paste this for every simulation you build, but let's go
-through it step by step so you know which parts you may have to adapt. If you
-are familiar with HTML, you may want to just copy the template code and 
-continue [building your simulation](#writing-your-simulation).
+can mostly just copy-paste this for every simulation you build. For now,
+we will just copy-paste the following template so you can continue with
+[building your simulation](#writing-your-simulation). If you are unfamiliar with
+HTML, you may want to check out [this tutorial](htmlTemplate.html) later --
+it will guide you through the template 
+step by step so you know which parts you may have to adapt. 
 
 ```$xslt
 <!-- Page setup and title -->
@@ -56,136 +58,26 @@ body{
 
 </script>
 </head>
-<body>
-<h1>Your Page Title</h1>
-<p>
-Description of your page.
-</p>
-</body>
-</html>
-```
-
-We will now go through this step by step.
-
-### Step 1 : Create a basic HTML page
-
-A very simple html page looks like this:
-
-```$xslt
-<!DOCTYPE html>
-<html>
-<head> </head>
-<body> </body>
-</html>
-```
-
-The `<html>` tag shows where the page starts, and `</html>` shows where it ends.
-The page consists of a *header*, which starts at `<head>` and ends at `</head>`,
-and a *body*, starting at `<body>` and ending at `</body>`. (In general,
-anything you place in your HTML file starts with `<something>` and ends with
-`</something>`).
-
-Copy the above code into a file called `MyFirstSimulation.html`, which you can
-save in the `cpmjs/examples/html/` folder for now. If you wish to save the file
-elsewhere, please read [these instructions](installation.md#additional-notes) 
-first.
-
-### Step 2 : Configure the header
-
-The header of the HTML page is the place that contains some meta-information
-about that page, and will also contain the simulation code.
-
-First, we will expand the header code above:
-
-```$xslt
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>PageTitle</title>
-</head>
-```
-
-The additional code in the first line just includes some document settings into 
-the header that you will rarely need to change. The only thing you may want to 
-change is the second line, where you set the title that will be displayed
-in the open tab in your web browser when you open the page.
-
-### Step 3 : Add JavaScript
-
-We will now add some JavaScript code to the header part of the page:
-
-```$xslt
-<head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>PageTitle</title>
-<script src="path/to/cpmjs/build/cpm.js"></script>
-<script>
-"use strict"
-// Simulation code will go here:
-
-</script>
-</head>
-```
-
-The first script just loads the CPMjs package for HTML, which is stored in
-`cpmjs/build/cpm.js`. Please ensure that the path supplied here is the correct
-path from the folder where you stored `MyFirstSimulation.html` to the file
-`cpmjs/build/cpm.js`. If you have stored your simulation in `cpmjs/examples/html`,
-you can use the path `../../build/cpm.js`
-
-The second script is where your actual simulation code
-will go later in [Writing your simulation](#writing-your-simulation).
-For now, we'll leave it empty.
-
-### Step 4: Write the body
-
-Finally, we make some changes to the body of the page:
-
-```$xslt
 <body onload="initialize()">
 <h1>Your Page Title</h1>
 <p>
 Description of your page.
 </p>
 </body>
+</html>
 ```
 
-In the first line, we tell the HTML page to run the JavaScript function 
-`intitialize()`, which we will define later in 
-[Writing your simulation](#writing-your-simulation) (between the 
-`<script></script>` tags of the page header we just set up).
+Copy the above code into a file called `MyFirstSimulation.html`, which you can
+save in the `cpmjs/examples/html/` folder for now. 
 
-The rest of the code just adds a title and a description to the web page.
-The simulation will then be placed below (as in the example shown
-at the top of this page).
+> ! *Important*: If you wish to save the file elsewhere, please read 
+>[these instructions](installation.html#additional-notes) 
+>first, and ensure that you include the correct path to the cpm build in
+>the part `<script src="../../build/cpm.js"></script>`.
 
-### Step 5 (optional): Add CSS
-
-The code we have now added is sufficient to make the page work once we have
-[added a simulation](#writing-your-simulation), but to make it look better we
-may want to add some CSS styling code to the header of the page. The header now
-becomes:
-
-```$xslt
-
-<head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>PageTitle</title>
-
-<style type="text/css"> 
-body{
-font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
-}
-</style>
-
-<script src="path/to/cpmjs/build/cpm.js"></script>
-<script>
-"use strict"
-// Simulation code will go here:
-
-</script>
-</head>
-```
-
-To see the final result, have a look again at the complete
- [template](#an-html-template-page). You can now proceed with
+You can now proceed with
  [adding your simulation](#writing-your-simulation) to this file.
+
 
 ## Set up a simulation in nodejs
 
@@ -202,7 +94,7 @@ boilerplate code.
 
 To set up your first node simulation, just create a file `MyFirstSimulation.js`
 in the folder `cpmjs/examples/node/` 
-(or see [these instructions](installation.md#additional-notes) to create it 
+(or see [these instructions](installation.html#additional-notes) to create it 
 elsewhere). Then add the following line of code to the (still empty) script to
 source the package:
 
@@ -219,42 +111,19 @@ You can now proceed with [adding your simulation](#writing-your-simulation).
 ## Writing your simulation
 
 We are now ready to add some simulation code. The following code goes either
-in between the `<script></script>` tags of your HTML page, or at the bottom of
-your node script.
-
-### Step 1: Create a simulation object
+in between the `<script></script>` tags of your HTML page (see the comment
+`// Simulation code here`), or at the bottom of your node script.
 
 The easiest way to build a simulation in CPMjs is to use the 
 [Simulation class](../class/src/simulation/Simulation.js~Simulation.html).
 This class provides some default methods for running the simulation and 
 producing outputs, so we won't have to worry about this yet. 
 
-To construct an object of class simulation, type:
+### Step 1 : Configure the CPM & Simulation
 
-```$xslt
-let sim = new CPM.Simulation( config )
-```
-
-The `config` contains configuration options; we will take care of this in the
-next step.
-
-If you are writing an HTML page, you have to define an `initialize()` function -
-as this is the function that will be run when the page is loaded (see 
-[this section](#step-4-write-the-body)):
-
-
-```$xslt
-let sim
-function initialize(){
-    sim = new CPM.Simulation( config )
-}
-```
-
-
-### Step 2 : Configure the CPM & Simulation
-
-The code above will not work yet because we still need to supply the `config` 
-object. A configuration object for a simulation should look like this:
+The first thing we need to do is supply a `config` object with all the required
+parameters and settings for the simulation. A configuration object for a simulation 
+should look something like this:
 
 ```$xslt
 let config = {
@@ -270,8 +139,6 @@ let config = {
 }
 ```
 
-(Note: this piece of code should go above the code from the previous step,
-as the `config` object is needed to construct the simulation object.)
 
 Here, `ndim` is the number of dimensions of the grid, `field_size` is the 
 number of pixels in each dimension (in this case: 50 x 50 pixels), `conf` is 
@@ -354,6 +221,32 @@ let config = {
 }
 ```
 
+### Step 2: Create a simulation object
+
+Once we have the configuration object, we can use it to construct a simulation.
+
+#### In nodejs
+In nodejs, simply construct the simulation as follows:
+
+```$xslt
+let sim = new CPM.Simulation( config )
+```
+
+#### In HTML
+
+If you are writing an HTML page, you have to define an `initialize()` function -
+as this is the function that will be run when the page is loaded (see 
+[this section](htmlTemplate.html#step-4-write-the-body)):
+
+
+```$xslt
+let sim
+function initialize(){
+    sim = new CPM.Simulation( config )
+}
+```
+
+
 ### Step 3 : Tell the simulation to run
 
 We are now almost ready; the only thing still missing is a command in the script
@@ -392,6 +285,7 @@ let config = {
 let sim
 function initialize(){
     sim = new CPM.Simulation( config )
+    step()
 }
 function step(){
     sim.step()

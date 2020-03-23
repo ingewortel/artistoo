@@ -45,18 +45,27 @@
 <li data-ice="manualNav" class="indent-h1" data-link="manual/quickstart.html"><a href="manual/quickstart.html" data-ice="link">Your First Simulation</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#set-up-a-simulation-in-the-web-browser" data-ice="link">Set up a simulation in the web browser</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#an-html-template-page" data-ice="link">An HTML template page</a></li>
-<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-1---create-a-basic-html-page" data-ice="link">Step 1 : Create a basic HTML page</a></li>
-<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-2---configure-the-header" data-ice="link">Step 2 : Configure the header</a></li>
-<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-3---add-javascript" data-ice="link">Step 3 : Add JavaScript</a></li>
-<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-4--write-the-body" data-ice="link">Step 4: Write the body</a></li>
-<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-5--optional---add-css" data-ice="link">Step 5 (optional): Add CSS</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#set-up-a-simulation-in-nodejs" data-ice="link">Set up a simulation in nodejs</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/quickstart.html"><a href="manual/quickstart.html#writing-your-simulation" data-ice="link">Writing your simulation</a></li>
-<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-1--create-a-simulation-object" data-ice="link">Step 1: Create a simulation object</a></li>
-<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-2---configure-the-cpm--amp--simulation" data-ice="link">Step 2 : Configure the CPM &amp; Simulation</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-1---configure-the-cpm--amp--simulation" data-ice="link">Step 1 : Configure the CPM &amp; Simulation</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-2--create-a-simulation-object" data-ice="link">Step 2: Create a simulation object</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-nodejs" data-ice="link">In nodejs</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-html" data-ice="link">In HTML</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/quickstart.html"><a href="manual/quickstart.html#step-3---tell-the-simulation-to-run" data-ice="link">Step 3 : Tell the simulation to run</a></li>
 <li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-nodejs" data-ice="link">In nodejs</a></li>
 <li data-ice="manualNav" class="indent-h4" data-link="manual/quickstart.html"><a href="manual/quickstart.html#in-html" data-ice="link">In HTML</a></li>
+</ul>
+</div>
+<div data-ice="manual">
+<ul class="manual-toc">
+
+<li data-ice="manualNav" class="indent-h1" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html" data-ice="link">An HTML template page</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html#an-html-template" data-ice="link">An HTML template</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html#step-1---create-a-basic-html-page" data-ice="link">Step 1 : Create a basic HTML page</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html#step-2---configure-the-header" data-ice="link">Step 2 : Configure the header</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html#step-3---add-javascript" data-ice="link">Step 3 : Add JavaScript</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html#step-4--write-the-body" data-ice="link">Step 4: Write the body</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html#step-5--optional---add-css" data-ice="link">Step 5 (optional): Add CSS</a></li>
 </ul>
 </div>
 </div>
@@ -84,10 +93,12 @@ simulation and store output to your computer, a simulation using nodejs may be
 more appropriate &#x2013; see <a href="#set-up-a-simulation-in-nodejs">Set up a simulation in nodejs</a>
 for details.</p>
 <h3 id="an-html-template-page">An HTML template page</h3><p>Unfortunately, writing an HTML page requires quite some boilerplate code. You
-can mostly just copy-paste this for every simulation you build, but let&apos;s go
-through it step by step so you know which parts you may have to adapt. If you
-are familiar with HTML, you may want to just copy the template code and
-continue <a href="#writing-your-simulation">building your simulation</a>.</p>
+can mostly just copy-paste this for every simulation you build. For now,
+we will just copy-paste the following template so you can continue with
+<a href="#writing-your-simulation">building your simulation</a>. If you are unfamiliar with
+HTML, you may want to check out <a href="./manual/htmlTemplate.html">this tutorial</a> later --
+it will guide you through the template
+step by step so you know which parts you may have to adapt. </p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;!-- Page setup and title --&gt;
 &lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
@@ -110,7 +121,7 @@ body{
 
 &lt;/script&gt;
 &lt;/head&gt;
-&lt;body&gt;
+&lt;body onload=&quot;initialize()&quot;&gt;
 &lt;h1&gt;Your Page Title&lt;/h1&gt;
 &lt;p&gt;
 Description of your page.
@@ -118,92 +129,15 @@ Description of your page.
 &lt;/body&gt;
 &lt;/html&gt;</code>
 </code></pre>
-<p>We will now go through this step by step.</p>
-<h3 id="step-1---create-a-basic-html-page">Step 1 : Create a basic HTML page</h3><p>A very simple html page looks like this:</p>
-<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt; &lt;/head&gt;
-&lt;body&gt; &lt;/body&gt;
-&lt;/html&gt;</code>
-</code></pre>
-<p>The <code>&lt;html&gt;</code> tag shows where the page starts, and <code>&lt;/html&gt;</code> shows where it ends.
-The page consists of a <em>header</em>, which starts at <code>&lt;head&gt;</code> and ends at <code>&lt;/head&gt;</code>,
-and a <em>body</em>, starting at <code>&lt;body&gt;</code> and ending at <code>&lt;/body&gt;</code>. (In general,
-anything you place in your HTML file starts with <code>&lt;something&gt;</code> and ends with
-<code>&lt;/something&gt;</code>).</p>
 <p>Copy the above code into a file called <code>MyFirstSimulation.html</code>, which you can
-save in the <code>cpmjs/examples/html/</code> folder for now. If you wish to save the file
-elsewhere, please read <a href="./manual/installation.md#additional-notes">these instructions</a>
-first.</p>
-<h3 id="step-2---configure-the-header">Step 2 : Configure the header</h3><p>The header of the HTML page is the place that contains some meta-information
-about that page, and will also contain the simulation code.</p>
-<p>First, we will expand the header code above:</p>
-<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
-&lt;title&gt;PageTitle&lt;/title&gt;
-&lt;/head&gt;</code>
-</code></pre>
-<p>The additional code in the first line just includes some document settings into
-the header that you will rarely need to change. The only thing you may want to
-change is the second line, where you set the title that will be displayed
-in the open tab in your web browser when you open the page.</p>
-<h3 id="step-3---add-javascript">Step 3 : Add JavaScript</h3><p>We will now add some JavaScript code to the header part of the page:</p>
-<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;
-&lt;title&gt;PageTitle&lt;/title&gt;
-&lt;script src=&quot;path/to/cpmjs/build/cpm.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-&quot;use strict&quot;
-// Simulation code will go here:
-
-&lt;/script&gt;
-&lt;/head&gt;</code>
-</code></pre>
-<p>The first script just loads the CPMjs package for HTML, which is stored in
-<code>cpmjs/build/cpm.js</code>. Please ensure that the path supplied here is the correct
-path from the folder where you stored <code>MyFirstSimulation.html</code> to the file
-<code>cpmjs/build/cpm.js</code>. If you have stored your simulation in <code>cpmjs/examples/html</code>,
-you can use the path <code>../../build/cpm.js</code></p>
-<p>The second script is where your actual simulation code
-will go later in <a href="#writing-your-simulation">Writing your simulation</a>.
-For now, we&apos;ll leave it empty.</p>
-<h3 id="step-4--write-the-body">Step 4: Write the body</h3><p>Finally, we make some changes to the body of the page:</p>
-<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;body onload=&quot;initialize()&quot;&gt;
-&lt;h1&gt;Your Page Title&lt;/h1&gt;
-&lt;p&gt;
-Description of your page.
-&lt;/p&gt;
-&lt;/body&gt;</code>
-</code></pre>
-<p>In the first line, we tell the HTML page to run the JavaScript function
-<code>intitialize()</code>, which we will define later in
-<a href="#writing-your-simulation">Writing your simulation</a> (between the
-<code>&lt;script&gt;&lt;/script&gt;</code> tags of the page header we just set up).</p>
-<p>The rest of the code just adds a title and a description to the web page.
-The simulation will then be placed below (as in the example shown
-at the top of this page).</p>
-<h3 id="step-5--optional---add-css">Step 5 (optional): Add CSS</h3><p>The code we have now added is sufficient to make the page work once we have
-<a href="#writing-your-simulation">added a simulation</a>, but to make it look better we
-may want to add some CSS styling code to the header of the page. The header now
-becomes:</p>
-<pre><code class="lang-$xslt"><code class="source-code prettyprint">
-&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=UTF-8&quot;&gt;
-&lt;title&gt;PageTitle&lt;/title&gt;
-
-&lt;style type=&quot;text/css&quot;&gt;
-body{
-	font-family: &quot;HelveticaNeue-Light&quot;, sans-serif; padding : 15px;
-}
-&lt;/style&gt;
-
-&lt;script src=&quot;path/to/cpmjs/build/cpm.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-&quot;use strict&quot;
-// Simulation code will go here:
-
-&lt;/script&gt;
-&lt;/head&gt;</code>
-</code></pre>
-<p>To see the final result, have a look again at the complete
-<a href="#an-html-template-page">template</a>. You can now proceed with
+save in the <code>cpmjs/examples/html/</code> folder for now. </p>
+<blockquote>
+<p>! <em>Important</em>: If you wish to save the file elsewhere, please read
+<a href="./manual/installation.html#additional-notes">these instructions</a>
+first, and ensure that you include the correct path to the cpm build in
+the part <code>&lt;script src=&quot;../../build/cpm.js&quot;&gt;&lt;/script&gt;</code>.</p>
+</blockquote>
+<p>You can now proceed with
 <a href="#writing-your-simulation">adding your simulation</a> to this file.</p>
 <h2 id="set-up-a-simulation-in-nodejs">Set up a simulation in nodejs</h2><p>Another way to use CPMjs &#x2013; besides using HTML &#x2013; is to use nodejs from the
 console. This method of running CPMjs allows you to print statistics to the
@@ -216,7 +150,7 @@ appropriate &#x2013; see
 boilerplate code. </p>
 <p>To set up your first node simulation, just create a file <code>MyFirstSimulation.js</code>
 in the folder <code>cpmjs/examples/node/</code>
-(or see <a href="./manual/installation.md#additional-notes">these instructions</a> to create it
+(or see <a href="./manual/installation.html#additional-notes">these instructions</a> to create it
 elsewhere). Then add the following line of code to the (still empty) script to
 source the package:</p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">/* Source the CPM module (cpm-cjs version because this is a node script).*/
@@ -226,27 +160,15 @@ let CPM = require(&quot;../../build/cpm-cjs.js&quot;)</code>
 location of <code>MyFirstSimulation.js</code> to <code>cpmjs/build/cpm-cjs.js</code>.</p>
 <p>You can now proceed with <a href="#writing-your-simulation">adding your simulation</a>.</p>
 <h2 id="writing-your-simulation">Writing your simulation</h2><p>We are now ready to add some simulation code. The following code goes either
-in between the <code>&lt;script&gt;&lt;/script&gt;</code> tags of your HTML page, or at the bottom of
-your node script.</p>
-<h3 id="step-1--create-a-simulation-object">Step 1: Create a simulation object</h3><p>The easiest way to build a simulation in CPMjs is to use the
+in between the <code>&lt;script&gt;&lt;/script&gt;</code> tags of your HTML page (see the comment
+<code>// Simulation code here</code>), or at the bottom of your node script.</p>
+<p>The easiest way to build a simulation in CPMjs is to use the
 <a href="./manual/../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>.
 This class provides some default methods for running the simulation and
 producing outputs, so we won&apos;t have to worry about this yet. </p>
-<p>To construct an object of class simulation, type:</p>
-<pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim = new CPM.Simulation( config )</code>
-</code></pre>
-<p>The <code>config</code> contains configuration options; we will take care of this in the
-next step.</p>
-<p>If you are writing an HTML page, you have to define an <code>initialize()</code> function -
-as this is the function that will be run when the page is loaded (see
-<a href="#step-4-write-the-body">this section</a>):</p>
-<pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim
-function initialize(){
-	sim = new CPM.Simulation( config )
-}</code>
-</code></pre>
-<h3 id="step-2---configure-the-cpm--amp--simulation">Step 2 : Configure the CPM &amp; Simulation</h3><p>The code above will not work yet because we still need to supply the <code>config</code>
-object. A configuration object for a simulation should look like this:</p>
+<h3 id="step-1---configure-the-cpm--amp--simulation">Step 1 : Configure the CPM &amp; Simulation</h3><p>The first thing we need to do is supply a <code>config</code> object with all the required
+parameters and settings for the simulation. A configuration object for a simulation
+should look something like this:</p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
 	
 	ndim : 2,
@@ -259,8 +181,6 @@ object. A configuration object for a simulation should look like this:</p>
 	}
 }</code>
 </code></pre>
-<p>(Note: this piece of code should go above the code from the previous step,
-as the <code>config</code> object is needed to construct the simulation object.)</p>
 <p>Here, <code>ndim</code> is the number of dimensions of the grid, <code>field_size</code> is the
 number of pixels in each dimension (in this case: 50 x 50 pixels), <code>conf</code> is
 the configuration object parsed to the
@@ -330,6 +250,18 @@ the background of the grid is colored gray, and the grid is drawn at 4x zoom.</p
 	}
 }</code>
 </code></pre>
+<h3 id="step-2--create-a-simulation-object">Step 2: Create a simulation object</h3><p>Once we have the configuration object, we can use it to construct a simulation.</p>
+<h4 id="in-nodejs">In nodejs</h4><p>In nodejs, simply construct the simulation as follows:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim = new CPM.Simulation( config )</code>
+</code></pre>
+<h4 id="in-html">In HTML</h4><p>If you are writing an HTML page, you have to define an <code>initialize()</code> function -
+as this is the function that will be run when the page is loaded (see
+<a href="./manual/htmlTemplate.html#step-4-write-the-body">this section</a>):</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim
+function initialize(){
+	sim = new CPM.Simulation( config )
+}</code>
+</code></pre>
 <h3 id="step-3---tell-the-simulation-to-run">Step 3 : Tell the simulation to run</h3><p>We are now almost ready; the only thing still missing is a command in the script
 that tells the simulation to start running. This works slightly differently in
 the browser- and nodejs versions.</p>
@@ -353,6 +285,7 @@ this function is called from the <code>initialize()</code> function:</p>
 let sim
 function initialize(){
 	sim = new CPM.Simulation( config )
+	step()
 }
 function step(){
 	sim.step()

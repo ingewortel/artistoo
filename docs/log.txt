@@ -157,6 +157,7 @@ output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/source.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/manual/index.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/manual/installation.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/manual/quickstart.html
+output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/manual/htmlTemplate.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/manual/asset
 output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/test.html
 output: /Users/ingewortel/Documents/projects/Github/cpmjs/docs/test-file/spec/grid/Grid2DSpec.js.html

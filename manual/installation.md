@@ -45,7 +45,7 @@ If you do not have `nodejs` and its package manager `npm`, see
 
 ### Step 3: link the build in your code.
 
-You can now use CPMjs! See this [tutorial](quickstart.md) to build your first
+You can now use CPMjs! See this [tutorial](quickstart.html) to build your first
 simulation, or start from one of the simulations in the `cpmjs/examples/`
 folder. In these examples, you will see that the package can be loaded as
 follows:
