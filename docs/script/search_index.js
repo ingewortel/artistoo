@@ -900,6 +900,48 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "canvas src/canvas.js~canvas,canvas",
+    "test-file/spec/CanvasSpec.js.html#lineNumber4",
+    "Some tests for drawing methods in the Canvas class.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber118",
+    "Some tests for drawing methods in the Canvas class. drawCellBorders should work on CPM and CA",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber85",
+    "Some tests for drawing methods in the Canvas class. drawCells should draw cells on CA",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber72",
+    "Some tests for drawing methods in the Canvas class. drawCells should draw cells on CPM",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber108",
+    "Some tests for drawing methods in the Canvas class. drawOnCellBorders should draw borders on CA",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber95",
+    "Some tests for drawing methods in the Canvas class. drawOnCellBorders should draw borders on CPM",
+    "test"
+  ],
+  [
+    "spec/canvasspec.js",
+    "test-file/spec/CanvasSpec.js.html",
+    "spec/CanvasSpec.js",
+    "testFile"
+  ],
+  [
     "spec/grid/grid2dspec.js",
     "test-file/spec/grid/Grid2DSpec.js.html",
     "spec/grid/Grid2DSpec.js",

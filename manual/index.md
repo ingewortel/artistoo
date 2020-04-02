@@ -38,7 +38,7 @@ biologists with the programming skills required to build them. While the
 literature, the models themselves are typically not accessible for the target
 audience.
 
-We think this should change.
+Could we change this?
 
 In the age of open science, let's make computational biology a little more
 transparent. While sharing scripts and making code "open-source" is nice, it

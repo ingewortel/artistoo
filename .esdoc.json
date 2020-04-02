@@ -15,6 +15,7 @@
           "index": "./manual/index.md",
           "asset": "./manual/asset",
           "files": [
+            "./manual/introCPM.md",
             "./manual/installation.md",
             "./manual/quickstart.md"
           ]

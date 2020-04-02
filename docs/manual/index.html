@@ -31,6 +31,16 @@
 <div data-ice="manual">
 <ul class="manual-toc">
 
+<li data-ice="manualNav" class="indent-h1" data-link="manual/introCPM.html"><a href="manual/introCPM.html" data-ice="link">An introduction to the CPM</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introCPM.html"><a href="manual/introCPM.html#a-brief-history-of-the-cpm" data-ice="link">A brief history of the CPM</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introCPM.html"><a href="manual/introCPM.html#cpm--basic-principle" data-ice="link">CPM: basic principle</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introCPM.html"><a href="manual/introCPM.html#the-hamiltonian-and-energy-constraints" data-ice="link">The Hamiltonian and energy constraints</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/introCPM.html"><a href="manual/introCPM.html#references" data-ice="link">References</a></li>
+</ul>
+</div>
+<div data-ice="manual">
+<ul class="manual-toc">
+
 <li data-ice="manualNav" class="indent-h1" data-link="manual/installation.html"><a href="manual/installation.html" data-ice="link">Getting started</a></li>
 <li data-ice="manualNav" class="indent-h2" data-link="manual/installation.html"><a href="manual/installation.html#set-up-cpmjs-in-3-easy-steps" data-ice="link">Set up CPMjs in 3 easy steps</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-1--download-the-repository-" data-ice="link">Step 1: download the repository.</a></li>
@@ -96,7 +106,7 @@ biologists with the programming skills required to build them. While the
 <em>results</em> from such models are shared with other biologists in the scientific
 literature, the models themselves are typically not accessible for the target
 audience.</p>
-<p>We think this should change.</p>
+<p>Could we change this?</p>
 <p>In the age of open science, let&apos;s make computational biology a little more
 transparent. While sharing scripts and making code &quot;open-source&quot; is nice, it
 still won&apos;t make simulation models accessible for a broad audience of biologists.</p>
@@ -135,6 +145,55 @@ loss of speed.</p>
 
 <div class="manual-cards">
 
+<div class="manual-card-wrap" data-ice="cards">
+<div class="manual-card">
+<div data-ice="card"><h1>An introduction to the CPM</h1><p>This tutorial provides a brief introduction to the Cellular Potts Model (CPM)
+framework. It is not specific to CPMjs; rather, it aims to provide a general
+overview of how CPMs work, and to give you a feel for what the parameters mean.
+If you are already familiar with the CPM, this tutorial is probably not for you.</p><h2>A brief history of the CPM</h2><p>The first version of a CPM was developed in the early nineties by
+Fran&#xE7;ois Graner and James Glazier <a href="#graner-glazier">(1)</a>. At the time,
+developmental biologists had found that when two different types of embryonic
+cells were mixed, they could automatically sort into large homogeneous patches
+containing cells of the same type. Experimental studies suggested that this sorting
+process was governed by differential adhesion between cells of different types.
+To better understand how this worked, Graner and Glazier wanted to model the
+phenomenon and see if they could indeed reproduce sorting based on this
+&quot;differential adhesion&quot; alone.</p><p>Their model was an extension of an existing model used in physics: the Potts
+model <a href="#basic-potts">(2)</a>. The original Potts model was developed by physicists
+to simulate magnetism: it models the interaction between so-called &quot;spins&quot; on a
+crystalline lattice:</p><p><div>
+<iframe src="./manual/asset/IsingModel.html" width="500px" height="320px"> </iframe>
+</div>
+
+</p><p>Graner and Glazier realized that they could apply the same principle to the
+cell sorting problem. Their model extended the original Potts model
+by replacing the binary &quot;spin&quot; property with a &quot;cell identity&quot;, a number indicating
+the cell to which a grid point belonged. This number could take on more than two
+values, allowing the co-existence of multiple cells on the same grid. Graner
+and Glazier also extended the energy equations so that &quot;cells&quot; would roughly
+keep the same number of grid points <a href="#graner-glazier">(1</a><a href="#cpm-history">,3)</a>:</p><p><div>
+<iframe src="./manual/asset/Cellsorting.html" width="500px" height="320px"> </iframe>
+</div>
+
+</p><p>This was the first &quot;cellular&quot; Potts model, or CPM. After Graner and Glazier
+showed how the central energy equation could be extended to account for different
+types of behavior, others quickly followed with their own variations to the
+model. In particular, Paulien Hogeweg developed many important extensions to
+generalize the CPM - which is why it is also referred to as the
+Glazier-Graner-Hogeweg (GGH) model <a href="#cpm-history">(3)</a>.</p><h2>CPM: basic principle</h2><h2>The Hamiltonian and energy constraints</h2><h2>References</h2><p>[1] <a id="graner-glazier"></a> Graner &amp; Glazier (1992).
+<a href="https://www.if.ufrgs.br/~leon/cursopg/mod_min/Articles/PRL_69-13-2013.pdf">
+Simulation of biological cell sorting using a two-dimensional extended Potts model.
+</a></p><p>[2] <a id="basic-potts"></a> Wikipedia.
+<a href="https://en.wikipedia.org/wiki/Potts_model">
+The Potts model.
+</a></p><p>[3] <a id="cpm-history"></a> Glazier, Balter, Poplawski (2007).
+<a href="https://link.springer.com/chapter/10.1007/978-3-7643-8123-3_4">
+Magnetization to Morphogenesis: a brief history of the
+Glazier-Graner-Hogeweg model.
+</a></p></div>
+<a data-ice="link" href="manual/introCPM.html"></a>
+</div>
+</div>
 <div class="manual-card-wrap" data-ice="cards">
 <div class="manual-card">
 <div data-ice="card"><h1>Getting started</h1><h2>Set up CPMjs in 3 easy steps</h2><h3>Step 1: download the repository.</h3><p><strong>Via the Github website</strong></p><p>Visit the <a href="https://github.com/jtextor/cpmjs">Github repository</a> and click on the
