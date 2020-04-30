@@ -240,7 +240,13 @@ class Simulation {
 			
 			// if there is an activity constraint, draw activity values depending on color.
 			if( this.C.conf["LAMBDA_ACT"] !== undefined && this.C.conf["LAMBDA_ACT"][ cellkind + 1 ] > 0 ){ //this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
-				if( ( actcolor[ cellkind ] ) ){
+				let colorAct
+				if( typeof actcolor !== "undefined" ){
+					colorAct = actcolor[ cellkind ] || false
+				} else {
+					colorAct = false
+				}
+				if( ( colorAct ) ){
 					this.Cim.drawActivityValues( cellkind + 1 )//, this.constraints["ActivityConstraint"] )
 				}			
 			}
