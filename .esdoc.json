@@ -17,7 +17,9 @@
           "files": [
             "./manual/introCPM.md",
             "./manual/installation.md",
-            "./manual/quickstart.md"
+            "./manual/quickstart.md",
+            "./manual/htmlTemplate.md",
+            "./manual/simulationConfig.md"
           ]
         },
         "brand": {

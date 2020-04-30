@@ -174,6 +174,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "cpmjs/src/hexcanvas.js~hexcanvas",
+    "class/src/HexCanvas.js~HexCanvas.html",
+    "<span>HexCanvas</span> <span class=\"search-result-import-path\">cpmjs/src/HexCanvas.js</span>",
+    "class"
+  ],
+  [
+    "cpmjs/src/grid/hexgrid2d.js~hexgrid2d",
+    "class/src/grid/HexGrid2D.js~HexGrid2D.html",
+    "<span>HexGrid2D</span> <span class=\"search-result-import-path\">cpmjs/src/grid/HexGrid2D.js</span>",
+    "class"
+  ],
+  [
     "cpmjs/src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint",
     "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html",
     "<span>LocalConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/LocalConnectivityConstraint.js</span>",
@@ -237,6 +249,12 @@ window.esdocSearchIndex = [
     "cpmjs/src/stats/stat.js~stat",
     "class/src/stats/Stat.js~Stat.html",
     "<span>Stat</span> <span class=\"search-result-import-path\">cpmjs/src/stats/Stat.js</span>",
+    "class"
+  ],
+  [
+    "cpmjs/src/hamiltonian/tunableperimeterconstraint.js~tunableperimeterconstraint",
+    "class/src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint.html",
+    "<span>TunablePerimeterConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/TunablePerimeterConstraint.js</span>",
     "class"
   ],
   [
@@ -1464,6 +1482,72 @@ window.esdocSearchIndex = [
     "typedef"
   ],
   [
+    "src/hexcanvas.js",
+    "file/src/HexCanvas.js.html",
+    "src/HexCanvas.js",
+    "file"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#constructor",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-constructor-constructor",
+    "src/HexCanvas.js~HexCanvas#constructor",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#drawactivityvalues",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-drawActivityValues",
+    "src/HexCanvas.js~HexCanvas#drawActivityValues",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#drawcellborders",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-drawCellBorders",
+    "src/HexCanvas.js~HexCanvas#drawCellBorders",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#drawcells",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-drawCells",
+    "src/HexCanvas.js~HexCanvas#drawCells",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#drawpixel",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-drawPixel",
+    "src/HexCanvas.js~HexCanvas#drawPixel",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#hexagoncorners",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-hexagonCorners",
+    "src/HexCanvas.js~HexCanvas#hexagonCorners",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#p2c",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-p2c",
+    "src/HexCanvas.js~HexCanvas#p2c",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#rgbtohex",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-rgbToHex",
+    "src/HexCanvas.js~HexCanvas#rgbToHex",
+    "method"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#s",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-member-s",
+    "src/HexCanvas.js~HexCanvas#s",
+    "member"
+  ],
+  [
+    "src/hexcanvas.js~hexcanvas#shiftcoordinate",
+    "class/src/HexCanvas.js~HexCanvas.html#instance-method-shiftCoordinate",
+    "src/HexCanvas.js~HexCanvas#shiftCoordinate",
+    "method"
+  ],
+  [
     "src/grid/coarsegrid.js",
     "file/src/grid/CoarseGrid.js.html",
     "src/grid/CoarseGrid.js",
@@ -1881,6 +1965,30 @@ window.esdocSearchIndex = [
     "src/grid/gridmanipulator.js~gridmanipulator#seedcellsincircle",
     "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCellsInCircle",
     "src/grid/GridManipulator.js~GridManipulator#seedCellsInCircle",
+    "method"
+  ],
+  [
+    "src/grid/hexgrid2d.js",
+    "file/src/grid/HexGrid2D.js.html",
+    "src/grid/HexGrid2D.js",
+    "file"
+  ],
+  [
+    "src/grid/hexgrid2d.js~hexgrid2d#constructor",
+    "class/src/grid/HexGrid2D.js~HexGrid2D.html#instance-constructor-constructor",
+    "src/grid/HexGrid2D.js~HexGrid2D#constructor",
+    "method"
+  ],
+  [
+    "src/grid/hexgrid2d.js~hexgrid2d#neighneumanni",
+    "class/src/grid/HexGrid2D.js~HexGrid2D.html#instance-method-neighNeumanni",
+    "src/grid/HexGrid2D.js~HexGrid2D#neighNeumanni",
+    "method"
+  ],
+  [
+    "src/grid/hexgrid2d.js~hexgrid2d#neighi",
+    "class/src/grid/HexGrid2D.js~HexGrid2D.html#instance-method-neighi",
+    "src/grid/HexGrid2D.js~HexGrid2D#neighi",
     "method"
   ],
   [
@@ -2862,6 +2970,42 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/hamiltonian/tunableperimeterconstraint.js",
+    "file/src/hamiltonian/TunablePerimeterConstraint.js.html",
+    "src/hamiltonian/TunablePerimeterConstraint.js",
+    "file"
+  ],
+  [
+    "src/hamiltonian/tunableperimeterconstraint.js~tunableperimeterconstraint#cellperimeters",
+    "class/src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint.html#instance-member-cellperimeters",
+    "src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint#cellperimeters",
+    "member"
+  ],
+  [
+    "src/hamiltonian/tunableperimeterconstraint.js~tunableperimeterconstraint#confchecker",
+    "class/src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint.html#instance-method-confChecker",
+    "src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint#confChecker",
+    "method"
+  ],
+  [
+    "src/hamiltonian/tunableperimeterconstraint.js~tunableperimeterconstraint#constructor",
+    "class/src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint.html#instance-constructor-constructor",
+    "src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint#constructor",
+    "method"
+  ],
+  [
+    "src/hamiltonian/tunableperimeterconstraint.js~tunableperimeterconstraint#deltah",
+    "class/src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint.html#instance-method-deltaH",
+    "src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint#deltaH",
+    "method"
+  ],
+  [
+    "src/hamiltonian/tunableperimeterconstraint.js~tunableperimeterconstraint#postsetpixlistener",
+    "class/src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint.html#instance-method-postSetpixListener",
+    "src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint#postSetpixListener",
+    "method"
+  ],
+  [
     "src/hamiltonian/volumeconstraint.js",
     "file/src/hamiltonian/VolumeConstraint.js.html",
     "src/hamiltonian/VolumeConstraint.js",
@@ -3195,6 +3339,12 @@ window.esdocSearchIndex = [
     "src/models/gridbasedmodel.js~gridbasedmodel#grid",
     "class/src/models/GridBasedModel.js~GridBasedModel.html#instance-member-grid",
     "src/models/GridBasedModel.js~GridBasedModel#grid",
+    "member"
+  ],
+  [
+    "src/models/gridbasedmodel.js~gridbasedmodel#hexgrid",
+    "class/src/models/GridBasedModel.js~GridBasedModel.html#instance-member-hexGrid",
+    "src/models/GridBasedModel.js~GridBasedModel#hexGrid",
     "member"
   ],
   [

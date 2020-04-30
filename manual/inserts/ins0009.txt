@@ -1,0 +1,3 @@
+<div>
+<iframe src="./manual/asset/perimeterExample.html" width="500px" height="260px"> </iframe>
+</div>

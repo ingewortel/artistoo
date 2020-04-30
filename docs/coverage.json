@@ -1,7 +1,7 @@
 {
-  "coverage": "99.05%",
-  "expectCount": 424,
-  "actualCount": 420,
+  "coverage": "97.77%",
+  "expectCount": 450,
+  "actualCount": 440,
   "files": {
     "src/Canvas.js": {
       "expectCount": 41,
@@ -12,6 +12,17 @@
       "expectCount": 10,
       "actualCount": 10,
       "undocumentLines": []
+    },
+    "src/HexCanvas.js": {
+      "expectCount": 15,
+      "actualCount": 10,
+      "undocumentLines": [
+        9,
+        11,
+        17,
+        137,
+        172
+      ]
     },
     "src/grid/CoarseGrid.js": {
       "expectCount": 8,
@@ -42,6 +53,11 @@
     "src/grid/GridManipulator.js": {
       "expectCount": 10,
       "actualCount": 10,
+      "undocumentLines": []
+    },
+    "src/grid/HexGrid2D.js": {
+      "expectCount": 4,
+      "actualCount": 4,
       "undocumentLines": []
     },
     "src/hamiltonian/ActivityConstraint.js": {
@@ -146,6 +162,11 @@
       "actualCount": 9,
       "undocumentLines": []
     },
+    "src/hamiltonian/TunablePerimeterConstraint.js": {
+      "expectCount": 6,
+      "actualCount": 6,
+      "undocumentLines": []
+    },
     "src/hamiltonian/VolumeConstraint.js": {
       "expectCount": 5,
       "actualCount": 5,
@@ -162,9 +183,11 @@
       "undocumentLines": []
     },
     "src/models/GridBasedModel.js": {
-      "expectCount": 26,
+      "expectCount": 27,
       "actualCount": 26,
-      "undocumentLines": []
+      "undocumentLines": [
+        53
+      ]
     },
     "src/simulation/Simulation.js": {
       "expectCount": 30,

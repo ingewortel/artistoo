@@ -1,1 +1,31 @@
-[]
+[
+  {
+    "name": "HexCanvas#drawPixel",
+    "filePath": "src/HexCanvas.js",
+    "lines": [
+      {
+        "lineNumber": 103,
+        "line": "\t/** Draw the hexagon of this pixel."
+      },
+      {
+        "lineNumber": 104,
+        "line": "\t * @param {ArrayCoordinate} p - coordinate of the pixel on the hex grid."
+      },
+      {
+        "lineNumber": 105,
+        "line": "\t * */"
+      },
+      {
+        "lineNumber": 106,
+        "line": "\tdrawPixel( p, colorVec  ){"
+      }
+    ],
+    "codeParams": [
+      "p",
+      "colorVec"
+    ],
+    "docParams": [
+      "p"
+    ]
+  }
+]

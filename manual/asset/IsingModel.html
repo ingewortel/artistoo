@@ -50,7 +50,7 @@ let config = {
 											// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 0,
-		RUNTIME : 1000,
+		RUNTIME : 1500,
 		RUNTIME_BROWSER : "Inf",
 		
 		// Visualization
@@ -105,7 +105,9 @@ function step(){
 function initializeGrid(){
 
 		// Create a cell (other than background)
-		this.cid = this.C.makeNewCellID(1)
+        if( typeof( this.cid ) == "undefined" ){
+			this.cid = this.C.makeNewCellID(1)
+        }
 		let cid = this.cid 
 		
 		// For all non-stromaborder pixels in the grid: assign it randomly
@@ -141,13 +143,22 @@ function logStats(){
 
 // Add a postMCSListener to reinitialize the grid when one of the cells disappears
 function postMCSListener(){
-		
+
+	    let reset = false, maxtime = this.conf.RUNTIME
 		for( let cid of this.C.cellIDs() ){
 			let vol = this.C.getVolume(cid)
 			if( vol<=5 || vol===(this.C.extents[0]-1)*(this.C.extents[1]-1) ){
-				this.initializeGrid()
+				reset = true
 			}
 		}
+		if( this.time >= maxtime ){
+            reset = true
+        }
+		if( reset ){
+			this.time = 0
+            this.initializeGrid()
+        }
+
 }
 
 </script>
@@ -164,9 +175,10 @@ function postMCSListener(){
             between spins on a crystalline lattice. Each grid point represents a spin
             that can take on one of two values (here represented as red and white).
             Spins interact through a global "Hamiltonian" or energy equation, which
-            puts an energetic penalty on every adhesive interaction between neighboring
-            spins of opposite value. Minimisation of this global energy then causes
-            spins to "flip", so that they form large patches of spins of the same type.
+            puts an energetic penalty on every pair of neighboring pixels with
+            opposite spins - reflecting a "surface" or "adhesion" energy.
+            Minimisation of the global energy then causes spins to "flip", until
+            they form large patches of spins of the same type.
         </td>
     </tr>
 </table>

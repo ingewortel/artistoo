@@ -31,6 +31,7 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/HexCanvas.js~HexCanvas.html">HexCanvas</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
@@ -40,6 +41,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/HexGrid2D.js~HexGrid2D.html">HexGrid2D</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
@@ -64,6 +66,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/TunablePerimeterConstraint.js~TunablePerimeterConstraint.html">TunablePerimeterConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
@@ -99,6 +102,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&quot;use strict&quot;
 
 import MersenneTwister from &quot;mersenne-twister&quot;
+import HexGrid2D from &quot;../grid/HexGrid2D.js&quot;
 import Grid2D from &quot;../grid/Grid2D.js&quot;
 import Grid3D from &quot;../grid/Grid3D.js&quot;
 
@@ -116,6 +120,8 @@ class GridBasedModel {
 	@param {object} conf - configuration options. See below for its elements,
 	but subclasses can have more.
 	@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
+	@param {boolean} [conf.hexGrid=false] - should the grid be hexagonal? Grids
+	 are square by default.
 	@param {number} [seed] - seed for the random number generator. If left unspecified,
 	a random number from the Math.random() generator is used to make one.  */
 	constructor( extents, conf ){
@@ -136,7 +142,7 @@ class GridBasedModel {
 		/** Dimensionality of the grid 
 		@type {number}*/
 		this.ndim = extents.length // grid dimensions (2 or 3)
-		if( this.ndim != 2 &amp;&amp; this.ndim != 3 ){
+		if( this.ndim !== 2 &amp;&amp; this.ndim !== 3 ){
 			throw(&quot;only 2D and 3D models are implemented!&quot;)
 		}
 		
@@ -145,11 +151,21 @@ class GridBasedModel {
 		this.conf = conf // input parameter settings; see documentation.
 
 		// Some functions/attributes depend on ndim:
-		if( this.ndim == 2 ){
-			/** The grid.
-			@type {Grid2D|Grid3D}*/
-			this.grid = new Grid2D(extents,conf.torus)
+		this.hexGrid = conf.hexGrid || false
+
+		if( this.ndim === 2 ){
+			if( this.hexGrid ){
+				/** The grid.
+				@type {Grid2D|Grid3D|HexGrid2D}*/
+				this.grid = new HexGrid2D(extents,conf.torus)
+			} else {
+				this.grid = new Grid2D(extents,conf.torus)
+			}
+
 		} else {
+			if( this.hexGrid ){
+				throw( &quot;There is no 3D hexagonal grid!&quot; )
+			}
 			this.grid = new Grid3D(extents,conf.torus)
 		}
 		// Pull up some things from the grid object so we don&apos;t have to access it
