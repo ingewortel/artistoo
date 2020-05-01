@@ -1285,253 +1285,109 @@ class GridBasedModel {
 	}
 }
 
-/** This class encapsulates a lower-resolution grid and makes it
-   visible as a higher-resolution grid. Only exact subsampling by
-   a constant factor per dimension is supported. 
-   
-   This class is useful when combining information of grids of
-   different sizes. This is often the case for chemotaxis, where
-   we let diffusion occur on a lower resolution grid to speed things up.
-   This class then allows you to obtain chemokine information from the 
-   low resolution chemokine grid using coordinates from the linked,
-   higher resolution model grid.
-   
-   @example <caption>Linear interpolation on a low resolution chemokine grid</caption>
-   * let CPM = require( "path/to/build" )
-   * 
-   * // Define a grid with float values for chemokine values, and set the middle pixel
-   * let chemogrid = new CPM.Grid2D( [50,50], [true,true], "Float32" )
-   * chemogrid.setpix( [99,99], 100 )
-   * 
-   * // Make a coarse grid at 5x as high resolution, which is then 500x500 pixels.
-   * let coarsegrid = new CPM.CoarseGrid( chemogrid, 5 )
-   * 
-   * // Use interpolation. Pixels close to the midpoint won't have the exact same
-   * // value of either 100 or 0, but something inbetween.
-   * let p1 = [250,250], p2 = [250,251]
-   * console.log( "p1 : " + coarsegrid.pixt(p1) + ", p2 : " + coarsegrid.pixt(p2) )
-   * // p1 : 100, p2 : 80 
-   * 
-   * // Or draw it to see this. Compare these two:
-   * let Cim1 = new CPM.Canvas( coarsegrid )
-   * Cim1.drawField()
-   * let Cim2 = new CPM.Canvas( chemogrid, {zoom:5} )
-   * Cim2.drawField()
-*/
-class CoarseGrid extends Grid2D {
-	/** The constructor of class CoarseGrid takes a low resolution grid as input
-	and a factor 'upscale', which is how much bigger the dimensions of the high
-	resolution grid are (must be a constant factor). 
-	@param {Grid2D} grid the grid to scale up; currently only supports the {@link Grid2D} class.
-	@param {number} upscale The (integer) factor to magnify the original grid with. */
-	constructor( grid, upscale = 3 ){
-	
-		let extents = new Array( grid.extents.length );
-		for( let i = 0 ; i < grid.extents.length ; i++ ){
-			extents[i] = upscale * grid.extents[i];
-		}
-		super( extents, grid.torus, "Float32" );
-	
-		/** Size of the new grid in all dimensions.
-		@type {GridSize} with a non-negative integer number for each dimension. */
-		this.extents = extents;
-		/** The original, low-resolution grid. 
-		@type {Grid2D}*/
-		this.grid = grid;
-		
-		/** The upscale factor (a positive integer number).
-		@private
-		@type {number} */
-		this.upscale = upscale;
-	}
+// pass in RNG
 
-	/** The pixt method takes as input a coordinate on the bigger grid, and maps it
-	to the corresponding value on the resized small grid via bilinear interpolation.
-	This prevents artefacts from the lower resolution of the second grid: the 
-	[upscale x upscale] pixels that map to the same pixel in the low resolution grid
-	do not get the same value.
-	@param {ArrayCoordinate} p array coordinates on the high resolution grid.
-	@return {number} interpolated value from the low resolution grid at this position. */
-	pixt( p ){
-	
-		// 2D bilinear interpolation. Find the 4 positions on the original, low resolution grid
-		// that are closest to the requested position p: x-coordinate l,r (left/right) 
-		// and y-coordinate t,b (top/bottom)
-	
-		let positions = this.positions(p); // [t,r,b,l,h,v]
-		let t = positions[0], r = positions[1], b = positions[2], l = positions[3],
-			h = positions[4], v = positions[5];
+/** This class implements a data structure with constant-time insertion, deletion, and random
+    sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
+    pixels at cell borders. Elements in this set must be unique.*/
+class DiceSet{
 
-		// Get the values on those 4 positions
-		let f_lt = this.grid.pixt([l,t]);
-		let f_rt = this.grid.pixt([r,t]);
-		let f_lb = this.grid.pixt([l,b]);
-		let f_rb = this.grid.pixt([r,b]);
-
-		// Average these weighted by their distance to the current pixel.
-		let f_x_b = f_lb * (1-h) + f_rb * h; 
-		let f_x_t = f_lt * (1-h) + f_rt * h;
-
-		return f_x_t*(1-v) + f_x_b * v
-	}
-	
-	/** This method takes as input a coordinate on the bigger grid, and 'adds' additional
-	value to it by adding the proper amount to the corresponding positions on the low
-	resolution grid.
-	@param {ArrayCoordinate} p array coordinates on the high resolution grid.
-	@param {number} value - value that should be added to this position.
+	/** An object of class MersenneTwister. 
+	@see https://www.npmjs.com/package/mersenne-twister
+	@typedef {object} MersenneTwister
 	*/
-	addValue( p, value ){
-		
-		// 2D bilinear interpolation, the other way around.
-		// Find the 4 positions on the original, low res grid that are closest to the
-		// requested position p
-		
-		let positions = this.positions(p); 
-		let t = positions[0], r = positions[1], b = positions[2], l = positions[3],
-			h = positions[4], v = positions[5];
-			
-		
-		let v_lt = value * (1-h) * (1-v);
-		let v_lb = value * (1-h) * v;
-		let v_rt = value * h * (1-v);
-		let v_rb = value * h * v;
-		
-		
-		this.grid.setpix( [l,t], this.grid.pixt([l,t]) + v_lt );
-		this.grid.setpix( [l,b], this.grid.pixt([l,b]) + v_lb );
-		this.grid.setpix( [r,t], this.grid.pixt([r,t]) + v_rt );
-		this.grid.setpix( [r,b], this.grid.pixt([r,b]) + v_rb );
-		
-	}
-	/** @private 
-	@ignore */
-	positions( p ){
-		// Find the 4 positions on the original, low resolution grid
-		// that are closest to the requested position p: x-coordinate l,r (left/right) 
-		// and y-coordinate t,b (top/bottom)
-		let l = ~~(p[0] / this.upscale); // ~~ is a fast alternative for Math.floor
-		let r = l+1;
-		
-		let t = ~~(p[1] / this.upscale);
-		let b = t+1;
-		
-		// Find the horizontal/vertical distances of these positions to p
-		let h = (p[0]%this.upscale)/this.upscale;
-		let v = (p[1]%this.upscale)/this.upscale;
-		
-		// Correct grid boundaries depending on torus
-		if( r > this.grid.extents[0] ){
-			if( this.grid.torus[0] ){
-				r = 0;
-			} else {
-				r = this.grid.extents[0];
-				h = 0.5;
-			}
-		}
-		
-		if( b > this.grid.extents[1] ){
-			if( this.grid.torus[1] ){
-				b = 0;
-			} else {
-				b = this.grid.extents[1];
-				v = 0.5;
-			}
-			
-		}
-		
-		return [t,r,b,l,h,v]
+
+	/** The constructor of class DiceSet takes a MersenneTwister object as input, to allow
+	seeding of the random number generator used for random sampling.
+	@param {MersenneTwister} mt MersenneTwister object used for random numbers.*/
+	constructor( mt ) {
+
+		/** Object or hash map used to check in constant time whether a pixel is at the
+		cell border. Keys are the actual values stored in the DiceSet, numbers are their
+		location in the elements arrray.
+		Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
+		at least in nodejs. This is weird given that in vanilla objects, all keys are 
+		converted to strings, which does not happen for Maps.
+		@type {object}
+		*/
+		this.indices = {}; //new Map() // {}
+		//this.indices = {}
+
+		/** Use an array for constant time random sampling of pixels at the border of cells.
+		@type {number[]} */
+		this.elements = [];
+
+		/** The number of elements currently present in the DiceSet. 
+		@type {number}
+		*/
+		this.length = 0;
+
+		/** @ignore */
+		this.mt = mt;
 	}
 
-	/*gradient( p ){
-		let ps = new Array( p.length )
-		for( let i = 0 ; i < p.length ; i ++ ){
-			ps[i] = ~~(p[i]/this.upscale)
-		}
-		return this.grid.gradient( ps )
-	}*/
-}
+	/** Unique identifier of some element. This can be a number (integer) or a string,
+	but it must uniquely identify one element in a set.
+	@typedef {number|string} uniqueID*/
 
-/** Base class for a statistic that can be computed on a GridBasedModel. 
-This class by itself is not usable; see its subclasses for stats that are 
-currently supported. */
-class Stat {
-
-	/** The constructor of class Stat takes a 'conf' object as argument.
-	However, Stats should not really be configurable in the sense that they should always
-	provide an expected output. The 'conf' object is mainly intended
-	to provide an option to configure logging / debugging output. That
-	is not implemented yet.	
-	@param {object} conf configuration options for the Stat, which should change nothing
-	about the return value produced by the compute() method but may be used for logging
-	and debugging options.*/
-	constructor( conf ){
-		/** Configuration object for the stat, which should not change its value but
-		may be used for logging and debugging options.
-		@type {object}*/
-		this.conf = conf || {};
-	}
-	
-	/** Every stat is linked to a specific model.
-	@param {GridBasedModel} M the model to compute the stat on.*/
-	set model( M ){
-	
-		/** The model to compute the stat on.
-		@type {GridBasedModel} */
-		this.M = M;
-	}
-	
-	/** The compute method of the base Stat class throws an error, 
-	enforcing that you have to implement this method when you build a new 
-	stat class extending this base class. 
-	@abstract */
-	compute(){
-		throw("compute method not implemented for subclass of Stat")
-	}
-}
-
-/** This Stat creates an object with the cellpixels of each cell on the grid. 
-	Keys are the {@link CellId} of all cells on the grid, corresponding values are arrays
-	containing the pixels belonging to that cell. Each element of that array contains
-	the {@link ArrayCoordinate} for that pixel.
-	
-	@example
-	* let CPM = require( "path/to/build" )
-	*
-	* // Make a CPM, seed a cell, and get the PixelsByCell
-	* let C = new CPM.CPM( [100,100], { 
-	* 	T:20,
-	* 	J:[[0,20],[20,10]],
-	* 	V:[0,200],
-	* 	LAMBDA_V:[0,2]
-	* } )
-	* let gm = new CPM.GridManipulator( C )
-	* gm.seedCell(1)
-	* gm.seedCell(1)
-	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
-	* C.getStat( CPM.PixelsByCell )
-*/
-class PixelsByCell extends Stat {
-
-	/** The compute method of PixelsByCell creates an object with cellpixels of each
-	cell on the grid.
-	@return {CellArrayObject} object with for each cell on the grid
-	an array of pixels (specified by {@link ArrayCoordinate}) belonging to that cell.
+	/** Insert a new element. It is added as an index in the indices, and pushed
+	to the end of the elements array.
+	@param {uniqueID} v The element to add.
 	*/
-	compute(){
-		// initialize the object
-		let cellpixels = { };
-		// The this.M.pixels() iterator returns coordinates and cellid for all 
-		// non-background pixels on the grid. See the appropriate Grid class for
-		// its implementation.
-		for( let [p,i] of this.M.pixels() ){
-			if( !cellpixels[i] ){
-				cellpixels[i] = [p];
-			} else {
-				cellpixels[i].push( p );
-			}
+	insert( v ){
+		if( this.indices[v] ){
+			return
 		}
-		return cellpixels
+		// Add element to both the hash map and the array.
+		//this.indices.set( v, this.length )
+		this.indices[v] = this.length;
+	
+		this.elements.push( v );
+		this.length ++; 
+	}
+
+	/** Remove element v.
+	@param {uniqueID} v The element to remove. 
+	*/
+	remove( v ){
+		// Check whether element is present before it can be removed.
+		if( !this.indices[v] ){
+			return
+		}
+		/* The hash map gives the index in the array of the value to be removed.
+		The value is removed directly from the hash map, but from the array we
+		initially remove the last element, which we then substitute for the 
+		element that should be removed.*/
+		//const i = this.indices.get(v)
+		const i = this.indices[v];
+
+		//this.indices.delete(v)
+		delete this.indices[v];
+
+		const e = this.elements.pop();
+		this.length --;
+		if( e == v ){
+			return
+		}
+		this.elements[i] = e;
+
+		//this.indices.set(e,i)
+		this.indices[e] = i;
+	}
+	/** Check if the DiceSet already contains element v. 
+	@param {uniqueID} v The element to check presence of. 
+	@return {boolean} true or false depending on whether the element is present or not.
+	*/
+	contains( v ){
+		//return this.indices.has(v)
+		return (v in this.indices)
+	}
+	
+	/** Sample a random element from v.
+	@return {uniqueID} the element sampled.
+	*/
+	sample(){
+		return this.elements[Math.floor(this.mt.random()*this.length)]
 	}
 }
 
@@ -2086,6 +1942,164 @@ class ParameterChecker {
 	
 }
 
+/** 
+ * Implements the adhesion constraint of Potts models. 
+ * Each pair of neighboring pixels [n,m] gets a positive energy penalty deltaH if n and m
+ * do not belong to the same {@link CellId}.
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], { T : 20 } )
+ * C.add( new CPM.Adhesion( { J : [[0,20],[20,10]] } ) )
+ * 
+ * // Or add automatically by entering the parameters in the CPM
+ * let C2 = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]]
+ * })
+ */
+class Adhesion extends SoftConstraint {
+
+	/** The constructor of Adhesion requires a conf object with a single parameter J.
+	@param {object} conf - parameter object for this constraint
+	@param {CellKindInteractionMatrix} conf.J - J[n][m] gives the adhesion energy between a pixel of
+	{@link CellKind} n and a pixel of {@link CellKind} m. J[n][n] is only non-zero
+	when the pixels in question are of the same {@link CellKind}, but a different 
+	{@link CellId}. Energies are given as non-negative numbers.
+	*/
+	constructor( conf ){
+		super( conf );		
+	}
+
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "J", "KindMatrix", "Number" );
+	}
+
+	/**  Get adhesion between two cells t1,t2 from "conf". 
+	@param {CellId} t1 - cellid of the first cell.
+	@param {CellId} t2 - cellid of the second cell.
+	@return {number} adhesion between a pixel of t1 and one of t2.
+	@private
+	*/
+	J( t1, t2 ){
+		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+	}
+	/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
+	neighbors that belong to a different cellid.
+	@param {IndexCoordinate} i - coordinate of the pixel to evaluate hamiltonian at.
+	@param {CellId} tp - cellid of this pixel.
+	@return {number} sum over all neighbors of adhesion energies (only non-zero for 
+	neighbors belonging to a different cellid).	
+	@private
+	 */
+	H( i, tp ){
+		let r = 0, tn;
+		/* eslint-disable */
+		const N = this.C.grid.neighi( i );
+		for( let j = 0 ; j < N.length ; j ++ ){
+			tn = this.C.pixti( N[j] );
+			if( tn != tp ) r += this.J( tn, tp );
+		}
+		return r
+	}
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	deltaH( sourcei, targeti, src_type, tgt_type ){
+		return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
+	}
+}
+
+/** 
+ * Implements the volume constraint of Potts models. 
+ * 
+ * This constraint is typically used together with {@link Adhesion}.
+ * 
+ * See {@link VolumeConstraint#constructor} for the required parameters.
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]]
+ * })
+ * C.add( new CPM.VolumeConstraint( {
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5] 	
+ * } ) )
+ * 
+ * // Or add automatically by entering the parameters in the CPM
+ * let C2 = new CPM.CPM( [200,200], {
+ * 	T : 20,
+ * 	J : [[0,20],[20,10]],
+ * 	V : [0,500],
+ * 	LAMBDA_V : [0,5]
+ * })
+ */
+class VolumeConstraint extends SoftConstraint {
+
+
+	/** The constructor of the VolumeConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {PerKindNonNegative} conf.LAMBDA_V - strength of the constraint per cellkind.
+	@param {PerKindNonNegative} conf.V - Target volume per cellkind.
+	*/
+	constructor( conf ){
+		super( conf );
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "LAMBDA_V", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "V", "KindArray", "NonNegative" );
+	}
+
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	deltaH( sourcei, targeti, src_type, tgt_type ){
+		// volume gain of src cell
+		let deltaH = this.volconstraint( 1, src_type ) - 
+			this.volconstraint( 0, src_type );
+		// volume loss of tgt cell
+		deltaH += this.volconstraint( -1, tgt_type ) - 
+			this.volconstraint( 0, tgt_type );
+		return deltaH
+	}
+	/* ======= VOLUME ======= */
+
+	/** The volume constraint term of the Hamiltonian for the cell with id t.
+	@param {number} vgain - Use vgain=0 for energy of current volume, vgain=1 
+		for energy if cell gains a pixel, and vgain = -1 for energy if cell loses a pixel.
+	@param {CellId} t - the cellid of the cell whose volume energy we are computing.
+	@return {number} the volume energy of this cell.
+	*/
+	volconstraint ( vgain, t ){
+		const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
+		// the background "cell" has no volume constraint.
+		if( t == 0 || l == 0 ) return 0
+		const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
+		return l*vdiff*vdiff
+	}
+}
+
 /** This class implements the activity constraint of Potts models published in:
  *
  *	Niculescu I, Textor J, de Boer RJ (2015) 
@@ -2330,1142 +2344,6 @@ class ActivityConstraint extends SoftConstraint {
 	}
 
 
-}
-
-/**
- * The ActivityMultiBackground constraint implements the activity constraint of Potts models,
- but allows users to specify locations on the grid where LAMBDA_ACT is different. 
- See {@link ActivityConstraint} for the normal version of this constraint.
- See {@link ActivityMultiBackground#constructor} for an explanation of the parameters.
- */
-class ActivityMultiBackground extends ActivityConstraint {
-
-	/** Creates an instance of the ActivityMultiBackground constraint 
-	* @param {object} conf - Configuration object with the parameters.
-	* ACT_MEAN is a single string determining whether the activity mean should be computed
-	* using a "geometric" or "arithmetic" mean. 
-	*/
-	/** The constructor of the ActivityConstraint requires a conf object with parameters.
-	@param {object} conf - parameter object for this constraint
-	@param {string} [conf.ACT_MEAN="geometric"] - should local mean activity be measured with an
-	"arithmetic" or a "geometric" mean?
-	@param {PerKindArray} conf.LAMBDA_ACT_MBG - strength of the activityconstraint per cellkind and per background.
-	@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
-	@param {Array} conf.BACKGROUND_VOXELS - an array where each element represents a different background type.
-	This is again an array of {@ArrayCoordinate}s of the pixels belonging to that backgroundtype. These pixels
-	will have the LAMBDA_ACT_MBG value of that backgroundtype, instead of the standard value.
-	*/
-	constructor( conf ){
-		super( conf );
-
-		/** Activity of all cellpixels with a non-zero activity is stored in this object,
-		with the {@link IndexCoordinate} of each pixel as key and its current activity as
-		value. When the activity reaches 0, the pixel is removed from the object until it
-		is added again. 
-		@type {object}*/
-		this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
-		
-		/** Wrapper: select function to compute activities based on ACT_MEAN in conf.
-		Default is to use the {@link activityAtGeom} for a geometric mean.
-		@type {function}*/
-		this.activityAt = this.activityAtGeom;
-		if( this.conf.ACT_MEAN == "arithmetic" ){
-			this.activityAt = this.activityAtArith;
-		} 
-		
-		/** Store which pixels belong to which background type 
-		@type {Array}*/
-		this.bgvoxels = [];
-		
-		/** Track if this.bgvoxels has been set.
-		@type {boolean}*/
-		this.setup = false;
-	}
-	
-	/** This method checks that all required parameters are present in the object supplied to
-	the constructor, and that they are of the right format. It throws an error when this
-	is not the case.*/
-	confChecker(){
-		let checker = new ParameterChecker( this.conf, this.C );
-		checker.confCheckParameter( "ACT_MEAN", "SingleValue", "String", [ "geometric", "arithmetic" ] );
-		checker.confCheckPresenceOf( "LAMBDA_ACT_MBG" );
-		checker.confCheckParameter( "MAX_ACT", "KindArray", "NonNegative" );
-		
-		// Custom checks
-		checker.confCheckStructureKindArray( this.conf["LAMBDA_ACT_MBG"], "LAMBDA_ACT_MBG" );
-		for( let e of this.conf["LAMBDA_ACT_MBG"] ){
-			for( let i of e ){
-				if( !checker.isNonNegative(i) ){
-					throw("Elements of LAMBDA_ACT_MBG must be non-negative numbers!")
-				}
-			}
-		}
-		checker.confCheckPresenceOf( "BACKGROUND_VOXELS" );
-		let bgvox = this.conf["BACKGROUND_VOXELS"];
-		// Background voxels must be an array of arrays
-		if( !(bgvox instanceof Array) ){
-			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
-		} else if ( bgvox.length < 2 ){
-			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
-		}
-		// Elements of the initial array must be arrays.
-		for( let e of bgvox ){
-			if( !(e instanceof Array) ){
-				throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
-			}
-			
-			// Entries of this array must be pixel coordinates, which are arrays of length C.extents.length
-			for( let ee of e ){
-				let isCoordinate = true;
-				if( !(ee instanceof Array) ){
-					isCoordinate = false;
-				} else if ( ee.length != this.C.extents.length ){
-					isCoordinate = false;
-				}
-				if( !isCoordinate ){
-					throw( "Parameter BACKGROUND_VOXELS: subarray elements should be ArrayCoordinates; arrays of length " + this.C.extents.length + "!" )
-				}
-			}
-		}
-	}
-	
-	/** Get the background voxels from input argument or the conf object and store them in a correct format
-	in this.bgvoxels. This only has to be done once, but can be called from outside to
-	change the background voxels during a simulation (eg in a HTML page).
-	 */	
-	setBackgroundVoxels( voxels ){
-	
-		voxels = voxels || this.conf["BACKGROUND_VOXELS"];
-	
-		// reset if any exist already
-		this.bgvoxels = [];
-		for( let bgkind = 0; bgkind < voxels.length; bgkind++ ){
-			this.bgvoxels.push({});
-			for( let v of voxels[bgkind] ){
-				this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true;
-			}
-		}
-		this.setup = true;
-
-	}
-	
-	/* ======= ACT MODEL ======= */
-
-	/* Act model : compute local activity values within cell around pixel i.
-	 * Depending on settings in conf, this is an arithmetic (activityAtArith)
-	 * or geometric (activityAtGeom) mean of the activities of the neighbors
-	 * of pixel i.
-	 */
-	/** Method to compute the Hamiltonian for this constraint. 
-	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
-	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
-	 to copy into.
-	 @param {CellId} src_type - cellid of the source pixel.
-	 @param {CellId} tgt_type - cellid of the target pixel. 
-	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
-	deltaH ( sourcei, targeti, src_type, tgt_type ){
-	
-		if( ! this.setup ){
-			this.setBackgroundVoxels();
-		}
-
-		let deltaH = 0, maxact, lambdaact;
-		const src_kind = this.C.cellKind( src_type );
-		const tgt_kind = this.C.cellKind( tgt_type );
-		let bgindex1 = 0, bgindex2 = 0;
-		
-		for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
-			if( sourcei in this.bgvoxels[bgkind] ){
-				bgindex1 = bgkind;
-			}
-			if( targeti in this.bgvoxels[bgkind] ){
-				bgindex2 = bgkind;
-			}
-		}
-		
-
-		// use parameters for the source cell, unless that is the background.
-		// In that case, use parameters of the target cell.
-		if( src_type != 0 ){
-			maxact = this.conf["MAX_ACT"][src_kind];
-			lambdaact = this.conf["LAMBDA_ACT_MBG"][src_kind][bgindex1];
-		} else {
-			// special case: punishment for a copy attempt from background into
-			// an active cell. This effectively means that the active cell retracts,
-			// which is different from one cell pushing into another (active) cell.
-			maxact = this.conf["MAX_ACT"][tgt_kind];
-			lambdaact = this.conf["LAMBDA_ACT_MBG"][tgt_kind][bgindex2];
-		}
-		if( !maxact || !lambdaact ){
-			return 0
-		}
-
-		// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
-		// or activityAtGeom, depending on conf (see constructor).	
-		deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
-		return deltaH
-	}
-
-
-
-}
-
-/**
- * Class for taking a CPM grid and displaying it in either browser or with
- *  nodejs.
- * Note: when using this class from outside the module, you don't need to import
- *  it separately but can access it from CPM.Canvas. */
-class Canvas {
-	/** The Canvas constructor accepts a CPM object C or a Grid2D object.
-	@param {GridBasedModel|Grid2D|CoarseGrid} C - the object to draw, which must
-	 be an object of class {@link GridBasedModel} (or its subclasses {@link CPM}
-	 and {@link CA}), or a 2D grid ({@link Grid2D} or {@link CoarseGrid}).
-	 Drawing of other grids is currently not supported.
-	@param {object} [options = {}] - Configuration settings
-	@param {number} [options.zoom = 1]- positive number specifying the zoom
-	 level to draw with.
-	@param {number[]} [options.wrap = [0,0,0]] - if nonzero: 'wrap' the grid to
-	 these dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is
-	 displayed at x = 1.
-	@param {string} [options.parentElement = document.body] - the element on
-	 the html page where the canvas will be appended.
-
-	@example <caption>A CPM with Canvas</caption>
-	* let CPM = require( "path/to/build" )
-	*
-	* // Create a CPM, corresponding Canvas and GridManipulator
-	* // (Use CPM. prefix from outside the module)
-	* let C = new CPM.CPM( [200,200], {
-	* 	T : 20,
-	* 	J : [[0,20][20,10]],
-	* 	V:[0,500],
-	* 	LAMBDA_V:[0,5]
-	* } )
-	* let Cim = new CPM.Canvas( C, {zoom:2} )
-	* let gm = new CPM.GridManipulator( C )
-	*
-	* // Seed a cell at [x=100,y=100] and run 100 MCS.
-	* gm.seedCellAt( 1, [100,100] )
-	* for( let t = 0; t < 100; t++ ){
-	* 	C.timeStep()
-	* }
-	*
-	* // Draw the cell and save an image
-	* Cim.drawCells( 1, "FF0000" )			// draw cells of CellKind 1 in red
-	* Cim.writePNG( "my-cell-t100.png" )
-	*/
-	constructor( C, options ){
-		if( C instanceof GridBasedModel ){
-			/**
-			 * The underlying model that is drawn on the canvas.
-			 * @type {GridBasedModel|CPM|CA}
-			 */
-			this.C = C;
-			/**
-			 * The underlying grid that is drawn on the canvas.
-			 * @type {Grid2D|CoarseGrid}
-			 */
-			this.grid = this.C.grid;
-
-			/** Grid size in each dimension, taken from the CPM or grid object
-			 * to draw.
-			 * @type {GridSize} each element is the grid size in that dimension
-			 * in pixels */
-			this.extents = C.extents;
-		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
-
-			this.grid = C;
-			this.extents = C.extents;
-		}
-		/** Zoom level to draw the canvas with, set to options.zoom or its
-		 * default value 1.
-		 * @type {number}*/
-		this.zoom = (options && options.zoom) || 1;
-		/** if nonzero: 'wrap' the grid to these dimensions; eg a pixel with x
-		 * coordinate 201 and wrap[0] = 200 is displayed at x = 1.
-		 * @type {number[]} */
-		this.wrap = (options && options.wrap) || [0,0,0];
-
-		/** Width of the canvas in pixels (in its unzoomed state)
-		 * @type {number}*/
-		this.width = this.wrap[0];
-		/** Height of the canvas in pixels (in its unzoomed state)
-		 * @type {number}*/
-		this.height = this.wrap[1];
-
-		if( this.width === 0 || this.extents[0] < this.width ){
-			this.width = this.extents[0];
-		}
-		if( this.height === 0 || this.extents[1] < this.height ){
-			this.height = this.extents[1];
-		}
-
-		if( typeof document !== "undefined" ){
-			/** @ignore */
-			this.el = document.createElement("canvas");
-			this.el.width = this.width*this.zoom;
-			this.el.height = this.height*this.zoom;//extents[1]*this.zoom
-			let parent_element = (options && options.parentElement) || document.body;
-			parent_element.appendChild( this.el );
-		} else {
-			const {createCanvas} = require("canvas");
-			/** @ignore */
-			this.el = createCanvas( this.width*this.zoom,
-				this.height*this.zoom );
-			/** @ignore */
-			this.fs = require("fs");
-		}
-
-		/** @ignore */
-		this.ctx = this.el.getContext("2d");
-		this.ctx.lineWidth = .2;
-		this.ctx.lineCap="butt";
-	}
-
-	/** Give the canvas element an ID supplied as argument. Useful for building
-	 * an HTML page where you want to get this canvas by its ID.
-	 * @param {string} idString - the name to give the canvas element.
-	 * */
-	setCanvasId( idString ){
-		this.el.id = idString;
-	}
-
-
-	/* Several internal helper functions (used by drawing functions below) : */
-
-	/** @private
-	 * @ignore*/
-	pxf( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom );
-	}
-
-	/** @private
-	 * @ignore */
-	pxfi( p, alpha=1 ){
-		const dy = this.zoom*this.width;
-		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
-		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
-			for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
-				this.px[i+j+off] = this.col_r;
-				this.px[i+j+off + 1] = this.col_g;
-				this.px[i+j+off + 2] = this.col_b;
-				this.px[i+j+off + 3] = alpha*255;
-			}
-		}
-	}
-
-	/** @private
-	 * @ignore */
-	pxfir( p ){
-		const dy = this.zoom*this.width;
-		const off = (p[1]*dy + p[0])*4;
-		this.px[off] = this.col_r;
-		this.px[off + 1] = this.col_g;
-		this.px[off + 2] = this.col_b;
-		this.px[off + 3] = 255;
-	}
-
-	/** @private
-	 * @ignore*/
-	getImageData(){
-		/** @ignore */
-		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
-		/** @ignore */
-		this.px = this.image_data.data;
-	}
-
-	/** @private
-	 * @ignore*/
-	putImageData(){
-		this.ctx.putImageData(this.image_data, 0, 0);
-	}
-
-	/** @private
-	 * @ignore*/
-	pxfnozoom( p ){
-		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 );
-	}
-
-	/** draw a line left (l), right (r), down (d), or up (u) of pixel p
-	 * @private
-	 * @ignore */
-	pxdrawl( p ){
-		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
-			this.pxfir( [this.zoom*p[0],i] );
-		}
-	}
-
-	/** @private
-	 * @ignore */
-	pxdrawr( p ){
-		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
-			this.pxfir( [this.zoom*(p[0]+1),i] );
-		}
-	}
-	/** @private
-	 * @ignore */
-	pxdrawd( p ){
-		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
-			this.pxfir( [i,this.zoom*(p[1]+1)] );
-		}
-	}
-	/** @private
-	 * @ignore */
-	pxdrawu( p ){
-		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
-			this.pxfir( [i,this.zoom*p[1]] );
-		}
-	}
-
-	/** For easier color naming
-	 * @private
-	 * @ignore */
-	col( hex ){
-		this.ctx.fillStyle="#"+hex;
-		/** @ignore */
-		this.col_r = parseInt( hex.substr(0,2), 16 );
-		/** @ignore */
-		this.col_g = parseInt( hex.substr(2,2), 16 );
-		/** @ignore */
-		this.col_b = parseInt( hex.substr(4,2), 16 );
-	}
-
-	/** Hex code string for a color.
-	 * @typedef {string} HexColor*/
-
-	/** Color the whole grid in color [col], or in black if no argument is given.
-	 * @param {HexColor} [col = "000000"] -hex code for the color to use, defaults to black.
-	 */
-	clear( col ){
-		col = col || "000000";
-		this.ctx.fillStyle="#"+col;
-		this.ctx.fillRect( 0,0, this.el.width, this.el.height );
-	}
-
-	/** Rendering context of canvas.
-	 * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
-	 * @typedef {object} CanvasRenderingContext2D
-	 * */
-
-	/** Return the current drawing context.
-	 * @return {CanvasRenderingContext2D} current drawing context on the canvas.
-	 * */
-	context(){
-		return this.ctx
-	}
-	/** @private
-	 * @ignore */
-	p2pdraw( p ){
-		for( let dim = 0; dim < p.length; dim++ ){
-			if( this.wrap[dim] !== 0 ){
-				p[dim] = p[dim] % this.wrap[dim];
-			}
-		}
-		return p
-	}
-
-	/* DRAWING FUNCTIONS ---------------------- */
-
-	/** Use to color a grid according to its values. High values are colored in
-	 * a brighter color.
-	 * @param {Grid2D|CoarseGrid} [cc] - the grid to draw values for. If left
-	 * unspecified, the grid that was originally supplied to the Canvas
-	 * constructor is used.
-	 * @param {HexColor} [col = "0000FF"] - the color to draw the chemokine in.
-	 * */
-	drawField( cc, col = "0000FF" ){
-		if( !cc ){
-			cc = this.grid;
-		}
-		this.col(col);
-		let maxval = 0;
-		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
-			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				let p = Math.log(.1+cc.pixt([i,j]));
-				if( maxval < p ){
-					maxval = p;
-				}
-			}
-		}
-		this.getImageData();
-		//this.col_g = 0
-		//this.col_b = 0
-		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
-			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				//let colval = 255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
-				let alpha = (Math.log(.1+cc.pixt( [i,j] ))/maxval);
-				//this.col_r = colval
-				//this.col_g = colval
-				this.pxfi([i,j], alpha);
-			}
-		}
-		this.putImageData();
-		this.ctx.globalAlpha = 1;
-	}
-	/** Use to color a grid according to its values. High values are colored in
-	 * a brighter color.
-	 * @param {Grid2D|CoarseGrid} [cc] - the grid to draw values for. If left
-	 * unspecified, the grid that was originally supplied to the Canvas
-	 * constructor is used.
-	 * @param {number} [nsteps = 10] - the number of contour lines to draw.
-	 * Contour lines are evenly spaced between the min and max log10 of the
-	 * chemokine.
-	 * @param {HexColor} [col = "FFFF00"] - the color to draw contours with.
-	 * */
-	drawFieldContour( cc, nsteps = 10, col = "FFFF00" ){
-		if( !cc ){
-			cc = this.grid;
-		}
-		this.col(col);
-		let maxval = 0;
-		let minval = Math.log(0.1);
-		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
-			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-				let p = Math.log(.1+cc.pixt([i,j]));
-				if( maxval < p ){
-					maxval = p;
-				}
-				if( minval > p ){
-					minval = p;
-				}
-			}
-		}
-
-
-		this.getImageData();
-		//this.col_g = 0
-		//this.col_b = 0
-		//this.col_r = 255
-
-		let step = (maxval-minval)/nsteps;
-		for( let v = minval; v < maxval; v+= step ){
-
-			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
-				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
-
-					let pixelval = Math.log( .1 + cc.pixt( [i,j] ) );
-					if( Math.abs( v - pixelval ) < 0.05*maxval ){
-						let below = false, above = false;
-						for( let n of this.grid.neighNeumanni( this.grid.p2i( [i,j] ) ) ){
-
-							let nval = Math.log(0.1 + cc.pixt(this.grid.i2p(n)) );
-							if( nval < v ){
-								below = true;
-							}
-							if( nval >= v ){
-								above = true;
-							}
-							if( above && below ){
-								//this.col_r = 150*((v-minval)/(maxval-minval)) + 105
-								let alpha = 0.7*((v-minval)/(maxval-minval)) + 0.3;
-								this.pxfi( [i,j], alpha );
-								break
-							}
-						}
-					}
-
-
-
-				}
-			}
-
-		}
-
-
-
-
-
-		this.putImageData();
-	}
-
-
-
-	/** @desc Method for drawing the cell borders for a given cellkind in the
-	 * color specified in "col" (hex format). This function draws a line around
-	 * the cell (rather than coloring the outer pixels). If [kind] is negative,
-	 * simply draw all borders.
-	 *
-	 * See {@link drawOnCellBorders} to color the outer pixels of the cell.
-	 *
-	 * @param {CellKind} kind - Integer specifying the cellkind to color.
-	 * Should be a positive integer as 0 is reserved for the background.
-	 * @param {HexColor}  [col = "000000"] - hex code for the color to use,
-	 * defaults to black.
-   */
-	drawCellBorders( kind, col ){
-		col = col || "000000";
-		let pc, pu, pd, pl, pr, pdraw;
-		this.col( col );
-		this.getImageData();
-		// cst contains indices of pixels at the border of cells
-		for( let x of this.C.cellBorderPixels() ){
-			let p = x[0];
-			if( kind < 0 || this.C.cellKind(x[1]) === kind ){
-				pdraw = this.p2pdraw( p );
-
-				pc = this.C.pixt( [p[0],p[1]] );
-				pr = this.C.pixt( [p[0]+1,p[1]] );
-				pl = this.C.pixt( [p[0]-1,p[1]] );
-				pd = this.C.pixt( [p[0],p[1]+1] );
-				pu = this.C.pixt( [p[0],p[1]-1] );
-
-				if( pc !== pl  ){
-					this.pxdrawl( pdraw );
-				}
-				if( pc !== pr ){
-					this.pxdrawr( pdraw );
-				}
-				if( pc !== pd ){
-					this.pxdrawd( pdraw );
-				}
-				if( pc !== pu ){
-					this.pxdrawu( pdraw );
-				}
-			}
-
-		}
-		this.putImageData();
-	}
-
-	/** Use to show activity values of the act model using a color gradient, for
-	 * cells in the grid of cellkind "kind". The constraint holding the activity
-	 * values can be supplied as an argument. Otherwise, the current CPM is
-	 * searched for the first registered activity constraint and that is then
-	 * used.
-	 *
-	 * @param {CellKind} kind - Integer specifying the cellkind to color.
-	 * If negative, draw values for all cellkinds.
-	 * @param {ActivityConstraint|ActivityMultiBackground} [A] - the constraint
-	 * object to use, which must be of class {@link ActivityConstraint} or
-	 * {@link ActivityMultiBackground} If left unspecified, this is the first
-	 * instance of an ActivityConstraint or ActivityMultiBackground object found
-	 * in the soft_constraints of the attached CPM.
-	 * @param {Function} [col] - a function that returns a color for a number
-	 * in [0,1] as an array of red/green/blue values, for example, [255,0,0]
-	 * would be the color red. If unspecified, a green-to-red heatmap is used.
-	 * */
-	drawActivityValues( kind, A, col ){
-		if( !A ){
-			for( let c of this.C.soft_constraints ){
-				if( c instanceof ActivityConstraint || c instanceof ActivityMultiBackground ){
-					A = c; break
-				}
-			}
-		}
-		if( !A ){
-			throw("Cannot find activity values to draw!")
-		}
-		if( !col ){
-			col = function(a){
-				let r = [0,0,0];
-				if( a > 0.5 ){
-					r[0] = 255;
-					r[1] = (2-2*a)*255;
-				} else {
-					r[0] = (2*a)*255;
-					r[1] = 255;
-				}
-				return r
-			};
-		}
-		// cst contains the pixel ids of all non-background/non-stroma cells in
-		// the grid. 
-		let ii, sigma, a, k;
-		// loop over all pixels belonging to non-background, non-stroma
-		this.col("FF0000");
-		this.getImageData();
-		this.col_b = 0;
-		//this.col_g = 0
-		for( let x of this.C.cellPixels() ){
-			ii = x[0];
-			sigma = x[1];
-			k = this.C.cellKind(sigma);
-
-			// For all pixels that belong to the current kind, compute
-			// color based on activity values, convert to hex, and draw.
-			if( ( kind < 0 && A.conf["MAX_ACT"][k] > 0 ) || k === kind ){
-				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][k];
-				if( a > 0 ){
-					if( a > 0.5 ){
-						this.col_r = 255;
-						this.col_g = (2-2*a)*255;
-					} else {
-						this.col_r = (2*a)*255;
-						this.col_g = 255;
-					}
-					let r = col( a );
-					this.col_r = r[0];
-					this.col_g = r[1];
-					this.col_b = r[2];
-					this.pxfi( ii );
-				}
-			}
-		}
-		this.putImageData();
-	}
-
-	/** Color outer pixel of all cells of kind [kind] in col [col].
-	 * See {@link drawCellBorders} to actually draw around the cell rather than
-	 * coloring the outer pixels.
-	 *
-	 * @param {CellKind} kind - Integer specifying the cellkind to color.
-	 * Should be a positive integer as 0 is reserved for the background.
-	 * @param {HexColor|function} col - Optional: hex code for the color to use.
-	 * If left unspecified, it gets the default value of black ("000000").
-	 * col can also be a function that returns a hex value for a cell id. */
-	drawOnCellBorders( kind, col ){
-		col = col || "000000";
-		this.getImageData();
-		this.col( col );
-		for( let p of this.C.cellBorderPixels() ){
-			if( kind < 0 || this.C.cellKind(p[1]) === kind ){
-				if( typeof col == "function" ){
-					this.col( col(p[1]) );
-				}
-				this.pxfi( p[0] );
-			}
-		}
-		this.putImageData();
-	}
-
-	/**
-	 * Draw all cells of cellid "id" in color col (hex). Note that this function
-	 * also works for CA.
-	 *
-	 * @param {CellId} id - id of the cell to color.
-	 * @param {HexColor} col - Optional: hex code for the color to use.
-	 * If left unspecified, it gets the default value of black ("000000").
-	 *
-	 * */
-	drawCellsOfId( id, col ){
-		if( !col ){
-			col = "000000";
-		}
-		if( typeof col == "string" ){
-			this.col(col);
-		}
-
-
-		// Use the pixels() iterator to get the id of all non-background pixels.
-		this.getImageData();
-
-		for( let x of this.C.pixels() ){
-			if( x[1] === id ){
-
-				this.pxfi( x[0] );
-
-			}
-		}
-
-		this.putImageData();
-	}
-
-	/** Draw all cells of cellkind "kind" in color col (hex).
-	 *
-	 * @param {CellKind} kind - Integer specifying the cellkind to color.
-	 * Should be a positive integer as 0 is reserved for the background.
-	 * @param {HexColor|function} col - Optional: hex code for the color to use.
-	 * If left unspecified, it gets the default value of black ("000000").
-	 * col can also be a function that returns a hex value for a cell id.
-	 * */
-	drawCells( kind, col ){
-		if( ! col ){
-			col = "000000";
-		}
-		if( typeof col == "string" ){
-			this.col(col);
-		}
-		// Object cst contains pixel index of all pixels belonging to non-background,
-		// non-stroma cells.
-
-		let cellpixelsbyid = this.C.getStat( PixelsByCell );
-
-		/*for( let x of this.C.pixels() ){
-			if( kind < 0 || this.C.cellKind(x[1]) == kind ){
-				if( !cellpixelsbyid[x[1]] ){
-					cellpixelsbyid[x[1]] = []
-				}
-				cellpixelsbyid[x[1]].push( x[0] )
-			}
-		}*/
-
-		this.getImageData();
-		for( let cid of Object.keys( cellpixelsbyid ) ){
-			if( kind < 0 || this.C.cellKind(cid) === kind ){
-				if( typeof col == "function" ){
-					this.col( col(cid) );
-				}
-				for( let cp of cellpixelsbyid[cid] ){
-					this.pxfi( cp );
-				}
-			}
-		}
-		this.putImageData();
-	}
-
-	/** General drawing function to draw all pixels in a supplied set in a given
-	 * color.
-	 * @param {ArrayCoordinate[]} pixelarray - an array of
-	 * {@link ArrayCoordinate}s of pixels to color.
-	 * @param {HexColor|function} col - Optional: hex code for the color to use.
-	 * If left unspecified, it gets the default value of black ("000000").
-	 * col can also be a function that returns a hex value for a cell id.
-	 * */
-	drawPixelSet( pixelarray, col ){
-		if( ! col ){
-			col = "000000";
-		}
-		if( typeof col == "string" ){
-			this.col(col);
-		}
-		this.getImageData();
-		for( let p of pixelarray ){
-			this.pxfi( p );
-		}
-		this.putImageData();
-	}
-
-	/** Draw grid to the png file "fname".
-	 *
-	 * @param {string} fname Path to the file to write. Any parent folders in
-	 * this path must already exist.*/
-	writePNG( fname ){
-
-		try {
-			this.fs.writeFileSync(fname, this.el.toBuffer());
-		}
-		catch (err) {
-			if (err.code === "ENOENT") {
-				let message = "Canvas.writePNG: cannot write to file " + fname +
-					", are you sure the directory exists?";
-				throw(message)
-			}
-		}
-
-	}
-}
-
-/** Extension of the {@link GridBasedModel} class suitable for
-a Cellular Automaton (CA). Currently only supports synchronous CAs.
-
-@example <caption>Conway's Game of Life </caption>
-*	let CPM = require( "path/to/build" )
-*	let C = new CPM.CA( [200,200], {
-*		"UPDATE_RULE": 	function(p,N){
-*			let nalive = 0
-*			for( let pn of N ){
-*				nalive += (this.pixt(pn)==1)
-*			}	
-*			if( this.pixt(p) == 1 ){
-*				if( nalive == 2 || nalive == 3 ){
-*					return 1
-*				}
-*			} else {
-*				if( nalive == 3 ) return 1
-*			}
-*			return 0
-*		}
-*	})
-*	let initialpixels = [ [100,100], [101,100], [102,100], [102,101], [101,102] ]
-*	for( p of initialpixels ){
-*		C.setpix( p, 1 )
-* 	}
-*	// Run it.
-*	for( let t = 0; t < 10; t++ ){ C.timeStep() }
-
-@todo Include asynchronous updating scheme?
-*/
-class CA extends GridBasedModel {
-
-	/** The constructor of class CA.
-	@param {GridSize} extents - the size of the grid of the model.
-	@param {object} conf - configuration options. 
-	@param {boolean} [conf.torus=[true,true,...]] - should the grid have linked borders?
-	@param {number} [seed] - seed for the random number generator. If left unspecified,
-	a random number from the Math.random() generator is used to make one.
-	@param {updatePixelFunction} conf.UPDATE_RULE - the update rule of the CA. 
-	*/
-	constructor( extents, conf ){
-		super( extents, conf );
-		/** Bind the supplied updaterule to the object.
-		@type {updatePixelFunction}*/
-		this.updateRule = conf["UPDATE_RULE"].bind(this);
-	}
-
-	/** A timestep in a CA just applies the update rule and clears any cached stats after
-	doing so. */
-	timeStep(){
-		this.grid.applyLocally( this.updateRule );
-		
-		/** Cached values of these stats. Object with stat name as key and its cached
-		value as value. The cache must be cleared when the grid changes!
-		@type {object} */
-		this.stat_values = {};
-	}
-}
-
-// pass in RNG
-
-/** This class implements a data structure with constant-time insertion, deletion, and random
-    sampling. That's crucial for the CPM metropolis algorithm, which repeatedly needs to sample
-    pixels at cell borders. Elements in this set must be unique.*/
-class DiceSet{
-
-	/** An object of class MersenneTwister. 
-	@see https://www.npmjs.com/package/mersenne-twister
-	@typedef {object} MersenneTwister
-	*/
-
-	/** The constructor of class DiceSet takes a MersenneTwister object as input, to allow
-	seeding of the random number generator used for random sampling.
-	@param {MersenneTwister} mt MersenneTwister object used for random numbers.*/
-	constructor( mt ) {
-
-		/** Object or hash map used to check in constant time whether a pixel is at the
-		cell border. Keys are the actual values stored in the DiceSet, numbers are their
-		location in the elements arrray.
-		Currently (Mar 6, 2019), it seems that vanilla objects perform BETTER than ES6 maps,
-		at least in nodejs. This is weird given that in vanilla objects, all keys are 
-		converted to strings, which does not happen for Maps.
-		@type {object}
-		*/
-		this.indices = {}; //new Map() // {}
-		//this.indices = {}
-
-		/** Use an array for constant time random sampling of pixels at the border of cells.
-		@type {number[]} */
-		this.elements = [];
-
-		/** The number of elements currently present in the DiceSet. 
-		@type {number}
-		*/
-		this.length = 0;
-
-		/** @ignore */
-		this.mt = mt;
-	}
-
-	/** Unique identifier of some element. This can be a number (integer) or a string,
-	but it must uniquely identify one element in a set.
-	@typedef {number|string} uniqueID*/
-
-	/** Insert a new element. It is added as an index in the indices, and pushed
-	to the end of the elements array.
-	@param {uniqueID} v The element to add.
-	*/
-	insert( v ){
-		if( this.indices[v] ){
-			return
-		}
-		// Add element to both the hash map and the array.
-		//this.indices.set( v, this.length )
-		this.indices[v] = this.length;
-	
-		this.elements.push( v );
-		this.length ++; 
-	}
-
-	/** Remove element v.
-	@param {uniqueID} v The element to remove. 
-	*/
-	remove( v ){
-		// Check whether element is present before it can be removed.
-		if( !this.indices[v] ){
-			return
-		}
-		/* The hash map gives the index in the array of the value to be removed.
-		The value is removed directly from the hash map, but from the array we
-		initially remove the last element, which we then substitute for the 
-		element that should be removed.*/
-		//const i = this.indices.get(v)
-		const i = this.indices[v];
-
-		//this.indices.delete(v)
-		delete this.indices[v];
-
-		const e = this.elements.pop();
-		this.length --;
-		if( e == v ){
-			return
-		}
-		this.elements[i] = e;
-
-		//this.indices.set(e,i)
-		this.indices[e] = i;
-	}
-	/** Check if the DiceSet already contains element v. 
-	@param {uniqueID} v The element to check presence of. 
-	@return {boolean} true or false depending on whether the element is present or not.
-	*/
-	contains( v ){
-		//return this.indices.has(v)
-		return (v in this.indices)
-	}
-	
-	/** Sample a random element from v.
-	@return {uniqueID} the element sampled.
-	*/
-	sample(){
-		return this.elements[Math.floor(this.mt.random()*this.length)]
-	}
-}
-
-/** 
- * Implements the adhesion constraint of Potts models. 
- * Each pair of neighboring pixels [n,m] gets a positive energy penalty deltaH if n and m
- * do not belong to the same {@link CellId}.
- *
- * @example
- * // Build a CPM and add the constraint
- * let CPM = require( "path/to/build" )
- * let C = new CPM.CPM( [200,200], { T : 20 } )
- * C.add( new CPM.Adhesion( { J : [[0,20],[20,10]] } ) )
- * 
- * // Or add automatically by entering the parameters in the CPM
- * let C2 = new CPM.CPM( [200,200], {
- * 	T : 20,
- * 	J : [[0,20],[20,10]]
- * })
- */
-class Adhesion extends SoftConstraint {
-
-	/** The constructor of Adhesion requires a conf object with a single parameter J.
-	@param {object} conf - parameter object for this constraint
-	@param {CellKindInteractionMatrix} conf.J - J[n][m] gives the adhesion energy between a pixel of
-	{@link CellKind} n and a pixel of {@link CellKind} m. J[n][n] is only non-zero
-	when the pixels in question are of the same {@link CellKind}, but a different 
-	{@link CellId}. Energies are given as non-negative numbers.
-	*/
-	constructor( conf ){
-		super( conf );		
-	}
-
-	/** This method checks that all required parameters are present in the object supplied to
-	the constructor, and that they are of the right format. It throws an error when this
-	is not the case.*/
-	confChecker(){
-		let checker = new ParameterChecker( this.conf, this.C );
-		checker.confCheckParameter( "J", "KindMatrix", "Number" );
-	}
-
-	/**  Get adhesion between two cells t1,t2 from "conf". 
-	@param {CellId} t1 - cellid of the first cell.
-	@param {CellId} t2 - cellid of the second cell.
-	@return {number} adhesion between a pixel of t1 and one of t2.
-	@private
-	*/
-	J( t1, t2 ){
-		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
-	}
-	/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
-	neighbors that belong to a different cellid.
-	@param {IndexCoordinate} i - coordinate of the pixel to evaluate hamiltonian at.
-	@param {CellId} tp - cellid of this pixel.
-	@return {number} sum over all neighbors of adhesion energies (only non-zero for 
-	neighbors belonging to a different cellid).	
-	@private
-	 */
-	H( i, tp ){
-		let r = 0, tn;
-		/* eslint-disable */
-		const N = this.C.grid.neighi( i );
-		for( let j = 0 ; j < N.length ; j ++ ){
-			tn = this.C.pixti( N[j] );
-			if( tn != tp ) r += this.J( tn, tp );
-		}
-		return r
-	}
-	/** Method to compute the Hamiltonian for this constraint. 
-	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
-	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
-	 to copy into.
-	 @param {CellId} src_type - cellid of the source pixel.
-	 @param {CellId} tgt_type - cellid of the target pixel. 
-	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
-	deltaH( sourcei, targeti, src_type, tgt_type ){
-		return this.H( targeti, src_type ) - this.H( targeti, tgt_type )
-	}
-}
-
-/** 
- * Implements the volume constraint of Potts models. 
- * 
- * This constraint is typically used together with {@link Adhesion}.
- * 
- * See {@link VolumeConstraint#constructor} for the required parameters.
- *
- * @example
- * // Build a CPM and add the constraint
- * let CPM = require( "path/to/build" )
- * let C = new CPM.CPM( [200,200], {
- * 	T : 20,
- * 	J : [[0,20],[20,10]]
- * })
- * C.add( new CPM.VolumeConstraint( {
- * 	V : [0,500],
- * 	LAMBDA_V : [0,5] 	
- * } ) )
- * 
- * // Or add automatically by entering the parameters in the CPM
- * let C2 = new CPM.CPM( [200,200], {
- * 	T : 20,
- * 	J : [[0,20],[20,10]],
- * 	V : [0,500],
- * 	LAMBDA_V : [0,5]
- * })
- */
-class VolumeConstraint extends SoftConstraint {
-
-
-	/** The constructor of the VolumeConstraint requires a conf object with parameters.
-	@param {object} conf - parameter object for this constraint
-	@param {PerKindNonNegative} conf.LAMBDA_V - strength of the constraint per cellkind.
-	@param {PerKindNonNegative} conf.V - Target volume per cellkind.
-	*/
-	constructor( conf ){
-		super( conf );
-	}
-	
-	/** This method checks that all required parameters are present in the object supplied to
-	the constructor, and that they are of the right format. It throws an error when this
-	is not the case.*/
-	confChecker(){
-		let checker = new ParameterChecker( this.conf, this.C );
-		checker.confCheckParameter( "LAMBDA_V", "KindArray", "NonNegative" );
-		checker.confCheckParameter( "V", "KindArray", "NonNegative" );
-	}
-
-	/** Method to compute the Hamiltonian for this constraint. 
-	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
-	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
-	 to copy into.
-	 @param {CellId} src_type - cellid of the source pixel.
-	 @param {CellId} tgt_type - cellid of the target pixel. 
-	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
-	deltaH( sourcei, targeti, src_type, tgt_type ){
-		// volume gain of src cell
-		let deltaH = this.volconstraint( 1, src_type ) - 
-			this.volconstraint( 0, src_type );
-		// volume loss of tgt cell
-		deltaH += this.volconstraint( -1, tgt_type ) - 
-			this.volconstraint( 0, tgt_type );
-		return deltaH
-	}
-	/* ======= VOLUME ======= */
-
-	/** The volume constraint term of the Hamiltonian for the cell with id t.
-	@param {number} vgain - Use vgain=0 for energy of current volume, vgain=1 
-		for energy if cell gains a pixel, and vgain = -1 for energy if cell loses a pixel.
-	@param {CellId} t - the cellid of the cell whose volume energy we are computing.
-	@return {number} the volume energy of this cell.
-	*/
-	volconstraint ( vgain, t ){
-		const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
-		// the background "cell" has no volume constraint.
-		if( t == 0 || l == 0 ) return 0
-		const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
-		return l*vdiff*vdiff
-	}
 }
 
 /** 
@@ -4191,6 +3069,1192 @@ class CPM extends GridBasedModel {
 		return newid
 	}
 
+}
+
+/** This class encapsulates a lower-resolution grid and makes it
+   visible as a higher-resolution grid. Only exact subsampling by
+   a constant factor per dimension is supported. 
+   
+   This class is useful when combining information of grids of
+   different sizes. This is often the case for chemotaxis, where
+   we let diffusion occur on a lower resolution grid to speed things up.
+   This class then allows you to obtain chemokine information from the 
+   low resolution chemokine grid using coordinates from the linked,
+   higher resolution model grid.
+   
+   @example <caption>Linear interpolation on a low resolution chemokine grid</caption>
+   * let CPM = require( "path/to/build" )
+   * 
+   * // Define a grid with float values for chemokine values, and set the middle pixel
+   * let chemogrid = new CPM.Grid2D( [50,50], [true,true], "Float32" )
+   * chemogrid.setpix( [99,99], 100 )
+   * 
+   * // Make a coarse grid at 5x as high resolution, which is then 500x500 pixels.
+   * let coarsegrid = new CPM.CoarseGrid( chemogrid, 5 )
+   * 
+   * // Use interpolation. Pixels close to the midpoint won't have the exact same
+   * // value of either 100 or 0, but something inbetween.
+   * let p1 = [250,250], p2 = [250,251]
+   * console.log( "p1 : " + coarsegrid.pixt(p1) + ", p2 : " + coarsegrid.pixt(p2) )
+   * // p1 : 100, p2 : 80 
+   * 
+   * // Or draw it to see this. Compare these two:
+   * let Cim1 = new CPM.Canvas( coarsegrid )
+   * Cim1.drawField()
+   * let Cim2 = new CPM.Canvas( chemogrid, {zoom:5} )
+   * Cim2.drawField()
+*/
+class CoarseGrid extends Grid2D {
+	/** The constructor of class CoarseGrid takes a low resolution grid as input
+	and a factor 'upscale', which is how much bigger the dimensions of the high
+	resolution grid are (must be a constant factor). 
+	@param {Grid2D} grid the grid to scale up; currently only supports the {@link Grid2D} class.
+	@param {number} upscale The (integer) factor to magnify the original grid with. */
+	constructor( grid, upscale = 3 ){
+	
+		let extents = new Array( grid.extents.length );
+		for( let i = 0 ; i < grid.extents.length ; i++ ){
+			extents[i] = upscale * grid.extents[i];
+		}
+		super( extents, grid.torus, "Float32" );
+	
+		/** Size of the new grid in all dimensions.
+		@type {GridSize} with a non-negative integer number for each dimension. */
+		this.extents = extents;
+		/** The original, low-resolution grid. 
+		@type {Grid2D}*/
+		this.grid = grid;
+		
+		/** The upscale factor (a positive integer number).
+		@private
+		@type {number} */
+		this.upscale = upscale;
+	}
+
+	/** The pixt method takes as input a coordinate on the bigger grid, and maps it
+	to the corresponding value on the resized small grid via bilinear interpolation.
+	This prevents artefacts from the lower resolution of the second grid: the 
+	[upscale x upscale] pixels that map to the same pixel in the low resolution grid
+	do not get the same value.
+	@param {ArrayCoordinate} p array coordinates on the high resolution grid.
+	@return {number} interpolated value from the low resolution grid at this position. */
+	pixt( p ){
+	
+		// 2D bilinear interpolation. Find the 4 positions on the original, low resolution grid
+		// that are closest to the requested position p: x-coordinate l,r (left/right) 
+		// and y-coordinate t,b (top/bottom)
+	
+		let positions = this.positions(p); // [t,r,b,l,h,v]
+		let t = positions[0], r = positions[1], b = positions[2], l = positions[3],
+			h = positions[4], v = positions[5];
+
+		// Get the values on those 4 positions
+		let f_lt = this.grid.pixt([l,t]);
+		let f_rt = this.grid.pixt([r,t]);
+		let f_lb = this.grid.pixt([l,b]);
+		let f_rb = this.grid.pixt([r,b]);
+
+		// Average these weighted by their distance to the current pixel.
+		let f_x_b = f_lb * (1-h) + f_rb * h; 
+		let f_x_t = f_lt * (1-h) + f_rt * h;
+
+		return f_x_t*(1-v) + f_x_b * v
+	}
+	
+	/** This method takes as input a coordinate on the bigger grid, and 'adds' additional
+	value to it by adding the proper amount to the corresponding positions on the low
+	resolution grid.
+	@param {ArrayCoordinate} p array coordinates on the high resolution grid.
+	@param {number} value - value that should be added to this position.
+	*/
+	addValue( p, value ){
+		
+		// 2D bilinear interpolation, the other way around.
+		// Find the 4 positions on the original, low res grid that are closest to the
+		// requested position p
+		
+		let positions = this.positions(p); 
+		let t = positions[0], r = positions[1], b = positions[2], l = positions[3],
+			h = positions[4], v = positions[5];
+			
+		
+		let v_lt = value * (1-h) * (1-v);
+		let v_lb = value * (1-h) * v;
+		let v_rt = value * h * (1-v);
+		let v_rb = value * h * v;
+		
+		
+		this.grid.setpix( [l,t], this.grid.pixt([l,t]) + v_lt );
+		this.grid.setpix( [l,b], this.grid.pixt([l,b]) + v_lb );
+		this.grid.setpix( [r,t], this.grid.pixt([r,t]) + v_rt );
+		this.grid.setpix( [r,b], this.grid.pixt([r,b]) + v_rb );
+		
+	}
+	/** @private 
+	@ignore */
+	positions( p ){
+		// Find the 4 positions on the original, low resolution grid
+		// that are closest to the requested position p: x-coordinate l,r (left/right) 
+		// and y-coordinate t,b (top/bottom)
+		let l = ~~(p[0] / this.upscale); // ~~ is a fast alternative for Math.floor
+		let r = l+1;
+		
+		let t = ~~(p[1] / this.upscale);
+		let b = t+1;
+		
+		// Find the horizontal/vertical distances of these positions to p
+		let h = (p[0]%this.upscale)/this.upscale;
+		let v = (p[1]%this.upscale)/this.upscale;
+		
+		// Correct grid boundaries depending on torus
+		if( r > this.grid.extents[0] ){
+			if( this.grid.torus[0] ){
+				r = 0;
+			} else {
+				r = this.grid.extents[0];
+				h = 0.5;
+			}
+		}
+		
+		if( b > this.grid.extents[1] ){
+			if( this.grid.torus[1] ){
+				b = 0;
+			} else {
+				b = this.grid.extents[1];
+				v = 0.5;
+			}
+			
+		}
+		
+		return [t,r,b,l,h,v]
+	}
+
+	/*gradient( p ){
+		let ps = new Array( p.length )
+		for( let i = 0 ; i < p.length ; i ++ ){
+			ps[i] = ~~(p[i]/this.upscale)
+		}
+		return this.grid.gradient( ps )
+	}*/
+}
+
+/** Base class for a statistic that can be computed on a GridBasedModel. 
+This class by itself is not usable; see its subclasses for stats that are 
+currently supported. */
+class Stat {
+
+	/** The constructor of class Stat takes a 'conf' object as argument.
+	However, Stats should not really be configurable in the sense that they should always
+	provide an expected output. The 'conf' object is mainly intended
+	to provide an option to configure logging / debugging output. That
+	is not implemented yet.	
+	@param {object} conf configuration options for the Stat, which should change nothing
+	about the return value produced by the compute() method but may be used for logging
+	and debugging options.*/
+	constructor( conf ){
+		/** Configuration object for the stat, which should not change its value but
+		may be used for logging and debugging options.
+		@type {object}*/
+		this.conf = conf || {};
+	}
+	
+	/** Every stat is linked to a specific model.
+	@param {GridBasedModel} M the model to compute the stat on.*/
+	set model( M ){
+	
+		/** The model to compute the stat on.
+		@type {GridBasedModel} */
+		this.M = M;
+	}
+	
+	/** The compute method of the base Stat class throws an error, 
+	enforcing that you have to implement this method when you build a new 
+	stat class extending this base class. 
+	@abstract */
+	compute(){
+		throw("compute method not implemented for subclass of Stat")
+	}
+}
+
+/** This Stat creates an object with the cellpixels of each cell on the grid. 
+	Keys are the {@link CellId} of all cells on the grid, corresponding values are arrays
+	containing the pixels belonging to that cell. Each element of that array contains
+	the {@link ArrayCoordinate} for that pixel.
+	
+	@example
+	* let CPM = require( "path/to/build" )
+	*
+	* // Make a CPM, seed a cell, and get the PixelsByCell
+	* let C = new CPM.CPM( [100,100], { 
+	* 	T:20,
+	* 	J:[[0,20],[20,10]],
+	* 	V:[0,200],
+	* 	LAMBDA_V:[0,2]
+	* } )
+	* let gm = new CPM.GridManipulator( C )
+	* gm.seedCell(1)
+	* gm.seedCell(1)
+	* for( let t = 0; t < 100; t++ ){ C.timeStep() }
+	* C.getStat( CPM.PixelsByCell )
+*/
+class PixelsByCell extends Stat {
+
+	/** The compute method of PixelsByCell creates an object with cellpixels of each
+	cell on the grid.
+	@return {CellArrayObject} object with for each cell on the grid
+	an array of pixels (specified by {@link ArrayCoordinate}) belonging to that cell.
+	*/
+	compute(){
+		// initialize the object
+		let cellpixels = { };
+		// The this.M.pixels() iterator returns coordinates and cellid for all 
+		// non-background pixels on the grid. See the appropriate Grid class for
+		// its implementation.
+		for( let [p,i] of this.M.pixels() ){
+			if( !cellpixels[i] ){
+				cellpixels[i] = [p];
+			} else {
+				cellpixels[i].push( p );
+			}
+		}
+		return cellpixels
+	}
+}
+
+/**
+ * The ActivityMultiBackground constraint implements the activity constraint of Potts models,
+ but allows users to specify locations on the grid where LAMBDA_ACT is different. 
+ See {@link ActivityConstraint} for the normal version of this constraint.
+ See {@link ActivityMultiBackground#constructor} for an explanation of the parameters.
+ */
+class ActivityMultiBackground extends ActivityConstraint {
+
+	/** Creates an instance of the ActivityMultiBackground constraint 
+	* @param {object} conf - Configuration object with the parameters.
+	* ACT_MEAN is a single string determining whether the activity mean should be computed
+	* using a "geometric" or "arithmetic" mean. 
+	*/
+	/** The constructor of the ActivityConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	@param {string} [conf.ACT_MEAN="geometric"] - should local mean activity be measured with an
+	"arithmetic" or a "geometric" mean?
+	@param {PerKindArray} conf.LAMBDA_ACT_MBG - strength of the activityconstraint per cellkind and per background.
+	@param {PerKindNonNegative} conf.MAX_ACT - how long do pixels remember their activity? Given per cellkind.
+	@param {Array} conf.BACKGROUND_VOXELS - an array where each element represents a different background type.
+	This is again an array of {@ArrayCoordinate}s of the pixels belonging to that backgroundtype. These pixels
+	will have the LAMBDA_ACT_MBG value of that backgroundtype, instead of the standard value.
+	*/
+	constructor( conf ){
+		super( conf );
+
+		/** Activity of all cellpixels with a non-zero activity is stored in this object,
+		with the {@link IndexCoordinate} of each pixel as key and its current activity as
+		value. When the activity reaches 0, the pixel is removed from the object until it
+		is added again. 
+		@type {object}*/
+		this.cellpixelsact = {}; // activity of cellpixels with a non-zero activity
+		
+		/** Wrapper: select function to compute activities based on ACT_MEAN in conf.
+		Default is to use the {@link activityAtGeom} for a geometric mean.
+		@type {function}*/
+		this.activityAt = this.activityAtGeom;
+		if( this.conf.ACT_MEAN == "arithmetic" ){
+			this.activityAt = this.activityAtArith;
+		} 
+		
+		/** Store which pixels belong to which background type 
+		@type {Array}*/
+		this.bgvoxels = [];
+		
+		/** Track if this.bgvoxels has been set.
+		@type {boolean}*/
+		this.setup = false;
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new ParameterChecker( this.conf, this.C );
+		checker.confCheckParameter( "ACT_MEAN", "SingleValue", "String", [ "geometric", "arithmetic" ] );
+		checker.confCheckPresenceOf( "LAMBDA_ACT_MBG" );
+		checker.confCheckParameter( "MAX_ACT", "KindArray", "NonNegative" );
+		
+		// Custom checks
+		checker.confCheckStructureKindArray( this.conf["LAMBDA_ACT_MBG"], "LAMBDA_ACT_MBG" );
+		for( let e of this.conf["LAMBDA_ACT_MBG"] ){
+			for( let i of e ){
+				if( !checker.isNonNegative(i) ){
+					throw("Elements of LAMBDA_ACT_MBG must be non-negative numbers!")
+				}
+			}
+		}
+		checker.confCheckPresenceOf( "BACKGROUND_VOXELS" );
+		let bgvox = this.conf["BACKGROUND_VOXELS"];
+		// Background voxels must be an array of arrays
+		if( !(bgvox instanceof Array) ){
+			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+		} else if ( bgvox.length < 2 ){
+			throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+		}
+		// Elements of the initial array must be arrays.
+		for( let e of bgvox ){
+			if( !(e instanceof Array) ){
+				throw( "Parameter BACKGROUND_VOXELS should be an array of at least two arrays!" )
+			}
+			
+			// Entries of this array must be pixel coordinates, which are arrays of length C.extents.length
+			for( let ee of e ){
+				let isCoordinate = true;
+				if( !(ee instanceof Array) ){
+					isCoordinate = false;
+				} else if ( ee.length != this.C.extents.length ){
+					isCoordinate = false;
+				}
+				if( !isCoordinate ){
+					throw( "Parameter BACKGROUND_VOXELS: subarray elements should be ArrayCoordinates; arrays of length " + this.C.extents.length + "!" )
+				}
+			}
+		}
+	}
+	
+	/** Get the background voxels from input argument or the conf object and store them in a correct format
+	in this.bgvoxels. This only has to be done once, but can be called from outside to
+	change the background voxels during a simulation (eg in a HTML page).
+	 */	
+	setBackgroundVoxels( voxels ){
+	
+		voxels = voxels || this.conf["BACKGROUND_VOXELS"];
+	
+		// reset if any exist already
+		this.bgvoxels = [];
+		for( let bgkind = 0; bgkind < voxels.length; bgkind++ ){
+			this.bgvoxels.push({});
+			for( let v of voxels[bgkind] ){
+				this.bgvoxels[bgkind][ this.C.grid.p2i(v) ] = true;
+			}
+		}
+		this.setup = true;
+
+	}
+	
+	/* ======= ACT MODEL ======= */
+
+	/* Act model : compute local activity values within cell around pixel i.
+	 * Depending on settings in conf, this is an arithmetic (activityAtArith)
+	 * or geometric (activityAtGeom) mean of the activities of the neighbors
+	 * of pixel i.
+	 */
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. 
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	deltaH ( sourcei, targeti, src_type, tgt_type ){
+	
+		if( ! this.setup ){
+			this.setBackgroundVoxels();
+		}
+
+		let deltaH = 0, maxact, lambdaact;
+		const src_kind = this.C.cellKind( src_type );
+		const tgt_kind = this.C.cellKind( tgt_type );
+		let bgindex1 = 0, bgindex2 = 0;
+		
+		for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
+			if( sourcei in this.bgvoxels[bgkind] ){
+				bgindex1 = bgkind;
+			}
+			if( targeti in this.bgvoxels[bgkind] ){
+				bgindex2 = bgkind;
+			}
+		}
+		
+
+		// use parameters for the source cell, unless that is the background.
+		// In that case, use parameters of the target cell.
+		if( src_type != 0 ){
+			maxact = this.conf["MAX_ACT"][src_kind];
+			lambdaact = this.conf["LAMBDA_ACT_MBG"][src_kind][bgindex1];
+		} else {
+			// special case: punishment for a copy attempt from background into
+			// an active cell. This effectively means that the active cell retracts,
+			// which is different from one cell pushing into another (active) cell.
+			maxact = this.conf["MAX_ACT"][tgt_kind];
+			lambdaact = this.conf["LAMBDA_ACT_MBG"][tgt_kind][bgindex2];
+		}
+		if( !maxact || !lambdaact ){
+			return 0
+		}
+
+		// compute the Hamiltonian. The activityAt method is a wrapper for either activityAtArith
+		// or activityAtGeom, depending on conf (see constructor).	
+		deltaH += lambdaact*(this.activityAt( targeti ) - this.activityAt( sourcei ))/maxact;
+		return deltaH
+	}
+
+
+
+}
+
+/**
+ * Class for taking a CPM grid and displaying it in either browser or with
+ *  nodejs.
+ * Note: when using this class from outside the module, you don't need to import
+ *  it separately but can access it from CPM.Canvas. */
+class Canvas {
+	/** The Canvas constructor accepts a CPM object C or a Grid2D object.
+	@param {GridBasedModel|Grid2D|CoarseGrid} C - the object to draw, which must
+	 be an object of class {@link GridBasedModel} (or its subclasses {@link CPM}
+	 and {@link CA}), or a 2D grid ({@link Grid2D} or {@link CoarseGrid}).
+	 Drawing of other grids is currently not supported.
+	@param {object} [options = {}] - Configuration settings
+	@param {number} [options.zoom = 1]- positive number specifying the zoom
+	 level to draw with.
+	@param {number[]} [options.wrap = [0,0,0]] - if nonzero: 'wrap' the grid to
+	 these dimensions; eg a pixel with x coordinate 201 and wrap[0] = 200 is
+	 displayed at x = 1.
+	@param {string} [options.parentElement = document.body] - the element on
+	 the html page where the canvas will be appended.
+
+	@example <caption>A CPM with Canvas</caption>
+	* let CPM = require( "path/to/build" )
+	*
+	* // Create a CPM, corresponding Canvas and GridManipulator
+	* // (Use CPM. prefix from outside the module)
+	* let C = new CPM.CPM( [200,200], {
+	* 	T : 20,
+	* 	J : [[0,20][20,10]],
+	* 	V:[0,500],
+	* 	LAMBDA_V:[0,5]
+	* } )
+	* let Cim = new CPM.Canvas( C, {zoom:2} )
+	* let gm = new CPM.GridManipulator( C )
+	*
+	* // Seed a cell at [x=100,y=100] and run 100 MCS.
+	* gm.seedCellAt( 1, [100,100] )
+	* for( let t = 0; t < 100; t++ ){
+	* 	C.timeStep()
+	* }
+	*
+	* // Draw the cell and save an image
+	* Cim.drawCells( 1, "FF0000" )			// draw cells of CellKind 1 in red
+	* Cim.writePNG( "my-cell-t100.png" )
+	*/
+	constructor( C, options ){
+		if( C instanceof GridBasedModel ){
+			/**
+			 * The underlying model that is drawn on the canvas.
+			 * @type {GridBasedModel|CPM|CA}
+			 */
+			this.C = C;
+			/**
+			 * The underlying grid that is drawn on the canvas.
+			 * @type {Grid2D|CoarseGrid}
+			 */
+			this.grid = this.C.grid;
+
+			/** Grid size in each dimension, taken from the CPM or grid object
+			 * to draw.
+			 * @type {GridSize} each element is the grid size in that dimension
+			 * in pixels */
+			this.extents = C.extents;
+		} else if( C instanceof Grid2D  ||  C instanceof CoarseGrid ){
+
+			this.grid = C;
+			this.extents = C.extents;
+		}
+		/** Zoom level to draw the canvas with, set to options.zoom or its
+		 * default value 1.
+		 * @type {number}*/
+		this.zoom = (options && options.zoom) || 1;
+		/** if nonzero: 'wrap' the grid to these dimensions; eg a pixel with x
+		 * coordinate 201 and wrap[0] = 200 is displayed at x = 1.
+		 * @type {number[]} */
+		this.wrap = (options && options.wrap) || [0,0,0];
+
+		/** Width of the canvas in pixels (in its unzoomed state)
+		 * @type {number}*/
+		this.width = this.wrap[0];
+		/** Height of the canvas in pixels (in its unzoomed state)
+		 * @type {number}*/
+		this.height = this.wrap[1];
+
+		if( this.width === 0 || this.extents[0] < this.width ){
+			this.width = this.extents[0];
+		}
+		if( this.height === 0 || this.extents[1] < this.height ){
+			this.height = this.extents[1];
+		}
+
+		if( typeof document !== "undefined" ){
+			/** @ignore */
+			this.el = document.createElement("canvas");
+			this.el.width = this.width*this.zoom;
+			this.el.height = this.height*this.zoom;//extents[1]*this.zoom
+			let parent_element = (options && options.parentElement) || document.body;
+			parent_element.appendChild( this.el );
+		} else {
+			const {createCanvas} = require("canvas");
+			/** @ignore */
+			this.el = createCanvas( this.width*this.zoom,
+				this.height*this.zoom );
+			/** @ignore */
+			this.fs = require("fs");
+		}
+
+		/** @ignore */
+		this.ctx = this.el.getContext("2d");
+		this.ctx.lineWidth = .2;
+		this.ctx.lineCap="butt";
+	}
+
+	/** Give the canvas element an ID supplied as argument. Useful for building
+	 * an HTML page where you want to get this canvas by its ID.
+	 * @param {string} idString - the name to give the canvas element.
+	 * */
+	setCanvasId( idString ){
+		this.el.id = idString;
+	}
+
+
+	/* Several internal helper functions (used by drawing functions below) : */
+
+	/** @private
+	 * @ignore*/
+	pxf( p ){
+		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], this.zoom, this.zoom );
+	}
+
+	/** @private
+	 * @ignore */
+	pxfi( p, alpha=1 ){
+		const dy = this.zoom*this.width;
+		const off = (this.zoom*p[1]*dy + this.zoom*p[0])*4;
+		for( let i = 0 ; i < this.zoom*4 ; i += 4 ){
+			for( let j = 0 ; j < this.zoom*dy*4 ; j += dy*4 ){
+				this.px[i+j+off] = this.col_r;
+				this.px[i+j+off + 1] = this.col_g;
+				this.px[i+j+off + 2] = this.col_b;
+				this.px[i+j+off + 3] = alpha*255;
+			}
+		}
+	}
+
+	/** @private
+	 * @ignore */
+	pxfir( p ){
+		const dy = this.zoom*this.width;
+		const off = (p[1]*dy + p[0])*4;
+		this.px[off] = this.col_r;
+		this.px[off + 1] = this.col_g;
+		this.px[off + 2] = this.col_b;
+		this.px[off + 3] = 255;
+	}
+
+	/** @private
+	 * @ignore*/
+	getImageData(){
+		/** @ignore */
+		this.image_data = this.ctx.getImageData(0, 0, this.width*this.zoom, this.height*this.zoom);
+		/** @ignore */
+		this.px = this.image_data.data;
+	}
+
+	/** @private
+	 * @ignore*/
+	putImageData(){
+		this.ctx.putImageData(this.image_data, 0, 0);
+	}
+
+	/** @private
+	 * @ignore*/
+	pxfnozoom( p ){
+		this.ctx.fillRect( this.zoom*p[0], this.zoom*p[1], 1, 1 );
+	}
+
+	/** draw a line left (l), right (r), down (d), or up (u) of pixel p
+	 * @private
+	 * @ignore */
+	pxdrawl( p ){
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*p[0],i] );
+		}
+	}
+
+	/** @private
+	 * @ignore */
+	pxdrawr( p ){
+		for( let i = this.zoom*p[1] ; i < this.zoom*(p[1]+1) ; i ++ ){
+			this.pxfir( [this.zoom*(p[0]+1),i] );
+		}
+	}
+	/** @private
+	 * @ignore */
+	pxdrawd( p ){
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*(p[1]+1)] );
+		}
+	}
+	/** @private
+	 * @ignore */
+	pxdrawu( p ){
+		for( let i = this.zoom*p[0] ; i < this.zoom*(p[0]+1) ; i ++ ){
+			this.pxfir( [i,this.zoom*p[1]] );
+		}
+	}
+
+	/** For easier color naming
+	 * @private
+	 * @ignore */
+	col( hex ){
+		this.ctx.fillStyle="#"+hex;
+		/** @ignore */
+		this.col_r = parseInt( hex.substr(0,2), 16 );
+		/** @ignore */
+		this.col_g = parseInt( hex.substr(2,2), 16 );
+		/** @ignore */
+		this.col_b = parseInt( hex.substr(4,2), 16 );
+	}
+
+	/** Hex code string for a color.
+	 * @typedef {string} HexColor*/
+
+	/** Color the whole grid in color [col], or in black if no argument is given.
+	 * @param {HexColor} [col = "000000"] -hex code for the color to use, defaults to black.
+	 */
+	clear( col ){
+		col = col || "000000";
+		this.ctx.fillStyle="#"+col;
+		this.ctx.fillRect( 0,0, this.el.width, this.el.height );
+	}
+
+	/** Rendering context of canvas.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+	 * @typedef {object} CanvasRenderingContext2D
+	 * */
+
+	/** Return the current drawing context.
+	 * @return {CanvasRenderingContext2D} current drawing context on the canvas.
+	 * */
+	context(){
+		return this.ctx
+	}
+	/** @private
+	 * @ignore */
+	p2pdraw( p ){
+		for( let dim = 0; dim < p.length; dim++ ){
+			if( this.wrap[dim] !== 0 ){
+				p[dim] = p[dim] % this.wrap[dim];
+			}
+		}
+		return p
+	}
+
+	/* DRAWING FUNCTIONS ---------------------- */
+
+	/** Use to color a grid according to its values. High values are colored in
+	 * a brighter color.
+	 * @param {Grid2D|CoarseGrid} [cc] - the grid to draw values for. If left
+	 * unspecified, the grid that was originally supplied to the Canvas
+	 * constructor is used.
+	 * @param {HexColor} [col = "0000FF"] - the color to draw the chemokine in.
+	 * */
+	drawField( cc, col = "0000FF" ){
+		if( !cc ){
+			cc = this.grid;
+		}
+		this.col(col);
+		let maxval = 0;
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				let p = Math.log(.1+cc.pixt([i,j]));
+				if( maxval < p ){
+					maxval = p;
+				}
+			}
+		}
+		this.getImageData();
+		//this.col_g = 0
+		//this.col_b = 0
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				//let colval = 255*(Math.log(.1+cc.pixt( [i,j] ))/maxval)
+				let alpha = (Math.log(.1+cc.pixt( [i,j] ))/maxval);
+				//this.col_r = colval
+				//this.col_g = colval
+				this.pxfi([i,j], alpha);
+			}
+		}
+		this.putImageData();
+		this.ctx.globalAlpha = 1;
+	}
+	/** Use to color a grid according to its values. High values are colored in
+	 * a brighter color.
+	 * @param {Grid2D|CoarseGrid} [cc] - the grid to draw values for. If left
+	 * unspecified, the grid that was originally supplied to the Canvas
+	 * constructor is used.
+	 * @param {number} [nsteps = 10] - the number of contour lines to draw.
+	 * Contour lines are evenly spaced between the min and max log10 of the
+	 * chemokine.
+	 * @param {HexColor} [col = "FFFF00"] - the color to draw contours with.
+	 * */
+	drawFieldContour( cc, nsteps = 10, col = "FFFF00" ){
+		if( !cc ){
+			cc = this.grid;
+		}
+		this.col(col);
+		let maxval = 0;
+		let minval = Math.log(0.1);
+		for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+			for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+				let p = Math.log(.1+cc.pixt([i,j]));
+				if( maxval < p ){
+					maxval = p;
+				}
+				if( minval > p ){
+					minval = p;
+				}
+			}
+		}
+
+
+		this.getImageData();
+		//this.col_g = 0
+		//this.col_b = 0
+		//this.col_r = 255
+
+		let step = (maxval-minval)/nsteps;
+		for( let v = minval; v < maxval; v+= step ){
+
+			for( let i = 0 ; i < cc.extents[0] ; i ++ ){
+				for( let j = 0 ; j < cc.extents[1] ; j ++ ){
+
+					let pixelval = Math.log( .1 + cc.pixt( [i,j] ) );
+					if( Math.abs( v - pixelval ) < 0.05*maxval ){
+						let below = false, above = false;
+						for( let n of this.grid.neighNeumanni( this.grid.p2i( [i,j] ) ) ){
+
+							let nval = Math.log(0.1 + cc.pixt(this.grid.i2p(n)) );
+							if( nval < v ){
+								below = true;
+							}
+							if( nval >= v ){
+								above = true;
+							}
+							if( above && below ){
+								//this.col_r = 150*((v-minval)/(maxval-minval)) + 105
+								let alpha = 0.7*((v-minval)/(maxval-minval)) + 0.3;
+								this.pxfi( [i,j], alpha );
+								break
+							}
+						}
+					}
+
+
+
+				}
+			}
+
+		}
+
+
+
+
+
+		this.putImageData();
+	}
+
+
+
+	/** @desc Method for drawing the cell borders for a given cellkind in the
+	 * color specified in "col" (hex format). This function draws a line around
+	 * the cell (rather than coloring the outer pixels). If [kind] is negative,
+	 * simply draw all borders.
+	 *
+	 * See {@link drawOnCellBorders} to color the outer pixels of the cell.
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * Should be a positive integer as 0 is reserved for the background.
+	 * @param {HexColor}  [col = "000000"] - hex code for the color to use,
+	 * defaults to black.
+   */
+	drawCellBorders( kind, col ){
+
+		let isCPM = ( this.C instanceof CPM ), C = this.C;
+		let getBorderPixels = function*(){
+			for( let p of C.cellBorderPixels() ){
+				yield p;
+			}
+		};
+		if( !isCPM ){
+			// in a non-cpm, simply draw borders of all pixels
+			getBorderPixels = function*(){
+				for( let p of C.grid.pixels() ){
+					yield p;
+				}
+			};
+		}
+
+
+
+		col = col || "000000";
+		let pc, pu, pd, pl, pr, pdraw;
+		this.col( col );
+		this.getImageData();
+		// cst contains indices of pixels at the border of cells
+		for( let x of getBorderPixels() ){
+
+			let pKind;
+			if( isCPM ){
+				pKind = this.C.cellKind( x[1] );
+			} else {
+				pKind = x[1];
+			}
+
+			let p = x[0];
+			if( kind < 0 || pKind === kind ){
+				pdraw = this.p2pdraw( p );
+
+				pc = this.C.pixt( [p[0],p[1]] );
+				pr = this.C.pixt( [p[0]+1,p[1]] );
+				pl = this.C.pixt( [p[0]-1,p[1]] );
+				pd = this.C.pixt( [p[0],p[1]+1] );
+				pu = this.C.pixt( [p[0],p[1]-1] );
+
+				if( pc !== pl  ){
+					this.pxdrawl( pdraw );
+				}
+				if( pc !== pr ){
+					this.pxdrawr( pdraw );
+				}
+				if( pc !== pd ){
+					this.pxdrawd( pdraw );
+				}
+				if( pc !== pu ){
+					this.pxdrawu( pdraw );
+				}
+			}
+
+		}
+		this.putImageData();
+	}
+
+	/** Use to show activity values of the act model using a color gradient, for
+	 * cells in the grid of cellkind "kind". The constraint holding the activity
+	 * values can be supplied as an argument. Otherwise, the current CPM is
+	 * searched for the first registered activity constraint and that is then
+	 * used.
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * If negative, draw values for all cellkinds.
+	 * @param {ActivityConstraint|ActivityMultiBackground} [A] - the constraint
+	 * object to use, which must be of class {@link ActivityConstraint} or
+	 * {@link ActivityMultiBackground} If left unspecified, this is the first
+	 * instance of an ActivityConstraint or ActivityMultiBackground object found
+	 * in the soft_constraints of the attached CPM.
+	 * @param {Function} [col] - a function that returns a color for a number
+	 * in [0,1] as an array of red/green/blue values, for example, [255,0,0]
+	 * would be the color red. If unspecified, a green-to-red heatmap is used.
+	 * */
+	drawActivityValues( kind, A, col ){
+		if( !( this.C instanceof CPM) ){
+			throw("You cannot use the drawActivityValues method on a non-CPM model!")
+		}
+		if( !A ){
+			for( let c of this.C.soft_constraints ){
+				if( c instanceof ActivityConstraint || c instanceof ActivityMultiBackground ){
+					A = c; break
+				}
+			}
+		}
+		if( !A ){
+			throw("Cannot find activity values to draw!")
+		}
+		if( !col ){
+			col = function(a){
+				let r = [0,0,0];
+				if( a > 0.5 ){
+					r[0] = 255;
+					r[1] = (2-2*a)*255;
+				} else {
+					r[0] = (2*a)*255;
+					r[1] = 255;
+				}
+				return r
+			};
+		}
+		// cst contains the pixel ids of all non-background/non-stroma cells in
+		// the grid. 
+		let ii, sigma, a, k;
+		// loop over all pixels belonging to non-background, non-stroma
+		this.col("FF0000");
+		this.getImageData();
+		this.col_b = 0;
+		//this.col_g = 0
+		for( let x of this.C.cellPixels() ){
+			ii = x[0];
+			sigma = x[1];
+			k = this.C.cellKind(sigma);
+
+			// For all pixels that belong to the current kind, compute
+			// color based on activity values, convert to hex, and draw.
+			if( ( kind < 0 && A.conf["MAX_ACT"][k] > 0 ) || k === kind ){
+				a = A.pxact( this.C.grid.p2i( ii ) )/A.conf["MAX_ACT"][k];
+				if( a > 0 ){
+					if( a > 0.5 ){
+						this.col_r = 255;
+						this.col_g = (2-2*a)*255;
+					} else {
+						this.col_r = (2*a)*255;
+						this.col_g = 255;
+					}
+					let r = col( a );
+					this.col_r = r[0];
+					this.col_g = r[1];
+					this.col_b = r[2];
+					this.pxfi( ii );
+				}
+			}
+		}
+		this.putImageData();
+	}
+
+	/** Color outer pixel of all cells of kind [kind] in col [col].
+	 * See {@link drawCellBorders} to actually draw around the cell rather than
+	 * coloring the outer pixels. If you're using this model on a CA,
+	 * {@link CellKind} is not defined and the parameter "kind" is instead
+	 * interpreted as {@link CellId}.
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * Should be a positive integer as 0 is reserved for the background.
+	 * @param {HexColor|function} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black ("000000").
+	 * col can also be a function that returns a hex value for a cell id. */
+	drawOnCellBorders( kind, col ){
+		col = col || "000000";
+
+		let isCPM = ( this.C instanceof CPM ), C = this.C;
+		let getBorderPixels = function*(){
+			for( let p of C.cellBorderPixels() ){
+				yield p;
+			}
+		};
+		if( !isCPM ){
+			// in a non-cpm, simply draw borders of all pixels
+			getBorderPixels = this.C.pixels;
+		}
+
+		this.getImageData();
+		this.col( col );
+		for( let p of getBorderPixels() ){
+
+			let pKind;
+			if( isCPM ){
+				pKind = this.C.cellKind( p[1] );
+			} else {
+				pKind = p[1];
+			}
+
+			if( kind < 0 || pKind === kind ){
+				if( typeof col == "function" ){
+					this.col( col(p[1]) );
+				}
+				this.pxfi( p[0] );
+			}
+		}
+		this.putImageData();
+	}
+
+	/**
+	 * Draw all cells of cellid "id" in color col (hex). Note that this function
+	 * also works for CA.
+	 *
+	 * @param {CellId} id - id of the cell to color.
+	 * @param {HexColor} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black ("000000").
+	 *
+	 * */
+	drawCellsOfId( id, col ){
+		if( !col ){
+			col = "000000";
+		}
+		if( typeof col == "string" ){
+			this.col(col);
+		}
+
+
+		// Use the pixels() iterator to get the id of all non-background pixels.
+		this.getImageData();
+
+		for( let x of this.C.pixels() ){
+			if( x[1] === id ){
+
+				this.pxfi( x[0] );
+
+			}
+		}
+
+		this.putImageData();
+	}
+
+	/** Draw all cells of cellkind "kind" in color col (hex). This method is
+	 * meant for models of class {@link CPM}, where the {@link CellKind} is
+	 * defined. If you apply this method on a {@link CA} model, this method
+	 * will internally call {@link drawCellsOfId} by just supplying the
+	 * "kind" parameter as {@link CellId}.
+	 *
+	 * @param {CellKind} kind - Integer specifying the cellkind to color.
+	 * Should be a positive integer as 0 is reserved for the background.
+	 * @param {HexColor|function} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black ("000000").
+	 * col can also be a function that returns a hex value for a cell id, but
+	 * this is only supported for CPMs.
+	 * */
+	drawCells( kind, col ){
+		if( !( this.C instanceof CPM ) ){
+			if( typeof col != "string" ){
+				throw("If you use the drawCells method on a CA, you cannot " +
+					"specify the color as function! Please specify a single string.")
+			}
+			this.drawCellsOfId( kind, col );
+		} else {
+			if (!col) {
+				col = "000000";
+			}
+			if (typeof col == "string") {
+				this.col(col);
+			}
+			// Object cst contains pixel index of all pixels belonging to non-background,
+			// non-stroma cells.
+
+			let cellpixelsbyid = this.C.getStat(PixelsByCell);
+
+			/*for( let x of this.C.pixels() ){
+				if( kind < 0 || this.C.cellKind(x[1]) == kind ){
+					if( !cellpixelsbyid[x[1]] ){
+						cellpixelsbyid[x[1]] = []
+					}
+					cellpixelsbyid[x[1]].push( x[0] )
+				}
+			}*/
+
+			this.getImageData();
+			for (let cid of Object.keys(cellpixelsbyid)) {
+				if (kind < 0 || this.C.cellKind(cid) === kind) {
+					if (typeof col == "function") {
+						this.col(col(cid));
+					}
+					for (let cp of cellpixelsbyid[cid]) {
+						this.pxfi(cp);
+					}
+				}
+			}
+			this.putImageData();
+		}
+	}
+
+	/** General drawing function to draw all pixels in a supplied set in a given
+	 * color.
+	 * @param {ArrayCoordinate[]} pixelarray - an array of
+	 * {@link ArrayCoordinate}s of pixels to color.
+	 * @param {HexColor|function} col - Optional: hex code for the color to use.
+	 * If left unspecified, it gets the default value of black ("000000").
+	 * col can also be a function that returns a hex value for a cell id.
+	 * */
+	drawPixelSet( pixelarray, col ){
+		if( ! col ){
+			col = "000000";
+		}
+		if( typeof col == "string" ){
+			this.col(col);
+		}
+		this.getImageData();
+		for( let p of pixelarray ){
+			this.pxfi( p );
+		}
+		this.putImageData();
+	}
+
+	/** Draw grid to the png file "fname".
+	 *
+	 * @param {string} fname Path to the file to write. Any parent folders in
+	 * this path must already exist.*/
+	writePNG( fname ){
+
+		try {
+			this.fs.writeFileSync(fname, this.el.toBuffer());
+		}
+		catch (err) {
+			if (err.code === "ENOENT") {
+				let message = "Canvas.writePNG: cannot write to file " + fname +
+					", are you sure the directory exists?";
+				throw(message)
+			}
+		}
+
+	}
+}
+
+/** Extension of the {@link GridBasedModel} class suitable for
+a Cellular Automaton (CA). Currently only supports synchronous CAs.
+
+@example <caption>Conway's Game of Life </caption>
+*	let CPM = require( "path/to/build" )
+*	let C = new CPM.CA( [200,200], {
+*		"UPDATE_RULE": 	function(p,N){
+*			let nalive = 0
+*			for( let pn of N ){
+*				nalive += (this.pixt(pn)==1)
+*			}	
+*			if( this.pixt(p) == 1 ){
+*				if( nalive == 2 || nalive == 3 ){
+*					return 1
+*				}
+*			} else {
+*				if( nalive == 3 ) return 1
+*			}
+*			return 0
+*		}
+*	})
+*	let initialpixels = [ [100,100], [101,100], [102,100], [102,101], [101,102] ]
+*	for( p of initialpixels ){
+*		C.setpix( p, 1 )
+* 	}
+*	// Run it.
+*	for( let t = 0; t < 10; t++ ){ C.timeStep() }
+
+@todo Include asynchronous updating scheme?
+*/
+class CA extends GridBasedModel {
+
+	/** The constructor of class CA.
+	@param {GridSize} extents - the size of the grid of the model.
+	@param {object} conf - configuration options. 
+	@param {boolean} [conf.torus=[true,true,...]] - should the grid have linked borders?
+	@param {number} [seed] - seed for the random number generator. If left unspecified,
+	a random number from the Math.random() generator is used to make one.
+	@param {updatePixelFunction} conf.UPDATE_RULE - the update rule of the CA. 
+	*/
+	constructor( extents, conf ){
+		super( extents, conf );
+		/** Bind the supplied updaterule to the object.
+		@type {updatePixelFunction}*/
+		this.updateRule = conf["UPDATE_RULE"].bind(this);
+	}
+
+	/** A timestep in a CA just applies the update rule and clears any cached stats after
+	doing so. */
+	timeStep(){
+		this.grid.applyLocally( this.updateRule );
+		
+		/** Cached values of these stats. Object with stat name as key and its cached
+		value as value. The cache must be cleared when the grid changes!
+		@type {object} */
+		this.stat_values = {};
+	}
 }
 
 /**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 
