@@ -3,11 +3,173 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../">
-  <title data-ice="title">Manual | cpmjs</title>
+  <title data-ice="title">Manual | artistoo</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+MathJax = {
+	tex: {
+		inlineMath: [['$', '$']]
+	}
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script>
 MathJax = {
 	tex: {
@@ -33,7 +195,7 @@ MathJax = {
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div class="manual-toc-root">
   
@@ -59,7 +221,7 @@ MathJax = {
     <ul class="manual-toc">
       
     <li data-ice="manualNav" class="indent-h1" data-link="manual/installation.html"><a href="manual/installation.html" data-ice="link">Getting started</a></li>
-<li data-ice="manualNav" class="indent-h2" data-link="manual/installation.html"><a href="manual/installation.html#set-up-cpmjs-in-3-easy-steps" data-ice="link">Set up CPMjs in 3 easy steps</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/installation.html"><a href="manual/installation.html#set-up-artistoo-in-3-easy-steps" data-ice="link">Set up Artistoo in 3 easy steps</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-1--download-the-repository-" data-ice="link">Step 1: download the repository.</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-2--install-node-dependencies-" data-ice="link">Step 2: install node dependencies.</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-3--link-the-build-in-your-code-" data-ice="link">Step 3: link the build in your code.</a></li>
@@ -115,11 +277,65 @@ MathJax = {
 </nav>
 
 <div class="content" data-ice="content"><div class="github-markdown" data-ice="content"><h1 id="configuring-simulations--1-">Configuring Simulations (1)</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>Once you have written a <a href="./manual/quickstart.html">fist simulation</a>, you can make
 it more complex by adding different CPM energy constraints, 
 or you can increase the number of cells in your simulation and examine 
 interactions between different cell types. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <p>The <a href="./manual/../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>
 allows you to make many of those changes by simply modifying the its
@@ -127,21 +343,147 @@ allows you to make many of those changes by simply modifying the its
 The next tutorial will show you how you can make even more advanced simulations 
 by writing custom functions - but for now we will focus on changes you can make
 through configuration only. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <p>We will start from this very simple simulation from the 
 <a href="./manual/quickstart.html">previous tutorial</a>:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <p><div>
 &lt;iframe src=&quot;./manual/asset/SingleCell.html&quot; width=&quot;350px&quot; height=&quot;400px&quot;&gt; &lt;/iframe&gt;
 </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <p>This tutorial assumes you have completed the previous tutorial, and we will 
 examine the <code>config</code> object of the simulation you generated there in more detail:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
 
@@ -174,18 +516,126 @@ examine the <code>config</code> object of the simulation you generated there in 
 }</code>
 </code></pre>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>We will now see how changes to this object can alter the simulation. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <h2 id="configuring-the-cpm-itself">Configuring the CPM itself</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>First, let&apos;s see how we can control the <a href="./manual/../class/src/models/CPM.js~CPM.html">CPM model class</a> itself. For this lesson,
 we recommend starting from the HTML version of the simulation in the 
 <a href="./manual/quickstart.html">previous tutorial</a>. This HTML version will allow you to
 see the effect of your changes more quickly than running a node script would.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <h3 id="changing-cpm-constraints">Changing CPM constraints</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>As we&apos;ve seen before, the <code>config</code> object has three parts: the <code>field_size</code>, 
 the <code>conf</code>, and the <code>simsettings</code>. We will now look at the <code>conf</code> part, which
 controls the CPM model itself.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">    // CPM parameters and configuration
     conf : {
@@ -200,45 +650,297 @@ controls the CPM model itself.
     },</code>
 </code></pre>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>Remember that CPMs work by defining a &quot;global energy&quot; in the form of an equation
 called the <em>Hamiltonian</em>. Whether or not a pixel changes in the CPM then depends
 on how this would change the global energy: if the pixel change <em>decreases</em> the
 global energy (=energetically favourable), the pixel change will happen. If it
 would <em>increase</em> the global energy, 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <h3 id="configuring-the-grid">Configuring the grid</h3><h4 id="-strong-field-size--strong-"><strong>Field size</strong></h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>Open your file <code>MyFirstSimulation.html</code> from the previous tutorial in the web
 browser. You should see a black cell floating inside a square gray area, which
 is the field or &quot;grid&quot; the simulation runs in. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <p>The size of this grid is controlled by <code>field_size</code> in the <code>config</code> object.
 The entry 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">    // Grid settings
     field_size : [100,100],</code>
 </code></pre>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>ensures that the simulation is performed on a 100 x 100 pixel (2D) grid. We
 can change the size of this grid by changing the numbers <code>x</code> and <code>y</code> between
 the square brackets: <code>[x,y]</code>, where <code>x</code> controls the grid&apos;s width and 
 <code>y</code> controls its height. For example, changing this setting to:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">    // Grid settings
     field_size : [150,100],</code>
 </code></pre>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p>makes the grid slightly broader, but equally high as before.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <p><strong>Exercise</strong> : 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <p><em>How would you make a grid with a width of 100 pixels and a
 height of 200 pixels? Open your file</em> <code>MyFirstSimulation.html</code> <em>in your 
 favourite text editor, change the</em> <code>field_size</code> <em>in the appropriate manner, and
 save the file. Now open</em> <code>MyFirstSimulation.html</code> <em>in your web browser (or just
 refresh the page if you had already done so). Did it work?</em>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </p>
 <h4 id="-strong-grid-boundaries--strong-"><strong>Grid boundaries</strong></h4><h3 id="setting-a-seed">Setting a seed</h3><h2 id="configuring-the-simulation-object">Configuring the Simulation object</h2><h3 id="controlling-the-simulation">Controlling the simulation</h3><h3 id="controlling-the-visualization">Controlling the visualization</h3><h3 id="controlling-outputs">Controlling outputs</h3></div>
 </div>

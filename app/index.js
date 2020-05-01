@@ -3,7 +3,6 @@
 //	should serve as dependencies.
  
 import Canvas from "../src/Canvas.js" 
-import HexCanvas from "../src/HexCanvas.js" 
  
 import CA from "../src/models/CA.js" 
 import CPM from "../src/models/CPM.js" 
@@ -23,13 +22,11 @@ import Grid2D from "../src/grid/Grid2D.js"
 import Grid3D from "../src/grid/Grid3D.js" 
 import GridManipulator from "../src/grid/GridManipulator.js" 
 import CoarseGrid from "../src/grid/CoarseGrid.js" 
-import HexGrid2D from "../src/grid/HexGrid2D.js" 
  
 import SoftConstraint from "../src/hamiltonian/SoftConstraint.js" 
 import Adhesion from "../src/hamiltonian/Adhesion.js" 
 import VolumeConstraint from "../src/hamiltonian/VolumeConstraint.js" 
 import PerimeterConstraint from "../src/hamiltonian/PerimeterConstraint.js" 
-import TunablePerimeterConstraint from "../src/hamiltonian/TunablePerimeterConstraint.js" 
 import ActivityConstraint from "../src/hamiltonian/ActivityConstraint.js" 
 import ActivityMultiBackground from "../src/hamiltonian/ActivityMultiBackground.js" 
 import PersistenceConstraint from "../src/hamiltonian/PersistenceConstraint.js" 
@@ -50,7 +47,6 @@ import Simulation from "../src/simulation/Simulation.js"
  
 export {
 	Canvas,
-	HexCanvas,
 	CA,
 	CPM,
 	GridBasedModel,
@@ -67,12 +63,10 @@ export {
 	Grid3D,
 	GridManipulator,
 	CoarseGrid,
-	HexGrid2D,
 	SoftConstraint,
 	Adhesion,
 	VolumeConstraint,
 	PerimeterConstraint,
-	TunablePerimeterConstraint,
 	ActivityConstraint,
 	ActivityMultiBackground,
 	PersistenceConstraint,

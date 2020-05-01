@@ -1,7 +1,7 @@
 # An introduction to the CPM
 
 This tutorial provides a brief introduction to the Cellular Potts Model (CPM)
-framework. This intro is not specific to CPMjs, but aims to provide a general 
+framework. This intro is not specific to Artistoo, but aims to provide a general 
 overview of how CPMs work and to give you a feel for what the parameters mean.
 If you are already familiar with the CPM, this tutorial is probably not for you;
 feel free to skip ahead to the more technical tutorials.

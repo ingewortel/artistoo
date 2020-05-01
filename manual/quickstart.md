@@ -5,18 +5,16 @@ or in a nodejs script. Choose either
 [Set up a simulation in the web browser](#set-up-a-simulation-in-the-web-browser)
 or [Set up a simulation in nodejs](#set-up-a-simulation-in-nodejs) to get the
 required template code, and then see
-[Writing your simulation](#writing-your-simulation) to start using CPMjs in the
+[Writing your simulation](#writing-your-simulation) to start using Artistoo in the
 environment of your choice.
 
 The simulation we will build is a simple CPM cell:
 
-<div>
-<iframe src="./manual/asset/SingleCell.html" width="350px" height="400px"> </iframe>
-</div>
+INSERTFROMFILE 1001
 
 ## Set up a simulation in the web browser
 
-One way to use CPMjs is to build a simulation in HTML, to open directly in
+One way to use Artistoo is to build a simulation in HTML, to open directly in
 your favourite web browser (as long as that favourite web browser is not
 Internet Explorer). The advantage of this method is that it allows you to
 visualize the simulation immediately, and that you can easily explore the
@@ -49,7 +47,7 @@ body{
 </style>
 
 <!-- Sourcing the cpm build -->
-<script src="../../build/cpm.js"></script>
+<script src="../../build/artistoo.js"></script>
 <script>
 "use strict"
 
@@ -68,12 +66,12 @@ Description of your page.
 ```
 
 Copy the above code into a file called `MyFirstSimulation.html`, which you can
-save in the `cpmjs/examples/html/` folder for now. 
+save in the `artistoo/examples/html/` folder for now. 
 
 > ! *Important*: If you wish to save the file elsewhere, please read 
 >[these instructions](installation.html#additional-notes) 
 >first, and ensure that you include the correct path to the cpm build in
->the part `<script src="../../build/cpm.js"></script>`.
+>the part `<script src="../../build/artistoo.js"></script>`.
 
 You can now proceed with
  [adding your simulation](#writing-your-simulation) to this file.
@@ -81,8 +79,8 @@ You can now proceed with
 
 ## Set up a simulation in nodejs
 
-Another way to use CPMjs – besides using HTML – is to use nodejs from the 
-console. This method of running CPMjs allows you to print statistics to the 
+Another way to use Artistoo – besides using HTML – is to use nodejs from the 
+console. This method of running Artistoo allows you to print statistics to the 
 console and store them in external files, as well as to save images of the 
 simulation to create a movie later. To set up a more interactive version 
 of your simulation with a live animation, an HTML version may be more 
@@ -93,18 +91,18 @@ In contrast to a browser simulation, a node simulation requires almost no
 boilerplate code. 
 
 To set up your first node simulation, just create a file `MyFirstSimulation.js`
-in the folder `cpmjs/examples/node/` 
+in the folder `artistoo/examples/node/` 
 (or see [these instructions](installation.html#additional-notes) to create it 
 elsewhere). Then add the following line of code to the (still empty) script to
 source the package:
 
 ```$xslt
 /* Source the CPM module (cpm-cjs version because this is a node script).*/
-let CPM = require("../../build/cpm-cjs.js")
+let CPM = require("../../build/artistoo-cjs.js")
 ```
 
 Make sure that the path supplied to `require()` is the correct path from the
-location of `MyFirstSimulation.js` to `cpmjs/build/cpm-cjs.js`.
+location of `MyFirstSimulation.js` to `artistoo/build/artistoo-cjs.js`.
 
 You can now proceed with [adding your simulation](#writing-your-simulation).
 
@@ -114,7 +112,7 @@ We are now ready to add some simulation code. The following code goes either
 in between the `<script></script>` tags of your HTML page (see the comment
 `// Simulation code here`), or at the bottom of your node script.
 
-The easiest way to build a simulation in CPMjs is to use the 
+The easiest way to build a simulation in Artistoo is to use the 
 [Simulation class](../class/src/simulation/Simulation.js~Simulation.html).
 This class provides some default methods for running the simulation and 
 producing outputs, so we won't have to worry about this yet. 

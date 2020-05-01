@@ -21,7 +21,7 @@ echo -e '\t vertical-align: top;'
 echo "}"
 echo '</style>'
 echo -e "\n"
-echo '<script src="./cpm.js"></script>'
+echo '<script src="./artistoo.js"></script>'
 echo '<script src="./fpsmeter.min.js"></script>'
 echo '<script>'
 echo '"use strict"'

@@ -1,4 +1,4 @@
-let CPM = require("../build/cpm-cjs.js")
+let CPM = require("../build/artistoo-cjs.js")
 console.log("1000x1000 model, mix T cells and epidermal cells, torus, 100 MCS")
 
 

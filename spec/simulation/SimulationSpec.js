@@ -1,9 +1,8 @@
-// todo: test that simulation should work when actcolor not specified.
 /** Tests for Simulation class.
  *
  * @test {Simulation}*/
 describe("Simulation", function () {
-	let CPM = require("../../build/cpm-cjs.js")
+	let CPM = require("../../build/artistoo-cjs.js")
 	//eslint-disable-next-line no-unused-vars
 	let sim
 
@@ -40,7 +39,7 @@ describe("Simulation", function () {
 				SAVEIMG : false,
 
 				// Output stats etc
-				STATSOUT : { browser: false, node: true },
+				STATSOUT : { browser: false, node: false },
 				LOGRATE : 10
 			}
 		}

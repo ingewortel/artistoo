@@ -117,6 +117,7 @@ class GridManipulator {
 	 */
 	seedCellAt( kind, p ){
 		const newid = this.C.makeNewCellID( kind )
+		this.C.grid.checkOnGrid(p)
 		this.C.setpix( p, newid )
 		return newid
 	}

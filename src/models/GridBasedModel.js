@@ -1,7 +1,7 @@
 "use strict"
 
 import MersenneTwister from "mersenne-twister"
-import HexGrid2D from "../grid/HexGrid2D.js"
+//import HexGrid2D from "../grid/HexGrid2D.js"
 import Grid2D from "../grid/Grid2D.js"
 import Grid3D from "../grid/Grid3D.js"
 
@@ -50,21 +50,22 @@ class GridBasedModel {
 		this.conf = conf // input parameter settings; see documentation.
 
 		// Some functions/attributes depend on ndim:
-		this.hexGrid = conf.hexGrid || false
+		//this.hexGrid = conf.hexGrid || false
 
 		if( this.ndim === 2 ){
-			if( this.hexGrid ){
-				/** The grid.
-				@type {Grid2D|Grid3D|HexGrid2D}*/
-				this.grid = new HexGrid2D(extents,conf.torus)
-			} else {
-				this.grid = new Grid2D(extents,conf.torus)
-			}
+			this.grid=new Grid2D(extents,conf.torus)
+			//if( this.hexGrid ){
+			//	/** The grid.
+			//	@type {Grid2D|Grid3D|HexGrid2D}*/
+			//	this.grid = new HexGrid2D(extents,conf.torus)
+			//} else {
+			//	this.grid = new Grid2D(extents,conf.torus)
+			//}
 
 		} else {
-			if( this.hexGrid ){
+			/*if( this.hexGrid ){
 				throw( "There is no 3D hexagonal grid!" )
-			}
+			}*/
 			this.grid = new Grid3D(extents,conf.torus)
 		}
 		// Pull up some things from the grid object so we don't have to access it

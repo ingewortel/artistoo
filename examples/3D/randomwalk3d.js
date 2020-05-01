@@ -1,4 +1,4 @@
-let CPM = require("../../build/cpm-cjs.js")
+let CPM = require("../../build/artistoo-cjs.js")
 let w = 20
 // Create a CPM object
 C = new CPM.CPM( [w, w, 2], {

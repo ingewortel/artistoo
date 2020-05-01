@@ -5,12 +5,11 @@
 #						In that case the file is added in the makefile because the build
 #						needs updating whenever underlying classes change, but the file
 #						is not added to the app/index.js.
-# 			3rd col = path (from cpmjs home folder)
+# 			3rd col = path (from artistoo home folder)
 # 			(tab-delimited).
 
 # src base folder
 module	Canvas	src/Canvas.js
-module  HexCanvas   src/HexCanvas.js
 module	no-export	src/DiceSet.js
 
 # models
@@ -35,7 +34,6 @@ module	Grid3D	src/grid/Grid3D.js
 module	GridManipulator	src/grid/GridManipulator.js
 module	CoarseGrid	src/grid/CoarseGrid.js
 module	no-export	src/grid/Grid.js
-module  HexGrid2D   src/grid/HexGrid2D.js
 
 # constraints: soft constraints
 module	no-export	src/hamiltonian/Constraint.js
@@ -44,7 +42,6 @@ module	no-export	src/hamiltonian/AutoAdderConfig.js
 module	Adhesion	src/hamiltonian/Adhesion.js
 module	VolumeConstraint	src/hamiltonian/VolumeConstraint.js
 module	PerimeterConstraint	src/hamiltonian/PerimeterConstraint.js
-module  TunablePerimeterConstraint  src/hamiltonian/TunablePerimeterConstraint.js
 module	ActivityConstraint	src/hamiltonian/ActivityConstraint.js
 module	ActivityMultiBackground	src/hamiltonian/ActivityMultiBackground.js
 module	PersistenceConstraint	src/hamiltonian/PersistenceConstraint.js

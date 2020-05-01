@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <base data-ice="baseUrl" href="../">
-<title data-ice="title">Manual | cpmjs</title>
+<title data-ice="title">Manual | artistoo</title>
 <link type="text/css" rel="stylesheet" href="css/style.css">
 <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
 <script src="script/prettify/prettify.js"></script>
@@ -33,7 +33,7 @@ MathJax = {
 </span>
 <ul class="search-result"></ul>
 </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div class="manual-toc-root">
 
@@ -51,7 +51,7 @@ MathJax = {
 <ul class="manual-toc">
 
 <li data-ice="manualNav" class="indent-h1" data-link="manual/installation.html"><a href="manual/installation.html" data-ice="link">Getting started</a></li>
-<li data-ice="manualNav" class="indent-h2" data-link="manual/installation.html"><a href="manual/installation.html#set-up-cpmjs-in-3-easy-steps" data-ice="link">Set up CPMjs in 3 easy steps</a></li>
+<li data-ice="manualNav" class="indent-h2" data-link="manual/installation.html"><a href="manual/installation.html#set-up-artistoo-in-3-easy-steps" data-ice="link">Set up Artistoo in 3 easy steps</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-1--download-the-repository-" data-ice="link">Step 1: download the repository.</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-2--install-node-dependencies-" data-ice="link">Step 2: install node dependencies.</a></li>
 <li data-ice="manualNav" class="indent-h3" data-link="manual/installation.html"><a href="manual/installation.html#step-3--link-the-build-in-your-code-" data-ice="link">Step 3: link the build in your code.</a></li>

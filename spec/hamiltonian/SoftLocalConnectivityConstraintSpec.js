@@ -5,7 +5,7 @@
 
 
 describe("SoftLocalConnectivityConstraint", function() {
-  let CPM = require('../../build/cpm-cjs.js');
+  let CPM = require('../../build/artistoo-cjs.js');
   let C
   
   beforeEach(function() {

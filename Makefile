@@ -1,14 +1,14 @@
 .SECONDARY:
 
-all : build/cpm.js examples/html/cpm.js
+all : build/artistoo.js examples/html/artistoo.js
 
 
 # Dependencies are now kept up to date automatically from the file app/include-list.txt
 
-examples/html/cpm.js : build/cpm.js
+examples/html/artistoo.js : build/artistoo.js
 	@cp $< $@
 
-build/cpm.js: rollup.config.js app/index.js misc/uptodate
+build/artistoo.js: rollup.config.js app/index.js misc/uptodate
 	@echo '...Building package using node_modules/rollup/bin/rollup...' &&\
 	node_modules/rollup/bin/rollup -c && touch misc/build.make
 
@@ -22,8 +22,9 @@ misc/build.make: misc/build-makeout.bash app/include-list.txt
 app/index.js : app/automatic-index.bash app/include-list.txt
 	@bash $^ > $@
 
-docs/index.html : build/cpm.js README.md spec $(shell find manual -type f)
+docs/index.html : build/artistoo.js README.md spec $(shell find manual -type f) 
 	@echo  '...Writing documentation with ESDOC, please wait...' &&\
+	cp build/artistoo.js manual/asset/ &&\
 	node_modules/.bin/esdoc > docs/log.txt && bash misc/fix-docs.bash
 
 docs-examples : examples/html | docs/examples

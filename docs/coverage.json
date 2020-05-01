@@ -1,7 +1,7 @@
 {
-  "coverage": "97.77%",
-  "expectCount": 450,
-  "actualCount": 440,
+  "coverage": "98.6%",
+  "expectCount": 429,
+  "actualCount": 423,
   "files": {
     "src/Canvas.js": {
       "expectCount": 41,
@@ -13,51 +13,35 @@
       "actualCount": 10,
       "undocumentLines": []
     },
-    "src/HexCanvas.js": {
-      "expectCount": 15,
-      "actualCount": 10,
-      "undocumentLines": [
-        9,
-        11,
-        17,
-        137,
-        172
-      ]
-    },
     "src/grid/CoarseGrid.js": {
       "expectCount": 8,
       "actualCount": 8,
       "undocumentLines": []
     },
     "src/grid/Grid.js": {
-      "expectCount": 34,
-      "actualCount": 33,
+      "expectCount": 35,
+      "actualCount": 34,
       "undocumentLines": [
-        55
+        65
       ]
     },
     "src/grid/Grid2D.js": {
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        65
+        67
       ]
     },
     "src/grid/Grid3D.js": {
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        55
+        57
       ]
     },
     "src/grid/GridManipulator.js": {
       "expectCount": 10,
       "actualCount": 10,
-      "undocumentLines": []
-    },
-    "src/grid/HexGrid2D.js": {
-      "expectCount": 4,
-      "actualCount": 4,
       "undocumentLines": []
     },
     "src/hamiltonian/ActivityConstraint.js": {
@@ -131,8 +115,8 @@
       "undocumentLines": []
     },
     "src/hamiltonian/PerimeterConstraint.js": {
-      "expectCount": 6,
-      "actualCount": 6,
+      "expectCount": 9,
+      "actualCount": 9,
       "undocumentLines": []
     },
     "src/hamiltonian/PersistenceConstraint.js": {
@@ -162,11 +146,6 @@
       "actualCount": 9,
       "undocumentLines": []
     },
-    "src/hamiltonian/TunablePerimeterConstraint.js": {
-      "expectCount": 6,
-      "actualCount": 6,
-      "undocumentLines": []
-    },
     "src/hamiltonian/VolumeConstraint.js": {
       "expectCount": 5,
       "actualCount": 5,
@@ -178,15 +157,17 @@
       "undocumentLines": []
     },
     "src/models/CPM.js": {
-      "expectCount": 30,
+      "expectCount": 31,
       "actualCount": 30,
-      "undocumentLines": []
+      "undocumentLines": [
+        380
+      ]
     },
     "src/models/GridBasedModel.js": {
-      "expectCount": 27,
-      "actualCount": 26,
+      "expectCount": 26,
+      "actualCount": 25,
       "undocumentLines": [
-        53
+        56
       ]
     },
     "src/simulation/Simulation.js": {

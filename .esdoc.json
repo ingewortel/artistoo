@@ -15,15 +15,13 @@
           "index": "./manual/index.md",
           "asset": "./manual/asset",
           "files": [
-            "./manual/introCPM.md",
             "./manual/installation.md",
             "./manual/quickstart.md",
-            "./manual/htmlTemplate.md",
-            "./manual/simulationConfig.md"
+            "./manual/htmlTemplate.md"
           ]
         },
         "brand": {
-          "repository": "https://github.com/ingewortel/cpmjs"
+          "repository": "https://github.com/ingewortel/artistoo"
         }
       }
     }]

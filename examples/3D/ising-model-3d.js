@@ -1,6 +1,6 @@
 /** Run a basic Ising model. */
 
-let CPM = require("../../build/cpm-cjs.js")
+let CPM = require("../../build/artistoo-cjs.js")
 
 let w = parseInt(process.argv[2]) || 100
 

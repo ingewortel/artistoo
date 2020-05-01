@@ -22,7 +22,7 @@ body{
 </style>
 
 <!-- Sourcing the cpm build -->
-<script src="../../build/cpm.js"></script>
+<script src="../../build/artistoo.js"></script>
 <script>
 "use strict"
 
@@ -86,7 +86,7 @@ between the `<head></head>` tags):
 ```$xslt
 <head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>PageTitle</title>
-<script src="path/to/cpmjs/build/cpm.js"></script>
+<script src="path/to/artistoo/build/artistoo.js"></script>
 <script>
 "use strict"
 // Simulation code will go here:
@@ -95,11 +95,11 @@ between the `<head></head>` tags):
 </head>
 ```
 
-The first script just loads the CPMjs package for HTML, which is stored in
-`cpmjs/build/cpm.js`. Please ensure that the path supplied here is the correct
+The first script just loads the Artistoo package for HTML, which is stored in
+`artistoo/build/artistoo.js`. Please ensure that the path supplied here is the correct
 path from the folder where you stored `MyFirstSimulation.html` to the file
-`cpmjs/build/cpm.js`. If you have stored your simulation in `cpmjs/examples/html`,
-you can use the path `../../build/cpm.js`
+`artistoo/build/artistoo.js`. If you have stored your simulation in `artistoo/examples/html`,
+you can use the path `../../build/artistoo.js`
 
 The second script is where your actual simulation code
 will go when you are [Writing your simulation](quickstart.html#writing-your-simulation).
@@ -145,7 +145,7 @@ font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
 }
 </style>
 
-<script src="path/to/cpmjs/build/cpm.js"></script>
+<script src="path/to/artistoo/build/artistoo.js"></script>
 <script>
 "use strict"
 // Simulation code will go here:

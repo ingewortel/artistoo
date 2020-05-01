@@ -4,6 +4,25 @@ yyyy-mm-dd Your Name <your@email.com>
 ###
 
 
+2020-05-01 Inge Wortel <ingewortel@gmail.com>
+    * All files: changed CPMjs to Artistoo.
+    * src/grid/Grid.js, src/grid/Grid2D.js, src/grid/Grid3D.js : added warning
+    about torus = false to the relevant docs.
+    * examples: added NoTorusDemo to show how to deal with a grid without torus.
+    * spec/hamiltonian/PerimeterConstraintSpec.js : added test for constraint
+    working when added to a non-empty CPM.]
+    * src/hamiltonian/PerimeterConstraint.js : fixed bug so now works when added
+    to non-empty grid.
+    * spec/grid/GridManipulatorSpec.js : added test that seedCellAt throws an
+    error when it tries to seed outside of grid.
+    * src/grid/Grid.js : added a method checkOnGrid(p) to check if pixel p is on
+    the grid, and throw an error if it is not.
+    * src/grid/GridManipulator.js : seedCellAt() method first calls checkOnGrid(p)
+    before attempting to seed.
+    * src/simulation/Simulation.js : now doesn't crash when ACTCOLOR not specified.
+    * spec/simulation/SimulationSpec.js : tests that simulation doesn't crash if
+    ACTCOLOR is not specified.
+
 2020-01-08 Inge Wortel <ingewortel@gmail.com>
     * spec/CanvasSpec.js : adding tests for the Canvas for the bug that prevented
     drawing on CA grids.
