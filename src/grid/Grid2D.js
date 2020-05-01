@@ -45,6 +45,8 @@ class Grid2D extends Grid {
 	 * be linked, so that a cell moving out on the left reappears on the right?
 	 * Should be an array specifying whether the torus holds in each dimension;
 	 * eg [true,false] for a torus in x but not y dimension.
+	 * Warning: setting the torus to false can give artifacts if not done
+	 * properly, see {@link Grid#torus}.
 	 * @param {string} [datatype="Uint16"] - What datatype are the values
 	 * associated with each pixel on the grid? Choose from "Uint16" or
 	 * "Float32". */

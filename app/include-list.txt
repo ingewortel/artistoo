@@ -5,7 +5,7 @@
 #						In that case the file is added in the makefile because the build
 #						needs updating whenever underlying classes change, but the file
 #						is not added to the app/index.js.
-# 			3rd col = path (from cpmjs home folder)
+# 			3rd col = path (from artistoo home folder)
 # 			(tab-delimited).
 
 # src base folder

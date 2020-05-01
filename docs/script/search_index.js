@@ -1,248 +1,248 @@
 window.esdocSearchIndex = [
   [
-    "cpmjs/src/hamiltonian/activityconstraint.js~activityconstraint",
+    "artistoo/src/hamiltonian/activityconstraint.js~activityconstraint",
     "class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html",
-    "<span>ActivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ActivityConstraint.js</span>",
+    "<span>ActivityConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/ActivityConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/activitymultibackground.js~activitymultibackground",
+    "artistoo/src/hamiltonian/activitymultibackground.js~activitymultibackground",
     "class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html",
-    "<span>ActivityMultiBackground</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ActivityMultiBackground.js</span>",
+    "<span>ActivityMultiBackground</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/ActivityMultiBackground.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/adhesion.js~adhesion",
+    "artistoo/src/hamiltonian/adhesion.js~adhesion",
     "class/src/hamiltonian/Adhesion.js~Adhesion.html",
-    "<span>Adhesion</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/Adhesion.js</span>",
+    "<span>Adhesion</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/Adhesion.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint",
+    "artistoo/src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint",
     "class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html",
-    "<span>AttractionPointConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/AttractionPointConstraint.js</span>",
+    "<span>AttractionPointConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/AttractionPointConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/autoadderconfig.js~autoadderconfig",
+    "artistoo/src/hamiltonian/autoadderconfig.js~autoadderconfig",
     "variable/index.html#static-variable-AutoAdderConfig",
-    "<span>AutoAdderConfig</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/AutoAdderConfig.js</span>",
+    "<span>AutoAdderConfig</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/AutoAdderConfig.js</span>",
     "variable"
   ],
   [
-    "cpmjs/src/hamiltonian/barrierconstraint.js~barrierconstraint",
+    "artistoo/src/hamiltonian/barrierconstraint.js~barrierconstraint",
     "class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html",
-    "<span>BarrierConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/BarrierConstraint.js</span>",
+    "<span>BarrierConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/BarrierConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/borderconstraint.js~borderconstraint",
+    "artistoo/src/hamiltonian/borderconstraint.js~borderconstraint",
     "class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html",
-    "<span>BorderConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/BorderConstraint.js</span>",
+    "<span>BorderConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/BorderConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/borderpixelsbycell.js~borderpixelsbycell",
+    "artistoo/src/stats/borderpixelsbycell.js~borderpixelsbycell",
     "class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html",
-    "<span>BorderPixelsByCell</span> <span class=\"search-result-import-path\">cpmjs/src/stats/BorderPixelsByCell.js</span>",
+    "<span>BorderPixelsByCell</span> <span class=\"search-result-import-path\">Artistoo/src/stats/BorderPixelsByCell.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/models/ca.js~ca",
+    "artistoo/src/models/ca.js~ca",
     "class/src/models/CA.js~CA.html",
-    "<span>CA</span> <span class=\"search-result-import-path\">cpmjs/src/models/CA.js</span>",
+    "<span>CA</span> <span class=\"search-result-import-path\">Artistoo/src/models/CA.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/models/cpm.js~cpm",
+    "artistoo/src/models/cpm.js~cpm",
     "class/src/models/CPM.js~CPM.html",
-    "<span>CPM</span> <span class=\"search-result-import-path\">cpmjs/src/models/CPM.js</span>",
+    "<span>CPM</span> <span class=\"search-result-import-path\">Artistoo/src/models/CPM.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/canvas.js~canvas",
+    "artistoo/src/canvas.js~canvas",
     "class/src/Canvas.js~Canvas.html",
-    "<span>Canvas</span> <span class=\"search-result-import-path\">cpmjs/src/Canvas.js</span>",
+    "<span>Canvas</span> <span class=\"search-result-import-path\">Artistoo/src/Canvas.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/cellneighborlist.js~cellneighborlist",
+    "artistoo/src/stats/cellneighborlist.js~cellneighborlist",
     "class/src/stats/CellNeighborList.js~CellNeighborList.html",
-    "<span>CellNeighborList</span> <span class=\"search-result-import-path\">cpmjs/src/stats/CellNeighborList.js</span>",
+    "<span>CellNeighborList</span> <span class=\"search-result-import-path\">Artistoo/src/stats/CellNeighborList.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/centroids.js~centroids",
+    "artistoo/src/stats/centroids.js~centroids",
     "class/src/stats/Centroids.js~Centroids.html",
-    "<span>Centroids</span> <span class=\"search-result-import-path\">cpmjs/src/stats/Centroids.js</span>",
+    "<span>Centroids</span> <span class=\"search-result-import-path\">Artistoo/src/stats/Centroids.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/centroidswithtoruscorrection.js~centroidswithtoruscorrection",
+    "artistoo/src/stats/centroidswithtoruscorrection.js~centroidswithtoruscorrection",
     "class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html",
-    "<span>CentroidsWithTorusCorrection</span> <span class=\"search-result-import-path\">cpmjs/src/stats/CentroidsWithTorusCorrection.js</span>",
+    "<span>CentroidsWithTorusCorrection</span> <span class=\"search-result-import-path\">Artistoo/src/stats/CentroidsWithTorusCorrection.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/chemotaxisconstraint.js~chemotaxisconstraint",
+    "artistoo/src/hamiltonian/chemotaxisconstraint.js~chemotaxisconstraint",
     "class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html",
-    "<span>ChemotaxisConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ChemotaxisConstraint.js</span>",
+    "<span>ChemotaxisConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/ChemotaxisConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/grid/coarsegrid.js~coarsegrid",
+    "artistoo/src/grid/coarsegrid.js~coarsegrid",
     "class/src/grid/CoarseGrid.js~CoarseGrid.html",
-    "<span>CoarseGrid</span> <span class=\"search-result-import-path\">cpmjs/src/grid/CoarseGrid.js</span>",
+    "<span>CoarseGrid</span> <span class=\"search-result-import-path\">Artistoo/src/grid/CoarseGrid.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/connectedcomponentsbycell.js~connectedcomponentsbycell",
+    "artistoo/src/stats/connectedcomponentsbycell.js~connectedcomponentsbycell",
     "class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html",
-    "<span>ConnectedComponentsByCell</span> <span class=\"search-result-import-path\">cpmjs/src/stats/ConnectedComponentsByCell.js</span>",
+    "<span>ConnectedComponentsByCell</span> <span class=\"search-result-import-path\">Artistoo/src/stats/ConnectedComponentsByCell.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/connectedcomponentsbycellborder.js~connectedcomponentsbycellborder",
+    "artistoo/src/stats/connectedcomponentsbycellborder.js~connectedcomponentsbycellborder",
     "class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html",
-    "<span>ConnectedComponentsByCellBorder</span> <span class=\"search-result-import-path\">cpmjs/src/stats/ConnectedComponentsByCellBorder.js</span>",
+    "<span>ConnectedComponentsByCellBorder</span> <span class=\"search-result-import-path\">Artistoo/src/stats/ConnectedComponentsByCellBorder.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/connectedness.js~connectedness",
+    "artistoo/src/stats/connectedness.js~connectedness",
     "class/src/stats/Connectedness.js~Connectedness.html",
-    "<span>Connectedness</span> <span class=\"search-result-import-path\">cpmjs/src/stats/Connectedness.js</span>",
+    "<span>Connectedness</span> <span class=\"search-result-import-path\">Artistoo/src/stats/Connectedness.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/connectivityconstraint.js~connectivityconstraint",
+    "artistoo/src/hamiltonian/connectivityconstraint.js~connectivityconstraint",
     "class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html",
-    "<span>ConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ConnectivityConstraint.js</span>",
+    "<span>ConnectivityConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/ConnectivityConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/constraint.js~constraint",
+    "artistoo/src/hamiltonian/constraint.js~constraint",
     "class/src/hamiltonian/Constraint.js~Constraint.html",
-    "<span>Constraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/Constraint.js</span>",
+    "<span>Constraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/Constraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/diceset.js~diceset",
+    "artistoo/src/diceset.js~diceset",
     "class/src/DiceSet.js~DiceSet.html",
-    "<span>DiceSet</span> <span class=\"search-result-import-path\">cpmjs/src/DiceSet.js</span>",
+    "<span>DiceSet</span> <span class=\"search-result-import-path\">Artistoo/src/DiceSet.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/grid/grid2d.js~grid2d",
+    "artistoo/src/grid/grid2d.js~grid2d",
     "class/src/grid/Grid2D.js~Grid2D.html",
-    "<span>Grid2D</span> <span class=\"search-result-import-path\">cpmjs/src/grid/Grid2D.js</span>",
+    "<span>Grid2D</span> <span class=\"search-result-import-path\">Artistoo/src/grid/Grid2D.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/grid/grid3d.js~grid3d",
+    "artistoo/src/grid/grid3d.js~grid3d",
     "class/src/grid/Grid3D.js~Grid3D.html",
-    "<span>Grid3D</span> <span class=\"search-result-import-path\">cpmjs/src/grid/Grid3D.js</span>",
+    "<span>Grid3D</span> <span class=\"search-result-import-path\">Artistoo/src/grid/Grid3D.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/grid/grid.js~grid",
+    "artistoo/src/grid/grid.js~grid",
     "class/src/grid/Grid.js~Grid.html",
-    "<span>Grid</span> <span class=\"search-result-import-path\">cpmjs/src/grid/Grid.js</span>",
+    "<span>Grid</span> <span class=\"search-result-import-path\">Artistoo/src/grid/Grid.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/models/gridbasedmodel.js~gridbasedmodel",
+    "artistoo/src/models/gridbasedmodel.js~gridbasedmodel",
     "class/src/models/GridBasedModel.js~GridBasedModel.html",
-    "<span>GridBasedModel</span> <span class=\"search-result-import-path\">cpmjs/src/models/GridBasedModel.js</span>",
+    "<span>GridBasedModel</span> <span class=\"search-result-import-path\">Artistoo/src/models/GridBasedModel.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/grid/gridmanipulator.js~gridmanipulator",
+    "artistoo/src/grid/gridmanipulator.js~gridmanipulator",
     "class/src/grid/GridManipulator.js~GridManipulator.html",
-    "<span>GridManipulator</span> <span class=\"search-result-import-path\">cpmjs/src/grid/GridManipulator.js</span>",
+    "<span>GridManipulator</span> <span class=\"search-result-import-path\">Artistoo/src/grid/GridManipulator.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/hardconstraint.js~hardconstraint",
+    "artistoo/src/hamiltonian/hardconstraint.js~hardconstraint",
     "class/src/hamiltonian/HardConstraint.js~HardConstraint.html",
-    "<span>HardConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/HardConstraint.js</span>",
+    "<span>HardConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/HardConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/hardvolumerangeconstraint.js~hardvolumerangeconstraint",
+    "artistoo/src/hamiltonian/hardvolumerangeconstraint.js~hardvolumerangeconstraint",
     "class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html",
-    "<span>HardVolumeRangeConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/HardVolumeRangeConstraint.js</span>",
+    "<span>HardVolumeRangeConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/HardVolumeRangeConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint",
+    "artistoo/src/hamiltonian/localconnectivityconstraint.js~localconnectivityconstraint",
     "class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html",
-    "<span>LocalConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/LocalConnectivityConstraint.js</span>",
+    "<span>LocalConnectivityConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/LocalConnectivityConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/parameterchecker.js~parameterchecker",
+    "artistoo/src/hamiltonian/parameterchecker.js~parameterchecker",
     "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html",
-    "<span>ParameterChecker</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/ParameterChecker.js</span>",
+    "<span>ParameterChecker</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/ParameterChecker.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/perimeterconstraint.js~perimeterconstraint",
+    "artistoo/src/hamiltonian/perimeterconstraint.js~perimeterconstraint",
     "class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html",
-    "<span>PerimeterConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/PerimeterConstraint.js</span>",
+    "<span>PerimeterConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/PerimeterConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/persistenceconstraint.js~persistenceconstraint",
+    "artistoo/src/hamiltonian/persistenceconstraint.js~persistenceconstraint",
     "class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html",
-    "<span>PersistenceConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/PersistenceConstraint.js</span>",
+    "<span>PersistenceConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/PersistenceConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/pixelsbycell.js~pixelsbycell",
+    "artistoo/src/stats/pixelsbycell.js~pixelsbycell",
     "class/src/stats/PixelsByCell.js~PixelsByCell.html",
-    "<span>PixelsByCell</span> <span class=\"search-result-import-path\">cpmjs/src/stats/PixelsByCell.js</span>",
+    "<span>PixelsByCell</span> <span class=\"search-result-import-path\">Artistoo/src/stats/PixelsByCell.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/preferreddirectionconstraint.js~preferreddirectionconstraint",
+    "artistoo/src/hamiltonian/preferreddirectionconstraint.js~preferreddirectionconstraint",
     "class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html",
-    "<span>PreferredDirectionConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/PreferredDirectionConstraint.js</span>",
+    "<span>PreferredDirectionConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/PreferredDirectionConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/simulation/simulation.js~simulation",
+    "artistoo/src/simulation/simulation.js~simulation",
     "class/src/simulation/Simulation.js~Simulation.html",
-    "<span>Simulation</span> <span class=\"search-result-import-path\">cpmjs/src/simulation/Simulation.js</span>",
+    "<span>Simulation</span> <span class=\"search-result-import-path\">Artistoo/src/simulation/Simulation.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/softconnectivityconstraint.js~softconnectivityconstraint",
+    "artistoo/src/hamiltonian/softconnectivityconstraint.js~softconnectivityconstraint",
     "class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html",
-    "<span>SoftConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/SoftConnectivityConstraint.js</span>",
+    "<span>SoftConnectivityConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/SoftConnectivityConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/softconstraint.js~softconstraint",
+    "artistoo/src/hamiltonian/softconstraint.js~softconstraint",
     "class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html",
-    "<span>SoftConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/SoftConstraint.js</span>",
+    "<span>SoftConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/SoftConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint",
+    "artistoo/src/hamiltonian/softlocalconnectivityconstraint.js~softlocalconnectivityconstraint",
     "class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html",
-    "<span>SoftLocalConnectivityConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/SoftLocalConnectivityConstraint.js</span>",
+    "<span>SoftLocalConnectivityConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/SoftLocalConnectivityConstraint.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/stats/stat.js~stat",
+    "artistoo/src/stats/stat.js~stat",
     "class/src/stats/Stat.js~Stat.html",
-    "<span>Stat</span> <span class=\"search-result-import-path\">cpmjs/src/stats/Stat.js</span>",
+    "<span>Stat</span> <span class=\"search-result-import-path\">Artistoo/src/stats/Stat.js</span>",
     "class"
   ],
   [
-    "cpmjs/src/hamiltonian/volumeconstraint.js~volumeconstraint",
+    "artistoo/src/hamiltonian/volumeconstraint.js~volumeconstraint",
     "class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html",
-    "<span>VolumeConstraint</span> <span class=\"search-result-import-path\">cpmjs/src/hamiltonian/VolumeConstraint.js</span>",
+    "<span>VolumeConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/VolumeConstraint.js</span>",
     "class"
   ],
   [
@@ -900,6 +900,114 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "canvas src/canvas.js~canvas,canvas",
+    "test-file/spec/CanvasSpec.js.html#lineNumber4",
+    "Some tests for drawing methods in the Canvas class.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber118",
+    "Some tests for drawing methods in the Canvas class. drawCellBorders should work on CPM and CA",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber85",
+    "Some tests for drawing methods in the Canvas class. drawCells should draw cells on CA",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber72",
+    "Some tests for drawing methods in the Canvas class. drawCells should draw cells on CPM",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber108",
+    "Some tests for drawing methods in the Canvas class. drawOnCellBorders should draw borders on CA",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/CanvasSpec.js.html#lineNumber95",
+    "Some tests for drawing methods in the Canvas class. drawOnCellBorders should draw borders on CPM",
+    "test"
+  ],
+  [
+    "gridmanipulator src/grid/gridmanipulator.js~gridmanipulator,gridmanipulator",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber4",
+    "Tests for Grid Manipulator",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber40",
+    "Tests for Grid Manipulator  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "gridmanipulator#seedcellat src/grid/gridmanipulator.js~gridmanipulator#seedcellat,gridmanipulator#seedcellat",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber43",
+    "Tests for Grid Manipulator  [ unit tests ]  should throw error when trying to seed outside of grid",
+    "test"
+  ],
+  [
+    "perimeterconstraint src/hamiltonian/perimeterconstraint.js~perimeterconstraint,perimeterconstraint",
+    "test-file/spec/hamiltonian/PerimeterConstraintSpec.js.html#lineNumber4",
+    "Tests for Perimeter Constraint",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/PerimeterConstraintSpec.js.html#lineNumber64",
+    "Tests for Perimeter Constraint  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/hamiltonian/PerimeterConstraintSpec.js.html#lineNumber78",
+    "Tests for Perimeter Constraint  [ unit tests ]  can be added automatically through the conf object",
+    "test"
+  ],
+  [
+    "perimeterconstraint src/hamiltonian/perimeterconstraint.js~perimeterconstraint,perimeterconstraint",
+    "test-file/spec/hamiltonian/PerimeterConstraintSpec.js.html#lineNumber67",
+    "Tests for Perimeter Constraint  [ unit tests ]  can be added to a non-empty grid without crashing:",
+    "test"
+  ],
+  [
+    "simulation src/simulation/simulation.js~simulation,simulation",
+    "test-file/spec/simulation/SimulationSpec.js.html#lineNumber4",
+    "Tests for Simulation class.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/simulation/SimulationSpec.js.html#lineNumber57",
+    "Tests for Simulation class.  [ unit tests ] ",
+    "test"
+  ],
+  [
+    "simulation#drawcanvas src/simulation/simulation.js~simulation#drawcanvas,simulation#drawcanvas",
+    "test-file/spec/simulation/SimulationSpec.js.html#lineNumber60",
+    "Tests for Simulation class.  [ unit tests ]  drawCanvas has sensible defaults:",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/simulation/SimulationSpec.js.html#lineNumber61",
+    "Tests for Simulation class.  [ unit tests ]  drawCanvas has sensible defaults: should not throw error if ACTCOLOR undefined",
+    "test"
+  ],
+  [
+    "spec/canvasspec.js",
+    "test-file/spec/CanvasSpec.js.html",
+    "spec/CanvasSpec.js",
+    "testFile"
+  ],
+  [
     "spec/grid/grid2dspec.js",
     "test-file/spec/grid/Grid2DSpec.js.html",
     "spec/grid/Grid2DSpec.js",
@@ -918,6 +1026,12 @@ window.esdocSearchIndex = [
     "testFile"
   ],
   [
+    "spec/grid/gridmanipulatorspec.js",
+    "test-file/spec/grid/GridManipulatorSpec.js.html",
+    "spec/grid/GridManipulatorSpec.js",
+    "testFile"
+  ],
+  [
     "spec/grid/gridspec.js",
     "test-file/spec/grid/GridSpec.js.html",
     "spec/grid/GridSpec.js",
@@ -930,9 +1044,21 @@ window.esdocSearchIndex = [
     "testFile"
   ],
   [
+    "spec/hamiltonian/perimeterconstraintspec.js",
+    "test-file/spec/hamiltonian/PerimeterConstraintSpec.js.html",
+    "spec/hamiltonian/PerimeterConstraintSpec.js",
+    "testFile"
+  ],
+  [
     "spec/hamiltonian/softlocalconnectivityconstraintspec.js",
     "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html",
     "spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/simulation/simulationspec.js",
+    "test-file/spec/simulation/SimulationSpec.js.html",
+    "spec/simulation/SimulationSpec.js",
     "testFile"
   ],
   [
@@ -1503,6 +1629,12 @@ window.esdocSearchIndex = [
     "src/grid/grid.js~grid#applylocally",
     "class/src/grid/Grid.js~Grid.html#instance-method-applyLocally",
     "src/grid/Grid.js~Grid#applyLocally",
+    "method"
+  ],
+  [
+    "src/grid/grid.js~grid#checkongrid",
+    "class/src/grid/Grid.js~Grid.html#instance-method-checkOnGrid",
+    "src/grid/Grid.js~Grid#checkOnGrid",
     "method"
   ],
   [
@@ -2520,6 +2652,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/hamiltonian/perimeterconstraint.js~perimeterconstraint#c",
+    "class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html#instance-member-C",
+    "src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint#C",
+    "member"
+  ],
+  [
+    "src/hamiltonian/perimeterconstraint.js~perimeterconstraint#cpm",
+    "class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html#instance-set-CPM",
+    "src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint#CPM",
+    "member"
+  ],
+  [
     "src/hamiltonian/perimeterconstraint.js~perimeterconstraint#cellperimeters",
     "class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html#instance-member-cellperimeters",
     "src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint#cellperimeters",
@@ -2541,6 +2685,12 @@ window.esdocSearchIndex = [
     "src/hamiltonian/perimeterconstraint.js~perimeterconstraint#deltah",
     "class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html#instance-method-deltaH",
     "src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint#deltaH",
+    "method"
+  ],
+  [
+    "src/hamiltonian/perimeterconstraint.js~perimeterconstraint#initializeperimeters",
+    "class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html#instance-method-initializePerimeters",
+    "src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint#initializePerimeters",
     "method"
   ],
   [
@@ -3027,6 +3177,12 @@ window.esdocSearchIndex = [
     "src/models/cpm.js~cpm#nr_cells",
     "class/src/models/CPM.js~CPM.html#instance-member-nr_cells",
     "src/models/CPM.js~CPM#nr_cells",
+    "member"
+  ],
+  [
+    "src/models/cpm.js~cpm#perimeterneighbours",
+    "class/src/models/CPM.js~CPM.html#instance-get-perimeterNeighbours",
+    "src/models/CPM.js~CPM#perimeterNeighbours",
     "member"
   ],
   [

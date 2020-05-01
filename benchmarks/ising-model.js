@@ -2,7 +2,7 @@
  * 
  * This is just for benchmarking, so does not 
  * log anything or draw any images. */
-let CPM = require("../build/cpm-cjs.js")
+let CPM = require("../build/artistoo-cjs.js")
 let w = 1000
 console.log("1000x1000 2D Ising model, torus, 20 MCS")
 

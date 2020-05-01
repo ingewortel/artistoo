@@ -1,16 +1,16 @@
-# CPMjs
+# Artistoo (Artificial Tissue Toolbox)
 
 This manual is under construction. It currently contains some basic instructions
 on how to get started, but stay tuned for the most recent version! In
 the meantime, see the [examples]()
-(with provided [code](https://github.com/ingewortel/cpmjs/tree/master/examples))
-and the full [method documentation](https://ingewortel.github.io/cpmjs.github.io/identifiers.html)
-to get an idea of what you can do with CPMjs.
+(with provided [code](https://github.com/ingewortel/artistoo/tree/master/examples))
+and the full [method documentation](https://ingewortel.github.io/artistoo.github.io/identifiers.html)
+to get an idea of what you can do with Artistoo.
 
 
-## Why CPMjs?
+## Why Artistoo?
 
-CPMjs implements Cellular Potts Models in JavaScript. Yep, you read it correctly:
+Artistoo implements Cellular Potts Models in JavaScript. Yep, you read it correctly:
 JavaScript.
 
 This somewhat unorthodox choice allowed us to harness some key strengths of web
@@ -23,7 +23,7 @@ your audience needs no special software except a common web browser;
     - are just as fast as simulations in traditional modelling
 frameworks!
 - Unlocking CPM models for new users:
-    - biologists can access & modify CPMjs models created by others
+    - biologists can access & modify Artistoo models created by others
 (collaborators, in publications) - without needing to program
 anything themselves;
     - a large existing community of web programmers will be able to contribute
@@ -32,19 +32,9 @@ to the framework.
 
 ### Build, share, explore
 
-Simulation models have traditionally been used by a small group of computational
-biologists with the programming skills required to build them. While the
-*results* from such models are shared with other biologists in the scientific
-literature, the models themselves are typically not accessible for the target
-audience.
-
-Could we change this?
-
 In the age of open science, let's make computational biology a little more
-transparent. While sharing scripts and making code "open-source" is nice, it
-still won't make simulation models accessible for a broad audience of biologists.
-
-We built CPMjs to make simulation models accessible to anyone in three steps:
+transparent. We built Artistoo to make simulation models accessible to anyone 
+in three steps:
 
 1. You build your model in the form of an explorable web application;
 2. You **share** this page online either on a private website (before
@@ -74,7 +64,7 @@ frameworks have traditionally been written in languages with a reputation to
 be fast - such as C++ and Java. A modelling framework implemented in a
 scripting language may therefore come as a surprise. But improvements in the
 JavaScript engines powering common web browsers mean that performance is no
-longer an issue: CPMjs lets you build simulations as web applications without
+longer an issue: Artistoo lets you build simulations as web applications without
 loss of speed.
 
 

@@ -5,7 +5,7 @@ or in a nodejs script. Choose either
 [Set up a simulation in the web browser](#set-up-a-simulation-in-the-web-browser)
 or [Set up a simulation in nodejs](#set-up-a-simulation-in-nodejs) to get the
 required template code, and then see
-[Writing your simulation](#writing-your-simulation) to start using CPMjs in the
+[Writing your simulation](#writing-your-simulation) to start using Artistoo in the
 environment of your choice.
 
 The simulation we will build is a simple Ising model:
@@ -16,7 +16,7 @@ The simulation we will build is a simple Ising model:
 
 ## Set up a simulation in the web browser
 
-One way to use CPMjs is to build a simulation in HTML, to open directly in
+One way to use Artistoo is to build a simulation in HTML, to open directly in
 your favourite web browser (as long as that favourite web browser is not
 Internet Explorer). The advantage of this method is that it allows you to
 visualize the simulation immediately, and that you can easily explore the
@@ -74,7 +74,7 @@ We will now add some JavaScript code to the header part of the page:
 ```$xslt
 <head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>PageTitle</title>
-<script src="path/to/cpmjs/build/cpm.js"></script>
+<script src="path/to/artistoo/build/artistoo.js"></script>
 <script>
 "use strict"
 // Simulation code will go here:
@@ -83,8 +83,8 @@ We will now add some JavaScript code to the header part of the page:
 </head>
 ```
 
-The first script just loads the CPMjs package for HTML, which is stored in
-`cpmjs/build/cpm.js`. The second script is where your actual simulation code
+The first script just loads the Artistoo package for HTML, which is stored in
+`artistoo/build/artistoo.js`. The second script is where your actual simulation code
 will go later in [Writing your simulation](#writing-your-simulation).
 
 ### Step 4: Write the body
@@ -112,7 +112,7 @@ charset=UTF-8">
 <title>PageTitle</title>
 
 <!-- Sourcing the cpm build -->
-<script src="../../build/cpm.js"></script>
+<script src="../../build/artistoo.js"></script>
 <script>
 "use strict"
 

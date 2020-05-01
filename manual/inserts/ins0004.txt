@@ -1,0 +1,68 @@
+
+<div>
+<br>
+<table>
+<tr>
+    <td style="width:70%"> <img src="./manual/asset/cpm-explanation-02.svg" width="100%"> </td>
+    <td style="width:30%"> <span style="font-size:90%"><b>Figure 2: Simulation algorithm.</b> <br>
+    <i>A "source" pixel (red) tries to copy its cell ID into a randomly picked
+    "target" neighbor (one of the eight pixels highlighted by the dashed red line).
+    If this succeeds, the target pixel gets the same cell ID as the source
+    (in this case: background with cell ID = 0).
+    To find the chance P<sub>copy</sub> that this will succeed, we compute
+    the energy $H$ both before and after the proposed copy.
+    </i></span> </td>
+ </tr>
+ </table>
+<br>
+</div>
+
+<ol>
+    <li> We choose a random pixel somewhere on the grid. We call this pixel
+        the <em>source</em>. </li>
+    <li> We randomly select one of its eight <em>neighbors</em> (see Figure 2).
+        We call this pixel the <em>target</em>. </li>
+    <li> We pretend that the source pixel would "copy" itself into the target.
+        This would mean that instead of its current cell ID, the target pixel
+        gets the same cell ID as the source (this may change nothing if they
+        already belonged to the same cell). We compute a <em>global energy</em>
+        both before and after the proposed copy attempt (we'll discuss later
+        how we compute this energy, but for now, let's just assume we can do
+        that somehow - Figure 2). We call that energy $H$. We then compute
+        the <em>change</em> in energy that would occur if the proposed copy
+        attempt were to succeed:
+                $$&Delta; H = H_\text{after} - H_\text{before}$$ </li>
+    <li> If the proposed change would <em>decrease</em> the global energy
+        (i.e: &Delta;$H \lt 0$), we say it is energetically favourable
+        and we let it proceed. This means we actually change the cell ID of the
+        target pixel to that of the source pixel. If, however, the
+        proposed change would <em>increase</em> the global energy
+        (i.e: &Delta;$H \gt 0$), it is not favourable. We let it proceed only
+        in some cases, with a probability of:
+            $$P_\text{copy} = e^{- \Delta H/T}$$
+        This ensures a copy attempt is less likely when it is more energetically
+        favourable (&Delta;H more positive), but it becomes more likely when
+        there is a higher <em>Temperature</em> T (Figure 3). </li>
+    <li> Repeat the previous steps for a number of times equal to the number of
+    pixels on the grid. This completes one <em>Monte Carlo Step (MCS)</em>,
+    the time unit of the CPM. </li>
+</ol>
+
+<p>By following these steps, each time accepting mostly copy attempts that are
+energetically favourable, the system minimizes its global energy.</p>
+
+<div>
+<br>
+<table>
+<tr>
+    <td style="width:70%"> <img src="./manual/asset/deltaHfun.png" width="100%"> </td>
+    <td style="width:30%"> <span style="font-size:90%"><b>Figure 3: Success
+        chance P<sub>copy</sub> of a copy attempt as a function of the associated
+        change &Delta;$H$.</b> <br> <i>If &Delta;$H \lt 0$,
+     the copy attempt will always succeed. Otherwise, P<sub>copy</sub> drops
+     exponentially with &Delta;$H$ - and does so more steeply for lower temperatures.
+      </i></span> </td>
+ </tr>
+ </table>
+<br>
+</div>

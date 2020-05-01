@@ -3,7 +3,7 @@
  *
  * @test {Grid3D}*/
 describe("Grid3D", function () {
-	let CPM = require("../../build/cpm-cjs.js")
+	let CPM = require("../../build/artistoo-cjs.js")
 	//eslint-disable-next-line no-unused-vars
 	let grid3d, grid3dNoTorus, allPixelArray,  randomPixel //samplePixels, borderPixelSample, simpleNeumanni
 

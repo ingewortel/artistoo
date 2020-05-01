@@ -1,7 +1,7 @@
 {
-  "coverage": "99.05%",
-  "expectCount": 424,
-  "actualCount": 420,
+  "coverage": "98.6%",
+  "expectCount": 429,
+  "actualCount": 423,
   "files": {
     "src/Canvas.js": {
       "expectCount": 41,
@@ -19,24 +19,24 @@
       "undocumentLines": []
     },
     "src/grid/Grid.js": {
-      "expectCount": 34,
-      "actualCount": 33,
+      "expectCount": 35,
+      "actualCount": 34,
       "undocumentLines": [
-        55
+        65
       ]
     },
     "src/grid/Grid2D.js": {
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        65
+        67
       ]
     },
     "src/grid/Grid3D.js": {
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        55
+        57
       ]
     },
     "src/grid/GridManipulator.js": {
@@ -115,8 +115,8 @@
       "undocumentLines": []
     },
     "src/hamiltonian/PerimeterConstraint.js": {
-      "expectCount": 6,
-      "actualCount": 6,
+      "expectCount": 9,
+      "actualCount": 9,
       "undocumentLines": []
     },
     "src/hamiltonian/PersistenceConstraint.js": {
@@ -157,14 +157,18 @@
       "undocumentLines": []
     },
     "src/models/CPM.js": {
-      "expectCount": 30,
+      "expectCount": 31,
       "actualCount": 30,
-      "undocumentLines": []
+      "undocumentLines": [
+        380
+      ]
     },
     "src/models/GridBasedModel.js": {
       "expectCount": 26,
-      "actualCount": 26,
-      "undocumentLines": []
+      "actualCount": 25,
+      "undocumentLines": [
+        56
+      ]
     },
     "src/simulation/Simulation.js": {
       "expectCount": 30,

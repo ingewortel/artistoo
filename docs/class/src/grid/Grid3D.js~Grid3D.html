@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">Grid3D | cpmjs</title>
+  <title data-ice="title">Grid3D | Artistoo</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -96,7 +96,7 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Grid3D from &apos;<span><a href="file/src/grid/Grid3D.js.html#lineNumber23">cpmjs/src/grid/Grid3D.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Grid3D from &apos;<span><a href="file/src/grid/Grid3D.js.html#lineNumber23">Artistoo/src/grid/Grid3D.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
@@ -629,8 +629,8 @@ subclass.</p>
         
         
         <div data-ice="description"><p>Should the borders of the grid be linked, so that a cell moving
-out on the left reappears on the right? Torus can be specified for
-each dimension separately.</p>
+out on the left reappears on the right? Warning: setting to false
+can give artifacts if done incorrectly.</p>
 </div>
       </div>
     </td>
@@ -720,6 +720,36 @@ of some sort.</p>
         
         
         <div data-ice="description"><p>Apply a function to all pixel values on the grid.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-checkOnGrid">checkOnGrid</a></span></span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method to check if a given <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> falls within the
+bounds of this grid.</p>
 </div>
       </div>
     </td>
@@ -1309,7 +1339,7 @@ a copy of the current pixel values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber32">source</a></span></span>
     </span>
   </h3>
 
@@ -1343,7 +1373,9 @@ a copy of the current pixel values.</p>
 <li>default:  [true,true,true]</li></ul></td>
       <td data-ice="description"><p>should the borders of
 the grid be linked, so that a cell moving out on the left reappears on
-the right?</p>
+the right?
+Warning: setting the torus to false can give artifacts if not done
+properly, see <span><a href="class/src/grid/Grid.js~Grid.html#instance-member-torus">Grid#torus</a></span>.</p>
 </td>
     </tr>
 </tbody>
@@ -1383,7 +1415,7 @@ the right?</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
@@ -1428,7 +1460,7 @@ the right?</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber54">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
@@ -1479,7 +1511,7 @@ is stored as this._pixelArray[i].
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber90">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -1571,7 +1603,7 @@ console.log( grid.p2i( p ))</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber181">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
@@ -1664,7 +1696,7 @@ more general tests.  [ unit tests ]  neighi method should return correct neighbo
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber73">source</a></span></span>
     </span>
   </h3>
 
@@ -1756,7 +1788,7 @@ console.log( grid.p2i( p ))</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
@@ -1830,7 +1862,7 @@ for( let p of grid.pixels() ){
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid3D.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 

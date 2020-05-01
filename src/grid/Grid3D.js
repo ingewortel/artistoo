@@ -26,7 +26,9 @@ class Grid3D extends Grid {
 	 * @param {GridSize} extents - the size of the grid in each dimension
 	 * @param {boolean[]} [torus = [true,true,true]] - should the borders of
 	 * the grid be linked, so that a cell moving out on the left reappears on
-	 * the right? */
+	 * the right?
+	 * Warning: setting the torus to false can give artifacts if not done
+	 * properly, see {@link Grid#torus}.*/
 	constructor( extents, torus = [true,true,true] ){
 		super( extents, torus )
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,

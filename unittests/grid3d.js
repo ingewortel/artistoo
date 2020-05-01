@@ -1,5 +1,5 @@
 
-let CPM=require("../build/cpm-cjs.js")
+let CPM=require("../build/artistoo-cjs.js")
 
 let G = new CPM.Grid3D([20,20,2],[true,true,true])
 

@@ -13,7 +13,9 @@ class Grid {
 	 * @param {boolean[]} [torus=[true,true,...]] - should the borders of the
 	 * grid be linked, so that a cell moving out on the left reappears on the
 	 * right? Should be an array specifying whether the torus holds in each
-	 * dimension; eg [true,false] for a torus in x but not y dimension. */
+	 * dimension; eg [true,false] for a torus in x but not y dimension.
+	 * Warning: setting the torus to false can give artifacts if not done
+	 * properly, see {@link Grid#torus}.*/
 	constructor( field_size, torus ){
 	
 		torus = torus || []
@@ -38,7 +40,15 @@ class Grid {
 				"at all!" )
 		}
 		/** Should the borders of the grid be linked, so that a cell moving
-		 * out on the left reappears on the right? Torus can be specified for
+		 * out on the left reappears on the right? Warning: setting to false
+		 * can give artifacts if done incorrectly. If torus is set to false,
+		 * artifacts arise because
+		 * cells at the border have fewer neighbors. Cells will then stick to
+		 * the grid borders where they have fewer neighbors to get adhesion and/or
+		 * perimeter penalties from. You will need to specify how to handle the
+		 * borders explicitly; see the examples/ folder for details on how to
+		 * do this.
+		 * Torus can be specified for
 		 * each dimension separately.
 		 * @type {boolean[]}*/
 		this.torus = torus
@@ -94,7 +104,22 @@ class Grid {
 		this._pixelArray = pixels
 	}
 
-
+	/** Method to check if a given {@link ArrayCoordinate} falls within the
+	 * bounds of this grid. Returns an error if this is not the case.
+	 * @param {ArrayCoordinate} p - the coordinate to check.
+	 */
+	checkOnGrid( p ){
+		for( let d = 0; d < p.length; d++ ){
+			if( p[d] < 0 || p[d] >= this.extents[d] ){
+				throw("You are trying to access a coordinate that does not seem" +
+					"to lie on the grid! I am expecting values between 0 and " +
+					"the grid dimension specified in field_size. (If this is your" +
+					"own grid implementation and this assumption is not valid," +
+					"please overwrite the liesOnGrid() function in your own" +
+					"grid class).")
+			}
+		}
+	}
 
 	/** Method for conversion from an {@link ArrayCoordinate} to an
 	 * {@link IndexCoordinate}.

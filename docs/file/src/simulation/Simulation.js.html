@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/simulation/Simulation.js | cpmjs</title>
+  <title data-ice="title">src/simulation/Simulation.js | Artistoo</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -338,7 +338,13 @@ class Simulation {
 			
 			// if there is an activity constraint, draw activity values depending on color.
 			if( this.C.conf[&quot;LAMBDA_ACT&quot;] !== undefined &amp;&amp; this.C.conf[&quot;LAMBDA_ACT&quot;][ cellkind + 1 ] &gt; 0 ){ //this.constraints.hasOwnProperty( &quot;ActivityConstraint&quot; ) ){
-				if( ( actcolor[ cellkind ] ) ){
+				let colorAct
+				if( typeof actcolor !== &quot;undefined&quot; ){
+					colorAct = actcolor[ cellkind ] || false
+				} else {
+					colorAct = false
+				}
+				if( ( colorAct ) ){
 					this.Cim.drawActivityValues( cellkind + 1 )//, this.constraints[&quot;ActivityConstraint&quot;] )
 				}			
 			}

@@ -11,7 +11,7 @@ describe("Subclasses extending the Grid superclass", function () {
 	*/
 
 
-	let CPM = require("../../build/cpm-cjs.js")
+	let CPM = require("../../build/artistoo-cjs.js")
 	let testObjects = [], testNames = []
 	let addTestObject = function( object, name ){
 		testObjects.push( object )
@@ -124,7 +124,7 @@ describe("Subclasses extending the Grid superclass", function () {
  * @test {Grid2D} */
 describe("Grid subclasses supporting diffusion", function () {
 
-	let CPM = require("../../build/cpm-cjs.js")
+	let CPM = require("../../build/artistoo-cjs.js")
 	let testObjects2 = [], testNames2 = []
 	let addTestObject = function( object, name ){
 		testObjects2.push( object )

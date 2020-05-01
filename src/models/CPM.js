@@ -377,6 +377,10 @@ class CPM extends GridBasedModel {
 		}
 	}
 
+	get perimeterNeighbours(){
+		return this._neighbours
+	}
+
 	/** Update border elements ({@link borderpixels}) after a successful copy attempt. 
 	@listens {setpixi} because borders change when a copy succeeds.
 	@param {IndexCoordinate} i - coordinate of pixel that has changed.

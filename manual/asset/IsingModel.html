@@ -8,13 +8,13 @@ body{
 	 padding : 15px;
 }
 td {
-	 padding: 10px;
+	 padding: 0px;
 	 vertical-align: top;
 }
 </style>
 
 
-<script src="./cpm.js"></script>
+<script src="./artistoo.js"></script>
 <script src="./fpsmeter.min.js"></script>
 <script>
 "use strict"
@@ -28,13 +28,13 @@ let config = {
 
 	// Grid settings
 	ndim : 2,
-	field_size : [300,300],
+	field_size : [200,200],
 	
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
 		torus : [true,true],						// Should the grid have linked borders?
-		seed : 1,							// Seed for random number generation.
+		seed : 2,							// Seed for random number generation.
 		T : 0.01,								// CPM temperature
 		
 		// Constraint parameters. 	
@@ -50,7 +50,7 @@ let config = {
 											// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 0,
-		RUNTIME : 1000,
+		RUNTIME : 1500,
 		RUNTIME_BROWSER : "Inf",
 		
 		// Visualization
@@ -85,17 +85,15 @@ function initialize(){
 	 	logStats : logStats,
 	 	postMCSListener : postMCSListener
 	 }
+    config.simsettings.parentElement = document.getElementById("simcontainer")
 	sim = new CPM.Simulation( config, custommethods )
 
-
-	meter = new FPSMeter({left:"auto", right:"5px"})
 	step()
 }
 
 
 function step(){
 	sim.step()
-	meter.tick()
 	if( sim.conf["RUNTIME_BROWSER"] === "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
 		requestAnimationFrame( step )
 	}
@@ -107,7 +105,9 @@ function step(){
 function initializeGrid(){
 
 		// Create a cell (other than background)
-		this.cid = this.C.makeNewCellID(1)
+        if( typeof( this.cid ) == "undefined" ){
+			this.cid = this.C.makeNewCellID(1)
+        }
 		let cid = this.cid 
 		
 		// For all non-stromaborder pixels in the grid: assign it randomly
@@ -143,23 +143,45 @@ function logStats(){
 
 // Add a postMCSListener to reinitialize the grid when one of the cells disappears
 function postMCSListener(){
-		
+
+	    let reset = false, maxtime = this.conf.RUNTIME
 		for( let cid of this.C.cellIDs() ){
 			let vol = this.C.getVolume(cid)
-			if( vol<=1 || vol===(this.C.extents[0]-1)*(this.C.extents[1]-1) ){
-				this.initializeGrid()
+			if( vol<=5 || vol===(this.C.extents[0]-1)*(this.C.extents[1]-1) ){
+				reset = true
 			}
 		}
+		if( this.time >= maxtime ){
+            reset = true
+        }
+		if( reset ){
+			this.time = 0
+            this.initializeGrid()
+        }
+
 }
 
 </script>
 </head>
 <body onload="initialize()">
-<h1>IsingModel</h1>
-<p>
-The Ising model: a classic example of a CPM with only one "cell",
-and only an adhesion constraint. Because there is no volume constraint,
-the cell eventually either disappears or takes over the entire grid.
-</p>
+
+<h3>Potts model</h3>
+
+<table>
+    <tr>
+        <td id="simcontainer" style="width:210px"></td>
+        <td style="font-size:80%!important">
+            The Potts model (a generalisation of the Ising model) describes the interaction
+            between spins on a crystalline lattice. Each grid point represents a spin
+            that can take on one of two values (here represented as red and white).
+            Spins interact through a global "Hamiltonian" or energy equation, which
+            puts an energetic penalty on every pair of neighboring pixels with
+            opposite spins - reflecting a "surface" or "adhesion" energy.
+            Minimisation of the global energy then causes spins to "flip", until
+            they form large patches of spins of the same type.
+        </td>
+    </tr>
+</table>
+
 </body>
 </html>

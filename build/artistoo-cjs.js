@@ -21,7 +21,9 @@ class Grid {
 	 * @param {boolean[]} [torus=[true,true,...]] - should the borders of the
 	 * grid be linked, so that a cell moving out on the left reappears on the
 	 * right? Should be an array specifying whether the torus holds in each
-	 * dimension; eg [true,false] for a torus in x but not y dimension. */
+	 * dimension; eg [true,false] for a torus in x but not y dimension.
+	 * Warning: setting the torus to false can give artifacts if not done
+	 * properly, see {@link Grid#torus}.*/
 	constructor( field_size, torus ){
 	
 		torus = torus || [];
@@ -46,7 +48,15 @@ class Grid {
 				"at all!" )
 		}
 		/** Should the borders of the grid be linked, so that a cell moving
-		 * out on the left reappears on the right? Torus can be specified for
+		 * out on the left reappears on the right? Warning: setting to false
+		 * can give artifacts if done incorrectly. If torus is set to false,
+		 * artifacts arise because
+		 * cells at the border have fewer neighbors. Cells will then stick to
+		 * the grid borders where they have fewer neighbors to get adhesion and/or
+		 * perimeter penalties from. You will need to specify how to handle the
+		 * borders explicitly; see the examples/ folder for details on how to
+		 * do this.
+		 * Torus can be specified for
 		 * each dimension separately.
 		 * @type {boolean[]}*/
 		this.torus = torus;
@@ -102,7 +112,22 @@ class Grid {
 		this._pixelArray = pixels;
 	}
 
-
+	/** Method to check if a given {@link ArrayCoordinate} falls within the
+	 * bounds of this grid. Returns an error if this is not the case.
+	 * @param {ArrayCoordinate} p - the coordinate to check.
+	 */
+	checkOnGrid( p ){
+		for( let d = 0; d < p.length; d++ ){
+			if( p[d] < 0 || p[d] >= this.extents[d] ){
+				throw("You are trying to access a coordinate that does not seem" +
+					"to lie on the grid! I am expecting values between 0 and " +
+					"the grid dimension specified in field_size. (If this is your" +
+					"own grid implementation and this assumption is not valid," +
+					"please overwrite the liesOnGrid() function in your own" +
+					"grid class).")
+			}
+		}
+	}
 
 	/** Method for conversion from an {@link ArrayCoordinate} to an
 	 * {@link IndexCoordinate}.
@@ -484,6 +509,8 @@ class Grid2D extends Grid {
 	 * be linked, so that a cell moving out on the left reappears on the right?
 	 * Should be an array specifying whether the torus holds in each dimension;
 	 * eg [true,false] for a torus in x but not y dimension.
+	 * Warning: setting the torus to false can give artifacts if not done
+	 * properly, see {@link Grid#torus}.
 	 * @param {string} [datatype="Uint16"] - What datatype are the values
 	 * associated with each pixel on the grid? Choose from "Uint16" or
 	 * "Float32". */
@@ -880,7 +907,9 @@ class Grid3D extends Grid {
 	 * @param {GridSize} extents - the size of the grid in each dimension
 	 * @param {boolean[]} [torus = [true,true,true]] - should the borders of
 	 * the grid be linked, so that a cell moving out on the left reappears on
-	 * the right? */
+	 * the right?
+	 * Warning: setting the torus to false can give artifacts if not done
+	 * properly, see {@link Grid#torus}.*/
 	constructor( extents, torus = [true,true,true] ){
 		super( extents, torus );
 		// Check that the grid size is not too big to store pixel ID in 32-bit number,
@@ -1082,6 +1111,8 @@ class GridBasedModel {
 	@param {object} conf - configuration options. See below for its elements,
 	but subclasses can have more.
 	@param {boolean[]} [conf.torus=[true,true,...]] - should the grid have linked borders?
+	@param {boolean} [conf.hexGrid=false] - should the grid be hexagonal? Grids
+	 are square by default.
 	@param {number} [seed] - seed for the random number generator. If left unspecified,
 	a random number from the Math.random() generator is used to make one.  */
 	constructor( extents, conf ){
@@ -1102,7 +1133,7 @@ class GridBasedModel {
 		/** Dimensionality of the grid 
 		@type {number}*/
 		this.ndim = extents.length; // grid dimensions (2 or 3)
-		if( this.ndim != 2 && this.ndim != 3 ){
+		if( this.ndim !== 2 && this.ndim !== 3 ){
 			throw("only 2D and 3D models are implemented!")
 		}
 		
@@ -1111,11 +1142,22 @@ class GridBasedModel {
 		this.conf = conf; // input parameter settings; see documentation.
 
 		// Some functions/attributes depend on ndim:
-		if( this.ndim == 2 ){
-			/** The grid.
-			@type {Grid2D|Grid3D}*/
-			this.grid = new Grid2D(extents,conf.torus);
+		//this.hexGrid = conf.hexGrid || false
+
+		if( this.ndim === 2 ){
+			this.grid=new Grid2D(extents,conf.torus);
+			//if( this.hexGrid ){
+			//	/** The grid.
+			//	@type {Grid2D|Grid3D|HexGrid2D}*/
+			//	this.grid = new HexGrid2D(extents,conf.torus)
+			//} else {
+			//	this.grid = new Grid2D(extents,conf.torus)
+			//}
+
 		} else {
+			/*if( this.hexGrid ){
+				throw( "There is no 3D hexagonal grid!" )
+			}*/
 			this.grid = new Grid3D(extents,conf.torus);
 		}
 		// Pull up some things from the grid object so we don't have to access it
@@ -2381,10 +2423,12 @@ class ActivityConstraint extends SoftConstraint {
  */
 class PerimeterConstraint extends SoftConstraint {
 
-	/** The constructor of the PerimeterConstraint requires a conf object with parameters.
-	@param {object} conf - parameter object for this constraint
-	@param {PerKindNonNegative} conf.LAMBDA_P - strength of the perimeterconstraint per cellkind.
-	@param {PerKindNonNegative} conf.P - Target perimeter per cellkind.
+	/** The constructor of the PerimeterConstraint requires a conf object with
+	 * parameters.
+	 * @param {object} conf - parameter object for this constraint
+	 * @param {PerKindNonNegative} conf.LAMBDA_P - strength of the perimeter
+	 * 	constraint per cellkind.
+	 * @param {PerKindNonNegative} conf.P - Target perimeter per cellkind.
 	*/
 	constructor( conf ){
 		super( conf );
@@ -2393,27 +2437,58 @@ class PerimeterConstraint extends SoftConstraint {
 		@type {CellObject}*/
 		this.cellperimeters = {};
 	}
+
+	/** Set the CPM attached to this constraint.
+	@param {CPM} C - the CPM to attach.*/
+	set CPM(C){
+		/** The CPM this constraint acts on.
+		@type {CPM}*/
+		this.C = C;
+
+		this.confChecker();
+
+		// if C already has cells, initialize perimeters
+		if( C.cellvolume.length !== 0 ){
+			this.initializePerimeters();
+		}
+	}
 	
-	/** This method checks that all required parameters are present in the object supplied to
-	the constructor, and that they are of the right format. It throws an error when this
-	is not the case.*/
+	/** This method checks that all required parameters are present in the
+	 * object supplied to the constructor, and that they are of the right
+	 * format. It throws an error when this is not the case.*/
 	confChecker(){
 		let checker = new ParameterChecker( this.conf, this.C );
 		checker.confCheckParameter( "LAMBDA_P", "KindArray", "NonNegative" );
 		checker.confCheckParameter( "P", "KindArray", "NonNegative" );
 	}
-	
-	/** The postSetpixListener of the PerimeterConstraint ensures that cell perimeters 
-	are updated after each copy in the CPM.
-	@listens {CPM#setpixi} because when a new pixel is set (which is determined in the CPM),
-	some of the cell perimeters will change.
-	@param {IndexCoordinate} i - the coordinate of the pixel that is changed.
-	@param {CellId} t_old - the cellid of this pixel before the copy
-	@param {CellId} t_new - the cellid of this pixel after the copy.
+
+	/** This method initializes the this.cellperimeters object when the
+	 * constraint is added to a non-empty CPM. */
+	initializePerimeters(){
+
+		for( let bp of this.C.cellBorderPixels() ){
+			const p = bp[0];
+			let cid = this.C.pixt(p);
+			if( !(cid in this.cellperimeters) ){
+				this.cellperimeters[cid] = 0;
+			}
+			const i = this.C.grid.p2i( p );
+			this.cellperimeters[cid] += this.C.perimeterNeighbours[i];
+		}
+
+	}
+
+	/** The postSetpixListener of the PerimeterConstraint ensures that cell
+	 * perimeters are updated after each copy in the CPM.
+	 * @listens {CPM#setpixi} because when a new pixel is set (which is
+	 * 	determined in the CPM),	some of the cell perimeters will change.
+	 * @param {IndexCoordinate} i - the coordinate of the pixel that is changed.
+	 * @param {CellId} t_old - the cellid of this pixel before the copy
+	 * @param {CellId} t_new - the cellid of this pixel after the copy.
 	*/
 	/* eslint-disable no-unused-vars*/
 	postSetpixListener( i, t_old, t_new ){
-		if( t_old == t_new ){ return }
+		if( t_old === t_new ){ return }
 		
 		// Neighborhood of the pixel that changes
 		const Ni = this.C.neighi( i );
@@ -2426,36 +2501,36 @@ class PerimeterConstraint extends SoftConstraint {
 			const nt = this.C.pixti(Ni[i]);
 			
 			// neighbors are added to the perimeter if they are
-			// of a different cellid than the current pixel
-			if( nt != t_new ){
+			// of a different cellID than the current pixel
+			if( nt !== t_new ){
 				n_new ++; 
 			}
-			if( nt != t_old ){
+			if( nt !== t_old ){
 				n_old ++;
 			}
 			
 			// if the neighbor is non-background, the perimeter
 			// of the cell it belongs to may also have to be updated.
-			if( nt != 0 ){
+			if( nt !== 0 ){
 			
-				// if it was of t_old, its perimeter goes up because
-				// the current pixel will no longer be t_old.
-				// This means it will have a different type and start counting as perimeter.
-				if( nt == t_old ){
+				// if it was of t_old, its perimeter goes up because the
+				// current pixel will no longer be t_old. This means it will
+				// have a different type and start counting as perimeter.
+				if( nt === t_old ){
 					this.cellperimeters[nt] ++;
 				}
 				// opposite if it is t_new.
-				if( nt == t_new ){
+				if( nt === t_new ){
 					this.cellperimeters[nt] --;
 				}
 			}
 		}
 		
 		// update perimeters of the old and new type if they are non-background
-		if( t_old != 0 ){
+		if( t_old !== 0 ){
 			this.cellperimeters[t_old] -= n_old;
 		}
-		if( t_new != 0 ){
+		if( t_new !== 0 ){
 			if( !(t_new in this.cellperimeters) ){
 				this.cellperimeters[t_new] = 0;
 			}
@@ -2463,15 +2538,17 @@ class PerimeterConstraint extends SoftConstraint {
 		}
 	}
 	
-	/** Method to compute the Hamiltonian for this constraint. 
-	 @param {IndexCoordinate} sourcei - coordinate of the source pixel that tries to copy.
-	 @param {IndexCoordinate} targeti - coordinate of the target pixel the source is trying
-	 to copy into.
-	 @param {CellId} src_type - cellid of the source pixel.
-	 @param {CellId} tgt_type - cellid of the target pixel. 
-	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	/** Method to compute the Hamiltonian for this constraint.
+	 * @param {IndexCoordinate} sourcei - coordinate of the source pixel that
+	 * 	tries to copy.
+	 * @param {IndexCoordinate} targeti - coordinate of the target pixel the
+	 * 	source is trying to copy into.
+	 * @param {CellId} src_type - cellid of the source pixel.
+	 * @param {CellId} tgt_type - cellid of the target pixel.
+	 * @return {number} the change in Hamiltonian for this copy attempt and
+	 * this constraint.*/
 	deltaH( sourcei, targeti, src_type, tgt_type ){
-		if( src_type == tgt_type ){
+		if( src_type === tgt_type ){
 			return 0
 		}
 		const ts = this.C.cellKind(src_type);
@@ -2486,16 +2563,16 @@ class PerimeterConstraint extends SoftConstraint {
 		pchange[src_type] = 0; pchange[tgt_type] = 0;
 		for( let i = 0 ; i < Ni.length ; i ++  ){
 			const nt = this.C.pixti(Ni[i]);
-			if( nt != src_type ){
+			if( nt !== src_type ){
 				pchange[src_type]++; 
 			}
-			if( nt != tgt_type ){
+			if( nt !== tgt_type ){
 				pchange[tgt_type]--;
 			}
-			if( nt == tgt_type ){
+			if( nt === tgt_type ){
 				pchange[nt] ++;
 			}
-			if( nt == src_type ){
+			if( nt === src_type ){
 				pchange[nt] --;
 			}
 		}
@@ -3018,6 +3095,10 @@ class CPM extends GridBasedModel {
 		for( let l of this.post_setpix_listeners ){
 			l( i, t_old, t );
 		}
+	}
+
+	get perimeterNeighbours(){
+		return this._neighbours
 	}
 
 	/** Update border elements ({@link borderpixels}) after a successful copy attempt. 
@@ -4917,6 +4998,7 @@ class GridManipulator {
 	 */
 	seedCellAt( kind, p ){
 		const newid = this.C.makeNewCellID( kind );
+		this.C.grid.checkOnGrid(p);
 		this.C.setpix( p, newid );
 		return newid
 	}
@@ -5549,88 +5631,125 @@ class ChemotaxisConstraint extends SoftConstraint {
 	}
 }
 
-/** Implements a global bias direction of motion.
-	This constraint computes the *unnormalized* dot product 
-	between copy attempt vector and target direction vector.
-
-	Supply the target direction vector in normalized form, or 
-	use the length of the vector to influence the strength 
-	of this bias.
-
-	Works for torus grids, if they are "big enough".
-	Automatic adding is currently not supported, so you'll have to add it
-	using the {@link CPM#add} method.
-	
-	 * @example
-	 * // Build a CPM and add the constraint
-	 * let CPM = require( "path/to/build" )
-	 * let C = new CPM.CPM( [200,200], { T : 20 } )
-	 * C.add( new CPM.AttractionPointConstraint( {
-	 * 	LAMBDA_ATTRACTIONPOINT : [0,100],
-	 * 	ATTRACTIONPOINT: [100,100],
-	 * } ) )
-	 * 
-	 * // We can even add a second one at a different location
-	 * C.add( new CPM.AttractionPointConstraint( {
-	 * 	LAMBDA_ATTRACTIONPOINT : [0,100],
-	 * 	ATTRACTIONPOINT: [50,50],
-	 * } ) )
+/**Implements bias of motion in the direction of a supplied "attraction point".
+ * This constraint computes the cosine of the angle alpha between the direction
+ * of the copy attempt (from source to target pixel), and the direction from the
+ * source to the attraction point. This cosine is 1 if these directions are
+ * aligned, 0 if they are perpendicular, and 1 if they are opposite.
+ * We take the negative (so that deltaH is negative for a copy attempt in the
+ * right direction), and modify the strength of this bias using the lambda
+ * parameter. The constraint only acts on copy attempts *from* the cell that
+ * is responding to the field; it does not take into account the target pixel
+ * (except for its location to determine the direction of the copy attempt).
+ *
+ * The current implementation works for torus grids as long as the grid size in
+ * each dimension is larger than a few pixels.
+ *
+ * Automatic adding of this constraint via the conf object is currently not
+ * supported, so you will have to add this constraint using the
+ * {@link CPM#add} method.
+ *
+ * @example
+ * // Build a CPM and add the constraint
+ * let CPM = require( "path/to/build" )
+ * let C = new CPM.CPM( [200,200], { T : 20 } )
+ * C.add( new CPM.AttractionPointConstraint( {
+ * 	LAMBDA_ATTRACTIONPOINT : [0,100],
+ * 	ATTRACTIONPOINT: [100,100],
+ * } ) )
+ *
+ * // We can even add a second one at a different location
+ * C.add( new CPM.AttractionPointConstraint( {
+ * 	LAMBDA_ATTRACTIONPOINT : [0,100],
+ * 	ATTRACTIONPOINT: [50,50],
+ * } ) )
  */
-
 class AttractionPointConstraint extends SoftConstraint {
 
-	/** The constructor of an AttractionPointConstraint requires a conf object with 
-	two parameters.
-	@param {object} conf - parameter object for this constraint
-	@param {PerKindNonNegative} conf.LAMBDA_ATTRACTIONPOINT - strength of the constraint per cellkind.
-	@param {ArrayCoordinate} conf.ATTRACTIONPOINT coordinate of the attractionpoint.
+	/** The constructor of an AttractionPointConstraint requires a conf object
+	 * with two parameters.
+	 * @param {object} conf - parameter object for this constraint
+	 * @param {PerKindNonNegative} conf.LAMBDA_ATTRACTIONPOINT - strength of
+	 * the constraint per cellkind.
+	 * @param {ArrayCoordinate} conf.ATTRACTIONPOINT coordinate of the
+	 * attraction point.
 	*/
 	constructor( conf ){
 		super( conf );		
 	}
 	
-	/** This method checks that all required parameters are present in the object supplied to
-	the constructor, and that they are of the right format. It throws an error when this
-	is not the case.*/
+	/** This method checks that all required parameters are present in the
+	 * bject supplied to the constructor, and that they are of the right format.
+	 * It throws an error when this is not the case.*/
 	confChecker(){
 		let checker = new ParameterChecker( this.conf, this.C );
-		checker.confCheckParameter( "LAMBDA_ATTRACTIONPOINT", "KindArray", "NonNegative" );
+		checker.confCheckParameter( "LAMBDA_ATTRACTIONPOINT",
+			"KindArray", "NonNegative" );
 		
 		// Custom check for the attractionpoint
 		checker.confCheckPresenceOf( "ATTRACTIONPOINT" );
 		let pt = this.conf["ATTRACTIONPOINT"];
 		if( !checker.isCoordinate(pt) ){
-			throw( "ATTRACTIONPOINT must be a coordinate array with the same dimensions as the grid!" )
+			throw( "ATTRACTIONPOINT must be a coordinate array with the same " +
+				"dimensions as the grid!" )
 		}
 	}
 
-	/** Method to compute the Hamiltonian for this constraint. 
-	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
-	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
-	 to copy into.
-	 @param {CellId} src_type - cellid of the source pixel.
-	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not actually
-	 used but is given for consistency with other soft constraints; the CPM always calls
-	 this method with four arguments.
-	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	/** Method to compute the Hamiltonian for this constraint.
+	 * @param {IndexCoordinate} src_i - coordinate of the source pixel that
+	 * tries to copy.
+	 * @param {IndexCoordinate} tgt_i - coordinate of the target pixel the
+	 * source is trying to copy into.
+	 * @param {CellId} src_type - cellid of the source pixel.
+	 * @param {CellId} tgt_type - cellid of the target pixel. This argument is
+	 * not actually used but is given for consistency with other soft
+	 * constraints; the CPM always calls this method with four arguments.
+	 * @return {number} the change in Hamiltonian for this copy attempt and
+	 * this constraint. */
 	/* eslint-disable no-unused-vars*/
 	deltaH( src_i, tgt_i, src_type, tgt_type ){
+
+		// deltaH is only non-zero when the source pixel belongs to a cell with
+		// an attraction point, so it does not act on copy attempts where the
+		// background would invade the cell.
 		let l = this.conf["LAMBDA_ATTRACTIONPOINT"][this.C.cellKind( src_type )];
 		if( !l ){
 			return 0
 		}
+
+		// To assess whether the copy attempt lies in the direction of the
+		// attraction point, we must take into account whether the grid has
+		// wrapped boundaries (torus; see below).
 		let torus = this.C.conf.torus;
+
+		// tgt is the attraction point; p1 is the source location and p2 is
+		// the location of the target pixel.
 		let tgt = this.conf["ATTRACTIONPOINT"][this.C.cellKind( src_type )];
 		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
+
 		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
+		// r will contain the dot product of the copy attempt vector and the
+		// vector pointing from the source pixel to the attraction point.
+		// The copy attempt vector always has length one, but the vector to the
+		// attraction point has a variable length that will be stored in ldir
+		// (actually, we store the squared length).
 		let r = 0., ldir = 0.;
+
 		// loops over the coordinates x,y,(z)
 		for( let i = 0; i < p1.length ; i++ ){
+
+			// compute the distance between the target and the current position
+			// in this dimension, and add it in squared form to the total.
 			let dir_i = tgt[i] - p1[i];
 			ldir += dir_i * dir_i;
-			let si = this.C.extents[i];
-			// direction of the copy attempt on this coordinate is from p1 to p2
+
+			// similarly, the distance between the source and target pixel in this
+			// dimension (direction of the copy attempt is from p1 to p2)
 			let dx = p2[i] - p1[i];
+
+			// we may have to correct for torus if a copy attempt crosses the
+			// boundary.
+			let si = this.C.extents[i];
 			if( torus[i] ){
 				// If distance is greater than half the grid size, correct the
 				// coordinate.
@@ -5640,9 +5759,19 @@ class AttractionPointConstraint extends SoftConstraint {
 					dx += si;
 				}
 			}
-			// direction of the gradient
+
+			// direction of the gradient; add contribution of the current
+			// dimension to the dot product.
 			r += dx * dir_i; 
 		}
+
+		// divide dot product by squared length of directional vector to obtain
+		// cosine of the angle between the copy attempt direction and the
+		// direction to the attraction point. This cosine is 1 if they are
+		// perfectly aligned, 0 if they are perpendicular, and negative
+		// if the directions are opposite. Since we want to reward copy attempts
+		// in the right direction, deltaH is the negative of this (and
+		// multiplied by the lambda weight factor).
 		return - r * l / Math.sqrt( ldir )
 	}
 }
@@ -6934,7 +7063,13 @@ class Simulation {
 			
 			// if there is an activity constraint, draw activity values depending on color.
 			if( this.C.conf["LAMBDA_ACT"] !== undefined && this.C.conf["LAMBDA_ACT"][ cellkind + 1 ] > 0 ){ //this.constraints.hasOwnProperty( "ActivityConstraint" ) ){
-				if( ( actcolor[ cellkind ] ) ){
+				let colorAct;
+				if( typeof actcolor !== "undefined" ){
+					colorAct = actcolor[ cellkind ] || false;
+				} else {
+					colorAct = false;
+				}
+				if( ( colorAct ) ){
 					this.Cim.drawActivityValues( cellkind + 1 );//, this.constraints["ActivityConstraint"] )
 				}			
 			}

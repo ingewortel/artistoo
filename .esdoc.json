@@ -17,11 +17,11 @@
           "files": [
             "./manual/installation.md",
             "./manual/quickstart.md",
-	    	"./manual/htmlTemplate.md"
+            "./manual/htmlTemplate.md"
           ]
         },
         "brand": {
-          "repository": "https://github.com/ingewortel/cpmjs"
+          "repository": "https://github.com/ingewortel/artistoo"
         }
       }
     }]

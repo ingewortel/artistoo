@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">GridBasedModel | cpmjs</title>
+  <title data-ice="title">GridBasedModel | Artistoo</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -96,13 +96,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import GridBasedModel from &apos;<span><a href="file/src/models/GridBasedModel.js.html#lineNumber11">cpmjs/src/models/GridBasedModel.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import GridBasedModel from &apos;<span><a href="file/src/models/GridBasedModel.js.html#lineNumber12">Artistoo/src/models/GridBasedModel.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/models/GridBasedModel.js.html#lineNumber11">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/models/GridBasedModel.js.html#lineNumber12">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -310,14 +310,13 @@ given in the &apos;extents&apos; parameter.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html#instance-member-grid">grid</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html#instance-member-grid">grid</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The grid.</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -906,7 +905,7 @@ grid class.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber23">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber26">source</a></span></span>
     </span>
   </h3>
 
@@ -950,6 +949,15 @@ but subclasses can have more.</p>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: [true,true,...]</li></ul></td>
       <td data-ice="description"><p>should the grid have linked borders?</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">conf.hexGrid</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>should the grid be hexagonal? Grids
+are square by default.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -997,7 +1005,7 @@ a random number from the Math.random() generator is used to make one.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -1043,7 +1051,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber47">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
@@ -1087,7 +1095,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber90">source</a></span></span>
     </span>
   </h3>
 
@@ -1131,7 +1139,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber78">source</a></span></span>
     </span>
   </h3>
 
@@ -1171,19 +1179,18 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     
     
     
-    <span class="code" data-ice="name">grid</span><span class="code" data-ice="signature">: <span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span> | <span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span>
+    <span class="code" data-ice="name">grid</span><span class="code" data-ice="signature">: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber53">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The grid.</p>
-</div>
+  
 
   
 
@@ -1219,7 +1226,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber61">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 
@@ -1263,7 +1270,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -1307,7 +1314,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
@@ -1351,7 +1358,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber73">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber87">source</a></span></span>
     </span>
   </h3>
 
@@ -1395,7 +1402,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber67">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
@@ -1439,7 +1446,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -1483,7 +1490,7 @@ cellvolumes will be added with key = <span><a href="typedef/index.html#static-ty
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -1528,7 +1535,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1572,7 +1579,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber99">source</a></span></span>
     </span>
   </h3>
 
@@ -1619,7 +1626,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -1675,7 +1682,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber99">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
@@ -1750,7 +1757,7 @@ are just the same.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber200">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber214">source</a></span></span>
     </span>
   </h3>
 
@@ -1840,7 +1847,7 @@ C.getStat( Centroids )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber114">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber128">source</a></span></span>
     </span>
   </h3>
 
@@ -1923,7 +1930,7 @@ this is determined by this.conf.torus.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber122">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
@@ -1997,7 +2004,7 @@ this is determined by this.conf.torus.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber180">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 
@@ -2078,7 +2085,7 @@ this is determined by this.conf.torus.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
@@ -2135,7 +2142,7 @@ this is determined by this.conf.torus.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 
@@ -2204,7 +2211,7 @@ This just calls the <span><a href="class/src/grid/Grid.js~Grid.html#instance-met
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber137">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber151">source</a></span></span>
     </span>
   </h3>
 
@@ -2277,7 +2284,7 @@ In that case, this method needs to be overridden. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber219">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/GridBasedModel.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 

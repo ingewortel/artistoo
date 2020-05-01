@@ -9,7 +9,7 @@
 
 /** @test {LocalConnectivityConstraint} */
 describe("LocalConnectivityConstraint", function () {
-	let CPM = require("../../build/cpm-cjs.js")
+	let CPM = require("../../build/artistoo-cjs.js")
 	let C, conn
 
 	let fakeNeighi = function(i){

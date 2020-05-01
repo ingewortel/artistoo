@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/Canvas.js | cpmjs</title>
+  <title data-ice="title">src/Canvas.js | Artistoo</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -100,6 +100,7 @@
 &quot;use strict&quot;
 
 import GridBasedModel from &quot;./models/GridBasedModel.js&quot;
+import CPM from &quot;./models/CPM.js&quot;
 import Grid2D from &quot;./grid/Grid2D.js&quot;
 import CoarseGrid from &quot;./grid/CoarseGrid.js&quot;
 import PixelsByCell from &quot;./stats/PixelsByCell.js&quot;
@@ -489,14 +490,40 @@ class Canvas {
 	 * defaults to black.
    */
 	drawCellBorders( kind, col ){
+
+		let isCPM = ( this.C instanceof CPM ), C = this.C
+		let getBorderPixels = function*(){
+			for( let p of C.cellBorderPixels() ){
+				yield p
+			}
+		}
+		if( !isCPM ){
+			// in a non-cpm, simply draw borders of all pixels
+			getBorderPixels = function*(){
+				for( let p of C.grid.pixels() ){
+					yield p
+				}
+			}
+		}
+
+
+
 		col = col || &quot;000000&quot;
 		let pc, pu, pd, pl, pr, pdraw
 		this.col( col )
 		this.getImageData()
 		// cst contains indices of pixels at the border of cells
-		for( let x of this.C.cellBorderPixels() ){
+		for( let x of getBorderPixels() ){
+
+			let pKind
+			if( isCPM ){
+				pKind = this.C.cellKind( x[1] )
+			} else {
+				pKind = x[1]
+			}
+
 			let p = x[0]
-			if( kind &lt; 0 || this.C.cellKind(x[1]) === kind ){
+			if( kind &lt; 0 || pKind === kind ){
 				pdraw = this.p2pdraw( p )
 
 				pc = this.C.pixt( [p[0],p[1]] )
@@ -541,6 +568,9 @@ class Canvas {
 	 * would be the color red. If unspecified, a green-to-red heatmap is used.
 	 * */
 	drawActivityValues( kind, A, col ){
+		if( !( this.C instanceof CPM) ){
+			throw(&quot;You cannot use the drawActivityValues method on a non-CPM model!&quot;)
+		}
 		if( !A ){
 			for( let c of this.C.soft_constraints ){
 				if( c instanceof ActivityConstraint || c instanceof ActivityMultiBackground ){
@@ -602,7 +632,9 @@ class Canvas {
 
 	/** Color outer pixel of all cells of kind [kind] in col [col].
 	 * See {@link drawCellBorders} to actually draw around the cell rather than
-	 * coloring the outer pixels.
+	 * coloring the outer pixels. If you&apos;re using this model on a CA,
+	 * {@link CellKind} is not defined and the parameter &quot;kind&quot; is instead
+	 * interpreted as {@link CellId}.
 	 *
 	 * @param {CellKind} kind - Integer specifying the cellkind to color.
 	 * Should be a positive integer as 0 is reserved for the background.
@@ -611,10 +643,30 @@ class Canvas {
 	 * col can also be a function that returns a hex value for a cell id. */
 	drawOnCellBorders( kind, col ){
 		col = col || &quot;000000&quot;
+
+		let isCPM = ( this.C instanceof CPM ), C = this.C
+		let getBorderPixels = function*(){
+			for( let p of C.cellBorderPixels() ){
+				yield p
+			}
+		}
+		if( !isCPM ){
+			// in a non-cpm, simply draw borders of all pixels
+			getBorderPixels = this.C.pixels
+		}
+
 		this.getImageData()
 		this.col( col )
-		for( let p of this.C.cellBorderPixels() ){
-			if( kind &lt; 0 || this.C.cellKind(p[1]) === kind ){
+		for( let p of getBorderPixels() ){
+
+			let pKind
+			if( isCPM ){
+				pKind = this.C.cellKind( p[1] )
+			} else {
+				pKind = p[1]
+			}
+
+			if( kind &lt; 0 || pKind === kind ){
 				if( typeof col == &quot;function&quot; ){
 					this.col( col(p[1]) )
 				}
@@ -656,47 +708,60 @@ class Canvas {
 		this.putImageData()
 	}
 
-	/** Draw all cells of cellkind &quot;kind&quot; in color col (hex).
+	/** Draw all cells of cellkind &quot;kind&quot; in color col (hex). This method is
+	 * meant for models of class {@link CPM}, where the {@link CellKind} is
+	 * defined. If you apply this method on a {@link CA} model, this method
+	 * will internally call {@link drawCellsOfId} by just supplying the
+	 * &quot;kind&quot; parameter as {@link CellId}.
 	 *
 	 * @param {CellKind} kind - Integer specifying the cellkind to color.
 	 * Should be a positive integer as 0 is reserved for the background.
 	 * @param {HexColor|function} col - Optional: hex code for the color to use.
 	 * If left unspecified, it gets the default value of black (&quot;000000&quot;).
-	 * col can also be a function that returns a hex value for a cell id.
+	 * col can also be a function that returns a hex value for a cell id, but
+	 * this is only supported for CPMs.
 	 * */
 	drawCells( kind, col ){
-		if( ! col ){
-			col = &quot;000000&quot;
-		}
-		if( typeof col == &quot;string&quot; ){
-			this.col(col)
-		}
-		// Object cst contains pixel index of all pixels belonging to non-background,
-		// non-stroma cells.
-
-		let cellpixelsbyid = this.C.getStat( PixelsByCell )
-
-		/*for( let x of this.C.pixels() ){
-			if( kind &lt; 0 || this.C.cellKind(x[1]) == kind ){
-				if( !cellpixelsbyid[x[1]] ){
-					cellpixelsbyid[x[1]] = []
-				}
-				cellpixelsbyid[x[1]].push( x[0] )
+		if( !( this.C instanceof CPM ) ){
+			if( typeof col != &quot;string&quot; ){
+				throw(&quot;If you use the drawCells method on a CA, you cannot &quot; +
+					&quot;specify the color as function! Please specify a single string.&quot;)
 			}
-		}*/
+			this.drawCellsOfId( kind, col )
+		} else {
+			if (!col) {
+				col = &quot;000000&quot;
+			}
+			if (typeof col == &quot;string&quot;) {
+				this.col(col)
+			}
+			// Object cst contains pixel index of all pixels belonging to non-background,
+			// non-stroma cells.
 
-		this.getImageData()
-		for( let cid of Object.keys( cellpixelsbyid ) ){
-			if( kind &lt; 0 || this.C.cellKind(cid) === kind ){
-				if( typeof col == &quot;function&quot; ){
-					this.col( col(cid) )
+			let cellpixelsbyid = this.C.getStat(PixelsByCell)
+
+			/*for( let x of this.C.pixels() ){
+				if( kind &lt; 0 || this.C.cellKind(x[1]) == kind ){
+					if( !cellpixelsbyid[x[1]] ){
+						cellpixelsbyid[x[1]] = []
+					}
+					cellpixelsbyid[x[1]].push( x[0] )
 				}
-				for( let cp of cellpixelsbyid[cid] ){
-					this.pxfi( cp )
+			}*/
+
+			this.getImageData()
+			for (let cid of Object.keys(cellpixelsbyid)) {
+				if (kind &lt; 0 || this.C.cellKind(cid) === kind) {
+					if (typeof col == &quot;function&quot;) {
+						this.col(col(cid))
+					}
+					for (let cp of cellpixelsbyid[cid]) {
+						this.pxfi(cp)
+					}
 				}
 			}
+			this.putImageData()
 		}
-		this.putImageData()
 	}
 
 	/** General drawing function to draw all pixels in a supplied set in a given

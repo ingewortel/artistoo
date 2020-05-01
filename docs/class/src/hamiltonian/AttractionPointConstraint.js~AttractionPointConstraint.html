@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">AttractionPointConstraint | cpmjs</title>
+  <title data-ice="title">AttractionPointConstraint | Artistoo</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -96,13 +96,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import AttractionPointConstraint from &apos;<span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber33">cpmjs/src/hamiltonian/AttractionPointConstraint.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import AttractionPointConstraint from &apos;<span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber38">Artistoo/src/hamiltonian/AttractionPointConstraint.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber33">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber38">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -122,15 +122,21 @@
 
   
   
-  <div class="description" data-ice="description"><p>Implements a global bias direction of motion.
-This constraint computes the <em>unnormalized</em> dot product 
-between copy attempt vector and target direction vector.</p>
-<p>Supply the target direction vector in normalized form, or 
-use the length of the vector to influence the strength 
-of this bias.</p>
-<p>Works for torus grids, if they are &quot;big enough&quot;.
-Automatic adding is currently not supported, so you&apos;ll have to add it
-using the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-add">CPM#add</a></span> method.</p>
+  <div class="description" data-ice="description"><p>Implements bias of motion in the direction of a supplied &quot;attraction point&quot;.
+This constraint computes the cosine of the angle alpha between the direction
+of the copy attempt (from source to target pixel), and the direction from the
+source to the attraction point. This cosine is 1 if these directions are
+aligned, 0 if they are perpendicular, and 1 if they are opposite.
+We take the negative (so that deltaH is negative for a copy attempt in the
+right direction), and modify the strength of this bias using the lambda
+parameter. The constraint only acts on copy attempts <em>from</em> the cell that
+is responding to the field; it does not take into account the target pixel
+(except for its location to determine the direction of the copy attempt).</p>
+<p>The current implementation works for torus grids as long as the grid size in
+each dimension is larger than a few pixels.</p>
+<p>Automatic adding of this constraint via the conf object is currently not
+supported, so you will have to add this constraint using the
+<span><a href="class/src/models/CPM.js~CPM.html#instance-method-add">CPM#add</a></span> method.</p>
 </div>
   
 
@@ -188,8 +194,8 @@ C.add( new CPM.AttractionPointConstraint( {
       <div>
         
         
-        <div data-ice="description"><p>The constructor of an AttractionPointConstraint requires a conf object with 
-two parameters.</p>
+        <div data-ice="description"><p>The constructor of an AttractionPointConstraint requires a conf object
+with two parameters.</p>
 </div>
       </div>
     </td>
@@ -226,8 +232,8 @@ two parameters.</p>
       <div>
         
         
-        <div data-ice="description"><p>This method checks that all required parameters are present in the object supplied to
-the constructor, and that they are of the right format.</p>
+        <div data-ice="description"><p>This method checks that all required parameters are present in the
+bject supplied to the constructor, and that they are of the right format.</p>
 </div>
       </div>
     </td>
@@ -534,15 +540,15 @@ are actually present in the conf object and have the right format.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber48">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The constructor of an AttractionPointConstraint requires a conf object with 
-two parameters.</p>
+  <div data-ice="description"><p>The constructor of an AttractionPointConstraint requires a conf object
+with two parameters.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">Constraint#constructor</a></span></div>
@@ -566,14 +572,16 @@ two parameters.</p>
       <td data-ice="name" class="code" data-depth="1">conf.LAMBDA_ATTRACTIONPOINT</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>strength of the constraint per cellkind.</p>
+      <td data-ice="description"><p>strength of
+the constraint per cellkind.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">conf.ATTRACTIONPOINT</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>coordinate of the attractionpoint.</p>
+      <td data-ice="description"><p>coordinate of the
+attraction point.</p>
 </td>
     </tr>
 </tbody>
@@ -614,16 +622,16 @@ two parameters.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber55">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>This method checks that all required parameters are present in the object supplied to
-the constructor, and that they are of the right format. It throws an error when this
-is not the case.</p>
+  <div data-ice="description"><p>This method checks that all required parameters are present in the
+bject supplied to the constructor, and that they are of the right format.
+It throws an error when this is not the case.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confChecker">Constraint#confChecker</a></span></div>
@@ -660,14 +668,14 @@ is not the case.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Method to compute the Hamiltonian for this constraint. </p>
+  <div data-ice="description"><p>Method to compute the Hamiltonian for this constraint.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html#instance-method-deltaH">SoftConstraint#deltaH</a></span></div>
@@ -684,15 +692,16 @@ is not the case.</p>
       <td data-ice="name" class="code" data-depth="0">src_i</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>coordinate of the source pixel that tries to copy.</p>
+      <td data-ice="description"><p>coordinate of the source pixel that
+tries to copy.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">tgt_i</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>coordinate of the target pixel the source is trying
-to copy into.</p>
+      <td data-ice="description"><p>coordinate of the target pixel the
+source is trying to copy into.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -706,9 +715,9 @@ to copy into.</p>
       <td data-ice="name" class="code" data-depth="0">tgt_type</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>cellid of the target pixel. This argument is not actually
-used but is given for consistency with other soft constraints; the CPM always calls
-this method with four arguments.</p>
+      <td data-ice="description"><p>cellid of the target pixel. This argument is
+not actually used but is given for consistency with other soft
+constraints; the CPM always calls this method with four arguments.</p>
 </td>
     </tr>
 </tbody>
@@ -722,7 +731,8 @@ this method with four arguments.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>the change in Hamiltonian for this copy attempt and this constraint.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>the change in Hamiltonian for this copy attempt and
+this constraint.</p>
 </td>
         </tr>
       </tbody>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">Grid | cpmjs</title>
+  <title data-ice="title">Grid | Artistoo</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -24,7 +24,7 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/cpmjs"><img width="20px" src="./image/github.png"></a></header>
+<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
@@ -96,7 +96,7 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Grid from &apos;<span><a href="file/src/grid/Grid.js.html#lineNumber7">cpmjs/src/grid/Grid.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Grid from &apos;<span><a href="file/src/grid/Grid.js.html#lineNumber7">Artistoo/src/grid/Grid.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
@@ -324,8 +324,8 @@ Grid class, for example Grid2D and Grid3D.</p>
         
         
         <div data-ice="description"><p>Should the borders of the grid be linked, so that a cell moving
-out on the left reappears on the right? Torus can be specified for
-each dimension separately.</p>
+out on the left reappears on the right? Warning: setting to false
+can give artifacts if done incorrectly.</p>
 </div>
       </div>
     </td>
@@ -487,6 +487,36 @@ of some sort.</p>
         
         
         <div data-ice="description"><p>Apply a function to all pixel values on the grid.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-checkOnGrid">checkOnGrid</a></span></span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method to check if a given <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> falls within the
+bounds of this grid.</p>
 </div>
       </div>
     </td>
@@ -1084,7 +1114,7 @@ a copy of the current pixel values.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber17">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber19">source</a></span></span>
     </span>
   </h3>
 
@@ -1121,7 +1151,9 @@ Entries must be positive integer numbers.</p>
       <td data-ice="description"><p>should the borders of the
 grid be linked, so that a cell moving out on the left reappears on the
 right? Should be an array specifying whether the torus holds in each
-dimension; eg [true,false] for a torus in x but not y dimension.</p>
+dimension; eg [true,false] for a torus in x but not y dimension.
+Warning: setting the torus to false can give artifacts if not done
+properly, see <span><a href="class/src/grid/Grid.js~Grid.html#instance-member-torus">Grid#torus</a></span>.</p>
 </td>
     </tr>
 </tbody>
@@ -1167,7 +1199,7 @@ dimension; eg [true,false] for a torus in x but not y dimension.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
@@ -1210,7 +1242,7 @@ dimension; eg [true,false] for a torus in x but not y dimension.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber25">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -1256,7 +1288,7 @@ be positive integer numbers.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
@@ -1300,7 +1332,7 @@ be positive integer numbers.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -1344,7 +1376,7 @@ be positive integer numbers.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber54">source</a></span></span>
     </span>
   </h3>
 
@@ -1352,7 +1384,15 @@ be positive integer numbers.</p>
   
   
   <div data-ice="description"><p>Should the borders of the grid be linked, so that a cell moving
-out on the left reappears on the right? Torus can be specified for
+out on the left reappears on the right? Warning: setting to false
+can give artifacts if done incorrectly. If torus is set to false,
+artifacts arise because
+cells at the border have fewer neighbors. Cells will then stick to
+the grid borders where they have fewer neighbors to get adhesion and/or
+perimeter penalties from. You will need to specify how to handle the
+borders explicitly; see the examples/ folder for details on how to
+do this.
+Torus can be specified for
 each dimension separately.</p>
 </div>
 
@@ -1392,7 +1432,7 @@ each dimension separately.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber54">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber64">source</a></span></span>
     </span>
   </h3>
 
@@ -1441,7 +1481,7 @@ each dimension separately.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber89">source</a></span></span>
     </span>
   </h3>
 
@@ -1504,7 +1544,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1548,7 +1588,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber284">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber309">source</a></span></span>
     </span>
   </h3>
 
@@ -1596,7 +1636,7 @@ of some sort.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber438">source</a></span></span>
     </span>
   </h3>
 
@@ -1647,6 +1687,68 @@ this._pixels, which is implemented in the grid subclass.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-checkOnGrid">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">checkOnGrid</span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber111">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Method to check if a given <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> falls within the
+bounds of this grid. Returns an error if this is not the case.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">p</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the coordinate to check.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-diffusion">
     <span class="access" data-ice="access">public</span>
     
@@ -1658,7 +1760,7 @@ this._pixels, which is implemented in the grid subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber387">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber412">source</a></span></span>
     </span>
   </h3>
 
@@ -1727,7 +1829,7 @@ according to Fick&apos;s second law of diffusion.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber316">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber341">source</a></span></span>
     </span>
   </h3>
 
@@ -1812,7 +1914,7 @@ the gradient at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber304">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber329">source</a></span></span>
     </span>
   </h3>
 
@@ -1890,7 +1992,7 @@ gradient at.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber146">source</a></span></span>
     </span>
   </h3>
 
@@ -1973,7 +2075,7 @@ This method should be implemented in the subclass, see
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber328">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber353">source</a></span></span>
     </span>
   </h3>
 
@@ -2058,7 +2160,7 @@ laplacian at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber361">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber386">source</a></span></span>
     </span>
   </h3>
 
@@ -2147,7 +2249,7 @@ laplacian at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber426">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber451">source</a></span></span>
     </span>
   </h3>
 
@@ -2210,7 +2312,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber153">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber178">source</a></span></span>
     </span>
   </h3>
 
@@ -2305,7 +2407,7 @@ element contains the array coordinates of the neighbor in question.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber345">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber370">source</a></span></span>
     </span>
   </h3>
 
@@ -2391,7 +2493,7 @@ borders? Defaults to the setting on this grid, see <span><a href="class/src/grid
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber137">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber162">source</a></span></span>
     </span>
   </h3>
 
@@ -2477,7 +2579,7 @@ leaving on the right re-enters the grid on the left?</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber133">source</a></span></span>
     </span>
   </h3>
 
@@ -2560,7 +2662,7 @@ This method should be implemented in the subclass, see
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber246">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber271">source</a></span></span>
     </span>
   </h3>
 
@@ -2627,7 +2729,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber304">source</a></span></span>
     </span>
   </h3>
 
@@ -2694,7 +2796,7 @@ Float32Array.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber268">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber293">source</a></span></span>
     </span>
   </h3>
 
@@ -2755,7 +2857,7 @@ implemented in a grid subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber211">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 
@@ -2839,7 +2941,7 @@ Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -2923,7 +3025,7 @@ Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber187">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber212">source</a></span></span>
     </span>
   </h3>
 
@@ -3003,7 +3105,7 @@ used (see eg Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber199">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber224">source</a></span></span>
     </span>
   </h3>
 
@@ -3085,7 +3187,7 @@ or floating point numbers, depending on the grid subclass used
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber198">source</a></span></span>
     </span>
   </h3>
 
