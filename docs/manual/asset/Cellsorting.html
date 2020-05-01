@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Cellsorting</title>
+<style type="text/css">
+body{
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 0px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [100,100],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],						// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 15,								// CPM temperature
+
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+		
+		// Adhesion parameters:
+		J : [ [NaN, 12, 6], [12, 6, 16], [6, 16, 6] ],
+		
+		// VolumeConstraint parameters
+			// VolumeConstraint importance per cellkind
+			// Target volume of each cellkind
+		LAMBDA_V : [0,2,2],
+		V : [0,25,25]		
+
+		
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1,1],					// Number of cells to seed for all
+											// non-background cellkinds.
+	
+		// Runtime etc
+		BURNIN : 10,
+		RUNTIME : 2000,
+		RUNTIME_BROWSER : Infinity,
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["000000","FF0000"],
+		ACTCOLOR : [true,false],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [true,true],				// Should cellborders be displayed?
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : true,					// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/CellSorting",				// ... And save the image in this folder.
+		EXPNAME : "CellSorting",					// Used for the filename of output images.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object.*/
+	 let custommethods = {
+	 	initializeGrid : initializeGrid
+	 }
+	config.simsettings.parentElement = document.getElementById("simcontainer")
+	sim = new CPM.Simulation( config, custommethods )
+	step()
+}
+
+
+function step(){
+	sim.step()
+    document.getElementById("timelogger").innerText = "Time: " + sim.time + " MCS"
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+
+/* The following custom methods will be added to the simulation object
+below. */
+function initializeGrid(){
+	
+		// add the GridManipulator if not already there and if you need it
+		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	
+		this.gm.seedCellsInCircle( 1, 180, this.C.midpoint, this.C.extents[0]/3 )
+		this.gm.seedCellsInCircle( 2, 160, this.C.midpoint, this.C.extents[0]/3 )
+
+}
+
+function resetSim(){
+	// kill all cells
+	let pix = sim.C.getStat( CPM.PixelsByCell )
+	for( let i of sim.C.cellIDs() ){
+		let cellpix = pix[i]
+		for( let p of cellpix ){
+			sim.C.setpixi( sim.C.grid.p2i(p), 0 )
+		}
+	}
+
+	// initialize and reset time to zero
+    sim.time = 0
+    sim.initializeGrid()
+    sim.runBurnin()
+}
+
+</script>
+</head>
+<body onload="initialize()">
+
+<h3>Graner & Glazier cell sorting model</h3>
+
+<table>
+    <tr>
+        <td id="simcontainer" style="width:210px"></td>
+        <td style="font-size:80%!important">
+            Graner & Glazier extended the Potts model into a "cellular" Potts
+            model, where patches of grid points now belong to "cells" that
+            roughly keep their volume. Cells gradually sort themselves because of
+            differential adhesion between red and black cells.
+            <br><br>
+            <div id="timelogger"></div>
+            <button onclick="resetSim()">reset</button>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

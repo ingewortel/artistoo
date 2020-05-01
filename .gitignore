@@ -1,6 +1,5 @@
 examples-dev
 examples-old
-docs
 *.swp
 build.make
 node_modules
