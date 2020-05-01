@@ -44,7 +44,7 @@ We will now go through this step by step.
 
 ### Step 1 : Create a basic HTML page
 
-A very simple html page looks like this:
+A very simple HTML page looks like this:
 
 ```$xslt
 <!DOCTYPE html>
