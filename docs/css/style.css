@@ -187,7 +187,7 @@ li > code {
 }
 
 .navigation li {
-  list-style: none;
+  list-style: none!important;
   margin: 4px 0;
   white-space: nowrap;
 }
