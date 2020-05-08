@@ -10,7 +10,7 @@ examples/html/artistoo.js : build/artistoo.js
 
 build/artistoo.js: rollup.config.js app/index.js misc/uptodate
 	@echo '...Building package using node_modules/rollup/bin/rollup...' &&\
-	node_modules/rollup/bin/rollup -c && touch misc/build.make
+	node_modules/rollup/dist/bin/rollup -c && touch misc/build.make
 
 misc/uptodate : misc/build.make
 	@$(MAKE) -f $<
@@ -25,10 +25,14 @@ app/index.js : app/automatic-index.bash app/include-list.txt
 docs/index.html : build/artistoo.js README.md spec $(shell find manual -type f) 
 	@echo  '...Writing documentation with ESDOC, please wait...' &&\
 	cp build/artistoo.js manual/asset/ &&\
-	node_modules/.bin/esdoc > docs/log.txt && bash misc/fix-docs.bash
+	node_modules/.bin/esdoc > docs/log.txt && bash misc/fix-docs.bash &&\
+	cp misc/index2.html docs/index.html
 
 docs-examples : examples/html | docs/examples
-	@cp $</* docs/examples/
+	@cp $</* docs/examples/ && \
+	cp examples/3D/cpm3d.html docs/examples/ && \
+	cp examples/3D/Canvas3D.js docs/examples/ && \
+	cp examples/3D/OrbitControls.js docs/examples/
 	
 docs/examples :
 	@mkdir -p $@

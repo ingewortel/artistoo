@@ -4,10 +4,18 @@
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../">
   <title data-ice="title">Manual | Artistoo</title>
+  
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+
+  <script src="../misc/nav.js"></script>
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 <script>
 MathJax = {
 	tex: {
@@ -20,22 +28,104 @@ MathJax = {
 </head>
 <body class="layout-container manual-root manual-index" data-ice="rootContainer">
 
-<header>
-  <a href="./">Home</a>
-  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
-  <a href="identifiers.html">Reference</a>
-  <a href="source.html">Source</a>
-  <a href="test.html" data-ice="testLink">Test</a>
-  <div class="search-box">
-  <span>
-    <img src="./image/search.png">
-    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
-  </span>
-    <ul class="search-result"></ul>
-  </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
+<style>
+/*.li {
+	list-style-type: none!important;
+}*/
 
-<nav class="navigation" data-ice="nav"><div class="manual-toc-root">
+.navbar{
+padding-left:10px;
+padding-right:10px;
+}
+
+
+.mainimg {
+	min-height: 21em;
+    background-color: #666;
+    margin:0px 0px!important; padding:0px!important;
+	background-position: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    url('../misc/cpm-01.jpg');
+}
+.mainimg h1 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 300;
+  border-bottom: solid 0px #ddd;
+  text-align: center;
+  font-size: 400%;
+}
+
+.mainimg h2 {
+	text-align: center;
+	font-size:200%;
+	border-bottom: solid 0px;
+}
+
+.front-page h1 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.front-page h2 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	font-size:170%!important;
+}
+
+
+.bottom {
+  display: block;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main" style="border-bottom: solid 1px #ddd;">
+    <div class="container" style="margin-left:0px;max-width:100%;">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+
+				<li class="nav-item">
+				  <a class="nav-link" href="./manual/index.html"><span>Manual</span></a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Source</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo"><img width="20px" style="position:relative;top:-2px;" src="./image/github.png"></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<img src="./image/search.png">
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    	
+</nav>
+
+<nav class="navigation" data-ice="nav" id="mySidepanel"><div class="manual-toc-root">
   
 <div data-ice="manual">
     <ul class="manual-toc">
@@ -77,82 +167,59 @@ MathJax = {
 <li data-ice="manualNav" class="indent-h3" data-link="manual/htmlTemplate.html"><a href="manual/htmlTemplate.html#step-5--optional---add-css" data-ice="link">Step 5 (optional): Add CSS</a></li>
 </ul>
   </div>
+<div data-ice="manual">
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html" data-ice="link">Configuring Simulations (1)</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#configuring-the-cpm-itself" data-ice="link">Configuring the CPM itself</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#changing-cpm-parameters" data-ice="link">Changing CPM parameters</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#setting-a-random-seed" data-ice="link">Setting a random seed</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#configuring-the-grid" data-ice="link"> Configuring the grid</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#field-size" data-ice="link"> Field size </a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#grid-boundaries" data-ice="link"> Grid boundaries</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#configuring-the-simulation-object" data-ice="link">Configuring the Simulation object </a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#controlling-the-simulation" data-ice="link">Controlling the simulation</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#controlling-the-visualization" data-ice="link">Controlling the visualization</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/simulationConfig.html"><a href="manual/simulationConfig.html#controlling-outputs" data-ice="link">Controlling outputs</a></li>
+</ul>
+  </div>
+<div data-ice="manual">
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1" data-link="manual/sharingSimulations.html"><a href="manual/sharingSimulations.html" data-ice="link">Sharing your simulations</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/sharingSimulations.html"><a href="manual/sharingSimulations.html#undefined" data-ice="link">Step 1: Create a self-contained directory</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/sharingSimulations.html"><a href="manual/sharingSimulations.html#undefined" data-ice="link">Step 2: Adjust relative paths</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/sharingSimulations.html"><a href="manual/sharingSimulations.html#undefined" data-ice="link">Step 3: Share</a></li>
+</ul>
+  </div>
+<div data-ice="manual">
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1" data-link="manual/custommodules.html"><a href="manual/custommodules.html" data-ice="link">Custom modules</a></li>
+<li data-ice="manualNav" class="indent-h3" data-link="manual/custommodules.html"><a href="manual/custommodules.html#undefined" data-ice="link">A custom statistic</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/custommodules.html"><a href="manual/custommodules.html#undefined" data-ice="link">Step 1: Create a custom extension of the Stat class</a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/custommodules.html"><a href="manual/custommodules.html#undefined" data-ice="link"> Step 2: Implement a compute() method </a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/custommodules.html"><a href="manual/custommodules.html#undefined" data-ice="link"> Step 3: Implement a computeForCell() method </a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/custommodules.html"><a href="manual/custommodules.html#undefined" data-ice="link">Step 4 (Optional): clean-up </a></li>
+<li data-ice="manualNav" class="indent-h4" data-link="manual/custommodules.html"><a href="manual/custommodules.html#undefined" data-ice="link">Step 5: Use statistic</a></li>
+</ul>
+  </div>
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div class="github-markdown">
+<div class="content" data-ice="content" id="mainContent">
+<div class="github-markdown">
   <div class="manual-user-index" data-ice="manualUserIndex"><h1 id="artistoo--artificial-tissue-toolbox-">Artistoo (Artificial Tissue Toolbox)</h1>
 <p>This manual is under construction. It currently contains some basic instructions
 on how to get started, but stay tuned for the most recent version! In
-the meantime, see the <a href>examples</a>
+the meantime, see the <a href="./examples.html">examples</a>
 (with provided <a href="https://github.com/ingewortel/artistoo/tree/master/examples">code</a>)
-and the full <a href="https://ingewortel.github.io/artistoo.github.io/identifiers.html">method documentation</a>
+and the full <a href="./identifiers.html">method documentation</a>
 to get an idea of what you can do with Artistoo.
 </p>
-<h2 id="why-artistoo-">Why Artistoo?</h2>
-<p>Artistoo implements Cellular Potts Models in JavaScript. Yep, you read it correctly:
-JavaScript.
-</p>
-
-<p>This somewhat unorthodox choice allowed us to harness some key strengths of web
-programming to provide the following features:
-</p>
-<ul>
-<li>Build models in the form of interactive and explorable web
-applications that:<ul>
-<li>you can easily share with other users without any fuss:
-your audience needs no special software except a common web browser;</li>
-<li>are just as fast as simulations in traditional modelling
-frameworks!</li>
-</ul>
-</li>
-<li>Unlocking CPM models for new users:<ul>
-<li>biologists can access &amp; modify Artistoo models created by others
-(collaborators, in publications) - without needing to program
-anything themselves;</li>
-<li>a large existing community of web programmers will be able to contribute
-to the framework.</li>
-</ul>
-</li>
-</ul>
-<h3 id="build--share--explore">Build, share, explore</h3>
-<p>In the age of open science, let&apos;s make computational biology a little more
-transparent. We built Artistoo to make simulation models accessible to anyone 
-in three steps:
-</p>
-<ol>
-<li>You build your model in the form of an explorable web application;</li>
-<li>You <strong>share</strong> this page online either on a private website (before
-publication), or as supplementary material to your paper;</li>
-<li>You let users <strong>explore</strong> your model by allowing them to change parameters
-with something as simple as a mouse click.</li>
-</ol>
-
-<p>We believe this approach comes with some nice benefits:
-</p>
-<ul>
-<li><strong>Reviewers</strong> can get a feel of how your model behaves. This will help them
-assess the robustness and validity of results presented in a paper - speeding up
-the peer review process and improving the quality of the scientific literature.</li>
-<li><strong>Readers</strong> can access a simulation as supplementary material to your paper,
-without needing any special software. This will help them understand your
-models in more detail, and build on their conclusions with novel ideas.</li>
-<li><strong>Collaborators</strong> with experimental expertise can be involved in the modelling
-process earlier on, which will foster more close collaborations and improve the
-exchange of ideas.</li>
-<li><strong>Students</strong> can be exposed to simulation modelling early on in their program,
-promoting the use of computational models by a larger audience.</li>
-</ul>
-<h3 id="but-what-about-speed-">But what about speed?</h3>
-<p>Because simulation models tend to be computationally expensive, modelling
-frameworks have traditionally been written in languages with a reputation to
-be fast - such as C++ and Java. A modelling framework implemented in a
-scripting language may therefore come as a surprise. But improvements in the
-JavaScript engines powering common web browsers mean that performance is no
-longer an issue: Artistoo lets you build simulations as web applications without
-loss of speed.
-</p>
 </div>
+
+
 
   
 
@@ -585,6 +652,911 @@ font-family: &quot;HelveticaNeue-Light&quot;, sans-serif; padding : 15px;
  <a href="./manual/quickstart.html#writing-your-simulation">adding your simulation</a> to this file.
 </p></div>
         <a data-ice="link" href="manual/htmlTemplate.html"></a>
+      </div>
+    </div>
+<div class="manual-card-wrap" data-ice="cards">
+      <div class="manual-card">
+        <div data-ice="card"><h1>Configuring Simulations (1)</h1>
+<p>
+</p><p></p><p>
+Once you have written a <a href="./manual/./quickstart.html">fist simulation</a>, you can 
+adapt it by modifying parameters, 
+or you can increase the number of cells in your simulation and examine 
+interactions between different cell types.
+</p>
+<p>
+</p><p></p><p>The <a href="./manual/../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>
+allows you to make many of those changes by simply modifying the its
+<a href="./manual/./quickstart.html#step-1---configure-the-cpm--amp--simulation">configuration object</a>, 
+which will be the topic of this tutorial. 
+The next tutorial will show you how you can make even more advanced simulations 
+by writing custom functions - but for now we will focus on changes you can make
+through configuration only.
+</p>
+<p>
+</p><p></p><p>We will start from this very simple simulation from the 
+<a href="./manual/./quickstart.html">previous tutorial</a>:
+
+<div>
+<iframe src="./manual/asset/SingleCell.html" width="350px" height="400px"> </iframe>
+</div>
+
+
+</p>
+<p>
+This tutorial assumes you have completed the previous tutorial, and we will 
+examine the <code>config</code> object of the simulation you generated there in more detail:
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+
+    // Grid settings
+    field_size : [100,100],
+
+    // CPM parameters and configuration
+    conf : {
+        T : 20,                                // CPM temperature
+
+        // Adhesion parameters:
+        J: [[0,20], [20,100]] ,
+
+        // VolumeConstraint parameters
+        LAMBDA_V : [0,50],                // VolumeConstraint importance per cellkind
+        V : [0,500]                        // Target volume of each cellkind
+    },
+
+    // Simulation setup and configuration
+    simsettings : {
+        // Cells on the grid
+        NRCELLS : [1],                    // Number of cells to seed for all
+                                        // non-background cellkinds.
+
+        RUNTIME : 500,                  // Only used in node
+
+        CANVASCOLOR : &quot;eaecef&quot;,
+        zoom : 4                        // zoom in on canvas with this factor.
+    }
+}</code></code></pre>
+
+
+</p>
+<p>
+</p><p>We will now see how changes to this object can alter the simulation.</p><p></p><p></p><h3>Configuring the CPM itself</h3><p></p><p></p><p>First, let&apos;s see how we can control the <a href="./manual/../class/src/models/CPM.js~CPM.html">
+CPM model class</a> itself. For this lesson, we recommend you start from the HTML version 
+of the simulation in the <a href="./manual/./quickstart.html">previous tutorial</a>.
+This HTML version will allow you to
+see the effect of your changes more quickly than running a node script would.
+</p>
+<p>
+</p><p></p><h4>Changing CPM parameters</h4><p></p><p></p><p>As we&apos;ve seen before, the <code>config</code> object has three parts: the 
+<code>field_size</code>, the <code>conf</code>, and the <code>simsettings</code>. 
+We will now look at the <code>conf</code> part, which controls the CPM model itself.
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+    conf : {
+        T : 20,                                // CPM temperature
+
+        // Adhesion parameters:
+        J: [[0,20], [20,100]] ,
+
+        // VolumeConstraint parameters
+        LAMBDA_V : [0,50],                // VolumeConstraint importance per cellkind
+        V : [0,500]                        // Target volume of each cellkind
+    },</code></code></pre>
+
+
+</p>
+<p>
+</p><p>The CPM shown here has only two constraints: the 
+<a href="./manual/../class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a> and
+<a href="./manual/../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">Volume</a>
+constraints. The <code>T</code> parameter belongs to the CPM itself and controls to
+what extent the model &quot;listens&quot; to the energy rules it gets. The higher T, the more likely
+the model is to misbehave. But if T is too low, the cell might get stuck in a state it
+can&apos;t get out of.
+
+</p>
+<p>
+</p><p><b>Exercise</b> : </p><p><i>Try some different values for T here, and see what happens with your simulation.</i></p><p></p><p>The other parameters here belong to the constraints. The <code>J</code> values form
+a matrix controlling the adhesion between cell and background. The $J_{00}$ value, which
+is here 0, is never used (the adhesion constraint only counts adhesion between pixels
+belonging to different cells, and since there is only one background &quot;cell&quot;, there can
+be no background-background adhesion). The $J_{01}$ and $J_{10}$ values (here 20) are
+the adhesion between cell and background, and are important for this simulation. 
+The $J_{11}$ would be the adhesion between two different cells and is also not relevant
+yet, since there is only one cell.
+</p>
+<p>
+</p><p></p><p>The <code>V</code> and <code>LAMBDA_V</code> parameters control the volume constraint,
+see its <a href>documentation</a>. 
+</p>
+<p>
+</p><p><b>Exercises</b> : </p><p><ol>
+<li><i>Change the values in <code>J</code>, and try to make the cell fall apart. Do you
+understand why this happens?</i></li>
+<li><i>How would you make the cell twice as big? Try it.<i></i></i></li>
+</ol>
+
+
+</p>
+<p>
+</p><p>Finally, note that we can also add more different constraints to the model via the
+<code>conf</code> object. We&apos;ll do that in a later tutorial.
+</p>
+<p>
+</p><p></p><h4>Setting a random seed</h4><p></p><p></p><p>If you look at the simulation on the top of this page and then refresh a few times, 
+you should see that every simulation &quot;run&quot; goes a little differently. This happens because
+the CPM is stochastic. If you don&apos;t want this, because you want someone else to be able
+to reproduce exactly your results, you can try setting a random <code>seed</code>:
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+    conf : {
+        T : 20,                                // CPM temperature
+        seed : 1,
+
+        // Adhesion parameters:
+        J: [[0,20], [20,100]] ,
+
+        // VolumeConstraint parameters
+        LAMBDA_V : [0,50],                // VolumeConstraint importance per cellkind
+        V : [0,500]                        // Target volume of each cellkind
+    },</code></code></pre>
+
+
+
+</p>
+<p><b>Exercise</b> :
+</p><p><i>Set a random seed in your simulation&apos;s HTML file. Refresh the page a few times
+and look what happens. What is different now?</i>
+</p>
+<p>
+</p><h3> Configuring the grid</h3><p></p><p></p><h4> Field size </h4><p></p><p></p><p>Open your file <code>MyFirstSimulation.html</code> from the previous tutorial in the web
+browser. You should see a black cell floating inside a square gray area, which
+is the field or &quot;grid&quot; the simulation runs in.
+</p>
+<p>
+</p><p></p><p> The size of this grid is controlled by <code>field_size</code> in the <code>config</code> 
+object. The entry 
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">// Grid settings
+field_size : [100,100],</code></code></pre>
+
+
+
+</p>
+<p>
+</p><p>
+ensures that the simulation is performed on a 100 x 100 pixel (2D) grid. We can change 
+the size of this grid by changing the numbers <code>x</code> and <code>y</code> between
+the square brackets: <code>[x,y]</code>, where <code>x</code> controls the grid&apos;s width 
+and <code>y</code> controls its height. For example, changing this setting to:
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">    // Grid settings
+    field_size : [150,100], </code></code></pre>
+
+
+
+</p>
+<p>
+</p><p>makes the grid slightly broader, but equally high as before.</p><p></p><p><b>Exercise</b> : </p><p><i>How would you make a grid with a width of 100 pixels and a
+height of 200 pixels? Open your file</i> <code>MyFirstSimulation.html</code> <i>in your 
+favourite text editor, change the</i> <code>field_size</code> <i>in the appropriate manner, 
+and save the file. Now open</i> <code>MyFirstSimulation.html</code> <i>in your web browser 
+(or just refresh the page if you had already done so). Did it work?</i>
+</p>
+<p>
+</p><h4> Grid boundaries</h4><p></p><p></p><p>Have a look at the following simulation:</p><p></p><p><div>
+<iframe src="./manual/asset/ActSmall.html" width="350px" height="300px"> </iframe>
+</div>
+
+
+</p>
+<p>
+</p><p> When the cell leaves the grid on the right, we see that it re-enters on the left.
+We call this a grid with <i>periodic boundaries</i>. Because grid boundaries are linked,
+the cell feels as though it is roaming an infinite space.
+</p>
+<p>
+</p><p></p><p>In the <code>CPM</code> object, the grid boundary conditions can be set through the
+<code>torus</code> property in the configuration object like this:
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+    conf : {
+        T : 20,                                // CPM temperature
+        torus : [true,true],
+
+        // Adhesion parameters:
+        J: [[0,20], [20,100]] ,
+
+        // VolumeConstraint parameters
+        LAMBDA_V : [0,50],                // VolumeConstraint importance per cellkind
+        V : [0,500]                        // Target volume of each cellkind
+    },</code></code></pre>
+
+
+</p>
+<p>
+</p><p>When <code>torus=true</code>, this means that the grid boundaries are linked as in the
+example above (this is also the default when we don&apos;t supply the <code>torus</code>
+property in the configuration settings). If we don&apos;t want linked boundaries, we can
+change this value to false:
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+    conf : {
+        T : 20,                                // CPM temperature
+        torus : [false,false],
+
+        // Adhesion parameters:
+        J: [[0,20], [20,100]] ,
+
+        // VolumeConstraint parameters
+        LAMBDA_V : [0,50],                // VolumeConstraint importance per cellkind
+        V : [0,500]                        // Target volume of each cellkind
+    },</code></code></pre>
+
+
+</p>
+<p>
+</p><p>However, what we get is not quite what we intended: </p><p></p><p><div>
+<iframe src="./manual/asset/ActSmall2.html" width="350px" height="300px"> </iframe>
+</div>
+
+
+</p>
+<p>
+</p><p>The problem here is that we can&apos;t just say that there are boundaries without telling
+the CPM how to deal with those boundaries. A pixel at the border of the grid will have 
+fewer neighboring pixels to contribute to its 
+<a href="./manual/../class/src/hamiltonian/Adhesion.js~Adhesion.html">adhesion</a> or 
+<a href="./manual/../class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">surface</a>
+energy, which will give artefacts. In reality, any physical boundary a cell might
+encounter <i>would</i> contribute to adhesion energy.
+</p>
+<p>
+</p><p></p><p>To solve such problems, it is possible to create a layer of boundary pixels at the
+edges of the grid, to which the adhesion can be explicitly defined. See
+<a href="./manual/../examples/NoTorusDemo.html">this example</a> for details and implementation (once you see the simulation,
+right click and select &quot;view page source&quot; to see code).
+</p>
+<p>
+</p><p></p><h3>Configuring the Simulation object </h3><p></p><p></p><p>The <a href="./manual/class/src/simulation/Simulation.js~Simulation.html">Simulation object</a> 
+automatically takes care of many aspects of the
+simulation, such as seeding cells on the grid, running the simulation for a number of 
+steps, drawing the output images and computing output statistics. We&apos;ll discuss how to
+tune some of these aspects here.
+</p>
+<p>
+</p><p></p><p>Have a look at the documentation for the <code>constructor</code> of the simulation
+class <a href="./manual/class/src/simulation/Simulation.js~Simulation.html#instance-constructor-constructor">here</a>. 
+All the options listed under <code>simsettings</code> here are options to configure the 
+simulation, which we will discuss here.
+</p>
+<p>
+</p><p></p><h4>Controlling the simulation</h4><p></p><p></p><p>Using the option <code>NRCELLS</code>, we can specify how many cells of each 
+<a href="./manual/../typedef/index.html#static-typedef-CellKind">CellKind</a> we want to seed
+on the grid at the beginning of the simulation. Note that this needs to be an array with
+one element for each non-background cellkind on the grid. This means this array is one
+element shorter than most typical CPM parameters (e.g. <code>LAMBDA_V</code>) which are
+specified for each cellkind <i>including</i> background. If the lengths of these 
+different arrays are not consistent with each other, the CPM will get confused about
+how many cellkinds you want on the grid. It will crash.
+</p>
+<p>
+</p><p></p><p>By default, the simulation class seeds them in random positions. We&apos;ll discuss how 
+to seed cells in more customized locations in a later tutorial. But for now, try 
+modifying the <code>NRCELLS</code> property of your simulation and see what happens.
+</p>
+<p>
+</p><p></p><p>The <code>RUNTIME</code> property determines for how many Monte Carlo Steps (MCS) the
+simulation will run. This property is actually only used by node simulations. 
+You can use the <code>RUNTIME_BROWSER</code> property in the browser, but then you must
+use that in your <code>step()</code> function like this: 
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">function step(){
+    sim.step()
+    meter.tick()
+    if( sim.conf[&quot;RUNTIME_BROWSER&quot;] == &quot;Inf&quot; | sim.time+1 &lt; sim.conf[&quot;RUNTIME_BROWSER&quot;] ){
+        requestAnimationFrame( step )
+    }
+}</code></code></pre>
+
+
+</p>
+<p>
+</p><p>This way, the simulation will only keep running until <code>RUNTIME_BROWSER</code> is
+reached. If we wouldn&apos;t do this, the browser simulation would just keep running infinitely
+(or in practice, until your patience or your computer&apos;s battery runs out and you close 
+the browser window).
+</p>
+<p>
+</p><p></p><h4>Controlling the visualization</h4><p></p><p></p><p>The Simulation class contains a default method 
+<a href="./manual/../file/src/simulation/Simulation.js.html#lineNumber210"><code>drawCanvas()</code></a>
+that takes care of drawing the grid for you. You can control the way this function draws
+the grid via the <code>simsettings</code> object as well, by setting: 
+</p>
+<p>
+</p><p><ul>
+    <li><code>CANVASCOLOR</code>, the color code to draw the background in. If left
+    unspecified, this is white (<code>&quot;FFFFFF&quot;&quot;</code>).</li>
+    <li><code>CELLCOLOR</code>, the color code to draw the cells in. If left
+    unspecified, this is black (<code>&quot;000000&quot;&quot;</code>). If you do wish to specify it,
+    you must provide an array with a color for each <a href="./manual/../typedef/index.html#static-typedef-CellKind">CellKind</a>
+    just like we did for NRCELLS above. E.g. for one black and one red cell kind, that would
+    be <code>[&quot;000000&quot;,&quot;FF0000&quot;]</code></li>
+    <li><code>ACTCOLOR</code>, whether or not to draw the activity gradient if the cells
+    have an <a href="./manual/class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">
+    ActivityConstraint</a>. If left unspecified, this is set to <code>false</code> for 
+    each <a href="./manual/../typedef/index.html#static-typedef-CellKind">CellKind</a>. </li>
+    <li><code>SHOWBORDERS</code>, whether or not to draw the borders of each cell as well
+    as their area. This is <code>false</code> by default.</li>
+    <li><code>BORDERCOL</code>, the color to draw the cell borders in, once more specified
+    for each <a href="./manual/../typedef/index.html#static-typedef-CellKind">CellKind</a>. This
+    is only used whenever <code>SHOWBORDERS</code> is set to <code>true</code>.</li>
+</ul>
+
+
+</p>
+<p>
+</p><p>For all the options involving color, this online <a href="https://www.google.com/search?q=color+picker">
+color picker</a> may come in handy.
+</p>
+<p>
+</p><p><b>Exercise</b> :</p><p><i>Given all the information we have covered so far, can you reproduce a simulation that 
+looks roughly like the one below?</i>
+</p>
+<p><div>
+<iframe src="./manual/asset/ColorEx.html" width="400px" height="400px"> </iframe>
+</div>
+
+
+
+
+</p>
+<p>
+</p><h4>Controlling outputs</h4><p></p></div>
+        <a data-ice="link" href="manual/simulationConfig.html"></a>
+      </div>
+    </div>
+<div class="manual-card-wrap" data-ice="cards">
+      <div class="manual-card">
+        <div data-ice="card"><h1>Sharing your simulations</h1>
+<p>
+</p><p></p><p>
+This tutorial will describe how you can share your simulations in a zero-install setting.
+Note that this tutorial applies to the browser (HTML) simulations only, since command line
+(node) simulations <i>do</i> require installation of libraries and are therefore not
+zero-install.
+
+</p>
+<p>
+</p><p></p><h3>Step 1: Create a self-contained directory</h3><p></p><p></p><p>For sharing, we will make a directory that contains all required components. Anyone
+who has that folder and opens your simulation in that folder will be able to see your
+model in its full glory, as long as they don&apos;t mess with the directory structure or 
+move/remove any files.
+</p>
+<p>
+</p><p></p><p>Assuming you have created an empty directory <code>mySimulation</code>, now add the
+following files to it:
+</p>
+<p>
+</p><p><ul>
+    <li><code>MySimulation.html</code>, the html file containing your simulation;</li>
+    <li><code>artistoo.js</code>, the script with the Artistoo code (don&apos;t just make a
+    link, but actually copy the code into this folder);</li>
+</ul>
+
+
+</p>
+<p>
+</p><p>If you&apos;re using the <code>fpsmeter</code>, you also need to add the 
+<code>fpsmeter.min.js</code> file from <a href="./manual/../examples/fpsmeter.min.js">here</a>
+(the same goes for any other scripts you are loading from your HTML file). 
+</p>
+<p>
+</p><p></p><h3>Step 2: Adjust relative paths</h3><p></p><p></p><p>In your HTML file <code>MySimulation.html</code>, adjust any paths to scripts you
+are loading so that they refer to the local copy in your self-contained folder.
+To check that it all works, open the HTML file in your browser -- the simulation should
+run. If it doesn&apos;t, right click, select &apos;inspect&apos; &gt; &apos;console&apos; to see any error messages
+that come up (if your simulation worked before you moved it, any error messages are
+probably due to a missing file or a path that needs updating).
+
+</p>
+<p>
+</p><p></p><p>Just to be sure, move the directory to some other place on your computer and check if
+the simulation still runs. If it does, you&apos;re good to go.
+</p>
+<p>
+</p><p></p><h3>Step 3: Share</h3><p></p><p></p><p>Once you have a working simulation in a self-contained directory, you can zip that
+directory and send it to someone else. They can unpack the folder on their own computer
+and double click the HTML file to run in their own browser. Alternatively, you can
+copy the folder to your own server and make your simulation available via a URL.
+</p>
+<p>
+</p></div>
+        <a data-ice="link" href="manual/sharingSimulations.html"></a>
+      </div>
+    </div>
+<div class="manual-card-wrap" data-ice="cards">
+      <div class="manual-card">
+        <div data-ice="card"><h1>Custom modules</h1>
+<p>
+</p><p></p><p>
+This tutorial will show you how to extend the Artistoo code with your
+own custom modules. More detailed information will follow in a later
+version of this manual, but for now we will show some examples of how
+you can develop your own custom stats. You can use the same principle
+to develop your own CPM energy constraints, or even grids (tutorials 
+will follow later).
+
+</p>
+<p>
+</p><p></p><h3>A custom statistic</h3><p></p><p></p><p>In this tutorial, we will implement a custom 
+<a href="./manual/../class/src/stats/Stat.js~Stat.html">statistic</a> as an example of a 
+custom module. Suppose that in the ActModel example, we want to 
+record the percentage of the cell&apos;s pixels that have a non-zero activity.
+Since no such statistic currently exists in Artistoo, we&apos;ll have to develop
+a custom module. 
+</p>
+<p>
+</p><p></p><p>We&apos;ll build a simulation of a single migrating cell as in the following example:</p><p></p><p><iframe src="./examples/ActModel.html" width="100%" height="400px"> </iframe>
+
+
+</p>
+<p>
+</p><p>We will extend this example with our custom statistic.</p><p></p><p></p><p> We start from the code as written in the example. You can find the full code 
+<a href="./manual/../examples/ActModel.html">here</a> (once you follow the link the the simulation,
+right click and choose &quot;view page source&quot;),
+but focussing on the code between the <code>&lt;script&gt;&lt;/script&gt;</code> tags and leaving
+out the details in the <code>config</code> object, the simulation looks something like this:
+
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+            ...
+    }
+}
+//    ---------------------------------- 
+let sim, meter
+
+
+function initialize(){
+    sim = new CPM.Simulation( config, {} )
+    meter = new FPSMeter({left:&quot;auto&quot;, right:&quot;5px&quot;})
+    step()
+}
+
+
+function step(){
+    sim.step()
+    meter.tick()
+    requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><p></p><p></p><p></p><h4>Step 1: Create a custom extension of the Stat class</h4><p></p><p></p><p>We can write a custom statistic by coding a new class. In doing so, we will
+extend the base <a href="./manual/../class/src/stats/Stat.js~Stat.html">Stat class</a>.
+This base class takes care of things like attaching your stat to your model for you,
+so you don&apos;t need to worry about that. 
+</p>
+<p>
+</p><p></p><p>To implement a new class in the code, we must add it to the code from step 1:</p><p></p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+            ...
+    }
+}
+// --------------------------
+let sim, meter
+
+
+function initialize(){
+    sim = new CPM.Simulation( config, {} )
+    meter = new FPSMeter({left:&quot;auto&quot;, right:&quot;5px&quot;})
+    step()
+}
+
+class PercentageActive extends CPM.Stat {
+
+}
+
+
+function step(){
+    sim.step()
+    meter.tick()
+    requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><p>This will create a new class for a statistic called <code>PercentageActive</code>,
+which will behave just like the other stats implemented in Artistoo. This means you can
+request its value by using <code>sim.C.getStat( PercentageActive )</code> somewhere,
+but we&apos;ll get to that later. For now, let&apos;s focus on what code should go between the now
+empty braces.
+</p>
+<p>
+</p><p></p><h4> Step 2: Implement a compute() method </h4><p></p><p></p><p>
+Looking at the <a href="./manual/../class/src/stats/Stat.js~Stat.html">documentation for the Stat 
+class</a>, we see that the important method is the <code>compute()</code> method. In the
+base <code>Stat</code> class, this method throws an error, because it is something that 
+should be implemented separately for each stat. Let&apos;s add it inside our new class:
+
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">class PercentageActive extends CPM.Stat {
+    compute(){
+        return 0
+    }
+}</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><p>
+Our code will no longer throw an error, but it is also not very useful yet. We can have a
+look at the code from an existing statistic to see how we can generate some useful output.
+Have a look at the <code>compute()</code> method from the <code>Connectedness</code>
+statistic (full code <a href="./manual/../file/src/stats/Connectedness.js.html">here</a>):
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">
+    // The compute method of Connectedness creates an object with 
+    // connectedness of each cell on the grid.
+    // @return {CellObject} object with for each cell on the grid
+    // a connectedness value. 
+    compute(){
+        // initialize the object
+        let connectedness = { }
+        // The this.M.pixels() iterator returns coordinates and cellid for all 
+        // non-background pixels on the grid. See the appropriate Grid class for
+        // its implementation.
+        for( let ci of this.M.cellIDs() ){
+            connectedness[ci] = this.connectednessOfCell( ci )
+        }
+        return connectedness
+    }</code>
+</code></pre>
+
+
+
+</p>
+<p>
+</p><p>Let&apos;s look at what is happening here. Most statistics we want to compute are actually
+properties of individual cells, but we may have more than one of those in our simulation.
+This means we must compute the statistic for each cell. Statistics therefore typically 
+return an object, where each cell gets its own entry. The key of this entry is the cell&apos;s
+<a href="./manual/../typedef/index.html#static-typedef-CellId">cellID</a>, and the value is the 
+computed statistic <i>for that cell</i>.
+
+</p>
+<p>
+</p><p></p><p>In the code above, this is also what happens. We first make the empty object <code>{}</code>,
+and then set an entry for each cellID on the grid in the loop. The actual values for each
+cell are computed by an additional method in the class called <code>connectednessOfCell()</code>,
+which takes the cellID as input argument.
+</p>
+<p>
+
+
+</p>
+<p>Let&apos;s apply the same structure to our own statistic. We get:
+</p><p></p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">class PercentageActive extends CPM.Stat {
+
+    computePercentageOfCell( cid ){
+        return 0
+    }
+
+    compute(){
+
+        // Create an object for the output, then add stat for each cell in the loop.
+        let percentages = {}
+        for( let cid of this.M.cellIDs() ){
+            percentages[cid] = this.computePercentageOfCell( cid )
+        }
+
+        return percentages
+
+    }
+}</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><h4> Step 3: Implement a computeForCell() method </h4><p></p><p></p><p>Now, how do we get the method <code>computePercentageOfCell()</code> to return the
+correct percentage of active pixels? For that, we need to know two things of each cell:
+</p><ol>
+    <li>The number of pixels of that cell currently active, and</li>
+    <li>The total number of pixels of that cell.</li>
+</ol>
+<p>If we had those, we could compute the percentage of active pixels like this:
+</p><p></p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">computePercentageOfCell( cid ){
+
+    // divide by total number of pixels and multiply with 100 to get percentage
+    return ( 100 * activePixels / totalPixels )
+}</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><p>To know how many pixels a cell has and how many of those are active, let&apos;s start by
+looking at which pixels actually are part of the cell. Luckily, there already is a
+statistic called <a href="./manual/../class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a>
+which does exactly that. Its return value is an object with a key for each cellID, and
+as a value an array with all pixels belonging to that cell (given as an 
+<a href="./manual/../typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a>).
+</p>
+<p>
+</p><p></p><p>We first note that the length of this array equals the number of pixels belonging to
+that cell, which we can use directly inside the code for <code>computePercentageOfCell()</code>:
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">computePercentageOfCell( cid ){
+
+    // Get the pixels of each cell:
+    // Note that we need the &apos;CPM.&apos; prefix since we&apos;re accessing this from outside.
+    const cellpixels = this.M.getStat( CPM.PixelsByCell )
+
+    // Get the array of pixels for this cell
+    const current_pixels = cellpixels[cid]
+
+    // The length of this array tells us the number of pixels:
+    const totalPixels = current_pixels.length
+
+    // divide by total number of pixels and multiply with 100 to get percentage
+    return ( 100 * activePixels / totalPixels )
+}</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><p>Note here that <code>this.M</code> contains the current CPM model which we want to
+compute the statistic on. Models have a method <code>getStat</code>, which calls the
+<code>compute</code> method of the statistic given as an argument. Since we
+are accessing this from outside, we need the &quot;CPM.&quot; prefix.
+</p>
+<p>
+</p><p></p><p>Now, we just need the number of active pixels. We should be able to find that somewhere
+in our <a href="./manual/../class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">
+ActivityConstraint</a>, since it&apos;s used there to compute the Hamiltonian. We find that 
+there is a method <a href="./manual/../class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html#instance-method-pxact">
+pxact</a> that we can use, which takes the
+<a href="./manual/../typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a> of
+a pixel as argument and then returns it&apos;s current activity value.
+</p>
+<p>
+</p><p></p><p>Let&apos;s put that information to use. We write:</p><p></p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">computePercentageOfCell( cid ){
+
+
+        // Get the pixels of each cell:
+        // Note that we need the &apos;CPM.&apos; prefix since we&apos;re accessing this from outside.
+        const cellpixels = this.M.getStat( CPM.PixelsByCell )
+
+        // Get the array of pixels for this cell
+        const current_pixels = cellpixels[cid]
+
+        // The length of this array tells us the number of pixels:
+        const totalPixels = current_pixels.length
+
+        // Loop over pixels of the current cell and count the active ones:
+        let activePixels = 0
+        for( let i = 0; i &lt; current_pixels.length; i++ ){
+            // PixelsByCell returns ArrayCoordinates, but we need to convert those
+            // to IndexCoordinates to look up the activity using the pxact() method.
+            const pos = this.M.grid.p2i( current_pixels[i] )
+
+            // increase the counter if pxact() returns an activity &gt; 0
+            if( this.M.getConstraint( &quot;ActivityConstraint&quot; ).pxact( pos ) &gt; 0 ){
+                activePixels++
+            }
+        }
+
+        // divide by total number of pixels and multiply with 100 to get percentage
+        return ( 100 * activePixels / totalPixels )
+
+    }</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><h4>Step 4 (Optional): clean-up </h4><p></p><p></p><p>Note: we now compute the <code>PixelsByCell</code> every time the 
+<code>computePercentageOfCell</code> method is called, even though it is one single
+object with pixels for all cells already in there. Ideally, we&apos;d therefore only call
+it once. We clean up the code to compute <code>PixelsByCell</code> at the beginning
+of the <code>compute</code>method, and get the following complete code for the new class:
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">class PercentageActive extends CPM.Stat {
+
+    computePercentageOfCell( cid, cellpixels ){
+
+        // Get the array of pixels for this cell
+        const current_pixels = cellpixels[cid]
+
+        // The length of this array tells us the number of pixels:
+        const totalPixels = current_pixels.length
+
+        // Loop over pixels of the current cell and count the active ones:
+        let activePixels = 0
+        for( let i = 0; i &lt; current_pixels.length; i++ ){
+            // PixelsByCell returns ArrayCoordinates, but we need to convert those
+            // to IndexCoordinates to look up the activity using the pxact() method.
+            const pos = this.M.grid.p2i( current_pixels[i] )
+
+            // increase the counter if pxact() returns an activity &gt; 0
+            if( this.M.getConstraint( &quot;ActivityConstraint&quot; ).pxact( pos ) &gt; 0 ){
+                activePixels++
+            }
+        }
+
+        // divide by total number of pixels and multiply with 100 to get percentage
+        return ( 100 * activePixels / totalPixels )
+
+    }
+
+    compute(){
+        // Get object with arrays of pixels for each cell on the grid, and get
+        // the array for the current cell.
+        const cellpixels = this.M.getStat( CPM.PixelsByCell ) 
+
+        // Create an object for the output, then add stat for each cell in the loop.
+        let percentages = {}
+        for( let cid of this.M.cellIDs() ){
+            percentages[cid] = this.computePercentageOfCell( cid, cellpixels )
+        }
+
+        return percentages
+
+    }
+}</code>
+</code></pre>
+
+
+
+</p>
+<p>
+</p><p><i>Note: In the current implementation of statistics in Artistoo this is not 
+really necessary, since statistics are actually cached when they are computed. Even if 
+the method is called many times, the stat is only computed once unless the grid changes.
+But let&apos;s do the cleanup step anyway since it is clearer from the code that way that the 
+object will only be computed once.</i>
+</p>
+<p>
+</p><p></p><p>We now have a custom statistic class that we can use. All that&apos;s left now is to make
+sure that this statistic is actually computed and reported somewhere in our simulation.
+</p>
+<p>
+</p><p></p><h4>Step 5: Use statistic</h4><p></p><p>To use our new statistic, we will overwrite the <code>logStats()</code> method of
+the <a href="./manual/../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>. 
+Rather than reporting the centroids as is done by default, we now log the percentage 
+active pixels as returned by our new stat: 
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">function logStats() {
+        // compute percentages for all cells
+        const allpercentages = this.C.getStat( PercentageActive )
+
+        for( let cid of this.C.cellIDs() ){
+
+            let theperc = allpercentages[cid]
+
+            console.log( this.time + &quot;\t&quot; + cid + &quot;\t&quot; + 
+                this.C.cellKind(cid) + &quot;\t&quot; + theperc )
+
+        }
+
+}</code>
+</code></pre>
+
+
+</p>
+<p>
+</p><p>The full code becomes (where we pass our new <code>logStats</code> method along when
+we construct our simulation):
+</p>
+<p>
+</p><p><pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+    field_size : [200,200],
+        conf : {
+        torus : [true,true],<br>        seed : 1,<br>        T : 10,<br>        J: [[0,10], [10,0]],
+        LAMBDA_V: [0,5],<br>        V: [0,500],
+        LAMBDA_P: [0,2],<br>        P : [0,260],<br>        LAMBDA_ACT : [0,300],<br>        MAX_ACT : [0,30],<br>        ACT_MEAN : &quot;geometric&quot;<br>    },
+    simsettings : {
+        NRCELLS : [1],<br>        BURNIN : 500,
+        RUNTIME : 1000,
+        CANVASCOLOR : &quot;eaecef&quot;,
+        CELLCOLOR : [&quot;000000&quot;],
+        ACTCOLOR : [true],<br>        SHOWBORDERS : [false],<br>        zoom :2,
+        SAVEIMG : false,
+
+        // Note that we set this to true for the browser to see the
+        // effect of our new stat:
+
+        STATSOUT : { browser: true, node: true },
+        LOGRATE : 10<br>
+    }
+}
+
+let sim, meter
+
+
+function initialize(){
+    // our simulation gets the new logStats method to overwrite the old one:
+    sim = new CPM.Simulation( config, { logStats: logStats } )
+    meter = new FPSMeter({left:&quot;auto&quot;, right:&quot;5px&quot;})
+    step()
+}
+
+class PercentageActive extends CPM.Stat {
+    computePercentageOfCell( cid, cellpixels ){
+
+        const current_pixels = cellpixels[cid]
+        const totalPixels = current_pixels.length
+
+        let activePixels = 0
+        for( let i = 0; i &lt; current_pixels.length; i++ ){
+            const pos = this.M.grid.p2i( current_pixels[i] )
+            if( this.M.getConstraint( &quot;ActivityConstraint&quot; ).pxact( pos ) &gt; 0 ){
+                activePixels++
+            }
+        }
+
+        return ( 100 * activePixels / totalPixels )
+    }
+
+    compute(){
+        const cellpixels = this.M.getStat( CPM.PixelsByCell ) 
+        let percentages = {}
+        for( let cid of this.M.cellIDs() ){
+            percentages[cid] = this.computePercentageOfCell( cid, cellpixels )
+        }
+        return percentages
+    }
+}
+
+function logStats() {
+        const allpercentages = this.C.getStat( PercentageActive )
+        for( let cid of this.C.cellIDs() ){
+            let theperc = allpercentages[cid]
+            console.log( this.time + &quot;\t&quot; + cid + &quot;\t&quot; + 
+                this.C.cellKind(cid) + &quot;\t&quot; + theperc )
+        }
+}
+
+function step(){
+    sim.step()
+    meter.tick()
+    requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+
+
+</p>
+<p>
+</p><p>The end result is this (right click inside the simulation, choose &apos;inspect&apos; and then
+&apos;console&apos; to see the output):
+</p>
+<p>
+</p><p><iframe src="./examples/ActModelCustomStat.html" width="100%" height="400px"> </iframe>
+
+
+</p></div>
+        <a data-ice="link" href="manual/custommodules.html"></a>
       </div>
     </div>
 </div>

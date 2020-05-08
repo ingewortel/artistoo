@@ -4,29 +4,121 @@
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
   <title data-ice="title">src/grid/Grid2D.js | Artistoo</title>
+  
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+
+  <script src="../misc/nav.js"></script>
   <script src="script/prettify/prettify.js"></script>
   <script src="script/manual.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 </head>
 <body class="layout-container" data-ice="rootContainer">
 
-<header>
-  <a href="./">Home</a>
-  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
-  <a href="identifiers.html">Reference</a>
-  <a href="source.html">Source</a>
-  <a href="test.html" data-ice="testLink">Test</a>
-  <div class="search-box">
-  <span>
-    <img src="./image/search.png">
-    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
-  </span>
-    <ul class="search-result"></ul>
-  </div>
-<a style="position:relative; top:3px;" href="https://github.com/ingewortel/artistoo"><img width="20px" src="./image/github.png"></a></header>
+<style>
+/*.li {
+	list-style-type: none!important;
+}*/
 
-<nav class="navigation" data-ice="nav"><div>
+.navbar{
+padding-left:10px;
+padding-right:10px;
+}
+
+
+.mainimg {
+	min-height: 21em;
+    background-color: #666;
+    margin:0px 0px!important; padding:0px!important;
+	background-position: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    url('../misc/cpm-01.jpg');
+}
+.mainimg h1 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 300;
+  border-bottom: solid 0px #ddd;
+  text-align: center;
+  font-size: 400%;
+}
+
+.mainimg h2 {
+	text-align: center;
+	font-size:200%;
+	border-bottom: solid 0px;
+}
+
+.front-page h1 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.front-page h2 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	font-size:170%!important;
+}
+
+
+.bottom {
+  display: block;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main" style="border-bottom: solid 1px #ddd;">
+    <div class="container" style="margin-left:0px;max-width:100%;">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+
+				<li class="nav-item">
+				  <a class="nav-link" href="./manual/index.html"><span>Manual</span></a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Source</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo"><img width="20px" style="position:relative;top:-2px;" src="./image/github.png"></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<img src="./image/search.png">
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    	
+</nav>
+
+<nav class="navigation" data-ice="nav" id="mySidepanel">
+<!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
+<div>
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
@@ -95,7 +187,7 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/grid/Grid2D.js</h1>
+<div class="content" data-ice="content" id="mainContent"><h1 data-ice="title">src/grid/Grid2D.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Grid from &quot;./Grid.js&quot;
 
 /** A class containing (mostly static) utility functions for dealing with 2D
