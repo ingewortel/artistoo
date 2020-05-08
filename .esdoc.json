@@ -19,6 +19,7 @@
             "./manual/quickstart.md",
             "./manual/htmlTemplate.md",
             "./manual/simulationConfig.html",
+            "./manual/addConstraints.html",
             "./manual/sharingSimulations.html",
             "./manual/custommodules.html"
           ]

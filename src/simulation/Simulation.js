@@ -8,7 +8,7 @@ import Centroids from "../stats/Centroids.js"
 This class provides some boilerplate code for creating simulations easily.
 It comes with defaults for seeding cells, drawing, logging of statistics, saving output
 images, and running the simulation. Each of these default methods can be overwritten
-by the user while keeping the other default methods intact. See the {@link constructor}
+by the user while keeping the other default methods intact. See the {@link Simulation#constructor}
 for details on how to configure a simulation.
 @see ../examples
 */

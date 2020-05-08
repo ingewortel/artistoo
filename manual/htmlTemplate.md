@@ -1,4 +1,4 @@
-# An HTML template page
+# An HTML Template
 
 This tutorial will take you through the HTML simulation template 
 step by step so you know which parts you may have to adapt when 

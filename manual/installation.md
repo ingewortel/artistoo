@@ -1,4 +1,4 @@
-# Getting started
+# Getting Started
 
 ## Set up Artistoo in 3 easy steps
 

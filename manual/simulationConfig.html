@@ -109,7 +109,7 @@ The $J_{11}$ would be the adhesion between two different cells and is also not r
 yet, since there is only one cell.</p>
 
 <p>The <code>V</code> and <code>LAMBDA_V</code> parameters control the volume constraint,
-see its <a href="">documentation</a>. </p>
+see its <a href="../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">documentation</a>. </p>
 
 
 <b>Exercises</b> : 
@@ -254,20 +254,21 @@ encounter <i>would</i> contribute to adhesion energy.</p>
 <p>To solve such problems, it is possible to create a layer of boundary pixels at the
 edges of the grid, to which the adhesion can be explicitly defined. See
 <a href="../examples/NoTorusDemo.html">this example</a> for details and implementation (once you see the simulation,
-right click and select "view page source" to see code).</p>
+right click on the page (outside of the simulation grid) and select "view page source" 
+to see code).</p>
 
 
 
 <h3 id="configuring-the-simulation-object">Configuring the Simulation object </h3>
 
-<p>The <a href="class/src/simulation/Simulation.js~Simulation.html">Simulation object</a> 
+<p>The <a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation object</a> 
 automatically takes care of many aspects of the
 simulation, such as seeding cells on the grid, running the simulation for a number of 
 steps, drawing the output images and computing output statistics. We'll discuss how to
 tune some of these aspects here.</p>
 
 <p>Have a look at the documentation for the <code>constructor</code> of the simulation
-class <a href="class/src/simulation/Simulation.js~Simulation.html#instance-constructor-constructor">here</a>. 
+class <a href="../class/src/simulation/Simulation.js~Simulation.html#instance-constructor-constructor">here</a>. 
 All the options listed under <code>simsettings</code> here are options to configure the 
 simulation, which we will discuss here.</p>
 
@@ -322,7 +323,7 @@ the grid via the <code>simsettings</code> object as well, by setting: </p>
 	just like we did for NRCELLS above. E.g. for one black and one red cell kind, that would
 	be <code>["000000","FF0000"]</code></li>
 	<li><code>ACTCOLOR</code>, whether or not to draw the activity gradient if the cells
-	have an <a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">
+	have an <a href="../class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">
 	ActivityConstraint</a>. If left unspecified, this is set to <code>false</code> for 
 	each <a href="../typedef/index.html#static-typedef-CellKind">CellKind</a>. </li>
 	<li><code>SHOWBORDERS</code>, whether or not to draw the borders of each cell as well
@@ -330,6 +331,10 @@ the grid via the <code>simsettings</code> object as well, by setting: </p>
 	<li><code>BORDERCOL</code>, the color to draw the cell borders in, once more specified
 	for each <a href="../typedef/index.html#static-typedef-CellKind">CellKind</a>. This
 	is only used whenever <code>SHOWBORDERS</code> is set to <code>true</code>.</li>
+	<li><code>zoom</code>the factor by which to enlarge the image (note that using a higher
+	zoom factor may slow down your simulation, since it takes more time to draw the grid
+	in a larger image. If a simulation is fast enough, this won't be an issue, but if
+	you notice your simulations being too slow you might want to adjust this factor).</li>
 </ul>
 
 <p>For all the options involving color, this online <a href="https://www.google.com/search?q=color+picker">
@@ -343,9 +348,77 @@ looks roughly like the one below?</i>
 
 
 <div>
-<iframe src="./manual/asset/ColorEx.html" width="400px" height="400px"> </iframe>
+<iframe src="./manual/asset/ColorEx.html" width="450px" height="450px"> </iframe>
 </div>
 
 
 
 <h4 id="controlling-outputs">Controlling outputs</h4>
+
+<p>The simulation class helps you by generating outputs automatically. This happens inside
+the function <a href="../file/src/simulation/Simulation.js.html#lineNumber328"><code>createOutputs()</code></a>, 
+which does two things:</p>
+
+<ol>
+	<li>Drawing things on the screen (browser version) or on an output PNG image (node version)</li>
+	<li>Computing and logging statistics to the console (both versions)</li>
+</ol>
+
+<p>In node, you can control the following aspects of the PNG images that are written:</p>
+
+<ul>
+	<li><code>SAVEIMG</code>, are any images saved at all? Defaults to <code>false</code>;</li>
+	<li><code>IMGFRAMERATE</code>, how often should an image be saved? Defaults to 
+		<code>1</code> (save an image every simulation step), but you might set it to e.g.
+		<code>10</code> to save an image only once every 10 steps. This may significantly
+		speed up your simulations since drawing images can be a speed bottleneck. Very often,
+		drawing every step is not necessary to get a smooth movie in the end;</li>
+	<li><code>SAVEPATH</code>, in which folder should images be stored? You have to make 
+		sure this folder exists, or you will get an error. Although this option is documented
+		as "optional", this is only true because you don't have to give it when 
+		<code>SAVEIMG=false</code>. If you set <code>SAVEIMG=true</code>, you must provide this
+		option.</li>
+	<li><code>EXPNAME</code>, a name used to generate the name of the output images. These
+		will be stored as <code>[SAVEPATH]/[EXPNAME]-t[STEP].png</code>. Defaults to
+		<code>"mysim"</code>.</li>
+</ul>
+
+<p>Note that the options above only apply to node, since the browser version does not support
+writing PNG images. If you want to make a movie from the browser version, just record your
+screen. If you wish to change the <code>IMGFRAMERATE</code> of your browser simulation,
+you can adjust your <code>step()</code> function (see also <a href="./quickstart.html">
+this tutorial</a>) to something like this:
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function step(){
+	// Run IMGFRAMERATE simulation steps before rendering
+	for( let s = 0; s < config.simsettings.IMGFRAMERATE; s++ ){
+		sim.step()
+	}
+	requestAnimationFrame( step )
+}</code></code></pre>
+
+<p>Note that <a href="../class/src/simulation/Simulation.js~Simulation.html#instance-method-step">
+<code>sim.step()</code></a> will still call 
+<a href="../class/src/simulation/Simulation.js~Simulation.html#instance-method-drawCanvas">
+<code>drawCanvas()</code></a> every 
+step, but the grid will only be <i>rendered</i> once every <code>IMGFRAMERATE</code>
+steps. Since rendering is often the bottleneck, this will still speed up your simulation
+most of the times.</p>
+
+<p>The <a href="../file/src/simulation/Simulation.js.html#lineNumber328"><code>createOutputs()</code></a>
+also takes care of logging statistics to the console. By default, it logs the simulation
+step, the <a href="../typedef/index.html#static-typedef-CellId">cellID</a>, the
+<a href="../typedef/index.html#static-typedef-CellKind">CellKind</a>, and the centroid
+of every cell on the grid. To adjust this, you can overwrite this method, which we will
+discuss in a later tutorial.</p>
+
+<p>Two settings in the <code>simsettings</code> object control the logging of statistics:</p>
+
+<ul>
+	<li><code>LOGSTATS</code>, specifying for browser and node separately whether statistics
+	should be logged to the console. Defaults to <code>{ browser: false, node: true }<code>;</li>
+	<li><code>LOGRATE</code>, specifying how often statistics are computed and logged. Defaults to 
+		<code>1</code> (log every simulation step), but you might set it to e.g.
+		<code>10</code> to log only once every 10 steps.</li>
+</ul>
+

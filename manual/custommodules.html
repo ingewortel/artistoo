@@ -1,4 +1,4 @@
-<h1>Custom modules</h1>
+<h1>Custom Modules</h1>
 
 <p>
 This tutorial will show you how to extend the Artistoo code with your
@@ -9,7 +9,7 @@ to develop your own CPM energy constraints, or even grids (tutorials
 will follow later).
 </p>
 
-<h3>A custom statistic</h3>
+<h3 id="a-custom-statistic">A custom statistic</h3>
 
 <p>In this tutorial, we will implement a custom 
 <a href="../class/src/stats/Stat.js~Stat.html">statistic</a> as an example of a 
@@ -56,7 +56,7 @@ function step(){
 
 </p>We will now make changes to this page to implement our custom statistic.</p>
 
-<h4>Step 1: Create a custom extension of the Stat class</h4>
+<h4 id="step-1-custom-stat-class">Step 1: Create a custom extension of the Stat class</h4>
 
 <p>We can write a custom statistic by coding a new class. In doing so, we will
 extend the base <a href="../class/src/stats/Stat.js~Stat.html">Stat class</a>.
@@ -97,7 +97,7 @@ request its value by using <code>sim.C.getStat( PercentageActive )</code> somewh
 but we'll get to that later. For now, let's focus on what code should go between the now
 empty braces.</p>
 
-<h4> Step 2: Implement a compute() method </h4>
+<h4 id="step-2-implement-a-compute-method"> Step 2: Implement a compute() method </h4>
 
 <p>
 Looking at the <a href="../class/src/stats/Stat.js~Stat.html">documentation for the Stat 
@@ -175,7 +175,7 @@ which takes the cellID as input argument.<p>
 }</code>
 </code></pre>
 
-<h4> Step 3: Implement a computeForCell() method </h4>
+<h4 id="step-3-implement-a-computeforcell-method"> Step 3: Implement a computeForCell() method </h4>
 
 <p>Now, how do we get the method <code>computePercentageOfCell()</code> to return the
 correct percentage of active pixels? For that, we need to know two things of each cell:</p>
@@ -268,7 +268,7 @@ a pixel as argument and then returns it's current activity value.</p>
 	}</code>
 </code></pre>
 
-<h4>Step 4 (Optional): clean-up </h4>
+<h4 id="step-4-clean-up">Step 4 (Optional): clean-up </h4>
 
 <p>Note: we now compute the <code>PixelsByCell</code> every time the 
 <code>computePercentageOfCell</code> method is called, even though it is one single
@@ -331,7 +331,7 @@ object will only be computed once.</i></p>
 <p>We now have a custom statistic class that we can use. All that's left now is to make
 sure that this statistic is actually computed and reported somewhere in our simulation.</p>
 
-<h4>Step 5: Use statistic</h4>
+<h4 id="step-5-use-statistic">Step 5: Use statistic</h4>
 
 To use our new statistic, we will overwrite the <code>logStats()</code> method of
 the <a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>. 
@@ -452,3 +452,22 @@ function step(){
 
 <iframe src="./examples/ActModelCustomStat.html" width="100%" height="400px"> </iframe>
 
+
+<h3 id="a-custom-constraint">A custom constraint</h3>
+
+<p>Just like you might want to develop a custom statistic, you might also want to develop
+your own model constraints. A detailed tutorial will follow, but for now, you can try
+applying the same principle as described above for the statistics. But instead of the
+<a href="../class/src/stats/Stat.js~Stat.html"><code>Stat</code> class</a>, you will
+have to extend either the <a href="../class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html"><code>SoftConstraint</code></a> or
+the <a href="../class/src/hamiltonian/HardConstraint.js~HardConstraint.html"><code>HardConstraint</code></a>
+class (see also <a href="./addConstraints.html">this tutorial</a> for more information).
+Have a look at their code <a href="../file/src/hamiltonian/SoftConstraint.js.html">here</a> 
+and <a href="../file/src/hamiltonian/HardConstraint.js.html">here</a> to see which methods
+your class extension will have to overwrite. Of course, you can have a look at the code
+for one of the <a href="../file/src/hamiltonian/ActivityConstraint.js.html">existing constraints</a> 
+for inspiration as well. Once you have written your constraint inside your simulation file
+as explained for the custom statistics above, you can add it using the 
+ <a href="../class/src/models/CPM.js~CPM.html#instance-method-add"><code>add()</code> 
+ method</a> as explained <a href="./addConstraints.html#method-2-add">here</a>.
+</p>
