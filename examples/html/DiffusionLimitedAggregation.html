@@ -65,7 +65,14 @@ let config = {
 		CRYSTALCOLOR : "FFFFFF",
 		FREECOLOR : "3782fa",
 		zoom : 2,							// zoom in on canvas with this factor.
-		LOGSTATS : { browser: true, node: true }
+		LOGSTATS : { browser: true, node: true },
+		
+		// Output images
+		SAVEIMG : true,					// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 10,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/DiffusionLimitedAggregation",	// ... And save the image in this folder.
+		EXPNAME : "DiffusionLimitedAggregation",				// Used for the filename of output images.
 
 
 	}

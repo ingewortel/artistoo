@@ -43,7 +43,7 @@ let config = {
 
 	// Grid settings
 	ndim : 2,
-	field_size : [200,200],
+	field_size : [150,150],
 	
 	// CPM parameters and configuration
 	conf : {
@@ -65,7 +65,7 @@ let config = {
 	simsettings : {
 	
 		// Cells on the grid
-		NRCELLS : [4000],						// Number of cells to seed for all
+		NRCELLS : [2500],						// Number of cells to seed for all
 											// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 0,
@@ -145,7 +145,7 @@ function initializeGrids(){
 	for( let i = 0; i < config.simsettings.NRCELLS[0]; i++ ){
 		FreeGM.seedCell( 1 )
 	}
-	Fixed.setpix( [100,100], 1 )
+	Fixed.setpix( Fixed.grid.midpoint, 1 )
 }
 
 function draw(){

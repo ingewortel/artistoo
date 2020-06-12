@@ -14,7 +14,7 @@ let config = {
 
 	// Grid settings
 	ndim : 2,
-	field_size : [200,200],
+	field_size : [150,150],
 	
 	// CPM parameters and configuration
 	conf : {
@@ -36,18 +36,25 @@ let config = {
 	simsettings : {
 	
 		// Cells on the grid
-		NRCELLS : [4000],						// Number of cells to seed for all
+		NRCELLS : [2500],						// Number of cells to seed for all
 											// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 0,
-		RUNTIME : 10000,
+		RUNTIME : 20000,
 		
 		// Visualization
 		CANVASCOLOR : "000000",
 		CRYSTALCOLOR : "FFFFFF",
 		FREECOLOR : "3782fa",
 		zoom : 2,							// zoom in on canvas with this factor.
-		LOGSTATS : { browser: true, node: true }
+		LOGSTATS : { browser: true, node: true },
+		
+		// Output images
+		SAVEIMG : true,					// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 10,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/DiffusionLimitedAggregation",	// ... And save the image in this folder.
+		EXPNAME : "DiffusionLimitedAggregation",				// Used for the filename of output images.
 
 
 	}
@@ -108,7 +115,7 @@ function initializeGrids(){
 	for( let i = 0; i < config.simsettings.NRCELLS[0]; i++ ){
 		FreeGM.seedCell( 1 )
 	}
-	Fixed.setpix( [100,100], 1 )
+	Fixed.setpix( Fixed.grid.midpoint, 1 )
 }
 
 function draw(){
