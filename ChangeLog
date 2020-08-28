@@ -3,6 +3,11 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2020-08-28 Inge Wortel <ingewortel@gmail.com>
+	* src/DiceSet.js : fixed bug in insert and remove methods. Before, the first
+	element inserted sometimes failed to get removed; now its presence is checked
+	with hasOwnProperty to fix this issue.
+	* spec/DiceSetSpec.js : added test file for the bug described above.
 
 2020-05-01 Inge Wortel <ingewortel@gmail.com>
     * All files: changed CPMjs to Artistoo.
