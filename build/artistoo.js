@@ -1583,7 +1583,7 @@ var CPM = (function (exports) {
 		@param {uniqueID} v The element to add.
 		*/
 		insert( v ){
-			if( this.indices[v] ){
+			if( this.indices.hasOwnProperty( v ) ){
 				return
 			}
 			// Add element to both the hash map and the array.
@@ -1599,7 +1599,7 @@ var CPM = (function (exports) {
 		*/
 		remove( v ){
 			// Check whether element is present before it can be removed.
-			if( !this.indices[v] ){
+			if( !this.indices.hasOwnProperty( v ) ){
 				return
 			}
 			/* The hash map gives the index in the array of the value to be removed.
