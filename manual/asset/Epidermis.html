@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html">
+<title>Epidermis</title>
+<style type="text/css">
+body{
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 10px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [100,100],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],				// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 20,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+				
+		// Adhesion parameters:
+		J : [ [NaN,20], 
+			[20,100] // epidermal cells
+		],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],					// VolumeConstraint importance per cellkind
+		V : [0,152],						// Target volume of each cellkind
+		
+		// PerimeterConstraint parameters
+		LAMBDA_P : [0,2],					// PerimeterConstraint importance per cellkind
+		P : [0,145] 						// Target perimeter of each cellkind
+
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [3,0],					// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CELLCOLOR : ["CCCCCC"],
+		ACTCOLOR : 	[false],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [true],				// Should cellborders be displayed?
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : true,					// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/Epidermis",	// ... And save the image in this folder.
+		EXPNAME : "Epidermis",					// Used for the filename of output images.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object.*/
+	 let custommethods = {
+	 	initializeGrid : initializeGrid
+	 }
+	sim = new CPM.Simulation( config, custommethods )
+
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+	
+}
+
+
+function step(){
+	sim.step()
+	meter.tick()
+	console.log( sim.time )
+	if( sim.time == 1 ){
+		sim.running = false
+	}
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+
+/* The following custom methods will be added to the simulation object
+below. */
+function initializeGrid(){
+	// Seed epidermal cell layer
+	let step = 12
+	
+	this.addGridManipulator()
+	
+	for( let i = 1 ; i < this.C.extents[0] ; i += step ){
+		for( let j = 1 ; j < this.C.extents[1] ; j += step ){
+			//this.C.setpix( [i,j], this.C.makeNewCellID(1) )
+			this.gm.seedCellAt( 1, [i,j] )
+		}
+	}
+}
+
+function killAllCells(){
+	sim.addGridManipulator()
+	for( let cid of sim.C.cellIDs() ){
+		sim.gm.killCell( cid )
+	}
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<button onclick="sim.toggleRunning()">start/stop</button>
+<button onclick="killAllCells();sim.time=0;sim.initializeGrid()">reset </button>
+<br>
+</body>
+</html>

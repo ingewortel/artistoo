@@ -1,8 +1,9 @@
+
 # ESDOC by default does not display codeblocks with horizontal scroll bar if
 # they are overflowing. This is ugly when the window is small.
 # Fix this by copying a manually edited css file to the docs file after docs
 # generation:
-cp misc/style.css docs/css/style.css
+cp misc/*.css docs/css/
 
 # ESDOC does not recognize the HTML <iframe></iframe> tags, so displays this
 # as text instead of an iframe. Fix this:
@@ -91,3 +92,12 @@ for f in $manualFiles; do
   cp $tmpfile $f
 
 done
+
+# Copy custom html pages
+cp misc/examples.html docs/examples.html
+
+# ESDOC by default does not display codeblocks with horizontal scroll bar if
+# they are overflowing. This is ugly when the window is small.
+# Fix this by copying a manually edited css file to the docs file after docs
+# generation:
+cp misc/*.css docs/css/

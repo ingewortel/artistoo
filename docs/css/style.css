@@ -15,7 +15,10 @@
 
 html
 {
-  font-family: 'Source Sans Pro', 'Roboto', sans-serif;
+  /*font-family: 'Source Sans Pro', 'Roboto', sans-serif;*/
+  font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, 
+			Arial, noto sans, sans-serif, apple color emoji, segoe ui emoji, 
+			segoe ui symbol, noto color emoji;
   overflow: auto;
   /*font-size: 14px;*/
   /*color: #4d4e53;*/
@@ -39,7 +42,7 @@ ul, ol {
 }
 
 ul li {
-  list-style: disc;
+  /*list-style: disc;*/
   margin: 4px 0;
 }
 
@@ -97,6 +100,7 @@ pre.prettyprint, pre > code {
   margin: 1em 0;
   background-color: #f5f5f5;
   border-radius: 3px;
+  font-size:14px!important;
 }
 
 pre.prettyprint > code {
@@ -114,7 +118,7 @@ li > code {
 
 .code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  font-size: 13px;
+  font-size:14px;
 }
 
 .import-path pre.prettyprint,
@@ -166,9 +170,10 @@ li > code {
   top: 0;
   left: 0;
   box-sizing: border-box;
+  /*width: 250px;*/
   width: 250px;
   height: 100%;
-  padding-top: 40px;
+  padding-top: 60px;
   padding-left: 15px;
   padding-bottom: 2em;
   margin-top:1em;
@@ -182,7 +187,7 @@ li > code {
 }
 
 .navigation li {
-  list-style: none;
+  list-style: none!important;
   margin: 4px 0;
   white-space: nowrap;
 }
@@ -256,7 +261,7 @@ h1 .url a {
 }
 
 .content {
-  margin-top: 40px;
+  margin-top: 60px;
   margin-left: 250px;
   padding: 10px 50px 10px 20px;
 }
@@ -544,12 +549,13 @@ footer img {
 
 pre.source-code {
   padding: 4px;
+  font-size:14px;
 }
 
 pre.raw-source-code > code {
   padding: 0;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   background: #fff;
   border: solid 1px #ddd;
   line-height: 1.5;
@@ -607,3 +613,29 @@ pre.source-code.line-number li.error-line {
 .inner-link-active a {
   color: inherit;
 }
+
+
+/*.navigation .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #aaaaaa;
+  padding: 10px 15px;
+  border: 0px solid;
+}
+
+.openbtn:hover {
+  background-color: #444;
+}
+
+.openbtn:focus {
+  outline: none;
+  box-shadow: none;
+}*/

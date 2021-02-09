@@ -9,6 +9,13 @@ yyyy-mm-dd Your Name <your@email.com>
 	with hasOwnProperty to fix this issue.
 	* spec/DiceSetSpec.js : added test file for the bug described above.
 
+2020-05-08 Inge Wortel <ingewortel@gmail.com>
+    * docs : Big update to the website. Home page and examples page are now in
+    misc/ folder and copied to the docs/ folder by the Makefile, after esdoc
+    auto-generates the manual and documentation pages.
+    * mytemplate : folder with template for esdoc, to have a manual header.
+    * manual : new tutorials written.
+
 2020-05-01 Inge Wortel <ingewortel@gmail.com>
     * All files: changed CPMjs to Artistoo.
     * src/grid/Grid.js, src/grid/Grid2D.js, src/grid/Grid3D.js : added warning
