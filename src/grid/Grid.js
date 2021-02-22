@@ -120,6 +120,53 @@ class Grid {
 			}
 		}
 	}
+	
+	
+	/** Method to correct an {@link ArrayCoordinate} outside the grid dimensions when
+	 * the grid is wrapped (torus = true). If the coordinate falls inside the grid,
+	 * it is returned unchanged. If it falls outside the grid and the grid is periodic
+	 * in that dimension, a corrected coordinate is returned. If the pixel falls outside
+	 * the grid which is not periodic in that dimension, the function returns an empty
+	 * array.
+	 * @param {ArrayCoordinate} p - the coordinate of the pixel to correct
+	 * @return {ArrayCoordinate} the corrected coordinate.
+	 */
+	correctPosition( p ){
+	
+		let pnew = []
+		let ignore = false // ignore pixels that fall off the grid when non-periodic grid
+	
+		// Loop over the x, y, (z) dimensions
+		for( let d = 0; d < this.ndim; d++ ){
+	
+			// If position is outside the grid dimensions, action depends on whether
+			// grid is periodic or not (torus)
+			if( p[d] < 0 ){
+				// If there is a torus in this dimension, correct the position and return.
+				// otherwise just ignore it.
+				if( this.torus[d] ){
+					pnew.push( p[d] + this.extents[d] )
+				} else {
+					ignore = true
+				}
+			} else if ( p[d] >= this.extents[d] ){
+				if( this.torus[d] ){
+					pnew.push( p[d] - this.extents[d] )
+				} else {
+					ignore = true
+				}
+			} else {
+				pnew.push( p[d] )
+			}
+		}
+	
+		if( !ignore ){ 
+			return pnew
+		} else {
+			return []
+		}
+	
+	}
 
 	/** Method for conversion from an {@link ArrayCoordinate} to an
 	 * {@link IndexCoordinate}.

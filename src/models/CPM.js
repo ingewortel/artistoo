@@ -28,6 +28,17 @@ class CPM extends GridBasedModel {
 	constructor( field_size, conf ){
 		super( field_size, conf )
 
+		/** To check from outside if an object is a CPM; doing this with
+		 * instanceof doesn't work in some cases. Any other object will
+		 * not have this variable and return 'undefined', which in an
+		 * if-statement equates to a 'false'.
+		 * @type{boolean}*/
+		this.isCPM = true
+
+		/** Track time in MCS.
+		 * @type{number}*/
+		this.time = 0
+
 		// ---------- CPM specific stuff here
 		
 		/** Number of non-background cells currently on the grid.
@@ -88,6 +99,19 @@ class CPM extends GridBasedModel {
 				this.add( new AutoAdderConfig[x]( conf ) )
 			}
 		}
+	}
+
+	/** Completely reset; remove all cells and set time back to zero. Only the
+	 * constraints remain. */
+	reset(){
+		for( let p of this.cellPixels()){
+			this.setpix( p[0], 0 )
+		}
+		this.last_cell_id = 0
+		this.t2k = []
+		this.t2k[0] = 0
+		this.time = 0
+		this.cellvolumes = [0]
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 
@@ -215,6 +239,15 @@ class CPM extends GridBasedModel {
 			throw("No constraint of name " + " exists in this CPM!")
 		}	
 	
+	}
+
+	getAllConstraints(){
+		const soft = Object.keys( this.soft_constraints_indices )
+		const hard = Object.keys( this.hard_constraints_indices )
+		let names = {}
+		for( let n of soft ){ names[n] = soft[n] }
+		for( let n of hard ){ names[n] = hard[n] }
+		return names
 	}
 
 	/** Get {@link CellId} of the pixel at coordinates p. 

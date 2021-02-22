@@ -45,6 +45,12 @@ import BorderConstraint from "../src/hamiltonian/BorderConstraint.js"
  
 import Simulation from "../src/simulation/Simulation.js" 
  
+import ModelDescription from "../src/converter/ModelDescription.js" 
+import MorpheusImport from "../src/converter/MorpheusImport.js" 
+import ArtistooWriter from "../src/converter/ArtistooWriter.js" 
+import MorpheusWriter from "../src/converter/MorpheusWriter.js" 
+import ArtistooImport from "../src/converter/ArtistooImport.js" 
+ 
 export {
 	Canvas,
 	CA,
@@ -81,5 +87,10 @@ export {
 	HardVolumeRangeConstraint,
 	BarrierConstraint,
 	BorderConstraint,
-	Simulation
+	Simulation,
+	ModelDescription,
+	MorpheusImport,
+	ArtistooWriter,
+	MorpheusWriter,
+	ArtistooImport
 }

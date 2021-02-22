@@ -17,6 +17,8 @@ class Simulation {
 		@param {object} config - overall configuration settings. This is an object
 		with multiple entries, see below.
 		@param {GridSize} config.field_size - size of the CPM to build.
+	 	@param {Constraint[]} config.constraints - array of additional
+	 		constraints to add to the CPM model.
 		@param {object} config.conf - configuration settings for the CPM;
 		see its {@link CPM#constructor} for details.
 		@param {object} simsettings - configuration settings for the simulation 
@@ -47,19 +49,29 @@ class Simulation {
 			each {@link CellKind} in. Defaults to black. 
 		*/
 	constructor( config, custommethods ){
-	
+
+		/** To check from outside if an object is a Simulation; doing this with
+		 * instanceof doesn't work in some cases. Any other object will
+		 * not have this variable and return 'undefined', which in an
+		 * if-statement equates to a 'false'.
+		 * @type{boolean}*/
+		this.isSimulation = true
+
 		// ========= configuration and custom methods
-		
-		custommethods = custommethods || {}
+
+		/** Custom methods added to / overwriting the default Simulation class.
+		 * These are stored so that the ArtistooImport can check them.
+		@type {object}*/
+		this.custommethods = custommethods || {}
 	
 		// overwrite default method if methods are supplied in custommethods
 		// these can be initializeGrid(), drawCanvas(), logStats(),
 		// postMCSListener().
-		for( let m of Object.keys( custommethods ) ){
+		for( let m of Object.keys( this.custommethods ) ){
 		
 			/** Any function suplied in the custommethods argument to
 			the {@link constructor} is bound to the object. */
-			this[m] = custommethods[m]
+			this[m] = this.custommethods[m]
 		}
 		
 		/** Configuration of the simulation environment 
@@ -130,8 +142,13 @@ class Simulation {
 		their values in helpClasses to 'true', so they don't have to be added again.
 		@type {object}*/
 		this.helpClasses = { gm: false, canvas: false }
-		
-		
+
+		/** Add additional constraints.
+		 * @type {Constraint[]}
+		 * */
+		this.constraints = config.constraints || []
+		this.addConstraints()
+
 		// ========= Begin.
 		// Initialize the grid and run the burnin.
 		this.initializeGrid()
@@ -154,6 +171,15 @@ class Simulation {
 		@type {Canvas}*/
 		this.Cim = new Canvas( this.C, this.conf )
 		this.helpClasses[ "canvas" ] = true
+	}
+
+	/** Add additional constraints to the model before running; this
+	 * method is automatically called and adds constraints given in
+	 * the config object. */
+	addConstraints(){
+		for( let constraint of this.constraints ){
+			this.C.add( constraint )
+		}
 	}
 	
 	/** Method to initialize the Grid should be implemented in each simulation. 
