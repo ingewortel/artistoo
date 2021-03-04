@@ -133,7 +133,7 @@ an <a href="../class/src/hamiltonian/AttractionPointConstraint.js~AttractionPoin
 		V : [0,500],
 		LAMBDA_V: [ 0, 50],
 		LAMBDA_ATTRACTIONPOINT : [0,100],
-		ATTRACTIONPOINT: [100,100]
+		ATTRACTIONPOINT: [[0,0],[100,100]]
 	}
 
 )</code></code></pre>
@@ -163,7 +163,7 @@ For example, we might add a second attraction point like this:</p>
 <pre><code class="lang-$xslt"><code class="source-code prettyprint">//add another constraint
 myCPM.add( new CPM.AttractionPointConstraint( {
 		LAMBDA_ATTRACTIONPOINT : [0,100],
-		ATTRACTIONPOINT: [150,150]	
+		ATTRACTIONPOINT: [[0,0],[150,150]]	
 } ) )
 myCPM.soft_constraints</code></code></pre>
 
