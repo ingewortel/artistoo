@@ -26,7 +26,7 @@ import ParameterChecker from "./ParameterChecker.js"
  * let C = new CPM.CPM( [200,200], { T : 20 } )
  * C.add( new CPM.AttractionPointConstraint( {
  * 	LAMBDA_ATTRACTIONPOINT : [0,100],
- * 	ATTRACTIONPOINT: [100,100],
+ * 	ATTRACTIONPOINT: [[0,0],[100,100]],
  * } ) )
  *
  * // We can even add a second one at a different location
