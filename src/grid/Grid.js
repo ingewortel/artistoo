@@ -126,8 +126,8 @@ class Grid {
 	 * the grid is wrapped (torus = true). If the coordinate falls inside the grid,
 	 * it is returned unchanged. If it falls outside the grid and the grid is periodic
 	 * in that dimension, a corrected coordinate is returned. If the pixel falls outside
-	 * the grid which is not periodic in that dimension, the function returns an empty
-	 * array.
+	 * the grid which is not periodic in that dimension, the function returns
+	 * 'undefined'.
 	 * @param {ArrayCoordinate} p - the coordinate of the pixel to correct
 	 * @return {ArrayCoordinate} the corrected coordinate.
 	 */
@@ -163,7 +163,7 @@ class Grid {
 		if( !ignore ){ 
 			return pnew
 		} else {
-			return []
+			return undefined
 		}
 	
 	}

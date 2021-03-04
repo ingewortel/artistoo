@@ -38,20 +38,17 @@ class GridManipulator {
 	
 	/** @experimental
 	 */
-	killCell( cellid ){
-		let cp = this.C.getStat( PixelsByCell )
-		let cpi = cp[cellid]
+	killCell( cellID ){
 
-		if( ( typeof cpi !== "undefined" ) && cpi.length > 0 ) {
-
-			for (let p of cpi) {
-				this.C.setpixi(this.C.grid.p2i(p), 0)
+		for( let [p,i] of this.C.pixels() ){
+			if( i == cellID ){
+				this.C.setpix( p, 0 )
 			}
+		}
 
-			// update stats
-			if ("PixelsByCell" in this.C.stat_values) {
-				delete this.C.stat_values["PixelsByCell"][cellid]
-			}
+		// update stats
+		if ("PixelsByCell" in this.C.stat_values) {
+			delete this.C.stat_values["PixelsByCell"][cellID]
 		}
 	}
 	
@@ -94,12 +91,12 @@ class GridManipulator {
 				p[i] = this.C.ran(0,this.C.extents[i]-1)
 			}
 		}
-		if( this.C.pixt(p) !== 0 ){
+		if( this.C.pixt(p)  !== 0 ){
 			return 0 // failed
 		}
-		const newid = this.C.makeNewCellID( kind )
-		this.C.setpix( p, newid )
-		return newid
+		const newID = this.C.makeNewCellID( kind )
+		this.C.setpix( p, newID )
+		return newID
 	}
 	/**  Seed a new cell of celltype "kind" onto position "p".
 	 * This succeeds regardless of whether there is already a cell there.
@@ -170,7 +167,7 @@ class GridManipulator {
 		}
 		let C = this.C
 		while( n > 0 ){
-			if( --max_attempts == 0 ){
+			if( --max_attempts === 0 ){
 				throw("too many attempts to seed cells!")
 			}
 			let p = center.map( function(i){ return C.ran(Math.ceil(i-radius),Math.floor(i+radius)) } )
@@ -196,12 +193,12 @@ class GridManipulator {
 	 *
 	 * The plane is specified by fixing one coordinate (x,y,or z) to a
 	 * fixed value, and letting the others range from their min value 0 to
-	 * their max value.
+	 * their max value. In 3D, this returns a plane.
 	 *
-	 * @param {number} coord - the dimension to fix the coordinate of:
+	 * @param {number} dimension - the dimension to fix the coordinate of:
 	 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
 	 * x-coordinate).
-	 * @param {number} coordvalue - the value of the coordinate in the
+	 * @param {number} coordinateValue - the value of the coordinate in the
 	 * fixed dimension; location of the plane. (E.g. for our straight vertical
 	 * line, the x-value where the line should be placed).
 	 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
@@ -211,27 +208,27 @@ class GridManipulator {
 	 * @example
 	 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
 	 * let gm = new CPM.GridManipulator( C )
-	 * let myline = gm.makePlane( 0, 2 )
-	 * gm.assignCellPixels( myline, 1 )
+	 * let myLine = gm.makeLine( 0, 2 )
+	 * gm.assignCellPixels( myLine, 1 )
 	 */
-	makePlane ( coord, coordvalue, pixels ) {
+	makeLine ( dimension, coordinateValue, pixels ) {
 
 		pixels = pixels || []
 
 		let x,y,z
-		let minc = [0,0,0]
-		let maxc = [0,0,0]
+		let minC = [0,0,0]
+		let maxC = [0,0,0]
 		for( let dim = 0; dim < this.C.ndim; dim++ ){
-			maxc[dim] = this.C.extents[dim]-1
+			maxC[dim] = this.C.extents[dim]-1
 		}
-		minc[coord] = coordvalue
-		maxc[coord] = coordvalue
+		minC[dimension] = coordinateValue
+		maxC[dimension] = coordinateValue
 
 		// For every coordinate x,y,z, loop over all possible values from min to max.
 		// one of these loops will have only one iteration because min = max = coordvalue.
-		for( x = minc[0]; x <= maxc[0]; x++ ){
-			for( y = minc[1]; y<=maxc[1]; y++ ){
-				for( z = minc[2]; z<=maxc[2]; z++ ){
+		for( x = minC[0]; x <= maxC[0]; x++ ){
+			for( y = minC[1]; y<=maxC[1]; y++ ){
+				for( z = minC[2]; z<=maxC[2]; z++ ){
 					if( this.C.ndim === 3 ){
 						pixels.push( [x,y,z] )
 					} else {
@@ -243,6 +240,23 @@ class GridManipulator {
 		}
 
 		return pixels
+	}
+
+	/** Deprecated method, please use {@link makeLine} instead. Old method
+	 * just links to the new method for backwards-compatibility.
+	 *
+	 * @param {number} dim - the dimension to fix the coordinate of:
+	 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+	 * x-coordinate).
+	 * @param {number} coordinateValue - the value of the coordinate in the
+	 * fixed dimension; location of the plane. (E.g. for our straight vertical
+	 * line, the x-value where the line should be placed).
+	 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+	 * if given, the line will be added to this set.
+	 * @return {ArrayCoordinate[]} the updated array of pixels.
+ 	 */
+	makePlane( pixels, dim, coordinateValue ){
+		return this.makeLine( dim, coordinateValue, pixels )
 	}
 
 	/** Helper method to return a rectangle (or in 3D: box) of pixels; can be used
@@ -298,12 +312,12 @@ class GridManipulator {
 						pNew.push(p[2]+zz)
 						// correct for torus
 						const pCorr = this.C.grid.correctPosition( pNew )
-						if( pCorr.length > 0 ){ pixels.push( pCorr ) }
+						if( typeof pCorr !== "undefined" ){ pixels.push( pCorr ) }
 					}
 
 				} else {
 					const pCorr = this.C.grid.correctPosition( pNew )
-					if( pCorr.length > 0 ){ pixels.push( pCorr ) }
+					if( typeof pCorr !== "undefined"  ){ pixels.push( pCorr ) }
 				}
 			}
 		}
@@ -359,14 +373,14 @@ class GridManipulator {
 						pNew.push(p[2]+zz)
 						if( Math.sqrt( xx*xx + yy*yy + zz*zz ) <= radius ){
 							const pCorr = this.C.grid.correctPosition( pNew )
-							if( pCorr.length > 0 ){ pixels.push( pCorr ) }
+							if(  typeof pCorr !== "undefined"  ){ pixels.push( pCorr ) }
 						}
 					}
 
 				} else {
 					if( Math.sqrt( xx*xx + yy*yy ) <= radius ){
 						const pCorr = this.C.grid.correctPosition( pNew )
-						if( pCorr.length > 0 ){ pixels.push( pCorr ) }
+						if(  typeof pCorr !== "undefined"  ){ pixels.push( pCorr ) }
 					}
 
 				}
@@ -374,39 +388,6 @@ class GridManipulator {
 		}
 
 
-		return pixels
-
-	}
-
-	makeCircleRim( center, radius, pixels = [] ){
-
-		if( this.C.grid.ndim !== 2 ){
-			throw( "makeCircleRim currently only supported for 2D grids. ")
-		}
-
-		const phiMax = 2.2 * Math.PI * radius
-		let visited = {}
-		for( let phi = 0; phi < phiMax; phi++ ){
-			const xi = center[0] + radius * Math.cos( phi )
-			const yi = center[1] + radius * Math.sin( phi )
-			let Nbh = this.C.grid.neigh( [xi,yi] )
-			Nbh.push( [xi,yi] )
-			for( let nn of Nbh ){
-				if( !visited[nn.toString()] ) {
-					for (let n of this.C.grid.neigh(nn)) {
-						if (!visited[n.toString()]) {
-							const dx = n[0] - center[0] + 0.5
-							const dy = n[1] - center[1] + 0.5
-							if (Math.sqrt(dx * dx + dy * dy) >= radius) {
-								pixels.push(n)
-							}
-							visited[n.toString()] = true
-						}
-					}
-				}
-			}
-
-		}
 		return pixels
 
 	}
