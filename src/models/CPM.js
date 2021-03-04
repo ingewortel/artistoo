@@ -385,6 +385,9 @@ class CPM extends GridBasedModel {
 	*/
 	setpixi ( i, t ){		
 		const t_old = this.grid.pixti(i)
+		if( t_old == t ){
+			return
+		}
 		if( t_old > 0 ){
 			// also update volume of the old cell
 			// (unless it is background/stroma)
