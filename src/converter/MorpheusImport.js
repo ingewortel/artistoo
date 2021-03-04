@@ -544,6 +544,7 @@ class MorpheusImport extends ModelDescription {
 					this.setInitObjects( p_ch, kindName )
 					break
 
+					/*
 				case "InitDistribute":
 					this.setInitDistribute( p_ch, kindName )
 					break
@@ -554,7 +555,7 @@ class MorpheusImport extends ModelDescription {
 
 				case "InitRectangle" :
 					this.setInitRectangle (p_ch, kindName )
-					break
+					break*/
 
 				default: //InitProperty, InitVectorProperty, InitVoronoi, TIFFReader, InitPoissonDisc
 					this.conversionWarnings.init.push(
