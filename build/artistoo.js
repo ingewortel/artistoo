@@ -340,8 +340,8 @@ var CPM = (function (exports) {
 		 * the grid is wrapped (torus = true). If the coordinate falls inside the grid,
 		 * it is returned unchanged. If it falls outside the grid and the grid is periodic
 		 * in that dimension, a corrected coordinate is returned. If the pixel falls outside
-		 * the grid which is not periodic in that dimension, the function returns an empty
-		 * array.
+		 * the grid which is not periodic in that dimension, the function returns
+		 * 'undefined'.
 		 * @param {ArrayCoordinate} p - the coordinate of the pixel to correct
 		 * @return {ArrayCoordinate} the corrected coordinate.
 		 */
@@ -377,7 +377,7 @@ var CPM = (function (exports) {
 			if( !ignore ){ 
 				return pnew
 			} else {
-				return []
+				return undefined
 			}
 		
 		}
@@ -3358,6 +3358,9 @@ var CPM = (function (exports) {
 		*/
 		setpixi ( i, t ){		
 			const t_old = this.grid.pixti(i);
+			if( t_old == t ){
+				return
+			}
 			if( t_old > 0 ){
 				// also update volume of the old cell
 				// (unless it is background/stroma)
@@ -5178,7 +5181,7 @@ var CPM = (function (exports) {
 	 * configurations. Methods are written for CPMs, but some of the methods
 	 * may also apply to other models of class ({@link GridBasedModel}, e.g.
 	 * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
-	 * the {@link makePlane} and {@link assignCellPixels} methods).
+	 * the {@link makeLine} and {@link assignCellPixels} methods).
 	 *
 	 * @example
 	 * // Build CPM and attach a gridmanipulator
@@ -5193,7 +5196,7 @@ var CPM = (function (exports) {
 		 * Methods are written for CPMs, but some of the methods may also
 		 * apply to other models of class ({@link GridBasedModel}, e.g.
 		 * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
-		 * the {@link makePlane} and {@link assignCellPixels} methods).
+		 * the {@link makeLine} and {@link assignCellPixels} methods).
 		*/
 		constructor( C ){
 			/** The model whose grid we are manipulating.
@@ -5203,20 +5206,17 @@ var CPM = (function (exports) {
 		
 		/** @experimental
 		 */
-		killCell( cellid ){
-			let cp = this.C.getStat( PixelsByCell );
-			let cpi = cp[cellid];
+		killCell( cellID ){
 
-			if( ( typeof cpi !== "undefined" ) && cpi.length > 0 ) {
-
-				for (let p of cpi) {
-					this.C.setpixi(this.C.grid.p2i(p), 0);
+			for( let [p,i] of this.C.pixels() ){
+				if( i == cellID ){
+					this.C.setpix( p, 0 );
 				}
+			}
 
-				// update stats
-				if ("PixelsByCell" in this.C.stat_values) {
-					delete this.C.stat_values["PixelsByCell"][cellid];
-				}
+			// update stats
+			if ("PixelsByCell" in this.C.stat_values) {
+				delete this.C.stat_values["PixelsByCell"][cellID];
 			}
 		}
 		
@@ -5259,12 +5259,12 @@ var CPM = (function (exports) {
 					p[i] = this.C.ran(0,this.C.extents[i]-1);
 				}
 			}
-			if( this.C.pixt(p) !== 0 ){
+			if( this.C.pixt(p)  !== 0 ){
 				return 0 // failed
 			}
-			const newid = this.C.makeNewCellID( kind );
-			this.C.setpix( p, newid );
-			return newid
+			const newID = this.C.makeNewCellID( kind );
+			this.C.setpix( p, newID );
+			return newID
 		}
 		/**  Seed a new cell of celltype "kind" onto position "p".
 		 * This succeeds regardless of whether there is already a cell there.
@@ -5335,7 +5335,7 @@ var CPM = (function (exports) {
 			}
 			let C = this.C;
 			while( n > 0 ){
-				if( --max_attempts == 0 ){
+				if( --max_attempts === 0 ){
 					throw("too many attempts to seed cells!")
 				}
 				let p = center.map( function(i){ return C.ran(Math.ceil(i-radius),Math.floor(i+radius)) } );
@@ -5361,12 +5361,12 @@ var CPM = (function (exports) {
 		 *
 		 * The plane is specified by fixing one coordinate (x,y,or z) to a
 		 * fixed value, and letting the others range from their min value 0 to
-		 * their max value.
+		 * their max value. In 3D, this returns a plane.
 		 *
-		 * @param {number} coord - the dimension to fix the coordinate of:
+		 * @param {number} dimension - the dimension to fix the coordinate of:
 		 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
 		 * x-coordinate).
-		 * @param {number} coordvalue - the value of the coordinate in the
+		 * @param {number} coordinateValue - the value of the coordinate in the
 		 * fixed dimension; location of the plane. (E.g. for our straight vertical
 		 * line, the x-value where the line should be placed).
 		 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
@@ -5376,27 +5376,27 @@ var CPM = (function (exports) {
 		 * @example
 		 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
 		 * let gm = new CPM.GridManipulator( C )
-		 * let myline = gm.makePlane( 0, 2 )
-		 * gm.assignCellPixels( myline, 1 )
+		 * let myLine = gm.makeLine( 0, 2 )
+		 * gm.assignCellPixels( myLine, 1 )
 		 */
-		makePlane ( coord, coordvalue, pixels ) {
+		makeLine ( dimension, coordinateValue, pixels ) {
 
 			pixels = pixels || [];
 
 			let x,y,z;
-			let minc = [0,0,0];
-			let maxc = [0,0,0];
+			let minC = [0,0,0];
+			let maxC = [0,0,0];
 			for( let dim = 0; dim < this.C.ndim; dim++ ){
-				maxc[dim] = this.C.extents[dim]-1;
+				maxC[dim] = this.C.extents[dim]-1;
 			}
-			minc[coord] = coordvalue;
-			maxc[coord] = coordvalue;
+			minC[dimension] = coordinateValue;
+			maxC[dimension] = coordinateValue;
 
 			// For every coordinate x,y,z, loop over all possible values from min to max.
 			// one of these loops will have only one iteration because min = max = coordvalue.
-			for( x = minc[0]; x <= maxc[0]; x++ ){
-				for( y = minc[1]; y<=maxc[1]; y++ ){
-					for( z = minc[2]; z<=maxc[2]; z++ ){
+			for( x = minC[0]; x <= maxC[0]; x++ ){
+				for( y = minC[1]; y<=maxC[1]; y++ ){
+					for( z = minC[2]; z<=maxC[2]; z++ ){
 						if( this.C.ndim === 3 ){
 							pixels.push( [x,y,z] );
 						} else {
@@ -5410,9 +5410,26 @@ var CPM = (function (exports) {
 			return pixels
 		}
 
+		/** Deprecated method, please use {@link makeLine} instead. Old method
+		 * just links to the new method for backwards-compatibility.
+		 *
+		 * @param {number} dim - the dimension to fix the coordinate of:
+		 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+		 * x-coordinate).
+		 * @param {number} coordinateValue - the value of the coordinate in the
+		 * fixed dimension; location of the plane. (E.g. for our straight vertical
+		 * line, the x-value where the line should be placed).
+		 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+		 * if given, the line will be added to this set.
+		 * @return {ArrayCoordinate[]} the updated array of pixels.
+	 	 */
+		makePlane( pixels, dim, coordinateValue ){
+			return this.makeLine( dim, coordinateValue, pixels )
+		}
+
 		/** Helper method to return a rectangle (or in 3D: box) of pixels; can be used
 		 * in conjunction with {@link assignCellPixels} to assign all these pixels
-		 * to a given CellId at once. (See also {@link makePlane} and
+		 * to a given CellId at once. (See also {@link makeLine} and
 		 * {@link makeCircle}).
 		 * The method takes an existing array of coordinates (which can be
 		 * empty) and adds the pixels of the specified rectangle/box to it.
@@ -5463,12 +5480,12 @@ var CPM = (function (exports) {
 							pNew.push(p[2]+zz);
 							// correct for torus
 							const pCorr = this.C.grid.correctPosition( pNew );
-							if( pCorr.length > 0 ){ pixels.push( pCorr ); }
+							if( typeof pCorr !== "undefined" ){ pixels.push( pCorr ); }
 						}
 
 					} else {
 						const pCorr = this.C.grid.correctPosition( pNew );
-						if( pCorr.length > 0 ){ pixels.push( pCorr ); }
+						if( typeof pCorr !== "undefined"  ){ pixels.push( pCorr ); }
 					}
 				}
 			}
@@ -5479,7 +5496,7 @@ var CPM = (function (exports) {
 
 		/** Helper method to return a circle (in 3D: sphere) of pixels; can be used
 		 * in conjunction with {@link assignCellPixels} to assign all these pixels
-		 * to a given CellId at once. (See also {@link makePlane} and
+		 * to a given CellId at once. (See also {@link makeLine} and
 		 * {@link makeBox}).
 		 * The method takes an existing array of coordinates (which can be
 		 * empty) and adds the pixels of the specified circle/sphere to it.
@@ -5524,14 +5541,14 @@ var CPM = (function (exports) {
 							pNew.push(p[2]+zz);
 							if( Math.sqrt( xx*xx + yy*yy + zz*zz ) <= radius ){
 								const pCorr = this.C.grid.correctPosition( pNew );
-								if( pCorr.length > 0 ){ pixels.push( pCorr ); }
+								if(  typeof pCorr !== "undefined"  ){ pixels.push( pCorr ); }
 							}
 						}
 
 					} else {
 						if( Math.sqrt( xx*xx + yy*yy ) <= radius ){
 							const pCorr = this.C.grid.correctPosition( pNew );
-							if( pCorr.length > 0 ){ pixels.push( pCorr ); }
+							if(  typeof pCorr !== "undefined"  ){ pixels.push( pCorr ); }
 						}
 
 					}
@@ -5539,39 +5556,6 @@ var CPM = (function (exports) {
 			}
 
 
-			return pixels
-
-		}
-
-		makeCircleRim( center, radius, pixels = [] ){
-
-			if( this.C.grid.ndim !== 2 ){
-				throw( "makeCircleRim currently only supported for 2D grids. ")
-			}
-
-			const phiMax = 2.2 * Math.PI * radius;
-			let visited = {};
-			for( let phi = 0; phi < phiMax; phi++ ){
-				const xi = center[0] + radius * Math.cos( phi );
-				const yi = center[1] + radius * Math.sin( phi );
-				let Nbh = this.C.grid.neigh( [xi,yi] );
-				Nbh.push( [xi,yi] );
-				for( let nn of Nbh ){
-					if( !visited[nn.toString()] ) {
-						for (let n of this.C.grid.neigh(nn)) {
-							if (!visited[n.toString()]) {
-								const dx = n[0] - center[0] + 0.5;
-								const dy = n[1] - center[1] + 0.5;
-								if (Math.sqrt(dx * dx + dy * dy) >= radius) {
-									pixels.push(n);
-								}
-								visited[n.toString()] = true;
-							}
-						}
-					}
-				}
-
-			}
 			return pixels
 
 		}
@@ -5584,20 +5568,20 @@ var CPM = (function (exports) {
 		 *
 		 * @param {ArrayCoordinate[]} voxels - Array of pixels to change.
 		 * @param {CellKind} cellkind - cellkind to change these pixels into.
-		 * @param {CellId} [newid] - (Optional) id of the cell to assign the
+		 * @param {CellId} [newID] - (Optional) id of the cell to assign the
 		 * 	pixels to; if this is unspecified, a new cellID is generated for this
 		 * 	purpose.
 		 * 	@example
 		 * 	let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
 		 * 	let gm = new CPM.GridManipulator( C )
-		 * 	let myline = gm.makePlane( 0, 2 )
-		 * 	gm.assignCellPixels( myline, 1 )
+		 * 	let myLine = gm.makeLine( 0, 2 )
+		 * 	gm.assignCellPixels( myLine, 1 )
 		 **/
-		assignCellPixels ( voxels, cellkind, newid ){
+		assignCellPixels ( voxels, cellkind, newID ){
 
-			newid = newid || this.C.makeNewCellID( cellkind );
+			newID = newID || this.C.makeNewCellID( cellkind );
 			for( let p of voxels ){
-				this.C.setpix( p, newid );
+				this.C.setpix( p, newID );
 			}
 			
 		}
@@ -6140,7 +6124,7 @@ var CPM = (function (exports) {
 	 * let C = new CPM.CPM( [200,200], { T : 20 } )
 	 * C.add( new CPM.AttractionPointConstraint( {
 	 * 	LAMBDA_ATTRACTIONPOINT : [0,100],
-	 * 	ATTRACTIONPOINT: [100,100],
+	 * 	ATTRACTIONPOINT: [[0,0],[100,100]],
 	 * } ) )
 	 *
 	 * // We can even add a second one at a different location
@@ -8492,17 +8476,18 @@ var CPM = (function (exports) {
 						this.setInitObjects( p_ch, kindName );
 						break
 
+						/*
 					case "InitDistribute":
-						this.setInitDistribute( p_ch, kindName );
+						this.setInitDistribute( p_ch, kindName )
 						break
 
 					case "InitHexLattice":
-						this.setHexLattice( p_ch, kindName );
+						this.setHexLattice( p_ch, kindName )
 						break
 
 					case "InitRectangle" :
-						this.setInitRectangle (p_ch, kindName );
-						break
+						this.setInitRectangle (p_ch, kindName )
+						break*/
 
 					default: //InitProperty, InitVectorProperty, InitVoronoi, TIFFReader, InitPoissonDisc
 						this.conversionWarnings.init.push(

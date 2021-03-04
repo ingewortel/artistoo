@@ -3,6 +3,47 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2021-03-04 Inge Wortel <ingewortel@gmail.com>
+	* src/grid/Grid.js : added method correctPosition(), a convenience function 
+	to 'wrap' a position that falls outside the grid dimensions back onto the grid
+	when torus = true. Used by some methods in the GridManipulator.
+	* src/converter/ModelDescription.js, src/converter/ArtistooImport.js, 
+	src/converter/ArtistooWriter.js, src/converter/Writer.js, src/converter/MorpheusImport.js,
+	src/converter/MorpheusWriter.js : new classes added for Artistoo-other framework
+	conversion.
+	* src/grid/GridManipulator.js : method killCell() updated to make it independent of
+	the PixelsByCell stat (more robust because of caching). 
+	* src/grid/GridManipulator.js : method seedCell() changed != logic to !==.
+	* src/grid/GridManipulator.js : replaced method makePlane with new method 
+	makeLine; old method still exists as a pointer for compatibility. New method
+	uses parameters in a more convenient order.
+	* src/grid/GridManipulator.js : new methods makeBox() and makeCircle() return 
+	arrays of pixels in a rectangle (3D:box) or circle (2D: sphere), to seed cells of 
+	a given geometry (works like makeLine, or the old makePlane).
+	* src/grid/GridManipulator.js : renamed changeKind() to assignCellPixels(), a method
+	that now also allows users to add pixels to a predefined cellid. Old method still 
+	exists as a pointer for compatibility.
+	* src/models/CPM.js : added attribute isCPM to check from outside if an object is a CPM.
+	* src/models/CPM.js : new method reset() to empty the grid of cells all at once, and
+	reset the time to 0. 
+	* src/models/CPM.js : new method getAllConstraints() for convenience, returns names
+	of all the constraints currently in the model.
+	* src/models/CPM.js : in method setpixi(), bugfix: if trying to set a pixel to the
+	value it already has, return immediately (otherwise the method makes some unjustified
+	changes that can cause weird errors, such as cellKinds that are suddenly undefined).
+	A test for the bug has been added in spec/models/CPMSpec.js.
+	* spec/models/CPMSpec.js : added test file
+	* spec/grid/GridManipulator.js : slight restructuring, and added test for killCell().
+	* src/simulation/Simulation.js : added attribute 'isSimulation' to check easily from
+	outside if object is a Simulation.
+	* src/simulation/Simulation.js : constructor now takes as an optional extra argument
+	in config an array of extra constraints to add; this is equivalent to adding them 
+	with sim.C.add(), but this ensures that they are added *before* initializeGrid() is called.
+	The constraint array is stored as this.constraints, and each constraint is added by 
+	the constructor calling the new addConstraints() method.
+	* src/simulation/Simulation.js : custommethods now stored as attribute so that they
+	can be checked by the converters.
+
 2020-08-28 Inge Wortel <ingewortel@gmail.com>
 	* src/DiceSet.js : fixed bug in insert and remove methods. Before, the first
 	element inserted sometimes failed to get removed; now its presence is checked
