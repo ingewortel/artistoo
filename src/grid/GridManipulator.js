@@ -13,7 +13,7 @@ import Grid3D from "./Grid3D.js"
  * configurations. Methods are written for CPMs, but some of the methods
  * may also apply to other models of class ({@link GridBasedModel}, e.g.
  * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
- * the {@link makePlane} and {@link assignCellPixels} methods).
+ * the {@link makeLine} and {@link assignCellPixels} methods).
  *
  * @example
  * // Build CPM and attach a gridmanipulator
@@ -28,7 +28,7 @@ class GridManipulator {
 	 * Methods are written for CPMs, but some of the methods may also
 	 * apply to other models of class ({@link GridBasedModel}, e.g.
 	 * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
-	 * the {@link makePlane} and {@link assignCellPixels} methods).
+	 * the {@link makeLine} and {@link assignCellPixels} methods).
 	*/
 	constructor( C ){
 		/** The model whose grid we are manipulating.
@@ -261,7 +261,7 @@ class GridManipulator {
 
 	/** Helper method to return a rectangle (or in 3D: box) of pixels; can be used
 	 * in conjunction with {@link assignCellPixels} to assign all these pixels
-	 * to a given CellId at once. (See also {@link makePlane} and
+	 * to a given CellId at once. (See also {@link makeLine} and
 	 * {@link makeCircle}).
 	 * The method takes an existing array of coordinates (which can be
 	 * empty) and adds the pixels of the specified rectangle/box to it.
@@ -328,7 +328,7 @@ class GridManipulator {
 
 	/** Helper method to return a circle (in 3D: sphere) of pixels; can be used
 	 * in conjunction with {@link assignCellPixels} to assign all these pixels
-	 * to a given CellId at once. (See also {@link makePlane} and
+	 * to a given CellId at once. (See also {@link makeLine} and
 	 * {@link makeBox}).
 	 * The method takes an existing array of coordinates (which can be
 	 * empty) and adds the pixels of the specified circle/sphere to it.
@@ -400,20 +400,20 @@ class GridManipulator {
 	 *
 	 * @param {ArrayCoordinate[]} voxels - Array of pixels to change.
 	 * @param {CellKind} cellkind - cellkind to change these pixels into.
-	 * @param {CellId} [newid] - (Optional) id of the cell to assign the
+	 * @param {CellId} [newID] - (Optional) id of the cell to assign the
 	 * 	pixels to; if this is unspecified, a new cellID is generated for this
 	 * 	purpose.
 	 * 	@example
 	 * 	let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
 	 * 	let gm = new CPM.GridManipulator( C )
-	 * 	let myline = gm.makePlane( 0, 2 )
-	 * 	gm.assignCellPixels( myline, 1 )
+	 * 	let myLine = gm.makeLine( 0, 2 )
+	 * 	gm.assignCellPixels( myLine, 1 )
 	 **/
-	assignCellPixels ( voxels, cellkind, newid ){
+	assignCellPixels ( voxels, cellkind, newID ){
 
-		newid = newid || this.C.makeNewCellID( cellkind )
+		newID = newID || this.C.makeNewCellID( cellkind )
 		for( let p of voxels ){
-			this.C.setpix( p, newid )
+			this.C.setpix( p, newID )
 		}
 		
 	}
