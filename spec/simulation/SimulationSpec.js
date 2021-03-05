@@ -64,6 +64,39 @@ describe("Simulation", function () {
 			})
 		})
 
+		/** @test {Simulation#initializeGrid} */
+		describe("initializeGrid method:", function () {
+			it( "should correctly clear up stats if called twice", function(){
+
+				sim.C.getStat( CPM.PixelsByCell )
+				sim.C.reset()
+				sim.initializeGrid()
+
+				// check that cids of PixelsByCell are still correct
+				let undef = 0
+				for( let cid of Object.keys( sim.C.getStat( CPM.PixelsByCell ) ) ){
+					if( typeof sim.C.cellKind(cid) === "undefined" ){
+						undef++
+					}
+				}
+				expect( undef ).toEqual(0)
+
+			})
+
+			it( "should reset C if called twice", function(){
+
+				sim.C.reset()
+				sim.initializeGrid()
+				const n0 = sim.C.t2k.length -1
+				// second call
+				sim.initializeGrid()
+				const n1 = sim.C.t2k.length -1
+
+				expect( n0 ).toEqual(n1)
+
+			})
+		})
+
 
 	})
 })

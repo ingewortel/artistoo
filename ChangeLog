@@ -3,6 +3,15 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2021-03-05 Inge Wortel <ingewortel@gmail.com>
+	* src/converter/ArtistooImport.js : readPixelsByCell() method gave problems after 
+	sim.initializeGrid() called twice; this is because of faulty stats caching. For now,
+	fixed inside Simulation and CPM classes (see below).
+	* src/models/CPM.js : reset() method now also clears cache.
+	* src/simulation/Simulation.js : initializeGrid() now first calls C.reset().
+	* spec/simulation/SimulationSpec.js : now has a test for the abovementioned bug.
+
+
 2021-03-04 Inge Wortel <ingewortel@gmail.com>
 	* src/grid/Grid.js : added method correctPosition(), a convenience function 
 	to 'wrap' a position that falls outside the grid dimensions back onto the grid

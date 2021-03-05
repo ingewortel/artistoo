@@ -194,7 +194,11 @@ class Simulation {
 	
 		// add the initializer if not already there
 		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
-	
+
+		// reset C and clear cache (important if this method is called
+		// again later in the sim).
+		this.C.reset()
+
 		let nrcells = this.conf["NRCELLS"], cellkind, i
 		
 		// Seed the right number of cells for each cellkind

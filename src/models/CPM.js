@@ -112,6 +112,7 @@ class CPM extends GridBasedModel {
 		this.t2k[0] = 0
 		this.time = 0
 		this.cellvolumes = [0]
+		this.stat_values = {}
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 

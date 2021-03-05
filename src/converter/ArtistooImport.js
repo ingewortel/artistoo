@@ -243,6 +243,7 @@ class ArtistooImport extends ModelDescription {
 	}
 
 	readPixelsByCell(){
+
 		const cellPix = this.C.getStat( PixelsByCell )
 		for( let cid of Object.keys( cellPix ) ){
 			if( cellPix[cid].length > 0 ) {
