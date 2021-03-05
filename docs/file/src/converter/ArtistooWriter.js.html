@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/converter/ArtistooWriter.js | Artistoo</title>
+  
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+
+  <script src="../misc/nav.js"></script>
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<style>
+/*.li {
+	list-style-type: none!important;
+}*/
+
+.navbar{
+padding-left:10px;
+padding-right:10px;
+}
+
+
+.mainimg {
+	min-height: 21em;
+    background-color: #666;
+    margin:0px 0px!important; padding:0px!important;
+	background-position: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    url('../misc/cpm-01.jpg');
+}
+.mainimg h1 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 300;
+  border-bottom: solid 0px #ddd;
+  text-align: center;
+  font-size: 400%;
+}
+
+.mainimg h2 {
+	text-align: center;
+	font-size:200%;
+	border-bottom: solid 0px;
+}
+
+.front-page h1 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.front-page h2 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	font-size:170%!important;
+}
+
+
+.bottom {
+  display: block;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main" style="border-bottom: solid 1px #ddd;">
+    <div class="container" style="margin-left:0px;max-width:100%;">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+
+				<li class="nav-item">
+				  <a class="nav-link" href="./manual/index.html"><span>Manual</span></a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Source</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo"><img width="20px" style="position:relative;top:-2px;" src="./image/github.png"></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<img src="./image/search.png">
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    	
+</nav>
+
+<nav class="navigation" data-ice="nav" id="mySidepanel">
+<!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
+<div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent"><h1 data-ice="title">src/converter/ArtistooWriter.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Writer from &quot;./Writer.js&quot;
+
+class ArtistooWriter extends Writer {
+
+	constructor( model, config ){
+		super( model, config )
+
+		this.mode = config.mode || &quot;html&quot;
+		this.out = &quot;&quot;
+		this.modelconfig = {}
+		this.custommethods = {}
+		this.methodDeclarations = &quot;&quot;
+
+
+
+		this.FPSMeterPath = config.FPSMeterPath || &quot;https://artistoo.net/examples/fpsmeter.min.js&quot;
+		this.browserLibrary = config.browserLibrary || &quot;.artistoo.js&quot; // &quot;https://artistoo.net/examples/artistoo.js&quot;
+		this.nodeLibrary = config.nodeLibrary || &quot;https://raw.githubusercontent.com/ingewortel/artistoo/master/build/artistoo-cjs.js&quot;
+		this.styleSheet = config.styleSheet || &quot;./modelStyle.css&quot;
+
+		this.logString = &quot;Hi there! Converting &quot; + this.model.from + &quot; to Artistoo...\n\n&quot;
+
+	}
+
+	write(){
+		if( this.mode === &quot;html&quot; ){
+			//console.log( this.writeHTML() )
+			this.target.innerHTML = this.writeHTML()
+		}
+		this.writeLog()
+	}
+
+
+	writeHTML(){
+		return this.writeHTMLHead() +
+			this.writeConfig() +
+			this.setInitialisation() +
+			this.customMethodsString() +
+			this.writeBasicScript() +
+			this.writeHTMLBody()
+	}
+
+	writeNode(){
+		return &quot;let CPM = require(\&quot;../../build/artistoo-cjs.js\&quot;)&quot; +
+			this.writeConfig() +
+			this.writeBasicScript()
+	}
+
+	writeHTMLHead( ){
+
+		let string = &quot;&lt;html lang=\&quot;en\&quot;&gt;&lt;head&gt;&lt;meta http-equiv=\&quot;Content-Type\&quot; &quot; +
+			&quot;content=\&quot;text/html; charset=UTF-8\&quot;&gt;\n&quot; +
+			&quot;\t&lt;title&gt;&quot; + this.model.modelInfo.title + &quot;&lt;/title&gt;\n&quot;+
+			&quot;\t&lt;link rel=\&quot;stylesheet\&quot; href=\&quot;&quot; + this.styleSheet + &quot;\&quot; /&gt;&quot; +
+			/*&quot;\t&lt;style type=\&quot;text/css\&quot;&gt;\n&quot; +
+			&quot;\t\t body{\n&quot;+
+			&quot;\t\t\t font-family: \&quot;HelveticaNeue-Light\&quot;, \&quot;Helvetica Neue Light\&quot;, \&quot;Helvetica Neue\&quot;, &quot; +
+			&quot;Helvetica, Arial, \&quot;Lucida Grande\&quot;, sans-serif; \n&quot; +
+			&quot;\t\t\t padding : 15px; \n&quot; +
+			&quot;\t\t} \n&quot; +
+			&quot;\t\t td { \n&quot; +
+			&quot;\t\t\t padding: 10px; \n&quot; +
+			&quot;\t\t\t vertical-align: top; \n&quot; +
+			&quot;\t\t } \n&quot; +
+			&quot;\t &lt;/style&gt; \n&quot; +*/
+			&quot;\t&quot; + &quot;&lt;script src=\&quot;&quot; + this.browserLibrary + &quot;\&quot;&gt;&lt;/script&gt; \n&quot; + //&apos;\t &lt;script src=&quot;https://artistoo.net/examples/artistoo.js&quot;&gt;&lt;/script&gt; \n&apos; +
+			&quot;\t&quot; + &quot;&lt;script src=\&quot;&quot; + this.FPSMeterPath + &quot;\&quot;&gt;&lt;/script&gt; \n\n&quot; +
+			&quot;&lt;script&gt; \n\n\n&quot; +
+			&quot;\&quot;use strict\&quot; \n&quot; +
+			&quot;var sim, meter \n\n&quot;
+
+		return(string)
+
+	}
+
+	writeHTMLBody(){
+
+		let modelDesc = this.model.modelInfo.desc
+		modelDesc = this.htmlNewLine( modelDesc )
+
+		return &quot;&lt;/script&gt; \n\n&quot; +
+			&quot;&lt;/head&gt;\n&quot; +
+			&quot;&lt;body onload=\&quot;initialize();parent.window.model = sim\&quot;&gt; \n&quot; +
+			&quot;&lt;h1&gt;&quot;+this.model.modelInfo.title + &quot;&lt;/h1&gt; \n&quot;+
+			&quot;&lt;p&gt;\n\t&quot; + modelDesc + &quot;\n&quot; +
+			&quot;&lt;/p&gt;\n&quot; +
+			&quot;&lt;/body&gt; \n&quot; +
+			&quot;&lt;/html&gt;&quot;
+
+	}
+
+	writeConfig(){
+		this.setModelConfig()
+		return &quot;let config = &quot; + this.objToString( this.modelconfig ) + &quot;\n\n&quot;
+	}
+
+	customMethodsString(){
+		let string = &quot;let custommethods = {\n&quot;
+		for( let m of Object.keys( this.custommethods ) ){
+			string += &quot;\t&quot; + m + &quot; : &quot; + m + &quot;,\n&quot;
+		}
+		return string + &quot;}&quot;
+	}
+
+	/* TO DO */
+	setModelConfig(){
+
+		// Initialize structure
+		let config = {
+			conf : {},
+			simsettings : {
+				zoom : 2,
+				CANVASCOLOR : &quot;EEEEEE&quot;
+			}
+		}
+
+		// Time information; warn if start time != 0
+		if( this.model.timeInfo.start !== 0 ){
+			this.conversionWarnings.time.push(
+				&quot;Morpheus model time starts at t = &quot; + this.model.timeInfo.start +
+				&quot;. Interpreting time before that as a burnin time, but in Artistoo &quot; +
+				&quot; time will restart at t = 0 after this burnin.&quot;
+			)
+		}
+		config.simsettings.BURNIN = parseInt( this.model.timeInfo.start )
+		config.simsettings.RUNTIME = parseInt( this.model.timeInfo.duration )
+		config.simsettings.RUNTIME_BROWSER = parseInt( this.model.timeInfo.duration )
+
+		// Grid information, warn if grid has to be converted.
+		config.ndim = this.model.grid.ndim
+		config.field_size = this.model.grid.extents
+		if( this.model.grid.geometry === &quot;hexagonal&quot; ){
+			this.conversionWarnings.grid.push(
+				&quot;Grid of type &apos;hexagonal&apos; is not yet supported in Artistoo. &quot; +
+				&quot;Converting to square 2D lattice instead. You may have to adjust some parameters, &quot; +
+				&quot;especially where neighborhood sizes matter (eg PerimeterConstraint, Adhesion).&quot;
+			)
+		}
+		config.torus = []
+		const dimNames = [&quot;x&quot;,&quot;y&quot;,&quot;z&quot;]
+		for( let d = 0; d &lt; config.ndim; d++ ){
+			const bound = this.model.grid.boundaries[d]
+			switch( bound ){
+			case &quot;periodic&quot; :
+				config.torus.push( true )
+				break
+			case &quot;noflux&quot; :
+				config.torus.push( false )
+				break
+			default :
+				config.torus.push( true )
+				this.conversionWarnings.grid.push(
+					&quot;unknown boundary condition in &quot; + dimNames[d] + &quot;-dimension: &quot; +
+					bound + &quot;; reverting to default periodic boundary.&quot;
+				)
+			}
+
+			// special case for &quot;linear&quot; geometry, which in Artistoo is just
+			// a 2D grid with a field_size [x,1] and torus = [x, false].
+			if( this.model.grid.geometry === &quot;linear&quot; ){
+				config.torus[1] = false
+			}
+		}
+		if( !isNaN( this.model.grid.neighborhood.distance ) ){
+			this.conversionWarnings.grid.push(
+				&quot;You are trying to set a neighborhood with distance = &quot; +
+				this.model.grid.neighborhood.distance + &quot;, &quot; +
+				&quot;but this is currently not supported in Artistoo. Reverting to&quot; +
+				&quot;default (Moore) neighborhood; behaviour may change.&quot;
+			)
+		}
+		if( !isNaN( this.model.grid.neighborhood.order ) &amp;&amp;  this.model.grid.neighborhood.order !== 2 ){
+			this.conversionWarnings.grid.push(
+				&quot;You are trying to set a neighborhood with order = &quot; +
+				this.model.grid.neighborhood.order + &quot;, &quot; +
+				&quot;but this is currently not supported in Artistoo. Reverting to&quot; +
+				&quot;default (Moore) neighborhood; behaviour may change.&quot;
+			)
+		}
+
+		// CPM kinetics
+		config.conf.T = this.model.kinetics.T
+		config.conf.seed = this.model.kinetics.seed
+
+		this.modelconfig = config
+
+		// CellKinds
+		config.simsettings.NRCELLS = this.model.initCellKindVector( 0, false )
+		config.simsettings.SHOWBORDERS = this.model.initCellKindVector( true, false )
+		config.simsettings.CELLCOLOR = this.model.initCellKindVector( &quot;333333&quot;, false )
+		for( let k = 1; k &lt; this.model.cellKinds.count - 1; k++ ){
+			// Overwrite cellcolors for all kinds except the first with a
+			// randomly generated color.
+			config.simsettings.CELLCOLOR[k] =
+				Math.floor(Math.random()*16777215).toString(16).toUpperCase()
+		}
+
+		// Constraints
+		// First constraints that can go in the main conf object (via auto-adder)
+		let constraintString = &quot;&quot;
+		for( let cName of Object.keys( this.model.constraints.constraints ) ){
+			const constraintArray = this.model.constraints.constraints[cName]
+			for( let ci = 0; ci &lt; constraintArray.length; ci++ ){
+				const constraintConf = constraintArray[ci]
+				constraintString += this.addConstraintToConfig( cName, constraintConf )
+			}
+		}
+		if( constraintString !== &quot;&quot; ){
+			this.addCustomMethod( &quot;addConstraints&quot;, &quot;&quot;, constraintString )
+		}
+	}
+
+	addCustomMethod( methodName, args, contentString ){
+		if( this.custommethods.hasOwnProperty( methodName ) ){
+			throw( &quot;Cannot add two custom methods of the same name!&quot; )
+		}
+		this.custommethods[methodName] = methodName
+		this.methodDeclarations += &quot;function &quot; + methodName + &quot;( &quot; + args + &quot;){\n\n\t&quot; +
+			contentString + &quot;\n}\n\n&quot;
+	}
+
+	addConstraintToConfig( cName, cConf ){
+
+		const autoAdded = {
+			ActivityConstraint : true,
+			Adhesion : true,
+			VolumeConstraint : true,
+			PerimeterConstraint : true,
+			BarrierConstraint : true
+		}
+
+		// Constraints that can be directly added to config.conf:
+		if( autoAdded.hasOwnProperty(cName) ) {
+			for (let parameter of Object.keys(cConf)) {
+				this.modelconfig.conf[parameter] = cConf[parameter]
+			}
+
+			// ActivityConstraint special case; set ACTCOLOR
+			if (cName === &quot;ActivityConstraint&quot;) {
+				// check which kinds have activity; skip background
+				let hasAct = []
+				for (let k = 1; k &lt; this.model.cellKinds.count; k++) {
+					if (cConf.LAMBDA_ACT[k] &gt; 0 &amp;&amp; cConf.MAX_ACT[k] &gt; 0) {
+						hasAct.push(true)
+					} else {
+						hasAct.push(false)
+					}
+				}
+				this.modelconfig.simsettings.ACTCOLOR = hasAct
+			}
+
+			// Another special case for the PerimeterConstraint, which may
+			// have to be converted depending on &apos;mode&apos; and the &apos;ShapeSurface&apos;.
+			else if (cName === &quot;PerimeterConstraint&quot;) {
+				switch (cConf.mode) {
+				case &quot;surface&quot; :
+					// do nothing
+					break
+				case &quot;aspherity&quot; : {
+					// correct the &apos;target&apos; perimeter.
+					let P = cConf.P
+					const volume = this.modelconfig.conf.V
+					for (let i = 0; i &lt; P.length; i++) {
+						if (this.modelconfig.ndim === 2) {
+							P[i] = 4 * P[i] * 2 * Math.sqrt(volume[i] * Math.PI)
+						} else if (this.modelconfig.ndim === 3) {
+							P[i] = P[i] * 4 * Math.PI * Math.pow((3 / 4) * volume[i] / Math.PI, 2 / 3)
+						}
+						P[i] = parseFloat(P[i])
+					}
+					this.conversionWarnings.constraints.push(
+						&quot;Artistoo does not support the &apos;aspherity&apos; mode of the Morpheus &lt;SurfaceConstraint&gt;.&quot; +
+						&quot;Adding a regular PerimeterConstraint (mode &apos;surface&apos;) instead. I am converting the &quot; +
+						&quot;target perimeter with an educated guess, but behaviour may be slightly different; &quot; +
+						&quot;please check parameters.&quot;
+					)
+
+					this.modelconfig.conf.P = P
+					break
+				}
+
+				}
+				delete this.modelconfig.conf.mode
+			}
+
+			return &quot;&quot;
+		}
+
+		// For the other constraints, add them by overwriting the
+		// Simulation.addConstraints() method. Return the string of code
+		// to add in this method.
+		const otherSupportedConstraints = {
+			LocalConnectivityConstraint : true,
+			PersistenceConstraint : true,
+			PreferredDirectionConstraint : true,
+			ChemotaxisConstraint : true
+		}
+
+		if( !otherSupportedConstraints[cName] ){
+			this.conversionWarnings.constraints.push(
+				&quot;Ignoring unknown constraint of type &quot; + cName + &quot;. Behaviour may change.&quot;)
+		}
+
+		// Special case for the PersistenceConstraint: warn if
+		// protrusion/retraction setting does not correspond.
+		if (cName === &quot;PersistenceConstraint&quot; || cName === &quot;PreferredDirectionConstraint&quot; ){
+			const protrude = cConf.PROTRUDE
+			const retract = cConf.RETRACT
+			const lambda = cConf.LAMBDA_DIR
+
+			let warn = false
+			for( let k = 0; k &lt; protrude.length; k++ ){
+
+				if( lambda[k] &gt; 0 ) {
+
+					if (!protrude[k]) {
+						warn = true
+					}
+					if (retract[k]) {
+						warn = true
+					}
+					if (warn) {
+						this.conversionWarnings.constraints.push(
+							&quot;You are trying to set a PersistenceConstraint for cellkind &quot; +
+							this.model.getKindName(k) + &quot; with protrusion = &quot; +
+							protrude[k] + &quot; and retraction = &quot; + retract[k] + &quot;, but Artistoo &quot; +
+							&quot;only supports protrusion = true and retraction = false. &quot; +
+							&quot;Reverting to these settings. Behaviour may change slightly; &quot; +
+							&quot;if this is important, consider implementing your own constraint.&quot;
+						)
+					}
+				}
+			}
+			delete cConf.PROTRUDE
+			delete cConf.RETRACT
+		}
+
+		return &quot;this.C.add( new CPM.&quot; + cName + &quot;( &quot; + this.objToString( cConf, 1 ) + &quot;) )\n\n\t&quot;
+
+	}
+
+	writeBasicScript(){
+
+		return &quot;\n\n&quot; +
+			&quot;function initialize(){ \n&quot; +
+			&quot;\t&quot; + &quot;sim = new CPM.Simulation( config, custommethods ) \n&quot; +
+			&quot;\t&quot; + &quot;meter = new FPSMeter({left:\&quot;auto\&quot;, right:\&quot;5px\&quot;}) \n\n&quot;+
+			&quot;\t&quot; + &quot;step() \n&quot; +
+			&quot;} \n\n&quot; +
+			&quot;function step(){ \n\t&quot; +
+			&quot;sim.step() \n\t&quot; +
+			&quot;meter.tick() \n\n\t&quot; +
+			&quot;if( sim.conf[\&quot;RUNTIME_BROWSER\&quot;] == \&quot;Inf\&quot; | sim.time+1 &lt; sim.conf[\&quot;RUNTIME_BROWSER\&quot;] ){ \n\t&quot; +
+			&quot;\t\t&quot; + &quot;requestAnimationFrame( step ) \n&quot; +
+			&quot;\t} \n}\n\n&quot; + this.methodDeclarations
+
+	}
+
+	setInitialisation(){
+		// Initializers
+		let initString = &quot;&quot;
+		for( let initConf of this.model.setup.init ){
+			initString += this.addInitializer( initConf )
+		}
+		if( initString !== &quot;&quot; ){
+			initString = &quot;&quot; + &quot;this.addGridManipulator()\n\n&quot; + initString
+			this.addCustomMethod( &quot;initializeGrid&quot;, &quot;&quot;, initString )
+		}
+		return &quot;&quot;
+	}
+
+	addInitializer( conf ){
+
+		const kindIndex = conf.kind
+		switch( conf.setter ){
+
+		case &quot;circleObject&quot; :
+			return &quot;\t&quot; + &quot;this.gm.assignCellPixels( this.gm.makeCircle( [&quot; +
+				conf.center.toString() + &quot;], &quot; + conf.radius +  &quot;) , &quot; + kindIndex + &quot; )\n&quot;
+
+		case &quot;boxObject&quot; :
+			return &quot;\t&quot; + &quot;this.gm.assignCellPixels( this.gm.makeBox( [&quot; +
+				conf.bottomLeft.toString() + &quot;], [&quot; + conf.boxSize.toString() +
+				&quot;] ) , &quot; + kindIndex + &quot; )\n&quot;
+
+		case &quot;cellCircle&quot; :
+			return &quot;\t&quot; + &quot;this.gm.seedCellsInCircle( &quot; + kindIndex + &quot;, &quot; +
+				conf.nCells + &quot;, [&quot; + conf.center.toString() + &quot;], &quot; +
+				conf.radius + &quot; )\n&quot;
+
+		case &quot;pixelSet&quot; : {
+			let out = &quot;[\n\t\t&quot;
+			for (let i = 0; i &lt; conf.pixels.length; i++ ) {
+				const p = conf.pixels[i]
+				out += &quot;[&quot; + p.toString() + &quot;]&quot;
+				if( i &lt; conf.pixels.length - 1 ){ out += &quot;,&quot; }
+			}
+			return &quot;\t&quot; + &quot;this.gm.assignCellPixels( &quot; + out +
+				&quot; ], &quot; + kindIndex + &quot;)\n&quot;
+
+		}
+
+		default :
+			this.conversionWarnings.init.push( &quot;Unknown initializer &quot;
+			+ conf.setter + &quot;; ignoring.&quot; )
+		}
+
+	}
+
+}
+
+export default ArtistooWriter
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

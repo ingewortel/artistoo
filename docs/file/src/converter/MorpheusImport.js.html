@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/converter/MorpheusImport.js | Artistoo</title>
+  
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+
+  <script src="../misc/nav.js"></script>
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<style>
+/*.li {
+	list-style-type: none!important;
+}*/
+
+.navbar{
+padding-left:10px;
+padding-right:10px;
+}
+
+
+.mainimg {
+	min-height: 21em;
+    background-color: #666;
+    margin:0px 0px!important; padding:0px!important;
+	background-position: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    url('../misc/cpm-01.jpg');
+}
+.mainimg h1 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 300;
+  border-bottom: solid 0px #ddd;
+  text-align: center;
+  font-size: 400%;
+}
+
+.mainimg h2 {
+	text-align: center;
+	font-size:200%;
+	border-bottom: solid 0px;
+}
+
+.front-page h1 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.front-page h2 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	font-size:170%!important;
+}
+
+
+.bottom {
+  display: block;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main" style="border-bottom: solid 1px #ddd;">
+    <div class="container" style="margin-left:0px;max-width:100%;">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+
+				<li class="nav-item">
+				  <a class="nav-link" href="./manual/index.html"><span>Manual</span></a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Source</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo"><img width="20px" style="position:relative;top:-2px;" src="./image/github.png"></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<img src="./image/search.png">
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    	
+</nav>
+
+<nav class="navigation" data-ice="nav" id="mySidepanel">
+<!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
+<div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent"><h1 data-ice="title">src/converter/MorpheusImport.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import ModelDescription from &quot;./ModelDescription.js&quot;
+
+
+class MorpheusImport extends ModelDescription {
+
+	constructor( config ){
+
+		super( )
+
+		this.xml = config.xml
+		this.from = &quot;a Morpheus model&quot;
+		this.build()
+
+	}
+
+	/* ==========	GENERAL HELPER FUNCTIONS =========== */
+
+	readXMLTag( tag, xml, index = 0 ){
+		if( typeof xml === &quot;undefined&quot; ){
+			xml = this.xml
+		}
+		const tag2 = this.getXMLTag( tag, xml, index )
+		if( typeof tag2 !== &quot;undefined&quot; ){
+			return tag2.innerHTML
+		}
+		return undefined
+	}
+
+	getXMLTag( tag, xml, index = 0 ){
+		if( typeof xml === &quot;undefined&quot; ){
+			xml = this.xml
+		}
+		const tags = xml.getElementsByTagName( tag )
+		if( tags.length === 0 ){
+			return undefined
+		}
+		return tags[index]
+	}
+
+	readVectorAttribute( xml, attrName ){
+		const attr = xml.getAttribute( attrName )
+		return attr.split( &quot;,&quot; ).map( function(x){
+			return( parseInt(x) )
+		})
+	}
+
+	readCoordinateAttribute( xml, attrName ){
+		const vec = this.readVectorAttribute( xml, attrName )
+		let outVec = []
+		for( let d = 0; d &lt; this.grid.ndim; d++ ){
+			outVec.push( vec[d] )
+		}
+		return outVec
+	}
+
+	toCoordinate( string ){
+		const vec = string.split( &quot;,&quot; ).map( function(x){
+			return( parseInt(x) )
+		})
+		let outVec = []
+		for( let d = 0; d &lt; this.grid.ndim; d++ ){
+			outVec.push( vec[d] )
+		}
+		return outVec
+	}
+
+	/* ==========	MORPHEUS READER FUNCTIONS =========== */
+
+	setModelInfo(){
+
+		// Get title from XML
+		const title = this.readXMLTag( &quot;Title&quot; )
+		if( typeof title === &quot;undefined&quot; ) {
+			this.conversionWarnings.modelInfo.push(
+				&quot;Could not find model title.&quot;
+			)
+		} else {
+			this.modelInfo.title = title
+		}
+
+		// Get description from XML
+		const desc = this.readXMLTag( &quot;Details&quot; )
+		if( typeof desc === &quot;undefined&quot; ) {
+			this.conversionWarnings.modelInfo.push(
+				&quot;Could not find a model description.&quot;
+			)
+		} else {
+			this.modelInfo.desc = desc.toString()
+		}
+
+	}
+
+	setTimeInfo(){
+
+		const time = this.getXMLTag( &quot;Time&quot; )
+
+		for( let time_ch of time.children ) {
+
+			switch (time_ch.nodeName) {
+
+			case &quot;StartTime&quot; :
+				this.timeInfo.start = Number( time_ch.getAttribute(&quot;value&quot;) )
+				break
+			case &quot;StopTime&quot; :
+				this.timeInfo.stop = Number( time_ch.getAttribute(&quot;value&quot;) )
+				break
+			case &quot;RandomSeed&quot; :
+				this.kinetics.seed = parseInt( time_ch.getAttribute(&quot;value&quot;) )
+				break
+			case &quot;TimeSymbol&quot; :
+				break
+			default :
+				this.conversionWarnings.time.push(
+					&quot;I don&apos;t know what to do with tag &lt;&quot; + time_ch.nodeName + &quot;&gt; in &lt;Time&gt;. Ignoring it.&quot;
+				)
+			}
+		}
+		this.timeInfo.duration = this.timeInfo.stop - this.timeInfo.start
+		if( this.timeInfo.duration &lt; 0 ){
+			throw( &quot;Error: I cannot go back in time; timeInfo.stop must be larger than timeInfo.start!&quot;)
+		}
+	}
+
+	setGridInfo(){
+		const space = this.getXMLTag( &quot;Space&quot; )
+		for( let space_ch of space.children ){
+			switch( space_ch.nodeName ) {
+			case &quot;Lattice&quot; :
+				this.readMorpheusLattice( space_ch )
+				break
+			case &quot;SpaceSymbol&quot; :
+				break
+			default :
+				this.conversionWarnings.grid.push(
+					&quot;Tags of type &lt;&quot; + space_ch.nodeName + &quot;&gt; are currently not supported. &quot; +
+					&quot;Ignoring it for now.&quot;
+				)
+
+			}
+		}
+	}
+
+	readMorpheusLattice( lattice ){
+
+		// this.grid.geometry and this.grid.ndim
+		this.setGridGeometry( lattice.className )
+
+		// declare some variables needed
+		const boundLookup = { x : 0, y : 1, z : 2 }
+		let order, bound, dimIndex, boundType
+
+
+		// Read info in the lattice
+		for( let lattice_ch of lattice.children ){
+
+			switch( lattice_ch.nodeName ) {
+			case &quot;Size&quot; :
+				this.grid.extents = this.readCoordinateAttribute( lattice_ch, &quot;value&quot; )
+				break
+			case &quot;Neighborhood&quot; :
+				for( let nn of lattice_ch.children ){
+					switch( nn.nodeName ){
+					case &quot;Order&quot; :
+						order = parseInt( this.readXMLTag( &quot;Order&quot;, lattice_ch ) )
+						if( isNaN(order) ){
+							this.conversionWarnings.grid.push(
+								&quot;Non-integer neighborhood order. Ignoring.&quot;
+							)
+						} else {
+							this.grid.neighborhood.order = order
+						}
+						break
+					case &quot;Distance&quot; :
+						this.grid.neighborhood.distance = this.readXMLTag( &quot;Distance&quot;, lattice_ch )
+						break
+					default:
+						this.conversionWarnings.grid.push(
+							&quot;I don&apos;t know what to do with tag &lt;&quot; + nn.nodeName +
+							&quot;&gt; in a &lt;Neighborhood&gt; of a &lt;Space&gt; &lt;Lattice&gt;. Ignoring.&quot;
+						)
+
+					}
+				}
+				break
+
+			case &quot;BoundaryConditions&quot; :
+
+				for( let nn of lattice_ch.children ) {
+					switch (nn.nodeName) {
+					case &quot;Condition&quot; :
+						bound = nn.getAttribute(&quot;boundary&quot;)
+						dimIndex = boundLookup[bound]
+						boundType = nn.getAttribute(&quot;type&quot;)
+						this.grid.boundaries[dimIndex] = boundType
+						break
+
+					default :
+						this.conversionWarnings.grid.push(
+							&quot;I don&apos;t know what to do with tag &lt;&quot; + nn.nodeName +
+							&quot;&gt; in the &lt;BoundaryConditions&gt; of a &lt;Space&gt; &lt;Lattice&gt;. Ignoring.&quot;
+						)
+					}
+				}
+				break
+
+			case &quot;Domain&quot; :
+				this.conversionWarnings.grid.push(
+					&quot;Your MorpheusModel has specified a &lt;&quot; + lattice_ch.nodeName + &quot;&gt; : \n\t\t\t&quot; +
+					lattice_ch.outerHTML + &quot;\n&quot; +
+					&quot;This is currently not supported, but you can mimic the behaviour &quot; +
+					&quot;by adding a physical barrier using a BarrierConstraint; &quot; +
+					&quot;e.g. see artistoo.net/examples/Microchannel.html.&quot;
+				)
+				break
+
+			case &quot;NodeLength&quot; :
+				this.conversionWarnings.grid.push(
+					&quot;Your MorpheusModel has specified a &lt;&quot; + lattice_ch.nodeName + &quot;&gt; : \n\t\t\t&quot; +
+					lattice_ch.outerHTML + &quot;\n&quot; +
+					&quot;This is currently not supported, so spatial scales in your model &quot; +
+					&quot;are just measured in pixels. This shouldn&apos;t change behaviour as long as &quot; +
+					&quot;(spatial) parameters are defined in units of pixels. Please check this.&quot;
+				)
+				break
+
+			default :
+				this.conversionWarnings.grid.push(
+					&quot;I don&apos;t know what to do with tag &lt;&quot; + lattice_ch.nodeName +
+					&quot;&gt; in a &lt;Space&gt; &lt;Lattice&gt;. Ignoring.&quot;
+				)
+			}
+		}
+	}
+
+	setCellKindNames(){
+
+		// this counter will increase every time a new CellType is handled.
+		let indexNonBackground = 1
+		for( let ck of this.getXMLTag( &quot;CellTypes&quot; ).children ){
+			if( ck.nodeName !== &quot;CellType&quot; ){
+				this.conversionWarnings.cells.push(
+					&quot;Not expecting tag &lt;&quot; + ck.nodeName + &quot;&gt; inside CellTypes. Ignoring.&quot;
+				)
+			}
+			const kind_class = ck.className
+			const kind_name = ck.getAttribute( &quot;name&quot; )
+
+			// special case for kind of class &apos;medium&apos;, the background;
+			// this is always index 0 and there can be only one kind of this
+			// class.
+			if( kind_class === &quot;medium&quot; ){
+				if( this.cellKinds.name2index.hasOwnProperty( kind_class ) ){
+					throw( &quot;There cannot be two CellTypes of class &apos;medium&apos;! Aborting.&quot; )
+				} else {
+					// it gets index 0.
+					this.cellKinds.name2index[ kind_class ] = 0
+					this.cellKinds.index2name[ &quot;0&quot; ] = kind_class
+				}
+			} else if ( kind_class === &quot;biological&quot; ){
+				if( this.cellKinds.name2index.hasOwnProperty( kind_name ) ){
+					throw( &quot;There cannot be two CellTypes with name &apos;&quot; + kind_name +
+						&quot;&apos; Aborting.&quot; )
+				} else {
+					this.cellKinds.name2index[ kind_name ] = indexNonBackground
+					this.cellKinds.index2name[ indexNonBackground.toString() ] = kind_name
+				}
+				indexNonBackground++
+
+			} else {
+				throw( &quot;Don&apos;t know what to do with a CellType of class &quot; + kind_class + &quot;. Aborting.&quot; )
+			}
+
+			// Also extract any &lt;Property&gt; or &lt;PropertyVector&gt;
+			if( !this.cellKinds.properties.hasOwnProperty( kind_name ) ){
+				this.cellKinds.properties[ kind_name ] = {}
+			}
+			const props = ck.getElementsByTagName( &quot;Property&quot; )
+			for( let p of props ){
+				const propName = p.getAttribute( &quot;symbol&quot; )
+				const propVal = p.getAttribute( &quot;value&quot; )
+				this.cellKinds.properties[ kind_name ][ propName ] = propVal
+			}
+			const propVecs = ck.getElementsByTagName( &quot;PropertyVector&quot; )
+			for( let pv of propVecs ){
+				const propName = pv.getAttribute( &quot;symbol&quot; )
+				const propVal = this.readCoordinateAttribute( pv, &quot;value&quot; )
+				this.cellKinds.properties[ kind_name ][ propName ] = propVal
+			}
+		}
+
+		// counter: number of cell kinds including medium/background.
+		this.cellKinds.count = indexNonBackground
+	}
+
+	setCPMGeneral(){
+
+		// Random Seed
+		// Note that the random &apos;seed&apos; in Morpheus is specified in &lt;Time&gt;,
+		// and as such is handled by this.setTimeInfo().
+
+		// Temperature
+		const cpm = this.getXMLTag( &quot;CPM&quot; )
+		for( let cpm_ch of cpm.children ) {
+			switch( cpm_ch.nodeName ){
+			case &quot;Interaction&quot; :
+				this.setAdhesionMorpheus( cpm_ch )
+				break
+
+			case &quot;ShapeSurface&quot; :
+				if( cpm_ch.getAttribute(&quot;scaling&quot;) !== &quot;none&quot; ){
+					this.conversionWarnings.grid.push(
+						&quot;You are trying to use a ShapeSurface with scaling &apos;&quot; +
+						cpm_ch.getAttribute(&quot;scaling&quot;) +
+						&quot;&apos;. This is currently not supported in Artistoo; &quot; +
+						&quot;Reverting to the default scaling = &apos;none&apos; instead. You may have &quot; +
+						&quot;to adapt parameters that involve cell-cell interfaces, such as &quot; +
+						&quot;those of the CPM&apos;s Adhesion and Perimeter constraints.&quot;
+					)
+				}
+				if( typeof this.readXMLTag( &quot;Distance&quot;, cpm_ch ) !== &quot;undefined&quot; ){
+					this.conversionWarnings.grid.push(
+						&quot;You are trying to use a ShapeSurface with neighborhood distance &apos;&quot; +
+						this.readXMLTag( &quot;Distance&quot;, cpm_ch ) +
+						&quot;&apos;. This is currently not supported in Artistoo; &quot; +
+						&quot;Reverting to the default Moore neighborhood instead. You may have &quot; +
+						&quot;to adapt parameters that involve cell-cell interfaces, such as &quot; +
+						&quot;those of the CPM&apos;s Adhesion and Perimeter constraints.&quot;
+					)
+				}
+				if( this.readXMLTag( &quot;Order&quot;, cpm_ch ) !== &quot;2&quot; ){
+					this.conversionWarnings.grid.push(
+						&quot;You are trying to use a ShapeSurface with neighborhood order &apos;&quot; +
+						this.readXMLTag( &quot;Order&quot;, cpm_ch ) +
+						&quot;&apos;. This is currently not supported in Artistoo; &quot; +
+						&quot;Reverting to the default Moore neighborhood instead. You may have &quot; +
+						&quot;to adapt parameters that involve cell-cell interfaces, such as &quot; +
+						&quot;those of the CPM&apos;s Adhesion and Perimeter constraints.&quot;
+					)
+				}
+				break
+
+			case &quot;MonteCarloSampler&quot; : {
+				const stepper = cpm_ch.getAttribute(&quot;stepper&quot;)
+				if (stepper !== &quot;edgelist&quot;) {
+					this.conversionWarnings.kinetics.push(
+						&quot;Stepper &apos;&quot; + stepper + &quot;&apos; not supported. Switching to &apos;edgelist&apos;.&quot;
+					)
+				}
+
+				for (let nn of cpm_ch.children) {
+
+					switch (nn.nodeName) {
+					case &quot;MetropolisKinetics&quot;: {
+
+						const kineticAttr = nn.getAttributeNames()
+						for (let k of kineticAttr) {
+							switch (k) {
+							case &quot;temperature&quot;:
+								this.kinetics.T = parseFloat(nn.getAttribute(&quot;temperature&quot;))
+								break
+							default :
+								this.conversionWarnings.kinetics.push(
+									&quot;Unknown attribute of &lt; MetropolisKinetics &gt;: &quot; +
+									k + &quot;. Ignoring.&quot;
+								)
+							}
+						}
+						break
+					}
+
+					case &quot;Neighborhood&quot;:
+
+						for (let nnn of nn.children) {
+
+							switch (nnn.nodeName) {
+							case &quot;Order&quot;: {
+								const order = nnn.innerHTML
+								if ( order !== &quot;2&quot; ) {
+									this.conversionWarnings.grid.push(
+										&quot;Ignoring &lt; Neighborhood &gt; &lt;Order&gt; in &lt;MetropolisKinetics&gt;: &quot;
+										+ order + &quot;. &quot; +
+										&quot;Using default order 2 (Moore-neighborhood) instead.&quot;)
+								}
+								break
+							}
+							default :
+								this.conversionWarnings.grid.push(
+									&quot;I don&apos;t understand what you mean with a neighborhood &quot; +
+									nnn.nodeName + &quot;. Using the default (Moore) neighborhood instead.&quot;
+								)
+							}
+						}
+						break
+
+					case &quot;MCSDuration&quot; :
+						this.conversionWarnings.kinetics.push(
+							&quot;Ignoring unsupported tag &lt;MCSDuration&gt;; this should not change &quot; +
+							&quot;behaviour of the model, but it means all time should be defined in units of MCS. &quot; +
+							&quot;Please check if this is the case.&quot;
+						)
+						break
+
+					default :
+						this.conversionWarnings.kinetics.push(
+							&quot;Unknown child of &lt; MonteCarloSampler &gt;: &lt;&quot; +
+							nn.nodeName + &quot;&gt;.&quot;)
+
+					}
+				}
+
+				break
+			}
+
+			default :
+				this.conversionWarnings.kinetics.push(
+					&quot;I don&apos;t know what to do with tag &lt;&quot; + cpm_ch.nodeName + &quot;&gt;. Ignoring it for now.&quot;
+				)
+
+			}
+		}
+	}
+
+	setConstraints(){
+
+		// Adhesion in Morpheus is stored under &apos;CPM&apos; and is set by
+		// setCPMGeneral().
+		const ct = this.getXMLTag( &quot;CellTypes&quot; )
+
+		for (let cc of ct.children ){
+
+			const kindIndex = this.getKindIndex( cc.getAttribute(&quot;name&quot;) )
+
+			// add constraints:
+			for( let constraint of cc.children ){
+
+				switch( constraint.nodeName ){
+
+				case &quot;VolumeConstraint&quot; :
+					this.setVolumeConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;SurfaceConstraint&quot; :
+					this.setPerimeterConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;Protrusion&quot; :
+					this.setActivityConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;ConnectivityConstraint&quot; :
+					this.setConnectivityConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;FreezeMotion&quot;:
+					this.setBarrierConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;PersistentMotion&quot; :
+					this.setPersistenceConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;DirectedMotion&quot; :
+					this.setPreferredDirectionConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;Chemotaxis&quot; :
+					this.setChemotaxisConstraintForKind( constraint, kindIndex )
+					break
+
+				case &quot;StarConvex&quot;:
+					this.unknownConstraintWarning( constraint.nodeName )
+					break
+
+				case &quot;Haptotaxis&quot; :
+					this.unknownConstraintWarning( constraint.nodeName )
+					break
+
+				case &quot;LengthConstraint&quot; :
+					this.unknownConstraintWarning( constraint.nodeName )
+					break
+
+				case &quot;Property&quot; :
+					// Properties are handled by this.setCellKindNames
+					break
+
+				case &quot;PropertyVector&quot; :
+					// PropertyVectors are handled by this.setCellKindNames
+					break
+
+				default:
+					this.conversionWarnings.cells.push(
+						&quot;I don&apos;t know what to do with &lt;CellType&gt; property &lt;&quot; +
+						constraint.nodeName  + &quot;&gt; for cell &quot; +
+						cc.getAttribute(&quot;name&quot;) + &quot;. Ignoring it. &quot; )
+				}
+
+			}
+
+
+		}
+
+	}
+
+	unknownConstraintWarning( constraintName ){
+		this.conversionWarnings.constraints.push(
+			&quot;Constraint &apos;&quot; + constraintName +
+			&quot;&apos; is currently not supported in Artistoo. +&quot; +
+			&quot;I am ignoring it for now, but model behaviour may change. &quot; +
+			&quot;Check out the online manual at https://artistoo.net/manual/custommodules.html &quot; +
+			&quot;to implement your own, or choose a similar constraint from available options &quot; +
+			&quot;https://artistoo.net/identifiers.html#hamiltonian&quot;
+		)
+	}
+
+	setGridConfiguration(){
+		const pops = this.getXMLTag( &quot;CellPopulations&quot; )
+		for( let p of pops.children ){
+
+			// Check if this is a Population.
+			if( p.nodeName !== &quot;Population&quot; ){
+				this.conversionWarnings.init.push(
+					&quot;Unexpected tag &lt;&quot; + p.nodeName + &quot;&gt; inside &lt;CellPopulations&gt;. Ignoring.&quot;
+				)
+			}
+
+			// Check which cellKind this population is of
+			const kindName = p.getAttribute( &quot;type&quot; )
+
+
+			// Handle the initialization depending on the type of child tags
+			for( let p_ch of p.children ){
+
+				switch( p_ch.nodeName ){
+
+				case &quot;Cell&quot;:
+					this.setCellPixelList( p_ch, kindName )
+					break
+
+				case &quot;InitCircle&quot; :
+					this.setInitCircle( p_ch, kindName )
+					break
+
+				case &quot;InitCellObjects&quot;:
+					this.setInitObjects( p_ch, kindName )
+					break
+
+					/*
+				case &quot;InitDistribute&quot;:
+					this.setInitDistribute( p_ch, kindName )
+					break
+
+				case &quot;InitHexLattice&quot;:
+					this.setHexLattice( p_ch, kindName )
+					break
+
+				case &quot;InitRectangle&quot; :
+					this.setInitRectangle (p_ch, kindName )
+					break*/
+
+				default: //InitProperty, InitVectorProperty, InitVoronoi, TIFFReader, InitPoissonDisc
+					this.conversionWarnings.init.push(
+						&quot;Ignoring unsupported tag &lt;&quot; + p_ch.nodeName + &quot;&gt; inside &quot; +
+						&quot;a &lt;Population&gt;.&quot;
+					)
+				}
+			}
+		}
+	}
+
+	/* ==========	MORPHEUS POPULATION READERS =========== */
+
+	setInitObjects( initXML, kindName ){
+		const mode = initXML.getAttribute( &quot;mode&quot; )
+		this.conversionWarnings.init.push( &quot;In InitCellObjects: attribute &apos;mode&apos; currently not supported. &quot; +
+			&quot;Ignoring mode = &apos;&quot; + mode + &quot;&apos; setting. &quot; +
+			&quot;If conflicts arise during cell seeding, the pixel gets the value of the last cell&quot; +
+			&quot; trying to occupy it. Adjust the script manually if this is not what you want.&quot;)
+
+		const arr = initXML.getElementsByTagName( &quot;Arrangement&quot; )[0]
+		const disp = this.readCoordinateAttribute( arr, &quot;displacements&quot; )
+		const reps = this.readCoordinateAttribute( arr, &quot;repetitions&quot; )
+
+		const obj = arr.children[0]
+
+		for( let xi = 0; xi &lt; reps[0]; xi++ ){
+			const dx = xi*disp[0]
+			for( let yi = 0; yi &lt; reps[1]; yi++ ){
+
+				const dy = yi*disp[1]
+				if( this.grid.ndim === 3 ){
+					for( let zi = 0; zi &lt; reps[2]; zi++ ){
+
+						const dz = zi*disp[2]
+						this.addInitObject( [dx,dy,dz], obj, kindName )
+
+					}
+				} else {
+					this.addInitObject( [dx,dy], obj, kindName )
+				}
+			}
+
+		}
+	}
+
+	addInitObject( disp, objXML, kindName ) {
+
+		const objType = objXML.nodeName
+		const ndim = disp.length
+
+		let pos
+
+		switch (objType) {
+		case &quot;Sphere&quot; : {
+			// For a sphere, position is the center attribute; add the
+			// displacement to that.
+			pos = this.readCoordinateAttribute(objXML, &quot;center&quot;)
+			for (let d = 0; d &lt; ndim; d++) {
+				pos[d] += disp[d]
+			}
+
+			this.setup.init.push( {
+				setter : &quot;circleObject&quot;,
+				kind : this.getKindIndex( kindName ),
+				kindName : kindName,
+				radius : parseFloat(objXML.getAttribute(&quot;radius&quot;)),
+				center : pos
+			} )
+			break
+		}
+
+		case &quot;Box&quot; : {
+			// For a box, position is the origin attribute; add the
+			// displacement to that.
+			pos = this.readCoordinateAttribute(objXML, &quot;origin&quot;)
+			for (let d = 0; d &lt; ndim; d++) {
+				pos[d] += disp[d]
+			}
+
+			// Read the box dimensions from the XML, this is the &apos;size&apos; attribute.
+			let boxSize = this.readCoordinateAttribute(objXML, &quot;size&quot;)
+
+			this.setup.init.push( {
+				setter : &quot;boxObject&quot;,
+				kind : this.getKindIndex( kindName ),
+				kindName : kindName,
+				bottomLeft: pos,
+				boxSize: boxSize
+			} )
+			break
+		}
+
+		default :
+			this.conversionWarnings.init.push(
+				&quot;No method to seed an object of type &quot; + objType + &quot;. Ignoring.&quot;
+			)
+		}
+	}
+
+	setInitCircle( initXML, kindName ){
+
+		let nCells
+
+		// Get information from attributes
+		for( let attr of initXML.getAttributeNames() ){
+			switch( attr ){
+			case &quot;mode&quot; :
+				if( initXML.getAttribute( &quot;mode&quot; ) !== &quot;random&quot; ){
+					this.conversionWarnings.init.push(
+						&quot;In InitCircle: &apos;mode&apos; &quot; + initXML.getAttribute( &quot;mode&quot; )  +
+						&quot; currently not supported. &quot; +
+						&quot;Seeding cells randomly in the circle; to change this, define your own&quot; +
+						&quot;initialization function as e.g. in &quot; +
+						&quot;https://artistoo.net/examples/DirectedMotionLinear.html.&quot; )
+				}
+				break
+
+			case &quot;number-of-cells&quot; :
+				// get number of cells to seed
+				nCells = initXML.getAttribute( &quot;number-of-cells&quot; )
+
+				// in morpheus, this can also be a function -- but this is not supported. Check and warn.
+				if( !isFinite( nCells ) ){
+					this.conversionWarnings.init.push(
+						&quot;In InitCircle: it appears as if the number-of-cells attribute is &quot; +
+						&quot;not a number but a function. Ignoring it for now. &quot; +
+						&quot;Please change to a number or initialize the grid manually.&quot;)
+				}
+				break
+
+			default :
+				this.conversionWarnings.init.push(
+					&quot;Attribute &quot; + attr + &quot; in &lt;InitCircle&gt; currently not &quot; +
+					&quot;supported; ignoring it for now.&quot; )
+
+			}
+		}
+
+		// Get the dimensions
+		for( let ch of initXML.children ){
+			switch( ch.nodeName ){
+			case &quot;Dimensions&quot; :
+				this.addInitCircle( ch, kindName, nCells )
+				break
+
+			default :
+				this.conversionWarnings.init.push(
+					&quot;In &lt;InitCircle&gt; I don&apos;t know what to do with &quot; +
+					&quot;tag &lt;&quot; + ch.nodeName + &quot;&gt;. Ignoring it.&quot; )
+			}
+		}
+
+
+	}
+
+	addInitCircle( initXML, kindName, nCells ){
+		let center, radius
+
+		for( let attr of initXML.getAttributeNames() ){
+
+			switch( attr ){
+			case &quot;center&quot; : {
+
+				center = this.readCoordinateAttribute( initXML, &quot;center&quot; )
+
+				// check if it&apos;s an array of numbers and correct dimensions so that
+				// position has 2 coordinates for 2D grids.
+				for (let d = 0; d &lt; this.grid.ndim; d++) {
+					if (!isFinite(center[d])) {
+						this.conversionWarnings.init.push(
+							&quot;In &lt;InitCircle&gt; &lt;Dimensions&gt;, &apos;center&apos; does not appear to be a numeric vector:&quot; +
+							&quot;center = &quot; + center + &quot;. Ignoring it for now.&quot;
+						)
+						return
+					}
+				}
+				break
+			}
+
+			case &quot;radius&quot; :
+				radius = parseInt( initXML.getAttribute( &quot;radius&quot; ) )
+				if( !isFinite(radius) ){
+					this.conversionWarnings.init.push(
+						&quot;In &lt;InitCircle&gt; &lt;Dimensions&gt;, &apos;radius&apos; does not appear to be a number:&quot; +
+						&quot;radius = &quot; + radius + &quot;. Ignoring it for now.&quot; )
+					return
+				}
+				break
+
+			default :
+				this.conversionWarnings.init.push(
+					&quot;In &lt;InitCircle&gt; &lt;Dimensions&gt;, I don&apos;t know what to do with attribute &quot; +
+					attr + &quot;. Ignoring.&quot; )
+
+			}
+		}
+
+		if( typeof center === &quot;undefined&quot; || typeof radius === &quot;undefined&quot; ){
+			this.conversionWarnings.init.push(
+				&quot;In &lt;InitCircle&gt; &lt;Dimensions&gt;, I cannot find a &apos;center&apos; or a &quot; +
+				&quot;&apos;radius&apos;. Ignoring.&quot; )
+			return
+		}
+
+
+		// If we get here, we have both center and radius now.
+		this.setup.init.push( {
+			setter : &quot;cellCircle&quot;,
+			kind : this.getKindIndex( kindName ),
+			kindName : kindName,
+			radius : radius,
+			center : center,
+			nCells : nCells
+		} )
+
+	}
+
+	setCellPixelList( cellXML, kindName ){
+
+		const kindIndex = this.getKindIndex( kindName )
+		const cid = cellXML.getAttribute( &quot;id&quot; )
+		let pixels = []
+		for( let n of cellXML.children ){
+			if( n.nodeName !== &quot;Nodes&quot; ){
+				this.conversionWarnings.init.push(
+					&quot;Ignoring unexpected tag &lt;&quot; + n.nodeName + &quot;&gt; inside a &quot; +
+					&quot;&lt;Population&gt;&lt;Cell&gt;.&quot;
+				)
+			} else {
+				pixels.push( this.toCoordinate( n.innerHTML ) )
+			}
+		}
+
+		this.setup.init.push( {
+			setter : &quot;pixelSet&quot;,
+			kind : kindIndex,
+			kindName : kindName,
+			cid : cid,
+			pixels : pixels
+		} )
+
+	}
+
+
+	/* ==========	MORPHEUS CONSTRAINT READERS =========== */
+
+	parameterFromXML( constraintXML, paramName, kindIndex, pType = &quot;int&quot; ){
+
+		let par = constraintXML.getAttribute( paramName )
+		const kindName = this.getKindName( kindIndex )
+
+		let parser
+		if( pType === &quot;int&quot; ){
+			parser = parseInt
+		} else if (pType === &quot;float&quot; ){
+			parser = parseFloat
+		} else {
+			throw ( &quot;Unknown type of parameter : &quot; + pType )
+		}
+
+		if( !isNaN( parser(  par ) ) ){
+			par = parser( par )
+		} else {
+			// try if it is the name of one of the defined symbols.
+			if( this.cellKinds.properties[ kindName ].hasOwnProperty( par ) ){
+				par = parser( this.cellKinds.properties[ this.getKindName( kindIndex ) ][ par ] )
+			}
+		}
+
+		// Check if now okay, otherwise set to 0 and add a warning.
+		if( isNaN( parser( par ) ) ){
+			this.conversionWarnings.constraints.push(
+				&quot;Failed to interpret parameter &quot; + paramName + &quot; in &quot; +
+				constraintXML.nodeName + &quot; for cellKind &quot; + kindName +
+				&quot;. For now, this is set to 0; please correct manually.&quot;
+			)
+			return 0
+		}
+		return parser( par )
+
+	}
+
+	setAdhesionMorpheus( interactionXML ){
+
+		let defValue = NaN, negative = false
+		if( interactionXML.hasAttribute(&quot;default&quot; ) ){
+			defValue = parseFloat( interactionXML.getAttribute( &quot;default&quot; ) )
+		}
+		if( interactionXML.hasAttribute(&quot;negative&quot; ) ){
+			negative = ( interactionXML.getAttribute( &quot;negative&quot; ) === &quot;true&quot; )
+		}
+
+		let J = this.initCellKindMatrix( defValue )
+
+		for( let contact of interactionXML.children ){
+			// Check if child is indeed a contact energy
+			if( contact.nodeName !== &quot;Contact&quot; ){
+				this.conversionWarnings.constraints.push( &quot;I don&apos;t know what to do with a tag &lt;&quot; +
+					contact.nodeName + &quot;&gt; inside the Adhesion &lt;Interactions&gt;. Ignoring. &quot; )
+				break
+			}
+
+			// Get the types and convert to the corresponding number using the &apos;cellTypes&apos; object used above
+			const type1 = this.getKindIndex( contact.getAttribute( &quot;type1&quot; ) )
+			const type2 = this.getKindIndex( contact.getAttribute( &quot;type2&quot; ) )
+			const energy = contact.getAttribute( &quot;value&quot; )
+			let energyNum = parseFloat( energy )
+			if( isNaN(energyNum) ){
+				this.conversionWarnings.constraints.push( &quot;Contact energy value &apos;&quot; +
+					energy.toString() + &quot;&apos; inside Adhesion &lt; Interactions &gt; &quot; +
+					&quot;seems not to be a number and will be ignored.&quot;)
+			}
+
+			// set the value symmetrically
+			if( negative ){ energyNum = -energyNum }
+			J[type1][type2] = energyNum
+			J[type2][type1] = energyNum
+		}
+
+		// Add the adhesion constraint to the model description.
+		this.addConstraint( &quot;Adhesion&quot;, { J : J } )
+
+
+	}
+
+	setVolumeConstraintForKind( constraintXML, kindIndex ){
+
+		if( !this.hasConstraint( &quot;VolumeConstraint&quot; ) ){
+			this.addConstraint( &quot;VolumeConstraint&quot;, {
+				V : this.initCellKindVector( 0 ),
+				LAMBDA_V : this.initCellKindVector( 0 )
+			})
+		}
+		const vol = this.parameterFromXML( constraintXML,
+			&quot;target&quot;, kindIndex,  &quot;int&quot; )
+		const lambda = this.parameterFromXML( constraintXML,
+			&quot;strength&quot;, kindIndex,  &quot;float&quot; )
+
+		this.getConstraintParameter( &quot;VolumeConstraint&quot;,
+			&quot;V&quot; )[kindIndex] = vol
+		this.getConstraintParameter( &quot;VolumeConstraint&quot;,
+			&quot;LAMBDA_V&quot; )[kindIndex] = lambda
+
+	}
+
+	setPerimeterConstraintForKind( constraintXML, kindIndex ){
+
+		if( !this.hasConstraint( &quot;PerimeterConstraint&quot; ) ){
+			this.addConstraint( &quot;PerimeterConstraint&quot;, {
+				P : this.initCellKindVector( 0 ),
+				LAMBDA_P : this.initCellKindVector( 0 ),
+				mode : &quot;surface&quot;
+			})
+		}
+
+		// Get info from XML object
+		let perimeter, lambda, mode
+		for( let att of constraintXML.getAttributeNames() ) {
+			switch (att) {
+			case &quot;mode&quot;:
+				mode = constraintXML.getAttribute( &quot;mode&quot; )
+				break
+
+			case &quot;target&quot; :
+				perimeter = this.parameterFromXML( constraintXML,
+					&quot;target&quot;, kindIndex,  &quot;float&quot; )
+				break
+
+			case &quot;strength&quot;:
+				lambda = this.parameterFromXML( constraintXML,
+					&quot;strength&quot;, kindIndex,  &quot;float&quot; )
+				break
+
+			default :
+				this.conversionWarnings.constraints.push(
+					&quot;Ignoring unsupported attribute &apos;&quot; + att +
+					&quot;&apos; of the &lt; SurfaceConstraint &gt;&quot;)
+
+			}
+		}
+
+		// Set (converted) values.
+		this.getConstraintParameter( &quot;PerimeterConstraint&quot;,
+			&quot;P&quot; )[kindIndex] = perimeter
+		this.getConstraintParameter( &quot;PerimeterConstraint&quot;,
+			&quot;LAMBDA_P&quot; )[kindIndex] = lambda
+		this.getConstraint( &quot;PerimeterConstraint&quot; ).mode = mode
+
+	}
+
+	setActivityConstraintForKind( constraintXML, kindIndex ){
+
+		if( !this.hasConstraint( &quot;ActivityConstraint&quot; ) ){
+			this.addConstraint( &quot;ActivityConstraint&quot;, {
+				MAX_ACT : this.initCellKindVector( 0 ),
+				LAMBDA_ACT : this.initCellKindVector( 0 ),
+				ACT_MEAN : &quot;geometric&quot;
+			})
+		}
+
+		const lambda = this.parameterFromXML( constraintXML,
+			&quot;strength&quot;, kindIndex,  &quot;float&quot; )
+		const max = this.parameterFromXML( constraintXML,
+			&quot;maximum&quot;, kindIndex,  &quot;float&quot; )
+
+		this.getConstraintParameter( &quot;ActivityConstraint&quot;,
+			&quot;MAX_ACT&quot; )[kindIndex] = max
+		this.getConstraintParameter( &quot;ActivityConstraint&quot;,
+			&quot;LAMBDA_ACT&quot; )[kindIndex] = lambda
+	}
+
+	setConnectivityConstraintForKind( constraintXML, kindIndex ){
+		if( !this.hasConstraint( &quot;LocalConnectivityConstraint&quot; ) ){
+			this.addConstraint( &quot;LocalConnectivityConstraint&quot;, {
+				CONNECTED : this.initCellKindVector( false ),
+			})
+		}
+
+		this.getConstraintParameter( &quot;LocalConnectivityConstraint&quot;,
+			&quot;CONNECTED&quot; )[kindIndex] = true
+
+	}
+
+	setBarrierConstraintForKind( constraintXML, kindIndex ){
+
+		if( !this.hasConstraint( &quot;BarrierConstraint&quot; ) ){
+			this.addConstraint( &quot;BarrierConstraint&quot;, {
+				IS_BARRIER : this.initCellKindVector( false ),
+			})
+		}
+
+		this.getConstraintParameter( &quot;BarrierConstraint&quot;,
+			&quot;IS_BARRIER&quot; )[kindIndex] = true
+
+		// The Morpheus &lt;FreezeMotion&gt; has an optional attribute/child &apos;Condition&apos;,
+		// which Artistoo doesn&apos;t have. It defaults to true, but for anything different
+		// the behaviour will be different; issue a warning.
+		for( let ch of constraintXML.children ){
+			if( ch.nodeName === &quot;Condition&quot; ){
+				if( this.readXMLTag( &quot;Condition&quot;, constraintXML ) !== &quot;1&quot; ){
+					this.conversionWarnings.constraints.push(
+						&quot;Converting a &lt;FreezeMotion&gt; constraint to an Artistoo &apos;BarrierConstraint&apos;, but &quot; +
+						&quot;don&apos;t know how to handle a &lt;Condition&gt; other than &apos;1&apos;. Ignoring Condition.&quot;)
+				}
+			} else {
+				this.conversionWarnings.constraints.push(
+					&quot;I don&apos;t know what to do with &lt;&quot; + ch.nodeName +
+					&quot;&gt; in a &lt;FreezeMotion&gt; constraint. Ignoring.&quot;)
+			}
+		}
+		for( let ch of constraintXML.getAttributeNames() ){
+			if( ch === &quot;condition&quot; ){
+				if( constraintXML.getAttribute( &quot;condition&quot; ) !== &quot;1&quot; ){
+					this.conversionWarnings.constraints.push(
+						&quot;Converting a &lt;FreezeMotion&gt; constraint to an Artistoo &apos;BarrierConstraint&apos;, but &quot; +
+						&quot;don&apos;t know how to handle a &lt;Condition&gt; other than &apos;1&apos;. Ignoring Condition.&quot;)
+				}
+			} else {
+				this.conversionWarnings.constraints.push(
+					&quot;I don&apos;t know what to do with property &apos;&quot; + ch +
+					&quot;&apos; in a &lt;FreezeMotion&gt; constraint. Ignoring.&quot;)
+			}
+		}
+
+
+	}
+
+	setPersistenceConstraintForKind( constraintXML, kindIndex ){
+		if( !this.hasConstraint( &quot;PersistenceConstraint&quot; ) ){
+			this.addConstraint( &quot;PersistenceConstraint&quot;, {
+				DELTA_T : this.initCellKindVector( 0 ),
+				LAMBDA_DIR : this.initCellKindVector( 0 ),
+				// Morpheus doesn&apos;t have this param and just uses the default 1.
+				PERSIST : this.initCellKindVector( 1 ),
+				PROTRUDE : this.initCellKindVector( true ),
+				RETRACT : this.initCellKindVector( false )
+			})
+		}
+
+		const dt = this.parameterFromXML( constraintXML,
+			&quot;decay-time&quot;, kindIndex,  &quot;int&quot; )
+		const lambda = this.parameterFromXML( constraintXML,
+			&quot;strength&quot;, kindIndex, &quot;float&quot; )
+
+
+		// Two other params specified in morpheus
+		let protrude = constraintXML.getAttribute( &quot;protrusion&quot; )
+		if( typeof protrude === undefined ){
+			protrude = true
+		} else {
+			protrude = ( protrude === &quot;true&quot; )
+		}
+		let retract = constraintXML.getAttribute( &quot;retraction&quot; )
+		if( typeof retract === undefined ){
+			retract = false
+		} else {
+			retract = ( retract === &quot;true&quot; )
+		}
+
+		this.getConstraintParameter( &quot;PersistenceConstraint&quot;,
+			&quot;DELTA_T&quot; )[kindIndex] = dt
+		this.getConstraintParameter( &quot;PersistenceConstraint&quot;,
+			&quot;LAMBDA_DIR&quot; )[kindIndex] = lambda
+		this.getConstraintParameter( &quot;PersistenceConstraint&quot;,
+			&quot;PROTRUDE&quot; )[kindIndex] = protrude
+		this.getConstraintParameter( &quot;PersistenceConstraint&quot;,
+			&quot;RETRACT&quot; )[kindIndex] = retract
+	}
+
+	setPreferredDirectionConstraintForKind( constraintXML, kindIndex ){
+		if( !this.hasConstraint( &quot;PreferredDirectionConstraint&quot; ) ){
+			this.addConstraint( &quot;PreferredDirectionConstraint&quot;, {
+				DIR : this.initCellKindVector( this.initDimensionVector(0) ),
+				LAMBDA_DIR : this.initCellKindVector( 0 ),
+				PROTRUDE : this.initCellKindVector( true ),
+				RETRACT : this.initCellKindVector( false )
+			})
+		}
+
+		const kindName = this.getKindName( kindIndex )
+		const dirSymbol = constraintXML.getAttribute( &quot;direction&quot; )
+		let dir = undefined
+		if( this.cellKinds.properties[kindName].hasOwnProperty( dirSymbol ) ){
+			// read value of this parameter
+			dir = this.cellKinds.properties[kindName][dirSymbol]
+		}
+		let lambdaDir = this.parameterFromXML( constraintXML,
+			&quot;strength&quot;, kindIndex,  &quot;float&quot; )
+
+		// Two other params specified in morpheus
+		let retract = constraintXML.getAttribute( &quot;retraction&quot; )
+		if( typeof retract === undefined ){
+			retract = false
+		} else {
+			retract = ( retract === &quot;true&quot; )
+		}
+		let protrude = constraintXML.getAttribute( &quot;protrusion&quot; )
+		if( typeof protrude === undefined ){
+			protrude = true
+		} else {
+			protrude = ( protrude === &quot;true&quot; )
+		}
+
+		this.getConstraintParameter( &quot;PreferredDirectionConstraint&quot;,
+			&quot;DIR&quot; )[kindIndex] = dir
+		this.getConstraintParameter( &quot;PreferredDirectionConstraint&quot;,
+			&quot;LAMBDA_DIR&quot; )[kindIndex] = lambdaDir
+		this.getConstraintParameter( &quot;PreferredDirectionConstraint&quot;,
+			&quot;PROTRUDE&quot; )[kindIndex] = protrude
+		this.getConstraintParameter( &quot;PreferredDirectionConstraint&quot;,
+			&quot;RETRACT&quot; )[kindIndex] = retract
+	}
+}
+
+
+export default MorpheusImport</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

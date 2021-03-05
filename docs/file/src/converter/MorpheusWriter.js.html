@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/converter/MorpheusWriter.js | Artistoo</title>
+  
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+
+  <script src="../misc/nav.js"></script>
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<style>
+/*.li {
+	list-style-type: none!important;
+}*/
+
+.navbar{
+padding-left:10px;
+padding-right:10px;
+}
+
+
+.mainimg {
+	min-height: 21em;
+    background-color: #666;
+    margin:0px 0px!important; padding:0px!important;
+	background-position: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    url('../misc/cpm-01.jpg');
+}
+.mainimg h1 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 300;
+  border-bottom: solid 0px #ddd;
+  text-align: center;
+  font-size: 400%;
+}
+
+.mainimg h2 {
+	text-align: center;
+	font-size:200%;
+	border-bottom: solid 0px;
+}
+
+.front-page h1 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.front-page h2 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	font-size:170%!important;
+}
+
+
+.bottom {
+  display: block;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main" style="border-bottom: solid 1px #ddd;">
+    <div class="container" style="margin-left:0px;max-width:100%;">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+
+				<li class="nav-item">
+				  <a class="nav-link" href="./manual/index.html"><span>Manual</span></a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Source</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo"><img width="20px" style="position:relative;top:-2px;" src="./image/github.png"></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<img src="./image/search.png">
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    	
+</nav>
+
+<nav class="navigation" data-ice="nav" id="mySidepanel">
+<!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
+<div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent"><h1 data-ice="title">src/converter/MorpheusWriter.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Writer from &quot;./Writer.js&quot;
+
+class MorpheusWriter extends Writer {
+
+	constructor( model, config ){
+		super( model, config )
+
+		// property set by initXML.
+		this.xml = undefined
+		this.initXML()
+
+		this.cellTypeTagIndex = {}
+
+		this.fieldsToDraw = []
+
+		this.logString = &quot;Hi there! Converting &quot; + this.model.from + &quot; to Morpheus XML...\n\n&quot;
+
+	}
+
+	write(){
+		if( typeof this.target !== undefined ){
+			this.target.innerHTML = this.writeXML()
+		} else {
+			//eslint-disable-next-line no-console
+			console.log( this.writeXML() )
+		}
+		this.writeLog()
+	}
+
+	writeXML(){
+		this.writeDescription()
+		this.writeGlobal()
+		this.writeSpace()
+		this.writeTime()
+		this.writeCellTypes()
+		this.writeCPM()
+		this.writeConstraints()
+		this.writeCellPopulations()
+		this.writeAnalysis()
+		return this.formatXml( new XMLSerializer().serializeToString(this.xml) )
+	}
+
+	formatXml(xml, tab) { // tab = optional indent value, default is tab (\t)
+		let formatted = &quot;&quot;, indent= &quot;&quot;
+		tab = tab || &quot;\t&quot;
+		xml.split(/&gt;\s*&lt;/).forEach(function(node) {
+			if (node.match( /^\/\w/ )) indent = indent.substring(tab.length) // decrease indent by one &apos;tab&apos;
+			formatted += indent + &quot;&lt;&quot; + node + &quot;&gt;\r\n&quot;
+			if (node.match( /^&lt;?\w[^&gt;]*[^/]$/ )) indent += tab             // increase indent
+		})
+		return formatted.substring(1, formatted.length-3)
+	}
+
+	initXML(){
+		let xmlString = &quot;&lt;MorpheusModel&gt;&lt;/MorpheusModel&gt;&quot;
+		let parser = new DOMParser()
+		this.xml = parser.parseFromString( xmlString, &quot;text/xml&quot; )
+		this.setAttributesOf( &quot;MorpheusModel&quot;, {version: &quot;4&quot; } )
+	}
+
+	/* ==========	METHODS TO MANIPULATE XML STRUCTURE =========== */
+
+	setAttributesOf( node, attr, index = 0 ){
+		for( let a of Object.keys( attr ) ){
+			this.xml.getElementsByTagName( node )[index].setAttribute( a, attr[a] )
+		}
+	}
+	attachNode( parentName, nodeName, value = undefined, attr= {}, index = 0 ){
+		let node = this.makeNode( nodeName, value, attr )
+		this.addNodeTo( node, parentName, index )
+	}
+	makeNode( nodeName, value = undefined, attr= {} ){
+		let node = this.xml.createElement( nodeName )
+		if( typeof value !== &quot;undefined&quot; ){
+			node.innerHTML = value
+		}
+		for( let a of Object.keys( attr ) ){
+			node.setAttribute( a, attr[a] )
+		}
+		return node
+
+	}
+	addNodeTo( node, parentName, index = 0 ){
+		let parent = this.xml.getElementsByTagName( parentName )[index]
+		parent.appendChild(node)
+	}
+	setNode( nodeName, value, index = 0 ){
+		this.xml.getElementsByTagName( nodeName )[index].innerHTML = value
+	}
+
+	/* ==========	OTHER HELPER METHODS =========== */
+
+	toMorpheusCoordinate( coordinate, fillValue = 0 ){
+		while( coordinate.length &lt; 3 ){
+			coordinate.push( fillValue )
+		}
+		return coordinate.toString()
+	}
+
+	/* ==========	WRITING THE MAIN XML MODEL COMPONENTS OF MORPHEUS =========== */
+
+	writeDescription(){
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;Description&quot; )
+		this.attachNode( &quot;Description&quot;, &quot;Title&quot;,
+			this.model.modelInfo.title )
+		this.attachNode( &quot;Description&quot;, &quot;Details&quot;,
+			this.model.modelInfo.desc )
+	}
+
+	writeGlobal(){
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;Global&quot; )
+	}
+
+	writeSpace(){
+		// Set &lt;Space&gt; tag and children
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;Space&quot; )
+		this.attachNode( &quot;Space&quot;, &quot;Lattice&quot;, undefined,
+			{&quot;class&quot;:this.model.grid.geometry } )
+		this.attachNode( &quot;Space&quot;, &quot;SpaceSymbol&quot;, undefined,
+			{symbol: &quot;space&quot; } )
+
+		// Set the lattice properties.
+		this.attachNode( &quot;Lattice&quot;, &quot;Size&quot;, undefined,
+			{ symbol : &quot;size&quot;,
+				value : this.toMorpheusCoordinate( this.model.grid.extents ) } )
+		this.attachNode( &quot;Lattice&quot;, &quot;Neighborhood&quot; )
+
+		if( typeof this.model.grid.neighborhood.order !== &quot;undefined&quot; ){
+			this.attachNode( &quot;Neighborhood&quot;, &quot;Order&quot;,
+				this.model.grid.neighborhood.order )
+		} else if ( typeof this.model.grid.neighborhood.distance !== &quot;undefined&quot;) {
+			this.attachNode( &quot;Neighborhood&quot;, &quot;Distance&quot;,
+				this.model.grid.neighborhood.distance )
+		} else {
+			this.conversionWarnings.grid.push( &quot;Unknown neighborhood order; &quot; +
+				&quot;reverting to default order 2 instead.&quot; )
+			this.attachNode( &quot;Neighborhood&quot;, &quot;Order&quot;, 2 )
+		}
+
+		this.attachNode( &quot;Lattice&quot;, &quot;BoundaryConditions&quot; )
+
+		const dimNames = [&quot;x&quot;,&quot;y&quot;,&quot;z&quot;]
+		const knownBounds = { periodic: true, noflux : true, constant: true }
+		for( let d = 0; d &lt; this.model.grid.boundaries.length; d++ ){
+			let bType = this.model.grid.boundaries[d]
+			if( !knownBounds.hasOwnProperty( bType ) ){
+
+				this.conversionWarnings.grid.push(
+					&quot;Unknown boundary type : &quot; + bType + &quot;; setting to&quot; +
+					&quot;default &apos;periodic&apos; instead.&quot;
+				)
+				bType = &quot;periodic&quot;
+
+			}
+			this.attachNode( &quot;BoundaryConditions&quot;, &quot;Condition&quot;,
+				undefined, { boundary: dimNames[d], type: bType } )
+		}
+	}
+
+	writeTime(){
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;Time&quot; )
+		this.attachNode( &quot;Time&quot;, &quot;StartTime&quot;, undefined,
+			{value: this.model.timeInfo.start } )
+		this.attachNode( &quot;Time&quot;, &quot;StopTime&quot;, undefined,
+			{value: this.model.timeInfo.stop } )
+
+		if( typeof this.model.kinetics.seed !== &quot;undefined&quot; ){
+			this.attachNode( &quot;Time&quot;, &quot;RandomSeed&quot;, undefined,
+				{ value: this.model.kinetics.seed } )
+		}
+
+		this.attachNode( &quot;Time&quot;, &quot;TimeSymbol&quot;, undefined,
+			{ symbol: &quot;time&quot; } )
+
+	}
+
+	writeCellTypes(){
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;CellTypes&quot; )
+		const ck = this.model.cellKinds
+
+		for( let ki = 0; ki &lt; ck.count; ki++ ){
+			// Special case: background is always the first (index ki = 0 )
+			if( ki === 0 ){
+				this.attachNode( &quot;CellTypes&quot;, &quot;CellType&quot;, undefined,
+					{ class : &quot;medium&quot;, name : ck.index2name[ ki.toString() ] } )
+			} else {
+				this.attachNode( &quot;CellTypes&quot;, &quot;CellType&quot;, undefined,
+					{ class : &quot;biological&quot;, name : ck.index2name[ ki.toString() ] } )
+			}
+			this.cellTypeTagIndex[ this.model.getKindName( ki ) ] =
+				this.xml.getElementsByTagName( &quot;CellType&quot; ).length - 1
+		}
+	}
+
+	writeCPM(){
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;CPM&quot; )
+
+		this.attachNode( &quot;CPM&quot;, &quot;Interaction&quot; )
+		this.setAdhesion()
+
+		this.attachNode( &quot;CPM&quot;, &quot;MonteCarloSampler&quot;, undefined,
+			{stepper:&quot;edgelist&quot;})
+		this.attachNode( &quot;MonteCarloSampler&quot; , &quot;MCSDuration&quot;, undefined,
+			{value:1})
+		this.attachNode( &quot;MonteCarloSampler&quot;, &quot;Neighborhood&quot; )
+		let neighIndex = this.xml.getElementsByTagName(&quot;Neighborhood&quot;).length - 1
+		this.attachNode( &quot;Neighborhood&quot;, &quot;Order&quot;, 2, {}, neighIndex )
+		this.attachNode( &quot;MonteCarloSampler&quot;, &quot;MetropolisKinetics&quot;, undefined,
+			{ temperature: this.model.kinetics.T } )
+		this.attachNode( &quot;CPM&quot;, &quot;ShapeSurface&quot;, undefined,
+			{scaling: &quot;none&quot; } )
+		this.attachNode( &quot;ShapeSurface&quot;, &quot;Neighborhood&quot; )
+		neighIndex++
+		this.attachNode( &quot;Neighborhood&quot;, &quot;Order&quot;, 2, {}, neighIndex )
+
+	}
+
+	writeConstraints(){
+		const constraints = this.model.constraints.constraints
+		for (let cName of Object.keys( constraints ) ){
+
+			switch( cName ){
+
+			case &quot;Adhesion&quot; :
+				// is actually handled by this.writeCPM()
+				break
+
+			case &quot;VolumeConstraint&quot; :
+				this.setVolumeConstraint( constraints[cName] )
+				break
+
+			case &quot;PerimeterConstraint&quot; :
+				this.setPerimeterConstraint( constraints[cName] )
+				break
+
+			case &quot;ActivityConstraint&quot; :
+				this.setActivityConstraint( constraints[cName] )
+				break
+
+			case &quot;LocalConnectivityConstraint&quot; :
+				this.setConnectivityConstraint( constraints[cName], cName )
+				break
+
+			case &quot;ConnectivityConstraint&quot; :
+				this.setConnectivityConstraint( constraints[cName], cName )
+				break
+
+			case &quot;SoftConnectivityConstraint&quot; :
+				this.setConnectivityConstraint( constraints[cName], cName )
+				break
+
+			case &quot;SoftLocalConnectivityConstraint&quot; :
+				this.setConnectivityConstraint( constraints[cName], cName )
+				break
+
+			case &quot;BarrierConstraint&quot; :
+				this.setBarrierConstraint( constraints[cName] )
+				break
+
+			case &quot;PersistenceConstraint&quot; :
+				this.setPersistenceConstraint( constraints[cName] )
+				break
+
+			case &quot;PreferredDirectionConstraint&quot; :
+				this.setPreferredDirectionConstraint( constraints[cName] )
+				break
+
+			case &quot;ChemotaxisConstraint&quot; :
+				this.setChemotaxisConstraint( constraints[cName] )
+				break
+
+			default :
+				this.conversionWarnings.constraints.push( &quot;Constraint :&quot; +
+					cName + &quot; doesn&apos;t exist in Morpheus. Making the model anyway &quot; +
+					&quot;without it; behaviour of the model may change so please &quot; +
+					&quot;check manually for alternatives in Morpheus.&quot;
+				)
+			}
+
+		}
+
+
+	}
+
+	multipleConstraintsWarning( constraintName ){
+		this.conversionWarnings.constraints.push(
+			&quot;It appears as if your model has multiple constraints of type &quot; +
+			constraintName + &quot;; ignoring all but the first.&quot;
+		)
+	}
+
+	setAdhesion( ){
+		if( this.model.constraints.constraints.hasOwnProperty(&quot;Adhesion&quot;)) {
+			const JMatrix = this.model.constraints.constraints.Adhesion[0].J
+			for (let ki = 0; ki &lt; this.model.cellKinds.count; ki++) {
+				for (let kj = 0; kj &lt;= ki; kj++) {
+					const j1 = JMatrix[ki][kj], j2 = JMatrix[kj][ki]
+					if (!isNaN(j1) &amp;&amp; (j1 !== j2)) {
+						this.conversionWarnings.constraints.push(
+							&quot;Your adhesion matrix is not symmetrical, which is not&quot; +
+							&quot;supported by Morpheus. Please check &lt;Interaction&gt; &lt;Contact&gt; values and &quot; +
+							&quot;modify if required.&quot;
+						)
+					}
+					let J = j1
+					if (isNaN(J)) {
+						J = 0
+					}
+					const iName = this.model.getKindName(ki)
+					const jName = this.model.getKindName(kj)
+					this.attachNode(&quot;Interaction&quot;, &quot;Contact&quot;, undefined,
+						{type1: iName, type2: jName, value: J})
+				}
+			}
+		}
+	}
+
+	setVolumeConstraint( confArray ){
+		if( confArray.length &gt; 1 ){
+			this.multipleConstraintsWarning( &quot;VolumeConstraint&quot; )
+		}
+		const conf = confArray[0]
+		const lambda = conf.LAMBDA_V
+		const target = conf.V
+
+		for( let k = 0; k &lt; lambda.length; k++ ){
+			// only add constraint to CellType for which it is non-zero.
+			if( lambda[k] &gt; 0 ){
+				const kName = this.model.getKindName(k)
+				let constraintNode = this.makeNode( &quot;VolumeConstraint&quot;,
+					undefined, {target: target[k], strength: lambda[k]})
+				this.addNodeTo( constraintNode, &quot;CellType&quot;, this.cellTypeTagIndex[kName] )
+			}
+		}
+	}
+
+	setPerimeterConstraint( confArray ){
+		if( confArray.length &gt; 1 ){
+			this.multipleConstraintsWarning( &quot;PerimeterConstraint&quot; )
+		}
+		const conf = confArray[0]
+		const lambda = conf.LAMBDA_P
+		const target = conf.P
+
+		for( let k = 0; k &lt; lambda.length; k++ ){
+			// only add constraint to CellType for which it is non-zero.
+			if( lambda[k] &gt; 0 ){
+				const kName = this.model.getKindName(k)
+				let constraintNode = this.makeNode( &quot;SurfaceConstraint&quot;,
+					undefined, {mode: &quot;surface&quot;, target: target[k], strength: lambda[k]})
+				this.addNodeTo( constraintNode, &quot;CellType&quot;, this.cellTypeTagIndex[kName] )
+			}
+		}
+	}
+
+	setActivityConstraint( confArray ){
+		if( confArray.length &gt; 1 ){
+			this.multipleConstraintsWarning( &quot;ActivityConstraint&quot; )
+		}
+		const conf = confArray[0]
+		const lambda = conf.LAMBDA_ACT
+		const maximum = conf.MAX_ACT
+		const actMean = conf.ACT_MEAN
+		if( actMean !== &quot;geometric&quot; ){
+			this.conversionWarnings.constraints.push( &quot;You have an ActivityConstraint with&quot; +
+				&quot; ACT_MEAN = &apos;arithmetic&apos;, but this is not supported in Morpheus. &quot; +
+				&quot;Switching to &apos;geometric&apos;. Behaviour may change slightly; please &quot; +
+				&quot;check if this is a problem and adjust parameters if this is the case.&quot; )
+		}
+
+		for( let k = 0; k &lt; lambda.length; k++ ){
+			// only add constraint to CellType for which it is non-zero.
+			if( lambda[k] &gt; 0 ){
+				const kName = this.model.getKindName(k)
+				// Add the protrusion plugin to the celltype
+				let constraintNode = this.makeNode( &quot;Protrusion&quot;,
+					undefined, {field: &quot;act&quot;, maximum: maximum[k], strength: lambda[k]})
+				this.addNodeTo( constraintNode, &quot;CellType&quot;, this.cellTypeTagIndex[kName] )
+				// We also need to add an activity Field to the &lt;Global&gt; tag.
+
+				let actField = this.makeNode( &quot;Field&quot;, undefined,
+					{symbol: &quot;act&quot;, value: &quot;0&quot;, name: &quot;actin-activity&quot; } )
+				let diff = this.makeNode( &quot;Diffusion&quot;, undefined, {rate:&quot;0&quot;})
+				actField.appendChild( diff )
+				this.addNodeTo( actField, &quot;Global&quot; )
+			}
+		}
+
+		this.fieldsToDraw.push( &quot;act&quot; )
+	}
+
+	setConnectivityConstraint( confArray, cName ){
+		if( confArray.length &gt; 1 ){
+			this.multipleConstraintsWarning( &quot;ConnectivityConstraint&quot; )
+		}
+		const conf = confArray[0]
+
+		// Hard constraint
+		if( conf.hasOwnProperty( &quot;CONNECTED&quot; ) ){
+			const conn = conf.CONNECTED
+
+			for( let k = 0; k &lt; conn.length; k++ ){
+				if( conn[k] ){
+					let constraintNode = this.makeNode( &quot;ConnectivityConstraint&quot; )
+					this.addNodeTo( constraintNode, &quot;CellType&quot;,
+						this.cellTypeTagIndex[this.model.getKindName(k)] )
+				}
+			}
+			if( cName === &quot;LocalConnectivityConstraint&quot; ){
+				this.conversionWarnings.constraints.push( &quot;Your artistoo &quot; +
+					&quot;model has a LocalConnectivityConstraint, which is not &quot; +
+					&quot;supported in Morpheus. Converting to the Morpheus &quot; +
+					&quot;ConnectivityConstraint; behaviour may change slightly &quot; +
+					&quot;so please check your model.&quot; )
+			}
+		}
+
+		// Or the soft constraint
+		else if ( conf.hasOwnProperty ( &quot;LAMBDA_CONNECTIVITY&quot; ) ){
+
+			// add only to the cells for which it is non-zero.
+			const lambda = conf.LAMBDA_CONNECTIVITY
+			for( let k = 0; k &lt; lambda.length; k++ ){
+				if( lambda[k] &gt; 0 ){
+					let constraintNode = this.makeNode( &quot;ConnectivityConstraint&quot; )
+					this.addNodeTo( constraintNode, &quot;CellType&quot;,
+						this.cellTypeTagIndex[this.model.getKindName(k)] )
+				}
+			}
+
+			this.conversionWarnings.constraints.push( &quot;Your artistoo &quot; +
+				&quot;model has a &quot; + cName + &quot;, which is not &quot; +
+				&quot;supported in Morpheus. Converting to the Morpheus &quot; +
+				&quot;ConnectivityConstraint; this is a hard constraint so &quot; +
+				&quot; behaviour may change slightly -- please check your model.&quot; )
+		}
+
+	}
+
+	setBarrierConstraint( confArray ){
+		if( confArray.length &gt; 1 ){
+			this.multipleConstraintsWarning( &quot;BarrierConstraint&quot; )
+		}
+		const conf = confArray[0]
+		const barr = conf.IS_BARRIER
+
+		// Add to cells for which it is set to true.
+		for( let k = 0; k &lt; barr.length; k++ ){
+			if( barr[k] ){
+				let constraintNode = this.makeNode( &quot;FreezeMotion&quot;,
+					undefined, { condition: &quot;1&quot;})
+				this.addNodeTo( constraintNode, &quot;CellType&quot;,
+					this.cellTypeTagIndex[this.model.getKindName(k)] )
+			}
+		}
+	}
+
+	setPersistenceConstraint( confArray ){
+		if( confArray.length &gt; 1 ){
+			this.multipleConstraintsWarning( &quot;PersistenceConstraint&quot; )
+		}
+		const conf = confArray[0]
+		const lambda = conf.LAMBDA_DIR
+		const dt = conf.DELTA_T || this.model.initCellKindVector(10)
+		const prob = conf.PERSIST
+
+		for( let k = 0; k &lt; lambda.length; k++ ){
+			// only add constraint to CellType for which it is non-zero.
+			if( lambda[k] &gt; 0 ){
+				const kName = this.model.getKindName(k)
+				let constraintNode = this.makeNode( &quot;PersistentMotion&quot;,
+					undefined, {decaytime: dt[k], strength: lambda[k]})
+				this.addNodeTo( constraintNode, &quot;CellType&quot;, this.cellTypeTagIndex[kName] )
+				if( prob[k] !== 1 ){
+					this.conversionWarnings.constraints.push( &quot;Your model has a &quot; +
+						&quot;PersistenceConstraint with PERSIST = &quot; + prob[k] + &quot;, but &quot; +
+						&quot;Morpheus only supports PERSIST = 1. Reverting to this setting &quot; +
+						&quot;instead, please check your model carefully.&quot; )
+				}
+			}
+		}
+	}
+
+	setPreferredDirectionConstraint( confArray ){
+		if( confArray.length &gt; 1 ){
+			this.multipleConstraintsWarning( &quot;PreferredDirectionConstraint&quot; )
+		}
+		const conf = confArray[0]
+		const lambda = conf.LAMBDA_DIR
+		const dir = conf.DIR
+
+		for( let k = 0; k &lt; lambda.length; k++ ){
+			// only add constraint to CellType for which it is non-zero.
+			if( lambda[k] &gt; 0 ){
+				const kName = this.model.getKindName(k)
+				const direction = this.toMorpheusCoordinate( dir[k] )
+				let constraintNode = this.makeNode( &quot;DirectedMotion&quot;,
+					undefined, {direction: direction, strength: lambda[k]})
+				this.addNodeTo( constraintNode, &quot;CellType&quot;, this.cellTypeTagIndex[kName] )
+			}
+		}
+
+	}
+
+	setChemotaxisConstraint( confArray ){
+
+		for( let i = 0; i &lt; confArray.length; i++ ){
+
+			const conf = confArray[i]
+			const index = i+1
+			const fieldName = &quot;U&quot; + index
+
+			const lambda = conf.LAMBDA_CH
+			const field = conf.CH_FIELD
+
+			// Warn for a CoarseGrid
+			if( typeof field.upscale !== &quot;undefined&quot; &amp;&amp; field.upscale !== 1 ){
+				this.conversionWarnings.constraints.push(
+					&quot;Your ChemotaxisConstraint is linked to a &apos;CoarseGrid&apos; with &quot; +
+					&quot;a different resolution than the original CPM grid. This is not &quot; +
+					&quot;supported in Morpheus. Adding a Field anyway, but you may have &quot; +
+					&quot;to check and scale the diffusion rate.&quot;
+				)
+			}
+
+			// Add the constraint to celltypes for which lambda nonzero.
+			for( let k = 0; k &lt; lambda.length; k++ ){
+				if( lambda[k] &gt; 0 ){
+					const kName = this.model.getKindName(k)
+					let constraintNode = this.makeNode( &quot;Chemotaxis&quot;,
+						undefined, {field: fieldName, strength: lambda[k]})
+					this.addNodeTo( constraintNode, &quot;CellType&quot;, this.cellTypeTagIndex[kName] )
+				}
+			}
+
+			// For this to work, the concentration field &apos;U&apos; needs to exist in &apos;global&apos;.
+			let fieldNode = this.makeNode( &quot;Field&quot;, undefined,
+				{symbol: fieldName, value : 0 } )
+			let diffNode = this.makeNode( &quot;Diffusion&quot;, undefined,
+				{rate:0.1} )
+			this.conversionWarnings.constraints.push( &quot;Adding a ChemotaxisConstraint &quot; +
+				&quot;with an attached field, but cannot find parameters like diffusion rate, &quot; +
+				&quot;chemokine production rate, and decay rate automatically. Adding some &quot; +
+				&quot;default values; please adapt these manually (by configuring constants &quot; +
+				&quot;and properties under &apos;Global&apos; and where &quot; +
+				&quot;relevant under the &apos;CellTypes&apos;)&quot; )
+			fieldNode.appendChild( diffNode )
+			this.addNodeTo( fieldNode, &quot;Global&quot; )
+
+			// Also add the production/decay equation in a system
+			let sysNode = this.makeNode( &quot;System&quot;, undefined,
+				{solver: &quot;Euler [fixed, O(1)]&quot;, &quot;time-step&quot;:1 } )
+			let eqnNode = this.makeNode( &quot;DiffEqn&quot;, undefined,
+				{ &quot;symbol-ref&quot; : fieldName })
+			let expr = &quot;P&quot; + index + &quot; - d&quot; + index +&quot;*&quot; + fieldName
+			let exprNode = this.makeNode( &quot;Expression&quot;, expr )
+			eqnNode.appendChild( exprNode )
+			sysNode.appendChild( eqnNode )
+
+			// Add the constant degradation used in the equation
+			let constNode = this.makeNode( &quot;Constant&quot;, undefined,
+				{ symbol: &quot;d&quot;+index, value : &quot;0&quot;, name: &quot;degradation &quot;+fieldName } )
+			sysNode.appendChild( constNode )
+
+			// Add the production, space-dependent so use a field
+			let productionField = this.makeNode( &quot;Field&quot;, undefined,
+				{&quot;symbol&quot;: &quot;P&quot;+index, value : 0} )
+			let eqn2Node = this.makeNode( &quot;Equation&quot;, undefined,
+				{ &quot;symbol-ref&quot; : &quot;P&quot;+index, name: &quot;production &quot;+fieldName })
+			const randX = Math.floor( Math.random() * this.model.grid.extents[0] )
+			const randY = Math.floor( Math.random() * this.model.grid.extents[1] )
+			let expr2Node = this.makeNode( &quot;Expression&quot;,
+				&quot;if( space.x == &quot;+randX+&quot; and space.y == &quot;+randY+&quot;, 10, 0 )&quot; )
+			eqn2Node.appendChild( expr2Node )
+			this.addNodeTo( eqn2Node, &quot;Global&quot; )
+			this.addNodeTo( productionField, &quot;Global&quot; )
+			this.addNodeTo( sysNode, &quot;Global&quot; )
+
+			this.fieldsToDraw.push( fieldName )
+
+		}
+
+
+
+	}
+
+	writeCellPopulations(){
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;CellPopulations&quot; )
+
+		let objects = {} // key for each kind, array of objects in InitCellObjects as value.
+		let ID = 1
+
+		for( let init of this.model.setup.init ){
+			const k = init.kindName
+			if( !objects.hasOwnProperty(k) ){ objects[k] = [] }
+
+			switch( init.setter ){
+			case &quot;circleObject&quot; :
+				// objects added per cellkind below the loop.
+				objects[k].push(this.makeNode(&quot;Sphere&quot;, undefined,
+					{center: this.toMorpheusCoordinate( init.center ),
+						radius: init.radius}))
+				break
+
+			case &quot;boxObject&quot; :
+				// objects added per cellkind below the loop.
+				objects[k].push(this.makeNode(&quot;Box&quot;, undefined,
+					{origin: this.toMorpheusCoordinate( init.bottomLeft ),
+						size: this.toMorpheusCoordinate( init.boxSize ) } ) )
+				break
+
+			case &quot;cellCircle&quot; : {
+				let popNode = this.makeNode( &quot;Population&quot;, undefined, {type:k } )
+				let initNode = this.makeNode( &quot;InitCircle&quot;,
+					undefined, { mode: &quot;random&quot;, &quot;number-of-cells&quot;: init.nCells })
+				let dimNode = this.makeNode( &quot;Dimensions&quot;, undefined,
+					{center : this.toMorpheusCoordinate( init.center ),
+						radius: init.radius} )
+				initNode.appendChild( dimNode )
+				popNode.appendChild( initNode )
+				this.addNodeTo( popNode, &quot;CellPopulations&quot; )
+				break
+			}
+
+			case &quot;pixelSet&quot; : {
+				let popNode = this.makeNode( &quot;Population&quot;, undefined, {type:k } )
+				let cellNode = this.makeNode( &quot;Cell&quot;,
+					undefined, { id: ID, name: ID })
+				let ww = this
+				let pixelList = init.pixels.map( function(p){
+					return ww.toMorpheusCoordinate(p)
+				} )
+				let nodeNode = this.makeNode( &quot;Nodes&quot;,
+					pixelList.join(&quot;;&quot;) )
+				ID++
+
+				cellNode.appendChild( nodeNode )
+				popNode.appendChild( cellNode )
+				this.addNodeTo( popNode, &quot;CellPopulations&quot; )
+				break
+			}
+
+			default :
+				this.conversionWarnings.init.push( &quot;Unknown initializer : &quot; + init.setter +
+				&quot;, ignoring; you may have to check the CellPopulations settings of your model&quot; +
+					&quot;manually.&quot;)
+
+			}
+		}
+
+		for( let k of Object.keys( objects ) ){
+
+			if( objects[k].length &gt; 0 ) {
+
+				let popNode = this.makeNode(&quot;Population&quot;, undefined, {type: k})
+				let initNode = this.makeNode(&quot;InitCellObjects&quot;,
+					undefined, {mode: &quot;distance&quot;})
+
+
+				let objArr = objects[k]
+				for (let obj of objArr) {
+					let arrNode = this.makeNode(&quot;Arrangement&quot;, undefined,
+						{displacements: &quot;0,0,0&quot;, repetitions: &quot;1,1,1&quot;})
+					arrNode.appendChild(obj)
+					initNode.appendChild(arrNode)
+				}
+				popNode.appendChild(initNode)
+				this.addNodeTo(popNode, &quot;CellPopulations&quot;)
+
+			}
+		}
+
+	}
+
+	writeAnalysis(){
+		this.conversionWarnings.analysis.push(
+			&quot;Auto-conversion of plots and other output is not (yet) supported.&quot; +
+			&quot;Adding some default outputs, but please check and adjust these &quot; +
+			&quot;manually.&quot;
+		)
+		this.attachNode( &quot;MorpheusModel&quot;, &quot;Analysis&quot; )
+
+		let gnuPlot = this.makeNode( &quot;Gnuplotter&quot;, undefined, {&quot;time-step&quot;:50} )
+		gnuPlot.appendChild(
+			this.makeNode( &quot;Terminal&quot;, undefined, {name:&quot;png&quot;})
+		)
+		let plot = this.makeNode( &quot;Plot&quot; )
+		plot.appendChild(
+			this.makeNode( &quot;Cells&quot;, undefined,
+				{opacity:&quot;0.2&quot;, value: &quot;cell.type&quot; })
+		)
+
+		// Plot the fields to draw
+		for( let f of this.fieldsToDraw ){
+			plot.appendChild( this.makeNode( &quot;Field&quot;, undefined,
+				{&quot;symbol-ref&quot;: f } ) )
+		}
+
+		gnuPlot.appendChild( plot )
+		this.addNodeTo( gnuPlot, &quot;Analysis&quot; )
+
+	}
+
+}
+
+export default MorpheusWriter</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

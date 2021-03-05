@@ -34,10 +34,13 @@ docs-examples : examples/html | docs/examples
 	cp examples/3D/Canvas3D.js docs/examples/ && \
 	cp examples/3D/OrbitControls.js docs/examples/
 	
+docs/converter.html : misc/converter.html
+	cp $< $@ && cp -r converter-page docs/converter
+	
 docs/examples :
 	@mkdir -p $@
 
-docs : docs/index.html docs-examples
+docs : docs/index.html docs-examples docs/converter.html
 
 #cat $< | sed 's:./examples:../examples:g' | sed 's:./docs:../docs:g' > docs/index2.html && \
 #mv docs/index2.html docs/index.html

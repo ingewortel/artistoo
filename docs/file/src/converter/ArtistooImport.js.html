@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/converter/ArtistooImport.js | Artistoo</title>
+  
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+
+  <script src="../misc/nav.js"></script>
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<style>
+/*.li {
+	list-style-type: none!important;
+}*/
+
+.navbar{
+padding-left:10px;
+padding-right:10px;
+}
+
+
+.mainimg {
+	min-height: 21em;
+    background-color: #666;
+    margin:0px 0px!important; padding:0px!important;
+	background-position: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    url('../misc/cpm-01.jpg');
+}
+.mainimg h1 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 300;
+  border-bottom: solid 0px #ddd;
+  text-align: center;
+  font-size: 400%;
+}
+
+.mainimg h2 {
+	text-align: center;
+	font-size:200%;
+	border-bottom: solid 0px;
+}
+
+.front-page h1 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.front-page h2 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	font-size:170%!important;
+}
+
+
+.bottom {
+  display: block;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main" style="border-bottom: solid 1px #ddd;">
+    <div class="container" style="margin-left:0px;max-width:100%;">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+
+				<li class="nav-item">
+				  <a class="nav-link" href="./manual/index.html"><span>Manual</span></a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Source</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo"><img width="20px" style="position:relative;top:-2px;" src="./image/github.png"></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<img src="./image/search.png">
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    	
+</nav>
+
+<nav class="navigation" data-ice="nav" id="mySidepanel">
+<!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
+<div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent"><h1 data-ice="title">src/converter/ArtistooImport.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import ModelDescription from &quot;./ModelDescription.js&quot;
+import PixelsByCell from &quot;../stats/PixelsByCell.js&quot;
+
+class ArtistooImport extends ModelDescription {
+
+	constructor( model ) {
+
+		super()
+
+		if( model.isCPM ){
+			this.C = model
+			this.simsettings = {}
+			this.mode = &quot;CPM&quot;
+		} else if ( model.isSimulation ){
+			this.sim = model
+			this.C = model.C
+			this.simsettings = model.conf
+			this.mode = &quot;Simulation&quot;
+		} else {
+			throw(&quot;Model must be a CPM or Simulation object!&quot;)
+		}
+
+		this.from = &quot;an Artistoo model (&quot; + this.mode + &quot; class)&quot;
+		this.generalWarning += &quot;\nWarning: cannot automatically convert an entire &quot; +
+			&quot;Artistoo script. This converter handles anything in the configuration &quot; +
+			&quot;object of your &quot; + this.mode + &quot;, such as spatial settings, time settings &quot; +
+			&quot;and CPM parameters. It also handles the initial configuration. But &quot; +
+			&quot;if you perform extra actions between steps &quot; +
+			&quot;(such as dividing cells, killing cells, producing chemokines, etc.),&quot; +
+			&quot; these are not automatically added to the converted model. &quot; +
+			&quot;Please check your script manually for such actions; they should be &quot; +
+			&quot;added manually in the destination framework (please consult that framework&apos;s &quot; +
+			&quot;documentation to see how).\n\n&quot;
+
+
+		this.build()
+	}
+
+
+	setModelInfo(){
+		this.modelInfo.title = &quot;ArtistooImport&quot;
+		this.modelInfo.desc = &quot;Please add a description of your model here.&quot;
+		this.conversionWarnings.modelInfo.push(
+			&quot;Cannot set model title and description automatically from an HTML page; &quot; +
+			&quot;please add these manually to your model.&quot;
+		)
+	}
+
+	setTimeInfo(){
+
+
+		this.timeInfo.start = 0
+		if( this.simsettings.hasOwnProperty(&quot;BURNIN&quot;) ){
+			this.timeInfo.start += this.simsettings[&quot;BURNIN&quot;]
+		}
+
+		if( this.simsettings.hasOwnProperty( &quot;RUNTIME&quot; ) ){
+			this.timeInfo.stop = this.timeInfo.start + this.simsettings.RUNTIME
+		} else if (this.simsettings.hasOwnProperty( &quot;RUNTIME_BROWSER&quot; ) ){
+			this.timeInfo.stop = this.timeInfo.start + this.simsettings.RUNTIME_BROWSER
+		} else {
+			this.timeInfo.stop = 100
+			this.conversionWarnings.time.push(
+				&quot;Could not find any information of runtime; setting the simulation to &quot; +
+				&quot;100 MCS for now. Please adjust manually.&quot;
+			)
+		}
+
+		this.timeInfo.duration = this.timeInfo.stop - this.timeInfo.start
+		if( this.timeInfo.duration &lt; 0 ){
+			throw( &quot;Error: I cannot go back in time; timeInfo.stop must be larger than timeInfo.start!&quot;)
+		}
+	}
+
+	setGridInfo(){
+		this.grid.ndim = this.C.grid.extents.length
+		this.grid.extents = this.C.grid.extents
+		this.grid.geometry = &quot;square&quot;
+		if( this.grid.ndim === 3 ){
+			this.grid.geometry = &quot;cubic&quot;
+		}
+		this.grid.neighborhood = { order: 2 }
+		const torus = this.C.grid.torus
+		let bounds = []
+		for( let t of torus ){
+			if(t){
+				bounds.push( &quot;periodic&quot; )
+			} else {
+				bounds.push( &quot;noflux&quot; )
+			}
+		}
+		this.grid.boundaries = bounds
+	}
+
+	setCellKindNames(){
+
+		this.cellKinds.count = undefined
+
+		// If there are simsettings, NRCELLS contains info on number of cellkinds.
+		/*if( this.simsettings.hasOwnProperty(&quot;NRCELLS&quot; ) ){
+			this.cellKinds.count = this.simsettings.NRCELLS.length + 1
+
+		// Otherwise, try getting it from the constraint parameters.
+		} else {*/
+		let found = false
+		const constraints = this.C.getAllConstraints()
+
+		// If there&apos;s an adhesion constraint, we can get the info from the J matrix.
+		if( constraints.hasOwnProperty( &quot;Adhesion&quot; ) ){
+			found = true
+			this.cellKinds.count = this.C.getConstraint(&quot;Adhesion&quot;).conf.J.length
+
+		// Otherwise, loop through constraints to find a parameter starting
+		// with LAMBDA and use that.
+		} else {
+			for( let cn of Object.keys( constraints ) ){
+				let cc = this.C.getConstraint(cn).conf
+				// Find index of first param that starts with LAMBDA;
+				// returns -1 if there are none.
+				const lambdaIndex = Object.keys(cc).findIndex(
+					function (k) {
+						return ~k.indexOf(&quot;LAMBDA&quot;)
+					})
+				if (lambdaIndex &gt; -1) {
+					// there is a lambda parameter, assume specified per cellkind
+					found = true
+					const parmName = Object.keys(cc)[lambdaIndex]
+					this.cellKinds.count = cc[parmName].length
+				}
+				if (found) {
+
+					break
+				}
+			}
+			// if we get here, still no success. Now try to read how many
+			// cellKinds there are from the initialized grid.
+
+			let kinds = {}
+			for( let cid of this.C.cellIDs() ){
+				if( !kinds.hasOwnProperty( this.C.cellKind(cid) ) ){
+					kinds[this.C.cellKind(cid)] = true
+				}
+			}
+			this.cellKinds.count = Object.keys( kinds ).length + 1
+			this.conversionWarnings.cells.push(
+				&quot;Could not find how many CellKinds there are automatically! &quot; +
+				&quot;Counting the number of cellKinds on the initialized grid, but &quot; +
+				&quot;if the simulation introduces new cellKinds only after initialization &quot; +
+				&quot;then the output will be wrong. Please check manually! &quot; +
+				&quot;As a workaround, you can add an Adhesion constraint to the model&quot; +
+				&quot;with all-zero contact energies; this will not change the model &quot; +
+				&quot;but will define the number of cellkinds properly.&quot;
+			)
+
+
+			//}
+		}
+
+		// if still undefined, don&apos;t add any except background an add a warning.
+		if( typeof this.cellKinds.count === &quot;undefined&quot; ){
+			this.cellKinds.count = 1
+			this.conversionWarnings.cells.push(
+				&quot;Could not find how many CellKinds there are automatically! &quot; +
+				&quot;Ignoring everything except background, output will be wrong. &quot; +
+				&quot;As a workaround, you can add an Adhesion constraint to the model&quot; +
+				&quot;with all-zero contact energies; this will not change the model &quot; +
+				&quot;but will define the number of cellkinds properly.&quot;
+			)
+		}
+
+		this.cellKinds.index2name = {}
+		this.cellKinds.name2index = {}
+		for( let k = 0; k &lt; this.cellKinds.count; k++ ){
+			if( k === 0 ){
+				this.cellKinds.index2name[k] = &quot;medium&quot;
+				this.cellKinds.name2index[&quot;medium&quot;] = k
+			} else {
+				this.cellKinds.index2name[k] = &quot;celltype&quot; + k
+				this.cellKinds.name2index[&quot;celltype&quot;+k ] = k
+			}
+		}
+
+		// empty object for each cellkind.
+		this.cellKinds.properties = {}
+		for( let n of Object.keys( this.cellKinds.name2index ) ){
+			this.cellKinds.properties[n] = {}
+		}
+
+
+	}
+
+	setCPMGeneral(){
+
+		// Random Seed
+		this.kinetics.seed = this.C.conf.seed
+
+		// Temperature
+		this.kinetics.T = this.C.conf.T
+
+	}
+
+	setConstraints(){
+
+		const constraints = this.C.getAllConstraints()
+		for( let cName of Object.keys( constraints ) ){
+			this.constraints.constraints[cName] = []
+			let index = 0
+			while( typeof this.C.getConstraint( cName, index ) !== &quot;undefined&quot;){
+				let cc = this.C.getConstraint( cName, index ).conf
+				this.constraints.constraints[cName].push( cc )
+				index++
+			}
+		}
+	}
+
+	setGridConfiguration(){
+
+		// If the supplied model is a Simulation; this is the most robust method
+		// because we can reset the model and export the grid configuration
+		// directly after initializeGrid has been called.
+		if( typeof this.sim !== &quot;undefined&quot; ){
+			// stop the simulation
+			this.sim.toggleRunning()
+			// remove any cells from the grid and reinitialize
+			this.sim.C.reset()
+			this.sim.initializeGrid()
+			this.readPixelsByCell()
+			// Reset time to just after initialisation
+			this.sim.C.time -= this.sim.time
+			this.sim.time -= this.sim.time
+			this.sim.runBurnin()
+			this.sim.toggleRunning()
+		} else {
+			this.conversionWarnings.init.push(
+				&quot;You have supplied a CPM rather than a Simulation object; &quot; +
+				&quot;reading the initial settings directly from the CPM. This is &quot; +
+				&quot;slightly less robust than reading it from the Simulation since &quot; +
+				&quot;I cannot go back to time t = 0 to read the exact initial setup.&quot;
+			)
+			this.readPixelsByCell()
+		}
+
+	}
+
+	readPixelsByCell(){
+
+		const cellPix = this.C.getStat( PixelsByCell )
+		for( let cid of Object.keys( cellPix ) ){
+			if( cellPix[cid].length &gt; 0 ) {
+				const cki = this.C.cellKind(cid)
+				this.setup.init.push({
+					setter: &quot;pixelSet&quot;,
+					kind: cki,
+					kindName: this.getKindName(cki),
+					cid: cid,
+					pixels: cellPix[cid]
+				})
+			}
+		}
+	}
+
+}
+
+export default ArtistooImport</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

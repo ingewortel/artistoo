@@ -2879,6 +2879,7 @@ class CPM extends GridBasedModel {
 		this.t2k[0] = 0;
 		this.time = 0;
 		this.cellvolumes = [0];
+		this.stat_values = {};
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 
@@ -7280,7 +7281,11 @@ class Simulation {
 	
 		// add the initializer if not already there
 		if( !this.helpClasses["gm"] ){ this.addGridManipulator(); }
-	
+
+		// reset C and clear cache (important if this method is called
+		// again later in the sim).
+		this.C.reset();
+
 		let nrcells = this.conf["NRCELLS"], cellkind, i;
 		
 		// Seed the right number of cells for each cellkind
@@ -10353,6 +10358,7 @@ class ArtistooImport extends ModelDescription {
 	}
 
 	readPixelsByCell(){
+
 		const cellPix = this.C.getStat( PixelsByCell );
 		for( let cid of Object.keys( cellPix ) ){
 			if( cellPix[cid].length > 0 ) {
