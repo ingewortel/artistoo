@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -188,13 +197,13 @@ padding-right:10px;
 </nav>
 
 <div class="content" data-ice="content" id="mainContent"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import GridManipulator from &apos;<span><a href="file/src/grid/GridManipulator.js.html#lineNumber20">Artistoo/src/grid/GridManipulator.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import GridManipulator from &apos;<span><a href="file/src/grid/GridManipulator.js.html#lineNumber23">Artistoo/src/grid/GridManipulator.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/grid/GridManipulator.js.html#lineNumber20">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/grid/GridManipulator.js.html#lineNumber23">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -214,12 +223,13 @@ padding-right:10px;
 
   
   
-  <div class="description" data-ice="description"><p>This class contains methods that should be executed once per Monte Carlo Step.
-Examples are cell division, cell death etc.</p>
-<p>Methods are written for CPMs, but some of the methods may also apply to other
-models of class (<span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span>, e.g. the cell seeding methods) 
-or even a general grid (<span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span>, e.g. the <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makePlane">makePlane</a></span> and <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-changeKind">changeKind</a></span> 
-methods).</p>
+  <div class="description" data-ice="description"><p>This class contains methods that should be executed once per
+Monte Carlo Step. Examples are cell division, cell death etc.</p>
+<p>It also contains methods to seed new cells in certain shapes and
+configurations. Methods are written for CPMs, but some of the methods
+may also apply to other models of class (<span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span>, e.g.
+the cell seeding methods) or even a general grid (<span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span>, e.g.
+the <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine">makeLine</a></span> and <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> methods).</p>
 </div>
   
 
@@ -230,7 +240,7 @@ methods).</p>
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">// Build CPM and attach a gridmanipulator 
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">// Build CPM and attach a gridmanipulator
 let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
 let gm = new CPM.GridManipulator( C )</code></pre>
     </div>
@@ -339,15 +349,45 @@ let gm = new CPM.GridManipulator( C )</code></pre>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-changeKind">changeKind</a></span></span><span class="code" data-ice="signature">(voxels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, cellkind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span></span><span class="code" data-ice="signature">(voxels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, cellkind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, newID: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Helper method that converts all pixels in a given array to a specific cellkind:
-changes the pixels defined by voxels (array of coordinates p) into
-the given cellkind.</p>
+        <div data-ice="description"><p>Helper method that assigns all pixels in a given array to a
+cell of a given cellkind: changes the pixels defined by voxels
+(array of coordinates p) into the given cellKind and a corresponding
+cellID.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-changeKind">changeKind</a></span></span><span class="code" data-ice="signature">(voxels: <span>*</span>, cellkind: <span>*</span>, newid: <span>*</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Abrogated; this is now <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span>.</p>
 </div>
       </div>
     </td>
@@ -400,7 +440,7 @@ its major axis.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-killCell">killCell</a></span></span><span class="code" data-ice="signature">(cellid: <span>*</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-killCell">killCell</a></span></span><span class="code" data-ice="signature">(cellID: <span>*</span>)</span>
         </p>
       </div>
       <div>
@@ -428,13 +468,106 @@ its major axis.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makePlane">makePlane</a></span></span><span class="code" data-ice="signature">(voxels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, coord: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, coordvalue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeBox">makeBox</a></span></span><span class="code" data-ice="signature">(bottomLeft: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, boxSize: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Helper method to set an entire plane or line of pixels to a certain CellId at once.</p>
+        <div data-ice="description"><p>Helper method to return a rectangle (or in 3D: box) of pixels; can be used
+in conjunction with <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> to assign all these pixels
+to a given CellId at once.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeCircle">makeCircle</a></span></span><span class="code" data-ice="signature">(center: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, radius: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Helper method to return a circle (in 3D: sphere) of pixels; can be used
+in conjunction with <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> to assign all these pixels
+to a given CellId at once.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine">makeLine</a></span></span><span class="code" data-ice="signature">(dimension: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, coordinateValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Helper method to return an entire plane or line of pixels; can be used
+in conjunction with <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> to assign all these pixels
+to a given CellId at once.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makePlane">makePlane</a></span></span><span class="code" data-ice="signature">(dim: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, coordinateValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Deprecated method, please use <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine">makeLine</a></span> instead.</p>
 </div>
       </div>
     </td>
@@ -521,8 +654,8 @@ its major axis.</p>
       <div>
         
         
-        <div data-ice="description"><p> Seed &quot;n&quot; cells of celltype &quot;kind&quot; at random points lying within a circle 
-surrounding &quot;center&quot; with radius &quot;radius&quot;.</p>
+        <div data-ice="description"><p> Seed &quot;n&quot; cells of celltype &quot;kind&quot; at random points lying within a
+circle surrounding &quot;center&quot; with radius &quot;radius&quot;.</p>
 </div>
       </div>
     </td>
@@ -553,7 +686,7 @@ surrounding &quot;center&quot; with radius &quot;radius&quot;.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber33">source</a></span></span>
     </span>
   </h3>
 
@@ -577,11 +710,12 @@ surrounding &quot;center&quot; with radius &quot;radius&quot;.</p>
       <td data-ice="name" class="code" data-depth="0">C</td>
       <td data-ice="type" class="code"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM">CPM</a></span> | <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span> | <span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>the model whose grid you wish to manipulate.
-Methods are written for CPMs, but some of the methods may also apply to other
-models of class (<span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span>, e.g. the cell seeding methods) 
-or even a general grid (<span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span>, e.g. the <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makePlane">makePlane</a></span> and <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-changeKind">changeKind</a></span> 
-methods).</p>
+      <td data-ice="description"><p>the model whose grid
+you wish to manipulate.
+Methods are written for CPMs, but some of the methods may also
+apply to other models of class (<span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span>, e.g.
+the cell seeding methods) or even a general grid (<span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span>, e.g.
+the <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine">makeLine</a></span> and <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> methods).</p>
 </td>
     </tr>
 </tbody>
@@ -621,7 +755,7 @@ methods).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber36">source</a></span></span>
     </span>
   </h3>
 
@@ -657,27 +791,28 @@ methods).</p>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-changeKind">
+  <h3 data-ice="anchor" id="instance-method-assignCellPixels">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">changeKind</span><span class="code" data-ice="signature">(voxels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, cellkind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>)</span>
+    <span class="code" data-ice="name">assignCellPixels</span><span class="code" data-ice="signature">(voxels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, cellkind: <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span>, newID: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber235">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber412">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Helper method that converts all pixels in a given array to a specific cellkind:
-changes the pixels defined by voxels (array of coordinates p) into
-the given cellkind. </p>
+  <div data-ice="description"><p>Helper method that assigns all pixels in a given array to a
+cell of a given cellkind: changes the pixels defined by voxels
+(array of coordinates p) into the given cellKind and a corresponding
+cellID.</p>
 </div>
 
   
@@ -704,6 +839,15 @@ the given cellkind. </p>
       <td data-ice="description"><p>cellkind to change these pixels into.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">newID</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>(Optional) id of the cell to assign the
+    pixels to; if this is unspecified, a new cellID is generated for this
+    purpose.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -724,12 +868,84 @@ the given cellkind. </p>
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
-let gm = new CPM.GridManipulator( C )
-let myline = gm.makePlane( [], 0, 2 )
-gm.changeKind( myline, 1 )</code></pre>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">	let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+	let gm = new CPM.GridManipulator( C )
+	let myLine = gm.makeLine( 0, 2 )
+	gm.assignCellPixels( myLine, 1 )</code></pre>
     </div>
 </div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-changeKind">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">changeKind</span><span class="code" data-ice="signature">(voxels: <span>*</span>, cellkind: <span>*</span>, newid: <span>*</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber422">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Abrogated; this is now <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span>. *</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">voxels</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cellkind</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">newid</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -748,7 +964,7 @@ gm.changeKind( myline, 1 )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber271">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber453">source</a></span></span>
     </span>
   </h3>
 
@@ -844,11 +1060,11 @@ C.getStat( PixelsByCell )</code></pre>
     
     
     
-    <span class="code" data-ice="name">killCell</span><span class="code" data-ice="signature">(cellid: <span>*</span>)</span>
+    <span class="code" data-ice="name">killCell</span><span class="code" data-ice="signature">(cellID: <span>*</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber41">source</a></span></span>
     </span>
   </h3>
 
@@ -868,7 +1084,7 @@ C.getStat( PixelsByCell )</code></pre>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">cellid</td>
+      <td data-ice="name" class="code" data-depth="0">cellID</td>
       <td data-ice="type" class="code"><span>*</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"></td>
@@ -890,36 +1106,46 @@ C.getStat( PixelsByCell )</code></pre>
 
   
 
-  
+  <div data-ice="tests">
+    <h4>Test:</h4>
+    <ul>
+      
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber36">Tests for Grid Manipulator  [ unit tests ]  should remove a cellID from the grid</a></span></li>
+</ul>
+  </div>
 
   
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-makePlane">
+  <h3 data-ice="anchor" id="instance-method-makeBox">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">makePlane</span><span class="code" data-ice="signature">(voxels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, coord: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, coordvalue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">makeBox</span><span class="code" data-ice="signature">(bottomLeft: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, boxSize: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber195">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber288">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Helper method to set an entire plane or line of pixels to a certain CellId at once.
-The method takes an existing array of coordinates (which can be empty) and adds the pixels
-of the specified plane to it. See <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-changeKind">changeKind</a></span> for a method that sets such a 
-pixel set to a new value.</p>
-<p>The plane is specified by fixing one coordinate (x,y,or z) to a fixed value, and
-letting the others range from their min value 0 to their max value.</p>
+  <div data-ice="description"><p>Helper method to return a rectangle (or in 3D: box) of pixels; can be used
+in conjunction with <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> to assign all these pixels
+to a given CellId at once. (See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine">makeLine</a></span> and
+<span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeCircle">makeCircle</a></span>).
+The method takes an existing array of coordinates (which can be
+empty) and adds the pixels of the specified rectangle/box to it.
+See <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> for a method that sets such a pixel set to a
+new value.</p>
+<p>The box/rectangle is specified by its bottom left corner (x,y,z)
+and size (dx, dy, dz).</p>
 </div>
 
   
@@ -933,25 +1159,27 @@ letting the others range from their min value 0 to their max value.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">voxels</td>
+      <td data-ice="name" class="code" data-depth="0">bottomLeft</td>
       <td data-ice="type" class="code"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>Existing array of pixels; this can be empty [].</p>
+      <td data-ice="description"><p>the coordinate of the bottom
+left corner of the rectangle/box.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">coord</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="name" class="code" data-depth="0">boxSize</td>
+      <td data-ice="type" class="code"><span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>the dimension to fix the coordinate of: 0 = x, 1 = y, 2 = z.</p>
+      <td data-ice="description"><p>the size of the rectangle in each dimension:
+[dx,dy,dz].</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">coordvalue</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>the value of the coordinate in the fixed dimension; location
-of the plane.</p>
+      <td data-ice="name" class="code" data-depth="0">pixels</td>
+      <td data-ice="type" class="code"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>(Optional) existing array of pixels;
+if given, the line will be added to this set.</p>
 </td>
     </tr>
 </tbody>
@@ -989,10 +1217,326 @@ of the plane.</p>
       
       <pre class="prettyprint source-code"><code data-ice="exampleCode">let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
 let gm = new CPM.GridManipulator( C )
-let myline = gm.makePlane( [], 0, 2 )
-gm.changeKind( myline, 1 )</code></pre>
+let rect = gm.makeBox( [50,50], [10,10] )
+gm.assignCellPixels( rect, 1 )</code></pre>
     </div>
 </div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-makeCircle">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">makeCircle</span><span class="code" data-ice="signature">(center: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>, radius: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber354">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Helper method to return a circle (in 3D: sphere) of pixels; can be used
+in conjunction with <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> to assign all these pixels
+to a given CellId at once. (See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine">makeLine</a></span> and
+<span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeBox">makeBox</a></span>).
+The method takes an existing array of coordinates (which can be
+empty) and adds the pixels of the specified circle/sphere to it.
+See <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> for a method that sets such a pixel set to a
+new value.</p>
+<p>The circle/sphere is specified by its center (x,y,z)
+and radius.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">center</td>
+      <td data-ice="type" class="code"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the coordinate of the center
+of the circle/sphere.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">radius</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the radius of the circle/sphere.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">pixels</td>
+      <td data-ice="type" class="code"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>(Optional) existing array of pixels;
+if given, the circle/sphere pixels will be added to this set.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>the updated array of pixels.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+let gm = new CPM.GridManipulator( C )
+let circ = gm.makeCircle( [50,50], 10 )
+gm.assignCellPixels( circ, 1 )</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-makeLine">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">makeLine</span><span class="code" data-ice="signature">(dimension: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, coordinateValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber214">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Helper method to return an entire plane or line of pixels; can be used
+in conjunction with <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> to assign all these pixels
+to a given CellId at once. (See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeBox">makeBox</a></span> and
+<span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeCircle">makeCircle</a></span>).
+The method takes an existing array of coordinates (which can be
+empty) and adds the pixels of the specified plane to it.
+See <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels">assignCellPixels</a></span> for a method that sets such a pixel set to a
+new value.</p>
+<p>The plane is specified by fixing one coordinate (x,y,or z) to a
+fixed value, and letting the others range from their min value 0 to
+their max value. In 3D, this returns a plane.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">dimension</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the dimension to fix the coordinate of:
+0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+x-coordinate).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">coordinateValue</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the value of the coordinate in the
+fixed dimension; location of the plane. (E.g. for our straight vertical
+line, the x-value where the line should be placed).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">pixels</td>
+      <td data-ice="type" class="code"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>(Optional) existing array of pixels;
+if given, the line will be added to this set.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>the updated array of pixels.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+let gm = new CPM.GridManipulator( C )
+let myLine = gm.makeLine( 0, 2 )
+gm.assignCellPixels( myLine, 1 )</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-makePlane">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">makePlane</span><span class="code" data-ice="signature">(dim: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, coordinateValue: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, pixels: <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span>): <span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber258">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Deprecated method, please use <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine">makeLine</a></span> instead. Old method
+just links to the new method for backwards-compatibility.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">dim</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the dimension to fix the coordinate of:
+0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+x-coordinate).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">coordinateValue</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the value of the coordinate in the
+fixed dimension; location of the plane. (E.g. for our straight vertical
+line, the x-value where the line should be placed).</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">pixels</td>
+      <td data-ice="type" class="code"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>(Optional) existing array of pixels;
+if given, the line will be added to this set.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span><span>[]</span></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>the updated array of pixels.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -1011,16 +1555,17 @@ gm.changeKind( myline, 1 )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber87">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
+  <div data-ice="description"><p>Seed a new cell at a random position. Return 0 if failed, ID of new
+cell otherwise.
 Try a specified number of times, then give up if grid is too full. 
-The first cell will always be seeded at the midpoint of the grid. </p>
+The first cell will always be seeded at the midpoint of the grid.</p>
 <p>See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCellAt">seedCellAt</a></span> to seed a cell on a predefined position.</p>
 </div>
 
@@ -1038,8 +1583,8 @@ The first cell will always be seeded at the midpoint of the grid. </p>
       <td data-ice="name" class="code" data-depth="0">kind</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>what kind of cell should be seeded? This determines the CPM
-parameters that will be used for that cell.</p>
+      <td data-ice="description"><p>what kind of cell should be seeded? This
+determines the CPM parameters that will be used for that cell.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -1047,10 +1592,10 @@ parameters that will be used for that cell.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default:  10000</li></ul></td>
-      <td data-ice="description"><p>number of tries allowed. The method will
-attempt to seed a cell at a random position, but this will fail if the position is 
-already occupied. After max_attempts fails, it will not try again. This can happen
-if the grid is very full.</p>
+      <td data-ice="description"><p>number of tries allowed. The
+method will attempt to seed a cell at a random position, but this will
+fail if the position is already occupied. After max_attempts fails,
+it will not try again. This can happen if the grid is very full.</p>
 </td>
     </tr>
 </tbody>
@@ -1064,8 +1609,8 @@ if the grid is very full.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>the <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span> of the newly seeded cell, or 0 if the seeding
-has failed.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>the <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span> of the newly seeded cell, or 0
+if the seeding has failed.</p>
 </td>
         </tr>
       </tbody>
@@ -1119,7 +1664,7 @@ for( let p of C.pixels() ){
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber118">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
@@ -1127,8 +1672,8 @@ for( let p of C.pixels() ){
   
   
   <div data-ice="description"><p> Seed a new cell of celltype &quot;kind&quot; onto position &quot;p&quot;.
-This succeeds regardless of whether there is already a cell there.</p>
-<p>See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCell">seedCell</a></span> to seed a cell on a random position.</p>
+This succeeds regardless of whether there is already a cell there.
+See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCell">seedCell</a></span> to seed a cell on a random position.</p>
 </div>
 
   
@@ -1145,8 +1690,8 @@ This succeeds regardless of whether there is already a cell there.</p>
       <td data-ice="name" class="code" data-depth="0">kind</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>what kind of cell should be seeded? This determines the CPM
-parameters that will be used for that cell.</p>
+      <td data-ice="description"><p>what kind of cell should be seeded?
+This determines the CPM parameters that will be used for that cell.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -1167,8 +1712,8 @@ parameters that will be used for that cell.</p>
       <tbody>
         <tr>
           <td class="return-type code" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>the <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span> of the newly seeded cell, or 0 if the seeding
-has failed.</p>
+          <td class="return-desc" data-ice="returnDescription"><p>the <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span> of the newly seeded cell, or 0
+if the seeding has failed.</p>
 </td>
         </tr>
       </tbody>
@@ -1209,7 +1754,7 @@ for( let p of C.pixels() ){
     <h4>Test:</h4>
     <ul>
       
-    <li data-ice="test"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber43">Tests for Grid Manipulator  [ unit tests ]  should throw error when trying to seed outside of grid</a></span></li>
+    <li data-ice="test"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber26">Tests for Grid Manipulator  [ unit tests ]  seedCellAt should not throw error normally</a></span></li>
 </ul>
   </div>
 
@@ -1228,17 +1773,18 @@ for( let p of C.pixels() ){
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p> Seed &quot;n&quot; cells of celltype &quot;kind&quot; at random points lying within a circle 
-surrounding &quot;center&quot; with radius &quot;radius&quot;. </p>
-<p>See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCell">seedCell</a></span> to seed a cell on a random position in the entire grid,
-and <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCellAt">seedCellAt</a></span> to seed a cell at a specific position.</p>
+  <div data-ice="description"><p> Seed &quot;n&quot; cells of celltype &quot;kind&quot; at random points lying within a
+circle surrounding &quot;center&quot; with radius &quot;radius&quot;.</p>
+<p>See also <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCell">seedCell</a></span> to seed a cell on a random position in
+the entire grid, and <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCellAt">seedCellAt</a></span> to seed a cell at a specific
+position.</p>
 </div>
 
   
@@ -1255,8 +1801,8 @@ and <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instan
       <td data-ice="name" class="code" data-depth="0">kind</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>what kind of cell should be seeded? This determines the CPM
-parameters that will be used for that cell.</p>
+      <td data-ice="description"><p>what kind of cell should be seeded? This
+determines the CPM parameters that will be used for that cell.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -1270,8 +1816,8 @@ parameters that will be used for that cell.</p>
       <td data-ice="name" class="code" data-depth="0">center</td>
       <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>position on the grid where the center of the
-circle should be.</p>
+      <td data-ice="description"><p>position on the grid where the center
+of the circle should be.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -1285,10 +1831,10 @@ circle should be.</p>
       <td data-ice="name" class="code" data-depth="0">max_attempts</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>the maximum number of attempts to seed a cell.
-Seeding can fail if the randomly chosen position is outside the circle, or if 
-there is already a cell there. After max_attempts the method will stop trying
-and throw an error.</p>
+      <td data-ice="description"><p>the maximum number of attempts to seed a
+cell. Seeding can fail if the randomly chosen position is outside the
+circle, or if there is already a cell there. After max_attempts the
+method will stop trying and throw an error.</p>
 </td>
     </tr>
 </tbody>

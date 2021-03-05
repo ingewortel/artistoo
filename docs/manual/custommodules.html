@@ -102,6 +102,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -289,7 +292,7 @@ a custom module.
 <p>
 </p>
 
-<p><iframe src="./examples/ActModel.html" width="100%" height="400px"> </iframe>
+<p>&lt;iframe src=&quot;./examples/ActModel.html&quot; width=&quot;100%&quot; height=&quot;400px&quot;&gt; &lt;/iframe&gt;
 
 
 </p>
@@ -480,7 +483,7 @@ properties of individual cells, but we may have more than one of those in our si
 This means we must compute the statistic for each cell. Statistics therefore typically 
 return an object, where each cell gets its own entry. The key of this entry is the cell&apos;s
 <a href="./manual/../typedef/index.html#static-typedef-CellId">cellID</a>, and the value is the 
-computed statistic <i>for that cell</i>.
+computed statistic &lt;i&gt;for that cell&lt;/i&gt;.
 
 </p>
 
@@ -742,11 +745,11 @@ of the <code>compute</code>method, and get the following complete code for the n
 </p>
 
 <p>
-</p><p><i>Note: In the current implementation of statistics in Artistoo this is not 
+</p><p>&lt;i&gt;Note: In the current implementation of statistics in Artistoo this is not 
 really necessary, since statistics are actually cached when they are computed. Even if 
 the method is called many times, the stat is only computed once unless the grid changes.
 But let&apos;s do the cleanup step anyway since it is clearer from the code that way that the 
-object will only be computed once.</i>
+object will only be computed once.&lt;/i&gt;
 </p>
 
 
@@ -894,7 +897,7 @@ function step(){
 <p>
 </p>
 
-<p><iframe src="./examples/ActModelCustomStat.html" width="100%" height="400px"> </iframe>
+<p>&lt;iframe src=&quot;./examples/ActModelCustomStat.html&quot; width=&quot;100%&quot; height=&quot;400px&quot;&gt; &lt;/iframe&gt;
 
 
 

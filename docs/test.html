@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -233,6 +242,24 @@ padding-right:10px;
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
   <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/spec/CanvasSpec.js.html#lineNumber118"><p>drawCellBorders should work on CPM and CA</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="0">
+  <td data-ice="testDescription" style="padding-left: 10px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/DiceSetSpec.js.html#lineNumber4"><p>Some tests for the DiceSet class.</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/spec/DiceSetSpec.js.html#lineNumber16"><p> should start empty</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/spec/DiceSetSpec.js.html#lineNumber22"><p> should be empty after an element is added and removed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
 </tr>
@@ -465,15 +492,33 @@ more general tests.</p>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber40"><p> [ unit tests ] </p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber23"><p> [ unit tests ] </p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber43"><p>should throw error when trying to seed outside of grid</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber26"><p>seedCellAt should not throw error normally</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-seedCellAt">GridManipulator#seedCellAt</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber30"><p>seedCellAt should throw error when trying to seed outside of grid</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber36"><p>should remove a cellID from the grid</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-killCell">GridManipulator#killCell</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber50"><p>should not mess up cellKinds etc</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="0">
@@ -950,6 +995,36 @@ more general tests.</p>
 </tr>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="0">
+  <td data-ice="testDescription" style="padding-left: 10px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/models/CPMSpec.js.html#lineNumber4"><p>Some tests for the CPM class.</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM">CPM</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/models/CPMSpec.js.html#lineNumber16"><p>[ Unit tests ]</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/models/CPMSpec.js.html#lineNumber19"><p>method [ setpixi ]</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="class/src/models/CPM.js~CPM.html#instance-method-setpixi">CPM#setpixi</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="3">
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/spec/models/CPMSpec.js.html#lineNumber21"><p>shouldn&apos;t mess up cell kinds</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="3">
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/spec/models/CPMSpec.js.html#lineNumber31"><p>shouldn&apos;t mess up cell kinds if called twice on same pixel</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="0">
   <td data-ice="testDescription" style="padding-left: 10px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/simulation/SimulationSpec.js.html#lineNumber4"><p>Tests for Simulation class.</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></td>
@@ -969,6 +1044,24 @@ more general tests.</p>
 
 <tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="3">
   <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/spec/simulation/SimulationSpec.js.html#lineNumber61"><p>should not throw error if ACTCOLOR undefined</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span data-ice="testInterfaceToggle" class="toggle closed"></span><span><a href="test-file/spec/simulation/SimulationSpec.js.html#lineNumber68"><p>initializeGrid method:</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target"><span><a href="class/src/simulation/Simulation.js~Simulation.html#instance-method-initializeGrid">Simulation#initializeGrid</a></span></td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="3">
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/spec/simulation/SimulationSpec.js.html#lineNumber69"><p>should correctly clear up stats if called twice</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+</tr>
+
+<tr class="test-interface" data-ice="testInterface" style="display: none;" data-test-depth="3">
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/spec/simulation/SimulationSpec.js.html#lineNumber86"><p>should reset C if called twice</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
 </tr>

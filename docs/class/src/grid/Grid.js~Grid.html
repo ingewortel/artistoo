@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -609,6 +618,36 @@ of some sort.</p>
         
         <div data-ice="description"><p>Method to check if a given <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> falls within the
 bounds of this grid.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html#instance-method-correctPosition">correctPosition</a></span></span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>): <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method to correct an <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> outside the grid dimensions when
+the grid is wrapped (torus = true).</p>
 </div>
       </div>
     </td>
@@ -1680,7 +1719,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber356">source</a></span></span>
     </span>
   </h3>
 
@@ -1728,7 +1767,7 @@ of some sort.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber438">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber485">source</a></span></span>
     </span>
   </h3>
 
@@ -1841,6 +1880,85 @@ bounds of this grid. Returns an error if this is not the case.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-correctPosition">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">correctPosition</span><span class="code" data-ice="signature">(p: <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>): <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber134">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Method to correct an <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span> outside the grid dimensions when
+the grid is wrapped (torus = true). If the coordinate falls inside the grid,
+it is returned unchanged. If it falls outside the grid and the grid is periodic
+in that dimension, a corrected coordinate is returned. If the pixel falls outside
+the grid which is not periodic in that dimension, the function returns
+&apos;undefined&apos;.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">p</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the coordinate of the pixel to correct</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>the corrected coordinate.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-diffusion">
     <span class="access" data-ice="access">public</span>
     
@@ -1852,7 +1970,7 @@ bounds of this grid. Returns an error if this is not the case.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber412">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber459">source</a></span></span>
     </span>
   </h3>
 
@@ -1921,7 +2039,7 @@ according to Fick&apos;s second law of diffusion.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber341">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber388">source</a></span></span>
     </span>
   </h3>
 
@@ -2006,7 +2124,7 @@ the gradient at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber329">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber376">source</a></span></span>
     </span>
   </h3>
 
@@ -2084,7 +2202,7 @@ gradient at.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber146">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber193">source</a></span></span>
     </span>
   </h3>
 
@@ -2167,7 +2285,7 @@ This method should be implemented in the subclass, see
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
@@ -2252,7 +2370,7 @@ laplacian at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber386">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber433">source</a></span></span>
     </span>
   </h3>
 
@@ -2341,7 +2459,7 @@ laplacian at</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber451">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber498">source</a></span></span>
     </span>
   </h3>
 
@@ -2404,7 +2522,7 @@ subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber178">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber225">source</a></span></span>
     </span>
   </h3>
 
@@ -2499,7 +2617,7 @@ element contains the array coordinates of the neighbor in question.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber370">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 
@@ -2585,7 +2703,7 @@ borders? Defaults to the setting on this grid, see <span><a href="class/src/grid
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -2671,7 +2789,7 @@ leaving on the right re-enters the grid on the left?</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber133">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber180">source</a></span></span>
     </span>
   </h3>
 
@@ -2754,7 +2872,7 @@ This method should be implemented in the subclass, see
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber271">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber318">source</a></span></span>
     </span>
   </h3>
 
@@ -2821,7 +2939,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber304">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber351">source</a></span></span>
     </span>
   </h3>
 
@@ -2888,7 +3006,7 @@ Float32Array.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber293">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber340">source</a></span></span>
     </span>
   </h3>
 
@@ -2949,7 +3067,7 @@ implemented in a grid subclass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber236">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber283">source</a></span></span>
     </span>
   </h3>
 
@@ -3033,7 +3151,7 @@ Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber294">source</a></span></span>
     </span>
   </h3>
 
@@ -3117,7 +3235,7 @@ Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber212">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -3197,7 +3315,7 @@ used (see eg Grid2D).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber224">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber271">source</a></span></span>
     </span>
   </h3>
 
@@ -3279,7 +3397,7 @@ or floating point numbers, depending on the grid subclass used
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber198">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/Grid.js.html#lineNumber245">source</a></span></span>
     </span>
   </h3>
 

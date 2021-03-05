@@ -18,6 +18,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "artistoo/src/converter/artistooimport.js~artistooimport",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html",
+    "<span>ArtistooImport</span> <span class=\"search-result-import-path\">Artistoo/src/converter/ArtistooImport.js</span>",
+    "class"
+  ],
+  [
+    "artistoo/src/converter/artistoowriter.js~artistoowriter",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html",
+    "<span>ArtistooWriter</span> <span class=\"search-result-import-path\">Artistoo/src/converter/ArtistooWriter.js</span>",
+    "class"
+  ],
+  [
     "artistoo/src/hamiltonian/attractionpointconstraint.js~attractionpointconstraint",
     "class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html",
     "<span>AttractionPointConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/AttractionPointConstraint.js</span>",
@@ -180,6 +192,24 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "artistoo/src/converter/modeldescription.js~modeldescription",
+    "class/src/converter/ModelDescription.js~ModelDescription.html",
+    "<span>ModelDescription</span> <span class=\"search-result-import-path\">Artistoo/src/converter/ModelDescription.js</span>",
+    "class"
+  ],
+  [
+    "artistoo/src/converter/morpheusimport.js~morpheusimport",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html",
+    "<span>MorpheusImport</span> <span class=\"search-result-import-path\">Artistoo/src/converter/MorpheusImport.js</span>",
+    "class"
+  ],
+  [
+    "artistoo/src/converter/morpheuswriter.js~morpheuswriter",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html",
+    "<span>MorpheusWriter</span> <span class=\"search-result-import-path\">Artistoo/src/converter/MorpheusWriter.js</span>",
+    "class"
+  ],
+  [
     "artistoo/src/hamiltonian/parameterchecker.js~parameterchecker",
     "class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html",
     "<span>ParameterChecker</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/ParameterChecker.js</span>",
@@ -243,6 +273,12 @@ window.esdocSearchIndex = [
     "artistoo/src/hamiltonian/volumeconstraint.js~volumeconstraint",
     "class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html",
     "<span>VolumeConstraint</span> <span class=\"search-result-import-path\">Artistoo/src/hamiltonian/VolumeConstraint.js</span>",
+    "class"
+  ],
+  [
+    "artistoo/src/converter/writer.js~writer",
+    "class/src/converter/Writer.js~Writer.html",
+    "<span>Writer</span> <span class=\"search-result-import-path\">Artistoo/src/converter/Writer.js</span>",
     "class"
   ],
   [
@@ -936,6 +972,54 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "cpm src/hamiltonian/chemotaxisconstraint.js~chemotaxisconstraint#cpm,cpm",
+    "test-file/spec/models/CPMSpec.js.html#lineNumber4",
+    "Some tests for the CPM class.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/models/CPMSpec.js.html#lineNumber16",
+    "Some tests for the CPM class. [ Unit tests ]",
+    "test"
+  ],
+  [
+    "cpm#setpixi src/models/cpm.js~cpm#setpixi,cpm#setpixi",
+    "test-file/spec/models/CPMSpec.js.html#lineNumber19",
+    "Some tests for the CPM class. [ Unit tests ] method [ setpixi ]",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/models/CPMSpec.js.html#lineNumber21",
+    "Some tests for the CPM class. [ Unit tests ] method [ setpixi ] shouldn't mess up cell kinds",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/models/CPMSpec.js.html#lineNumber31",
+    "Some tests for the CPM class. [ Unit tests ] method [ setpixi ] shouldn't mess up cell kinds if called twice on same pixel",
+    "test"
+  ],
+  [
+    "diceset src/diceset.js~diceset,diceset",
+    "test-file/spec/DiceSetSpec.js.html#lineNumber4",
+    "Some tests for the DiceSet class.",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/DiceSetSpec.js.html#lineNumber22",
+    "Some tests for the DiceSet class.  should be empty after an element is added and removed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/DiceSetSpec.js.html#lineNumber16",
+    "Some tests for the DiceSet class.  should start empty",
+    "test"
+  ],
+  [
     "gridmanipulator src/grid/gridmanipulator.js~gridmanipulator,gridmanipulator",
     "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber4",
     "Tests for Grid Manipulator",
@@ -943,14 +1027,32 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber40",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber23",
     "Tests for Grid Manipulator  [ unit tests ] ",
     "test"
   ],
   [
     "gridmanipulator#seedcellat src/grid/gridmanipulator.js~gridmanipulator#seedcellat,gridmanipulator#seedcellat",
-    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber43",
-    "Tests for Grid Manipulator  [ unit tests ]  should throw error when trying to seed outside of grid",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber26",
+    "Tests for Grid Manipulator  [ unit tests ]  seedCellAt should not throw error normally",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber30",
+    "Tests for Grid Manipulator  [ unit tests ]  seedCellAt should throw error when trying to seed outside of grid",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber50",
+    "Tests for Grid Manipulator  [ unit tests ]  should not mess up cellKinds etc",
+    "test"
+  ],
+  [
+    "gridmanipulator#killcell src/grid/gridmanipulator.js~gridmanipulator#killcell,gridmanipulator#killcell",
+    "test-file/spec/grid/GridManipulatorSpec.js.html#lineNumber36",
+    "Tests for Grid Manipulator  [ unit tests ]  should remove a cellID from the grid",
     "test"
   ],
   [
@@ -1002,9 +1104,33 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
+    "simulation#initializegrid src/simulation/simulation.js~simulation#initializegrid,simulation#initializegrid",
+    "test-file/spec/simulation/SimulationSpec.js.html#lineNumber68",
+    "Tests for Simulation class.  [ unit tests ]  initializeGrid method:",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/simulation/SimulationSpec.js.html#lineNumber69",
+    "Tests for Simulation class.  [ unit tests ]  initializeGrid method: should correctly clear up stats if called twice",
+    "test"
+  ],
+  [
+    "",
+    "test-file/spec/simulation/SimulationSpec.js.html#lineNumber86",
+    "Tests for Simulation class.  [ unit tests ]  initializeGrid method: should reset C if called twice",
+    "test"
+  ],
+  [
     "spec/canvasspec.js",
     "test-file/spec/CanvasSpec.js.html",
     "spec/CanvasSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/dicesetspec.js",
+    "test-file/spec/DiceSetSpec.js.html",
+    "spec/DiceSetSpec.js",
     "testFile"
   ],
   [
@@ -1053,6 +1179,12 @@ window.esdocSearchIndex = [
     "spec/hamiltonian/softlocalconnectivityconstraintspec.js",
     "test-file/spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js.html",
     "spec/hamiltonian/SoftLocalConnectivityConstraintSpec.js",
+    "testFile"
+  ],
+  [
+    "spec/models/cpmspec.js",
+    "test-file/spec/models/CPMSpec.js.html",
+    "spec/models/CPMSpec.js",
     "testFile"
   ],
   [
@@ -1548,6 +1680,924 @@ window.esdocSearchIndex = [
     "typedef"
   ],
   [
+    "src/converter/artistooimport.js",
+    "file/src/converter/ArtistooImport.js.html",
+    "src/converter/ArtistooImport.js",
+    "file"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#c",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-member-C",
+    "src/converter/ArtistooImport.js~ArtistooImport#C",
+    "member"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#constructor",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-constructor-constructor",
+    "src/converter/ArtistooImport.js~ArtistooImport#constructor",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#from",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-member-from",
+    "src/converter/ArtistooImport.js~ArtistooImport#from",
+    "member"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#generalwarning",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-member-generalWarning",
+    "src/converter/ArtistooImport.js~ArtistooImport#generalWarning",
+    "member"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#mode",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-member-mode",
+    "src/converter/ArtistooImport.js~ArtistooImport#mode",
+    "member"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#readpixelsbycell",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-readPixelsByCell",
+    "src/converter/ArtistooImport.js~ArtistooImport#readPixelsByCell",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#setcpmgeneral",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-setCPMGeneral",
+    "src/converter/ArtistooImport.js~ArtistooImport#setCPMGeneral",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#setcellkindnames",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-setCellKindNames",
+    "src/converter/ArtistooImport.js~ArtistooImport#setCellKindNames",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#setconstraints",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-setConstraints",
+    "src/converter/ArtistooImport.js~ArtistooImport#setConstraints",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#setgridconfiguration",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-setGridConfiguration",
+    "src/converter/ArtistooImport.js~ArtistooImport#setGridConfiguration",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#setgridinfo",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-setGridInfo",
+    "src/converter/ArtistooImport.js~ArtistooImport#setGridInfo",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#setmodelinfo",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-setModelInfo",
+    "src/converter/ArtistooImport.js~ArtistooImport#setModelInfo",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#settimeinfo",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-method-setTimeInfo",
+    "src/converter/ArtistooImport.js~ArtistooImport#setTimeInfo",
+    "method"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#sim",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-member-sim",
+    "src/converter/ArtistooImport.js~ArtistooImport#sim",
+    "member"
+  ],
+  [
+    "src/converter/artistooimport.js~artistooimport#simsettings",
+    "class/src/converter/ArtistooImport.js~ArtistooImport.html#instance-member-simsettings",
+    "src/converter/ArtistooImport.js~ArtistooImport#simsettings",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js",
+    "file/src/converter/ArtistooWriter.js.html",
+    "src/converter/ArtistooWriter.js",
+    "file"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#fpsmeterpath",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-FPSMeterPath",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#FPSMeterPath",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#addconstrainttoconfig",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-addConstraintToConfig",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#addConstraintToConfig",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#addcustommethod",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-addCustomMethod",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#addCustomMethod",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#addinitializer",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-addInitializer",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#addInitializer",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#browserlibrary",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-browserLibrary",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#browserLibrary",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#constructor",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-constructor-constructor",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#constructor",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#custommethodsstring",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-customMethodsString",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#customMethodsString",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#custommethods",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-custommethods",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#custommethods",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#logstring",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-logString",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#logString",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#methoddeclarations",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-methodDeclarations",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#methodDeclarations",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#mode",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-mode",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#mode",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#modelconfig",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-modelconfig",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#modelconfig",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#nodelibrary",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-nodeLibrary",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#nodeLibrary",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#out",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-out",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#out",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#setinitialisation",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-setInitialisation",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#setInitialisation",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#setmodelconfig",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-setModelConfig",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#setModelConfig",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#stylesheet",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-member-styleSheet",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#styleSheet",
+    "member"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#write",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-write",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#write",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#writebasicscript",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-writeBasicScript",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#writeBasicScript",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#writeconfig",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-writeConfig",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#writeConfig",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#writehtml",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-writeHTML",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#writeHTML",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#writehtmlbody",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-writeHTMLBody",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#writeHTMLBody",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#writehtmlhead",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-writeHTMLHead",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#writeHTMLHead",
+    "method"
+  ],
+  [
+    "src/converter/artistoowriter.js~artistoowriter#writenode",
+    "class/src/converter/ArtistooWriter.js~ArtistooWriter.html#instance-method-writeNode",
+    "src/converter/ArtistooWriter.js~ArtistooWriter#writeNode",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js",
+    "file/src/converter/ModelDescription.js.html",
+    "src/converter/ModelDescription.js",
+    "file"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#addconstraint",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-addConstraint",
+    "src/converter/ModelDescription.js~ModelDescription#addConstraint",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#build",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-build",
+    "src/converter/ModelDescription.js~ModelDescription#build",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#callername",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-callerName",
+    "src/converter/ModelDescription.js~ModelDescription#callerName",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#cellkinds",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-cellKinds",
+    "src/converter/ModelDescription.js~ModelDescription#cellKinds",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#constraints",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-constraints",
+    "src/converter/ModelDescription.js~ModelDescription#constraints",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#constructor",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-constructor-constructor",
+    "src/converter/ModelDescription.js~ModelDescription#constructor",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#conversionwarnings",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-conversionWarnings",
+    "src/converter/ModelDescription.js~ModelDescription#conversionWarnings",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#generalwarning",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-generalWarning",
+    "src/converter/ModelDescription.js~ModelDescription#generalWarning",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#getconstraint",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-getConstraint",
+    "src/converter/ModelDescription.js~ModelDescription#getConstraint",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#getconstraintparameter",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-getConstraintParameter",
+    "src/converter/ModelDescription.js~ModelDescription#getConstraintParameter",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#getkindindex",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-getKindIndex",
+    "src/converter/ModelDescription.js~ModelDescription#getKindIndex",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#getkindname",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-getKindName",
+    "src/converter/ModelDescription.js~ModelDescription#getKindName",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#grid",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-grid",
+    "src/converter/ModelDescription.js~ModelDescription#grid",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#hasconstraint",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-hasConstraint",
+    "src/converter/ModelDescription.js~ModelDescription#hasConstraint",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#initcellkindmatrix",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-initCellKindMatrix",
+    "src/converter/ModelDescription.js~ModelDescription#initCellKindMatrix",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#initcellkindvector",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-initCellKindVector",
+    "src/converter/ModelDescription.js~ModelDescription#initCellKindVector",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#initdimensionvector",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-initDimensionVector",
+    "src/converter/ModelDescription.js~ModelDescription#initDimensionVector",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#kinetics",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-kinetics",
+    "src/converter/ModelDescription.js~ModelDescription#kinetics",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#methodoverwriteerror",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-methodOverwriteError",
+    "src/converter/ModelDescription.js~ModelDescription#methodOverwriteError",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#modelinfo",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-modelInfo",
+    "src/converter/ModelDescription.js~ModelDescription#modelInfo",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setcpmgeneral",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setCPMGeneral",
+    "src/converter/ModelDescription.js~ModelDescription#setCPMGeneral",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setcellkindnames",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setCellKindNames",
+    "src/converter/ModelDescription.js~ModelDescription#setCellKindNames",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setconstraints",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setConstraints",
+    "src/converter/ModelDescription.js~ModelDescription#setConstraints",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setgridconfiguration",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setGridConfiguration",
+    "src/converter/ModelDescription.js~ModelDescription#setGridConfiguration",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setgridgeometry",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setGridGeometry",
+    "src/converter/ModelDescription.js~ModelDescription#setGridGeometry",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setgridinfo",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setGridInfo",
+    "src/converter/ModelDescription.js~ModelDescription#setGridInfo",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setmodelinfo",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setModelInfo",
+    "src/converter/ModelDescription.js~ModelDescription#setModelInfo",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#settimeinfo",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-setTimeInfo",
+    "src/converter/ModelDescription.js~ModelDescription#setTimeInfo",
+    "method"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#setup",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-setup",
+    "src/converter/ModelDescription.js~ModelDescription#setup",
+    "member"
+  ],
+  [
+    "src/converter/modeldescription.js~modeldescription#timeinfo",
+    "class/src/converter/ModelDescription.js~ModelDescription.html#instance-member-timeInfo",
+    "src/converter/ModelDescription.js~ModelDescription#timeInfo",
+    "member"
+  ],
+  [
+    "src/converter/morpheusimport.js",
+    "file/src/converter/MorpheusImport.js.html",
+    "src/converter/MorpheusImport.js",
+    "file"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#addinitcircle",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-addInitCircle",
+    "src/converter/MorpheusImport.js~MorpheusImport#addInitCircle",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#addinitobject",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-addInitObject",
+    "src/converter/MorpheusImport.js~MorpheusImport#addInitObject",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#constructor",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-constructor-constructor",
+    "src/converter/MorpheusImport.js~MorpheusImport#constructor",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#from",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-member-from",
+    "src/converter/MorpheusImport.js~MorpheusImport#from",
+    "member"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#getxmltag",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-getXMLTag",
+    "src/converter/MorpheusImport.js~MorpheusImport#getXMLTag",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#parameterfromxml",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-parameterFromXML",
+    "src/converter/MorpheusImport.js~MorpheusImport#parameterFromXML",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#readcoordinateattribute",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-readCoordinateAttribute",
+    "src/converter/MorpheusImport.js~MorpheusImport#readCoordinateAttribute",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#readmorpheuslattice",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-readMorpheusLattice",
+    "src/converter/MorpheusImport.js~MorpheusImport#readMorpheusLattice",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#readvectorattribute",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-readVectorAttribute",
+    "src/converter/MorpheusImport.js~MorpheusImport#readVectorAttribute",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#readxmltag",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-readXMLTag",
+    "src/converter/MorpheusImport.js~MorpheusImport#readXMLTag",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setactivityconstraintforkind",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setActivityConstraintForKind",
+    "src/converter/MorpheusImport.js~MorpheusImport#setActivityConstraintForKind",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setadhesionmorpheus",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setAdhesionMorpheus",
+    "src/converter/MorpheusImport.js~MorpheusImport#setAdhesionMorpheus",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setbarrierconstraintforkind",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setBarrierConstraintForKind",
+    "src/converter/MorpheusImport.js~MorpheusImport#setBarrierConstraintForKind",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setcpmgeneral",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setCPMGeneral",
+    "src/converter/MorpheusImport.js~MorpheusImport#setCPMGeneral",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setcellkindnames",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setCellKindNames",
+    "src/converter/MorpheusImport.js~MorpheusImport#setCellKindNames",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setcellpixellist",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setCellPixelList",
+    "src/converter/MorpheusImport.js~MorpheusImport#setCellPixelList",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setconnectivityconstraintforkind",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setConnectivityConstraintForKind",
+    "src/converter/MorpheusImport.js~MorpheusImport#setConnectivityConstraintForKind",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setconstraints",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setConstraints",
+    "src/converter/MorpheusImport.js~MorpheusImport#setConstraints",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setgridconfiguration",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setGridConfiguration",
+    "src/converter/MorpheusImport.js~MorpheusImport#setGridConfiguration",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setgridinfo",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setGridInfo",
+    "src/converter/MorpheusImport.js~MorpheusImport#setGridInfo",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setinitcircle",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setInitCircle",
+    "src/converter/MorpheusImport.js~MorpheusImport#setInitCircle",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setinitobjects",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setInitObjects",
+    "src/converter/MorpheusImport.js~MorpheusImport#setInitObjects",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setmodelinfo",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setModelInfo",
+    "src/converter/MorpheusImport.js~MorpheusImport#setModelInfo",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setperimeterconstraintforkind",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setPerimeterConstraintForKind",
+    "src/converter/MorpheusImport.js~MorpheusImport#setPerimeterConstraintForKind",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setpersistenceconstraintforkind",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setPersistenceConstraintForKind",
+    "src/converter/MorpheusImport.js~MorpheusImport#setPersistenceConstraintForKind",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setpreferreddirectionconstraintforkind",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setPreferredDirectionConstraintForKind",
+    "src/converter/MorpheusImport.js~MorpheusImport#setPreferredDirectionConstraintForKind",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#settimeinfo",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setTimeInfo",
+    "src/converter/MorpheusImport.js~MorpheusImport#setTimeInfo",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#setvolumeconstraintforkind",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-setVolumeConstraintForKind",
+    "src/converter/MorpheusImport.js~MorpheusImport#setVolumeConstraintForKind",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#tocoordinate",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-toCoordinate",
+    "src/converter/MorpheusImport.js~MorpheusImport#toCoordinate",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#unknownconstraintwarning",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-method-unknownConstraintWarning",
+    "src/converter/MorpheusImport.js~MorpheusImport#unknownConstraintWarning",
+    "method"
+  ],
+  [
+    "src/converter/morpheusimport.js~morpheusimport#xml",
+    "class/src/converter/MorpheusImport.js~MorpheusImport.html#instance-member-xml",
+    "src/converter/MorpheusImport.js~MorpheusImport#xml",
+    "member"
+  ],
+  [
+    "src/converter/morpheuswriter.js",
+    "file/src/converter/MorpheusWriter.js.html",
+    "src/converter/MorpheusWriter.js",
+    "file"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#addnodeto",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-addNodeTo",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#addNodeTo",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#attachnode",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-attachNode",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#attachNode",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#celltypetagindex",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-member-cellTypeTagIndex",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#cellTypeTagIndex",
+    "member"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#constructor",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-constructor-constructor",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#constructor",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#fieldstodraw",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-member-fieldsToDraw",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#fieldsToDraw",
+    "member"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#formatxml",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-formatXml",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#formatXml",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#initxml",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-initXML",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#initXML",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#logstring",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-member-logString",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#logString",
+    "member"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#makenode",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-makeNode",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#makeNode",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#multipleconstraintswarning",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-multipleConstraintsWarning",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#multipleConstraintsWarning",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setactivityconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setActivityConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setActivityConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setadhesion",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setAdhesion",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setAdhesion",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setattributesof",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setAttributesOf",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setAttributesOf",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setbarrierconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setBarrierConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setBarrierConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setchemotaxisconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setChemotaxisConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setChemotaxisConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setconnectivityconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setConnectivityConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setConnectivityConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setnode",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setNode",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setNode",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setperimeterconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setPerimeterConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setPerimeterConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setpersistenceconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setPersistenceConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setPersistenceConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setpreferreddirectionconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setPreferredDirectionConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setPreferredDirectionConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#setvolumeconstraint",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-setVolumeConstraint",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#setVolumeConstraint",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#tomorpheuscoordinate",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-toMorpheusCoordinate",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#toMorpheusCoordinate",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#write",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-write",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#write",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writeanalysis",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeAnalysis",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeAnalysis",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writecpm",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeCPM",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeCPM",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writecellpopulations",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeCellPopulations",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeCellPopulations",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writecelltypes",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeCellTypes",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeCellTypes",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writeconstraints",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeConstraints",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeConstraints",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writedescription",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeDescription",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeDescription",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writeglobal",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeGlobal",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeGlobal",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writespace",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeSpace",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeSpace",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writetime",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeTime",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeTime",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#writexml",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-method-writeXML",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#writeXML",
+    "method"
+  ],
+  [
+    "src/converter/morpheuswriter.js~morpheuswriter#xml",
+    "class/src/converter/MorpheusWriter.js~MorpheusWriter.html#instance-member-xml",
+    "src/converter/MorpheusWriter.js~MorpheusWriter#xml",
+    "member"
+  ],
+  [
+    "src/converter/writer.js",
+    "file/src/converter/Writer.js.html",
+    "src/converter/Writer.js",
+    "file"
+  ],
+  [
+    "src/converter/writer.js~writer#constructor",
+    "class/src/converter/Writer.js~Writer.html#instance-constructor-constructor",
+    "src/converter/Writer.js~Writer#constructor",
+    "method"
+  ],
+  [
+    "src/converter/writer.js~writer#conversionwarnings",
+    "class/src/converter/Writer.js~Writer.html#instance-member-conversionWarnings",
+    "src/converter/Writer.js~Writer#conversionWarnings",
+    "member"
+  ],
+  [
+    "src/converter/writer.js~writer#htmlnewline",
+    "class/src/converter/Writer.js~Writer.html#instance-method-htmlNewLine",
+    "src/converter/Writer.js~Writer#htmlNewLine",
+    "method"
+  ],
+  [
+    "src/converter/writer.js~writer#linew",
+    "class/src/converter/Writer.js~Writer.html#instance-member-lineW",
+    "src/converter/Writer.js~Writer#lineW",
+    "member"
+  ],
+  [
+    "src/converter/writer.js~writer#logstring",
+    "class/src/converter/Writer.js~Writer.html#instance-member-logString",
+    "src/converter/Writer.js~Writer#logString",
+    "member"
+  ],
+  [
+    "src/converter/writer.js~writer#model",
+    "class/src/converter/Writer.js~Writer.html#instance-member-model",
+    "src/converter/Writer.js~Writer#model",
+    "member"
+  ],
+  [
+    "src/converter/writer.js~writer#objtostring",
+    "class/src/converter/Writer.js~Writer.html#instance-method-objToString",
+    "src/converter/Writer.js~Writer#objToString",
+    "method"
+  ],
+  [
+    "src/converter/writer.js~writer#recursivearraystringfix",
+    "class/src/converter/Writer.js~Writer.html#instance-method-recursiveArrayStringFix",
+    "src/converter/Writer.js~Writer#recursiveArrayStringFix",
+    "method"
+  ],
+  [
+    "src/converter/writer.js~writer#stringwrap",
+    "class/src/converter/Writer.js~Writer.html#instance-method-stringWrap",
+    "src/converter/Writer.js~Writer#stringWrap",
+    "method"
+  ],
+  [
+    "src/converter/writer.js~writer#target",
+    "class/src/converter/Writer.js~Writer.html#instance-member-target",
+    "src/converter/Writer.js~Writer#target",
+    "member"
+  ],
+  [
+    "src/converter/writer.js~writer#warningbox",
+    "class/src/converter/Writer.js~Writer.html#instance-member-warningBox",
+    "src/converter/Writer.js~Writer#warningBox",
+    "member"
+  ],
+  [
+    "src/converter/writer.js~writer#write",
+    "class/src/converter/Writer.js~Writer.html#instance-method-write",
+    "src/converter/Writer.js~Writer#write",
+    "method"
+  ],
+  [
+    "src/converter/writer.js~writer#writelog",
+    "class/src/converter/Writer.js~Writer.html#instance-method-writeLog",
+    "src/converter/Writer.js~Writer#writeLog",
+    "method"
+  ],
+  [
     "src/grid/coarsegrid.js",
     "file/src/grid/CoarseGrid.js.html",
     "src/grid/CoarseGrid.js",
@@ -1641,6 +2691,12 @@ window.esdocSearchIndex = [
     "src/grid/grid.js~grid#constructor",
     "class/src/grid/Grid.js~Grid.html#instance-constructor-constructor",
     "src/grid/Grid.js~Grid#constructor",
+    "method"
+  ],
+  [
+    "src/grid/grid.js~grid#correctposition",
+    "class/src/grid/Grid.js~Grid.html#instance-method-correctPosition",
+    "src/grid/Grid.js~Grid#correctPosition",
     "method"
   ],
   [
@@ -1926,6 +2982,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/grid/gridmanipulator.js~gridmanipulator#assigncellpixels",
+    "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-assignCellPixels",
+    "src/grid/GridManipulator.js~GridManipulator#assignCellPixels",
+    "method"
+  ],
+  [
     "src/grid/gridmanipulator.js~gridmanipulator#changekind",
     "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-changeKind",
     "src/grid/GridManipulator.js~GridManipulator#changeKind",
@@ -1947,6 +3009,24 @@ window.esdocSearchIndex = [
     "src/grid/gridmanipulator.js~gridmanipulator#killcell",
     "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-killCell",
     "src/grid/GridManipulator.js~GridManipulator#killCell",
+    "method"
+  ],
+  [
+    "src/grid/gridmanipulator.js~gridmanipulator#makebox",
+    "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeBox",
+    "src/grid/GridManipulator.js~GridManipulator#makeBox",
+    "method"
+  ],
+  [
+    "src/grid/gridmanipulator.js~gridmanipulator#makecircle",
+    "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeCircle",
+    "src/grid/GridManipulator.js~GridManipulator#makeCircle",
+    "method"
+  ],
+  [
+    "src/grid/gridmanipulator.js~gridmanipulator#makeline",
+    "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-makeLine",
+    "src/grid/GridManipulator.js~GridManipulator#makeLine",
     "method"
   ],
   [
@@ -3114,6 +4194,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/models/cpm.js~cpm#cellvolumes",
+    "class/src/models/CPM.js~CPM.html#instance-member-cellvolumes",
+    "src/models/CPM.js~CPM#cellvolumes",
+    "member"
+  ],
+  [
     "src/models/cpm.js~cpm#constructor",
     "class/src/models/CPM.js~CPM.html#instance-constructor-constructor",
     "src/models/CPM.js~CPM#constructor",
@@ -3129,6 +4215,12 @@ window.esdocSearchIndex = [
     "src/models/cpm.js~cpm#docopy",
     "class/src/models/CPM.js~CPM.html#instance-method-docopy",
     "src/models/CPM.js~CPM#docopy",
+    "method"
+  ],
+  [
+    "src/models/cpm.js~cpm#getallconstraints",
+    "class/src/models/CPM.js~CPM.html#instance-method-getAllConstraints",
+    "src/models/CPM.js~CPM#getAllConstraints",
     "method"
   ],
   [
@@ -3153,6 +4245,12 @@ window.esdocSearchIndex = [
     "src/models/cpm.js~cpm#hard_constraints_indices",
     "class/src/models/CPM.js~CPM.html#instance-member-hard_constraints_indices",
     "src/models/CPM.js~CPM#hard_constraints_indices",
+    "member"
+  ],
+  [
+    "src/models/cpm.js~cpm#iscpm",
+    "class/src/models/CPM.js~CPM.html#instance-member-isCPM",
+    "src/models/CPM.js~CPM#isCPM",
     "member"
   ],
   [
@@ -3204,6 +4302,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/models/cpm.js~cpm#reset",
+    "class/src/models/CPM.js~CPM.html#instance-method-reset",
+    "src/models/CPM.js~CPM#reset",
+    "method"
+  ],
+  [
     "src/models/cpm.js~cpm#setcellkind",
     "class/src/models/CPM.js~CPM.html#instance-method-setCellKind",
     "src/models/CPM.js~CPM#setCellKind",
@@ -3237,6 +4341,12 @@ window.esdocSearchIndex = [
     "src/models/cpm.js~cpm#t2k",
     "class/src/models/CPM.js~CPM.html#instance-member-t2k",
     "src/models/CPM.js~CPM#t2k",
+    "member"
+  ],
+  [
+    "src/models/cpm.js~cpm#time",
+    "class/src/models/CPM.js~CPM.html#instance-member-time",
+    "src/models/CPM.js~CPM#time",
     "member"
   ],
   [
@@ -3456,6 +4566,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/simulation/simulation.js~simulation#addconstraints",
+    "class/src/simulation/Simulation.js~Simulation.html#instance-method-addConstraints",
+    "src/simulation/Simulation.js~Simulation#addConstraints",
+    "method"
+  ],
+  [
     "src/simulation/simulation.js~simulation#addgridmanipulator",
     "class/src/simulation/Simulation.js~Simulation.html#instance-method-addGridManipulator",
     "src/simulation/Simulation.js~Simulation#addGridManipulator",
@@ -3465,6 +4581,12 @@ window.esdocSearchIndex = [
     "src/simulation/simulation.js~simulation#conf",
     "class/src/simulation/Simulation.js~Simulation.html#instance-member-conf",
     "src/simulation/Simulation.js~Simulation#conf",
+    "member"
+  ],
+  [
+    "src/simulation/simulation.js~simulation#constraints",
+    "class/src/simulation/Simulation.js~Simulation.html#instance-member-constraints",
+    "src/simulation/Simulation.js~Simulation#constraints",
     "member"
   ],
   [
@@ -3478,6 +4600,12 @@ window.esdocSearchIndex = [
     "class/src/simulation/Simulation.js~Simulation.html#instance-method-createOutputs",
     "src/simulation/Simulation.js~Simulation#createOutputs",
     "method"
+  ],
+  [
+    "src/simulation/simulation.js~simulation#custommethods",
+    "class/src/simulation/Simulation.js~Simulation.html#instance-member-custommethods",
+    "src/simulation/Simulation.js~Simulation#custommethods",
+    "member"
   ],
   [
     "src/simulation/simulation.js~simulation#drawbelow",
@@ -3520,6 +4648,12 @@ window.esdocSearchIndex = [
     "class/src/simulation/Simulation.js~Simulation.html#instance-method-initializeGrid",
     "src/simulation/Simulation.js~Simulation#initializeGrid",
     "method"
+  ],
+  [
+    "src/simulation/simulation.js~simulation#issimulation",
+    "class/src/simulation/Simulation.js~Simulation.html#instance-member-isSimulation",
+    "src/simulation/Simulation.js~Simulation#isSimulation",
+    "member"
   ],
   [
     "src/simulation/simulation.js~simulation#logstats",

@@ -334,6 +334,53 @@ var CPM = (function (exports) {
 				}
 			}
 		}
+		
+		
+		/** Method to correct an {@link ArrayCoordinate} outside the grid dimensions when
+		 * the grid is wrapped (torus = true). If the coordinate falls inside the grid,
+		 * it is returned unchanged. If it falls outside the grid and the grid is periodic
+		 * in that dimension, a corrected coordinate is returned. If the pixel falls outside
+		 * the grid which is not periodic in that dimension, the function returns
+		 * 'undefined'.
+		 * @param {ArrayCoordinate} p - the coordinate of the pixel to correct
+		 * @return {ArrayCoordinate} the corrected coordinate.
+		 */
+		correctPosition( p ){
+		
+			let pnew = [];
+			let ignore = false; // ignore pixels that fall off the grid when non-periodic grid
+		
+			// Loop over the x, y, (z) dimensions
+			for( let d = 0; d < this.ndim; d++ ){
+		
+				// If position is outside the grid dimensions, action depends on whether
+				// grid is periodic or not (torus)
+				if( p[d] < 0 ){
+					// If there is a torus in this dimension, correct the position and return.
+					// otherwise just ignore it.
+					if( this.torus[d] ){
+						pnew.push( p[d] + this.extents[d] );
+					} else {
+						ignore = true;
+					}
+				} else if ( p[d] >= this.extents[d] ){
+					if( this.torus[d] ){
+						pnew.push( p[d] - this.extents[d] );
+					} else {
+						ignore = true;
+					}
+				} else {
+					pnew.push( p[d] );
+				}
+			}
+		
+			if( !ignore ){ 
+				return pnew
+			} else {
+				return undefined
+			}
+		
+		}
 
 		/** Method for conversion from an {@link ArrayCoordinate} to an
 		 * {@link IndexCoordinate}.
@@ -1583,7 +1630,7 @@ var CPM = (function (exports) {
 		@param {uniqueID} v The element to add.
 		*/
 		insert( v ){
-			if( this.indices[v] ){
+			if( this.indices.hasOwnProperty( v ) ){
 				return
 			}
 			// Add element to both the hash map and the array.
@@ -1599,7 +1646,7 @@ var CPM = (function (exports) {
 		*/
 		remove( v ){
 			// Check whether element is present before it can be removed.
-			if( !this.indices[v] ){
+			if( !this.indices.hasOwnProperty( v ) ){
 				return
 			}
 			/* The hash map gives the index in the array of the value to be removed.
@@ -2954,6 +3001,17 @@ var CPM = (function (exports) {
 		constructor( field_size, conf ){
 			super( field_size, conf );
 
+			/** To check from outside if an object is a CPM; doing this with
+			 * instanceof doesn't work in some cases. Any other object will
+			 * not have this variable and return 'undefined', which in an
+			 * if-statement equates to a 'false'.
+			 * @type{boolean}*/
+			this.isCPM = true;
+
+			/** Track time in MCS.
+			 * @type{number}*/
+			this.time = 0;
+
 			// ---------- CPM specific stuff here
 			
 			/** Number of non-background cells currently on the grid.
@@ -3014,6 +3072,20 @@ var CPM = (function (exports) {
 					this.add( new AutoAdderConfig[x]( conf ) );
 				}
 			}
+		}
+
+		/** Completely reset; remove all cells and set time back to zero. Only the
+		 * constraints remain. */
+		reset(){
+			for( let p of this.cellPixels()){
+				this.setpix( p[0], 0 );
+			}
+			this.last_cell_id = 0;
+			this.t2k = [];
+			this.t2k[0] = 0;
+			this.time = 0;
+			this.cellvolumes = [0];
+			this.stat_values = {};
 		}
 
 		/* This is no different from the GridBasedModel function and can go. 
@@ -3141,6 +3213,15 @@ var CPM = (function (exports) {
 				throw("No constraint of name " + " exists in this CPM!")
 			}	
 		
+		}
+
+		getAllConstraints(){
+			const soft = Object.keys( this.soft_constraints_indices );
+			const hard = Object.keys( this.hard_constraints_indices );
+			let names = {};
+			for( let n of soft ){ names[n] = soft[n]; }
+			for( let n of hard ){ names[n] = hard[n]; }
+			return names
 		}
 
 		/** Get {@link CellId} of the pixel at coordinates p. 
@@ -3278,6 +3359,9 @@ var CPM = (function (exports) {
 		*/
 		setpixi ( i, t ){		
 			const t_old = this.grid.pixti(i);
+			if( t_old == t ){
+				return
+			}
 			if( t_old > 0 ){
 				// also update volume of the old cell
 				// (unless it is background/stroma)
@@ -5091,65 +5175,71 @@ var CPM = (function (exports) {
 		}
 	}
 
-	/** This class contains methods that should be executed once per Monte Carlo Step.
-	 Examples are cell division, cell death etc.
-	 
-	 Methods are written for CPMs, but some of the methods may also apply to other
-		models of class ({@link GridBasedModel}, e.g. the cell seeding methods) 
-		or even a general grid ({@link Grid}, e.g. the {@link makePlane} and {@link changeKind} 
-		methods).
-		
-	 @example
-	 // Build CPM and attach a gridmanipulator 
-	 let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
-	 let gm = new CPM.GridManipulator( C )
+	/** This class contains methods that should be executed once per
+	 * Monte Carlo Step. Examples are cell division, cell death etc.
+	 *
+	 * It also contains methods to seed new cells in certain shapes and
+	 * configurations. Methods are written for CPMs, but some of the methods
+	 * may also apply to other models of class ({@link GridBasedModel}, e.g.
+	 * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
+	 * the {@link makeLine} and {@link assignCellPixels} methods).
+	 *
+	 * @example
+	 * // Build CPM and attach a gridmanipulator
+	 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
+	 * let gm = new CPM.GridManipulator( C )
 	 */
 	class GridManipulator {
 		/** Constructor of class GridManipulator.
-		@param {CPM|GridBasedModel|Grid} C - the model whose grid you wish to manipulate.
-		Methods are written for CPMs, but some of the methods may also apply to other
-		models of class ({@link GridBasedModel}, e.g. the cell seeding methods) 
-		or even a general grid ({@link Grid}, e.g. the {@link makePlane} and {@link changeKind} 
-		methods).
+		 *
+		 * @param {CPM|GridBasedModel|Grid} C - the model whose grid
+		 * you wish to manipulate.
+		 * Methods are written for CPMs, but some of the methods may also
+		 * apply to other models of class ({@link GridBasedModel}, e.g.
+		 * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
+		 * the {@link makeLine} and {@link assignCellPixels} methods).
 		*/
 		constructor( C ){
 			/** The model whose grid we are manipulating.
-			@type {CPM|GridBasedModel|Grid}*/
+			 * @type {CPM|GridBasedModel|Grid}*/
 			this.C = C;
 		}
 		
 		/** @experimental
 		 */
-		killCell( cellid ){
-			let cp = this.C.getStat( PixelsByCell );
-			let cpi = cp[cellid];
-			
-			for( let p of cpi ){
-				this.C.setpixi( this.C.grid.p2i(p), 0 );
+		killCell( cellID ){
+
+			for( let [p,i] of this.C.pixels() ){
+				if( i == cellID ){
+					this.C.setpix( p, 0 );
+				}
 			}
-			
+
 			// update stats
-			if( "PixelsByCell" in this.C.stat_values ){
-				delete this.C.stat_values["PixelsByCell"][cellid];
+			if ("PixelsByCell" in this.C.stat_values) {
+				delete this.C.stat_values["PixelsByCell"][cellID];
 			}
 		}
 		
-		/** Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
+
+		
+		/** Seed a new cell at a random position. Return 0 if failed, ID of new
+		 * cell otherwise.
 		 * Try a specified number of times, then give up if grid is too full. 
-		 * The first cell will always be seeded at the midpoint of the grid. 
-		 
-		 See also {@link seedCellAt} to seed a cell on a predefined position.
-		 
-		 @param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
-		 parameters that will be used for that cell.
-		 @param {number} [max_attempts = 10000] - number of tries allowed. The method will
-		 attempt to seed a cell at a random position, but this will fail if the position is 
-		 already occupied. After max_attempts fails, it will not try again. This can happen
-		 if the grid is very full.
-		 @return {CellId} - the {@link CellId} of the newly seeded cell, or 0 if the seeding
-		 has failed.
-		 
-		 @example
+		 * The first cell will always be seeded at the midpoint of the grid.
+		 *
+		 * See also {@link seedCellAt} to seed a cell on a predefined position.
+		 *
+		 * @param {CellKind} kind - what kind of cell should be seeded? This
+		 * determines the CPM parameters that will be used for that cell.
+		 * @param {number} [max_attempts = 10000] - number of tries allowed. The
+		 * method will attempt to seed a cell at a random position, but this will
+		 * fail if the position is already occupied. After max_attempts fails,
+		 * it will not try again. This can happen if the grid is very full.
+		 * @return {CellId} - the {@link CellId} of the newly seeded cell, or 0
+		 * if the seeding has failed.
+		 *
+		 * @example
 		 * // Build CPM and attach a gridmanipulator
 		 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
 		 * let gm = new CPM.GridManipulator( C )
@@ -5165,30 +5255,29 @@ var CPM = (function (exports) {
 		 */
 		seedCell( kind, max_attempts = 10000 ){
 			let p = this.C.midpoint;
-			while( this.C.pixt( p ) != 0 && max_attempts-- > 0 ){
+			while( this.C.pixt( p ) !== 0 && max_attempts-- > 0 ){
 				for( let i = 0 ; i < p.length ; i ++ ){
 					p[i] = this.C.ran(0,this.C.extents[i]-1);
 				}
 			}
-			if( this.C.pixt(p) != 0 ){
+			if( this.C.pixt(p)  !== 0 ){
 				return 0 // failed
 			}
-			const newid = this.C.makeNewCellID( kind );
-			this.C.setpix( p, newid );
-			return newid
+			const newID = this.C.makeNewCellID( kind );
+			this.C.setpix( p, newID );
+			return newID
 		}
 		/**  Seed a new cell of celltype "kind" onto position "p".
-			This succeeds regardless of whether there is already a cell there.
-			
-			See also {@link seedCell} to seed a cell on a random position.
-			
-			@param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
-			parameters that will be used for that cell.
-			@param {ArrayCoordinate} p - position to seed the cell at. 
-			@return {CellId} - the {@link CellId} of the newly seeded cell, or 0 if the seeding
-			has failed.
-			
-		 @example
+		 * This succeeds regardless of whether there is already a cell there.
+		 * See also {@link seedCell} to seed a cell on a random position.
+		 *
+		 * @param {CellKind} kind - what kind of cell should be seeded?
+		 * This determines the CPM parameters that will be used for that cell.
+		 * @param {ArrayCoordinate} p - position to seed the cell at.
+		 * @return {CellId} - the {@link CellId} of the newly seeded cell, or 0
+		 * if the seeding has failed.
+		 *
+		 * @example
 		 * // Build CPM and attach a gridmanipulator
 		 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
 		 * let gm = new CPM.GridManipulator( C )
@@ -5203,30 +5292,32 @@ var CPM = (function (exports) {
 		 * }
 		 */
 		seedCellAt( kind, p ){
+		
 			const newid = this.C.makeNewCellID( kind );
 			this.C.grid.checkOnGrid(p);
 			this.C.setpix( p, newid );
 			return newid
+
 		}
 		
-		/**  Seed "n" cells of celltype "kind" at random points lying within a circle 
-			surrounding "center" with radius "radius". 
-			
-			See also {@link seedCell} to seed a cell on a random position in the entire grid,
-			and {@link seedCellAt} to seed a cell at a specific position.
-			
-			@param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
-			parameters that will be used for that cell.
-			@param {number} n - the number of cells to seed (must be integer).
-			@param {ArrayCoordinate} center - position on the grid where the center of the
-			circle should be.
-			@param {number} radius - the radius of the circle to seed cells in.
-			@param {number} max_attempts - the maximum number of attempts to seed a cell.
-			Seeding can fail if the randomly chosen position is outside the circle, or if 
-			there is already a cell there. After max_attempts the method will stop trying
-			and throw an error.
-			
-		 @example
+		/**  Seed "n" cells of celltype "kind" at random points lying within a
+		 * circle surrounding "center" with radius "radius".
+		 *
+		 * See also {@link seedCell} to seed a cell on a random position in
+		 * the entire grid, and {@link seedCellAt} to seed a cell at a specific
+		 * position.
+		 * @param {CellKind} kind - what kind of cell should be seeded? This
+		 * determines the CPM parameters that will be used for that cell.
+		 * @param {number} n - the number of cells to seed (must be integer).
+		 * @param {ArrayCoordinate} center - position on the grid where the center
+		 * of the circle should be.
+		 * @param {number} radius - the radius of the circle to seed cells in.
+		 * @param {number} max_attempts - the maximum number of attempts to seed a
+		 * cell. Seeding can fail if the randomly chosen position is outside the
+		 * circle, or if there is already a cell there. After max_attempts the
+		 * method will stop trying and throw an error.
+		 *
+		 * @example
 		 * // Build CPM and attach a gridmanipulator
 		 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
 		 * let gm = new CPM.GridManipulator( C )
@@ -5245,7 +5336,7 @@ var CPM = (function (exports) {
 			}
 			let C = this.C;
 			while( n > 0 ){
-				if( --max_attempts == 0 ){
+				if( --max_attempts === 0 ){
 					throw("too many attempts to seed cells!")
 				}
 				let p = center.map( function(i){ return C.ran(Math.ceil(i-radius),Math.floor(i+radius)) } );
@@ -5259,73 +5350,246 @@ var CPM = (function (exports) {
 				}
 			}
 		}
-		/** Helper method to set an entire plane or line of pixels to a certain CellId at once.
-		The method takes an existing array of coordinates (which can be empty) and adds the pixels
-		of the specified plane to it. See {@link changeKind} for a method that sets such a 
-		pixel set to a new value.
-		
-		The plane is specified by fixing one coordinate (x,y,or z) to a fixed value, and
-		letting the others range from their min value 0 to their max value.
-		
-		@param {ArrayCoordinate[]} voxels - Existing array of pixels; this can be empty [].
-		@param {number} coord - the dimension to fix the coordinate of: 0 = x, 1 = y, 2 = z.
-		@param {number} coordvalue - the value of the coordinate in the fixed dimension; location
-		of the plane.
-		@return {ArrayCoordinate[]} the updated array of pixels. 
-		
-		@example
-		* let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
-		* let gm = new CPM.GridManipulator( C )
-		* let myline = gm.makePlane( [], 0, 2 )
-		* gm.changeKind( myline, 1 )
-		*/
-		makePlane ( voxels, coord, coordvalue ){
+
+		/** Helper method to return an entire plane or line of pixels; can be used
+		 * in conjunction with {@link assignCellPixels} to assign all these pixels
+		 * to a given CellId at once. (See also {@link makeBox} and
+		 * {@link makeCircle}).
+		 * The method takes an existing array of coordinates (which can be
+		 * empty) and adds the pixels of the specified plane to it.
+		 * See {@link assignCellPixels} for a method that sets such a pixel set to a
+		 * new value.
+		 *
+		 * The plane is specified by fixing one coordinate (x,y,or z) to a
+		 * fixed value, and letting the others range from their min value 0 to
+		 * their max value. In 3D, this returns a plane.
+		 *
+		 * @param {number} dimension - the dimension to fix the coordinate of:
+		 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+		 * x-coordinate).
+		 * @param {number} coordinateValue - the value of the coordinate in the
+		 * fixed dimension; location of the plane. (E.g. for our straight vertical
+		 * line, the x-value where the line should be placed).
+		 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+		 * if given, the line will be added to this set.
+		 * @return {ArrayCoordinate[]} the updated array of pixels.
+		 *
+		 * @example
+		 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+		 * let gm = new CPM.GridManipulator( C )
+		 * let myLine = gm.makeLine( 0, 2 )
+		 * gm.assignCellPixels( myLine, 1 )
+		 */
+		makeLine ( dimension, coordinateValue, pixels ) {
+
+			pixels = pixels || [];
+
 			let x,y,z;
-			let minc = [0,0,0];
-			let maxc = [0,0,0];
+			let minC = [0,0,0];
+			let maxC = [0,0,0];
 			for( let dim = 0; dim < this.C.ndim; dim++ ){
-				maxc[dim] = this.C.extents[dim]-1;
+				maxC[dim] = this.C.extents[dim]-1;
 			}
-			minc[coord] = coordvalue;
-			maxc[coord] = coordvalue;
+			minC[dimension] = coordinateValue;
+			maxC[dimension] = coordinateValue;
 
 			// For every coordinate x,y,z, loop over all possible values from min to max.
 			// one of these loops will have only one iteration because min = max = coordvalue.
-			for( x = minc[0]; x <= maxc[0]; x++ ){
-				for( y = minc[1]; y<=maxc[1]; y++ ){
-					for( z = minc[2]; z<=maxc[2]; z++ ){
-						if( this.C.ndim == 3 ){
-							voxels.push( [x,y,z] );	
+			for( x = minC[0]; x <= maxC[0]; x++ ){
+				for( y = minC[1]; y<=maxC[1]; y++ ){
+					for( z = minC[2]; z<=maxC[2]; z++ ){
+						if( this.C.ndim === 3 ){
+							pixels.push( [x,y,z] );
 						} else {
 							//console.log(x,y)
-							voxels.push( [x,y] );
+							pixels.push( [x,y] );
 						}
 					}
 				}
 			}
 
-			return voxels
+			return pixels
 		}
-		/** Helper method that converts all pixels in a given array to a specific cellkind:
-		   changes the pixels defined by voxels (array of coordinates p) into
-		   the given cellkind. 
-		
-		@param {ArrayCoordinate[]} voxels - Array of pixels to change.
-		@param {CellKind} cellkind - cellkind to change these pixels into.
-		   
-		@example
-		* let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
-		* let gm = new CPM.GridManipulator( C )
-		* let myline = gm.makePlane( [], 0, 2 )
-		* gm.changeKind( myline, 1 )
-		*/
-		changeKind ( voxels, cellkind ){
-			
-			let newid = this.C.makeNewCellID( cellkind );
+
+		/** Deprecated method, please use {@link makeLine} instead. Old method
+		 * just links to the new method for backwards-compatibility.
+		 *
+		 * @param {number} dim - the dimension to fix the coordinate of:
+		 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+		 * x-coordinate).
+		 * @param {number} coordinateValue - the value of the coordinate in the
+		 * fixed dimension; location of the plane. (E.g. for our straight vertical
+		 * line, the x-value where the line should be placed).
+		 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+		 * if given, the line will be added to this set.
+		 * @return {ArrayCoordinate[]} the updated array of pixels.
+	 	 */
+		makePlane( pixels, dim, coordinateValue ){
+			return this.makeLine( dim, coordinateValue, pixels )
+		}
+
+		/** Helper method to return a rectangle (or in 3D: box) of pixels; can be used
+		 * in conjunction with {@link assignCellPixels} to assign all these pixels
+		 * to a given CellId at once. (See also {@link makeLine} and
+		 * {@link makeCircle}).
+		 * The method takes an existing array of coordinates (which can be
+		 * empty) and adds the pixels of the specified rectangle/box to it.
+		 * See {@link assignCellPixels} for a method that sets such a pixel set to a
+		 * new value.
+		 *
+		 * The box/rectangle is specified by its bottom left corner (x,y,z)
+		 * and size (dx, dy, dz).
+		 *
+		 * @param {ArrayCoordinate[]} bottomLeft - the coordinate of the bottom
+		 * left corner of the rectangle/box.
+		 * @param {number[]} boxSize - the size of the rectangle in each dimension:
+		 * [dx,dy,dz].
+		 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+		 * if given, the line will be added to this set.
+		 * @return {ArrayCoordinate[]} the updated array of pixels.
+		 *
+		 * @example
+		 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+		 * let gm = new CPM.GridManipulator( C )
+		 * let rect = gm.makeBox( [50,50], [10,10] )
+		 * gm.assignCellPixels( rect, 1 )
+		 */
+		makeBox( bottomLeft, boxSize, pixels ){
+
+			// this array will contain all positions in the circle (/sphere)
+			// for radius = 1, just return the array with a single element:
+			// the center pixel
+			pixels = pixels || [];
+
+			// check that box dimensions do not exceed dimensions of the grid
+			for( let d = 0; d < this.C.grid.ndim; d++ ){
+				if( boxSize[d] > this.C.grid.extents[d] ){
+					throw( "GridManipulator.makeBox: You are trying to make a " +
+						"box that exceeds grid dimensions!" )
+				}
+			}
+
+			// find pixels inside the box, and correct them for torus if required
+			const p = bottomLeft;
+			for( let xx = 0; xx < boxSize[0]; xx++ ){
+				for( let yy = 0; yy < boxSize[1]; yy++ ){
+
+					let pNew = [p[0]+xx,p[1]+yy];
+					if( this.C.grid.ndim === 3 ){
+
+						for( let zz = 0; zz <= boxSize[2]; zz++ ){
+							pNew.push(p[2]+zz);
+							// correct for torus
+							const pCorr = this.C.grid.correctPosition( pNew );
+							if( typeof pCorr !== "undefined" ){ pixels.push( pCorr ); }
+						}
+
+					} else {
+						const pCorr = this.C.grid.correctPosition( pNew );
+						if( typeof pCorr !== "undefined"  ){ pixels.push( pCorr ); }
+					}
+				}
+			}
+
+			return pixels
+
+		}
+
+		/** Helper method to return a circle (in 3D: sphere) of pixels; can be used
+		 * in conjunction with {@link assignCellPixels} to assign all these pixels
+		 * to a given CellId at once. (See also {@link makeLine} and
+		 * {@link makeBox}).
+		 * The method takes an existing array of coordinates (which can be
+		 * empty) and adds the pixels of the specified circle/sphere to it.
+		 * See {@link assignCellPixels} for a method that sets such a pixel set to a
+		 * new value.
+		 *
+		 * The circle/sphere is specified by its center (x,y,z)
+		 * and radius.
+		 *
+		 * @param {ArrayCoordinate[]} center - the coordinate of the center
+		 * of the circle/sphere.
+		 * @param {number} radius - the radius of the circle/sphere.
+		 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+		 * if given, the circle/sphere pixels will be added to this set.
+		 * @return {ArrayCoordinate[]} the updated array of pixels.
+		 *
+		 * @example
+		 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+		 * let gm = new CPM.GridManipulator( C )
+		 * let circ = gm.makeCircle( [50,50], 10 )
+		 * gm.assignCellPixels( circ, 1 )
+		 */
+		makeCircle( center, radius, pixels = [] ){
+
+
+			// the positions to return depends on the Grid geometry. currently support only
+			// square 2D/3D lattices.
+			if( !( this.C.grid instanceof Grid2D ) && !( this.C.grid instanceof Grid3D ) ){
+				throw( "In makeCircle: radius > 1 only supported for grids of " +
+					"class Grid2D or Grid3D. Please set radius=1 to continue." )
+			}
+
+			// find the pixels	inside the radius
+			const p = center;
+			for( let xx = -radius; xx <= radius; xx++ ){
+				for( let yy = -radius; yy <= radius; yy++ ){
+
+					let pNew = [p[0]+xx,p[1]+yy];
+					if( this.C.grid.ndim === 3 ){
+
+						for( let zz = - radius; zz <= radius; zz++ ){
+							pNew.push(p[2]+zz);
+							if( Math.sqrt( xx*xx + yy*yy + zz*zz ) <= radius ){
+								const pCorr = this.C.grid.correctPosition( pNew );
+								if(  typeof pCorr !== "undefined"  ){ pixels.push( pCorr ); }
+							}
+						}
+
+					} else {
+						if( Math.sqrt( xx*xx + yy*yy ) <= radius ){
+							const pCorr = this.C.grid.correctPosition( pNew );
+							if(  typeof pCorr !== "undefined"  ){ pixels.push( pCorr ); }
+						}
+
+					}
+				}
+			}
+
+
+			return pixels
+
+		}
+
+
+		/** Helper method that assigns all pixels in a given array to a
+		 * cell of a given cellkind: changes the pixels defined by voxels
+		 * (array of coordinates p) into the given cellKind and a corresponding
+		 * cellID.
+		 *
+		 * @param {ArrayCoordinate[]} voxels - Array of pixels to change.
+		 * @param {CellKind} cellkind - cellkind to change these pixels into.
+		 * @param {CellId} [newID] - (Optional) id of the cell to assign the
+		 * 	pixels to; if this is unspecified, a new cellID is generated for this
+		 * 	purpose.
+		 * 	@example
+		 * 	let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+		 * 	let gm = new CPM.GridManipulator( C )
+		 * 	let myLine = gm.makeLine( 0, 2 )
+		 * 	gm.assignCellPixels( myLine, 1 )
+		 **/
+		assignCellPixels ( voxels, cellkind, newID ){
+
+			newID = newID || this.C.makeNewCellID( cellkind );
 			for( let p of voxels ){
-				this.C.setpix( p, newid );
+				this.C.setpix( p, newID );
 			}
 			
+		}
+
+		/** Abrogated; this is now {@link assignCellPixels}. **/
+		changeKind( voxels, cellkind, newid ){
+			this.assignCellPixels( voxels, cellkind, newid );
 		}
 
 		/** Let cell "id" divide by splitting it along a line perpendicular to
@@ -5861,7 +6125,7 @@ var CPM = (function (exports) {
 	 * let C = new CPM.CPM( [200,200], { T : 20 } )
 	 * C.add( new CPM.AttractionPointConstraint( {
 	 * 	LAMBDA_ATTRACTIONPOINT : [0,100],
-	 * 	ATTRACTIONPOINT: [100,100],
+	 * 	ATTRACTIONPOINT: [[0,0],[100,100]],
 	 * } ) )
 	 *
 	 * // We can even add a second one at a different location
@@ -7037,7 +7301,7 @@ var CPM = (function (exports) {
 	This class provides some boilerplate code for creating simulations easily.
 	It comes with defaults for seeding cells, drawing, logging of statistics, saving output
 	images, and running the simulation. Each of these default methods can be overwritten
-	by the user while keeping the other default methods intact. See the {@link constructor}
+	by the user while keeping the other default methods intact. See the {@link Simulation#constructor}
 	for details on how to configure a simulation.
 	@see ../examples
 	*/
@@ -7046,6 +7310,8 @@ var CPM = (function (exports) {
 			@param {object} config - overall configuration settings. This is an object
 			with multiple entries, see below.
 			@param {GridSize} config.field_size - size of the CPM to build.
+		 	@param {Constraint[]} config.constraints - array of additional
+		 		constraints to add to the CPM model.
 			@param {object} config.conf - configuration settings for the CPM;
 			see its {@link CPM#constructor} for details.
 			@param {object} simsettings - configuration settings for the simulation 
@@ -7076,19 +7342,29 @@ var CPM = (function (exports) {
 				each {@link CellKind} in. Defaults to black. 
 			*/
 		constructor( config, custommethods ){
-		
+
+			/** To check from outside if an object is a Simulation; doing this with
+			 * instanceof doesn't work in some cases. Any other object will
+			 * not have this variable and return 'undefined', which in an
+			 * if-statement equates to a 'false'.
+			 * @type{boolean}*/
+			this.isSimulation = true;
+
 			// ========= configuration and custom methods
-			
-			custommethods = custommethods || {};
+
+			/** Custom methods added to / overwriting the default Simulation class.
+			 * These are stored so that the ArtistooImport can check them.
+			@type {object}*/
+			this.custommethods = custommethods || {};
 		
 			// overwrite default method if methods are supplied in custommethods
 			// these can be initializeGrid(), drawCanvas(), logStats(),
 			// postMCSListener().
-			for( let m of Object.keys( custommethods ) ){
+			for( let m of Object.keys( this.custommethods ) ){
 			
 				/** Any function suplied in the custommethods argument to
 				the {@link constructor} is bound to the object. */
-				this[m] = custommethods[m];
+				this[m] = this.custommethods[m];
 			}
 			
 			/** Configuration of the simulation environment 
@@ -7159,8 +7435,13 @@ var CPM = (function (exports) {
 			their values in helpClasses to 'true', so they don't have to be added again.
 			@type {object}*/
 			this.helpClasses = { gm: false, canvas: false };
-			
-			
+
+			/** Add additional constraints.
+			 * @type {Constraint[]}
+			 * */
+			this.constraints = config.constraints || [];
+			this.addConstraints();
+
 			// ========= Begin.
 			// Initialize the grid and run the burnin.
 			this.initializeGrid();
@@ -7184,6 +7465,15 @@ var CPM = (function (exports) {
 			this.Cim = new Canvas( this.C, this.conf );
 			this.helpClasses[ "canvas" ] = true;
 		}
+
+		/** Add additional constraints to the model before running; this
+		 * method is automatically called and adds constraints given in
+		 * the config object. */
+		addConstraints(){
+			for( let constraint of this.constraints ){
+				this.C.add( constraint );
+			}
+		}
 		
 		/** Method to initialize the Grid should be implemented in each simulation. 
 		The default method checks in the simsettings.NRCELLS array how many cells to
@@ -7197,7 +7487,11 @@ var CPM = (function (exports) {
 		
 			// add the initializer if not already there
 			if( !this.helpClasses["gm"] ){ this.addGridManipulator(); }
-		
+
+			// reset C and clear cache (important if this method is called
+			// again later in the sim).
+			this.C.reset();
+
 			let nrcells = this.conf["NRCELLS"], cellkind, i;
 			
 			// Seed the right number of cells for each cellkind
@@ -7405,9 +7699,2894 @@ var CPM = (function (exports) {
 		
 	}
 
+	//import GridManipulator from "../grid/GridManipulator"
+
+	/** This class is meant as a bridge to convert between model frameworks.
+	 * It currently supports only conversion from Artistoo -> Morpheus and vice
+	 * versa.
+	 * @experimental
+	 */
+	class ModelDescription {
+
+		constructor( ){
+
+
+			// Properties to obtain
+			this.modelInfo = {
+				title : "",
+				desc : ""
+			};
+
+			this.timeInfo = {
+				start : 0,
+				stop : 0,
+				duration : 0
+			};
+
+			this.grid = {
+				geometry : "",
+				ndim : 0,
+				extents : [],
+				boundaries : [],
+				neighborhood : {
+					distance : NaN,
+					order : NaN
+				}
+			};
+
+			this.kinetics = {
+				T : 0,
+				seed : undefined
+			};
+
+			this.constraints = {
+				constraints : []
+			};
+
+			this.cellKinds = {
+				name2index : {},
+				index2name : {},
+				properties : {},
+				count : 0
+			};
+
+			this.setup = {
+				init : []
+			};
+
+			this.generalWarning = "";
+
+			this.conversionWarnings = {
+				modelInfo : [],
+				grid : [],
+				time : [],
+				cells : [],
+				kinetics : [],
+				constraints : [],
+				init : [],
+				analysis: []
+			};
+
+
+		}
+
+		build(){
+			this.setModelInfo();
+			this.setGridInfo();
+			this.setTimeInfo();
+			this.setCellKindNames();
+			this.setCPMGeneral();
+			this.setConstraints();
+			this.setGridConfiguration();
+		}
+
+		getKindIndex( kindName ){
+			if( typeof this.cellKinds === "undefined" ){
+				throw( "this.cellKinds needs to be set before getKindIndex() can be called!" )
+			}
+			return this.cellKinds.name2index[ kindName ]
+		}
+
+		getKindName( kindIndex ){
+			if( typeof this.cellKinds === "undefined" ){
+				throw( "this.cellKinds needs to be set before getKindName() can be called!" )
+			}
+			return this.cellKinds.index2name[ kindIndex.toString() ]
+		}
+
+
+		initDimensionVector( value = NaN ){
+			let vec = [];
+			if( !this.grid.ndim > 0 ){
+				throw( "initDimensionVector cannot be called before this.grid.ndim is set!" )
+			}
+			for( let d = 0; d < this.grid.ndim; d++ ){
+				vec.push( value );
+			}
+			return vec
+		}
+
+		initCellKindVector( value = NaN, includeBackground = true ){
+
+			if( typeof this.cellKinds === "undefined" ){
+				throw( "this.cellKinds needs to be set before initCellKindVector() can be called!" )
+			}
+
+			let nk = this.cellKinds.count;
+			if( !includeBackground ){ nk--; }
+
+			let vec = [];
+			for( let k = 0; k < nk; k++ ){
+				vec.push( value );
+			}
+			return vec
+		}
+
+		initCellKindMatrix( value = NaN, includeBackground = true ){
+			if( typeof this.cellKinds === "undefined" ){
+				throw( "this.cellKinds needs to be set before initCellKindVector() can be called!" )
+			}
+
+			let nk = this.cellKinds.count;
+			if( !includeBackground ){ nk--; }
+
+			let m = [];
+			for( let k = 0; k < nk; k++ ){
+				m.push( this.initCellKindVector( value, includeBackground ) );
+			}
+
+			return m
+		}
+
+		setGridGeometry( geomString ){
+			switch( geomString ){
+			case "cubic" :
+				this.grid.ndim = 3;
+				this.grid.geometry = "cubic";
+				break
+			case "square" :
+				this.grid.ndim = 2;
+				this.grid.geometry = "square";
+				break
+			case "linear" :
+				this.grid.ndim = 2;
+				this.grid.geometry = "linear";
+				break
+			case "hexagonal" :
+				this.grid.ndim = 2;
+				this.grid.geometry = "hexagonal";
+				break
+			default :
+				this.grid.ndim = 2;
+				this.grid.geometry = "square";
+				this.conversionWarnings.grid.push(
+					"Unknown grid geometry : " + geomString +
+					". Continuing with default 2D square grid; but behavior may change!"
+				);
+				// do nothing.
+			}
+		}
+
+		addConstraint( name, conf ){
+
+			if( !this.hasConstraint(name) ){
+				this.constraints.constraints[ name ] = [];
+			}
+			this.constraints.constraints[ name ].push( conf );
+
+		}
+
+		hasConstraint( name ){
+			return this.constraints.constraints.hasOwnProperty( name )
+		}
+
+		getConstraint( name, index = 0 ){
+			return this.constraints.constraints[name][index]
+		}
+
+		getConstraintParameter( constraintName, paramName, index = 0 ){
+			return this.getConstraint( constraintName, index )[ paramName ]
+		}
+
+		/* ==========	METHODS TO OVERWRITE IN SUBCLASS =========== */
+
+		callerName() {
+			try {
+				throw new Error()
+			}
+			catch (e) {
+				try {
+					return e.stack.split("at ")[3].split(" ")[0]
+				} catch (e) {
+					return ""
+				}
+			}
+
+		}
+		methodOverwriteError(){
+			throw( "Extensions of class ModelDescription must implement method: '" +
+				this.callerName() + "'!" )
+		}
+
+		setModelInfo(){
+			this.methodOverwriteError();
+		}
+
+		setTimeInfo(){
+			this.methodOverwriteError();
+		}
+
+		setGridInfo(){
+			this.methodOverwriteError();
+		}
+
+		setCPMGeneral(){
+			this.methodOverwriteError();
+		}
+
+		setConstraints(){
+			this.methodOverwriteError();
+		}
+
+		setCellKindNames(){
+			this.methodOverwriteError();
+		}
+
+		setGridConfiguration(){
+			this.methodOverwriteError();
+		}
+
+	}
+
+	class MorpheusImport extends ModelDescription {
+
+		constructor( config ){
+
+			super( );
+
+			this.xml = config.xml;
+			this.from = "a Morpheus model";
+			this.build();
+
+		}
+
+		/* ==========	GENERAL HELPER FUNCTIONS =========== */
+
+		readXMLTag( tag, xml, index = 0 ){
+			if( typeof xml === "undefined" ){
+				xml = this.xml;
+			}
+			const tag2 = this.getXMLTag( tag, xml, index );
+			if( typeof tag2 !== "undefined" ){
+				return tag2.innerHTML
+			}
+			return undefined
+		}
+
+		getXMLTag( tag, xml, index = 0 ){
+			if( typeof xml === "undefined" ){
+				xml = this.xml;
+			}
+			const tags = xml.getElementsByTagName( tag );
+			if( tags.length === 0 ){
+				return undefined
+			}
+			return tags[index]
+		}
+
+		readVectorAttribute( xml, attrName ){
+			const attr = xml.getAttribute( attrName );
+			return attr.split( "," ).map( function(x){
+				return( parseInt(x) )
+			})
+		}
+
+		readCoordinateAttribute( xml, attrName ){
+			const vec = this.readVectorAttribute( xml, attrName );
+			let outVec = [];
+			for( let d = 0; d < this.grid.ndim; d++ ){
+				outVec.push( vec[d] );
+			}
+			return outVec
+		}
+
+		toCoordinate( string ){
+			const vec = string.split( "," ).map( function(x){
+				return( parseInt(x) )
+			});
+			let outVec = [];
+			for( let d = 0; d < this.grid.ndim; d++ ){
+				outVec.push( vec[d] );
+			}
+			return outVec
+		}
+
+		/* ==========	MORPHEUS READER FUNCTIONS =========== */
+
+		setModelInfo(){
+
+			// Get title from XML
+			const title = this.readXMLTag( "Title" );
+			if( typeof title === "undefined" ) {
+				this.conversionWarnings.modelInfo.push(
+					"Could not find model title."
+				);
+			} else {
+				this.modelInfo.title = title;
+			}
+
+			// Get description from XML
+			const desc = this.readXMLTag( "Details" );
+			if( typeof desc === "undefined" ) {
+				this.conversionWarnings.modelInfo.push(
+					"Could not find a model description."
+				);
+			} else {
+				this.modelInfo.desc = desc.toString();
+			}
+
+		}
+
+		setTimeInfo(){
+
+			const time = this.getXMLTag( "Time" );
+
+			for( let time_ch of time.children ) {
+
+				switch (time_ch.nodeName) {
+
+				case "StartTime" :
+					this.timeInfo.start = Number( time_ch.getAttribute("value") );
+					break
+				case "StopTime" :
+					this.timeInfo.stop = Number( time_ch.getAttribute("value") );
+					break
+				case "RandomSeed" :
+					this.kinetics.seed = parseInt( time_ch.getAttribute("value") );
+					break
+				case "TimeSymbol" :
+					break
+				default :
+					this.conversionWarnings.time.push(
+						"I don't know what to do with tag <" + time_ch.nodeName + "> in <Time>. Ignoring it."
+					);
+				}
+			}
+			this.timeInfo.duration = this.timeInfo.stop - this.timeInfo.start;
+			if( this.timeInfo.duration < 0 ){
+				throw( "Error: I cannot go back in time; timeInfo.stop must be larger than timeInfo.start!")
+			}
+		}
+
+		setGridInfo(){
+			const space = this.getXMLTag( "Space" );
+			for( let space_ch of space.children ){
+				switch( space_ch.nodeName ) {
+				case "Lattice" :
+					this.readMorpheusLattice( space_ch );
+					break
+				case "SpaceSymbol" :
+					break
+				default :
+					this.conversionWarnings.grid.push(
+						"Tags of type <" + space_ch.nodeName + "> are currently not supported. " +
+						"Ignoring it for now."
+					);
+
+				}
+			}
+		}
+
+		readMorpheusLattice( lattice ){
+
+			// this.grid.geometry and this.grid.ndim
+			this.setGridGeometry( lattice.className );
+
+			// declare some variables needed
+			const boundLookup = { x : 0, y : 1, z : 2 };
+			let order, bound, dimIndex, boundType;
+
+
+			// Read info in the lattice
+			for( let lattice_ch of lattice.children ){
+
+				switch( lattice_ch.nodeName ) {
+				case "Size" :
+					this.grid.extents = this.readCoordinateAttribute( lattice_ch, "value" );
+					break
+				case "Neighborhood" :
+					for( let nn of lattice_ch.children ){
+						switch( nn.nodeName ){
+						case "Order" :
+							order = parseInt( this.readXMLTag( "Order", lattice_ch ) );
+							if( isNaN(order) ){
+								this.conversionWarnings.grid.push(
+									"Non-integer neighborhood order. Ignoring."
+								);
+							} else {
+								this.grid.neighborhood.order = order;
+							}
+							break
+						case "Distance" :
+							this.grid.neighborhood.distance = this.readXMLTag( "Distance", lattice_ch );
+							break
+						default:
+							this.conversionWarnings.grid.push(
+								"I don't know what to do with tag <" + nn.nodeName +
+								"> in a <Neighborhood> of a <Space> <Lattice>. Ignoring."
+							);
+
+						}
+					}
+					break
+
+				case "BoundaryConditions" :
+
+					for( let nn of lattice_ch.children ) {
+						switch (nn.nodeName) {
+						case "Condition" :
+							bound = nn.getAttribute("boundary");
+							dimIndex = boundLookup[bound];
+							boundType = nn.getAttribute("type");
+							this.grid.boundaries[dimIndex] = boundType;
+							break
+
+						default :
+							this.conversionWarnings.grid.push(
+								"I don't know what to do with tag <" + nn.nodeName +
+								"> in the <BoundaryConditions> of a <Space> <Lattice>. Ignoring."
+							);
+						}
+					}
+					break
+
+				case "Domain" :
+					this.conversionWarnings.grid.push(
+						"Your MorpheusModel has specified a <" + lattice_ch.nodeName + "> : \n\t\t\t" +
+						lattice_ch.outerHTML + "\n" +
+						"This is currently not supported, but you can mimic the behaviour " +
+						"by adding a physical barrier using a BarrierConstraint; " +
+						"e.g. see artistoo.net/examples/Microchannel.html."
+					);
+					break
+
+				case "NodeLength" :
+					this.conversionWarnings.grid.push(
+						"Your MorpheusModel has specified a <" + lattice_ch.nodeName + "> : \n\t\t\t" +
+						lattice_ch.outerHTML + "\n" +
+						"This is currently not supported, so spatial scales in your model " +
+						"are just measured in pixels. This shouldn't change behaviour as long as " +
+						"(spatial) parameters are defined in units of pixels. Please check this."
+					);
+					break
+
+				default :
+					this.conversionWarnings.grid.push(
+						"I don't know what to do with tag <" + lattice_ch.nodeName +
+						"> in a <Space> <Lattice>. Ignoring."
+					);
+				}
+			}
+		}
+
+		setCellKindNames(){
+
+			// this counter will increase every time a new CellType is handled.
+			let indexNonBackground = 1;
+			for( let ck of this.getXMLTag( "CellTypes" ).children ){
+				if( ck.nodeName !== "CellType" ){
+					this.conversionWarnings.cells.push(
+						"Not expecting tag <" + ck.nodeName + "> inside CellTypes. Ignoring."
+					);
+				}
+				const kind_class = ck.className;
+				const kind_name = ck.getAttribute( "name" );
+
+				// special case for kind of class 'medium', the background;
+				// this is always index 0 and there can be only one kind of this
+				// class.
+				if( kind_class === "medium" ){
+					if( this.cellKinds.name2index.hasOwnProperty( kind_class ) ){
+						throw( "There cannot be two CellTypes of class 'medium'! Aborting." )
+					} else {
+						// it gets index 0.
+						this.cellKinds.name2index[ kind_class ] = 0;
+						this.cellKinds.index2name[ "0" ] = kind_class;
+					}
+				} else if ( kind_class === "biological" ){
+					if( this.cellKinds.name2index.hasOwnProperty( kind_name ) ){
+						throw( "There cannot be two CellTypes with name '" + kind_name +
+							"' Aborting." )
+					} else {
+						this.cellKinds.name2index[ kind_name ] = indexNonBackground;
+						this.cellKinds.index2name[ indexNonBackground.toString() ] = kind_name;
+					}
+					indexNonBackground++;
+
+				} else {
+					throw( "Don't know what to do with a CellType of class " + kind_class + ". Aborting." )
+				}
+
+				// Also extract any <Property> or <PropertyVector>
+				if( !this.cellKinds.properties.hasOwnProperty( kind_name ) ){
+					this.cellKinds.properties[ kind_name ] = {};
+				}
+				const props = ck.getElementsByTagName( "Property" );
+				for( let p of props ){
+					const propName = p.getAttribute( "symbol" );
+					const propVal = p.getAttribute( "value" );
+					this.cellKinds.properties[ kind_name ][ propName ] = propVal;
+				}
+				const propVecs = ck.getElementsByTagName( "PropertyVector" );
+				for( let pv of propVecs ){
+					const propName = pv.getAttribute( "symbol" );
+					const propVal = this.readCoordinateAttribute( pv, "value" );
+					this.cellKinds.properties[ kind_name ][ propName ] = propVal;
+				}
+			}
+
+			// counter: number of cell kinds including medium/background.
+			this.cellKinds.count = indexNonBackground;
+		}
+
+		setCPMGeneral(){
+
+			// Random Seed
+			// Note that the random 'seed' in Morpheus is specified in <Time>,
+			// and as such is handled by this.setTimeInfo().
+
+			// Temperature
+			const cpm = this.getXMLTag( "CPM" );
+			for( let cpm_ch of cpm.children ) {
+				switch( cpm_ch.nodeName ){
+				case "Interaction" :
+					this.setAdhesionMorpheus( cpm_ch );
+					break
+
+				case "ShapeSurface" :
+					if( cpm_ch.getAttribute("scaling") !== "none" ){
+						this.conversionWarnings.grid.push(
+							"You are trying to use a ShapeSurface with scaling '" +
+							cpm_ch.getAttribute("scaling") +
+							"'. This is currently not supported in Artistoo; " +
+							"Reverting to the default scaling = 'none' instead. You may have " +
+							"to adapt parameters that involve cell-cell interfaces, such as " +
+							"those of the CPM's Adhesion and Perimeter constraints."
+						);
+					}
+					if( typeof this.readXMLTag( "Distance", cpm_ch ) !== "undefined" ){
+						this.conversionWarnings.grid.push(
+							"You are trying to use a ShapeSurface with neighborhood distance '" +
+							this.readXMLTag( "Distance", cpm_ch ) +
+							"'. This is currently not supported in Artistoo; " +
+							"Reverting to the default Moore neighborhood instead. You may have " +
+							"to adapt parameters that involve cell-cell interfaces, such as " +
+							"those of the CPM's Adhesion and Perimeter constraints."
+						);
+					}
+					if( this.readXMLTag( "Order", cpm_ch ) !== "2" ){
+						this.conversionWarnings.grid.push(
+							"You are trying to use a ShapeSurface with neighborhood order '" +
+							this.readXMLTag( "Order", cpm_ch ) +
+							"'. This is currently not supported in Artistoo; " +
+							"Reverting to the default Moore neighborhood instead. You may have " +
+							"to adapt parameters that involve cell-cell interfaces, such as " +
+							"those of the CPM's Adhesion and Perimeter constraints."
+						);
+					}
+					break
+
+				case "MonteCarloSampler" : {
+					const stepper = cpm_ch.getAttribute("stepper");
+					if (stepper !== "edgelist") {
+						this.conversionWarnings.kinetics.push(
+							"Stepper '" + stepper + "' not supported. Switching to 'edgelist'."
+						);
+					}
+
+					for (let nn of cpm_ch.children) {
+
+						switch (nn.nodeName) {
+						case "MetropolisKinetics": {
+
+							const kineticAttr = nn.getAttributeNames();
+							for (let k of kineticAttr) {
+								switch (k) {
+								case "temperature":
+									this.kinetics.T = parseFloat(nn.getAttribute("temperature"));
+									break
+								default :
+									this.conversionWarnings.kinetics.push(
+										"Unknown attribute of < MetropolisKinetics >: " +
+										k + ". Ignoring."
+									);
+								}
+							}
+							break
+						}
+
+						case "Neighborhood":
+
+							for (let nnn of nn.children) {
+
+								switch (nnn.nodeName) {
+								case "Order": {
+									const order = nnn.innerHTML;
+									if ( order !== "2" ) {
+										this.conversionWarnings.grid.push(
+											"Ignoring < Neighborhood > <Order> in <MetropolisKinetics>: "
+											+ order + ". " +
+											"Using default order 2 (Moore-neighborhood) instead.");
+									}
+									break
+								}
+								default :
+									this.conversionWarnings.grid.push(
+										"I don't understand what you mean with a neighborhood " +
+										nnn.nodeName + ". Using the default (Moore) neighborhood instead."
+									);
+								}
+							}
+							break
+
+						case "MCSDuration" :
+							this.conversionWarnings.kinetics.push(
+								"Ignoring unsupported tag <MCSDuration>; this should not change " +
+								"behaviour of the model, but it means all time should be defined in units of MCS. " +
+								"Please check if this is the case."
+							);
+							break
+
+						default :
+							this.conversionWarnings.kinetics.push(
+								"Unknown child of < MonteCarloSampler >: <" +
+								nn.nodeName + ">.");
+
+						}
+					}
+
+					break
+				}
+
+				default :
+					this.conversionWarnings.kinetics.push(
+						"I don't know what to do with tag <" + cpm_ch.nodeName + ">. Ignoring it for now."
+					);
+
+				}
+			}
+		}
+
+		setConstraints(){
+
+			// Adhesion in Morpheus is stored under 'CPM' and is set by
+			// setCPMGeneral().
+			const ct = this.getXMLTag( "CellTypes" );
+
+			for (let cc of ct.children ){
+
+				const kindIndex = this.getKindIndex( cc.getAttribute("name") );
+
+				// add constraints:
+				for( let constraint of cc.children ){
+
+					switch( constraint.nodeName ){
+
+					case "VolumeConstraint" :
+						this.setVolumeConstraintForKind( constraint, kindIndex );
+						break
+
+					case "SurfaceConstraint" :
+						this.setPerimeterConstraintForKind( constraint, kindIndex );
+						break
+
+					case "Protrusion" :
+						this.setActivityConstraintForKind( constraint, kindIndex );
+						break
+
+					case "ConnectivityConstraint" :
+						this.setConnectivityConstraintForKind( constraint, kindIndex );
+						break
+
+					case "FreezeMotion":
+						this.setBarrierConstraintForKind( constraint, kindIndex );
+						break
+
+					case "PersistentMotion" :
+						this.setPersistenceConstraintForKind( constraint, kindIndex );
+						break
+
+					case "DirectedMotion" :
+						this.setPreferredDirectionConstraintForKind( constraint, kindIndex );
+						break
+
+					case "Chemotaxis" :
+						this.setChemotaxisConstraintForKind( constraint, kindIndex );
+						break
+
+					case "StarConvex":
+						this.unknownConstraintWarning( constraint.nodeName );
+						break
+
+					case "Haptotaxis" :
+						this.unknownConstraintWarning( constraint.nodeName );
+						break
+
+					case "LengthConstraint" :
+						this.unknownConstraintWarning( constraint.nodeName );
+						break
+
+					case "Property" :
+						// Properties are handled by this.setCellKindNames
+						break
+
+					case "PropertyVector" :
+						// PropertyVectors are handled by this.setCellKindNames
+						break
+
+					default:
+						this.conversionWarnings.cells.push(
+							"I don't know what to do with <CellType> property <" +
+							constraint.nodeName  + "> for cell " +
+							cc.getAttribute("name") + ". Ignoring it. " );
+					}
+
+				}
+
+
+			}
+
+		}
+
+		unknownConstraintWarning( constraintName ){
+			this.conversionWarnings.constraints.push(
+				"Constraint '" + constraintName +
+				"' is currently not supported in Artistoo. +" +
+				"I am ignoring it for now, but model behaviour may change. " +
+				"Check out the online manual at https://artistoo.net/manual/custommodules.html " +
+				"to implement your own, or choose a similar constraint from available options " +
+				"https://artistoo.net/identifiers.html#hamiltonian"
+			);
+		}
+
+		setGridConfiguration(){
+			const pops = this.getXMLTag( "CellPopulations" );
+			for( let p of pops.children ){
+
+				// Check if this is a Population.
+				if( p.nodeName !== "Population" ){
+					this.conversionWarnings.init.push(
+						"Unexpected tag <" + p.nodeName + "> inside <CellPopulations>. Ignoring."
+					);
+				}
+
+				// Check which cellKind this population is of
+				const kindName = p.getAttribute( "type" );
+
+
+				// Handle the initialization depending on the type of child tags
+				for( let p_ch of p.children ){
+
+					switch( p_ch.nodeName ){
+
+					case "Cell":
+						this.setCellPixelList( p_ch, kindName );
+						break
+
+					case "InitCircle" :
+						this.setInitCircle( p_ch, kindName );
+						break
+
+					case "InitCellObjects":
+						this.setInitObjects( p_ch, kindName );
+						break
+
+						/*
+					case "InitDistribute":
+						this.setInitDistribute( p_ch, kindName )
+						break
+
+					case "InitHexLattice":
+						this.setHexLattice( p_ch, kindName )
+						break
+
+					case "InitRectangle" :
+						this.setInitRectangle (p_ch, kindName )
+						break*/
+
+					default: //InitProperty, InitVectorProperty, InitVoronoi, TIFFReader, InitPoissonDisc
+						this.conversionWarnings.init.push(
+							"Ignoring unsupported tag <" + p_ch.nodeName + "> inside " +
+							"a <Population>."
+						);
+					}
+				}
+			}
+		}
+
+		/* ==========	MORPHEUS POPULATION READERS =========== */
+
+		setInitObjects( initXML, kindName ){
+			const mode = initXML.getAttribute( "mode" );
+			this.conversionWarnings.init.push( "In InitCellObjects: attribute 'mode' currently not supported. " +
+				"Ignoring mode = '" + mode + "' setting. " +
+				"If conflicts arise during cell seeding, the pixel gets the value of the last cell" +
+				" trying to occupy it. Adjust the script manually if this is not what you want.");
+
+			const arr = initXML.getElementsByTagName( "Arrangement" )[0];
+			const disp = this.readCoordinateAttribute( arr, "displacements" );
+			const reps = this.readCoordinateAttribute( arr, "repetitions" );
+
+			const obj = arr.children[0];
+
+			for( let xi = 0; xi < reps[0]; xi++ ){
+				const dx = xi*disp[0];
+				for( let yi = 0; yi < reps[1]; yi++ ){
+
+					const dy = yi*disp[1];
+					if( this.grid.ndim === 3 ){
+						for( let zi = 0; zi < reps[2]; zi++ ){
+
+							const dz = zi*disp[2];
+							this.addInitObject( [dx,dy,dz], obj, kindName );
+
+						}
+					} else {
+						this.addInitObject( [dx,dy], obj, kindName );
+					}
+				}
+
+			}
+		}
+
+		addInitObject( disp, objXML, kindName ) {
+
+			const objType = objXML.nodeName;
+			const ndim = disp.length;
+
+			let pos;
+
+			switch (objType) {
+			case "Sphere" : {
+				// For a sphere, position is the center attribute; add the
+				// displacement to that.
+				pos = this.readCoordinateAttribute(objXML, "center");
+				for (let d = 0; d < ndim; d++) {
+					pos[d] += disp[d];
+				}
+
+				this.setup.init.push( {
+					setter : "circleObject",
+					kind : this.getKindIndex( kindName ),
+					kindName : kindName,
+					radius : parseFloat(objXML.getAttribute("radius")),
+					center : pos
+				} );
+				break
+			}
+
+			case "Box" : {
+				// For a box, position is the origin attribute; add the
+				// displacement to that.
+				pos = this.readCoordinateAttribute(objXML, "origin");
+				for (let d = 0; d < ndim; d++) {
+					pos[d] += disp[d];
+				}
+
+				// Read the box dimensions from the XML, this is the 'size' attribute.
+				let boxSize = this.readCoordinateAttribute(objXML, "size");
+
+				this.setup.init.push( {
+					setter : "boxObject",
+					kind : this.getKindIndex( kindName ),
+					kindName : kindName,
+					bottomLeft: pos,
+					boxSize: boxSize
+				} );
+				break
+			}
+
+			default :
+				this.conversionWarnings.init.push(
+					"No method to seed an object of type " + objType + ". Ignoring."
+				);
+			}
+		}
+
+		setInitCircle( initXML, kindName ){
+
+			let nCells;
+
+			// Get information from attributes
+			for( let attr of initXML.getAttributeNames() ){
+				switch( attr ){
+				case "mode" :
+					if( initXML.getAttribute( "mode" ) !== "random" ){
+						this.conversionWarnings.init.push(
+							"In InitCircle: 'mode' " + initXML.getAttribute( "mode" )  +
+							" currently not supported. " +
+							"Seeding cells randomly in the circle; to change this, define your own" +
+							"initialization function as e.g. in " +
+							"https://artistoo.net/examples/DirectedMotionLinear.html." );
+					}
+					break
+
+				case "number-of-cells" :
+					// get number of cells to seed
+					nCells = initXML.getAttribute( "number-of-cells" );
+
+					// in morpheus, this can also be a function -- but this is not supported. Check and warn.
+					if( !isFinite( nCells ) ){
+						this.conversionWarnings.init.push(
+							"In InitCircle: it appears as if the number-of-cells attribute is " +
+							"not a number but a function. Ignoring it for now. " +
+							"Please change to a number or initialize the grid manually.");
+					}
+					break
+
+				default :
+					this.conversionWarnings.init.push(
+						"Attribute " + attr + " in <InitCircle> currently not " +
+						"supported; ignoring it for now." );
+
+				}
+			}
+
+			// Get the dimensions
+			for( let ch of initXML.children ){
+				switch( ch.nodeName ){
+				case "Dimensions" :
+					this.addInitCircle( ch, kindName, nCells );
+					break
+
+				default :
+					this.conversionWarnings.init.push(
+						"In <InitCircle> I don't know what to do with " +
+						"tag <" + ch.nodeName + ">. Ignoring it." );
+				}
+			}
+
+
+		}
+
+		addInitCircle( initXML, kindName, nCells ){
+			let center, radius;
+
+			for( let attr of initXML.getAttributeNames() ){
+
+				switch( attr ){
+				case "center" : {
+
+					center = this.readCoordinateAttribute( initXML, "center" );
+
+					// check if it's an array of numbers and correct dimensions so that
+					// position has 2 coordinates for 2D grids.
+					for (let d = 0; d < this.grid.ndim; d++) {
+						if (!isFinite(center[d])) {
+							this.conversionWarnings.init.push(
+								"In <InitCircle> <Dimensions>, 'center' does not appear to be a numeric vector:" +
+								"center = " + center + ". Ignoring it for now."
+							);
+							return
+						}
+					}
+					break
+				}
+
+				case "radius" :
+					radius = parseInt( initXML.getAttribute( "radius" ) );
+					if( !isFinite(radius) ){
+						this.conversionWarnings.init.push(
+							"In <InitCircle> <Dimensions>, 'radius' does not appear to be a number:" +
+							"radius = " + radius + ". Ignoring it for now." );
+						return
+					}
+					break
+
+				default :
+					this.conversionWarnings.init.push(
+						"In <InitCircle> <Dimensions>, I don't know what to do with attribute " +
+						attr + ". Ignoring." );
+
+				}
+			}
+
+			if( typeof center === "undefined" || typeof radius === "undefined" ){
+				this.conversionWarnings.init.push(
+					"In <InitCircle> <Dimensions>, I cannot find a 'center' or a " +
+					"'radius'. Ignoring." );
+				return
+			}
+
+
+			// If we get here, we have both center and radius now.
+			this.setup.init.push( {
+				setter : "cellCircle",
+				kind : this.getKindIndex( kindName ),
+				kindName : kindName,
+				radius : radius,
+				center : center,
+				nCells : nCells
+			} );
+
+		}
+
+		setCellPixelList( cellXML, kindName ){
+
+			const kindIndex = this.getKindIndex( kindName );
+			const cid = cellXML.getAttribute( "id" );
+			let pixels = [];
+			for( let n of cellXML.children ){
+				if( n.nodeName !== "Nodes" ){
+					this.conversionWarnings.init.push(
+						"Ignoring unexpected tag <" + n.nodeName + "> inside a " +
+						"<Population><Cell>."
+					);
+				} else {
+					pixels.push( this.toCoordinate( n.innerHTML ) );
+				}
+			}
+
+			this.setup.init.push( {
+				setter : "pixelSet",
+				kind : kindIndex,
+				kindName : kindName,
+				cid : cid,
+				pixels : pixels
+			} );
+
+		}
+
+
+		/* ==========	MORPHEUS CONSTRAINT READERS =========== */
+
+		parameterFromXML( constraintXML, paramName, kindIndex, pType = "int" ){
+
+			let par = constraintXML.getAttribute( paramName );
+			const kindName = this.getKindName( kindIndex );
+
+			let parser;
+			if( pType === "int" ){
+				parser = parseInt;
+			} else if (pType === "float" ){
+				parser = parseFloat;
+			} else {
+				throw ( "Unknown type of parameter : " + pType )
+			}
+
+			if( !isNaN( parser(  par ) ) ){
+				par = parser( par );
+			} else {
+				// try if it is the name of one of the defined symbols.
+				if( this.cellKinds.properties[ kindName ].hasOwnProperty( par ) ){
+					par = parser( this.cellKinds.properties[ this.getKindName( kindIndex ) ][ par ] );
+				}
+			}
+
+			// Check if now okay, otherwise set to 0 and add a warning.
+			if( isNaN( parser( par ) ) ){
+				this.conversionWarnings.constraints.push(
+					"Failed to interpret parameter " + paramName + " in " +
+					constraintXML.nodeName + " for cellKind " + kindName +
+					". For now, this is set to 0; please correct manually."
+				);
+				return 0
+			}
+			return parser( par )
+
+		}
+
+		setAdhesionMorpheus( interactionXML ){
+
+			let defValue = NaN, negative = false;
+			if( interactionXML.hasAttribute("default" ) ){
+				defValue = parseFloat( interactionXML.getAttribute( "default" ) );
+			}
+			if( interactionXML.hasAttribute("negative" ) ){
+				negative = ( interactionXML.getAttribute( "negative" ) === "true" );
+			}
+
+			let J = this.initCellKindMatrix( defValue );
+
+			for( let contact of interactionXML.children ){
+				// Check if child is indeed a contact energy
+				if( contact.nodeName !== "Contact" ){
+					this.conversionWarnings.constraints.push( "I don't know what to do with a tag <" +
+						contact.nodeName + "> inside the Adhesion <Interactions>. Ignoring. " );
+					break
+				}
+
+				// Get the types and convert to the corresponding number using the 'cellTypes' object used above
+				const type1 = this.getKindIndex( contact.getAttribute( "type1" ) );
+				const type2 = this.getKindIndex( contact.getAttribute( "type2" ) );
+				const energy = contact.getAttribute( "value" );
+				let energyNum = parseFloat( energy );
+				if( isNaN(energyNum) ){
+					this.conversionWarnings.constraints.push( "Contact energy value '" +
+						energy.toString() + "' inside Adhesion < Interactions > " +
+						"seems not to be a number and will be ignored.");
+				}
+
+				// set the value symmetrically
+				if( negative ){ energyNum = -energyNum; }
+				J[type1][type2] = energyNum;
+				J[type2][type1] = energyNum;
+			}
+
+			// Add the adhesion constraint to the model description.
+			this.addConstraint( "Adhesion", { J : J } );
+
+
+		}
+
+		setVolumeConstraintForKind( constraintXML, kindIndex ){
+
+			if( !this.hasConstraint( "VolumeConstraint" ) ){
+				this.addConstraint( "VolumeConstraint", {
+					V : this.initCellKindVector( 0 ),
+					LAMBDA_V : this.initCellKindVector( 0 )
+				});
+			}
+			const vol = this.parameterFromXML( constraintXML,
+				"target", kindIndex,  "int" );
+			const lambda = this.parameterFromXML( constraintXML,
+				"strength", kindIndex,  "float" );
+
+			this.getConstraintParameter( "VolumeConstraint",
+				"V" )[kindIndex] = vol;
+			this.getConstraintParameter( "VolumeConstraint",
+				"LAMBDA_V" )[kindIndex] = lambda;
+
+		}
+
+		setPerimeterConstraintForKind( constraintXML, kindIndex ){
+
+			if( !this.hasConstraint( "PerimeterConstraint" ) ){
+				this.addConstraint( "PerimeterConstraint", {
+					P : this.initCellKindVector( 0 ),
+					LAMBDA_P : this.initCellKindVector( 0 ),
+					mode : "surface"
+				});
+			}
+
+			// Get info from XML object
+			let perimeter, lambda, mode;
+			for( let att of constraintXML.getAttributeNames() ) {
+				switch (att) {
+				case "mode":
+					mode = constraintXML.getAttribute( "mode" );
+					break
+
+				case "target" :
+					perimeter = this.parameterFromXML( constraintXML,
+						"target", kindIndex,  "float" );
+					break
+
+				case "strength":
+					lambda = this.parameterFromXML( constraintXML,
+						"strength", kindIndex,  "float" );
+					break
+
+				default :
+					this.conversionWarnings.constraints.push(
+						"Ignoring unsupported attribute '" + att +
+						"' of the < SurfaceConstraint >");
+
+				}
+			}
+
+			// Set (converted) values.
+			this.getConstraintParameter( "PerimeterConstraint",
+				"P" )[kindIndex] = perimeter;
+			this.getConstraintParameter( "PerimeterConstraint",
+				"LAMBDA_P" )[kindIndex] = lambda;
+			this.getConstraint( "PerimeterConstraint" ).mode = mode;
+
+		}
+
+		setActivityConstraintForKind( constraintXML, kindIndex ){
+
+			if( !this.hasConstraint( "ActivityConstraint" ) ){
+				this.addConstraint( "ActivityConstraint", {
+					MAX_ACT : this.initCellKindVector( 0 ),
+					LAMBDA_ACT : this.initCellKindVector( 0 ),
+					ACT_MEAN : "geometric"
+				});
+			}
+
+			const lambda = this.parameterFromXML( constraintXML,
+				"strength", kindIndex,  "float" );
+			const max = this.parameterFromXML( constraintXML,
+				"maximum", kindIndex,  "float" );
+
+			this.getConstraintParameter( "ActivityConstraint",
+				"MAX_ACT" )[kindIndex] = max;
+			this.getConstraintParameter( "ActivityConstraint",
+				"LAMBDA_ACT" )[kindIndex] = lambda;
+		}
+
+		setConnectivityConstraintForKind( constraintXML, kindIndex ){
+			if( !this.hasConstraint( "LocalConnectivityConstraint" ) ){
+				this.addConstraint( "LocalConnectivityConstraint", {
+					CONNECTED : this.initCellKindVector( false ),
+				});
+			}
+
+			this.getConstraintParameter( "LocalConnectivityConstraint",
+				"CONNECTED" )[kindIndex] = true;
+
+		}
+
+		setBarrierConstraintForKind( constraintXML, kindIndex ){
+
+			if( !this.hasConstraint( "BarrierConstraint" ) ){
+				this.addConstraint( "BarrierConstraint", {
+					IS_BARRIER : this.initCellKindVector( false ),
+				});
+			}
+
+			this.getConstraintParameter( "BarrierConstraint",
+				"IS_BARRIER" )[kindIndex] = true;
+
+			// The Morpheus <FreezeMotion> has an optional attribute/child 'Condition',
+			// which Artistoo doesn't have. It defaults to true, but for anything different
+			// the behaviour will be different; issue a warning.
+			for( let ch of constraintXML.children ){
+				if( ch.nodeName === "Condition" ){
+					if( this.readXMLTag( "Condition", constraintXML ) !== "1" ){
+						this.conversionWarnings.constraints.push(
+							"Converting a <FreezeMotion> constraint to an Artistoo 'BarrierConstraint', but " +
+							"don't know how to handle a <Condition> other than '1'. Ignoring Condition.");
+					}
+				} else {
+					this.conversionWarnings.constraints.push(
+						"I don't know what to do with <" + ch.nodeName +
+						"> in a <FreezeMotion> constraint. Ignoring.");
+				}
+			}
+			for( let ch of constraintXML.getAttributeNames() ){
+				if( ch === "condition" ){
+					if( constraintXML.getAttribute( "condition" ) !== "1" ){
+						this.conversionWarnings.constraints.push(
+							"Converting a <FreezeMotion> constraint to an Artistoo 'BarrierConstraint', but " +
+							"don't know how to handle a <Condition> other than '1'. Ignoring Condition.");
+					}
+				} else {
+					this.conversionWarnings.constraints.push(
+						"I don't know what to do with property '" + ch +
+						"' in a <FreezeMotion> constraint. Ignoring.");
+				}
+			}
+
+
+		}
+
+		setPersistenceConstraintForKind( constraintXML, kindIndex ){
+			if( !this.hasConstraint( "PersistenceConstraint" ) ){
+				this.addConstraint( "PersistenceConstraint", {
+					DELTA_T : this.initCellKindVector( 0 ),
+					LAMBDA_DIR : this.initCellKindVector( 0 ),
+					// Morpheus doesn't have this param and just uses the default 1.
+					PERSIST : this.initCellKindVector( 1 ),
+					PROTRUDE : this.initCellKindVector( true ),
+					RETRACT : this.initCellKindVector( false )
+				});
+			}
+
+			const dt = this.parameterFromXML( constraintXML,
+				"decay-time", kindIndex,  "int" );
+			const lambda = this.parameterFromXML( constraintXML,
+				"strength", kindIndex, "float" );
+
+
+			// Two other params specified in morpheus
+			let protrude = constraintXML.getAttribute( "protrusion" );
+			if( typeof protrude === undefined ){
+				protrude = true;
+			} else {
+				protrude = ( protrude === "true" );
+			}
+			let retract = constraintXML.getAttribute( "retraction" );
+			if( typeof retract === undefined ){
+				retract = false;
+			} else {
+				retract = ( retract === "true" );
+			}
+
+			this.getConstraintParameter( "PersistenceConstraint",
+				"DELTA_T" )[kindIndex] = dt;
+			this.getConstraintParameter( "PersistenceConstraint",
+				"LAMBDA_DIR" )[kindIndex] = lambda;
+			this.getConstraintParameter( "PersistenceConstraint",
+				"PROTRUDE" )[kindIndex] = protrude;
+			this.getConstraintParameter( "PersistenceConstraint",
+				"RETRACT" )[kindIndex] = retract;
+		}
+
+		setPreferredDirectionConstraintForKind( constraintXML, kindIndex ){
+			if( !this.hasConstraint( "PreferredDirectionConstraint" ) ){
+				this.addConstraint( "PreferredDirectionConstraint", {
+					DIR : this.initCellKindVector( this.initDimensionVector(0) ),
+					LAMBDA_DIR : this.initCellKindVector( 0 ),
+					PROTRUDE : this.initCellKindVector( true ),
+					RETRACT : this.initCellKindVector( false )
+				});
+			}
+
+			const kindName = this.getKindName( kindIndex );
+			const dirSymbol = constraintXML.getAttribute( "direction" );
+			let dir = undefined;
+			if( this.cellKinds.properties[kindName].hasOwnProperty( dirSymbol ) ){
+				// read value of this parameter
+				dir = this.cellKinds.properties[kindName][dirSymbol];
+			}
+			let lambdaDir = this.parameterFromXML( constraintXML,
+				"strength", kindIndex,  "float" );
+
+			// Two other params specified in morpheus
+			let retract = constraintXML.getAttribute( "retraction" );
+			if( typeof retract === undefined ){
+				retract = false;
+			} else {
+				retract = ( retract === "true" );
+			}
+			let protrude = constraintXML.getAttribute( "protrusion" );
+			if( typeof protrude === undefined ){
+				protrude = true;
+			} else {
+				protrude = ( protrude === "true" );
+			}
+
+			this.getConstraintParameter( "PreferredDirectionConstraint",
+				"DIR" )[kindIndex] = dir;
+			this.getConstraintParameter( "PreferredDirectionConstraint",
+				"LAMBDA_DIR" )[kindIndex] = lambdaDir;
+			this.getConstraintParameter( "PreferredDirectionConstraint",
+				"PROTRUDE" )[kindIndex] = protrude;
+			this.getConstraintParameter( "PreferredDirectionConstraint",
+				"RETRACT" )[kindIndex] = retract;
+		}
+	}
+
+	class Writer {
+
+		constructor( model, config ){
+			this.model = model;
+
+			this.conversionWarnings = {
+				grid : [],
+				time : [],
+				constraints : [],
+				init : [],
+				analysis: []
+			};
+
+			this.target = config.target || undefined;
+			this.warningBox = config.warningBox || "console";
+			this.lineW = config.lineW || 80;
+
+			this.logString = "Unknown converter..";
+		}
+
+		write(){
+
+		}
+
+		writeLog(){
+
+			let log = this.logString + this.stringWrap(this.model.generalWarning
+				, this.lineW, 2 ) + "Notes on the conversion process: \n\n";
+
+			const read = Object.keys( this.model.conversionWarnings );
+			const write = Object.keys( this.conversionWarnings );
+			const warnTitles = [...new Set([...read ,...write])];
+
+			for( let ch of warnTitles ){
+				log += "\t" + ch.toUpperCase() + " :\n\t\t";
+				// Reader warnings
+				if( this.model.conversionWarnings.hasOwnProperty( ch ) ){
+					if( this.model.conversionWarnings[ch].length > 0 ){
+						let warnArray = [...new Set([...this.model.conversionWarnings[ch]]) ];
+						log += "* Reading: " +
+							this.stringWrap(warnArray.join(
+								"\n"+"* ") + "\n", this.lineW, 2 );
+					} else {
+						log += "* Reading: No warnings; success.\n\t\t";
+					}
+				}
+
+				// Writer warnings
+				if( this.conversionWarnings.hasOwnProperty( ch ) ){
+					const warnings = this.conversionWarnings[ch];
+					if( warnings.length === 0 ){
+						log += "* Writing: No changes; success.\n\n";
+					} else {
+						log += "* Writing: " + this.stringWrap(
+							this.conversionWarnings[ch].join( "\n"+"* ") + "\n\n",
+							this.lineW, 2 );
+					}
+				} else {
+					log += "* Writing: No changes; success.\n\n";
+				}
+
+			}
+
+			/*for( let ch of Object.keys( this.conversionWarnings ) ){
+				log += "\t" + ch.toUpperCase() + " :\n\t\t"
+
+				const warnings = this.conversionWarnings[ch]
+				if( warnings.length === 0 ){
+					log += "No changes; success!\n\n"
+				} else {
+					log += "* " + this.stringWrap(
+						this.conversionWarnings[ch].join( "\n"+"* ") + "\n\n",
+						this.lineW, 2 )
+				}
+			}
+
+			log += "\n\nThere were also some properties I could not include: \n\n"
+
+			for( let ch of Object.keys( this.model ) ){
+				if( this.model[ch].hasOwnProperty( "warnings" ) && this.model[ch].warnings.length > 0 ){
+					log += "\t" + ch.toUpperCase() + " :\n\t\t" +
+						"* " +
+						this.stringWrap(this.model[ch].warnings.join(
+							"\n"+"* ") + "\n\n", this.lineW, 2 )
+				}
+			}*/
+
+
+			if( this.warningBox === "console" ){
+				//eslint-disable-next-line no-console
+				console.log(log);
+			} else {
+				this.warningBox.innerHTML = log;
+			}
+
+		}
+
+		htmlNewLine( string ){
+			let re = /\n/gi;
+			string = string.replace( re, "<br>\n");
+			return string
+		}
+
+		recursiveArrayStringFix( obj ){
+			for ( let k of Object.keys( obj ) )
+			{
+
+				if ( typeof obj[k] == "object" && obj[k] !== null && !Array.isArray( obj[k] ) )
+					this.recursiveArrayStringFix(obj[k]);
+				else
+				if( Array.isArray( obj[k] ) ){
+					obj[k] = JSON.stringify( obj[k]);
+				}
+			}
+
+			return(obj)
+		}
+
+		objToString( obj, indent = 0 ){
+
+			let indentStr = "\n";
+			for( let i = 0; i < indent; i++ ){
+				indentStr += "\t";
+			}
+
+			// Trick to print object nicely: we'll use JSON.stringify with option '\t'
+			// to insert whitespace between entries, but this function is a little too
+			// enthusiastic when it comes to arrays ( each element printed on a new line ).
+			// So we first convert arrays [...] in the config object to strings "[...]",
+			// which JSON.stringify sees as a single element and therefore prints on one line.
+			// After this step, we remove the quotes again using string.replace() with a regexp
+			// so that the stringified arrays once again become actual arrays.
+			let obj2 = this.recursiveArrayStringFix( obj );
+			let objString = JSON.stringify( obj2, null, "\t" );
+			let re = /"\[/gi;
+			objString = objString.replace( re, "[" );
+			re = /]"/gi;
+			objString = objString.replace( re, "]" );
+			re = /\n/gi;
+			objString = objString.replace( re, indentStr );
+			re = /\\"/gi;
+			objString = objString.replace( re, "\"" );
+			objString = objString.replace( /null/gi, "NaN" );
+			return objString
+		}
+
+		stringWrap( string, width = 60, indent = 1 ){
+
+			let indentString = "";
+			for( let i = 0; i < indent; i++ ){
+				indentString += "\t";
+			}
+
+			// Dynamic Width (Build Regex)
+			const wrap = (s, w) => s.replace(
+				new RegExp(`(?![^\\n]{1,${w}}$)([^\\n]{1,${w}})\\s`, "g"), "$1\n" + indentString
+			);
+			return wrap( string, width )
+		}
+
+	}
+
+	class ArtistooWriter extends Writer {
+
+		constructor( model, config ){
+			super( model, config );
+
+			this.mode = config.mode || "html";
+			this.out = "";
+			this.modelconfig = {};
+			this.custommethods = {};
+			this.methodDeclarations = "";
+
+
+
+			this.FPSMeterPath = config.FPSMeterPath || "https://artistoo.net/examples/fpsmeter.min.js";
+			this.browserLibrary = config.browserLibrary || ".artistoo.js"; // "https://artistoo.net/examples/artistoo.js"
+			this.nodeLibrary = config.nodeLibrary || "https://raw.githubusercontent.com/ingewortel/artistoo/master/build/artistoo-cjs.js";
+			this.styleSheet = config.styleSheet || "./modelStyle.css";
+
+			this.logString = "Hi there! Converting " + this.model.from + " to Artistoo...\n\n";
+
+		}
+
+		write(){
+			if( this.mode === "html" ){
+				//console.log( this.writeHTML() )
+				this.target.innerHTML = this.writeHTML();
+			}
+			this.writeLog();
+		}
+
+
+		writeHTML(){
+			return this.writeHTMLHead() +
+				this.writeConfig() +
+				this.setInitialisation() +
+				this.customMethodsString() +
+				this.writeBasicScript() +
+				this.writeHTMLBody()
+		}
+
+		writeNode(){
+			return "let CPM = require(\"../../build/artistoo-cjs.js\")" +
+				this.writeConfig() +
+				this.writeBasicScript()
+		}
+
+		writeHTMLHead( ){
+
+			let string = "<html lang=\"en\"><head><meta http-equiv=\"Content-Type\" " +
+				"content=\"text/html; charset=UTF-8\">\n" +
+				"\t<title>" + this.model.modelInfo.title + "</title>\n"+
+				"\t<link rel=\"stylesheet\" href=\"" + this.styleSheet + "\" />" +
+				/*"\t<style type=\"text/css\">\n" +
+				"\t\t body{\n"+
+				"\t\t\t font-family: \"HelveticaNeue-Light\", \"Helvetica Neue Light\", \"Helvetica Neue\", " +
+				"Helvetica, Arial, \"Lucida Grande\", sans-serif; \n" +
+				"\t\t\t padding : 15px; \n" +
+				"\t\t} \n" +
+				"\t\t td { \n" +
+				"\t\t\t padding: 10px; \n" +
+				"\t\t\t vertical-align: top; \n" +
+				"\t\t } \n" +
+				"\t </style> \n" +*/
+				"\t" + "<script src=\"" + this.browserLibrary + "\"></script> \n" + //'\t <script src="https://artistoo.net/examples/artistoo.js"></script> \n' +
+				"\t" + "<script src=\"" + this.FPSMeterPath + "\"></script> \n\n" +
+				"<script> \n\n\n" +
+				"\"use strict\" \n" +
+				"var sim, meter \n\n";
+
+			return(string)
+
+		}
+
+		writeHTMLBody(){
+
+			let modelDesc = this.model.modelInfo.desc;
+			modelDesc = this.htmlNewLine( modelDesc );
+
+			return "</script> \n\n" +
+				"</head>\n" +
+				"<body onload=\"initialize();parent.window.model = sim\"> \n" +
+				"<h1>"+this.model.modelInfo.title + "</h1> \n"+
+				"<p>\n\t" + modelDesc + "\n" +
+				"</p>\n" +
+				"</body> \n" +
+				"</html>"
+
+		}
+
+		writeConfig(){
+			this.setModelConfig();
+			return "let config = " + this.objToString( this.modelconfig ) + "\n\n"
+		}
+
+		customMethodsString(){
+			let string = "let custommethods = {\n";
+			for( let m of Object.keys( this.custommethods ) ){
+				string += "\t" + m + " : " + m + ",\n";
+			}
+			return string + "}"
+		}
+
+		/* TO DO */
+		setModelConfig(){
+
+			// Initialize structure
+			let config = {
+				conf : {},
+				simsettings : {
+					zoom : 2,
+					CANVASCOLOR : "EEEEEE"
+				}
+			};
+
+			// Time information; warn if start time != 0
+			if( this.model.timeInfo.start !== 0 ){
+				this.conversionWarnings.time.push(
+					"Morpheus model time starts at t = " + this.model.timeInfo.start +
+					". Interpreting time before that as a burnin time, but in Artistoo " +
+					" time will restart at t = 0 after this burnin."
+				);
+			}
+			config.simsettings.BURNIN = parseInt( this.model.timeInfo.start );
+			config.simsettings.RUNTIME = parseInt( this.model.timeInfo.duration );
+			config.simsettings.RUNTIME_BROWSER = parseInt( this.model.timeInfo.duration );
+
+			// Grid information, warn if grid has to be converted.
+			config.ndim = this.model.grid.ndim;
+			config.field_size = this.model.grid.extents;
+			if( this.model.grid.geometry === "hexagonal" ){
+				this.conversionWarnings.grid.push(
+					"Grid of type 'hexagonal' is not yet supported in Artistoo. " +
+					"Converting to square 2D lattice instead. You may have to adjust some parameters, " +
+					"especially where neighborhood sizes matter (eg PerimeterConstraint, Adhesion)."
+				);
+			}
+			config.torus = [];
+			const dimNames = ["x","y","z"];
+			for( let d = 0; d < config.ndim; d++ ){
+				const bound = this.model.grid.boundaries[d];
+				switch( bound ){
+				case "periodic" :
+					config.torus.push( true );
+					break
+				case "noflux" :
+					config.torus.push( false );
+					break
+				default :
+					config.torus.push( true );
+					this.conversionWarnings.grid.push(
+						"unknown boundary condition in " + dimNames[d] + "-dimension: " +
+						bound + "; reverting to default periodic boundary."
+					);
+				}
+
+				// special case for "linear" geometry, which in Artistoo is just
+				// a 2D grid with a field_size [x,1] and torus = [x, false].
+				if( this.model.grid.geometry === "linear" ){
+					config.torus[1] = false;
+				}
+			}
+			if( !isNaN( this.model.grid.neighborhood.distance ) ){
+				this.conversionWarnings.grid.push(
+					"You are trying to set a neighborhood with distance = " +
+					this.model.grid.neighborhood.distance + ", " +
+					"but this is currently not supported in Artistoo. Reverting to" +
+					"default (Moore) neighborhood; behaviour may change."
+				);
+			}
+			if( !isNaN( this.model.grid.neighborhood.order ) &&  this.model.grid.neighborhood.order !== 2 ){
+				this.conversionWarnings.grid.push(
+					"You are trying to set a neighborhood with order = " +
+					this.model.grid.neighborhood.order + ", " +
+					"but this is currently not supported in Artistoo. Reverting to" +
+					"default (Moore) neighborhood; behaviour may change."
+				);
+			}
+
+			// CPM kinetics
+			config.conf.T = this.model.kinetics.T;
+			config.conf.seed = this.model.kinetics.seed;
+
+			this.modelconfig = config;
+
+			// CellKinds
+			config.simsettings.NRCELLS = this.model.initCellKindVector( 0, false );
+			config.simsettings.SHOWBORDERS = this.model.initCellKindVector( true, false );
+			config.simsettings.CELLCOLOR = this.model.initCellKindVector( "333333", false );
+			for( let k = 1; k < this.model.cellKinds.count - 1; k++ ){
+				// Overwrite cellcolors for all kinds except the first with a
+				// randomly generated color.
+				config.simsettings.CELLCOLOR[k] =
+					Math.floor(Math.random()*16777215).toString(16).toUpperCase();
+			}
+
+			// Constraints
+			// First constraints that can go in the main conf object (via auto-adder)
+			let constraintString = "";
+			for( let cName of Object.keys( this.model.constraints.constraints ) ){
+				const constraintArray = this.model.constraints.constraints[cName];
+				for( let ci = 0; ci < constraintArray.length; ci++ ){
+					const constraintConf = constraintArray[ci];
+					constraintString += this.addConstraintToConfig( cName, constraintConf );
+				}
+			}
+			if( constraintString !== "" ){
+				this.addCustomMethod( "addConstraints", "", constraintString );
+			}
+		}
+
+		addCustomMethod( methodName, args, contentString ){
+			if( this.custommethods.hasOwnProperty( methodName ) ){
+				throw( "Cannot add two custom methods of the same name!" )
+			}
+			this.custommethods[methodName] = methodName;
+			this.methodDeclarations += "function " + methodName + "( " + args + "){\n\n\t" +
+				contentString + "\n}\n\n";
+		}
+
+		addConstraintToConfig( cName, cConf ){
+
+			const autoAdded = {
+				ActivityConstraint : true,
+				Adhesion : true,
+				VolumeConstraint : true,
+				PerimeterConstraint : true,
+				BarrierConstraint : true
+			};
+
+			// Constraints that can be directly added to config.conf:
+			if( autoAdded.hasOwnProperty(cName) ) {
+				for (let parameter of Object.keys(cConf)) {
+					this.modelconfig.conf[parameter] = cConf[parameter];
+				}
+
+				// ActivityConstraint special case; set ACTCOLOR
+				if (cName === "ActivityConstraint") {
+					// check which kinds have activity; skip background
+					let hasAct = [];
+					for (let k = 1; k < this.model.cellKinds.count; k++) {
+						if (cConf.LAMBDA_ACT[k] > 0 && cConf.MAX_ACT[k] > 0) {
+							hasAct.push(true);
+						} else {
+							hasAct.push(false);
+						}
+					}
+					this.modelconfig.simsettings.ACTCOLOR = hasAct;
+				}
+
+				// Another special case for the PerimeterConstraint, which may
+				// have to be converted depending on 'mode' and the 'ShapeSurface'.
+				else if (cName === "PerimeterConstraint") {
+					switch (cConf.mode) {
+					case "surface" :
+						// do nothing
+						break
+					case "aspherity" : {
+						// correct the 'target' perimeter.
+						let P = cConf.P;
+						const volume = this.modelconfig.conf.V;
+						for (let i = 0; i < P.length; i++) {
+							if (this.modelconfig.ndim === 2) {
+								P[i] = 4 * P[i] * 2 * Math.sqrt(volume[i] * Math.PI);
+							} else if (this.modelconfig.ndim === 3) {
+								P[i] = P[i] * 4 * Math.PI * Math.pow((3 / 4) * volume[i] / Math.PI, 2 / 3);
+							}
+							P[i] = parseFloat(P[i]);
+						}
+						this.conversionWarnings.constraints.push(
+							"Artistoo does not support the 'aspherity' mode of the Morpheus <SurfaceConstraint>." +
+							"Adding a regular PerimeterConstraint (mode 'surface') instead. I am converting the " +
+							"target perimeter with an educated guess, but behaviour may be slightly different; " +
+							"please check parameters."
+						);
+
+						this.modelconfig.conf.P = P;
+						break
+					}
+
+					}
+					delete this.modelconfig.conf.mode;
+				}
+
+				return ""
+			}
+
+			// For the other constraints, add them by overwriting the
+			// Simulation.addConstraints() method. Return the string of code
+			// to add in this method.
+			const otherSupportedConstraints = {
+				LocalConnectivityConstraint : true,
+				PersistenceConstraint : true,
+				PreferredDirectionConstraint : true,
+				ChemotaxisConstraint : true
+			};
+
+			if( !otherSupportedConstraints[cName] ){
+				this.conversionWarnings.constraints.push(
+					"Ignoring unknown constraint of type " + cName + ". Behaviour may change.");
+			}
+
+			// Special case for the PersistenceConstraint: warn if
+			// protrusion/retraction setting does not correspond.
+			if (cName === "PersistenceConstraint" || cName === "PreferredDirectionConstraint" ){
+				const protrude = cConf.PROTRUDE;
+				const retract = cConf.RETRACT;
+				const lambda = cConf.LAMBDA_DIR;
+
+				let warn = false;
+				for( let k = 0; k < protrude.length; k++ ){
+
+					if( lambda[k] > 0 ) {
+
+						if (!protrude[k]) {
+							warn = true;
+						}
+						if (retract[k]) {
+							warn = true;
+						}
+						if (warn) {
+							this.conversionWarnings.constraints.push(
+								"You are trying to set a PersistenceConstraint for cellkind " +
+								this.model.getKindName(k) + " with protrusion = " +
+								protrude[k] + " and retraction = " + retract[k] + ", but Artistoo " +
+								"only supports protrusion = true and retraction = false. " +
+								"Reverting to these settings. Behaviour may change slightly; " +
+								"if this is important, consider implementing your own constraint."
+							);
+						}
+					}
+				}
+				delete cConf.PROTRUDE;
+				delete cConf.RETRACT;
+			}
+
+			return "this.C.add( new CPM." + cName + "( " + this.objToString( cConf, 1 ) + ") )\n\n\t"
+
+		}
+
+		writeBasicScript(){
+
+			return "\n\n" +
+				"function initialize(){ \n" +
+				"\t" + "sim = new CPM.Simulation( config, custommethods ) \n" +
+				"\t" + "meter = new FPSMeter({left:\"auto\", right:\"5px\"}) \n\n"+
+				"\t" + "step() \n" +
+				"} \n\n" +
+				"function step(){ \n\t" +
+				"sim.step() \n\t" +
+				"meter.tick() \n\n\t" +
+				"if( sim.conf[\"RUNTIME_BROWSER\"] == \"Inf\" | sim.time+1 < sim.conf[\"RUNTIME_BROWSER\"] ){ \n\t" +
+				"\t\t" + "requestAnimationFrame( step ) \n" +
+				"\t} \n}\n\n" + this.methodDeclarations
+
+		}
+
+		setInitialisation(){
+			// Initializers
+			let initString = "";
+			for( let initConf of this.model.setup.init ){
+				initString += this.addInitializer( initConf );
+			}
+			if( initString !== "" ){
+				initString = "" + "this.addGridManipulator()\n\n" + initString;
+				this.addCustomMethod( "initializeGrid", "", initString );
+			}
+			return ""
+		}
+
+		addInitializer( conf ){
+
+			const kindIndex = conf.kind;
+			switch( conf.setter ){
+
+			case "circleObject" :
+				return "\t" + "this.gm.assignCellPixels( this.gm.makeCircle( [" +
+					conf.center.toString() + "], " + conf.radius +  ") , " + kindIndex + " )\n"
+
+			case "boxObject" :
+				return "\t" + "this.gm.assignCellPixels( this.gm.makeBox( [" +
+					conf.bottomLeft.toString() + "], [" + conf.boxSize.toString() +
+					"] ) , " + kindIndex + " )\n"
+
+			case "cellCircle" :
+				return "\t" + "this.gm.seedCellsInCircle( " + kindIndex + ", " +
+					conf.nCells + ", [" + conf.center.toString() + "], " +
+					conf.radius + " )\n"
+
+			case "pixelSet" : {
+				let out = "[\n\t\t";
+				for (let i = 0; i < conf.pixels.length; i++ ) {
+					const p = conf.pixels[i];
+					out += "[" + p.toString() + "]";
+					if( i < conf.pixels.length - 1 ){ out += ","; }
+				}
+				return "\t" + "this.gm.assignCellPixels( " + out +
+					" ], " + kindIndex + ")\n"
+
+			}
+
+			default :
+				this.conversionWarnings.init.push( "Unknown initializer "
+				+ conf.setter + "; ignoring." );
+			}
+
+		}
+
+	}
+
+	class MorpheusWriter extends Writer {
+
+		constructor( model, config ){
+			super( model, config );
+
+			// property set by initXML.
+			this.xml = undefined;
+			this.initXML();
+
+			this.cellTypeTagIndex = {};
+
+			this.fieldsToDraw = [];
+
+			this.logString = "Hi there! Converting " + this.model.from + " to Morpheus XML...\n\n";
+
+		}
+
+		write(){
+			if( typeof this.target !== undefined ){
+				this.target.innerHTML = this.writeXML();
+			} else {
+				//eslint-disable-next-line no-console
+				console.log( this.writeXML() );
+			}
+			this.writeLog();
+		}
+
+		writeXML(){
+			this.writeDescription();
+			this.writeGlobal();
+			this.writeSpace();
+			this.writeTime();
+			this.writeCellTypes();
+			this.writeCPM();
+			this.writeConstraints();
+			this.writeCellPopulations();
+			this.writeAnalysis();
+			return this.formatXml( new XMLSerializer().serializeToString(this.xml) )
+		}
+
+		formatXml(xml, tab) { // tab = optional indent value, default is tab (\t)
+			let formatted = "", indent= "";
+			tab = tab || "\t";
+			xml.split(/>\s*</).forEach(function(node) {
+				if (node.match( /^\/\w/ )) indent = indent.substring(tab.length); // decrease indent by one 'tab'
+				formatted += indent + "<" + node + ">\r\n";
+				if (node.match( /^<?\w[^>]*[^/]$/ )) indent += tab;             // increase indent
+			});
+			return formatted.substring(1, formatted.length-3)
+		}
+
+		initXML(){
+			let xmlString = "<MorpheusModel></MorpheusModel>";
+			let parser = new DOMParser();
+			this.xml = parser.parseFromString( xmlString, "text/xml" );
+			this.setAttributesOf( "MorpheusModel", {version: "4" } );
+		}
+
+		/* ==========	METHODS TO MANIPULATE XML STRUCTURE =========== */
+
+		setAttributesOf( node, attr, index = 0 ){
+			for( let a of Object.keys( attr ) ){
+				this.xml.getElementsByTagName( node )[index].setAttribute( a, attr[a] );
+			}
+		}
+		attachNode( parentName, nodeName, value = undefined, attr= {}, index = 0 ){
+			let node = this.makeNode( nodeName, value, attr );
+			this.addNodeTo( node, parentName, index );
+		}
+		makeNode( nodeName, value = undefined, attr= {} ){
+			let node = this.xml.createElement( nodeName );
+			if( typeof value !== "undefined" ){
+				node.innerHTML = value;
+			}
+			for( let a of Object.keys( attr ) ){
+				node.setAttribute( a, attr[a] );
+			}
+			return node
+
+		}
+		addNodeTo( node, parentName, index = 0 ){
+			let parent = this.xml.getElementsByTagName( parentName )[index];
+			parent.appendChild(node);
+		}
+		setNode( nodeName, value, index = 0 ){
+			this.xml.getElementsByTagName( nodeName )[index].innerHTML = value;
+		}
+
+		/* ==========	OTHER HELPER METHODS =========== */
+
+		toMorpheusCoordinate( coordinate, fillValue = 0 ){
+			while( coordinate.length < 3 ){
+				coordinate.push( fillValue );
+			}
+			return coordinate.toString()
+		}
+
+		/* ==========	WRITING THE MAIN XML MODEL COMPONENTS OF MORPHEUS =========== */
+
+		writeDescription(){
+			this.attachNode( "MorpheusModel", "Description" );
+			this.attachNode( "Description", "Title",
+				this.model.modelInfo.title );
+			this.attachNode( "Description", "Details",
+				this.model.modelInfo.desc );
+		}
+
+		writeGlobal(){
+			this.attachNode( "MorpheusModel", "Global" );
+		}
+
+		writeSpace(){
+			// Set <Space> tag and children
+			this.attachNode( "MorpheusModel", "Space" );
+			this.attachNode( "Space", "Lattice", undefined,
+				{"class":this.model.grid.geometry } );
+			this.attachNode( "Space", "SpaceSymbol", undefined,
+				{symbol: "space" } );
+
+			// Set the lattice properties.
+			this.attachNode( "Lattice", "Size", undefined,
+				{ symbol : "size",
+					value : this.toMorpheusCoordinate( this.model.grid.extents ) } );
+			this.attachNode( "Lattice", "Neighborhood" );
+
+			if( typeof this.model.grid.neighborhood.order !== "undefined" ){
+				this.attachNode( "Neighborhood", "Order",
+					this.model.grid.neighborhood.order );
+			} else if ( typeof this.model.grid.neighborhood.distance !== "undefined") {
+				this.attachNode( "Neighborhood", "Distance",
+					this.model.grid.neighborhood.distance );
+			} else {
+				this.conversionWarnings.grid.push( "Unknown neighborhood order; " +
+					"reverting to default order 2 instead." );
+				this.attachNode( "Neighborhood", "Order", 2 );
+			}
+
+			this.attachNode( "Lattice", "BoundaryConditions" );
+
+			const dimNames = ["x","y","z"];
+			const knownBounds = { periodic: true, noflux : true, constant: true };
+			for( let d = 0; d < this.model.grid.boundaries.length; d++ ){
+				let bType = this.model.grid.boundaries[d];
+				if( !knownBounds.hasOwnProperty( bType ) ){
+
+					this.conversionWarnings.grid.push(
+						"Unknown boundary type : " + bType + "; setting to" +
+						"default 'periodic' instead."
+					);
+					bType = "periodic";
+
+				}
+				this.attachNode( "BoundaryConditions", "Condition",
+					undefined, { boundary: dimNames[d], type: bType } );
+			}
+		}
+
+		writeTime(){
+			this.attachNode( "MorpheusModel", "Time" );
+			this.attachNode( "Time", "StartTime", undefined,
+				{value: this.model.timeInfo.start } );
+			this.attachNode( "Time", "StopTime", undefined,
+				{value: this.model.timeInfo.stop } );
+
+			if( typeof this.model.kinetics.seed !== "undefined" ){
+				this.attachNode( "Time", "RandomSeed", undefined,
+					{ value: this.model.kinetics.seed } );
+			}
+
+			this.attachNode( "Time", "TimeSymbol", undefined,
+				{ symbol: "time" } );
+
+		}
+
+		writeCellTypes(){
+			this.attachNode( "MorpheusModel", "CellTypes" );
+			const ck = this.model.cellKinds;
+
+			for( let ki = 0; ki < ck.count; ki++ ){
+				// Special case: background is always the first (index ki = 0 )
+				if( ki === 0 ){
+					this.attachNode( "CellTypes", "CellType", undefined,
+						{ class : "medium", name : ck.index2name[ ki.toString() ] } );
+				} else {
+					this.attachNode( "CellTypes", "CellType", undefined,
+						{ class : "biological", name : ck.index2name[ ki.toString() ] } );
+				}
+				this.cellTypeTagIndex[ this.model.getKindName( ki ) ] =
+					this.xml.getElementsByTagName( "CellType" ).length - 1;
+			}
+		}
+
+		writeCPM(){
+			this.attachNode( "MorpheusModel", "CPM" );
+
+			this.attachNode( "CPM", "Interaction" );
+			this.setAdhesion();
+
+			this.attachNode( "CPM", "MonteCarloSampler", undefined,
+				{stepper:"edgelist"});
+			this.attachNode( "MonteCarloSampler" , "MCSDuration", undefined,
+				{value:1});
+			this.attachNode( "MonteCarloSampler", "Neighborhood" );
+			let neighIndex = this.xml.getElementsByTagName("Neighborhood").length - 1;
+			this.attachNode( "Neighborhood", "Order", 2, {}, neighIndex );
+			this.attachNode( "MonteCarloSampler", "MetropolisKinetics", undefined,
+				{ temperature: this.model.kinetics.T } );
+			this.attachNode( "CPM", "ShapeSurface", undefined,
+				{scaling: "none" } );
+			this.attachNode( "ShapeSurface", "Neighborhood" );
+			neighIndex++;
+			this.attachNode( "Neighborhood", "Order", 2, {}, neighIndex );
+
+		}
+
+		writeConstraints(){
+			const constraints = this.model.constraints.constraints;
+			for (let cName of Object.keys( constraints ) ){
+
+				switch( cName ){
+
+				case "Adhesion" :
+					// is actually handled by this.writeCPM()
+					break
+
+				case "VolumeConstraint" :
+					this.setVolumeConstraint( constraints[cName] );
+					break
+
+				case "PerimeterConstraint" :
+					this.setPerimeterConstraint( constraints[cName] );
+					break
+
+				case "ActivityConstraint" :
+					this.setActivityConstraint( constraints[cName] );
+					break
+
+				case "LocalConnectivityConstraint" :
+					this.setConnectivityConstraint( constraints[cName], cName );
+					break
+
+				case "ConnectivityConstraint" :
+					this.setConnectivityConstraint( constraints[cName], cName );
+					break
+
+				case "SoftConnectivityConstraint" :
+					this.setConnectivityConstraint( constraints[cName], cName );
+					break
+
+				case "SoftLocalConnectivityConstraint" :
+					this.setConnectivityConstraint( constraints[cName], cName );
+					break
+
+				case "BarrierConstraint" :
+					this.setBarrierConstraint( constraints[cName] );
+					break
+
+				case "PersistenceConstraint" :
+					this.setPersistenceConstraint( constraints[cName] );
+					break
+
+				case "PreferredDirectionConstraint" :
+					this.setPreferredDirectionConstraint( constraints[cName] );
+					break
+
+				case "ChemotaxisConstraint" :
+					this.setChemotaxisConstraint( constraints[cName] );
+					break
+
+				default :
+					this.conversionWarnings.constraints.push( "Constraint :" +
+						cName + " doesn't exist in Morpheus. Making the model anyway " +
+						"without it; behaviour of the model may change so please " +
+						"check manually for alternatives in Morpheus."
+					);
+				}
+
+			}
+
+
+		}
+
+		multipleConstraintsWarning( constraintName ){
+			this.conversionWarnings.constraints.push(
+				"It appears as if your model has multiple constraints of type " +
+				constraintName + "; ignoring all but the first."
+			);
+		}
+
+		setAdhesion( ){
+			if( this.model.constraints.constraints.hasOwnProperty("Adhesion")) {
+				const JMatrix = this.model.constraints.constraints.Adhesion[0].J;
+				for (let ki = 0; ki < this.model.cellKinds.count; ki++) {
+					for (let kj = 0; kj <= ki; kj++) {
+						const j1 = JMatrix[ki][kj], j2 = JMatrix[kj][ki];
+						if (!isNaN(j1) && (j1 !== j2)) {
+							this.conversionWarnings.constraints.push(
+								"Your adhesion matrix is not symmetrical, which is not" +
+								"supported by Morpheus. Please check <Interaction> <Contact> values and " +
+								"modify if required."
+							);
+						}
+						let J = j1;
+						if (isNaN(J)) {
+							J = 0;
+						}
+						const iName = this.model.getKindName(ki);
+						const jName = this.model.getKindName(kj);
+						this.attachNode("Interaction", "Contact", undefined,
+							{type1: iName, type2: jName, value: J});
+					}
+				}
+			}
+		}
+
+		setVolumeConstraint( confArray ){
+			if( confArray.length > 1 ){
+				this.multipleConstraintsWarning( "VolumeConstraint" );
+			}
+			const conf = confArray[0];
+			const lambda = conf.LAMBDA_V;
+			const target = conf.V;
+
+			for( let k = 0; k < lambda.length; k++ ){
+				// only add constraint to CellType for which it is non-zero.
+				if( lambda[k] > 0 ){
+					const kName = this.model.getKindName(k);
+					let constraintNode = this.makeNode( "VolumeConstraint",
+						undefined, {target: target[k], strength: lambda[k]});
+					this.addNodeTo( constraintNode, "CellType", this.cellTypeTagIndex[kName] );
+				}
+			}
+		}
+
+		setPerimeterConstraint( confArray ){
+			if( confArray.length > 1 ){
+				this.multipleConstraintsWarning( "PerimeterConstraint" );
+			}
+			const conf = confArray[0];
+			const lambda = conf.LAMBDA_P;
+			const target = conf.P;
+
+			for( let k = 0; k < lambda.length; k++ ){
+				// only add constraint to CellType for which it is non-zero.
+				if( lambda[k] > 0 ){
+					const kName = this.model.getKindName(k);
+					let constraintNode = this.makeNode( "SurfaceConstraint",
+						undefined, {mode: "surface", target: target[k], strength: lambda[k]});
+					this.addNodeTo( constraintNode, "CellType", this.cellTypeTagIndex[kName] );
+				}
+			}
+		}
+
+		setActivityConstraint( confArray ){
+			if( confArray.length > 1 ){
+				this.multipleConstraintsWarning( "ActivityConstraint" );
+			}
+			const conf = confArray[0];
+			const lambda = conf.LAMBDA_ACT;
+			const maximum = conf.MAX_ACT;
+			const actMean = conf.ACT_MEAN;
+			if( actMean !== "geometric" ){
+				this.conversionWarnings.constraints.push( "You have an ActivityConstraint with" +
+					" ACT_MEAN = 'arithmetic', but this is not supported in Morpheus. " +
+					"Switching to 'geometric'. Behaviour may change slightly; please " +
+					"check if this is a problem and adjust parameters if this is the case." );
+			}
+
+			for( let k = 0; k < lambda.length; k++ ){
+				// only add constraint to CellType for which it is non-zero.
+				if( lambda[k] > 0 ){
+					const kName = this.model.getKindName(k);
+					// Add the protrusion plugin to the celltype
+					let constraintNode = this.makeNode( "Protrusion",
+						undefined, {field: "act", maximum: maximum[k], strength: lambda[k]});
+					this.addNodeTo( constraintNode, "CellType", this.cellTypeTagIndex[kName] );
+					// We also need to add an activity Field to the <Global> tag.
+
+					let actField = this.makeNode( "Field", undefined,
+						{symbol: "act", value: "0", name: "actin-activity" } );
+					let diff = this.makeNode( "Diffusion", undefined, {rate:"0"});
+					actField.appendChild( diff );
+					this.addNodeTo( actField, "Global" );
+				}
+			}
+
+			this.fieldsToDraw.push( "act" );
+		}
+
+		setConnectivityConstraint( confArray, cName ){
+			if( confArray.length > 1 ){
+				this.multipleConstraintsWarning( "ConnectivityConstraint" );
+			}
+			const conf = confArray[0];
+
+			// Hard constraint
+			if( conf.hasOwnProperty( "CONNECTED" ) ){
+				const conn = conf.CONNECTED;
+
+				for( let k = 0; k < conn.length; k++ ){
+					if( conn[k] ){
+						let constraintNode = this.makeNode( "ConnectivityConstraint" );
+						this.addNodeTo( constraintNode, "CellType",
+							this.cellTypeTagIndex[this.model.getKindName(k)] );
+					}
+				}
+				if( cName === "LocalConnectivityConstraint" ){
+					this.conversionWarnings.constraints.push( "Your artistoo " +
+						"model has a LocalConnectivityConstraint, which is not " +
+						"supported in Morpheus. Converting to the Morpheus " +
+						"ConnectivityConstraint; behaviour may change slightly " +
+						"so please check your model." );
+				}
+			}
+
+			// Or the soft constraint
+			else if ( conf.hasOwnProperty ( "LAMBDA_CONNECTIVITY" ) ){
+
+				// add only to the cells for which it is non-zero.
+				const lambda = conf.LAMBDA_CONNECTIVITY;
+				for( let k = 0; k < lambda.length; k++ ){
+					if( lambda[k] > 0 ){
+						let constraintNode = this.makeNode( "ConnectivityConstraint" );
+						this.addNodeTo( constraintNode, "CellType",
+							this.cellTypeTagIndex[this.model.getKindName(k)] );
+					}
+				}
+
+				this.conversionWarnings.constraints.push( "Your artistoo " +
+					"model has a " + cName + ", which is not " +
+					"supported in Morpheus. Converting to the Morpheus " +
+					"ConnectivityConstraint; this is a hard constraint so " +
+					" behaviour may change slightly -- please check your model." );
+			}
+
+		}
+
+		setBarrierConstraint( confArray ){
+			if( confArray.length > 1 ){
+				this.multipleConstraintsWarning( "BarrierConstraint" );
+			}
+			const conf = confArray[0];
+			const barr = conf.IS_BARRIER;
+
+			// Add to cells for which it is set to true.
+			for( let k = 0; k < barr.length; k++ ){
+				if( barr[k] ){
+					let constraintNode = this.makeNode( "FreezeMotion",
+						undefined, { condition: "1"});
+					this.addNodeTo( constraintNode, "CellType",
+						this.cellTypeTagIndex[this.model.getKindName(k)] );
+				}
+			}
+		}
+
+		setPersistenceConstraint( confArray ){
+			if( confArray.length > 1 ){
+				this.multipleConstraintsWarning( "PersistenceConstraint" );
+			}
+			const conf = confArray[0];
+			const lambda = conf.LAMBDA_DIR;
+			const dt = conf.DELTA_T || this.model.initCellKindVector(10);
+			const prob = conf.PERSIST;
+
+			for( let k = 0; k < lambda.length; k++ ){
+				// only add constraint to CellType for which it is non-zero.
+				if( lambda[k] > 0 ){
+					const kName = this.model.getKindName(k);
+					let constraintNode = this.makeNode( "PersistentMotion",
+						undefined, {decaytime: dt[k], strength: lambda[k]});
+					this.addNodeTo( constraintNode, "CellType", this.cellTypeTagIndex[kName] );
+					if( prob[k] !== 1 ){
+						this.conversionWarnings.constraints.push( "Your model has a " +
+							"PersistenceConstraint with PERSIST = " + prob[k] + ", but " +
+							"Morpheus only supports PERSIST = 1. Reverting to this setting " +
+							"instead, please check your model carefully." );
+					}
+				}
+			}
+		}
+
+		setPreferredDirectionConstraint( confArray ){
+			if( confArray.length > 1 ){
+				this.multipleConstraintsWarning( "PreferredDirectionConstraint" );
+			}
+			const conf = confArray[0];
+			const lambda = conf.LAMBDA_DIR;
+			const dir = conf.DIR;
+
+			for( let k = 0; k < lambda.length; k++ ){
+				// only add constraint to CellType for which it is non-zero.
+				if( lambda[k] > 0 ){
+					const kName = this.model.getKindName(k);
+					const direction = this.toMorpheusCoordinate( dir[k] );
+					let constraintNode = this.makeNode( "DirectedMotion",
+						undefined, {direction: direction, strength: lambda[k]});
+					this.addNodeTo( constraintNode, "CellType", this.cellTypeTagIndex[kName] );
+				}
+			}
+
+		}
+
+		setChemotaxisConstraint( confArray ){
+
+			for( let i = 0; i < confArray.length; i++ ){
+
+				const conf = confArray[i];
+				const index = i+1;
+				const fieldName = "U" + index;
+
+				const lambda = conf.LAMBDA_CH;
+				const field = conf.CH_FIELD;
+
+				// Warn for a CoarseGrid
+				if( typeof field.upscale !== "undefined" && field.upscale !== 1 ){
+					this.conversionWarnings.constraints.push(
+						"Your ChemotaxisConstraint is linked to a 'CoarseGrid' with " +
+						"a different resolution than the original CPM grid. This is not " +
+						"supported in Morpheus. Adding a Field anyway, but you may have " +
+						"to check and scale the diffusion rate."
+					);
+				}
+
+				// Add the constraint to celltypes for which lambda nonzero.
+				for( let k = 0; k < lambda.length; k++ ){
+					if( lambda[k] > 0 ){
+						const kName = this.model.getKindName(k);
+						let constraintNode = this.makeNode( "Chemotaxis",
+							undefined, {field: fieldName, strength: lambda[k]});
+						this.addNodeTo( constraintNode, "CellType", this.cellTypeTagIndex[kName] );
+					}
+				}
+
+				// For this to work, the concentration field 'U' needs to exist in 'global'.
+				let fieldNode = this.makeNode( "Field", undefined,
+					{symbol: fieldName, value : 0 } );
+				let diffNode = this.makeNode( "Diffusion", undefined,
+					{rate:0.1} );
+				this.conversionWarnings.constraints.push( "Adding a ChemotaxisConstraint " +
+					"with an attached field, but cannot find parameters like diffusion rate, " +
+					"chemokine production rate, and decay rate automatically. Adding some " +
+					"default values; please adapt these manually (by configuring constants " +
+					"and properties under 'Global' and where " +
+					"relevant under the 'CellTypes')" );
+				fieldNode.appendChild( diffNode );
+				this.addNodeTo( fieldNode, "Global" );
+
+				// Also add the production/decay equation in a system
+				let sysNode = this.makeNode( "System", undefined,
+					{solver: "Euler [fixed, O(1)]", "time-step":1 } );
+				let eqnNode = this.makeNode( "DiffEqn", undefined,
+					{ "symbol-ref" : fieldName });
+				let expr = "P" + index + " - d" + index +"*" + fieldName;
+				let exprNode = this.makeNode( "Expression", expr );
+				eqnNode.appendChild( exprNode );
+				sysNode.appendChild( eqnNode );
+
+				// Add the constant degradation used in the equation
+				let constNode = this.makeNode( "Constant", undefined,
+					{ symbol: "d"+index, value : "0", name: "degradation "+fieldName } );
+				sysNode.appendChild( constNode );
+
+				// Add the production, space-dependent so use a field
+				let productionField = this.makeNode( "Field", undefined,
+					{"symbol": "P"+index, value : 0} );
+				let eqn2Node = this.makeNode( "Equation", undefined,
+					{ "symbol-ref" : "P"+index, name: "production "+fieldName });
+				const randX = Math.floor( Math.random() * this.model.grid.extents[0] );
+				const randY = Math.floor( Math.random() * this.model.grid.extents[1] );
+				let expr2Node = this.makeNode( "Expression",
+					"if( space.x == "+randX+" and space.y == "+randY+", 10, 0 )" );
+				eqn2Node.appendChild( expr2Node );
+				this.addNodeTo( eqn2Node, "Global" );
+				this.addNodeTo( productionField, "Global" );
+				this.addNodeTo( sysNode, "Global" );
+
+				this.fieldsToDraw.push( fieldName );
+
+			}
+
+
+
+		}
+
+		writeCellPopulations(){
+			this.attachNode( "MorpheusModel", "CellPopulations" );
+
+			let objects = {}; // key for each kind, array of objects in InitCellObjects as value.
+			let ID = 1;
+
+			for( let init of this.model.setup.init ){
+				const k = init.kindName;
+				if( !objects.hasOwnProperty(k) ){ objects[k] = []; }
+
+				switch( init.setter ){
+				case "circleObject" :
+					// objects added per cellkind below the loop.
+					objects[k].push(this.makeNode("Sphere", undefined,
+						{center: this.toMorpheusCoordinate( init.center ),
+							radius: init.radius}));
+					break
+
+				case "boxObject" :
+					// objects added per cellkind below the loop.
+					objects[k].push(this.makeNode("Box", undefined,
+						{origin: this.toMorpheusCoordinate( init.bottomLeft ),
+							size: this.toMorpheusCoordinate( init.boxSize ) } ) );
+					break
+
+				case "cellCircle" : {
+					let popNode = this.makeNode( "Population", undefined, {type:k } );
+					let initNode = this.makeNode( "InitCircle",
+						undefined, { mode: "random", "number-of-cells": init.nCells });
+					let dimNode = this.makeNode( "Dimensions", undefined,
+						{center : this.toMorpheusCoordinate( init.center ),
+							radius: init.radius} );
+					initNode.appendChild( dimNode );
+					popNode.appendChild( initNode );
+					this.addNodeTo( popNode, "CellPopulations" );
+					break
+				}
+
+				case "pixelSet" : {
+					let popNode = this.makeNode( "Population", undefined, {type:k } );
+					let cellNode = this.makeNode( "Cell",
+						undefined, { id: ID, name: ID });
+					let ww = this;
+					let pixelList = init.pixels.map( function(p){
+						return ww.toMorpheusCoordinate(p)
+					} );
+					let nodeNode = this.makeNode( "Nodes",
+						pixelList.join(";") );
+					ID++;
+
+					cellNode.appendChild( nodeNode );
+					popNode.appendChild( cellNode );
+					this.addNodeTo( popNode, "CellPopulations" );
+					break
+				}
+
+				default :
+					this.conversionWarnings.init.push( "Unknown initializer : " + init.setter +
+					", ignoring; you may have to check the CellPopulations settings of your model" +
+						"manually.");
+
+				}
+			}
+
+			for( let k of Object.keys( objects ) ){
+
+				if( objects[k].length > 0 ) {
+
+					let popNode = this.makeNode("Population", undefined, {type: k});
+					let initNode = this.makeNode("InitCellObjects",
+						undefined, {mode: "distance"});
+
+
+					let objArr = objects[k];
+					for (let obj of objArr) {
+						let arrNode = this.makeNode("Arrangement", undefined,
+							{displacements: "0,0,0", repetitions: "1,1,1"});
+						arrNode.appendChild(obj);
+						initNode.appendChild(arrNode);
+					}
+					popNode.appendChild(initNode);
+					this.addNodeTo(popNode, "CellPopulations");
+
+				}
+			}
+
+		}
+
+		writeAnalysis(){
+			this.conversionWarnings.analysis.push(
+				"Auto-conversion of plots and other output is not (yet) supported." +
+				"Adding some default outputs, but please check and adjust these " +
+				"manually."
+			);
+			this.attachNode( "MorpheusModel", "Analysis" );
+
+			let gnuPlot = this.makeNode( "Gnuplotter", undefined, {"time-step":50} );
+			gnuPlot.appendChild(
+				this.makeNode( "Terminal", undefined, {name:"png"})
+			);
+			let plot = this.makeNode( "Plot" );
+			plot.appendChild(
+				this.makeNode( "Cells", undefined,
+					{opacity:"0.2", value: "cell.type" })
+			);
+
+			// Plot the fields to draw
+			for( let f of this.fieldsToDraw ){
+				plot.appendChild( this.makeNode( "Field", undefined,
+					{"symbol-ref": f } ) );
+			}
+
+			gnuPlot.appendChild( plot );
+			this.addNodeTo( gnuPlot, "Analysis" );
+
+		}
+
+	}
+
+	class ArtistooImport extends ModelDescription {
+
+		constructor( model ) {
+
+			super();
+
+			if( model.isCPM ){
+				this.C = model;
+				this.simsettings = {};
+				this.mode = "CPM";
+			} else if ( model.isSimulation ){
+				this.sim = model;
+				this.C = model.C;
+				this.simsettings = model.conf;
+				this.mode = "Simulation";
+			} else {
+				throw("Model must be a CPM or Simulation object!")
+			}
+
+			this.from = "an Artistoo model (" + this.mode + " class)";
+			this.generalWarning += "\nWarning: cannot automatically convert an entire " +
+				"Artistoo script. This converter handles anything in the configuration " +
+				"object of your " + this.mode + ", such as spatial settings, time settings " +
+				"and CPM parameters. It also handles the initial configuration. But " +
+				"if you perform extra actions between steps " +
+				"(such as dividing cells, killing cells, producing chemokines, etc.)," +
+				" these are not automatically added to the converted model. " +
+				"Please check your script manually for such actions; they should be " +
+				"added manually in the destination framework (please consult that framework's " +
+				"documentation to see how).\n\n";
+
+
+			this.build();
+		}
+
+
+		setModelInfo(){
+			this.modelInfo.title = "ArtistooImport";
+			this.modelInfo.desc = "Please add a description of your model here.";
+			this.conversionWarnings.modelInfo.push(
+				"Cannot set model title and description automatically from an HTML page; " +
+				"please add these manually to your model."
+			);
+		}
+
+		setTimeInfo(){
+
+
+			this.timeInfo.start = 0;
+			if( this.simsettings.hasOwnProperty("BURNIN") ){
+				this.timeInfo.start += this.simsettings["BURNIN"];
+			}
+
+			if( this.simsettings.hasOwnProperty( "RUNTIME" ) ){
+				this.timeInfo.stop = this.timeInfo.start + this.simsettings.RUNTIME;
+			} else if (this.simsettings.hasOwnProperty( "RUNTIME_BROWSER" ) ){
+				this.timeInfo.stop = this.timeInfo.start + this.simsettings.RUNTIME_BROWSER;
+			} else {
+				this.timeInfo.stop = 100;
+				this.conversionWarnings.time.push(
+					"Could not find any information of runtime; setting the simulation to " +
+					"100 MCS for now. Please adjust manually."
+				);
+			}
+
+			this.timeInfo.duration = this.timeInfo.stop - this.timeInfo.start;
+			if( this.timeInfo.duration < 0 ){
+				throw( "Error: I cannot go back in time; timeInfo.stop must be larger than timeInfo.start!")
+			}
+		}
+
+		setGridInfo(){
+			this.grid.ndim = this.C.grid.extents.length;
+			this.grid.extents = this.C.grid.extents;
+			this.grid.geometry = "square";
+			if( this.grid.ndim === 3 ){
+				this.grid.geometry = "cubic";
+			}
+			this.grid.neighborhood = { order: 2 };
+			const torus = this.C.grid.torus;
+			let bounds = [];
+			for( let t of torus ){
+				if(t){
+					bounds.push( "periodic" );
+				} else {
+					bounds.push( "noflux" );
+				}
+			}
+			this.grid.boundaries = bounds;
+		}
+
+		setCellKindNames(){
+
+			this.cellKinds.count = undefined;
+
+			// If there are simsettings, NRCELLS contains info on number of cellkinds.
+			/*if( this.simsettings.hasOwnProperty("NRCELLS" ) ){
+				this.cellKinds.count = this.simsettings.NRCELLS.length + 1
+
+			// Otherwise, try getting it from the constraint parameters.
+			} else {*/
+			let found = false;
+			const constraints = this.C.getAllConstraints();
+
+			// If there's an adhesion constraint, we can get the info from the J matrix.
+			if( constraints.hasOwnProperty( "Adhesion" ) ){
+				found = true;
+				this.cellKinds.count = this.C.getConstraint("Adhesion").conf.J.length;
+
+			// Otherwise, loop through constraints to find a parameter starting
+			// with LAMBDA and use that.
+			} else {
+				for( let cn of Object.keys( constraints ) ){
+					let cc = this.C.getConstraint(cn).conf;
+					// Find index of first param that starts with LAMBDA;
+					// returns -1 if there are none.
+					const lambdaIndex = Object.keys(cc).findIndex(
+						function (k) {
+							return ~k.indexOf("LAMBDA")
+						});
+					if (lambdaIndex > -1) {
+						// there is a lambda parameter, assume specified per cellkind
+						found = true;
+						const parmName = Object.keys(cc)[lambdaIndex];
+						this.cellKinds.count = cc[parmName].length;
+					}
+					if (found) {
+
+						break
+					}
+				}
+				// if we get here, still no success. Now try to read how many
+				// cellKinds there are from the initialized grid.
+
+				let kinds = {};
+				for( let cid of this.C.cellIDs() ){
+					if( !kinds.hasOwnProperty( this.C.cellKind(cid) ) ){
+						kinds[this.C.cellKind(cid)] = true;
+					}
+				}
+				this.cellKinds.count = Object.keys( kinds ).length + 1;
+				this.conversionWarnings.cells.push(
+					"Could not find how many CellKinds there are automatically! " +
+					"Counting the number of cellKinds on the initialized grid, but " +
+					"if the simulation introduces new cellKinds only after initialization " +
+					"then the output will be wrong. Please check manually! " +
+					"As a workaround, you can add an Adhesion constraint to the model" +
+					"with all-zero contact energies; this will not change the model " +
+					"but will define the number of cellkinds properly."
+				);
+
+
+				//}
+			}
+
+			// if still undefined, don't add any except background an add a warning.
+			if( typeof this.cellKinds.count === "undefined" ){
+				this.cellKinds.count = 1;
+				this.conversionWarnings.cells.push(
+					"Could not find how many CellKinds there are automatically! " +
+					"Ignoring everything except background, output will be wrong. " +
+					"As a workaround, you can add an Adhesion constraint to the model" +
+					"with all-zero contact energies; this will not change the model " +
+					"but will define the number of cellkinds properly."
+				);
+			}
+
+			this.cellKinds.index2name = {};
+			this.cellKinds.name2index = {};
+			for( let k = 0; k < this.cellKinds.count; k++ ){
+				if( k === 0 ){
+					this.cellKinds.index2name[k] = "medium";
+					this.cellKinds.name2index["medium"] = k;
+				} else {
+					this.cellKinds.index2name[k] = "celltype" + k;
+					this.cellKinds.name2index["celltype"+k ] = k;
+				}
+			}
+
+			// empty object for each cellkind.
+			this.cellKinds.properties = {};
+			for( let n of Object.keys( this.cellKinds.name2index ) ){
+				this.cellKinds.properties[n] = {};
+			}
+
+
+		}
+
+		setCPMGeneral(){
+
+			// Random Seed
+			this.kinetics.seed = this.C.conf.seed;
+
+			// Temperature
+			this.kinetics.T = this.C.conf.T;
+
+		}
+
+		setConstraints(){
+
+			const constraints = this.C.getAllConstraints();
+			for( let cName of Object.keys( constraints ) ){
+				this.constraints.constraints[cName] = [];
+				let index = 0;
+				while( typeof this.C.getConstraint( cName, index ) !== "undefined"){
+					let cc = this.C.getConstraint( cName, index ).conf;
+					this.constraints.constraints[cName].push( cc );
+					index++;
+				}
+			}
+		}
+
+		setGridConfiguration(){
+
+			// If the supplied model is a Simulation; this is the most robust method
+			// because we can reset the model and export the grid configuration
+			// directly after initializeGrid has been called.
+			if( typeof this.sim !== "undefined" ){
+				// stop the simulation
+				this.sim.toggleRunning();
+				// remove any cells from the grid and reinitialize
+				this.sim.C.reset();
+				this.sim.initializeGrid();
+				this.readPixelsByCell();
+				// Reset time to just after initialisation
+				this.sim.C.time -= this.sim.time;
+				this.sim.time -= this.sim.time;
+				this.sim.runBurnin();
+				this.sim.toggleRunning();
+			} else {
+				this.conversionWarnings.init.push(
+					"You have supplied a CPM rather than a Simulation object; " +
+					"reading the initial settings directly from the CPM. This is " +
+					"slightly less robust than reading it from the Simulation since " +
+					"I cannot go back to time t = 0 to read the exact initial setup."
+				);
+				this.readPixelsByCell();
+			}
+
+		}
+
+		readPixelsByCell(){
+
+			const cellPix = this.C.getStat( PixelsByCell );
+			for( let cid of Object.keys( cellPix ) ){
+				if( cellPix[cid].length > 0 ) {
+					const cki = this.C.cellKind(cid);
+					this.setup.init.push({
+						setter: "pixelSet",
+						kind: cki,
+						kindName: this.getKindName(cki),
+						cid: cid,
+						pixels: cellPix[cid]
+					});
+				}
+			}
+		}
+
+	}
+
 	exports.ActivityConstraint = ActivityConstraint;
 	exports.ActivityMultiBackground = ActivityMultiBackground;
 	exports.Adhesion = Adhesion;
+	exports.ArtistooImport = ArtistooImport;
+	exports.ArtistooWriter = ArtistooWriter;
 	exports.AttractionPointConstraint = AttractionPointConstraint;
 	exports.BarrierConstraint = BarrierConstraint;
 	exports.BorderConstraint = BorderConstraint;
@@ -7431,6 +10610,9 @@ var CPM = (function (exports) {
 	exports.HardConstraint = HardConstraint;
 	exports.HardVolumeRangeConstraint = HardVolumeRangeConstraint;
 	exports.LocalConnectivityConstraint = LocalConnectivityConstraint;
+	exports.ModelDescription = ModelDescription;
+	exports.MorpheusImport = MorpheusImport;
+	exports.MorpheusWriter = MorpheusWriter;
 	exports.PerimeterConstraint = PerimeterConstraint;
 	exports.PersistenceConstraint = PersistenceConstraint;
 	exports.PixelsByCell = PixelsByCell;

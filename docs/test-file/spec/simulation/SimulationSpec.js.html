@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -251,6 +260,39 @@ describe(&quot;Simulation&quot;, function () {
 			it( &quot;should not throw error if ACTCOLOR undefined&quot;, function(){
 				sim.conf.ACTCOLOR = undefined
 				expect( function() { sim.drawCanvas() }).not.toThrow()
+			})
+		})
+
+		/** @test {Simulation#initializeGrid} */
+		describe(&quot;initializeGrid method:&quot;, function () {
+			it( &quot;should correctly clear up stats if called twice&quot;, function(){
+
+				sim.C.getStat( CPM.PixelsByCell )
+				sim.C.reset()
+				sim.initializeGrid()
+
+				// check that cids of PixelsByCell are still correct
+				let undef = 0
+				for( let cid of Object.keys( sim.C.getStat( CPM.PixelsByCell ) ) ){
+					if( typeof sim.C.cellKind(cid) === &quot;undefined&quot; ){
+						undef++
+					}
+				}
+				expect( undef ).toEqual(0)
+
+			})
+
+			it( &quot;should reset C if called twice&quot;, function(){
+
+				sim.C.reset()
+				sim.initializeGrid()
+				const n0 = sim.C.t2k.length -1
+				// second call
+				sim.initializeGrid()
+				const n1 = sim.C.t2k.length -1
+
+				expect( n0 ).toEqual(n1)
+
 			})
 		})
 

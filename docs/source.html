@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -192,7 +201,7 @@ padding-right:10px;
 
 
 
-<h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">423/429</span></h1>
+<h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">434/596</span></h1>
 
 <table class="files-summary" data-ice="files" data-use-coverage="true">
   <thead>
@@ -213,15 +222,63 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">41/41</span></td>
       <td style="display: none;" data-ice="size">19665 byte</td>
       <td style="display: none;" data-ice="lines">712</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:03:17 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/DiceSet.js.html">src/DiceSet.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">10/10</span></td>
-      <td style="display: none;" data-ice="size">3218 byte</td>
+      <td style="display: none;" data-ice="size">3252 byte</td>
       <td style="display: none;" data-ice="lines">112</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:29:50 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/ArtistooImport.js.html#errorLines=11,12,13,15,192,202,216,23,24,245,4,40,49,6,75,95">src/converter/ArtistooImport.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/16</span></td>
+      <td style="display: none;" data-ice="size">7986 byte</td>
+      <td style="display: none;" data-ice="lines">263</td>
+      <td style="display: none;" data-ice="updated">2021-03-06 10:21:21 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/ArtistooWriter.js.html#errorLines=10,106,11,12,16,17,18,19,21,213,222,25,3,34,342,359,372,43,49,5,76,8,9,92,97">src/converter/ArtistooWriter.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/25</span></td>
+      <td style="display: none;" data-ice="size">12712 byte</td>
+      <td style="display: none;" data-ice="lines">412</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 18:21:35 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/ModelDescription.js.html#errorLines=10,108,124,14,140,169,178,182,186,19,192,205,210,214,218,222,226,230,234,25,36,41,45,52,56,58,72,82,89,97">src/converter/ModelDescription.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></td>
+      <td class="coverage"><span data-ice="coverage">3 %</span><span data-ice="coverageCount" class="coverage-count">1/31</span></td>
+      <td style="display: none;" data-ice="size">4547 byte</td>
+      <td style="display: none;" data-ice="lines">244</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 18:21:35 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/MorpheusImport.js.html#errorLines=10,1027,1069,11,124,143,18,235,29,295,4,40,423,47,504,515,56,572,6,605,659,69,715,777,806,842,885,905,93,950,971,983">src/converter/MorpheusImport.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/32</span></td>
+      <td style="display: none;" data-ice="size">31768 byte</td>
+      <td style="display: none;" data-ice="lines">1114</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 18:26:47 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/MorpheusWriter.js.html#errorLines=102,110,114,12,14,16,160,177,195,20,218,285,292,3,30,318,337,356,392,43,440,458,484,5,505,54,587,63,675,68,72,83,87,9,93">src/converter/MorpheusWriter.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/35</span></td>
+      <td style="display: none;" data-ice="size">22311 byte</td>
+      <td style="display: none;" data-ice="lines">705</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 18:21:35 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/Writer.js.html#errorLines=105,120,148,15,16,17,19,2,22,26,4,5,7,99">src/converter/Writer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/14</span></td>
+      <td style="display: none;" data-ice="size">4356 byte</td>
+      <td style="display: none;" data-ice="lines">163</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 18:21:35 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/grid/CoarseGrid.js.html">src/grid/CoarseGrid.js</a></span></td>
@@ -229,15 +286,15 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
       <td style="display: none;" data-ice="size">5977 byte</td>
       <td style="display: none;" data-ice="lines">170</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/grid/Grid.js.html#errorLines=65">src/grid/Grid.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></td>
-      <td class="coverage"><span data-ice="coverage">97 %</span><span data-ice="coverageCount" class="coverage-count">34/35</span></td>
-      <td style="display: none;" data-ice="size">17627 byte</td>
-      <td style="display: none;" data-ice="lines">459</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">97 %</span><span data-ice="coverageCount" class="coverage-count">35/36</span></td>
+      <td style="display: none;" data-ice="size">19012 byte</td>
+      <td style="display: none;" data-ice="lines">506</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 20:34:51 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/grid/Grid2D.js.html#errorLines=67">src/grid/Grid2D.js</a></span></td>
@@ -245,7 +302,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">92 %</span><span data-ice="coverageCount" class="coverage-count">13/14</span></td>
       <td style="display: none;" data-ice="size">12770 byte</td>
       <td style="display: none;" data-ice="lines">422</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/grid/Grid3D.js.html#errorLines=57">src/grid/Grid3D.js</a></span></td>
@@ -253,15 +310,15 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">92 %</span><span data-ice="coverageCount" class="coverage-count">13/14</span></td>
       <td style="display: none;" data-ice="size">6769 byte</td>
       <td style="display: none;" data-ice="lines">220</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/grid/GridManipulator.js.html">src/grid/GridManipulator.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">10/10</span></td>
-      <td style="display: none;" data-ice="size">10927 byte</td>
-      <td style="display: none;" data-ice="lines">347</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">14/14</span></td>
+      <td style="display: none;" data-ice="size">17397 byte</td>
+      <td style="display: none;" data-ice="lines">529</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 21:52:14 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/grid/grid-typedef.js.html">src/grid/grid-typedef.js</a></span></td>
@@ -269,7 +326,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">-</span></td>
       <td style="display: none;" data-ice="size">1242 byte</td>
       <td style="display: none;" data-ice="lines">30</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 08:43:15 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/ActivityConstraint.js.html">src/hamiltonian/ActivityConstraint.js</a></span></td>
@@ -277,7 +334,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">11/11</span></td>
       <td style="display: none;" data-ice="size">9061 byte</td>
       <td style="display: none;" data-ice="lines">250</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/ActivityMultiBackground.js.html">src/hamiltonian/ActivityMultiBackground.js</a></span></td>
@@ -285,7 +342,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">9/9</span></td>
       <td style="display: none;" data-ice="size">7167 byte</td>
       <td style="display: none;" data-ice="lines">183</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-10-02 16:59:23 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/Adhesion.js.html">src/hamiltonian/Adhesion.js</a></span></td>
@@ -293,15 +350,15 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">6/6</span></td>
       <td style="display: none;" data-ice="size">3076 byte</td>
       <td style="display: none;" data-ice="lines">81</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-09-02 13:43:27 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html">src/hamiltonian/AttractionPointConstraint.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
-      <td style="display: none;" data-ice="size">6065 byte</td>
+      <td style="display: none;" data-ice="size">6073 byte</td>
       <td style="display: none;" data-ice="lines">150</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-03-05 21:54:03 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/AutoAdderConfig.js.html">src/hamiltonian/AutoAdderConfig.js</a></span></td>
@@ -309,7 +366,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
       <td style="display: none;" data-ice="size">1337 byte</td>
       <td style="display: none;" data-ice="lines">30</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/BarrierConstraint.js.html">src/hamiltonian/BarrierConstraint.js</a></span></td>
@@ -317,7 +374,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
       <td style="display: none;" data-ice="size">2586 byte</td>
       <td style="display: none;" data-ice="lines">78</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-10-02 16:54:33 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/BorderConstraint.js.html">src/hamiltonian/BorderConstraint.js</a></span></td>
@@ -325,7 +382,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
       <td style="display: none;" data-ice="size">4687 byte</td>
       <td style="display: none;" data-ice="lines">141</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/ChemotaxisConstraint.js.html">src/hamiltonian/ChemotaxisConstraint.js</a></span></td>
@@ -333,7 +390,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">10/10</span></td>
       <td style="display: none;" data-ice="size">4795 byte</td>
       <td style="display: none;" data-ice="lines">122</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 09:33:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html">src/hamiltonian/ConnectivityConstraint.js</a></span></td>
@@ -341,7 +398,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">14/14</span></td>
       <td style="display: none;" data-ice="size">8828 byte</td>
       <td style="display: none;" data-ice="lines">255</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/Constraint.js.html">src/hamiltonian/Constraint.js</a></span></td>
@@ -349,7 +406,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">8/8</span></td>
       <td style="display: none;" data-ice="size">2619 byte</td>
       <td style="display: none;" data-ice="lines">67</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/HardConstraint.js.html">src/hamiltonian/HardConstraint.js</a></span></td>
@@ -357,7 +414,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
       <td style="display: none;" data-ice="size">1277 byte</td>
       <td style="display: none;" data-ice="lines">36</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/HardVolumeRangeConstraint.js.html">src/hamiltonian/HardVolumeRangeConstraint.js</a></span></td>
@@ -365,7 +422,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
       <td style="display: none;" data-ice="size">2237 byte</td>
       <td style="display: none;" data-ice="lines">59</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/LocalConnectivityConstraint.js.html">src/hamiltonian/LocalConnectivityConstraint.js</a></span></td>
@@ -373,7 +430,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">6/6</span></td>
       <td style="display: none;" data-ice="size">3871 byte</td>
       <td style="display: none;" data-ice="lines">131</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/ParameterChecker.js.html">src/hamiltonian/ParameterChecker.js</a></span></td>
@@ -381,7 +438,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">18/18</span></td>
       <td style="display: none;" data-ice="size">16365 byte</td>
       <td style="display: none;" data-ice="lines">459</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-12-05 20:35:13 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/PerimeterConstraint.js.html">src/hamiltonian/PerimeterConstraint.js</a></span></td>
@@ -389,7 +446,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">9/9</span></td>
       <td style="display: none;" data-ice="size">6220 byte</td>
       <td style="display: none;" data-ice="lines">215</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/PersistenceConstraint.js.html">src/hamiltonian/PersistenceConstraint.js</a></span></td>
@@ -397,7 +454,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">14/14</span></td>
       <td style="display: none;" data-ice="size">7099 byte</td>
       <td style="display: none;" data-ice="lines">209</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 09:33:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/PreferredDirectionConstraint.js.html">src/hamiltonian/PreferredDirectionConstraint.js</a></span></td>
@@ -405,7 +462,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
       <td style="display: none;" data-ice="size">3549 byte</td>
       <td style="display: none;" data-ice="lines">98</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 09:33:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html#errorLines=26">src/hamiltonian/SoftConnectivityConstraint.js</a></span></td>
@@ -413,7 +470,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">93 %</span><span data-ice="coverageCount" class="coverage-count">15/16</span></td>
       <td style="display: none;" data-ice="size">10559 byte</td>
       <td style="display: none;" data-ice="lines">318</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/SoftConstraint.js.html">src/hamiltonian/SoftConstraint.js</a></span></td>
@@ -421,7 +478,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
       <td style="display: none;" data-ice="size">1204 byte</td>
       <td style="display: none;" data-ice="lines">30</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/SoftLocalConnectivityConstraint.js.html">src/hamiltonian/SoftLocalConnectivityConstraint.js</a></span></td>
@@ -429,7 +486,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">9/9</span></td>
       <td style="display: none;" data-ice="size">5548 byte</td>
       <td style="display: none;" data-ice="lines">180</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/VolumeConstraint.js.html">src/hamiltonian/VolumeConstraint.js</a></span></td>
@@ -437,7 +494,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">5/5</span></td>
       <td style="display: none;" data-ice="size">3043 byte</td>
       <td style="display: none;" data-ice="lines">86</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/hamiltonian/constraint-typedef.js.html">src/hamiltonian/constraint-typedef.js</a></span></td>
@@ -445,7 +502,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">-</span></td>
       <td style="display: none;" data-ice="size">1868 byte</td>
       <td style="display: none;" data-ice="lines">45</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/models/CA.js.html">src/models/CA.js</a></span></td>
@@ -453,15 +510,15 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">5/5</span></td>
       <td style="display: none;" data-ice="size">1920 byte</td>
       <td style="display: none;" data-ice="lines">65</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 09:33:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/models/CPM.js.html#errorLines=380">src/models/CPM.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/models/CPM.js.html#errorLines=114,115,245,417">src/models/CPM.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></td>
-      <td class="coverage"><span data-ice="coverage">96 %</span><span data-ice="coverageCount" class="coverage-count">30/31</span></td>
-      <td style="display: none;" data-ice="size">15279 byte</td>
-      <td style="display: none;" data-ice="lines">435</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">88 %</span><span data-ice="coverageCount" class="coverage-count">32/36</span></td>
+      <td style="display: none;" data-ice="size">16230 byte</td>
+      <td style="display: none;" data-ice="lines">472</td>
+      <td style="display: none;" data-ice="updated">2021-03-06 10:53:48 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/models/GridBasedModel.js.html#errorLines=56">src/models/GridBasedModel.js</a></span></td>
@@ -469,7 +526,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">96 %</span><span data-ice="coverageCount" class="coverage-count">25/26</span></td>
       <td style="display: none;" data-ice="size">8126 byte</td>
       <td style="display: none;" data-ice="lines">238</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 15:04:01 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/models/model-typedefs.js.html">src/models/model-typedefs.js</a></span></td>
@@ -477,15 +534,15 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">-</span></td>
       <td style="display: none;" data-ice="size">1034 byte</td>
       <td style="display: none;" data-ice="lines">22</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/simulation/Simulation.js.html">src/simulation/Simulation.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/simulation/Simulation.js.html#errorLines=149">src/simulation/Simulation.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">30/30</span></td>
-      <td style="display: none;" data-ice="size">12879 byte</td>
-      <td style="display: none;" data-ice="lines">379</td>
-      <td style="display: none;" data-ice="updated">2020-05-06 14:47:39 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">97 %</span><span data-ice="coverageCount" class="coverage-count">33/34</span></td>
+      <td style="display: none;" data-ice="size">13953 byte</td>
+      <td style="display: none;" data-ice="lines">409</td>
+      <td style="display: none;" data-ice="updated">2021-03-06 10:57:18 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/BorderPixelsByCell.js.html">src/stats/BorderPixelsByCell.js</a></span></td>
@@ -493,7 +550,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">4/4</span></td>
       <td style="display: none;" data-ice="size">1885 byte</td>
       <td style="display: none;" data-ice="lines">60</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/CellNeighborList.js.html">src/stats/CellNeighborList.js</a></span></td>
@@ -501,7 +558,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">5/5</span></td>
       <td style="display: none;" data-ice="size">3374 byte</td>
       <td style="display: none;" data-ice="lines">106</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 09:33:06 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/Centroids.js.html">src/stats/Centroids.js</a></span></td>
@@ -509,7 +566,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
       <td style="display: none;" data-ice="size">3980 byte</td>
       <td style="display: none;" data-ice="lines">122</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 09:33:06 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/CentroidsWithTorusCorrection.js.html">src/stats/CentroidsWithTorusCorrection.js</a></span></td>
@@ -517,7 +574,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
       <td style="display: none;" data-ice="size">4443 byte</td>
       <td style="display: none;" data-ice="lines">137</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 09:33:06 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/ConnectedComponentsByCell.js.html">src/stats/ConnectedComponentsByCell.js</a></span></td>
@@ -525,7 +582,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
       <td style="display: none;" data-ice="size">2654 byte</td>
       <td style="display: none;" data-ice="lines">87</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/ConnectedComponentsByCellBorder.js.html">src/stats/ConnectedComponentsByCellBorder.js</a></span></td>
@@ -533,7 +590,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
       <td style="display: none;" data-ice="size">2838 byte</td>
       <td style="display: none;" data-ice="lines">87</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/Connectedness.js.html">src/stats/Connectedness.js</a></span></td>
@@ -541,7 +598,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
       <td style="display: none;" data-ice="size">1817 byte</td>
       <td style="display: none;" data-ice="lines">68</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2021-02-02 09:26:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/PixelsByCell.js.html">src/stats/PixelsByCell.js</a></span></td>
@@ -549,7 +606,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
       <td style="display: none;" data-ice="size">1427 byte</td>
       <td style="display: none;" data-ice="lines">49</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-04 08:58:39 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/Stat.js.html">src/stats/Stat.js</a></span></td>
@@ -557,7 +614,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">6/6</span></td>
       <td style="display: none;" data-ice="size">1409 byte</td>
       <td style="display: none;" data-ice="lines">41</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/stats/stat-typedef.js.html">src/stats/stat-typedef.js</a></span></td>
@@ -565,7 +622,7 @@ padding-right:10px;
       <td class="coverage"><span data-ice="coverage">-</span></td>
       <td style="display: none;" data-ice="size">426 byte</td>
       <td style="display: none;" data-ice="lines">9</td>
-      <td style="display: none;" data-ice="updated">2020-04-05 23:11:02 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2019-08-03 11:25:52 (UTC)</td>
     </tr>
 </tbody>
 </table>

@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -192,67 +201,75 @@ padding-right:10px;
 
 import PixelsByCell from &quot;../stats/PixelsByCell.js&quot;
 import Centroids from &quot;../stats/Centroids.js&quot;
+import Grid2D from &quot;./Grid2D.js&quot;
+import Grid3D from &quot;./Grid3D.js&quot;
 
 
-/** This class contains methods that should be executed once per Monte Carlo Step.
- Examples are cell division, cell death etc.
- 
- Methods are written for CPMs, but some of the methods may also apply to other
-	models of class ({@link GridBasedModel}, e.g. the cell seeding methods) 
-	or even a general grid ({@link Grid}, e.g. the {@link makePlane} and {@link changeKind} 
-	methods).
-	
- @example
- // Build CPM and attach a gridmanipulator 
- let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
- let gm = new CPM.GridManipulator( C )
+/** This class contains methods that should be executed once per
+ * Monte Carlo Step. Examples are cell division, cell death etc.
+ *
+ * It also contains methods to seed new cells in certain shapes and
+ * configurations. Methods are written for CPMs, but some of the methods
+ * may also apply to other models of class ({@link GridBasedModel}, e.g.
+ * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
+ * the {@link makeLine} and {@link assignCellPixels} methods).
+ *
+ * @example
+ * // Build CPM and attach a gridmanipulator
+ * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
+ * let gm = new CPM.GridManipulator( C )
  */
 class GridManipulator {
 	/** Constructor of class GridManipulator.
-	@param {CPM|GridBasedModel|Grid} C - the model whose grid you wish to manipulate.
-	Methods are written for CPMs, but some of the methods may also apply to other
-	models of class ({@link GridBasedModel}, e.g. the cell seeding methods) 
-	or even a general grid ({@link Grid}, e.g. the {@link makePlane} and {@link changeKind} 
-	methods).
+	 *
+	 * @param {CPM|GridBasedModel|Grid} C - the model whose grid
+	 * you wish to manipulate.
+	 * Methods are written for CPMs, but some of the methods may also
+	 * apply to other models of class ({@link GridBasedModel}, e.g.
+	 * the cell seeding methods) or even a general grid ({@link Grid}, e.g.
+	 * the {@link makeLine} and {@link assignCellPixels} methods).
 	*/
 	constructor( C ){
 		/** The model whose grid we are manipulating.
-		@type {CPM|GridBasedModel|Grid}*/
+		 * @type {CPM|GridBasedModel|Grid}*/
 		this.C = C
 	}
 	
 	/** @experimental
 	 */
-	killCell( cellid ){
-		let cp = this.C.getStat( PixelsByCell )
-		let cpi = cp[cellid]
-		
-		for( let p of cpi ){
-			this.C.setpixi( this.C.grid.p2i(p), 0 )
+	killCell( cellID ){
+
+		for( let [p,i] of this.C.pixels() ){
+			if( i == cellID ){
+				this.C.setpix( p, 0 )
+			}
 		}
-		
+
 		// update stats
-		if( &quot;PixelsByCell&quot; in this.C.stat_values ){
-			delete this.C.stat_values[&quot;PixelsByCell&quot;][cellid]
+		if (&quot;PixelsByCell&quot; in this.C.stat_values) {
+			delete this.C.stat_values[&quot;PixelsByCell&quot;][cellID]
 		}
 	}
 	
-	/** Seed a new cell at a random position. Return 0 if failed, ID of new cell otherwise.
+
+	
+	/** Seed a new cell at a random position. Return 0 if failed, ID of new
+	 * cell otherwise.
 	 * Try a specified number of times, then give up if grid is too full. 
-	 * The first cell will always be seeded at the midpoint of the grid. 
-	 
-	 See also {@link seedCellAt} to seed a cell on a predefined position.
-	 
-	 @param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
-	 parameters that will be used for that cell.
-	 @param {number} [max_attempts = 10000] - number of tries allowed. The method will
-	 attempt to seed a cell at a random position, but this will fail if the position is 
-	 already occupied. After max_attempts fails, it will not try again. This can happen
-	 if the grid is very full.
-	 @return {CellId} - the {@link CellId} of the newly seeded cell, or 0 if the seeding
-	 has failed.
-	 
-	 @example
+	 * The first cell will always be seeded at the midpoint of the grid.
+	 *
+	 * See also {@link seedCellAt} to seed a cell on a predefined position.
+	 *
+	 * @param {CellKind} kind - what kind of cell should be seeded? This
+	 * determines the CPM parameters that will be used for that cell.
+	 * @param {number} [max_attempts = 10000] - number of tries allowed. The
+	 * method will attempt to seed a cell at a random position, but this will
+	 * fail if the position is already occupied. After max_attempts fails,
+	 * it will not try again. This can happen if the grid is very full.
+	 * @return {CellId} - the {@link CellId} of the newly seeded cell, or 0
+	 * if the seeding has failed.
+	 *
+	 * @example
 	 * // Build CPM and attach a gridmanipulator
 	 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
 	 * let gm = new CPM.GridManipulator( C )
@@ -268,30 +285,29 @@ class GridManipulator {
 	 */
 	seedCell( kind, max_attempts = 10000 ){
 		let p = this.C.midpoint
-		while( this.C.pixt( p ) != 0 &amp;&amp; max_attempts-- &gt; 0 ){
+		while( this.C.pixt( p ) !== 0 &amp;&amp; max_attempts-- &gt; 0 ){
 			for( let i = 0 ; i &lt; p.length ; i ++ ){
 				p[i] = this.C.ran(0,this.C.extents[i]-1)
 			}
 		}
-		if( this.C.pixt(p) != 0 ){
+		if( this.C.pixt(p)  !== 0 ){
 			return 0 // failed
 		}
-		const newid = this.C.makeNewCellID( kind )
-		this.C.setpix( p, newid )
-		return newid
+		const newID = this.C.makeNewCellID( kind )
+		this.C.setpix( p, newID )
+		return newID
 	}
 	/**  Seed a new cell of celltype &quot;kind&quot; onto position &quot;p&quot;.
-		This succeeds regardless of whether there is already a cell there.
-		
-		See also {@link seedCell} to seed a cell on a random position.
-		
-		@param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
-		parameters that will be used for that cell.
-		@param {ArrayCoordinate} p - position to seed the cell at. 
-		@return {CellId} - the {@link CellId} of the newly seeded cell, or 0 if the seeding
-		has failed.
-		
-	 @example
+	 * This succeeds regardless of whether there is already a cell there.
+	 * See also {@link seedCell} to seed a cell on a random position.
+	 *
+	 * @param {CellKind} kind - what kind of cell should be seeded?
+	 * This determines the CPM parameters that will be used for that cell.
+	 * @param {ArrayCoordinate} p - position to seed the cell at.
+	 * @return {CellId} - the {@link CellId} of the newly seeded cell, or 0
+	 * if the seeding has failed.
+	 *
+	 * @example
 	 * // Build CPM and attach a gridmanipulator
 	 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
 	 * let gm = new CPM.GridManipulator( C )
@@ -306,30 +322,32 @@ class GridManipulator {
 	 * }
 	 */
 	seedCellAt( kind, p ){
+	
 		const newid = this.C.makeNewCellID( kind )
 		this.C.grid.checkOnGrid(p)
 		this.C.setpix( p, newid )
 		return newid
+
 	}
 	
-	/**  Seed &quot;n&quot; cells of celltype &quot;kind&quot; at random points lying within a circle 
-		surrounding &quot;center&quot; with radius &quot;radius&quot;. 
-		
-		See also {@link seedCell} to seed a cell on a random position in the entire grid,
-		and {@link seedCellAt} to seed a cell at a specific position.
-		
-		@param {CellKind} kind - what kind of cell should be seeded? This determines the CPM
-		parameters that will be used for that cell.
-		@param {number} n - the number of cells to seed (must be integer).
-		@param {ArrayCoordinate} center - position on the grid where the center of the
-		circle should be.
-		@param {number} radius - the radius of the circle to seed cells in.
-		@param {number} max_attempts - the maximum number of attempts to seed a cell.
-		Seeding can fail if the randomly chosen position is outside the circle, or if 
-		there is already a cell there. After max_attempts the method will stop trying
-		and throw an error.
-		
-	 @example
+	/**  Seed &quot;n&quot; cells of celltype &quot;kind&quot; at random points lying within a
+	 * circle surrounding &quot;center&quot; with radius &quot;radius&quot;.
+	 *
+	 * See also {@link seedCell} to seed a cell on a random position in
+	 * the entire grid, and {@link seedCellAt} to seed a cell at a specific
+	 * position.
+	 * @param {CellKind} kind - what kind of cell should be seeded? This
+	 * determines the CPM parameters that will be used for that cell.
+	 * @param {number} n - the number of cells to seed (must be integer).
+	 * @param {ArrayCoordinate} center - position on the grid where the center
+	 * of the circle should be.
+	 * @param {number} radius - the radius of the circle to seed cells in.
+	 * @param {number} max_attempts - the maximum number of attempts to seed a
+	 * cell. Seeding can fail if the randomly chosen position is outside the
+	 * circle, or if there is already a cell there. After max_attempts the
+	 * method will stop trying and throw an error.
+	 *
+	 * @example
 	 * // Build CPM and attach a gridmanipulator
 	 * let C = new CPM.CPM( [100,100], {T:20, J:[[0,20],[20,10]]} )
 	 * let gm = new CPM.GridManipulator( C )
@@ -348,7 +366,7 @@ class GridManipulator {
 		}
 		let C = this.C
 		while( n &gt; 0 ){
-			if( --max_attempts == 0 ){
+			if( --max_attempts === 0 ){
 				throw(&quot;too many attempts to seed cells!&quot;)
 			}
 			let p = center.map( function(i){ return C.ran(Math.ceil(i-radius),Math.floor(i+radius)) } )
@@ -362,73 +380,246 @@ class GridManipulator {
 			}
 		}
 	}
-	/** Helper method to set an entire plane or line of pixels to a certain CellId at once.
-	The method takes an existing array of coordinates (which can be empty) and adds the pixels
-	of the specified plane to it. See {@link changeKind} for a method that sets such a 
-	pixel set to a new value.
-	
-	The plane is specified by fixing one coordinate (x,y,or z) to a fixed value, and
-	letting the others range from their min value 0 to their max value.
-	
-	@param {ArrayCoordinate[]} voxels - Existing array of pixels; this can be empty [].
-	@param {number} coord - the dimension to fix the coordinate of: 0 = x, 1 = y, 2 = z.
-	@param {number} coordvalue - the value of the coordinate in the fixed dimension; location
-	of the plane.
-	@return {ArrayCoordinate[]} the updated array of pixels. 
-	
-	@example
-	* let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
-	* let gm = new CPM.GridManipulator( C )
-	* let myline = gm.makePlane( [], 0, 2 )
-	* gm.changeKind( myline, 1 )
-	*/
-	makePlane ( voxels, coord, coordvalue ){
+
+	/** Helper method to return an entire plane or line of pixels; can be used
+	 * in conjunction with {@link assignCellPixels} to assign all these pixels
+	 * to a given CellId at once. (See also {@link makeBox} and
+	 * {@link makeCircle}).
+	 * The method takes an existing array of coordinates (which can be
+	 * empty) and adds the pixels of the specified plane to it.
+	 * See {@link assignCellPixels} for a method that sets such a pixel set to a
+	 * new value.
+	 *
+	 * The plane is specified by fixing one coordinate (x,y,or z) to a
+	 * fixed value, and letting the others range from their min value 0 to
+	 * their max value. In 3D, this returns a plane.
+	 *
+	 * @param {number} dimension - the dimension to fix the coordinate of:
+	 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+	 * x-coordinate).
+	 * @param {number} coordinateValue - the value of the coordinate in the
+	 * fixed dimension; location of the plane. (E.g. for our straight vertical
+	 * line, the x-value where the line should be placed).
+	 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+	 * if given, the line will be added to this set.
+	 * @return {ArrayCoordinate[]} the updated array of pixels.
+	 *
+	 * @example
+	 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+	 * let gm = new CPM.GridManipulator( C )
+	 * let myLine = gm.makeLine( 0, 2 )
+	 * gm.assignCellPixels( myLine, 1 )
+	 */
+	makeLine ( dimension, coordinateValue, pixels ) {
+
+		pixels = pixels || []
+
 		let x,y,z
-		let minc = [0,0,0]
-		let maxc = [0,0,0]
+		let minC = [0,0,0]
+		let maxC = [0,0,0]
 		for( let dim = 0; dim &lt; this.C.ndim; dim++ ){
-			maxc[dim] = this.C.extents[dim]-1
+			maxC[dim] = this.C.extents[dim]-1
 		}
-		minc[coord] = coordvalue
-		maxc[coord] = coordvalue
+		minC[dimension] = coordinateValue
+		maxC[dimension] = coordinateValue
 
 		// For every coordinate x,y,z, loop over all possible values from min to max.
 		// one of these loops will have only one iteration because min = max = coordvalue.
-		for( x = minc[0]; x &lt;= maxc[0]; x++ ){
-			for( y = minc[1]; y&lt;=maxc[1]; y++ ){
-				for( z = minc[2]; z&lt;=maxc[2]; z++ ){
-					if( this.C.ndim == 3 ){
-						voxels.push( [x,y,z] )	
+		for( x = minC[0]; x &lt;= maxC[0]; x++ ){
+			for( y = minC[1]; y&lt;=maxC[1]; y++ ){
+				for( z = minC[2]; z&lt;=maxC[2]; z++ ){
+					if( this.C.ndim === 3 ){
+						pixels.push( [x,y,z] )
 					} else {
 						//console.log(x,y)
-						voxels.push( [x,y] )
+						pixels.push( [x,y] )
 					}
 				}
 			}
 		}
 
-		return voxels
+		return pixels
 	}
-	/** Helper method that converts all pixels in a given array to a specific cellkind:
-	   changes the pixels defined by voxels (array of coordinates p) into
-	   the given cellkind. 
-	
-	@param {ArrayCoordinate[]} voxels - Array of pixels to change.
-	@param {CellKind} cellkind - cellkind to change these pixels into.
-	   
-	@example
-	* let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
-	* let gm = new CPM.GridManipulator( C )
-	* let myline = gm.makePlane( [], 0, 2 )
-	* gm.changeKind( myline, 1 )
-	*/
-	changeKind ( voxels, cellkind ){
-		
-		let newid = this.C.makeNewCellID( cellkind )
+
+	/** Deprecated method, please use {@link makeLine} instead. Old method
+	 * just links to the new method for backwards-compatibility.
+	 *
+	 * @param {number} dim - the dimension to fix the coordinate of:
+	 * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the
+	 * x-coordinate).
+	 * @param {number} coordinateValue - the value of the coordinate in the
+	 * fixed dimension; location of the plane. (E.g. for our straight vertical
+	 * line, the x-value where the line should be placed).
+	 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+	 * if given, the line will be added to this set.
+	 * @return {ArrayCoordinate[]} the updated array of pixels.
+ 	 */
+	makePlane( pixels, dim, coordinateValue ){
+		return this.makeLine( dim, coordinateValue, pixels )
+	}
+
+	/** Helper method to return a rectangle (or in 3D: box) of pixels; can be used
+	 * in conjunction with {@link assignCellPixels} to assign all these pixels
+	 * to a given CellId at once. (See also {@link makeLine} and
+	 * {@link makeCircle}).
+	 * The method takes an existing array of coordinates (which can be
+	 * empty) and adds the pixels of the specified rectangle/box to it.
+	 * See {@link assignCellPixels} for a method that sets such a pixel set to a
+	 * new value.
+	 *
+	 * The box/rectangle is specified by its bottom left corner (x,y,z)
+	 * and size (dx, dy, dz).
+	 *
+	 * @param {ArrayCoordinate[]} bottomLeft - the coordinate of the bottom
+	 * left corner of the rectangle/box.
+	 * @param {number[]} boxSize - the size of the rectangle in each dimension:
+	 * [dx,dy,dz].
+	 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+	 * if given, the line will be added to this set.
+	 * @return {ArrayCoordinate[]} the updated array of pixels.
+	 *
+	 * @example
+	 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+	 * let gm = new CPM.GridManipulator( C )
+	 * let rect = gm.makeBox( [50,50], [10,10] )
+	 * gm.assignCellPixels( rect, 1 )
+	 */
+	makeBox( bottomLeft, boxSize, pixels ){
+
+		// this array will contain all positions in the circle (/sphere)
+		// for radius = 1, just return the array with a single element:
+		// the center pixel
+		pixels = pixels || []
+
+		// check that box dimensions do not exceed dimensions of the grid
+		for( let d = 0; d &lt; this.C.grid.ndim; d++ ){
+			if( boxSize[d] &gt; this.C.grid.extents[d] ){
+				throw( &quot;GridManipulator.makeBox: You are trying to make a &quot; +
+					&quot;box that exceeds grid dimensions!&quot; )
+			}
+		}
+
+		// find pixels inside the box, and correct them for torus if required
+		const p = bottomLeft
+		for( let xx = 0; xx &lt; boxSize[0]; xx++ ){
+			for( let yy = 0; yy &lt; boxSize[1]; yy++ ){
+
+				let pNew = [p[0]+xx,p[1]+yy]
+				if( this.C.grid.ndim === 3 ){
+
+					for( let zz = 0; zz &lt;= boxSize[2]; zz++ ){
+						pNew.push(p[2]+zz)
+						// correct for torus
+						const pCorr = this.C.grid.correctPosition( pNew )
+						if( typeof pCorr !== &quot;undefined&quot; ){ pixels.push( pCorr ) }
+					}
+
+				} else {
+					const pCorr = this.C.grid.correctPosition( pNew )
+					if( typeof pCorr !== &quot;undefined&quot;  ){ pixels.push( pCorr ) }
+				}
+			}
+		}
+
+		return pixels
+
+	}
+
+	/** Helper method to return a circle (in 3D: sphere) of pixels; can be used
+	 * in conjunction with {@link assignCellPixels} to assign all these pixels
+	 * to a given CellId at once. (See also {@link makeLine} and
+	 * {@link makeBox}).
+	 * The method takes an existing array of coordinates (which can be
+	 * empty) and adds the pixels of the specified circle/sphere to it.
+	 * See {@link assignCellPixels} for a method that sets such a pixel set to a
+	 * new value.
+	 *
+	 * The circle/sphere is specified by its center (x,y,z)
+	 * and radius.
+	 *
+	 * @param {ArrayCoordinate[]} center - the coordinate of the center
+	 * of the circle/sphere.
+	 * @param {number} radius - the radius of the circle/sphere.
+	 * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;
+	 * if given, the circle/sphere pixels will be added to this set.
+	 * @return {ArrayCoordinate[]} the updated array of pixels.
+	 *
+	 * @example
+	 * let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+	 * let gm = new CPM.GridManipulator( C )
+	 * let circ = gm.makeCircle( [50,50], 10 )
+	 * gm.assignCellPixels( circ, 1 )
+	 */
+	makeCircle( center, radius, pixels = [] ){
+
+
+		// the positions to return depends on the Grid geometry. currently support only
+		// square 2D/3D lattices.
+		if( !( this.C.grid instanceof Grid2D ) &amp;&amp; !( this.C.grid instanceof Grid3D ) ){
+			throw( &quot;In makeCircle: radius &gt; 1 only supported for grids of &quot; +
+				&quot;class Grid2D or Grid3D. Please set radius=1 to continue.&quot; )
+		}
+
+		// find the pixels	inside the radius
+		const p = center
+		for( let xx = -radius; xx &lt;= radius; xx++ ){
+			for( let yy = -radius; yy &lt;= radius; yy++ ){
+
+				let pNew = [p[0]+xx,p[1]+yy]
+				if( this.C.grid.ndim === 3 ){
+
+					for( let zz = - radius; zz &lt;= radius; zz++ ){
+						pNew.push(p[2]+zz)
+						if( Math.sqrt( xx*xx + yy*yy + zz*zz ) &lt;= radius ){
+							const pCorr = this.C.grid.correctPosition( pNew )
+							if(  typeof pCorr !== &quot;undefined&quot;  ){ pixels.push( pCorr ) }
+						}
+					}
+
+				} else {
+					if( Math.sqrt( xx*xx + yy*yy ) &lt;= radius ){
+						const pCorr = this.C.grid.correctPosition( pNew )
+						if(  typeof pCorr !== &quot;undefined&quot;  ){ pixels.push( pCorr ) }
+					}
+
+				}
+			}
+		}
+
+
+		return pixels
+
+	}
+
+
+	/** Helper method that assigns all pixels in a given array to a
+	 * cell of a given cellkind: changes the pixels defined by voxels
+	 * (array of coordinates p) into the given cellKind and a corresponding
+	 * cellID.
+	 *
+	 * @param {ArrayCoordinate[]} voxels - Array of pixels to change.
+	 * @param {CellKind} cellkind - cellkind to change these pixels into.
+	 * @param {CellId} [newID] - (Optional) id of the cell to assign the
+	 * 	pixels to; if this is unspecified, a new cellID is generated for this
+	 * 	purpose.
+	 * 	@example
+	 * 	let C = new CPM.CPM( [10,10], {T:20, J:[[0,20],[20,10]]} )
+	 * 	let gm = new CPM.GridManipulator( C )
+	 * 	let myLine = gm.makeLine( 0, 2 )
+	 * 	gm.assignCellPixels( myLine, 1 )
+	 **/
+	assignCellPixels ( voxels, cellkind, newID ){
+
+		newID = newID || this.C.makeNewCellID( cellkind )
 		for( let p of voxels ){
-			this.C.setpix( p, newid )
+			this.C.setpix( p, newID )
 		}
 		
+	}
+
+	/** Abrogated; this is now {@link assignCellPixels}. **/
+	changeKind( voxels, cellkind, newid ){
+		this.assignCellPixels( voxels, cellkind, newid )
 	}
 
 	/** Let cell &quot;id&quot; divide by splitting it along a line perpendicular to

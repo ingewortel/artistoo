@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -194,45 +203,64 @@ padding-right:10px;
 describe(&quot;GridManipulator&quot;, function () {
 	let CPM = require(&quot;../../build/artistoo-cjs.js&quot;)
 	//eslint-disable-next-line no-unused-vars
-	let sim
+	let C, G
 
 	let setupSim = function ( ) {
 
-		let config = {
-			field_size : [50,50],
-			conf : {
-				// Basic CPM parameters
-				torus : [true,true],
-				T : 10,
-				J: [[0,10], [10,0]],
-				LAMBDA_V: [0,5],
-				V: [0,500],
-				LAMBDA_P: [0,2],
-				P : [0,260]
-			},
+		C = new CPM.CPM( [50,50], {
+			T : 10,
+			J: [[0,10], [10,0]],
+			V : [0,10],
+			LAMBDA_V : [0,5]
+		} )
 
-			// Simulation setup and configuration
-			simsettings : {
-				NRCELLS : [1],
-				BURNIN : 10,
-				RUNTIME : 10,
-				CANVASCOLOR : &quot;eaecef&quot;,
-				STATSOUT : { browser: false, node: false },
-			}
-		}
-
-
-		sim = new CPM.Simulation( config, {} )
-		sim.initializeGrid()
-		sim.run()
+		G = new CPM.GridManipulator( C )
+		G.seedCell(1 )
+		for( let t = 0; t &lt; 10; t++ ){ C.monteCarloStep() }
 	}
 
 	describe(&quot; [ unit tests ] &quot;, function () {
 
 		/** @test {GridManipulator#seedCellAt} */
-		it(&quot;should throw error when trying to seed outside of grid&quot;, function () {
+		it(&quot;seedCellAt should not throw error normally&quot;, function () {
 			setupSim()
-			expect( function() { sim.gm.seedCellAt( 1, [300,-5]) }).toThrow()
+			expect( function() { G.seedCellAt( 1, [0,0] ) }).not.toThrow()
+		})
+		it(&quot;seedCellAt should throw error when trying to seed outside of grid&quot;, function () {
+			setupSim()
+			expect( function() { G.seedCellAt( 1, [300,-5]) }).toThrow()
+		})
+
+		/** @test {GridManipulator#killCell} */
+		it(&quot;should remove a cellID from the grid&quot;, function () {
+			setupSim()
+			const cid = C.cellIDs().next().value
+			expect( function() { G.killCell(cid) }).not.toThrow()
+			let pixels = []
+			for( let [p,i] of C.grid.pixels() ){
+
+				if( i.toString() === cid ){
+					pixels.push(p)
+				}
+			}
+			expect( pixels.length ).toEqual( 0 )
+		})
+
+		it(&quot;should not mess up cellKinds etc&quot;, function () {
+			setupSim()
+			const cid = C.cellIDs().next().value
+
+			// seed a second cell
+			G.seedCellAt( 1, [1,1] )
+			// kill the first cell
+			G.killCell(cid)
+
+			// check that all pixt() and cellKind() are still defined.
+			for( let [p,i] of C.grid.pixels() ){
+				expect( C.pixt(p) ).toBeDefined()
+				expect( C.cellKind(i) ).toBeDefined()
+				expect( C.cellKind(i) ).toEqual( 1 )
+			}
 		})
 
 	})

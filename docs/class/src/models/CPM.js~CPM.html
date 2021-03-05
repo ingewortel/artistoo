@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -312,6 +321,34 @@ padding-right:10px;
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-cellvolumes">cellvolumes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-hard_constraints">hard_constraints</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span></span>
         </p>
       </div>
@@ -348,6 +385,39 @@ padding-right:10px;
         
         
         <div data-ice="description"><p>Object showing which constraints are where in <span><a href="class/src/models/CPM.js~CPM.html#instance-member-soft_constraints">soft_constraints</a></span>.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-isCPM">isCPM</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>To check from outside if an object is a CPM; doing this with
+instanceof doesn&apos;t work in some cases. Any other object will
+not have this variable and return &apos;undefined&apos;, which in an
+if-statement equates to a &apos;false&apos;.
+@type{boolean}</p>
 </div>
       </div>
     </td>
@@ -572,14 +642,13 @@ padding-right:10px;
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-stat_values">stat_values</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-stat_values">stat_values</a></span></span><span class="code" data-ice="signature">: {}</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Cached values of these stats.</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -608,6 +677,35 @@ padding-right:10px;
         
         
         <div data-ice="description"><p>Store the {@CellKind} of each cell on the grid.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-time">time</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Track time in MCS.</p>
 </div>
       </div>
     </td>
@@ -876,6 +974,34 @@ padding-right:10px;
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-method-getAllConstraints">getAllConstraints</a></span></span><span class="code" data-ice="signature">(): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstraint">getConstraint</a></span></span><span class="code" data-ice="signature">(constraintname: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, num: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>): <span>*</span></span>
         </p>
       </div>
@@ -1000,6 +1126,35 @@ for this cell in the relevant arrays (cellvolume, t2k).</p>
         
         
         <div data-ice="description"><p>Get <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span> of the pixel at coordinates p.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-method-reset">reset</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Completely reset; remove all cells and set time back to zero.</p>
 </div>
       </div>
     </td>
@@ -1950,7 +2105,7 @@ used to make one.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber52">source</a></span></span>
     </span>
   </h3>
 
@@ -1959,6 +2114,49 @@ used to make one.</p>
   
   <div data-ice="description"><p>track border pixels for speed </p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-cellvolumes">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">cellvolumes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber114">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -1994,7 +2192,7 @@ used to make one.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber68">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber79">source</a></span></span>
     </span>
   </h3>
 
@@ -2039,7 +2237,7 @@ These are used to determine which copy attempts are allowed in a <span><a href="
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
@@ -2047,7 +2245,55 @@ These are used to determine which copy attempts are allowed in a <span><a href="
   
   
   <div data-ice="description"><p>Object showing which constraints are where in <span><a href="class/src/models/CPM.js~CPM.html#instance-member-soft_constraints">soft_constraints</a></span>. Used
-by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstraint">getConstraint</a></span> method to find an attached constraint by name.</p>
+by the <span><a href="class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-getConstraint">getConstraint</a></span> method to find an attached constraint by name.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-isCPM">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">isCPM</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber36">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>To check from outside if an object is a CPM; doing this with
+instanceof doesn&apos;t work in some cases. Any other object will
+not have this variable and return &apos;undefined&apos;, which in an
+if-statement equates to a &apos;false&apos;.
+@type{boolean}</p>
 </div>
 
   
@@ -2084,7 +2330,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
@@ -2129,7 +2375,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -2174,7 +2420,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber380">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 
@@ -2217,7 +2463,7 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
@@ -2263,7 +2509,7 @@ need to track some specific property on the grid. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber77">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber88">source</a></span></span>
     </span>
   </h3>
 
@@ -2309,7 +2555,7 @@ need to track some specific property on the grid. </p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber60">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber71">source</a></span></span>
     </span>
   </h3>
 
@@ -2354,7 +2600,7 @@ These are used to determine <span><a href="class/src/hamiltonian/ActivityConstra
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber75">source</a></span></span>
     </span>
   </h3>
 
@@ -2362,7 +2608,7 @@ These are used to determine <span><a href="class/src/hamiltonian/ActivityConstra
   
   
   <div data-ice="description"><p>Object showing which constraints are where in <span><a href="class/src/models/CPM.js~CPM.html#instance-member-soft_constraints">soft_constraints</a></span>. Used
-by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstraint">getConstraint</a></span> method to find an attached constraint by name.</p>
+by the <span><a href="class/src/converter/ModelDescription.js~ModelDescription.html#instance-method-getConstraint">getConstraint</a></span> method to find an attached constraint by name.</p>
 </div>
 
   
@@ -2395,11 +2641,11 @@ by the <span><a href="class/src/models/CPM.js~CPM.html#instance-method-getConstr
     
     
     
-    <span class="code" data-ice="name">stat_values</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+    <span class="code" data-ice="name">stat_values</span><span class="code" data-ice="signature">: {}</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber329">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber115">source</a></span></span>
     </span>
   </h3>
 
@@ -2444,7 +2690,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber53">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber64">source</a></span></span>
     </span>
   </h3>
 
@@ -2483,6 +2729,51 @@ value as value. The cache must be cleared when the grid changes!</p>
   
   
 </div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-time">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">time</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber40">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Track time in MCS.
+@type{number}</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html#instance-member-time">GridBasedModel#time</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 <h2 data-ice="title">Private Members</h2>
 
 <div class="detail" data-ice="detail">
@@ -2497,7 +2788,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
@@ -2544,7 +2835,7 @@ value as value. The cache must be cleared when the grid changes!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber145">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber170">source</a></span></span>
     </span>
   </h3>
 
@@ -2607,7 +2898,7 @@ Any postSetpixListeners and postMCSListeners are also executed at the appropriat
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber156">source</a></span></span>
     </span>
   </h3>
 
@@ -2667,7 +2958,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber116">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber141">source</a></span></span>
     </span>
   </h3>
 
@@ -2727,7 +3018,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber238">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber272">source</a></span></span>
     </span>
   </h3>
 
@@ -2802,7 +3093,7 @@ Overwrites <span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber102">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber127">source</a></span></span>
     </span>
   </h3>
 
@@ -2860,7 +3151,7 @@ the pixel&apos;s array coordinates on the grid, and v its value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber261">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber295">source</a></span></span>
     </span>
   </h3>
 
@@ -2956,7 +3247,7 @@ to copy into.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber339">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber373">source</a></span></span>
     </span>
   </h3>
 
@@ -3019,6 +3310,61 @@ to copy into.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getAllConstraints">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getAllConstraints</span><span class="code" data-ice="signature">(): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber245">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-getConstraint">
     <span class="access" data-ice="access">public</span>
     
@@ -3030,7 +3376,7 @@ to copy into.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber201">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber226">source</a></span></span>
     </span>
   </h3>
 
@@ -3119,7 +3465,7 @@ return the num-th one added to the CPM.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber230">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber264">source</a></span></span>
     </span>
   </h3>
 
@@ -3193,7 +3539,7 @@ return the num-th one added to the CPM.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber426">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber463">source</a></span></span>
     </span>
   </h3>
 
@@ -3268,7 +3614,7 @@ for this cell in the relevant arrays (cellvolume, t2k).</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber308">source</a></span></span>
     </span>
   </h3>
 
@@ -3314,7 +3660,7 @@ with earlier version. Internally, it just calls <span><a href="class/src/models/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber257">source</a></span></span>
     </span>
   </h3>
 
@@ -3377,6 +3723,51 @@ with earlier version. Internally, it just calls <span><a href="class/src/models/
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-reset">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">reset</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber106">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Completely reset; remove all cells and set time back to zero. Only the
+constraints remain.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-setCellKind">
     <span class="access" data-ice="access">public</span>
     
@@ -3388,7 +3779,7 @@ with earlier version. Internally, it just calls <span><a href="class/src/models/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber246">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber280">source</a></span></span>
     </span>
   </h3>
 
@@ -3456,7 +3847,7 @@ with earlier version. Internally, it just calls <span><a href="class/src/models/
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber353">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber387">source</a></span></span>
     </span>
   </h3>
 
@@ -3510,7 +3901,13 @@ add postSetpixListeners for all the constraints, to keep track of relevant infor
 
   
 
-  
+  <div data-ice="tests">
+    <h4>Test:</h4>
+    <ul>
+      
+    <li data-ice="test"><span><a href="test-file/spec/models/CPMSpec.js.html#lineNumber19">Some tests for the CPM class. [ Unit tests ] method [ setpixi ]</a></span></li>
+</ul>
+  </div>
 
   
   
@@ -3527,7 +3924,7 @@ add postSetpixListeners for all the constraints, to keep track of relevant infor
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber289">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber323">source</a></span></span>
     </span>
   </h3>
 
@@ -3577,7 +3974,7 @@ contains border pixels of the background.</span></li></ul></div>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber390">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/models/CPM.js.html#lineNumber427">source</a></span></span>
     </span>
   </h3>
 

@@ -93,6 +93,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -127,6 +130,12 @@ padding-right:10px;
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></span></li>
@@ -207,6 +216,8 @@ class Simulation {
 		@param {object} config - overall configuration settings. This is an object
 		with multiple entries, see below.
 		@param {GridSize} config.field_size - size of the CPM to build.
+	 	@param {Constraint[]} config.constraints - array of additional
+	 		constraints to add to the CPM model.
 		@param {object} config.conf - configuration settings for the CPM;
 		see its {@link CPM#constructor} for details.
 		@param {object} simsettings - configuration settings for the simulation 
@@ -237,19 +248,29 @@ class Simulation {
 			each {@link CellKind} in. Defaults to black. 
 		*/
 	constructor( config, custommethods ){
-	
+
+		/** To check from outside if an object is a Simulation; doing this with
+		 * instanceof doesn&apos;t work in some cases. Any other object will
+		 * not have this variable and return &apos;undefined&apos;, which in an
+		 * if-statement equates to a &apos;false&apos;.
+		 * @type{boolean}*/
+		this.isSimulation = true
+
 		// ========= configuration and custom methods
-		
-		custommethods = custommethods || {}
+
+		/** Custom methods added to / overwriting the default Simulation class.
+		 * These are stored so that the ArtistooImport can check them.
+		@type {object}*/
+		this.custommethods = custommethods || {}
 	
 		// overwrite default method if methods are supplied in custommethods
 		// these can be initializeGrid(), drawCanvas(), logStats(),
 		// postMCSListener().
-		for( let m of Object.keys( custommethods ) ){
+		for( let m of Object.keys( this.custommethods ) ){
 		
 			/** Any function suplied in the custommethods argument to
 			the {@link constructor} is bound to the object. */
-			this[m] = custommethods[m]
+			this[m] = this.custommethods[m]
 		}
 		
 		/** Configuration of the simulation environment 
@@ -320,8 +341,13 @@ class Simulation {
 		their values in helpClasses to &apos;true&apos;, so they don&apos;t have to be added again.
 		@type {object}*/
 		this.helpClasses = { gm: false, canvas: false }
-		
-		
+
+		/** Add additional constraints.
+		 * @type {Constraint[]}
+		 * */
+		this.constraints = config.constraints || []
+		this.addConstraints()
+
 		// ========= Begin.
 		// Initialize the grid and run the burnin.
 		this.initializeGrid()
@@ -345,6 +371,15 @@ class Simulation {
 		this.Cim = new Canvas( this.C, this.conf )
 		this.helpClasses[ &quot;canvas&quot; ] = true
 	}
+
+	/** Add additional constraints to the model before running; this
+	 * method is automatically called and adds constraints given in
+	 * the config object. */
+	addConstraints(){
+		for( let constraint of this.constraints ){
+			this.C.add( constraint )
+		}
+	}
 	
 	/** Method to initialize the Grid should be implemented in each simulation. 
 	The default method checks in the simsettings.NRCELLS array how many cells to
@@ -358,7 +393,11 @@ class Simulation {
 	
 		// add the initializer if not already there
 		if( !this.helpClasses[&quot;gm&quot;] ){ this.addGridManipulator() }
-	
+
+		// reset C and clear cache (important if this method is called
+		// again later in the sim).
+		this.C.reset()
+
 		let nrcells = this.conf[&quot;NRCELLS&quot;], cellkind, i
 		
 		// Seed the right number of cells for each cellkind

@@ -102,6 +102,9 @@ padding-right:10px;
 				<li class="nav-item">
 					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
 				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="source.html"><span>Source</span></a>
 				</li>
@@ -289,8 +292,8 @@ This tutorial will walk you through how to use these constraints in your models.
 <p>
 </p><p>&quot;Soft&quot; constraints are the classical CPM energy rules. They are the terms of the
 model&apos;s Hamiltonian, or energy equation. When a copy attempt would break such a rule,
-this becomes visible as an energetic penalty making that copy attempt <i>less likely</i>.
-But a soft constraint is more a guideline than an actual rule; the model will <i>mostly</i>
+this becomes visible as an energetic penalty making that copy attempt &lt;i&gt;less likely&lt;/i&gt;.
+But a soft constraint is more a guideline than an actual rule; the model will &lt;i&gt;mostly&lt;/i&gt;
 adhere to it, but not always.
 </p>
 
@@ -302,9 +305,9 @@ adhere to it, but not always.
 </p><p>For example, suppose we have a cell with a <a href="./manual/../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">volume constraint</a>, and that
 cell is already larger than its target volume. A copy attempt that would add another pixel
 to that cell would be associated with a $&#x394;H_\text{vol} \gt 0$. However, that 
-does <i>not</i> mean that this copy attempt will always fail to go through. First, it may
-be that there are other constraints acting on the model for which this copy attempt <i>is</i>
-favourable, compensating for the volume penalty such that the <i>global</i> $&#x394;H$
+does &lt;i&gt;not&lt;/i&gt; mean that this copy attempt will always fail to go through. First, it may
+be that there are other constraints acting on the model for which this copy attempt &lt;i&gt;is&lt;/i&gt;
+favourable, compensating for the volume penalty such that the &lt;i&gt;global&lt;/i&gt; $&#x394;H$
 is still negative. Second, even if the global $&#x394;H$ is positive, a copy attempt may
 still be accepted with a chance $e^{-&#x394;H T}$. Thus, soft constraints make some changes
 more likely to happen than others, but they can balance each other out and are not always
@@ -317,7 +320,7 @@ listened to.
 
 <p>
 </p><p>Most CPM constraints are soft constraints. But sometimes, there are things we would 
-like to <i>forbid</i> completely. For that, we can use a hard constraint.
+like to &lt;i&gt;forbid&lt;/i&gt; completely. For that, we can use a hard constraint.
 </p>
 
 
@@ -356,7 +359,7 @@ where we constrained the volume such that the cell can only be one or two pixels
 </p>
 
 <p><div>
-<iframe src="./examples/RandomWalk.html" width="100%" height="600px"> </iframe>
+&lt;iframe src=&quot;./examples/RandomWalk.html&quot; width=&quot;100%&quot; height=&quot;600px&quot;&gt; &lt;/iframe&gt;
 </div>
 
 
@@ -507,7 +510,7 @@ an <a href="./manual/../class/src/hamiltonian/AttractionPointConstraint.js~Attra
         V : [0,500],
         LAMBDA_V: [ 0, 50],
         LAMBDA_ATTRACTIONPOINT : [0,100],
-        ATTRACTIONPOINT: [100,100]
+        ATTRACTIONPOINT: [[0,0],[100,100]]
     }
 
 )</code></code></pre>
@@ -569,7 +572,7 @@ For example, we might add a second attraction point like this:
 <p><pre><code class="lang-$xslt"><code class="source-code prettyprint">//add another constraint
 myCPM.add( new CPM.AttractionPointConstraint( {
         LAMBDA_ATTRACTIONPOINT : [0,100],
-        ATTRACTIONPOINT: [150,150]<br>} ) )
+        ATTRACTIONPOINT: [[0,0],[150,150]]<br>} ) )
 myCPM.soft_constraints</code></code></pre>
 
 
@@ -585,7 +588,7 @@ myCPM.soft_constraints</code></code></pre>
 <p>
 </p><p>A word of warning: when you add a new constraint, the model will use it. It won&apos;t check
 if another constraint of the same type was already present. For the example above, that&apos;s
-perfectly fine because we might <i>want</i> to have two different points of attraction.
+perfectly fine because we might &lt;i&gt;want&lt;/i&gt; to have two different points of attraction.
 However, for other constraints such as the 
 <a href="./manual/../class/src/hamiltonian/Adhesion.js~Adhesion.html"><code>Adhesion</code></a>,
 this might not be what you want (basically, this will be the same as having only one
@@ -661,8 +664,8 @@ attraction point constraint).
 myCPM.getConstraint( &quot;AttractionPointConstraint&quot;, 1 )</code></code></pre>
 
 
-<p><i>(Note here that JavaScript uses zero-based indexing, so an element with number
-<code>1</code> is actually the second element)</i>
+<p>&lt;i&gt;(Note here that JavaScript uses zero-based indexing, so an element with number
+<code>1</code> is actually the second element)&lt;/i&gt;
 </p>
 
 

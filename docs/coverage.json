@@ -1,7 +1,7 @@
 {
-  "coverage": "98.6%",
-  "expectCount": 429,
-  "actualCount": 423,
+  "coverage": "72.81%",
+  "expectCount": 596,
+  "actualCount": 434,
   "files": {
     "src/Canvas.js": {
       "expectCount": 41,
@@ -13,14 +13,202 @@
       "actualCount": 10,
       "undocumentLines": []
     },
+    "src/converter/ArtistooImport.js": {
+      "expectCount": 16,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        6,
+        11,
+        12,
+        13,
+        15,
+        23,
+        24,
+        40,
+        49,
+        75,
+        95,
+        192,
+        202,
+        216,
+        245
+      ]
+    },
+    "src/converter/ArtistooWriter.js": {
+      "expectCount": 25,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        5,
+        8,
+        9,
+        10,
+        11,
+        12,
+        16,
+        17,
+        18,
+        19,
+        21,
+        25,
+        34,
+        43,
+        49,
+        76,
+        92,
+        97,
+        106,
+        213,
+        222,
+        342,
+        359,
+        372
+      ]
+    },
+    "src/converter/ModelDescription.js": {
+      "expectCount": 31,
+      "actualCount": 1,
+      "undocumentLines": [
+        10,
+        14,
+        19,
+        25,
+        36,
+        41,
+        45,
+        52,
+        56,
+        58,
+        72,
+        82,
+        89,
+        97,
+        108,
+        124,
+        140,
+        169,
+        178,
+        182,
+        186,
+        192,
+        205,
+        210,
+        214,
+        218,
+        222,
+        226,
+        230,
+        234
+      ]
+    },
+    "src/converter/MorpheusImport.js": {
+      "expectCount": 32,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        6,
+        10,
+        11,
+        18,
+        29,
+        40,
+        47,
+        56,
+        69,
+        93,
+        124,
+        143,
+        235,
+        295,
+        423,
+        504,
+        515,
+        572,
+        605,
+        659,
+        715,
+        777,
+        806,
+        842,
+        885,
+        905,
+        950,
+        971,
+        983,
+        1027,
+        1069
+      ]
+    },
+    "src/converter/MorpheusWriter.js": {
+      "expectCount": 35,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        5,
+        9,
+        12,
+        14,
+        16,
+        20,
+        30,
+        43,
+        54,
+        63,
+        68,
+        72,
+        83,
+        87,
+        93,
+        102,
+        110,
+        114,
+        160,
+        177,
+        195,
+        218,
+        285,
+        292,
+        318,
+        337,
+        356,
+        392,
+        440,
+        458,
+        484,
+        505,
+        587,
+        675
+      ]
+    },
+    "src/converter/Writer.js": {
+      "expectCount": 14,
+      "actualCount": 0,
+      "undocumentLines": [
+        2,
+        4,
+        5,
+        7,
+        15,
+        16,
+        17,
+        19,
+        22,
+        26,
+        99,
+        105,
+        120,
+        148
+      ]
+    },
     "src/grid/CoarseGrid.js": {
       "expectCount": 8,
       "actualCount": 8,
       "undocumentLines": []
     },
     "src/grid/Grid.js": {
-      "expectCount": 35,
-      "actualCount": 34,
+      "expectCount": 36,
+      "actualCount": 35,
       "undocumentLines": [
         65
       ]
@@ -40,8 +228,8 @@
       ]
     },
     "src/grid/GridManipulator.js": {
-      "expectCount": 10,
-      "actualCount": 10,
+      "expectCount": 14,
+      "actualCount": 14,
       "undocumentLines": []
     },
     "src/hamiltonian/ActivityConstraint.js": {
@@ -157,10 +345,13 @@
       "undocumentLines": []
     },
     "src/models/CPM.js": {
-      "expectCount": 31,
-      "actualCount": 30,
+      "expectCount": 36,
+      "actualCount": 32,
       "undocumentLines": [
-        380
+        114,
+        115,
+        245,
+        417
       ]
     },
     "src/models/GridBasedModel.js": {
@@ -171,9 +362,11 @@
       ]
     },
     "src/simulation/Simulation.js": {
-      "expectCount": 30,
-      "actualCount": 30,
-      "undocumentLines": []
+      "expectCount": 34,
+      "actualCount": 33,
+      "undocumentLines": [
+        149
+      ]
     },
     "src/stats/BorderPixelsByCell.js": {
       "expectCount": 4,
