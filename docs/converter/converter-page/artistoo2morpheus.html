@@ -1,0 +1,205 @@
+<html>
+  <head>
+    <title>Morpheus2Artistoo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" 
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://goessner.net/download/prj/jsonxml/xml2json.js"></script>
+    <script src="../examples/artistoo.js"></script>
+   <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+  	<h1>Artistoo2Morpheus Converter</h1>
+  	
+  	<div class="desc" style="text-align:justify">
+  	  	<p> This is a beta-version of a converter to import Artistoo models into Morpheus.
+  	  	Procedure:<br>
+  	  	</p>
+  	  	<ol>
+  	  		<li>Copy-paste the main &lt;script&gt; of your simulation into the Artistoo script window.
+  	  		(This is inserted into a full HTML page for the model preview from which the
+  	  		conversion is made; this full HTML page automatically sources the Artistoo library 
+  	  		and an FPS meter.) You script must have an initialize() function like in the
+  	  		examples on <a href="http://artistoo.net/examples.html">artistoo.net</a>.</li>
+  	  		<li>Enter the name of the variable holding your Simulation or CPM object in
+  	  		the input field.</li>
+  	  		<li>Click convert.</li>
+  	  		<li>Copy-paste the XML from the output field and save it on your computer;
+  	  		you can import this file into Morpheus.</li>
+  	  		<li>Carefully check the "Conversion log" to see to what extent the 
+  	  		conversion was successful.</li>
+  	  	</ol>
+  	  	<p>Important notes: </p>
+  	  	<ul>
+  	  		<li>This converter currently only works on either the Simulation or CPM class;
+  	  		CA simulations are not yet supported.</li>
+  	  		<li>The conversion works best on a Simulation; for a CPM it is possible that
+  	  		not all information can be found; please check the conversion log carefully.</li>
+  	  		<li>The converter will try to always produce an output, even if your simulation
+  	  		contains components that are not supported in Morpheus. <b>Always</b> check the
+  	  		conversion log carefully, it will indicate points where the converted model 
+  	  		may differ from the original; you may have to further modify it manually once
+  	  		it is imported in Morpheus. </li>
+  	  	</ul>
+  	  	
+  	  
+  	</div>
+  
+  
+
+  
+  
+  	<div class="app">
+  	<h2>App</h2>
+  	
+  	<div class="row">
+  	
+		<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+			<div class="row">
+				<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<h3>Artistoo Script</h3>
+					<textarea id="html" class="input" placeholder="Paste Morpheus XML code here"></textarea>
+					<div>
+  						Name of variable storing simulation/CPM:<br><input value = "sim" onchange="varName=this.value"></input>
+  		</div><button onclick=convert()>Convert</button>
+				</div>
+				<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<h3>Converted Morpheus</h3>
+					<textarea id="xml" class = "output" placeholder="The closest Morpheus Model will appear here"></textarea>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<br>
+					<h3>Conversion log</h3>
+					<textarea id="logger" class="logger" placeholder="There were no warnings"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+			<h3>Input Model Preview</h3>
+			<div id="simulationContainer">
+				<iframe id="simulation"></iframe>
+			</div>
+		</div>
+  	</div>
+  	</div>
+  	
+  	<script type="text/javascript">
+  	
+  		let parser = new DOMParser()
+  		let xmlField = document.getElementById( "xml" )
+  		
+  		let htmlField = document.getElementById( "html" )
+  		let modeldesc, code, htmlString
+  		let varName = "sim"
+  		let timeOut = 5000
+  		
+  		const browserLibrary = "../examples/artistoo.js"
+  		const FpsMeterPath = "../examples/fpsmeter.min.js"
+  		
+  		const htmlHead = "<html lang=\"en\"><head><meta http-equiv=\"Content-Type\" " +
+			"content=\"text/html; charset=UTF-8\">\n" +
+			"\t" + "<script src=\"" + browserLibrary + "\">\</script\> \n" + 
+			"\t" + "<script src=\"" + FpsMeterPath + "\">\</script\> \n\n" +
+			"<script> \n\n\n" +
+			"\"use strict\" \n" 
+  		
+  		let htmlTail = "\</script\> \n\n" +
+			"</head>\n" +
+			"<body onload=\"initialize();window.sim = " + varName +"\"> \n" +
+			"</body> </html>"
+  		
+  		function convert(){
+		
+		
+  			// Refresh the iframe simulation
+  			document.getElementById( "simulationContainer" ).innerHTML= "<iframe id='simulation'></iframe>"
+  			
+  			htmlTail = "\</script\> \n\n" +
+			"</head>\n" +
+			"<body onload=\"initialize();window.sim = " + varName +"\"> \n" +
+			"</body> </html>"
+  			htmlString = htmlHead + htmlField.value + htmlTail
+  			
+  			
+  			
+  			//"<body onload = \"initialize(); window.sim = "+varName)
+  			console.log(htmlString)
+  			
+  			code=document.getElementById("simulation").contentWindow.document
+			code.open()
+			code.writeln(htmlString)
+			code.close()
+  			  			
+  			timeOut = 100000			
+			checkSimLoaded()
+		
+		}
+  		  	  	
+  		
+		getModel = function(){
+			let frame = document.getElementById("simulation").contentWindow
+			let sim = frame.sim
+			if( typeof sim !== "undefined" ){
+				return sim
+			}
+			return undefined
+		}
+		
+		function checkSimLoaded() {
+			// Get a handle to the iframe element
+			var iframe = document.getElementById('simulation')
+			var iframeDoc = iframe.contentDocument || iframe.contentWindow.document
+
+			// Check if loading is complete
+			//if (  iframeDoc.readyState  == 'complete' ) {
+			if( typeof getModel() !== "undefined" ){
+				//iframe.contentWindow.alert("Hello")
+				// The loading is complete, call the function we want executed once the iframe is loaded
+				afterLoading()
+				return
+			} 
+			xmlField.innerHTML = "...loading.."
+			
+
+			// If we are here, it is not loaded. Set things up so we check the status again in 100 milliseconds
+			if( timeOut > 0 ) {
+				timeOut--
+				window.setTimeout(checkSimLoaded, 1)
+			} else {
+				xmlField.innerHTML = "Oops, something went wrong. See Conversion log. "
+				document.getElementById( "logger" ).innerHTML = "Conversion failed; could not find your model object. \n" +
+					" You can try again by adjusting your script: declare the variable \n" +
+					" containing the model as 'var sim' (use 'var', not 'let'!) to ensure \n" +
+					" that it is available as a global variable called 'sim'."
+			}
+			
+		}
+
+		function afterLoading(){
+			let Cobj = getModel()
+			modeldesc = new CPM.ArtistooImport( Cobj)
+			
+			morpheusOut = new CPM.MorpheusWriter( modeldesc, {
+				target : xmlField,
+				browserLibrary : "../examples/artistoo.js",
+				warningBox : document.getElementById( "logger" )
+			} )
+			morpheusOut.write()
+		}
+
+		
+		
+  		
+  	
+  	</script>
+  	
+  	 <!--<script type="text/javascript" src="app.js"></script>-->
+  </body>
+</html>

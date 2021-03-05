@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base data-ice="baseUrl">
+  <title data-ice="title">Converter | Artistoo</title>
+  
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+    <link rel="stylesheet" 
+    		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+    		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    		crossorigin="anonymous">
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+	<script>
+		function setConverter( conv ){
+			switch(conv){
+				case "a2m":
+					document.getElementById('converter').src = './converter/artistoo2morpheus.html'
+					break
+				case "m2a":
+					document.getElementById('converter').src = './converter/morpheus2artistoo.html'
+					break
+			}
+		}
+	</script>
+	
+
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<style>
+/*.li {
+	list-style-type: none!important;
+}*/
+
+.navbar{
+padding-left:10px;
+padding-right:10px;
+}
+
+
+.mainimg {
+	min-height: 21em;
+    background-color: #666;
+    margin:0px 0px!important; padding:0px!important;
+	background-position: center;
+    background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    url('./images/cpm-01.jpg');
+}
+.mainimg h1 {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 300;
+  border-bottom: solid 0px #ddd;
+  text-align: center;
+  font-size: 400%;
+}
+
+.mainimg h2 {
+	text-align: center;
+	font-size:200%;
+	border-bottom: solid 0px;
+}
+
+.front-page h1 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	margin-bottom:20px;
+}
+
+.front-page h2 {
+	border-bottom: solid 0px;
+	margin-top:30px;
+	font-size:170%!important;
+}
+
+
+.bottom {
+  display: block;
+  position: absolute;
+   bottom: 0;
+}
+</style>
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+
+				<li class="nav-item">
+				  <a class="nav-link" href="./manual/index.html"><span>Manual</span></a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Documentation</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+				
+					<a class="nav-link" href="source.html"><span>Source</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo"><img width="20px" style="position:relative;top:-2px;" src="./image/github.png"></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<img src="./image/search.png">
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    	
+</nav>
+
+<div class="mainimg" >
+    	<div style="text-align: left; margin-left: 20px; padding-left: 10px; padding-top: 8em; color: white">
+        <h1>
+          Converter
+        </h1>
+        <h2>
+          Convert models between Artistoo and other frameworks (prototype)
+        </h2>        
+      </div>
+  	</div>
+
+<div class="content" data-ice="content" style="margin-left:20px">
+
+<div data-ice="index" class="front-page">
+
+
+
+
+
+<p>Pick a conversion direction from the drop-down menu (note: this is a prototype;
+at the moment only conversions to and from Morpheus are supported).</p>
+<p> 
+<label for="converterSelector">Choose a conversion direction:</label>
+
+<select name="converterSelector" id="converterSelector" onchange="setConverter(this.value)">
+	<option value="empty">...Choose option</option>
+  <option value="a2m" >Artistoo -> Morpheus</option>
+  <option value="m2a" >Morpheus -> Artistoo</option>
+</select>
+</p>
+
+<iframe id = "converter" style="height:1500px;width:100%;border:none;overflow:hidden;"></iframe>
+
+
+<footer class="footer">
+  <!--Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>-->
+</footer>
+
+
+
+
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

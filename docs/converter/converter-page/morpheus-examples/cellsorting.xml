@@ -1,0 +1,152 @@
+<MorpheusModel version="4">
+    <Description>
+        <Title>Example-CellSorting-2D</Title>
+        <Details>Reference:
+Graner and Glazier, Simulation of biological cell sorting using a two-dimensional extended Potts model, Phys. Rev. Lett. 69, 2013–2016 (1992) </Details>
+    </Description>
+    <Global>
+        <Variable symbol="boundary" value="0.0" name="Boundary length of CT1 with other cell types"/>
+        <Constant symbol="b" value="0.0"/>
+        <Constant symbol="b2" value="0.0"/>
+    </Global>
+    <Space>
+        <SpaceSymbol symbol="l"/>
+        <Lattice class="square">
+            <Size symbol="size" value="200, 200, 0"/>
+            <BoundaryConditions>
+                <Condition boundary="x" type="periodic"/>
+                <Condition boundary="y" type="periodic"/>
+            </BoundaryConditions>
+            <Neighborhood>
+                <Order>2</Order>
+            </Neighborhood>
+        </Lattice>
+    </Space>
+    <Time>
+        <StartTime value="0"/>
+        <StopTime value="2.5e4"/>
+        <!--    <Disabled>
+        <SaveInterval value="5e3"/>
+    </Disabled>
+-->
+        <RandomSeed value="0"/>
+        <TimeSymbol symbol="time"/>
+    </Time>
+    <CellTypes>
+        <CellType class="biological" name="ct1">
+            <VolumeConstraint target="200" strength="1"/>
+            <NeighborhoodReporter>
+                <Input scaling="length" value="cell.type == celltype.ct2.id"/>
+                <Output mapping="sum" symbol-ref="boundary"/>
+            </NeighborhoodReporter>
+            <Property symbol="b" value="0"/>
+            <NeighborhoodReporter>
+                <Input scaling="cell" value="cell.type == celltype.ct2.id"/>
+                <Output mapping="sum" symbol-ref="b"/>
+            </NeighborhoodReporter>
+            <NeighborhoodReporter>
+                <Input scaling="length" value="cell.type == celltype.ct2.id"/>
+                <Output mapping="sum" symbol-ref="b2"/>
+            </NeighborhoodReporter>
+            <Property symbol="b2" value="0" name="Interface with ct2"/>
+        </CellType>
+        <CellType class="biological" name="ct2">
+            <VolumeConstraint target="200" strength="1"/>
+            <Property symbol="b" value="0"/>
+            <NeighborhoodReporter>
+                <Input scaling="cell" value="cell.type == celltype.ct1.id"/>
+                <Output mapping="sum" symbol-ref="b"/>
+            </NeighborhoodReporter>
+            <Property symbol="b2" value="0" name="Interface with ct1"/>
+            <NeighborhoodReporter>
+                <Input scaling="length" value="cell.type == celltype.ct1.id"/>
+                <Output mapping="sum" symbol-ref="b2"/>
+            </NeighborhoodReporter>
+        </CellType>
+        <CellType class="medium" name="medium"/>
+    </CellTypes>
+    <CPM>
+        <Interaction default="0.0">
+            <Contact type1="ct1" type2="medium" value="12"/>
+            <Contact type1="ct2" type2="medium" value="6"/>
+            <Contact type1="ct1" type2="ct1" value="6"/>
+            <Contact type1="ct2" type2="ct2" value="6"/>
+            <Contact type1="ct1" type2="ct2" value="16"/>
+        </Interaction>
+        <MonteCarloSampler stepper="edgelist">
+            <MCSDuration value="1"/>
+            <Neighborhood>
+                <Order>2</Order>
+            </Neighborhood>
+            <MetropolisKinetics temperature="2"/>
+        </MonteCarloSampler>
+        <ShapeSurface scaling="norm">
+            <Neighborhood>
+                <Order>6</Order>
+            </Neighborhood>
+        </ShapeSurface>
+    </CPM>
+    <CellPopulations>
+        <Population size="0" type="ct1">
+            <InitCircle number-of-cells="50" mode="random">
+                <Dimensions center="100, 100, 0" radius="70"/>
+            </InitCircle>
+        </Population>
+        <Population size="0" type="ct2">
+            <InitCircle number-of-cells="50" mode="random">
+                <Dimensions center="100, 100, 0" radius="70"/>
+            </InitCircle>
+        </Population>
+    </CellPopulations>
+    <Analysis>
+        <Gnuplotter time-step="100" decorate="false">
+            <Terminal name="png"/>
+            <Plot>
+                <Cells flooding="true" value="cell.type"/>
+            </Plot>
+            <Plot>
+                <Cells flooding="true" value="b">
+                    <ColorMap>
+                        <Color color="red" value="2"/>
+                        <Color color="yellow" value="1"/>
+                        <Color color="white" value="0"/>
+                    </ColorMap>
+                </Cells>
+                <CellLabels precision="0" fontsize="10" value="b"/>
+            </Plot>
+            <Plot>
+                <Cells per-frame-range="true" value="b2">
+                    <ColorMap>
+                        <Color color="red" value="2"/>
+                        <Color color="yellow" value="1"/>
+                        <Color color="white" value="0"/>
+                    </ColorMap>
+                </Cells>
+                <CellLabels precision="0" fontsize="10" value="b2"/>
+            </Plot>
+        </Gnuplotter>
+        <Logger time-step="10.0">
+            <Input>
+                <Symbol symbol-ref="boundary"/>
+                <Symbol symbol-ref="b"/>
+                <Symbol symbol-ref="b2"/>
+            </Input>
+            <Output>
+                <TextOutput/>
+            </Output>
+            <Plots>
+                <Plot time-step="500">
+                    <Style style="linespoints"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="boundary"/>
+                    </Y-axis>
+                </Plot>
+            </Plots>
+        </Logger>
+        <ModelGraph reduced="false" include-tags="#untagged" format="svg"/>
+    </Analysis>
+</MorpheusModel>
