@@ -1,10 +1,30 @@
 let CPM = require("../../build/artistoo-cjs.js")
-
-
-/* */
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/** @file
+ * In this example, we see freely diffusing particles (blue) aggregate into a crystal (white). 
+ * This is implemented as two communicating grids: one CPM (blue) and one CA (white).<br><br> 
+ * The "diffusion" is implemented as a Cellular Potts Model (CPM) with a hard volume range constraint, such that 
+ * each "cell" can only be 1 or 2 pixels big. Without any other constraint, this ensures that
+ * the particles follow Brownian motion. In a way, this is not really a CPM since there is
+ * no Hamiltonian H, but it still follows the same copy attempt dynamics as a real CPM. <br><br>
+ * 
+ * The white crystal grows on a cellular automaton (CA), which has been seeded with a single 
+ * point in the middle of the grid. Every step, this grid updates according to the following
+ * rules:
+ * <ol>
+ * 	<li> A pixel of type 1 (crystal) remains type 1 (once a particle has aggregated, it cannot become
+ *	free again) </li>
+ * 	<li> A pixel of type 0 (background) becomes type 1 (crystal) if and only if:
+ *		<ul>
+ *			<li> it is a (Moore) neighbor of a pixel of the crystal (type 1), AND </li>
+ *			<li> the CPM grid currently has a blue particle in this position </li>
+ *		</ul>
+ * 	</li>
+ * </ol>
+ */ 
 
 "use strict"
-
 
 /*	----------------------------------
 	CONFIGURATION SETTINGS
@@ -60,8 +80,8 @@ let config = {
 	}
 }
 /*	---------------------------------- */
-let sim, meter, Fixed, Free, FreeGM, FreeCanvas, FixedCanvas, t=0
-let conf 
+let sim, meter, Fixed, Free, FreeGM, FreeCanvas, FixedCanvas
+let conf, t = 0 
 
 
 function initialize(){
@@ -106,7 +126,7 @@ function initialize(){
 	
 	FreeCanvas = new CPM.Canvas( Free, {zoom:config.simsettings.zoom} )
 	initializeGrids()
-	conf = { runtime : config.simsettings.RUNTIME }
+	conf = { RUNTIME : config.simsettings.RUNTIME }
 	run()
 }
 
@@ -143,12 +163,6 @@ function logStats(){
 }
 
 function step(){
-
-	/*if( t > 2 && t < 10 ){
-		for( let i = 0; i < 1000; i++ ){
-			draw()
-		}
-	}*/
 	for( let i = 0; i < 1; i++ ){
 		Fixed.timeStep()
 		Free.timeStep()
@@ -160,8 +174,8 @@ function step(){
 
 // all steps
 function run(){
-	 while( t < conf.runtime){
-			step()
-	 }
+	while( t < conf.RUNTIME ){
+		step() 
+	}
 }
 initialize()

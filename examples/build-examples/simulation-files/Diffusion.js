@@ -1,12 +1,11 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Diffusion on a coarse grid.
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * Diffusion on a coarse grid.
+ * */
 
 
-/* START CODE Do not remove this line */
-/* */
+
 
 "use strict"
 
@@ -17,7 +16,7 @@ let conf = {
 	res : 10,				// 'Resolution' of the coarse grid
 	zoom : 1,				// zoom for displaying the grid
 	torus: [true,true],		// Should grid boundaries be connected?
-	runtime : 500
+	RUNTIME : 500
 }
 
 conf["m"]=Math.floor((conf.w-1)/2)		// midpoint of the grid
@@ -75,5 +74,4 @@ function initialize(){
 	initializeGrid()
 	run()
 }
-/* END CODE Do not remove this line */
 

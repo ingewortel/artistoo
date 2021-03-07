@@ -1,7 +1,12 @@
 let CPM = require("../../build/artistoo-cjs.js")
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/** @file
+ * Diffusion on a coarse grid.
+ * */
 
 
-/* */
+
 
 "use strict"
 
@@ -12,7 +17,7 @@ let conf = {
 	res : 10,				// 'Resolution' of the coarse grid
 	zoom : 1,				// zoom for displaying the grid
 	torus: [true,true],		// Should grid boundaries be connected?
-	runtime : 500
+	RUNTIME : 500
 }
 
 conf["m"]=Math.floor((conf.w-1)/2)		// midpoint of the grid
@@ -68,10 +73,11 @@ function initialize(){
 	initializeGrid()
 	run()
 }
+
 // all steps
 function run(){
-	 while( t < conf.runtime){
-			step()
-	 }
+	while( t < conf.RUNTIME ){
+		step() 
+	}
 }
 initialize()

@@ -1,12 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Diffusion on a coarse grid.
-/* END DESCRIPTION Do not remove this line */
-
-
-/* START CODE Do not remove this line */
-/* */
+/** @file
+ *  Diffusion on a coarse grid.
+ *  */
 
 "use strict"
 
@@ -17,13 +13,12 @@ let conf = {
 	res : 10,				// 'Resolution' of the coarse grid
 	zoom : 1,				// zoom for displaying the grid
 	torus: [true,true],		// Should grid boundaries be connected?
-	runtime : 20
+	RUNTIME : 20
 }
 
 conf["m"]=(conf.w-1)/2		// midpoint of the grid
 
 let grid, diffusiongrid, Cim, t = 0, s = 0
-
 
 // Setup the grid and needed objects
 function setup(){
@@ -65,7 +60,7 @@ function step(){
 	diffusionStep()
 	output()
 	t++
-	if( t < conf.runtime ){ requestAnimationFrame( step ) }
+	if( t < conf.RUNTIME ){ requestAnimationFrame( step ) }
 }
 
 // Starts up the simulation
@@ -74,5 +69,5 @@ function initialize(){
 	initializeGrid()
 	step()
 }
-/* END CODE Do not remove this line */
+
 

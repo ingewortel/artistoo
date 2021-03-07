@@ -1,10 +1,16 @@
 let CPM = require("../../build/artistoo-cjs.js")
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/** @file
+ * <p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to interrupt/restart simulation.</p>
+ * <p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
+ * <p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>
+ * <p><button onclick="initialize()">run</button></p>
+ * */
 
-
-/* */
 let C, zoom=2, Cim, cid=0, w=200, meter,
 	infected, resistant, t = 0
-let conf = { runtime: 1000 }
+let conf = { RUNTIME : 1000 }
 
 var r_i = 0.1, r_r = 0.01
 
@@ -59,7 +65,6 @@ function initialize(){
 	// Start simulation
 	seedGrid()
 	running = 1
-	//cancelAnimationFrame( ts )
 	run()
 }
 
@@ -78,12 +83,12 @@ function step(){
 		output()
 		t++
 	}
-	//ts = requestAnimationFrame( timestep )
 }
+
 // all steps
 function run(){
-	 while( t < conf.runtime){
-			step()
-	 }
+	while( t < conf.RUNTIME ){
+		step() 
+	}
 }
 initialize()

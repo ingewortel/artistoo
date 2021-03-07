@@ -3,23 +3,25 @@
 <title>Diffusion</title>
 <style type="text/css">
 body{
-		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
-		 Helvetica, Arial, "Lucida Grande", sans-serif;
-	 padding : 15px;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+	Helvetica, Arial, "Lucida Grande", sans-serif;
+	padding : 15px;
 }
 td {
-	 padding: 10px;
-	 vertical-align: top;
+	padding: 10px; vertical-align: top;
 }
 </style>
-
-
 <script src="./artistoo.js"></script>
 <script src="./fpsmeter.min.js"></script>
 <script>
+/* 	================= DESCRIPTION ===================== */
+/* This text is printed on the HTML page. */
+/** @file
+ * Diffusion on a coarse grid.
+ * */
 
 
-/* */
+
 
 "use strict"
 
@@ -30,7 +32,7 @@ let conf = {
 	res : 10,				// 'Resolution' of the coarse grid
 	zoom : 1,				// zoom for displaying the grid
 	torus: [true,true],		// Should grid boundaries be connected?
-	runtime : 500
+	RUNTIME : 500
 }
 
 conf["m"]=Math.floor((conf.w-1)/2)		// midpoint of the grid
@@ -88,17 +90,19 @@ function initialize(){
 	initializeGrid()
 	run()
 }
+
 // Run the simulation
 function run(){
-		step()
-		if( t < conf.runtime ){ requestAnimationFrame( run ) }
+	step(); 
+	if( t < conf.RUNTIME ){ requestAnimationFrame( run ) }
 }
 </script>
 </head>
 <body onload="initialize()">
 <h1>Diffusion</h1>
 <p>
-Diffusion on a coarse grid.
+ 
+ Diffusion on a coarse grid.
 </p>
 </body>
 </html>
