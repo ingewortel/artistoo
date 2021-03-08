@@ -1,15 +1,12 @@
+/* globals CPM, sim */
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Many moving cells attracted by a chemokine gradient.
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * Many moving cells attracted by a chemokine gradient.
+ * */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
-/* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
@@ -97,37 +94,37 @@ function drawCanvas(){
 	
 		
 	
-		// Add the canvas if required
-		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
+	// Add the canvas if required
+	if( !this.helpClasses["canvas"] ){ this.addCanvas() }
 		
-		// Clear canvas and draw stroma border
-		this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" )
+	// Clear canvas and draw stroma border
+	this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" )
 		
-		// Chemokines
-		this.Cim.drawFieldContour( this.gi1, 5, "555555" )
-		this.Cim.drawFieldContour( this.gi2, 5, "00FF00" )
+	// Chemokines
+	this.Cim.drawFieldContour( this.gi1, 5, "555555" )
+	this.Cim.drawFieldContour( this.gi2, 5, "00FF00" )
 		
-		// Draw each cellkind appropriately
-		let cellcolor=( this.conf["CELLCOLOR"] || [] ), actcolor=this.conf["ACTCOLOR"], 
-			nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+	// Draw each cellkind appropriately
+	let cellcolor=( this.conf["CELLCOLOR"] || [] ), actcolor=this.conf["ACTCOLOR"], 
+		nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
+	for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 		
-			// draw the cells of each kind in the right color
-			if( cellcolor[ cellkind ] != -1 ){
-				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
-			}
+		// draw the cells of each kind in the right color
+		if( cellcolor[ cellkind ] != -1 ){
+			this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
+		}
 			
-			// Draw borders if required
-			if(  cellborders[ cellkind  ]  ){
-				let bordercol = "000000"
-				if( this.conf.hasOwnProperty("BORDERCOL") ){
-					bordercol = this.conf["BORDERCOL"][cellkind] || "000000"
-				}
-				this.Cim.drawCellBorders( cellkind+1, bordercol )
+		// Draw borders if required
+		if(  cellborders[ cellkind  ]  ){
+			let bordercol = "000000"
+			if( this.conf.hasOwnProperty("BORDERCOL") ){
+				bordercol = this.conf["BORDERCOL"][cellkind] || "000000"
 			}
+			this.Cim.drawCellBorders( cellkind+1, bordercol )
+		}
 			
 
-		}
+	}
 		
 		
 		
@@ -168,10 +165,10 @@ let config = {
 		
 		// Adhesion parameters:
 		J: [[0,20,20,20,20], 
-		[20,100,20,100,20], 
-		[20,20,20,20,20], 
-		[20,100,20,100,20], 
-		[20,20,20,20,20]],
+			[20,100,20,100,20], 
+			[20,20,20,20,20], 
+			[20,100,20,100,20], 
+			[20,20,20,20,20]],
 		
 		// VolumeConstraint parameters
 		LAMBDA_V : [0,50,50,50,50],				// VolumeConstraint importance per cellkind
@@ -189,7 +186,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [10,1,10,1],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -203,7 +200,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/ManyCellsDiffusion",	// ... And save the image in this folder.
 		EXPNAME : "ManyCellsDiffusion",					// Used for the filename of output images.

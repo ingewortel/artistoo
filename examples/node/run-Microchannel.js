@@ -38,7 +38,7 @@ let config = {
 		LAMBDA_ACT : [0,500],			// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,40],				// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 								
 	},
 	
@@ -48,7 +48,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 100,
 		RUNTIME : 1000,
@@ -63,7 +63,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/Microchannel",// ... And save the image in this folder.
 		EXPNAME : "Microchannel",					// Used for the filename of output images.
@@ -78,15 +78,7 @@ let config = {
 /*	---------------------------------- */
 
 
-/* 	The following functions are defined below and will be added to
-	the simulation object.*/
-let custommethods = {
-	initializeGrid : initializeGrid,
-	buildChannel : buildChannel,
-	drawBelow : drawBelow
-}
-
-let sim = new CPM.Simulation( config, custommethods )
+let sim = new CPM.Simulation( config, {} )
 
 
 
@@ -101,37 +93,37 @@ function drawBelow(){
 
 function initializeGrid(){
 	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		let nrcells = this.conf["NRCELLS"], cellkind, i
-		this.buildChannel()
+	let nrcells = this.conf["NRCELLS"], cellkind, i
+	this.buildChannel()
 		
-		// Seed the right number of cells for each cellkind
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+	// Seed the right number of cells for each cellkind
+	for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 			
-			for( i = 0; i < nrcells[cellkind]; i++ ){
-				// first cell always at the midpoint. Any other cells
-				// randomly.				
-				if( i == 0 ){
-					this.gm.seedCellAt( cellkind+1, this.C.midpoint )
-				} else {
-					this.gm.seedCell( cellkind+1 )
-				}
+		for( i = 0; i < nrcells[cellkind]; i++ ){
+			// first cell always at the midpoint. Any other cells
+			// randomly.				
+			if( i == 0 ){
+				this.gm.seedCellAt( cellkind+1, this.C.midpoint )
+			} else {
+				this.gm.seedCell( cellkind+1 )
 			}
 		}
+	}
 }
 	
 function buildChannel(){
 		
 	
-		this.channelvoxels = this.gm.makePlane( [], 1, 0 )
-		let gridheight = this.C.extents[1]
-		this.channelvoxels = this.gm.makePlane( this.channelvoxels, 1, gridheight-1 )
+	this.channelvoxels = this.gm.makePlane( [], 1, 0 )
+	let gridheight = this.C.extents[1]
+	this.channelvoxels = this.gm.makePlane( this.channelvoxels, 1, gridheight-1 )
 		
-		this.C.add( new CPM.BorderConstraint({
-			BARRIER_VOXELS : this.channelvoxels
-		}) )
+	this.C.add( new CPM.BorderConstraint({
+		BARRIER_VOXELS : this.channelvoxels
+	}) )
 		
 }
 

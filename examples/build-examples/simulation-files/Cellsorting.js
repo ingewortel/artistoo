@@ -1,15 +1,12 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Cells sorting themselves through differential adhesion.
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * Cells sorting themselves through differential adhesion.
+ **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 /* 	If no custom methods are defined, the drawing/initialisation/output 
 	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
@@ -20,8 +17,6 @@ let custommethods = {
 /* END METHODS OBJECT Do not remove this line */
 
 
-
-
 /* ================= WRITE CUSTOM METHODS ===================== */
 
 /* START METHODS DEFINITION Do not remove this line */
@@ -30,11 +25,11 @@ let custommethods = {
 below. */
 function initializeGrid(){
 	
-		// add the GridManipulator if not already there and if you need it
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the GridManipulator if not already there and if you need it
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		this.gm.seedCellsInCircle( 1, 500, this.C.midpoint, this.C.extents[0]/3 )
-		this.gm.seedCellsInCircle( 2, 500, this.C.midpoint, this.C.extents[0]/3 )
+	this.gm.seedCellsInCircle( 1, 500, this.C.midpoint, this.C.extents[0]/3 )
+	this.gm.seedCellsInCircle( 2, 500, this.C.midpoint, this.C.extents[0]/3 )
 
 }
 
@@ -71,8 +66,8 @@ let config = {
 		J : [ [NaN, 12, 6], [12, 6, 16], [6, 16, 6] ],
 		
 		// VolumeConstraint parameters
-			// VolumeConstraint importance per cellkind
-			// Target volume of each cellkind
+		// VolumeConstraint importance per cellkind
+		// Target volume of each cellkind
 		LAMBDA_V : [0,2,2],
 		V : [0,25,25]		
 
@@ -84,7 +79,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [1,1],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 	
 		// Runtime etc
 		BURNIN : 500,
@@ -100,7 +95,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/CellSorting",				// ... And save the image in this folder.
 		EXPNAME : "CellSorting",					// Used for the filename of output images.

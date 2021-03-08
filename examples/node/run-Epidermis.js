@@ -43,7 +43,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -58,7 +58,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/Epidermis",	// ... And save the image in this folder.
 		EXPNAME : "Epidermis",					// Used for the filename of output images.
@@ -72,12 +72,7 @@ let config = {
 /*	---------------------------------- */
 
 
-/* 	The following functions are defined below and will be added to
-	the simulation object.*/
-let custommethods = {
-	initializeGrid : initializeGrid
-}
-let sim = new CPM.Simulation( config, custommethods )
+let sim = new CPM.Simulation( config, {} )
 
 
 

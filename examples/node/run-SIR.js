@@ -1,4 +1,5 @@
 let CPM = require("../../build/artistoo-cjs.js")
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
@@ -8,8 +9,7 @@ let CPM = require("../../build/artistoo-cjs.js")
  * <p><button onclick="initialize()">run</button></p>
  * */
 
-let C, zoom=2, Cim, cid=0, w=200, meter,
-	infected, resistant, t = 0
+let C, zoom=2, Cim, w=200, meter, t = 0
 let conf = { RUNTIME : 1000 }
 
 var r_i = 0.1, r_r = 0.01
@@ -71,6 +71,7 @@ function initialize(){
 function output(){
 	let cellpixels = C.getStat( CPM.PixelsByCell )
 	for( let cid of Object.keys( cellpixels ) ){
+		// eslint-disable-next-line
 		console.log( t + "\t" + cid + "\t" + cellpixels[cid].length )
 	}
 }

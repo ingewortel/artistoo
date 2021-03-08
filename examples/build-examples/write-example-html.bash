@@ -34,7 +34,7 @@ echo -e "\n"
 
 echo "function initialize(){"
 
-if [[ $( cat $templatefile | grep "Custom-methods:" | grep "true" | wc -l) -eq 0 ]] ; then 
+if [[ $( cat $templatefile | grep "START METHODS OBJECT" | wc -l) -eq 0 ]] ; then 
 	echo -e '\tsim = new CPM.Simulation( config, {} )'
 else
 	sed -e '1,/START METHODS OBJECT/d' -e '/END METHODS OBJECT/,$d' $templatefile | \
@@ -71,7 +71,7 @@ echo "</head>"
 echo '<body onload="initialize()">'
 echo '<h1>'$examplename'</h1>'
 echo '<p>'
-sed -e '1,/START DESCRIPTION/d' -e '/END DESCRIPTION/,$d' $templatefile
+awk -f extract-description.awk $templatefile
 echo '</p>'
 echo "</body>"
 echo "</html>"

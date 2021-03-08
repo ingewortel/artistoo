@@ -1,17 +1,17 @@
 /* 	================= DESCRIPTION ===================== */
-/* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Act cells moving in a microchannnel.
-/* END DESCRIPTION Do not remove this line */
+/* This text is printed on the HTML page. You can use HTML tags. */
+/** @file
+ * <i>Act</i> cells moving in a microchannnel.
+ * */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 /* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
+	functions of the CPM.Simulation class are used. 
+	In that case, you need to remove the part between START METHODS OBJECT and 
+	END METHODS OBJECT below, including both of those lines.
+*/
 
-// Are any custom methods defined here?
-Custom-methods: true
-
-/* START METHODS OBJECT Do not remove this line */
+/* START METHODS OBJECT Remove the part until END METHODS OBJECT if no custom methods are defined. */
 /* 	The following functions are defined below and will be added to
 	the simulation object. If Custom-methods above is set to false,
 	this object is ignored and not used in the html/node files. */
@@ -47,36 +47,36 @@ sim.C.add( pconstraint ) */
 /* The following custom methods will be added to the simulation object*/
 function initializeGrid(){
 	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		let nrcells = this.conf["NRCELLS"], cellkind, i
-		this.buildChannel()
+	let nrcells = this.conf["NRCELLS"], cellkind, i
+	this.buildChannel()
 		
-		// Seed the right number of cells for each cellkind
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+	// Seed the right number of cells for each cellkind
+	for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 			
-			for( i = 0; i < nrcells[cellkind]; i++ ){
-				// first cell always at the midpoint. Any other cells
-				// randomly.				
-				if( i == 0 ){
-					this.gm.seedCellAt( cellkind+1, this.C.midpoint )
-				} else {
-					this.gm.seedCell( cellkind+1 )
-				}
+		for( i = 0; i < nrcells[cellkind]; i++ ){
+			// first cell always at the midpoint. Any other cells
+			// randomly.				
+			if( i == 0 ){
+				this.gm.seedCellAt( cellkind+1, this.C.midpoint )
+			} else {
+				this.gm.seedCell( cellkind+1 )
 			}
 		}
+	}
 }
 	
 function buildChannel(){
 		
-		let channelvoxels
+	let channelvoxels
 	
-		channelvoxels = this.gm.makePlane( [], 1, 0 )
-		let gridheight = this.C.extents[1]
-		channelvoxels = this.gm.makePlane( channelvoxels, 1, gridheight-1 )
+	channelvoxels = this.gm.makePlane( [], 1, 0 )
+	let gridheight = this.C.extents[1]
+	channelvoxels = this.gm.makePlane( channelvoxels, 1, gridheight-1 )
 		
-		this.gm.changeKind( channelvoxels, 2)
+	this.gm.changeKind( channelvoxels, 2)
 		
 }
 
@@ -125,7 +125,7 @@ let config = {
 		LAMBDA_ACT : [0,200,NaN],			// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,30,NaN],				// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 								
 	},
 	
@@ -135,7 +135,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -150,7 +150,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/<myexp>",	// ... And save the image in this folder.
 		EXPNAME : "<myexp>",					// Used for the filename of output images.

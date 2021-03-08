@@ -1,18 +1,13 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-A tightly packed monolayer of epidermal cells, with migrating T cells
-in between. This is basically a combination of the examples "Epidermis"
-and "ActModel".
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * A tightly packed monolayer of epidermal cells, with migrating T cells
+ * in between. This is basically a combination of the examples "Epidermis"
+ * and "ActModel".
+ **/
 
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
-/* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
@@ -33,25 +28,25 @@ let custommethods = {
 below. */
 function initializeGrid(){
 	
-		// add the GridManipulator if not already there and if you need it
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the GridManipulator if not already there and if you need it
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
 	
-		let i = (this.C.extents[0]*this.C.extents[1]/145.)	
-		let cellids = []
+	let i = (this.C.extents[0]*this.C.extents[1]/145.)	
+	let cellids = []
 
-		while( i-- > 0 ){
-			cellids.push( this.gm.seedCell(1) )
-		}
-		i = 50
-		while( i-- > 0 ){
-			this.C.monteCarloStep()
-		}
-		i = 50*(this.C.extents[0]/1000)
-		while( i-- > 0 ){
-			this.C.setCellKind( cellids.pop(), 2 )
-			//Ci.seedCell(2)
-		}
+	while( i-- > 0 ){
+		cellids.push( this.gm.seedCell(1) )
+	}
+	i = 50
+	while( i-- > 0 ){
+		this.C.monteCarloStep()
+	}
+	i = 50*(this.C.extents[0]/1000)
+	while( i-- > 0 ){
+		this.C.setCellKind( cellids.pop(), 2 )
+		//Ci.seedCell(2)
+	}
 
 }
 
@@ -86,8 +81,8 @@ let config = {
 			
 		// Adhesion parameters:
 		J : [ [0,20,20], 
-		[20,20,100], // epidermal cells
-		[20,100,200] ],
+			[20,20,100], // epidermal cells
+			[20,100,200] ],
 		
 		// VolumeConstraint parameters
 		LAMBDA_V : [0,30,30],				// VolumeConstraint importance per cellkind
@@ -101,7 +96,7 @@ let config = {
 		LAMBDA_ACT : [0,0,500],			// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,0,60],				// Activity memory duration per cellkind
 		ACT_MEAN : "geometric",				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 
 	},
 	
@@ -110,7 +105,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -125,7 +120,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/EpidermisWithTCells",				// ... And save the image in this folder.
 		EXPNAME : "EpidermisWithTCells",					// Used for the filename of output images.

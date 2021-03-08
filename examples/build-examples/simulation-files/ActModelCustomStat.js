@@ -1,15 +1,12 @@
+/* globals CPM */
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-An example implementation of a custom statistic.
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * An example implementation of a custom statistic.
+ **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
-/* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
@@ -93,13 +90,12 @@ class PercentageActive extends CPM.Stat {
 
 // Overwrite the logstats method to compute our custom stat
 function logStats(){
-
-		const allpercentages = this.C.getStat( PercentageActive )
-		for( let cid of this.C.cellIDs() ){
-			let theperc = allpercentages[cid]
-			console.log( this.time + "\t" + cid + "\t" + 
+	const allpercentages = this.C.getStat( PercentageActive )
+	for( let cid of this.C.cellIDs() ){
+		let theperc = allpercentages[cid]
+		console.log( this.time + "\t" + cid + "\t" +  // eslint-disable-line
 				this.C.cellKind(cid) + "\t" + theperc )
-		}
+	}
 
 }
 
@@ -146,7 +142,7 @@ let config = {
 		LAMBDA_ACT : [0,300],				// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,30],					// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 
 	},
 	
@@ -155,7 +151,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [1],						// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,

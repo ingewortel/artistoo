@@ -1,4 +1,6 @@
 let CPM = require("../../build/artistoo-cjs.js")
+
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
@@ -26,7 +28,6 @@ let grid, diffusiongrid, Cim, t = 0, s = 0, meter
 
 // Setup the grid and needed objects
 function setup(){
-	let w = conf.w
 	grid = new CPM.Grid2D([conf.w,conf.w], conf.torus, "Float32")
 	diffusiongrid = new CPM.CoarseGrid( grid, conf.res )
 	Cim = new CPM.Canvas( diffusiongrid , {zoom:conf.zoom} )
@@ -40,22 +41,14 @@ function initializeGrid(){
 
 // Perform one diffusionstep
 function diffusionStep(){
-
-	let D = conf.D, s = 0, w = conf.w, m = conf.m
-
-	grid.diffusion( D*0.01 )
-	s = 0
-	for( let x = 0 ; x < w ; x ++ ){
-		for( let y = 0 ; y < w ; y ++ ){
-			s += ((x-m)*(x-m)+(y-m)*(y-m))*(0.38*0.38/60./60.)*grid.pixt( [x,y] )
-		}
-	}
+	grid.diffusion( conf.D*0.01 )
 }
 
 // Produce output, like drawing on the canvas and logging stats
 function output(){
 	Cim.clear("FFFFFF")
 	Cim.drawField( diffusiongrid )
+	// eslint-disable-next-line
 	console.log( t, s, 4 * 6.2 * 1E-5 * (t/10) )
 }
 

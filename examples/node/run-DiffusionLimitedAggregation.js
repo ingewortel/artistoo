@@ -1,4 +1,5 @@
 let CPM = require("../../build/artistoo-cjs.js")
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
@@ -57,7 +58,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [2500],						// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 0,
 		RUNTIME : 20000,
@@ -71,7 +72,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 10,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/DiffusionLimitedAggregation",	// ... And save the image in this folder.
 		EXPNAME : "DiffusionLimitedAggregation",				// Used for the filename of output images.
@@ -139,26 +140,27 @@ function initializeGrids(){
 }
 
 function draw(){
-		FreeCanvas.clear( config.simsettings.CANVASCOLOR )
+	FreeCanvas.clear( config.simsettings.CANVASCOLOR )
 		
-		// Draw the crystal from the FixedCanvas on the FreeCanvas
-		FreeCanvas.col( config.simsettings.CRYSTALCOLOR )
-		FreeCanvas.getImageData()
-		for( let x of Fixed.pixels() ){
-			if( x[1] === 1 ){
-				FreeCanvas.pxfi( x[0] )
-			}
+	// Draw the crystal from the FixedCanvas on the FreeCanvas
+	FreeCanvas.col( config.simsettings.CRYSTALCOLOR )
+	FreeCanvas.getImageData()
+	for( let x of Fixed.pixels() ){
+		if( x[1] === 1 ){
+			FreeCanvas.pxfi( x[0] )
 		}
-		FreeCanvas.putImageData()
+	}
+	FreeCanvas.putImageData()
 		
 		
-		FreeCanvas.drawCells( 1, config.simsettings.FREECOLOR )
-		//FixedCanvas.drawCellsOfId( 1, "FFFFFF" )
+	FreeCanvas.drawCells( 1, config.simsettings.FREECOLOR )
+	//FixedCanvas.drawCellsOfId( 1, "FFFFFF" )
 }
 
 function logStats(){
 	const freeCells = Object.keys( Free.getStat( CPM.PixelsByCell ) ).length
 	const fixedCells = Fixed.getStat( CPM.PixelsByCell )[1].length
+	// eslint-disable-next-line
 	console.log( Free.time + "\t" + freeCells + "\t" + fixedCells + "\t" + ( freeCells + fixedCells ) )
 }
 

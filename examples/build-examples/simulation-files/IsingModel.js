@@ -1,19 +1,12 @@
 /* 	================= DESCRIPTION ===================== */
-/* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-The Ising model: a classic example of a CPM with only one "cell",
-and only an adhesion constraint. Because there is no volume constraint,
-the cell eventually either disappears or takes over the entire grid -
-because that minimizes the adhesion penalty.
-/* END DESCRIPTION Do not remove this line */
-
+/** @file
+ * The Ising model: a classic example of a CPM with only one "cell",
+ * and only an adhesion constraint. Because there is no volume constraint,
+ * the cell eventually either disappears or takes over the entire grid -
+ * because that minimizes the adhesion penalty.
+ **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
-/* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
@@ -25,9 +18,6 @@ let custommethods = {
 }
 /* END METHODS OBJECT Do not remove this line */
 
-
-
-
 /* ================= WRITE CUSTOM METHODS ===================== */
 
 /* START METHODS DEFINITION Do not remove this line */
@@ -35,50 +25,50 @@ let custommethods = {
 /* The following custom methods will be added to the simulation object*/
 function initializeGrid(){
 
-		// Create a cell (other than background)
-		this.cid = this.C.makeNewCellID(1)
-		let cid = this.cid 
+	// Create a cell (other than background)
+	this.cid = this.C.makeNewCellID(1)
+	let cid = this.cid 
 		
-		// For all non-stromaborder pixels in the grid: assign it randomly
-		// to either background or cell.
-		for( let i = 1 ; i < this.C.extents[0] ; i ++ ){
-			for( let j = 1 ; j < this.C.extents[1] ; j ++ ){	
-				if( this.C.random() < 0.49 ){
-					this.C.setpix( [ i,j ], cid )
-				} else {
-					if( this.C.pixt( [i,j] ) ){
-						this.C.setpix( [i,j], 0 )
-					}
+	// For all non-stromaborder pixels in the grid: assign it randomly
+	// to either background or cell.
+	for( let i = 1 ; i < this.C.extents[0] ; i ++ ){
+		for( let j = 1 ; j < this.C.extents[1] ; j ++ ){	
+			if( this.C.random() < 0.49 ){
+				this.C.setpix( [ i,j ], cid )
+			} else {
+				if( this.C.pixt( [i,j] ) ){
+					this.C.setpix( [i,j], 0 )
 				}
 			}
 		}
 	}
+}
 	
 // Computing and logging stats.
 // Centroids are not really meaningful here so we'll log volume.
 function logStats(){
 		
-		// compute volume of all non-background		
-		for( let cid of this.C.cellIDs() ){
+	// compute volume of all non-background		
+	for( let cid of this.C.cellIDs() ){
 		
-			let volume = this.C.getVolume( cid )
+		let volume = this.C.getVolume( cid )
 			
-			// eslint-disable-next-line no-console
-			console.log( this.time + "\t" + cid + "\t" + 
+		// eslint-disable-next-line no-console
+		console.log( this.time + "\t" + cid + "\t" + 
 				this.C.cellKind(cid) + "\t" + volume )
 			
-		}
 	}
+}
 
 // Add a postMCSListener to reinitialize the grid when one of the cells disappears
 function postMCSListener(){
 		
-		for( let cid of this.C.cellIDs() ){
-			let vol = this.C.getVolume(cid)
-			if( vol<=1 || vol==(this.C.extents[0]-1)*(this.C.extents[1]-1) ){
-				this.initializeGrid()
-			}
+	for( let cid of this.C.cellIDs() ){
+		let vol = this.C.getVolume(cid)
+		if( vol<=1 || vol==(this.C.extents[0]-1)*(this.C.extents[1]-1) ){
+			this.initializeGrid()
 		}
+	}
 }
 
 /* END METHODS DEFINITION Do not remove this line */
@@ -115,7 +105,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 0,
 		RUNTIME : 1000,
@@ -130,7 +120,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/IsingModel",	// ... And save the image in this folder.
 		EXPNAME : "IsingModel",					// Used for the filename of output images.

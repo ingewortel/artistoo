@@ -1,16 +1,16 @@
+/* globals CPM, sim */
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Simulation of a random walk using the hard volumeconstraint
-(the cell must always have either 1 or 2 pixels).
-/* END DESCRIPTION Do not remove this line */
+
+/** @file
+ * Simulation of a random walk using the hard volume constraint.
+ * The cell must always have either 1 or 2 pixels.
+ **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 /* 	If no custom methods are defined, the drawing/initialisation/output 
 	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: false
 
 /* ================= ADD MORE CONSTRAINTS ===================== */
 /* START ADDCONSTRAINTS Do not remove this line */
@@ -57,7 +57,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [1],						// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -72,7 +72,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : false,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/RandomWalk",	// ... And save the image in this folder.
 		EXPNAME : "RandomWalk",				// Used for the filename of output images.

@@ -21,8 +21,7 @@ let config = {
 	// CPM parameters and configuration
 	conf : {
 		// Basic CPM parameters
-		torus : [true,true],				// Should the grid have linked borders?
-		seed : 2,							// Seed for random number generation.
+		seed : 3,							// Seed for random number generation.
 		T : 20,								// CPM temperature
 		torus : [false,false],
 		
@@ -34,11 +33,11 @@ let config = {
 		
 		// Adhesion parameters:
 		J : [ 
-		 		[0,20,20,20,20], 
-				[20,40,40,100,20], // epidermal cells
-				[20,40,50,J_TC_TUMOR,20], // T cells
-				[20,100,J_TC_TUMOR,100,20], // Cancer cells
-				[20,20,20,20,20] ],
+			[0,20,20,20,20],
+			[20,40,40,100,20], // epidermal cells
+			[20,40,50,J_TC_TUMOR,20], // T cells
+			[20,100,J_TC_TUMOR,100,20], // Cancer cells
+			[20,20,20,20,20] ],
 		
 		// VolumeConstraint parameters
 		LAMBDA_V : [0,50,50,50,0],			// VolumeConstraint importance per cellkind
@@ -52,7 +51,7 @@ let config = {
 		LAMBDA_ACT:[0,0,650,0,0],			// ActivityConstraint importance per cellkind
 		MAX_ACT: [0,0,25,0,0],				// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 								
 	},
 	
@@ -77,7 +76,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/CancerInvasion",	// ... And save the image in this folder.
 		EXPNAME : "CancerInvasion",					// Used for the filename of output images.
@@ -91,29 +90,14 @@ let config = {
 /*	---------------------------------- */
 
 
-/* 	The following functions are defined below and will be added to
-	the simulation object. If Custom-methods above is set to false,
-	this object is ignored and not used in the html/node files. */
-let custommethods = {
-	initializeGrid : initializeGrid,
-	postMCSListener : postMCSListener,
-	divideCancerCells : divideCancerCells,
-	killTooSmallCells : killTooSmallCells,
-	homeTCells : homeTCells,
-	killTCells : killTCells
-}
-
-let sim = new CPM.Simulation( config, custommethods )
+let sim = new CPM.Simulation( config, {} )
 
 let Cdir = new CPM.AttractionPointConstraint({
-		LAMBDA_ATTRACTIONPOINT : [0,0,50,0,0],
-		ATTRACTIONPOINT : [[NaN,NaN], [NaN,NaN], [sim.C.extents[1]/2,sim.C.extents[1]/2], [NaN,NaN],[NaN,NaN] ] 
+	LAMBDA_ATTRACTIONPOINT : [0,0,50,0,0],
+	ATTRACTIONPOINT : [[NaN,NaN], [NaN,NaN], [sim.C.extents[1]/2,sim.C.extents[1]/2], [NaN,NaN],[NaN,NaN] ] 
 })
 
 sim.C.add( Cdir )
-
-
-
 
 
 

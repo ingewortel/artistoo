@@ -27,6 +27,8 @@ match( $0, /@[a-z]+/ ) {
 		if( tag == "@file" ){
 			if( match( $0, /\*/ ) ){
 				print substr( $0, RSTART+RLENGTH )
+			} else {
+				print
 			} 
 		}
 	}

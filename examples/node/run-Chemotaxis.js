@@ -41,7 +41,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -52,7 +52,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/Chemotaxis",	// ... And save the image in this folder.
 		EXPNAME : "Chemotaxis",					// Used for the filename of output images.
@@ -66,15 +66,7 @@ let config = {
 /*	---------------------------------- */
 
 
-/* 	The following functions are defined below and will be added to
-	the simulation object. If Custom-methods above is set to false,
-	this object is ignored and not used in the html/node files. */
-let custommethods = {
-	initializeGrid : initializeGrid,
-	postMCSListener : postMCSListener,
-	drawCanvas : drawCanvas
-}
-let sim = new CPM.Simulation( config, custommethods )
+let sim = new CPM.Simulation( config, {} )
 sim.g = new CPM.Grid2D([sim.C.extents[0]/10,sim.C.extents[1]/10], config.torus, "Float32"),
 sim.gi = new CPM.CoarseGrid( sim.g, 10 ),
 
@@ -90,14 +82,14 @@ sim.C.add( new CPM.ChemotaxisConstraint( {
 /* The following custom methods will be added to the simulation object*/
 function initializeGrid(){
 	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		for( let i = 0 ; i < Math.PI*2 ; i += 0.4 ){
-			this.gm.seedCellAt( 1, 
+	for( let i = 0 ; i < Math.PI*2 ; i += 0.4 ){
+		this.gm.seedCellAt( 1, 
 			[Math.round(this.C.extents[0]/2+this.C.extents[0]/3*Math.sin(i)),
-			Math.round(this.C.extents[1]/2+this.C.extents[1]/3*Math.cos(i))] )
-		}
+				Math.round(this.C.extents[1]/2+this.C.extents[1]/3*Math.cos(i))] )
+	}
 }
 function postMCSListener(){
 	let center = [this.C.extents[0]/10/2,this.C.extents[1]/10/2]
@@ -110,10 +102,10 @@ function postMCSListener(){
 
 function drawCanvas(){
 	
-		// Add the canvas if required
-		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
-		this.Cim.drawField( this.gi )
-		this.Cim.drawCellBorders( -1, "000000" )
+	// Add the canvas if required
+	if( !this.helpClasses["canvas"] ){ this.addCanvas() }
+	this.Cim.drawField( this.gi )
+	this.Cim.drawCellBorders( -1, "000000" )
 		
 }
 
