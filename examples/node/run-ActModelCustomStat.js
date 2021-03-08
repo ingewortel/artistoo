@@ -37,7 +37,7 @@ let config = {
 		LAMBDA_ACT : [0,300],				// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,30],					// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 
 	},
 	
@@ -46,7 +46,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [1],						// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -71,13 +71,7 @@ let config = {
 /*	---------------------------------- */
 
 
-/* 	The following functions are defined below and will be added to
-	the simulation object. If Custom-methods above is set to false,
-	this object is ignored and not used in the html/node files. */
-let custommethods = {
-	logStats : logStats
-}
-let sim = new CPM.Simulation( config, custommethods )
+let sim = new CPM.Simulation( config, {} )
 
 
 
@@ -134,13 +128,12 @@ class PercentageActive extends CPM.Stat {
 
 // Overwrite the logstats method to compute our custom stat
 function logStats(){
-
-		const allpercentages = this.C.getStat( PercentageActive )
-		for( let cid of this.C.cellIDs() ){
-			let theperc = allpercentages[cid]
-			console.log( this.time + "\t" + cid + "\t" + 
+	const allpercentages = this.C.getStat( PercentageActive )
+	for( let cid of this.C.cellIDs() ){
+		let theperc = allpercentages[cid]
+		console.log( this.time + "\t" + cid + "\t" +  // eslint-disable-line
 				this.C.cellKind(cid) + "\t" + theperc )
-		}
+	}
 
 }
 

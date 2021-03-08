@@ -81,7 +81,6 @@ let sim = new CPM.Simulation( config, {} )
 
 
 
-// No custom methods.
 
 
 sim.run()

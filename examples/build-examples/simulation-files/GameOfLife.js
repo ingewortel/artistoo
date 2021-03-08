@@ -1,30 +1,27 @@
-/* 	================= DESCRIPTION ===================== */
-/* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Conway's Game of Life with random initial conditions.
-/* END DESCRIPTION Do not remove this line */
+/* The description below is printed on the HTML page. */
 
+/* global CPM, FPSMeter */
 
-/* START CODE Do not remove this line */
-/* */
+/**
+ * @file Conway's <i>Game of Life</i>
+ * with random initial conditions.
+ */
 
 "use strict"
-
 
 // Configuration
 let conf = {
 	gsize : [200,200],		// dimensions of the grid to build
 	zoom : 3,				// zoom for displaying the grid
 	torus: [true,true],			// Should grid boundaries be connected?
-	runtime : 1000
+	RUNTIME : 1000
 }
 
-let C, Cim, cid=0, meter, t = 0
-
+let C, Cim, meter, t = 0
 
 // Setup the grid and needed objects
 function setup(){
-		C = new CPM.CA( [conf.gsize[0],conf.gsize[1]], {
+	C = new CPM.CA( [conf.gsize[0],conf.gsize[1]], {
 		"UPDATE_RULE": 	function(p,N){
 			let nalive = 0
 			for( let pn of N ){
@@ -65,18 +62,16 @@ function output(){
 
 // Run everything needed for a single step (output and computation),
 // and update the current time
-function step(){
+function step(){ //eslint-disable-line
 	C.timeStep()
 	meter.tick()
 	output()
-	t++
+	t ++ 
 }
 
 // Starts up the simulation
-function initialize(){
+function initialize(){ //eslint-disable-line
 	setup()
 	initializeGrid()
-	run()
+	run() //eslint-disable-line
 }
-/* END CODE Do not remove this line */
-

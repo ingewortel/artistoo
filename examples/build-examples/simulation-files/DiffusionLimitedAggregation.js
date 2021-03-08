@@ -1,39 +1,31 @@
+/* globals CPM, FPSMeter */
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-
-In this example, we see freely diffusing particles (blue) aggregate into a crystal (white). 
-This is implemented as two communicating grids: one CPM (blue) and one CA (white).<br><br>
-
-The "diffusion" is implemented as a Cellular Potts Model (CPM) with a hard volume range constraint, such that 
-each "cell" can only be 1 or 2 pixels big. Without any other constraint, this ensures that
-the particles follow Brownian motion. In a way, this is not really a CPM since there is
-no Hamiltonian H, but it still follows the same copy attempt dynamics as a real CPM. <br><br>
-
-The white crystal grows on a cellular automaton (CA), which has been seeded with a single 
-point in the middle of the grid. Every step, this grid updates according to the following
-rules:
-<ol>
-	<li> A pixel of type 1 (crystal) remains type 1 (once a particle has aggregated, it cannot become
-	free again) </li>
-	<li> A pixel of type 0 (background) becomes type 1 (crystal) if and only if:
-		<ul>
-			<li> it is a (Moore) neighbor of a pixel of the crystal (type 1), AND </li>
-			<li> the CPM grid currently has a blue particle in this position </li>
-		</ul>
-	</li>
-</ol>
-
-
-
-/* END DESCRIPTION Do not remove this line */
-
-
-/* START CODE Do not remove this line */
-/* */
+/** @file
+ * In this example, we see freely diffusing particles (blue) aggregate into a crystal (white). 
+ * This is implemented as two communicating grids: one CPM (blue) and one CA (white).<br><br> 
+ * The "diffusion" is implemented as a Cellular Potts Model (CPM) with a hard volume range constraint, such that 
+ * each "cell" can only be 1 or 2 pixels big. Without any other constraint, this ensures that
+ * the particles follow Brownian motion. In a way, this is not really a CPM since there is
+ * no Hamiltonian H, but it still follows the same copy attempt dynamics as a real CPM. <br><br>
+ * 
+ * The white crystal grows on a cellular automaton (CA), which has been seeded with a single 
+ * point in the middle of the grid. Every step, this grid updates according to the following
+ * rules:
+ * <ol>
+ * 	<li> A pixel of type 1 (crystal) remains type 1 (once a particle has aggregated, it cannot become
+ *	free again) </li>
+ * 	<li> A pixel of type 0 (background) becomes type 1 (crystal) if and only if:
+ *		<ul>
+ *			<li> it is a (Moore) neighbor of a pixel of the crystal (type 1), AND </li>
+ *			<li> the CPM grid currently has a blue particle in this position </li>
+ *		</ul>
+ * 	</li>
+ * </ol>
+ */ 
 
 "use strict"
-
 
 /*	----------------------------------
 	CONFIGURATION SETTINGS
@@ -66,7 +58,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [2500],						// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 0,
 		RUNTIME : 20000,
@@ -80,7 +72,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 10,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/DiffusionLimitedAggregation",	// ... And save the image in this folder.
 		EXPNAME : "DiffusionLimitedAggregation",				// Used for the filename of output images.
@@ -89,8 +81,8 @@ let config = {
 	}
 }
 /*	---------------------------------- */
-let sim, meter, Fixed, Free, FreeGM, FreeCanvas, FixedCanvas, t=0
-let conf 
+let sim, meter, Fixed, Free, FreeGM, FreeCanvas, FixedCanvas
+let conf, t = 0 
 
 
 function initialize(){
@@ -136,7 +128,7 @@ function initialize(){
 	FreeCanvas = new CPM.Canvas( Free, {zoom:config.simsettings.zoom} )
 	initializeGrids()
 	meter = new FPSMeter({left:"auto", right:"5px"})
-	conf = { runtime : config.simsettings.RUNTIME }
+	conf = { RUNTIME : config.simsettings.RUNTIME }
 	run()
 }
 
@@ -149,36 +141,31 @@ function initializeGrids(){
 }
 
 function draw(){
-		FreeCanvas.clear( config.simsettings.CANVASCOLOR )
+	FreeCanvas.clear( config.simsettings.CANVASCOLOR )
 		
-		// Draw the crystal from the FixedCanvas on the FreeCanvas
-		FreeCanvas.col( config.simsettings.CRYSTALCOLOR )
-		FreeCanvas.getImageData()
-		for( let x of Fixed.pixels() ){
-			if( x[1] === 1 ){
-				FreeCanvas.pxfi( x[0] )
-			}
+	// Draw the crystal from the FixedCanvas on the FreeCanvas
+	FreeCanvas.col( config.simsettings.CRYSTALCOLOR )
+	FreeCanvas.getImageData()
+	for( let x of Fixed.pixels() ){
+		if( x[1] === 1 ){
+			FreeCanvas.pxfi( x[0] )
 		}
-		FreeCanvas.putImageData()
+	}
+	FreeCanvas.putImageData()
 		
 		
-		FreeCanvas.drawCells( 1, config.simsettings.FREECOLOR )
-		//FixedCanvas.drawCellsOfId( 1, "FFFFFF" )
+	FreeCanvas.drawCells( 1, config.simsettings.FREECOLOR )
+	//FixedCanvas.drawCellsOfId( 1, "FFFFFF" )
 }
 
 function logStats(){
 	const freeCells = Object.keys( Free.getStat( CPM.PixelsByCell ) ).length
 	const fixedCells = Fixed.getStat( CPM.PixelsByCell )[1].length
+	// eslint-disable-next-line
 	console.log( Free.time + "\t" + freeCells + "\t" + fixedCells + "\t" + ( freeCells + fixedCells ) )
 }
 
 function step(){
-
-	/*if( t > 2 && t < 10 ){
-		for( let i = 0; i < 1000; i++ ){
-			draw()
-		}
-	}*/
 	for( let i = 0; i < 1; i++ ){
 		Fixed.timeStep()
 		Free.timeStep()
@@ -188,6 +175,4 @@ function step(){
 	draw()
 	logStats()
 }
-
-/* END CODE Do not remove this line */
 

@@ -1,15 +1,14 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Cells moving up a gradient of a diffusing chemokine, which is produced in the center. 
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ *  Cells moving up a gradient of a diffusing chemokine, which is produced in the center. 
+ **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 /* 	If no custom methods are defined, the drawing/initialisation/output 
 	functions of the CPM.Simulation class are used. */
 
-// Are any custom methods defined here?
-Custom-methods: true
+/* globals CPM, sim */ 
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
@@ -54,14 +53,14 @@ sim.C.add( new CPM.ChemotaxisConstraint( {
 /* The following custom methods will be added to the simulation object*/
 function initializeGrid(){
 	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		for( let i = 0 ; i < Math.PI*2 ; i += 0.4 ){
-			this.gm.seedCellAt( 1, 
+	for( let i = 0 ; i < Math.PI*2 ; i += 0.4 ){
+		this.gm.seedCellAt( 1, 
 			[Math.round(this.C.extents[0]/2+this.C.extents[0]/3*Math.sin(i)),
-			Math.round(this.C.extents[1]/2+this.C.extents[1]/3*Math.cos(i))] )
-		}
+				Math.round(this.C.extents[1]/2+this.C.extents[1]/3*Math.cos(i))] )
+	}
 }
 function postMCSListener(){
 	let center = [this.C.extents[0]/10/2,this.C.extents[1]/10/2]
@@ -74,10 +73,10 @@ function postMCSListener(){
 
 function drawCanvas(){
 	
-		// Add the canvas if required
-		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
-		this.Cim.drawField( this.gi )
-		this.Cim.drawCellBorders( -1, "000000" )
+	// Add the canvas if required
+	if( !this.helpClasses["canvas"] ){ this.addCanvas() }
+	this.Cim.drawField( this.gi )
+	this.Cim.drawCellBorders( -1, "000000" )
 		
 }
 
@@ -128,7 +127,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -139,7 +138,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/Chemotaxis",	// ... And save the image in this folder.
 		EXPNAME : "Chemotaxis",					// Used for the filename of output images.

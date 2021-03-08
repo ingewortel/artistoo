@@ -1,15 +1,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-A single CPM cell with only adhesion and volume constraints.
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * A single CPM cell with only adhesion and volume constraints.
+ **/
 
-/* 	================= DECLARE CUSTOM METHODS ===================== */
-/* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: false
 
 /* ================= CONFIGURATION ===================== */
 
@@ -50,7 +44,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [1],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -65,7 +59,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/SingleCell",	// ... And save the image in this folder.
 		EXPNAME : "SingleCell",				// Used for the filename of output images.

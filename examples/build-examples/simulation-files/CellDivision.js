@@ -1,15 +1,12 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Proliferating cells.
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * Proliferating cells.
+ */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 /* 	If no custom methods are defined, the drawing/initialisation/output 
 	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to
@@ -21,7 +18,6 @@ let custommethods = {
 }
 /* END METHODS OBJECT Do not remove this line */
 
-
 /* ================= WRITE CUSTOM METHODS ===================== */
 
 /* START METHODS DEFINITION Do not remove this line */
@@ -29,39 +25,39 @@ let custommethods = {
 /* The following custom methods will be added to the simulation object*/
 function postMCSListener(){
 	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
 	
-		for( let i of this.C.cellIDs() ){
-			if( this.C.getVolume(i) > this.C.conf.V[1]*0.95 && this.C.random() < 0.01 ){
-				this.gm.divideCell(i)
-			}
+	for( let i of this.C.cellIDs() ){
+		if( this.C.getVolume(i) > this.C.conf.V[1]*0.95 && this.C.random() < 0.01 ){
+			this.gm.divideCell(i)
 		}
+	}
 }
 function initializeGrid(){
 	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		let nrcells = this.conf["NRCELLS"], cellkind, i
+	let nrcells = this.conf["NRCELLS"], cellkind, i
 		
-		// Seed the right number of cells for each cellkind
-		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+	// Seed the right number of cells for each cellkind
+	for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 			
-			for( i = 0; i < nrcells[cellkind]; i++ ){
-				// first cell always at the midpoint. Any other cells
-				// randomly.				
-				if( i == 0 ){
-					this.gm.seedCellAt( cellkind+1, [this.C.midpoint[0]/2, this.C.midpoint[1] ] )
-				} else {
-					this.gm.seedCell( cellkind+1 )
-				}
+		for( i = 0; i < nrcells[cellkind]; i++ ){
+			// first cell always at the midpoint. Any other cells
+			// randomly.				
+			if( i == 0 ){
+				this.gm.seedCellAt( cellkind+1, [this.C.midpoint[0]/2, this.C.midpoint[1] ] )
+			} else {
+				this.gm.seedCell( cellkind+1 )
 			}
 		}
-
-
 	}
+
+
+}
 
 
 /* END METHODS DEFINITION Do not remove this line */
@@ -112,7 +108,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [1],						// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 100,
 		RUNTIME : 1000,
@@ -127,7 +123,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/CellDivision",	// ... And save the image in this folder.
 		EXPNAME : "CellDivision",					// Used for the filename of output images.

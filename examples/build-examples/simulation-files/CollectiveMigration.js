@@ -1,6 +1,9 @@
+/* globals CPM, sim */
+
 /* 	================= DESCRIPTION ===================== */
+
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
+/** @file 
 <br>
 <button onclick="startsim()">start</button>
 <button onclick="stopsim()">stop</button>
@@ -10,8 +13,6 @@
 <button onclick="killCell()">remove cell</button>
 <button onclick="killAllCells()">remove all cells</button>
 <br>
-
-
 <div class="slidecontainer">
 <form autocomplete="off">
 <table>
@@ -59,24 +60,9 @@
 </table>
 </form>
 </div>
-/* END DESCRIPTION Do not remove this line */
+	**/
 
-/* 	================= DECLARE CUSTOM METHODS ===================== */
-/* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
 
-// Are any custom methods defined here?
-Custom-methods: false
-
-/* START METHODS OBJECT Do not remove this line */
-/* 	The following functions are defined below and will be added to
-	the simulation object. If Custom-methods above is set to false,
-	this object is ignored and not used in the html/node files. */
-let custommethods = {
-	initializeGrid : initializeGrid,
-	buildChannel : buildChannel
-}
-/* END METHODS OBJECT Do not remove this line */
 
 /* ================= ADD MORE CONSTRAINTS ===================== */
 
@@ -186,7 +172,7 @@ let config = {
 		LAMBDA_ACT : [0,140],			// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,20],				// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 	},
 	
 	// Simulation setup and configuration: this controls stuff like grid initialization,
@@ -195,7 +181,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [20,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 50,
 		RUNTIME : 1000,
@@ -210,7 +196,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/CollectiveMigration",	// ... And save the image in this folder.
 		EXPNAME : "CollectiveMigration",					// Used for the filename of output images.

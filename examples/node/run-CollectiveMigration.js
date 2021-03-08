@@ -39,7 +39,7 @@ let config = {
 		LAMBDA_ACT : [0,140],			// ActivityConstraint importance per cellkind
 		MAX_ACT : [0,20],				// Activity memory duration per cellkind
 		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
-											// "geometric" or "arithmetic" mean?
+		// "geometric" or "arithmetic" mean?
 	},
 	
 	// Simulation setup and configuration: this controls stuff like grid initialization,
@@ -48,7 +48,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [20,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 50,
 		RUNTIME : 1000,
@@ -63,7 +63,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/CollectiveMigration",	// ... And save the image in this folder.
 		EXPNAME : "CollectiveMigration",					// Used for the filename of output images.

@@ -1,34 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Model of a migrating cell. 
-/* END DESCRIPTION Do not remove this line */
-
-/* 	================= DECLARE CUSTOM METHODS ===================== */
-/* 	If no custom methods are defined, the drawing/initialisation/output 
-	functions of the CPM.Simulation class are used. */
-
-// Are any custom methods defined here?
-Custom-methods: false
-
-/* START METHODS OBJECT Do not remove this line */
-/* 	The following functions are defined below and will be added to
-	the simulation object.*/
-let custommethods = {
-	initializeGrid : initializeGrid,
-	buildChannel : buildChannel
-}
-/* END METHODS OBJECT Do not remove this line */
-
-
-
-
-/* ================= WRITE CUSTOM METHODS ===================== */
-
-/* START METHODS DEFINITION Do not remove this line */
-// No custom methods.
-/* END METHODS DEFINITION Do not remove this line */
-
+/** @file
+ * Model of a migrating cell. 
+ */
 
 
 /* ================= CONFIGURATION ===================== */

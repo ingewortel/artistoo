@@ -32,7 +32,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [1],						// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -47,7 +47,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : false,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/RandomWalk",	// ... And save the image in this folder.
 		EXPNAME : "RandomWalk",				// Used for the filename of output images.

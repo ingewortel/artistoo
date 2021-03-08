@@ -1,18 +1,16 @@
+/* globals CPM, FPSMeter */
+
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-<p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to interrupt/restart simulation.</p>
-<p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
-<p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>
-<p><button onclick="initialize()">run</button></p>
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * <p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to interrupt/restart simulation.</p>
+ * <p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
+ * <p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>
+ * <p><button onclick="initialize()">run</button></p>
+ * */
 
-
-/* START CODE Do not remove this line */
-/* */
-let C, zoom=2, Cim, cid=0, w=200, meter,
-	infected, resistant, t = 0
-let conf = { runtime: 1000 }
+let C, zoom=2, Cim, w=200, meter, t = 0
+let conf = { RUNTIME : 1000 }
 
 var r_i = 0.1, r_r = 0.01
 
@@ -68,13 +66,13 @@ function initialize(){
 	meter = new FPSMeter({left:"auto", right:"5px"})
 	seedGrid()
 	running = 1
-	//cancelAnimationFrame( ts )
 	run()
 }
 
 function output(){
 	let cellpixels = C.getStat( CPM.PixelsByCell )
 	for( let cid of Object.keys( cellpixels ) ){
+		// eslint-disable-next-line
 		console.log( t + "\t" + cid + "\t" + cellpixels[cid].length )
 	}
 }
@@ -89,7 +87,5 @@ function step(){
 		output()
 		t++
 	}
-	//ts = requestAnimationFrame( timestep )
 }
-/* END CODE Do not remove this line */
 

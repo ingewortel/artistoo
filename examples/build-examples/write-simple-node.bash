@@ -3,20 +3,18 @@
 examplename=$1
 templatefile=simulation-files/$examplename.js
 
+cat <<END
+let CPM = require("../../build/artistoo-cjs.js")
+END
 
-echo 'let CPM = require("../../build/artistoo-cjs.js")'
-echo -e '\n'
+cat $templatefile | grep -v FPSMeter | grep -v meter.tick
 
-sed -e '1,/START CODE/d' -e '/END CODE/,$d' $templatefile | grep -v FPSMeter | grep -v meter.tick
-
-
-echo "// all steps"
-echo function run'(){'
-echo -e '\t while( t < conf.runtime){'
-echo -e '\t\t	step()'
-echo -e '\t }'
-echo "}"
-
-
-
-echo "initialize()"
+cat <<END
+// all steps
+function run(){
+	while( t < conf.RUNTIME ){
+		step() 
+	}
+}
+initialize()
+END

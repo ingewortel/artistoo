@@ -4,45 +4,45 @@
 examplename=$1
 templatefile=simulation-files/$examplename.js
 
+cat <<END
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>$examplename</title>
+<style type="text/css">
+body{
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+	Helvetica, Arial, "Lucida Grande", sans-serif;
+	padding : 15px;
+}
+td {
+	padding: 10px; vertical-align: top;
+}
+</style>
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script>
+END
 
+cat $templatefile
 
-echo '<!DOCTYPE html>'
-echo '<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-echo '<title>'$examplename'</title>'
-echo '<style type="text/css">'
-echo 'body{'
-echo -e '\t	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",'
-echo -e '\t\t Helvetica, Arial, "Lucida Grande", sans-serif;'
-echo -e '\t padding : 15px;'
-echo "}"
-echo "td {"
-echo -e '\t padding: 10px;'
-echo -e '\t vertical-align: top;'
-echo "}"
-echo '</style>'
-echo -e "\n"
-echo '<script src="./artistoo.js"></script>'
-echo '<script src="./fpsmeter.min.js"></script>'
-echo '<script>'
-echo -e "\n"
+cat <<END
+// Run the simulation
+function run(){
+	step(); 
+	if( t < conf.RUNTIME ){ requestAnimationFrame( run ) }
+}
+END
 
-sed -e '1,/START CODE/d' -e '/END CODE/,$d' $templatefile \
-
-echo "// Run the simulation"
-echo function run'(){'
-echo -e '\t	step()'
-echo -e '\t	if( t < conf.runtime ){ requestAnimationFrame( run ) }'
-echo "}"
-
-
-
-
-echo "</script>"
-echo "</head>"
-echo '<body onload="initialize()">'
-echo '<h1>'$examplename'</h1>'
-echo '<p>'
-sed -e '1,/START DESCRIPTION/d' -e '/END DESCRIPTION/,$d' $templatefile
-echo '</p>'
-echo "</body>"
-echo "</html>"
+cat <<END
+</script>
+</head>
+<body onload="initialize()">
+<h1>$examplename</h1>
+<p>
+END
+awk -f extract-description.awk $templatefile
+cat <<END
+</p>
+</body>
+</html>
+END

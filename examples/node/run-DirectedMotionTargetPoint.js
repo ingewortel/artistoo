@@ -43,7 +43,7 @@ let config = {
 	
 		// Cells on the grid
 		NRCELLS : [3,0],					// Number of cells to seed for all
-											// non-background cellkinds.
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 20,
 		RUNTIME : 1000,
@@ -58,7 +58,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/DirectedMotionTargetPoint",	// ... And save the image in this folder.
 		EXPNAME : "DirectedMotionTargetPoint",					// Used for the filename of output images.
@@ -72,19 +72,13 @@ let config = {
 /*	---------------------------------- */
 
 
-/* 	The following functions are defined below and will be added to
-	the simulation object. If Custom-methods above is set to false,
-	this object is ignored and not used in the html/node files. */
-let custommethods = {
-	initializeGrid : initializeGrid
-}
-let sim = new CPM.Simulation( config, custommethods )
-	let Cdir = new CPM.AttractionPointConstraint({
-		LAMBDA_ATTRACTIONPOINT : [0,100],
-		ATTRACTIONPOINT : [[0,0], [sim.C.extents[0]/2,sim.C.extents[1]/2] ] 
-	})
+let sim = new CPM.Simulation( config, {} )
+let Cdir = new CPM.AttractionPointConstraint({
+	LAMBDA_ATTRACTIONPOINT : [0,100],
+	ATTRACTIONPOINT : [[0,0], [sim.C.extents[0]/2,sim.C.extents[1]/2] ] 
+})
 
-	sim.C.add( Cdir )
+sim.C.add( Cdir )
 
 
 
@@ -93,14 +87,14 @@ let sim = new CPM.Simulation( config, custommethods )
 /* The following custom methods will be added to the simulation object*/
 function initializeGrid(){
 	
-		// add the initializer if not already there
-		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-		for( let i = 0 ; i < Math.PI*2 ; i += 0.4 ){
-			this.gm.seedCellAt( 1, 
+	for( let i = 0 ; i < Math.PI*2 ; i += 0.4 ){
+		this.gm.seedCellAt( 1, 
 			[Math.round(this.C.extents[0]/2+this.C.extents[1]/3*Math.sin(i)),
-			Math.round(this.C.extents[0]/2+this.C.extents[0]/3*Math.cos(i))] )
-		}
+				Math.round(this.C.extents[0]/2+this.C.extents[0]/3*Math.cos(i))] )
+	}
 		
 }
 
