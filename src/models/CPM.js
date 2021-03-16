@@ -3,6 +3,7 @@
 import GridBasedModel from "./GridBasedModel.js"
 import DiceSet from "../DiceSet.js"
 import AutoAdderConfig from "../hamiltonian/AutoAdderConfig.js"
+import Cell from "../cells/Cell.js"
 
 
 /** The core CPM class. Can be used for two- or three-dimensional simulations.
@@ -455,17 +456,18 @@ class CPM extends GridBasedModel {
 	}
 
 	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
-
+	//  TODO: Rename or split so that it is clear that this no longer only makes a new ID
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
 	   for this cell in the relevant arrays (cellvolume, t2k).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
+	   @param {CellKind} parent - if this is a birth event
 	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind, parent ){
 		const newid = ++ this.last_cell_id
 		if (parent){
-			this.cells[newid] = Cell(kind, this.cells[parent])
+			this.cells[newid] = new Cell(this.conf, kind, newid, this.cells[parent])
 		} else {
-			this.cells[newid] = Cell(kind)
+			this.cells[newid] = new Cell(this.conf, kind, newid)
 		}
 		this.cellvolume[newid] = 0
 		this.setCellKind( newid, kind )

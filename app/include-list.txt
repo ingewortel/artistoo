@@ -17,6 +17,10 @@ module	CA	src/models/CA.js
 module	CPM	src/models/CPM.js
 module	GridBasedModel	src/models/GridBasedModel.js
 
+# cells 
+module Cell src/cells/Cell.js
+module StochasticCorrector src/cells/StochasticCorrector.js
+
 # stats
 module	Stat	src/stats/Stat.js
 module	PixelsByCell	src/stats/PixelsByCell.js
