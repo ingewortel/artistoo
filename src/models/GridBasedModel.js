@@ -94,6 +94,9 @@ class GridBasedModel {
 		cellvolumes will be added with key = {@link CellId}, value = volume.
 		@type{number[]}*/
 		this.cellvolume = []
+
+		/** TODO make comment = this will hold Cell objects */
+		this.cells = []
 		/** Tracks the elapsed time in MCS
 		@type {number}*/
 		this.time = 0

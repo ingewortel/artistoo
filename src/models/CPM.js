@@ -111,7 +111,7 @@ class CPM extends GridBasedModel {
 		this.t2k = []
 		this.t2k[0] = 0
 		this.time = 0
-		this.cellvolumes = [0]
+		this.cellvolume = [0]
 		this.stat_values = {}
 	}
 
@@ -460,13 +460,17 @@ class CPM extends GridBasedModel {
 	   for this cell in the relevant arrays (cellvolume, t2k).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
 	   @return {CellId} of the new cell.*/
-	makeNewCellID ( kind ){
+	makeNewCellID ( kind, parent ){
 		const newid = ++ this.last_cell_id
+		if (parent){
+			this.cells[newid] = Cell(kind, this.cells[parent])
+		} else {
+			this.cells[newid] = Cell(kind)
+		}
 		this.cellvolume[newid] = 0
 		this.setCellKind( newid, kind )
 		return newid
 	}
-
 }
 
 export default CPM

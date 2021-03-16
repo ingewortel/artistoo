@@ -3433,13 +3433,17 @@ var CPM = (function (exports) {
 		   for this cell in the relevant arrays (cellvolume, t2k).
 		   @param {CellKind} kind - cellkind of the cell that has to be made.
 		   @return {CellId} of the new cell.*/
-		makeNewCellID ( kind ){
+		makeNewCellID ( kind, parent ){
 			const newid = ++ this.last_cell_id;
 			this.cellvolume[newid] = 0;
 			this.setCellKind( newid, kind );
+			if (parent) {
+				// print(parent)
+				// eslint-disable-next-line no-console
+				console.log( parent  );
+			}
 			return newid
 		}
-
 	}
 
 	/** This class encapsulates a lower-resolution grid and makes it
@@ -5656,10 +5660,10 @@ var CPM = (function (exports) {
 				x1 = L2 - byy;
 				y1 = bxy;
 			}
-
+			// console.log( id )
 			// create a new ID for the second cell
-			let nid = C.makeNewCellID( C.cellKind( id ) );
-
+			let nid = C.makeNewCellID( C.cellKind( id ), id );
+			// let nid = C.makeNewCellID( C.cellKind( id ))
 			// Loop over the pixels belonging to this cell
 			//let sidea = 0, sideb = 0
 			//let pix_id = []
