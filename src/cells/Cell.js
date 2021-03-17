@@ -32,7 +32,7 @@ class Cell {
 	}
 	/* eslint-disable no-unused-vars*/
 	mutate(weight){
-		throw("Implement top-down mutation for " + typeof this + " Cell class's " )
+		throw("Implement top-down mutation for " + typeof this + " Cell class " )
 	}
 }
 

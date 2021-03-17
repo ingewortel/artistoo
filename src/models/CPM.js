@@ -5,7 +5,6 @@ import DiceSet from "../DiceSet.js"
 import AutoAdderConfig from "../hamiltonian/AutoAdderConfig.js"
 import Cell from "../cells/Cell.js"
 
-
 /** The core CPM class. Can be used for two- or three-dimensional simulations.
 */
 class CPM extends GridBasedModel {
@@ -65,6 +64,8 @@ class CPM extends GridBasedModel {
 		this.t2k = []	// cell type ("kind"). Example: this.t2k[1] is the cellKind of cell 1.
 		this.t2k[0] = 0	// Background cell; there is just one cell of this type.
 
+		this.cellclasses = ["EMPTY"] //cell classes per kind - 0 is blank
+
 		//  ---------- CPM constraints
 		/** Array of objects of (@link SoftConstraint) subclasses attached to the CPM.
 		These are used to determine {@link deltaH}.
@@ -98,8 +99,9 @@ class CPM extends GridBasedModel {
 		for( let x of Object.keys( conf ) ){
 			if( x in AutoAdderConfig ){
 				this.add( new AutoAdderConfig[x]( conf ) )
-			}
+			} 
 		}
+		this.addCells( conf )
 	}
 
 	/** Completely reset; remove all cells and set time back to zero. Only the
@@ -190,12 +192,13 @@ class CPM extends GridBasedModel {
 				i = this.hard_constraints.push( t )
 				
 				// Write this index to an array in the 
-				// this.soft_constraints_indices object, for lookup later. 
+				// this.hard_constraints_indices object, for lookup later. 
 				if( !this.hard_constraints_indices.hasOwnProperty(tName) ){
 					this.hard_constraints_indices[tName] = []
 				}
 				this.hard_constraints_indices[tName].push( i-1 )
 				break
+
 			}
 		}
 		if( typeof t["postSetpixListener"] === "function" ){
@@ -208,6 +211,27 @@ class CPM extends GridBasedModel {
 		if( typeof t["postAdd"] === "function" ){
 			t.postAdd()
 		}
+	}
+
+
+	addCells( conf ){
+		let i = 1
+		if ("CELLS" in conf){	
+			if (typeof this.n_cell_kinds == "undefined"){
+				this.n_cell_kinds = conf["CELLS"].length - 1
+			} else if (this.n_cell_kinds !== conf["CELLS"].length -1 ) {
+				throw("Incorrect number of CELLS defined - do constraints and CELLS all contain the same number? CELLS expects some null value in index 0 for background ")
+			}
+			while (i <= this.n_cell_kinds && conf["CELLS"][i] !== "undefined"){
+				this.cellclasses.push(conf["CELLS"][i])
+				i ++
+			}
+		} else {
+			while (i <= this.n_cell_kinds){
+				this.cellclasses.push(Cell)
+				i ++
+			}
+		}	
 	}
 	
 	/** Get a {@link Constraint} object linked to this CPM by the name of its class.
@@ -224,7 +248,7 @@ class CPM extends GridBasedModel {
 	@param {number} [num = 0] - if multiple constraints of this class are present, 
 	return the num-th one added to the CPM. 
 	*/
-	getConstraint( constraintname, num ){
+	getConstraint( constraintname, num ) {
 	
 		if( !num ){
 			num = 0
@@ -460,15 +484,11 @@ class CPM extends GridBasedModel {
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
 	   for this cell in the relevant arrays (cellvolume, t2k).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
-	   @param {CellKind} parent - if this is a birth event
+	   @param {CellId} parentId - if this is a birth event
 	   @return {CellId} of the new cell.*/
-	makeNewCellID ( kind, parent ){
+	makeNewCellID ( kind, parentId ){
 		const newid = ++ this.last_cell_id
-		if (parent){
-			this.cells[newid] = new Cell(this.conf, kind, newid, this.cells[parent])
-		} else {
-			this.cells[newid] = new Cell(this.conf, kind, newid)
-		}
+		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.cells[parentId])
 		this.cellvolume[newid] = 0
 		this.setCellKind( newid, kind )
 		return newid
