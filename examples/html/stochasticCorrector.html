@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>CellDivision</title>
+<style type="text/css">
+body{
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 10px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [400,200],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [false,false],				// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 2,								// CPM temperature
+        
+        // used internally
+        INIT_X : [0, 40, 40],
+        INIT_Y: [0, 40, 40],
+		INIT_V : [0, 150, 150],
+        CELLS : ["empty", CPM.StochasticCorrector, CPM.StochasticCorrector],
+
+        // only used in postMCSListener
+        rX : [0, 1, 1],
+        rY : [0, 0.8, 0.8],
+        d : [0, 0.05, 0.05],
+        speed_internal_dynamics : [0, 0.2, 0.2],
+        Q : [0, 0.8, 0.8],
+        noise : [0,5,5],
+
+        division_volume : [0, 200, 300],
+        shrink_rate : [0, 10, 10],
+        y_growth_contribution : [0, 25, 25],
+
+        
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+        
+        // Adhesion parameters:
+         J: [ [15,15,15], 
+			[15,15,15], // epidermal cells
+			[15,15,15] ],
+		
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0, 1, 1],				// VolumeConstraint importance per cellkind
+		V : [0,152, 152]					// Unused - are backup.
+		
+	},
+	
+	// Simulation setup and configuration: this controls stuff like grid initialization,
+	// runtime, and what the output should look like.
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [4, 4],						// Number of cells to seed for all
+		// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 100,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "EEEEEE",
+		CELLCOLOR : ["AA1AAA","FFA000"],
+		SHOWBORDERS : [true, true],				// Should cellborders be displayed?
+		BORDERCOL : ["666666", "666666"],				// color of the cell borders
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : true,						// Should a png image of the grid be saved
+		// during the simulation?
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/CellDivision",	// ... And save the image in this folder.
+		EXPNAME : "CellDivision",					// Used for the filename of output images.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object. If Custom-methods above is set to false,
+	 	this object is ignored and not used in the html/node files. */
+	 let custommethods = {
+	 	postMCSListener : postMCSListener,
+	 	initializeGrid : initializeGrid
+	 }
+	sim = new CPM.Simulation( config, custommethods )
+
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+
+function step(){
+	sim.step()
+	meter.tick()
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+
+/* The following custom methods will be added to the simulation object*/
+function postMCSListener(){
+	
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	
+	
+	for( let i of this.C.cellIDs() ){
+        updateInternalDynamics(this.C, i)
+		if( this.C.getVolume(i) > this.C.conf.division_volume[this.C.cellKind(i)] ){
+			this.gm.divideCell(i)
+		}
+	}
+}
+
+function updateInternalDynamics(C, i){
+    let cell = C.getCell(i) 
+    let vol = C.getVolume(cell.id)
+    console.log(cell.X, " ",cell.Y, " ", cell.V)
+    let V = cell.V
+    if ((cell.V - vol) < 10 && cell.X > 0){
+        V += C.conf.y_growth_contribution[cell.kind]*(cell.Y/vol)/((cell.Y/vol)+0.1)
+        
+    }
+    V -= C.conf.shrink_rate[cell.kind]
+    cell.setV(V)
+    
+    let dy = C.conf.rY[cell.kind]*cell.Y*(vol-cell.X-cell.Y)/vol*C.conf.speed_internal_dynamics[cell.kind]
+    let X = cell.X + (1-C.conf.Q[cell.kind])*dy+( C.conf.rX[cell.kind]*cell.X*(vol-cell.X-cell.Y)/vol - C.conf.d[cell.kind]*cell.X )*C.conf.speed_internal_dynamics[cell.kind]
+    let Y = cell.Y + C.conf.Q[cell.kind]*dy - C.conf.d[cell.kind]*cell.Y*C.conf.speed_internal_dynamics[cell.kind]
+    cell.setXY(X,Y)
+}
+
+function initializeGrid(){
+	
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+    
+	let nrcells = this.conf["NRCELLS"], cellkind, i
+		
+	// Seed the right number of cells for each cellkind 
+	for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+		
+		for( i = 0; i < nrcells[cellkind]; i++ ){
+			// first cell always at the midpoint. Any other cells
+			// randomly.				
+			if( i == 0 ){
+                this.gm.seedCellAt( cellkind+1, [this.C.midpoint[0]/2, this.C.midpoint[1] ] )
+			} else {
+				this.gm.seedCell( cellkind+1 )
+			}
+		}
+	}
+
+
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<h1>Stochastic Correction</h1>
+<p>
+ 
+ Replicator and mutant RNA compete in vesicles
+</p>
+</body>
+</html>
