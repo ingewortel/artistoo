@@ -75,10 +75,11 @@ class VolumeConstraint extends SoftConstraint {
 	@return {number} the volume energy of this cell.
 	*/
 	volconstraint ( vgain, t ){
-		const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k]
+		let c = this.C.getCell(t) 
+		let l =  c.getParam("LAMBDA_V")
 		// the background "cell" has no volume constraint.
 		if( t == 0 || l == 0 ) return 0
-		const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain)
+		const vdiff = c.getParam("V") - (this.C.getVolume(t) + vgain)
 		return l*vdiff*vdiff
 	}
 }

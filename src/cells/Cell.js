@@ -8,12 +8,13 @@ class Cell {
     kind
     */
     
-	constructor (conf, kind, id, parent){
+	constructor (conf, kind, id, C, parent){
 		this.individualParams = []
 		this.parentId = 0
 		this.id = id
 		this.conf = conf
 		this.kind = kind
+		this.C = C
 		if (parent instanceof Cell){ // copy on birth
 			this.parentId = parent.id
 		} 
@@ -30,10 +31,7 @@ class Cell {
 	getIndividualParam(param){
 		throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
 	}
-	/* eslint-disable no-unused-vars*/
-	mutate(weight){
-		throw("Implement top-down mutation for " + typeof this + " Cell class " )
-	}
+	
 }
 
 

@@ -1233,6 +1233,7 @@ class GridBasedModel {
 		cellvolumes will be added with key = {@link CellId}, value = volume.
 		@type{number[]}*/
 		this.cellvolume = [];
+
 		/** Tracks the elapsed time in MCS
 		@type {number}*/
 		this.time = 0;
@@ -2181,10 +2182,11 @@ class VolumeConstraint extends SoftConstraint {
 	@return {number} the volume energy of this cell.
 	*/
 	volconstraint ( vgain, t ){
-		const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
+		let c = this.C.getCell(t); 
+		let l =  c.getParam("LAMBDA_V");
 		// the background "cell" has no volume constraint.
 		if( t == 0 || l == 0 ) return 0
-		const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
+		const vdiff = c.getParam("V") - (this.C.getVolume(t) + vgain);
 		return l*vdiff*vdiff
 	}
 }
@@ -2772,6 +2774,41 @@ let AutoAdderConfig = {
 	IS_BARRIER : BarrierConstraint
 };
 
+/* eslint-disable no-unused-vars*/
+class Cell {
+	/** 
+    individualParams
+    parentId
+    conf
+    kind
+    */
+    
+	constructor (conf, kind, id, C, parent){
+		this.individualParams = [];
+		this.parentId = 0;
+		this.id = id;
+		this.conf = conf;
+		this.kind = kind;
+		this.C = C;
+		if (parent instanceof Cell){ // copy on birth
+			this.parentId = parent.id;
+		} 
+	}
+
+	getParam(param){
+		if (!(this.individualParams.includes(param))){
+			return this.conf[param][this.kind]
+		} else {
+			return this.getIndividualParam(param)
+		}
+	}
+
+	getIndividualParam(param){
+		throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
+	}
+	
+}
+
 /** The core CPM class. Can be used for two- or three-dimensional simulations.
 */
 class CPM extends GridBasedModel {
@@ -2807,7 +2844,8 @@ class CPM extends GridBasedModel {
 		this.time = 0;
 
 		// ---------- CPM specific stuff here
-		
+		/** TODO make comment = this will hold Cell objects */
+		this.cells = [new Cell(conf, 0, -1)];
 		/** Number of non-background cells currently on the grid.
 		@type{number}*/
 		this.nr_cells = 0;
@@ -2830,6 +2868,8 @@ class CPM extends GridBasedModel {
 		*/
 		this.t2k = [];	// cell type ("kind"). Example: this.t2k[1] is the cellKind of cell 1.
 		this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
+
+		this.cellclasses = ["EMPTY"]; //cell classes per kind - 0 is blank
 
 		//  ---------- CPM constraints
 		/** Array of objects of (@link SoftConstraint) subclasses attached to the CPM.
@@ -2864,8 +2904,9 @@ class CPM extends GridBasedModel {
 		for( let x of Object.keys( conf ) ){
 			if( x in AutoAdderConfig ){
 				this.add( new AutoAdderConfig[x]( conf ) );
-			}
+			} 
 		}
+		this.addCells( conf );
 	}
 
 	/** Completely reset; remove all cells and set time back to zero. Only the
@@ -2878,8 +2919,9 @@ class CPM extends GridBasedModel {
 		this.t2k = [];
 		this.t2k[0] = 0;
 		this.time = 0;
-		this.cellvolumes = [0];
+		this.cellvolume = [0];
 		this.stat_values = {};
+		this.cells = [];
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 
@@ -2956,12 +2998,13 @@ class CPM extends GridBasedModel {
 				i = this.hard_constraints.push( t );
 				
 				// Write this index to an array in the 
-				// this.soft_constraints_indices object, for lookup later. 
+				// this.hard_constraints_indices object, for lookup later. 
 				if( !this.hard_constraints_indices.hasOwnProperty(tName) ){
 					this.hard_constraints_indices[tName] = [];
 				}
 				this.hard_constraints_indices[tName].push( i-1 );
 				break
+
 			}
 		}
 		if( typeof t["postSetpixListener"] === "function" ){
@@ -2974,6 +3017,27 @@ class CPM extends GridBasedModel {
 		if( typeof t["postAdd"] === "function" ){
 			t.postAdd();
 		}
+	}
+
+
+	addCells( conf ){
+		let i = 1;
+		if ("CELLS" in conf){	
+			if (typeof this.n_cell_kinds == "undefined"){
+				this.n_cell_kinds = conf["CELLS"].length - 1;
+			} else if (this.n_cell_kinds !== conf["CELLS"].length -1 ) {
+				throw("Incorrect number of CELLS defined - do constraints and CELLS all contain the same number? CELLS expects some null value in index 0 for background ")
+			}
+			while (i <= this.n_cell_kinds && conf["CELLS"][i] !== "undefined"){
+				this.cellclasses.push(conf["CELLS"][i]);
+				i ++;
+			}
+		} else {
+			while (i <= this.n_cell_kinds){
+				this.cellclasses.push(Cell);
+				i ++;
+			}
+		}	
 	}
 	
 	/** Get a {@link Constraint} object linked to this CPM by the name of its class.
@@ -2990,7 +3054,7 @@ class CPM extends GridBasedModel {
 	@param {number} [num = 0] - if multiple constraints of this class are present, 
 	return the num-th one added to the CPM. 
 	*/
-	getConstraint( constraintname, num ){
+	getConstraint( constraintname, num ) {
 	
 		if( !num ){
 			num = 0;
@@ -3048,6 +3112,12 @@ class CPM extends GridBasedModel {
 		this.t2k[ t ] = k;
 	}
 	
+	/** Get the {@link Cell} of the cell with {@link CellId} t. 
+	@param {CellId} t - id of the cell to get kind of.
+	@return {Cell} the cellkind. */
+	getCell ( t ){
+		return this.cells[t]
+	}
 	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
@@ -3222,20 +3292,17 @@ class CPM extends GridBasedModel {
 	}
 
 	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
-
+	//  TODO: Rename or split so that it is clear that this no longer only makes a new ID
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
 	   for this cell in the relevant arrays (cellvolume, t2k).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
+	   @param {CellId} parentId - id of the parent, if this is birth
 	   @return {CellId} of the new cell.*/
-	makeNewCellID ( kind, parent ){
+	makeNewCellID ( kind, parentId ){
 		const newid = ++ this.last_cell_id;
+		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.cells[parentId]);
 		this.cellvolume[newid] = 0;
 		this.setCellKind( newid, kind );
-		if (parent) {
-			// print(parent)
-			// eslint-disable-next-line no-console
-			console.log( parent  );
-		}
 		return newid
 	}
 }
@@ -4424,6 +4491,57 @@ class CA extends GridBasedModel {
 		@type {object} */
 		this.stat_values = {};
 	}
+}
+
+/* eslint-disable no-unused-vars*/
+class StochasticCorrector extends Cell {
+	/* eslint-disable */ 
+	constructor (conf, kind, id, C, parent) {
+		super(conf, kind, id, C, parent);
+		this.X = conf["INIT_X"][kind];
+		this.Y = conf["INIT_Y"][kind];
+		this.V = conf["INIT_V"][kind];
+		this.individualParams = ["V"];
+		if (parent instanceof Cell){ // copy on birth
+			this.V = parent.V;
+			divideXY(parent);
+		} 
+	}
+
+	setXY(X, Y){
+		this.X = X;
+		this.Y = Y;
+	}
+
+	setV(V){
+		this.V = V;
+	}
+
+	divideXY(parent){
+		let prevX = parent.X;
+		let prevY = parent.Y;
+		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
+		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
+
+		if (prevX / 2 - fluctX < 0)
+			fluctX = prevX;
+		if (prevY / 2 - fluctY < 0)
+			fluctY = prevY;
+
+		this.setXY(prevX/2+fluctX ,prevY/2 +fluctY );
+		parent.setXY(prevX/2 - fluctX,prevY/2 - fluctY);
+	}
+
+	/* eslint-disable */ 
+	getIndividualParam(param){
+		if (param == "V"){
+			// console.log(this.V)
+			return this.V
+		} 
+		throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
+	}
+
+	
 }
 
 /**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 
@@ -10392,6 +10510,7 @@ exports.BorderPixelsByCell = BorderPixelsByCell;
 exports.CA = CA;
 exports.CPM = CPM;
 exports.Canvas = Canvas;
+exports.Cell = Cell;
 exports.CellNeighborList = CellNeighborList;
 exports.Centroids = Centroids;
 exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
@@ -10420,4 +10539,5 @@ exports.SoftConnectivityConstraint = SoftConnectivityConstraint;
 exports.SoftConstraint = SoftConstraint;
 exports.SoftLocalConnectivityConstraint = SoftLocalConnectivityConstraint;
 exports.Stat = Stat;
+exports.StochasticCorrector = StochasticCorrector;
 exports.VolumeConstraint = VolumeConstraint;

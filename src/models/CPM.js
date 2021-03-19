@@ -40,7 +40,8 @@ class CPM extends GridBasedModel {
 		this.time = 0
 
 		// ---------- CPM specific stuff here
-		
+		/** TODO make comment = this will hold Cell objects */
+		this.cells = [new Cell(conf, 0, -1)]
 		/** Number of non-background cells currently on the grid.
 		@type{number}*/
 		this.nr_cells = 0
@@ -116,6 +117,7 @@ class CPM extends GridBasedModel {
 		this.time = 0
 		this.cellvolume = [0]
 		this.stat_values = {}
+		this.cells = []
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 
@@ -306,6 +308,12 @@ class CPM extends GridBasedModel {
 		this.t2k[ t ] = k
 	}
 	
+	/** Get the {@link Cell} of the cell with {@link CellId} t. 
+	@param {CellId} t - id of the cell to get kind of.
+	@return {Cell} the cellkind. */
+	getCell ( t ){
+		return this.cells[t]
+	}
 	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
@@ -484,7 +492,7 @@ class CPM extends GridBasedModel {
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
 	   for this cell in the relevant arrays (cellvolume, t2k).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
-	   @param {CellId} parentId - if this is a birth event
+	   @param {CellId} parentId - id of the parent, if this is birth
 	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind, parentId ){
 		const newid = ++ this.last_cell_id

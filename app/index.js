@@ -8,6 +8,9 @@ import CA from "../src/models/CA.js"
 import CPM from "../src/models/CPM.js" 
 import GridBasedModel from "../src/models/GridBasedModel.js" 
  
+import Cell from "../src/cells/Cell.js" 
+import StochasticCorrector from "../src/cells/StochasticCorrector.js" 
+ 
 import Stat from "../src/stats/Stat.js" 
 import PixelsByCell from "../src/stats/PixelsByCell.js" 
 import BorderPixelsByCell from "../src/stats/BorderPixelsByCell.js" 
@@ -56,6 +59,8 @@ export {
 	CA,
 	CPM,
 	GridBasedModel,
+	Cell,
+	StochasticCorrector,
 	Stat,
 	PixelsByCell,
 	BorderPixelsByCell,
