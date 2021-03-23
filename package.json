@@ -4,8 +4,10 @@
 	"dependencies": {
 		"braces": "^3.0.2",
 		"canvas": "^2.6.0",
+		"colormap": "^2.3.2",
 		"esdoc": "^1.1.0",
 		"esdoc-standard-plugin": "^1.0.0",
+		"eslint": "^5.16.0",
 		"fs": "0.0.1-security",
 		"mathjs": "^5.8.0",
 		"mersenne-twister": "^1.1.0",

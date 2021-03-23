@@ -588,6 +588,7 @@ class Canvas {
 	 *
 	 * */
 	drawCellsOfId( id, col ){
+		
 		if( !col ){
 			col = "000000"
 		}
@@ -674,7 +675,9 @@ class Canvas {
 	 * If left unspecified, it gets the default value of black ("000000").
 	 * col can also be a function that returns a hex value for a cell id.
 	 * */
+
 	drawPixelSet( pixelarray, col ){
+	
 		if( ! col ){
 			col = "000000"
 		}

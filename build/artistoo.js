@@ -2995,7 +2995,7 @@ var CPM = (function (exports) {
 			this.id = id;
 			this.conf = conf;
 			this.kind = kind;
-			this.C = C;
+			this.C = C; // this is ugly - only added to have a form of random number generation
 			if (parent instanceof Cell){ // copy on birth
 				this.parentId = parent.id;
 			} 
@@ -3506,7 +3506,7 @@ var CPM = (function (exports) {
 		   @return {CellId} of the new cell.*/
 		makeNewCellID ( kind, parentId ){
 			const newid = ++ this.last_cell_id;
-			this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.cells[parentId]);
+			this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this ,this.cells[parentId]);
 			this.cellvolume[newid] = 0;
 			this.setCellKind( newid, kind );
 			return newid
@@ -4520,6 +4520,7 @@ var CPM = (function (exports) {
 		 *
 		 * */
 		drawCellsOfId( id, col ){
+			
 			if( !col ){
 				col = "000000";
 			}
@@ -4606,7 +4607,9 @@ var CPM = (function (exports) {
 		 * If left unspecified, it gets the default value of black ("000000").
 		 * col can also be a function that returns a hex value for a cell id.
 		 * */
+
 		drawPixelSet( pixelarray, col ){
+		
 			if( ! col ){
 				col = "000000";
 			}
@@ -4703,6 +4706,8 @@ var CPM = (function (exports) {
 	class StochasticCorrector extends Cell {
 		/* eslint-disable */ 
 		constructor (conf, kind, id, C, parent) {
+			/* eslint-disable	*/
+			// console.log("hi", parent)
 			super(conf, kind, id, C, parent);
 			this.X = conf["INIT_X"][kind];
 			this.Y = conf["INIT_Y"][kind];
@@ -4710,32 +4715,46 @@ var CPM = (function (exports) {
 			this.individualParams = ["V"];
 			if (parent instanceof Cell){ // copy on birth
 				this.V = parent.V;
-				divideXY(parent);
+				this.divideXY(parent);
 			} 
 		}
 
 		setXY(X, Y){
-			this.X = X;
-			this.Y = Y;
+			if (X > 0){
+				this.X = X;
+			} else {
+				this.X = 0;
+			}
+			if (Y > 0){
+				this.Y = Y;
+			} else {
+				this.Y = 0;
+			}
 		}
 
 		setV(V){
 			this.V = V;
 		}
-
+	/* eslint-disable	*/
 		divideXY(parent){
 			let prevX = parent.X;
 			let prevY = parent.Y;
 			let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
 			let fluctY = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
 
-			if (prevX / 2 - fluctX < 0)
-				fluctX = prevX;
-			if (prevY / 2 - fluctY < 0)
-				fluctY = prevY;
+			if ((prevX / 2 - fluctX) < 0)
+				fluctX = prevX/2;
+			if ((prevY / 2 - fluctY) < 0)
+				fluctY = prevY/2;
 
+			/* eslint-disable	*/
+			// console.log("prev childe: ", this.X, this.Y, "parent:" ,parent.X, parent.Y, "fluct:", fluctX, fluctY )
 			this.setXY(prevX/2+fluctX ,prevY/2 +fluctY );
 			parent.setXY(prevX/2 - fluctX,prevY/2 - fluctY);
+			let V = this.V;
+			this.setV(V/2);
+			parent.setV(V/2);
+			// console.log("post childe: ", this.X, this.Y, "parent:" ,parent.X, parent.Y, "fluct:", fluctX, fluctY )
 		}
 
 		/* eslint-disable */ 

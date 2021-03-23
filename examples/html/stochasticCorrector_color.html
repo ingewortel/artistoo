@@ -36,14 +36,15 @@ let config = {
 	conf : {
 		// Basic CPM parameters
 		torus : [false,false],				// Should the grid have linked borders?
-		seed : 1,							// Seed for random number generation.
+		seed : 5,							// Seed for random number generation.
 		T : 2,								// CPM temperature
         
         // used internally
         INIT_X : [0, 40, 40],
         INIT_Y: [0, 40, 40],
 		INIT_V : [0, 150, 150],
-        CELLS : ["empty", CPM.StochasticCorrector, CPM.StochasticCorrector],
+		CELLS : ["empty", CPM.StochasticCorrector, CPM.StochasticCorrector],
+		NOISE : [0,10,10],
 
         // only used in postMCSListener
         rX : [0, 1, 1],
@@ -51,11 +52,11 @@ let config = {
         d : [0, 0.05, 0.05],
         speed_internal_dynamics : [0, 0.2, 0.2],
         Q : [0, 0.8, 0.8],
-        noise : [0,5,5],
+       
 
         division_volume : [0, 200, 300],
         shrink_rate : [0, 10, 10],
-        y_growth_contribution : [0, 25, 25],
+        y_growth_contribution : [0, 35, 35],
 
         
 		// Constraint parameters. 
@@ -77,11 +78,11 @@ let config = {
 	
 	// Simulation setup and configuration: this controls stuff like grid initialization,
 	// runtime, and what the output should look like.
-	simsettings : {
+	simsettings : { 
 	
 		// Cells on the grid
-		NRCELLS : [4, 4],						// Number of cells to seed for all
-		// non-background cellkinds.
+		NRCELLS : [10, 10],						// Number of cells to seed for all
+		// non-background cellkinds. 
 		// Runtime etc
 		BURNIN : 100,
 		RUNTIME : 1000,
@@ -89,10 +90,10 @@ let config = {
 		
 		// Visualization
 		CANVASCOLOR : "EEEEEE",
-		CELLCOLOR : ["AA1AAA","FFA000"],
+		CELLCOLOR : ["AA111A","FFA110"],
 		SHOWBORDERS : [true, true],				// Should cellborders be displayed?
 		BORDERCOL : ["666666", "666666"],				// color of the cell borders
-		zoom : 2,							// zoom in on canvas with this factor.
+		zoom : 3,							// zoom in on canvas with this factor.
 		
 		// Output images
 		SAVEIMG : true,						// Should a png image of the grid be saved
@@ -117,7 +118,7 @@ function initialize(){
 	 let custommethods = {
 	 	postMCSListener : postMCSListener,
 		initializeGrid : initializeGrid,
-		drawCanvas : drawCanvas
+		drawOnTop : drawOnTop
 	 }
 	sim = new CPM.Simulation( config, custommethods )
 
@@ -147,17 +148,19 @@ function postMCSListener(){
 	// add the initializer if not already there
 	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-	
+	var C = this.C
+	this.C.cells.forEach(function (item) {
+		updateCell(C, item)
+	});
 	for( let i of this.C.cellIDs() ){
-        updateInternalDynamics(this.C, i)
 		if( this.C.getVolume(i) > this.C.conf.division_volume[this.C.cellKind(i)] ){
 			this.gm.divideCell(i)
 		}
 	}
 }
 
-function updateInternalDynamics(C, i){
-    let cell = C.getCell(i) 
+function updateCell(C, cell){
+	if (cell.id < 0){return}
     let vol = C.getVolume(cell.id)
     // console.log(cell.X, " ",cell.Y, " ", cell.V)
     let V = cell.V
@@ -171,7 +174,9 @@ function updateInternalDynamics(C, i){
     let dy = C.conf.rY[cell.kind]*cell.Y*(vol-cell.X-cell.Y)/vol*C.conf.speed_internal_dynamics[cell.kind]
     let X = cell.X + (1-C.conf.Q[cell.kind])*dy+( C.conf.rX[cell.kind]*cell.X*(vol-cell.X-cell.Y)/vol - C.conf.d[cell.kind]*cell.X )*C.conf.speed_internal_dynamics[cell.kind]
     let Y = cell.Y + C.conf.Q[cell.kind]*dy - C.conf.d[cell.kind]*cell.Y*C.conf.speed_internal_dynamics[cell.kind]
-    cell.setXY(X,Y)
+	cell.setXY(X,Y)
+	
+
 }
 
 function initializeGrid(){
@@ -195,8 +200,10 @@ function initializeGrid(){
 		}
 	}
 }
+
+
 // Custom drawing function to draw the preferred directions.
-function drawCanvas(){
+function drawOnTop(){
 	
 	/* This part is the normal drawing function */
 	
@@ -219,39 +226,44 @@ function drawCanvas(){
 			this.Cim.drawCellBorders( cellkind+1, "000000" )
 		}
 	}
+	// 	// Draw each cellkind appropriately
+	// 	let cellcolor=this.conf["CELLCOLOR"], 
+	// 	nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
+	// for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+		
+	// 	// draw the cells of each kind in the right color
+	// 	if( cellcolor[ cellkind ] != -1 ){
+	// 		this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
+	// 	}
+			
+	// 	// Draw borders if required
+	// 	if(  cellborders[ cellkind  ]  ){
+	// 		this.Cim.drawCellBorders( cellkind+1, "000000" )
+	// 	}
+	// }
 
 }
+const cmap = new ColorMap({
+		colormap: 'bluered',
+		nshades: 100,
+		format: 'hex',
+		alpha: 1
+})
 
 function colorByY (Cim, cell) {
-	
 	if (cell.id < 0){
 		return
 	}
-	
-	let c = Math.floor(cell.Y)
-	if (c > 300){
-		c = 150
+	let c = Math.floor(cell.Y *3) 
+	if (c >= cmap.length){
+		c = cmap.length - 1
+	} else if (c < 0){
+		c = 0
 	}
-	const viridis = new ColorMap({
-		colormap: 'bone',
-		nshades: 150,
-		format: 'hex',
-		alpha: 1
-	})
-	const plasma = new ColorMap({
-		colormap: 'summer',
-		nshades: 150,
-		format: 'hex',
-		alpha: 1
-	})
-	
-	if (cell.kind == 1){
-		console.log(c)
-		Cim.drawCellsOfId ( cell.id,  plasma[c])
-	} else {
-		Cim.drawCellsOfId ( cell.id,  viridis[c])
+	if (cmap[c] === undefined){
+		console.log("HEY", cell.V, cell.id, c,)
 	}
-	
+	Cim.drawCellsOfId ( cell.id,  cmap[c].substring(1))
 }
 
 

@@ -14,7 +14,7 @@ class Cell {
 		this.id = id
 		this.conf = conf
 		this.kind = kind
-		this.C = C
+		this.C = C // this is ugly - only added to have a form of random number generation
 		if (parent instanceof Cell){ // copy on birth
 			this.parentId = parent.id
 		} 

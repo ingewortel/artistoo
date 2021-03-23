@@ -1,0 +1,70 @@
+Two levels of stochastic correction:
+
+mt vesicle vs mt vesicle (solves conflict of mtDNA vs ∆mtDNA)
+cell vs cell (solves conflict of nucleus vs mitochondrial pop)
+
+Key assumptions:
+    mitochondrial fission is to create variation of mitochondrial products
+        select healthy mtDNA
+    mitochondrial fusion is to homogenize for nuclear products
+        growth and replciation can only happen with the full nuclear machinery in your mt vesicle
+    cell growth is a product of ∆Psi and membrane area, can be used for mt-replication and self-replication 
+
+-----
+
+This version records which product is 'worst' and computes rates with this as a rate-limiting step
+
+
+struct mt_DNA{
+    dna_quality = [float]			                                //this DNA’s ability to create each mt product
+}
+
+struct mitochondrion {
+    DNAs = [mt_DNA] 					                 //all mt_DNAs currently in this vesicle (2D array)
+
+    mt_products = [float]                              // quality and number of mt products - needed for high ∆psi
+    nuc_mt_products = [float]                        // quality and number of nuclear products for mt - needed to replicate mt_dna
+
+    ∆psi = number                                           // membrane potential
+}
+
+struct host {
+    mitochondria = [mitochondrion]              //all mitochondrial vesicles in this supercell
+
+    cell_products = float                         // cellular products collapsed into single variable - needed to replicate cell
+
+    selfishness = float                                    // evolvable parameter? - how much energy goes to cell_products vs nuc_mt_products 
+}
+
+
+for all hosts {
+    for all mitochondria in this_host {
+        
+        // DNA replication goes with rate limiting step in nuc_mt_products rate
+        for all DNAs in this_mitochondrion{
+            if random() > minimum(this_mitochondrion.nuc_mt_products):
+                new mt_DNA()
+                if random() > birth_mutation_rate:
+                    new_mt_DNA.mutate()
+            if random() > minimum(this_mitochondrion.mt_products) * oxphos_mutation_rate: //optional - links oxphos to mutation
+                this_DNA.mutate()
+            
+            mt_products += DNA_quality * some_conversion_factor
+        }
+
+        if random() > chanceFission && volume > minimum_fission_vol:
+        // I think it would be interesting to have fission as < 50% of the mitochondrial volume to be sequestered
+            new_mitochondrion()
+            divideProducts(this_mitochondrion, new_mitochondrion) // divide nuc_mt and mt products with(out) noise
+        if this_mitochondrion.hasNeighbour() && random() > chanceFusion:
+            fuseWith(neighbour) //(1 mitochondrion is effectively deleted, as both get the same ID)
+            combineProducts()
+        
+        ∆psi += minimum(mt_products) / surface_area
+    }
+    if this_host.cell_product > division_minimum_product:
+        divide()
+    else:
+        cell_products += selfishness * mitochondria.sum∆psi
+        (1-selfishness * mitochondria.sum∆psi).divideOverMitochondria() //adds to nuc_mt_products
+}

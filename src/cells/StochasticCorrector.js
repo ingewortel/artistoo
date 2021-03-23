@@ -4,6 +4,8 @@ import Cell from "./Cell.js"
 class StochasticCorrector extends Cell {
 	/* eslint-disable */ 
 	constructor (conf, kind, id, C, parent) {
+		/* eslint-disable	*/
+		// console.log("hi", parent)
 		super(conf, kind, id, C, parent)
 		this.X = conf["INIT_X"][kind]
 		this.Y = conf["INIT_Y"][kind]
@@ -11,32 +13,46 @@ class StochasticCorrector extends Cell {
 		this.individualParams = ["V"]
 		if (parent instanceof Cell){ // copy on birth
 			this.V = parent.V
-			divideXY(parent)
+			this.divideXY(parent)
 		} 
 	}
 
 	setXY(X, Y){
-		this.X = X
-		this.Y = Y
+		if (X > 0){
+			this.X = X
+		} else {
+			this.X = 0
+		}
+		if (Y > 0){
+			this.Y = Y
+		} else {
+			this.Y = 0
+		}
 	}
 
 	setV(V){
 		this.V = V
 	}
-
+/* eslint-disable	*/
 	divideXY(parent){
 		let prevX = parent.X
 		let prevY = parent.Y
 		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1)
 		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1)
 
-		if (prevX / 2 - fluctX < 0)
-			fluctX = prevX
-		if (prevY / 2 - fluctY < 0)
-			fluctY = prevY
+		if ((prevX / 2 - fluctX) < 0)
+			fluctX = prevX/2
+		if ((prevY / 2 - fluctY) < 0)
+			fluctY = prevY/2
 
+		/* eslint-disable	*/
+		// console.log("prev childe: ", this.X, this.Y, "parent:" ,parent.X, parent.Y, "fluct:", fluctX, fluctY )
 		this.setXY(prevX/2+fluctX ,prevY/2 +fluctY )
 		parent.setXY(prevX/2 - fluctX,prevY/2 - fluctY)
+		let V = this.V
+		this.setV(V/2)
+		parent.setV(V/2)
+		// console.log("post childe: ", this.X, this.Y, "parent:" ,parent.X, parent.Y, "fluct:", fluctX, fluctY )
 	}
 
 	/* eslint-disable */ 
