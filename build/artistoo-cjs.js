@@ -2845,7 +2845,10 @@ class CPM extends GridBasedModel {
 
 		// ---------- CPM specific stuff here
 		/** TODO make comment = this will hold Cell objects */
-		this.cells = [new Cell(conf, 0, -1)];
+		this.cells = [new Cell(conf, 0, -1, this)];
+
+		this.cellclasses = ["EMPTY"]; //cell classes per kind - 0 is blank
+
 		/** Number of non-background cells currently on the grid.
 		@type{number}*/
 		this.nr_cells = 0;
@@ -2869,7 +2872,7 @@ class CPM extends GridBasedModel {
 		this.t2k = [];	// cell type ("kind"). Example: this.t2k[1] is the cellKind of cell 1.
 		this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
 
-		this.cellclasses = ["EMPTY"]; //cell classes per kind - 0 is blank
+		
 
 		//  ---------- CPM constraints
 		/** Array of objects of (@link SoftConstraint) subclasses attached to the CPM.
@@ -2921,7 +2924,7 @@ class CPM extends GridBasedModel {
 		this.time = 0;
 		this.cellvolume = [0];
 		this.stat_values = {};
-		this.cells = [];
+		this.cells = [this.cells[0]]; // keep empty declared
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 

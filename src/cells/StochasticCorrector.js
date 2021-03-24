@@ -45,14 +45,11 @@ class StochasticCorrector extends Cell {
 		if ((prevY / 2 - fluctY) < 0)
 			fluctY = prevY/2
 
-		/* eslint-disable	*/
-		// console.log("prev childe: ", this.X, this.Y, "parent:" ,parent.X, parent.Y, "fluct:", fluctX, fluctY )
 		this.setXY(prevX/2+fluctX ,prevY/2 +fluctY )
 		parent.setXY(prevX/2 - fluctX,prevY/2 - fluctY)
 		let V = this.V
 		this.setV(V/2)
 		parent.setV(V/2)
-		// console.log("post childe: ", this.X, this.Y, "parent:" ,parent.X, parent.Y, "fluct:", fluctX, fluctY )
 	}
 
 	/* eslint-disable */ 
@@ -64,6 +61,9 @@ class StochasticCorrector extends Cell {
 		throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
 	}
 
+	// getColor(){
+	// 	return 100/this.Y
+	// }
 	
 }
 

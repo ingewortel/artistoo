@@ -109,7 +109,7 @@ let config = {
 	}
 }
 /*	---------------------------------- */
-let sim, meter, viridis
+let sim, meter, showYcolors
 
 function initialize(){
 	 /* 	The following functions are defined below and will be added to
@@ -122,10 +122,7 @@ function initialize(){
 	 }
 	sim = new CPM.Simulation( config, custommethods )
 
-	
-	// console.log(viridis)
-
-	// colormaps = new ColorMap()
+	showYcolors = false
 
 	meter = new FPSMeter({left:"auto", right:"5px"})
 	step()
@@ -214,33 +211,38 @@ function drawOnTop(){
 	this.Cim.clear( this.conf["CANVASCOLOR"] )
 		
 	// Draw each cellkind appropriately
-	var Cim = this.Cim
-	this.C.cells.forEach(function (item) {
-		colorByY(Cim, item)
-	});
+	if (showYcolors){
+		var Cim = this.Cim
+		this.C.cells.forEach(function (item) {
+			colorByY(Cim, item)
+		});
 
-	let nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
-	for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+		let nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
+		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+			// Draw borders if required
+			if(  cellborders[ cellkind  ]  ){
+				this.Cim.drawCellBorders( cellkind+1, "000000" )
+			}
+		}
+	} else {
+			// Draw each cellkind appropriately
+		let cellcolor=this.conf["CELLCOLOR"], 
+		nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
+		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+		
+		// draw the cells of each kind in the right color
+		if( cellcolor[ cellkind ] != -1 ){
+			this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
+		}
+			
 		// Draw borders if required
 		if(  cellborders[ cellkind  ]  ){
 			this.Cim.drawCellBorders( cellkind+1, "000000" )
 		}
 	}
-	// 	// Draw each cellkind appropriately
-	// 	let cellcolor=this.conf["CELLCOLOR"], 
-	// 	nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
-	// for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
-		
-	// 	// draw the cells of each kind in the right color
-	// 	if( cellcolor[ cellkind ] != -1 ){
-	// 		this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
-	// 	}
-			
-	// 	// Draw borders if required
-	// 	if(  cellborders[ cellkind  ]  ){
-	// 		this.Cim.drawCellBorders( cellkind+1, "000000" )
-	// 	}
-	// }
+	}
+	
+	
 
 }
 const cmap = new ColorMap({
@@ -266,15 +268,23 @@ function colorByY (Cim, cell) {
 	Cim.drawCellsOfId ( cell.id,  cmap[c].substring(1))
 }
 
-
+function changeColorBy(){
+	showYcolors = !showYcolors
+}
 
 
 </script>
 </head>
 <body onload="initialize()">
 <h1>Stochastic Correction</h1>
+
+<label class="switch">
+		<input type="checkbox" name="colorby" oninput="changeColorBy()"  unchecked>
+		<span class="slider round"></span>
+		<label for="colorby"> Show Y amount</label>
+	
+	</label>
 <p>
- 
  Replicator and mutant RNA compete in vesicles
 </p>
 </body>
