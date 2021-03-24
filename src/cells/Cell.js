@@ -8,13 +8,13 @@ class Cell {
     kind
     */
     
-	constructor (conf, kind, id, C, parent){
+	constructor (conf, kind, id, mt, parent){
 		this.individualParams = []
 		this.parentId = 0
 		this.id = id
 		this.conf = conf
 		this.kind = kind
-		this.C = C // this is ugly - only added to have a form of random number generation
+		this.mt = mt 
 		if (parent instanceof Cell){ // copy on birth
 			this.parentId = parent.id
 		} 

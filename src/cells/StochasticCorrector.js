@@ -3,10 +3,10 @@ import Cell from "./Cell.js"
 /* eslint-disable no-unused-vars*/
 class StochasticCorrector extends Cell {
 	/* eslint-disable */ 
-	constructor (conf, kind, id, C, parent) {
+	constructor (conf, kind, id, mt, parent) {
 		/* eslint-disable	*/
 		// console.log("hi", parent)
-		super(conf, kind, id, C, parent)
+		super(conf, kind, id, mt, parent)
 		this.X = conf["INIT_X"][kind]
 		this.Y = conf["INIT_Y"][kind]
 		this.V = conf["INIT_V"][kind]
@@ -37,8 +37,8 @@ class StochasticCorrector extends Cell {
 	divideXY(parent){
 		let prevX = parent.X
 		let prevY = parent.Y
-		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1)
-		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1)
+		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
+		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
 
 		if ((prevX / 2 - fluctX) < 0)
 			fluctX = prevX/2

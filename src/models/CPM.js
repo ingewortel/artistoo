@@ -499,11 +499,11 @@ class CPM extends GridBasedModel {
 	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind, parentId ){
 		const newid = ++ this.last_cell_id
-		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this ,this.cells[parentId])
+		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt ,this.cells[parentId])
 		this.cellvolume[newid] = 0
 		this.setCellKind( newid, kind )
 		return newid
 	}
 }
-
+ 
 export default CPM
