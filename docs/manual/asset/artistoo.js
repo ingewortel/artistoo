@@ -3084,7 +3084,7 @@ var CPM = (function (exports) {
 			this.t2k = [];
 			this.t2k[0] = 0;
 			this.time = 0;
-			this.cellvolumes = [0];
+			this.cellvolume = [];
 			this.stat_values = {};
 		}
 
@@ -3162,7 +3162,7 @@ var CPM = (function (exports) {
 					i = this.hard_constraints.push( t );
 					
 					// Write this index to an array in the 
-					// this.soft_constraints_indices object, for lookup later. 
+					// this.hard_constraints_indices object, for lookup later.
 					if( !this.hard_constraints_indices.hasOwnProperty(tName) ){
 						this.hard_constraints_indices[tName] = [];
 					}

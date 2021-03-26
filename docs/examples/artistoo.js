@@ -3084,7 +3084,7 @@ var CPM = (function (exports) {
 			this.t2k = [];
 			this.t2k[0] = 0;
 			this.time = 0;
-			this.cellvolumes = [0];
+			this.cellvolume = [];
 			this.stat_values = {};
 		}
 
@@ -3162,7 +3162,7 @@ var CPM = (function (exports) {
 					i = this.hard_constraints.push( t );
 					
 					// Write this index to an array in the 
-					// this.soft_constraints_indices object, for lookup later. 
+					// this.hard_constraints_indices object, for lookup later.
 					if( !this.hard_constraints_indices.hasOwnProperty(tName) ){
 						this.hard_constraints_indices[tName] = [];
 					}
@@ -4499,14 +4499,14 @@ var CPM = (function (exports) {
 		 * // and values (colors):
 		 * Cim.colFun = function( cid ){
 		 *
-		 * 	// First time function is called, attach an empty object 'cellColors' to
+		 * 	// First time function is called, attach an empty object 'cellColorMap' to
 		 * 	// simulation object; this tracks the color for each cellID on the grid.
 		 * 	if( !Cim.hasOwnProperty( "cellColorMap" ) ){
 		 * 		Cim.cellColorMap = {}
 		 * 	}
 		 *
 		 * 	// Check if the current cellID already has a color, otherwise put a random
-		 * 	// color in the cellColors object
+		 * 	// color in the cellColorMap object
 		 * 	if( !Cim.cellColorMap.hasOwnProperty(cid) ){
 		 * 		// this cell gets a random color
 		 * 		Cim.cellColorMap[cid] = Math.floor(Math.random()*16777215).toString(16).toUpperCase()
@@ -4516,7 +4516,7 @@ var CPM = (function (exports) {
 		 * 	return Cim.cellColorMap[cid]
 		 * }
 		 * // Now use this function to draw the cells, colored by their ID
-		 * this.Cim.drawCells( 1, Cim.colFun )
+		 * Cim.drawCells( 1, Cim.colFun )
 		 */
 		drawCells( kind, col ){
 			if( !( this.C instanceof CPM ) ){
@@ -4532,19 +4532,9 @@ var CPM = (function (exports) {
 				if (typeof col == "string") {
 					this.col(col);
 				}
-				// Object cst contains pixel index of all pixels belonging to non-background,
+				// Object contains all pixels belonging to non-background,
 				// non-stroma cells.
-
 				let cellpixelsbyid = this.C.getStat(PixelsByCell);
-
-				/*for( let x of this.C.pixels() ){
-					if( kind < 0 || this.C.cellKind(x[1]) == kind ){
-						if( !cellpixelsbyid[x[1]] ){
-							cellpixelsbyid[x[1]] = []
-						}
-						cellpixelsbyid[x[1]].push( x[0] )
-					}
-				}*/
 
 				this.getImageData();
 				for (let cid of Object.keys(cellpixelsbyid)) {

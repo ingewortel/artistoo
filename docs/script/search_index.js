@@ -4194,9 +4194,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/models/cpm.js~cpm#cellvolumes",
-    "class/src/models/CPM.js~CPM.html#instance-member-cellvolumes",
-    "src/models/CPM.js~CPM#cellvolumes",
+    "src/models/cpm.js~cpm#cellvolume",
+    "class/src/models/CPM.js~CPM.html#instance-member-cellvolume",
+    "src/models/CPM.js~CPM#cellvolume",
     "member"
   ],
   [
