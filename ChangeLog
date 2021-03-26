@@ -3,6 +3,9 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2021-03-26 Inge Wortel <ingewortel@gmail.com>
+    * Updated docs with an example of how to color cells by cellID
+
 2021-03-08 Inge Wortel <ingewortel@gmail.com>
 	* examples/build-examples/ : merged new way of auto-generating examples. Workflow is
 	still the same using the Makefile, only the scripts now work somewhat differently.

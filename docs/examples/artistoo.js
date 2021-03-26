@@ -4441,7 +4441,10 @@ var CPM = (function (exports) {
 
 		/**
 		 * Draw all cells of cellid "id" in color col (hex). Note that this function
-		 * also works for CA.
+		 * also works for CA. However, it has not yet been optimised and is very slow
+		 * if called many times. For multicellular CPMs, you are better off using
+		 * {@link drawCells} with an appropriate coloring function (see that method's
+		 * documentation).
 		 *
 		 * @param {CellId} id - id of the cell to color.
 		 * @param {HexColor} col - Optional: hex code for the color to use.
@@ -4459,7 +4462,8 @@ var CPM = (function (exports) {
 
 			// Use the pixels() iterator to get the id of all non-background pixels.
 			this.getImageData();
-
+			// this currently just loops over all pixels on the grid, which makes it slow
+			// if you repeat this process for many cells. Optimise later.
 			for( let x of this.C.pixels() ){
 				if( x[1] === id ){
 
@@ -4483,7 +4487,37 @@ var CPM = (function (exports) {
 		 * If left unspecified, it gets the default value of black ("000000").
 		 * col can also be a function that returns a hex value for a cell id, but
 		 * this is only supported for CPMs.
-		 * */
+		 *
+		 * @example <caption>Drawing cells by "kind" or "ID"</caption>
+		 *
+		 * // Draw all cells of kind 1 in red
+		 * Cim.drawCells( 1, "FF0000" )
+		 *
+		 * // To color cells by their ID instead of their kind, we can parse
+		 * // a function to 'col' instead of a string. The example function
+		 * // below reads the color for each cellID from an object of keys (ids)
+		 * // and values (colors):
+		 * Cim.colFun = function( cid ){
+		 *
+		 * 	// First time function is called, attach an empty object 'cellColors' to
+		 * 	// simulation object; this tracks the color for each cellID on the grid.
+		 * 	if( !Cim.hasOwnProperty( "cellColorMap" ) ){
+		 * 		Cim.cellColorMap = {}
+		 * 	}
+		 *
+		 * 	// Check if the current cellID already has a color, otherwise put a random
+		 * 	// color in the cellColors object
+		 * 	if( !Cim.cellColorMap.hasOwnProperty(cid) ){
+		 * 		// this cell gets a random color
+		 * 		Cim.cellColorMap[cid] = Math.floor(Math.random()*16777215).toString(16).toUpperCase()
+		 * 	}
+		 *
+		 * 	// now return the color assigned to this cellID.
+		 * 	return Cim.cellColorMap[cid]
+		 * }
+		 * // Now use this function to draw the cells, colored by their ID
+		 * this.Cim.drawCells( 1, Cim.colFun )
+		 */
 		drawCells( kind, col ){
 			if( !( this.C instanceof CPM ) ){
 				if( typeof col != "string" ){

@@ -50,8 +50,8 @@ let config = {
 	simsettings : {
 	
 		// Cells on the grid
-		NRCELLS : [30],						// Number of cells to seed for all
-											// non-background cellkinds.
+		NRCELLS : [1],						// Number of cells to seed for all
+		// non-background cellkinds.
 		// Runtime etc
 		BURNIN : 500,
 		RUNTIME : 1000,
@@ -66,7 +66,7 @@ let config = {
 		
 		// Output images
 		SAVEIMG : false,					// Should a png image of the grid be saved
-											// during the simulation?
+		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
 		SAVEPATH : "output/img/RandomWalk",	// ... And save the image in this folder.
 		EXPNAME : "RandomWalk",				// Used for the filename of output images.
@@ -111,8 +111,9 @@ function step(){
 <body onload="initialize()">
 <h1>RandomWalk</h1>
 <p>
-Simulation of a random walk using the hard volumeconstraint
-(the cell must always have either 1 or 2 pixels).
+ 
+ Simulation of a random walk using the hard volume constraint.
+ The cell must always have either 1 or 2 pixels.
 </p>
 </body>
 </html>

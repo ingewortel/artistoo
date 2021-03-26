@@ -1598,7 +1598,7 @@ defaults to black.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber626">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber660">source</a></span></span>
     </span>
   </h3>
 
@@ -1655,7 +1655,41 @@ this is only supported for CPMs.</p>
 
   
 
-  
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      <div class="example-caption" data-ice="exampleCaption">Drawing cells by &quot;kind&quot; or &quot;ID&quot;</div>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">
+// Draw all cells of kind 1 in red
+Cim.drawCells( 1, &quot;FF0000&quot; )
+
+// To color cells by their ID instead of their kind, we can parse
+// a function to &apos;col&apos; instead of a string. The example function
+// below reads the color for each cellID from an object of keys (ids)
+// and values (colors):
+Cim.colFun = function( cid ){
+
+	// First time function is called, attach an empty object &apos;cellColorMap&apos; to
+	// simulation object; this tracks the color for each cellID on the grid.
+	if( !Cim.hasOwnProperty( &quot;cellColorMap&quot; ) ){
+		Cim.cellColorMap = {}
+	}
+
+	// Check if the current cellID already has a color, otherwise put a random
+	// color in the cellColorMap object
+	if( !Cim.cellColorMap.hasOwnProperty(cid) ){
+		// this cell gets a random color
+		Cim.cellColorMap[cid] = Math.floor(Math.random()*16777215).toString(16).toUpperCase()
+	}
+
+	// now return the color assigned to this cellID.
+	return Cim.cellColorMap[cid]
+}
+// Now use this function to draw the cells, colored by their ID
+Cim.drawCells( 1, Cim.colFun )</code></pre>
+    </div>
+</div>
 
   
 
@@ -1674,7 +1708,7 @@ this is only supported for CPMs.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber590">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber593">source</a></span></span>
     </span>
   </h3>
 
@@ -1682,7 +1716,10 @@ this is only supported for CPMs.</p>
   
   
   <div data-ice="description"><p>Draw all cells of cellid &quot;id&quot; in color col (hex). Note that this function
-also works for CA.</p>
+also works for CA. However, it has not yet been optimised and is very slow
+if called many times. For multicellular CPMs, you are better off using
+<span><a href="class/src/Canvas.js~Canvas.html#instance-method-drawCells">drawCells</a></span> with an appropriate coloring function (see that method&apos;s
+documentation).</p>
 </div>
 
   
@@ -1973,7 +2010,7 @@ col can also be a function that returns a hex value for a cell id.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber677">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber701">source</a></span></span>
     </span>
   </h3>
 
@@ -2107,7 +2144,7 @@ an HTML page where you want to get this canvas by its ID.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber695">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/Canvas.js.html#lineNumber719">source</a></span></span>
     </span>
   </h3>
 
