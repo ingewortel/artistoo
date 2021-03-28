@@ -85,11 +85,17 @@ class PersistenceConstraint extends SoftConstraint {
 				}
 			}
 		}
+		//For the crossproduct to yield the cosine, the vectors should be normalized.
+		this.normalize(a) 
 		let dp = 0
 		for( let i = 0 ; i < a.length ; i ++ ){
 			dp += a[i]*b[i]
 		}
-		return - dp
+
+		//get the strength of this constraint
+		let lambdadir = this.conf["LAMBDA_DIR"][this.C.cellKind(src_type)]
+
+		return - dp*lambdadir
 	}
 	
 	/** Normalize a vector a by its length.
@@ -199,8 +205,11 @@ class PersistenceConstraint extends SoftConstraint {
 					for( let j = 0 ; j < dx.length ; j ++ ){
 						dx[j] *= ld
 					}
-					this.celldirections[t] = dx
 				}
+				// regardless of whether PERSIST is used, 
+				//the dx vector should be normalised and added to cell directions
+				this.normalize(dx)
+				this.celldirections[t] = dx
 			}
 		}
 	}

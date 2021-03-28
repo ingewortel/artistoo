@@ -113,7 +113,8 @@ class ChemotaxisConstraint extends SoftConstraint {
 	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/
 	/* eslint-disable no-unused-vars*/
 	deltaH( sourcei, targeti, src_type, tgt_type  ){
-		let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei )
+		let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti )
+		let delta = this.field.pixt( tp ) - this.field.pixt( sp ) //WAS: let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei )
 		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)]
 		return -delta*lambdachem
 	}

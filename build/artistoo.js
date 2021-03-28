@@ -5771,11 +5771,17 @@ var CPM = (function (exports) {
 					}
 				}
 			}
+			//For the crossproduct to yield the cosine, the vectors should be normalized.
+			this.normalize(a); 
 			let dp = 0;
 			for( let i = 0 ; i < a.length ; i ++ ){
 				dp += a[i]*b[i];
 			}
-			return - dp
+
+			//get the strength of this constraint
+			let lambdadir = this.conf["LAMBDA_DIR"][this.C.cellKind(src_type)];
+
+			return - dp*lambdadir
 		}
 		
 		/** Normalize a vector a by its length.
@@ -5885,8 +5891,11 @@ var CPM = (function (exports) {
 						for( let j = 0 ; j < dx.length ; j ++ ){
 							dx[j] *= ld;
 						}
-						this.celldirections[t] = dx;
 					}
+					// regardless of whether PERSIST is used, 
+					//the dx vector should be normalised and added to cell directions
+					this.normalize(dx);
+					this.celldirections[t] = dx;
 				}
 			}
 		}
@@ -6095,7 +6104,8 @@ var CPM = (function (exports) {
 		 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/
 		/* eslint-disable no-unused-vars*/
 		deltaH( sourcei, targeti, src_type, tgt_type  ){
-			let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei );
+			let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti );
+			let delta = this.field.pixt( tp ) - this.field.pixt( sp ); //WAS: let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei )
 			let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)];
 			return -delta*lambdachem
 		}
