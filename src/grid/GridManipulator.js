@@ -489,8 +489,12 @@ class GridManipulator {
 		}
 		// console.log( id )
 		// create a new ID for the second cell
-		let nid = C.makeNewCellID( C.cellKind( id ), id )
-		// let nid = C.makeNewCellID( C.cellKind( id ))
+		
+		let nid = C.makeNewCellID( C.cellKind( id ))
+		if (C.hasOwnProperty("cells")){
+			C.birth( nid, id )
+		}
+		
 		// Loop over the pixels belonging to this cell
 		//let sidea = 0, sideb = 0
 		//let pix_id = []

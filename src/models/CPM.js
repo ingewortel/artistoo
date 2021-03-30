@@ -40,10 +40,7 @@ class CPM extends GridBasedModel {
 		this.time = 0
 
 		// ---------- CPM specific stuff here
-		/** TODO make comment = this will hold Cell objects */
-		this.cells = [new Cell(conf, 0, -1, this)]
 
-		this.cellclasses = ["EMPTY"] //cell classes per kind - 0 is blank
 
 		/** Number of non-background cells currently on the grid.
 		@type{number}*/
@@ -105,7 +102,7 @@ class CPM extends GridBasedModel {
 				this.add( new AutoAdderConfig[x]( conf ) )
 			} 
 		}
-		this.addCells( conf )
+		if ("CELLS" in conf){this.addCells( conf )}
 	}
 
 	/** Completely reset; remove all cells and set time back to zero. Only the
@@ -120,7 +117,9 @@ class CPM extends GridBasedModel {
 		this.time = 0
 		this.cellvolume = [0]
 		this.stat_values = {}
-		this.cells = [this.cells[0]] // keep empty declared
+		if (this.hasOwnProperty("cells")){
+			this.cells = [this.cells[0]] // keep empty declared
+		}
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 
@@ -220,9 +219,15 @@ class CPM extends GridBasedModel {
 
 
 	addCells( conf ){
+		if (!this.hasOwnProperty("cells")){
+			this.cells = [new Cell(conf, 0, -1, this)]
+		}
+		if (!this.hasOwnProperty("cellclasses")){
+			this.cellclasses = ["EMPTY"] //cell classes per kind - 0 is blank
+		}
 		let i = 1
 		if ("CELLS" in conf){	
-			if (typeof this.n_cell_kinds == "undefined"){
+			if (!this.hasOwnProperty("n_cell_kinds")){
 				this.n_cell_kinds = conf["CELLS"].length - 1
 			} else if (this.n_cell_kinds !== conf["CELLS"].length -1 ) {
 				throw("Incorrect number of CELLS defined - do constraints and CELLS all contain the same number? CELLS expects some null value in index 0 for background ")
@@ -231,12 +236,7 @@ class CPM extends GridBasedModel {
 				this.cellclasses.push(conf["CELLS"][i])
 				i ++
 			}
-		} else {
-			while (i <= this.n_cell_kinds){
-				this.cellclasses.push(Cell)
-				i ++
-			}
-		}	
+		} 
 	}
 	
 	/** Get a {@link Constraint} object linked to this CPM by the name of its class.
@@ -439,8 +439,10 @@ class CPM extends GridBasedModel {
 			if( this.cellvolume[t_old] == 0 ){
 				delete this.cellvolume[t_old]
 				delete this.t2k[t_old]
-				delete this.cells[t_old]
 				this.nr_cells--
+				if (this.hasOwnProperty("cells")){
+					delete this.cells[t_old]
+				}
 			}
 		}
 		// update volume of the new cell and cellid of the pixel.
@@ -502,12 +504,18 @@ class CPM extends GridBasedModel {
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
 	   @param {CellId} parentId - id of the parent, if this is birth
 	   @return {CellId} of the new cell.*/
-	makeNewCellID ( kind, parentId ){
+	makeNewCellID ( kind ){
 		const newid = ++ this.last_cell_id
-		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt ,this.cells[parentId])
+		if (this.hasOwnProperty("cells")){
+			this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt )
+		}
 		this.cellvolume[newid] = 0
 		this.setCellKind( newid, kind )
 		return newid
+	}
+
+	birth (childId, parentId){
+		this.cells[childId].birth(this.cells[parentId] )
 	}
 }
  

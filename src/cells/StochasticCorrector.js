@@ -1,36 +1,26 @@
 
 import Cell from "./Cell.js" 
-/* eslint-disable no-unused-vars*/
+
 class StochasticCorrector extends Cell {
 
 	constructor (conf, kind, id, mt, parent) {
 		super(conf, kind, id, mt, parent)
 		this.X = conf["INIT_X"][kind]
 		this.Y = conf["INIT_Y"][kind]
-		this.V = conf["INIT_V"][kind]
-		if (parent instanceof Cell){ // copy on birth
-			this.V  = parent.V
-			this.divideXY(parent)
-		} 
+		this.V = conf["INIT_V"][kind]	
+	}
+
+	birth(parent){
+		super.birth(parent)
+		this.V  = parent.V
+		this.divideXY(parent) 
 	}
 
 	setXY(X, Y){
 		this.X = Math.max(0, X)
 		this.Y = Math.max(0, Y)
-		// if (X > 0){
-		// 	this.X = X
-		// } else {
-		// 	this.X = 0
-		// }
-		// if (Y > 0){
-		// 	this.Y = Y
-		// } else {
-		// 	this.Y = 0
-		// }
 	}
 
-	
-/* eslint-disable	*/
 	divideXY(parent){
 		let prevX = parent.X
 		let prevY = parent.Y
@@ -50,11 +40,11 @@ class StochasticCorrector extends Cell {
 	}
 
 	get V() {
-		return this.own_conf['V'][this.kind]
+		return this.own_conf["V"][this.kind]
 	}
 
 	set V(V){
-		this.own_conf['V'][this.kind] = V
+		this.own_conf["V"][this.kind] = V
 	}
 }
 
