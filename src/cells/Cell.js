@@ -2,17 +2,16 @@
 /* eslint-disable no-unused-vars*/
 class Cell {
 	/** 
-    individualParams
     parentId
-    conf
+    own_conf Needs to deep copy :(
     kind
     */
     
 	constructor (conf, kind, id, mt, parent){
-		this.individualParams = []
+		// this.individualParams = []
 		this.parentId = 0
 		this.id = id
-		this.conf = conf
+		this.own_conf = JSON.parse(JSON.stringify(conf))
 		this.kind = kind
 		this.mt = mt 
 		if (parent instanceof Cell){ // copy on birth
@@ -20,21 +19,10 @@ class Cell {
 		} 
 	}
 
-	getParam(param){
-		if (!(this.individualParams.includes(param))){
-			return this.conf[param][this.kind]
-		} else {
-			return this.getIndividualParam(param)
-		}
+	params(){
+		return this.own_conf
 	}
-
-	getIndividualParam(param){
-		throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
-	}
-	
 }
-
-
 
 export default Cell
 

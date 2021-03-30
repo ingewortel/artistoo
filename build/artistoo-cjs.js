@@ -1508,10 +1508,16 @@ class Constraint {
 	}
 	
 	/** Get the parameters of this constraint from the conf object. 
+	@param {CellId} cid -  specify the cell id of which the parameters are wanted , is only used if Cells are used in the simulation
 	@return {object} conf - configuration settings for this constraint, containing the
 	relevant parameters.
 	*/
-	get parameters(){
+	parameters(cid){
+		if (this.hasOwnProperty("C")){
+			if (this.C.hasOwnProperty("cells") && typeof cid === "number"){
+				return this.C.getParamsOfId(cid)
+			}
+		}
 		return this.conf
 	}
 	/** The constructor of a constraint takes a configuration object.
@@ -2182,11 +2188,10 @@ class VolumeConstraint extends SoftConstraint {
 	@return {number} the volume energy of this cell.
 	*/
 	volconstraint ( vgain, t ){
-		let c = this.C.getCell(t); 
-		let l =  c.getParam("LAMBDA_V");
+		const k = this.C.cellKind(t), l = this.parameters(t)["LAMBDA_V"][k];
 		// the background "cell" has no volume constraint.
 		if( t == 0 || l == 0 ) return 0
-		const vdiff = c.getParam("V") - (this.C.getVolume(t) + vgain);
+		const vdiff = this.parameters(t)["V"][k] - (this.C.getVolume(t) + vgain);
 		return l*vdiff*vdiff
 	}
 }
@@ -2777,17 +2782,16 @@ let AutoAdderConfig = {
 /* eslint-disable no-unused-vars*/
 class Cell {
 	/** 
-    individualParams
     parentId
-    conf
+    own_conf
     kind
     */
     
 	constructor (conf, kind, id, mt, parent){
-		this.individualParams = [];
+		// this.individualParams = []
 		this.parentId = 0;
 		this.id = id;
-		this.conf = conf;
+		this.own_conf = conf;
 		this.kind = kind;
 		this.mt = mt; 
 		if (parent instanceof Cell){ // copy on birth
@@ -2795,17 +2799,21 @@ class Cell {
 		} 
 	}
 
-	getParam(param){
-		if (!(this.individualParams.includes(param))){
-			return this.conf[param][this.kind]
-		} else {
-			return this.getIndividualParam(param)
-		}
+	params(){
+		return this.own_conf
 	}
 
-	getIndividualParam(param){
-		throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
-	}
+	// getParam(param){
+	// 	if (!(this.individualParams.includes(param))){
+	// 		return this.conf[param][this.kind]
+	// 	} else {
+	// 		return this.getIndividualParam(param)
+	// 	}
+	// }
+
+	// getIndividualParam(param){
+	// 	throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
+	// }
 	
 }
 
@@ -3120,6 +3128,10 @@ class CPM extends GridBasedModel {
 	@return {Cell} the cellkind. */
 	getCell ( t ){
 		return this.cells[t]
+	}
+
+	getParamsOfId(cid){
+		return this.cells[cid].params()
 	}
 	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
@@ -4502,43 +4514,40 @@ class CA extends GridBasedModel {
 
 /* eslint-disable no-unused-vars*/
 class StochasticCorrector extends Cell {
-	/* eslint-disable */ 
+
 	constructor (conf, kind, id, mt, parent) {
-		/* eslint-disable	*/
-		// console.log("hi", parent)
 		super(conf, kind, id, mt, parent);
 		this.X = conf["INIT_X"][kind];
 		this.Y = conf["INIT_Y"][kind];
 		this.V = conf["INIT_V"][kind];
-		this.individualParams = ["V"];
 		if (parent instanceof Cell){ // copy on birth
-			this.V = parent.V;
+			this.V  = parent.V;
 			this.divideXY(parent);
 		} 
 	}
 
 	setXY(X, Y){
-		if (X > 0){
-			this.X = X;
-		} else {
-			this.X = 0;
-		}
-		if (Y > 0){
-			this.Y = Y;
-		} else {
-			this.Y = 0;
-		}
+		this.X = Math.max(0, X);
+		this.Y = Math.max(0, Y);
+		// if (X > 0){
+		// 	this.X = X
+		// } else {
+		// 	this.X = 0
+		// }
+		// if (Y > 0){
+		// 	this.Y = Y
+		// } else {
+		// 	this.Y = 0
+		// }
 	}
 
-	setV(V){
-		this.V = V;
-	}
+	
 /* eslint-disable	*/
 	divideXY(parent){
 		let prevX = parent.X;
 		let prevY = parent.Y;
-		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
-		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
+		let fluctX = this.own_conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
+		let fluctY = this.own_conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
 
 		if ((prevX / 2 - fluctX) < 0)
 			fluctX = prevX/2;
@@ -4548,23 +4557,17 @@ class StochasticCorrector extends Cell {
 		this.setXY(prevX/2+fluctX ,prevY/2 +fluctY );
 		parent.setXY(prevX/2 - fluctX,prevY/2 - fluctY);
 		let V = this.V;
-		this.setV(V/2);
-		parent.setV(V/2);
+		this.V = V/2;
+		parent.V = V/2;
 	}
 
-	/* eslint-disable */ 
-	getIndividualParam(param){
-		if (param == "V"){
-			// console.log(this.V)
-			return this.V
-		} 
-		throw("Implement changed way to get" + param + " constraint parameter per individual, or remove this from " + typeof this + " Cell class's indivualParams." )
+	get V() {
+		return this.own_conf['V'][this.kind]
 	}
 
-	// getColor(){
-	// 	return 100/this.Y
-	// }
-	
+	set V(V){
+		this.own_conf['V'][this.kind] = V;
+	}
 }
 
 /**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 

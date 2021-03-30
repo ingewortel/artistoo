@@ -165,7 +165,7 @@ function updateCell(C, cell){
         
     }
     V -= C.conf.shrink_rate[cell.kind]
-    cell.setV(V)
+    cell.V = V
     
     let dy = C.conf.rY[cell.kind]*cell.Y*(vol-cell.X-cell.Y)/vol*C.conf.speed_internal_dynamics[cell.kind]
     let X = cell.X + (1-C.conf.Q[cell.kind])*dy+( C.conf.rX[cell.kind]*cell.X*(vol-cell.X-cell.Y)/vol - C.conf.d[cell.kind]*cell.X )*C.conf.speed_internal_dynamics[cell.kind]
