@@ -3120,7 +3120,7 @@ var CPM = (function (exports) {
 			this.t2k = [];
 			this.t2k[0] = 0;
 			this.time = 0;
-			this.cellvolume = [0];
+			this.cellvolume = [];
 			this.stat_values = {};
 			if (this.hasOwnProperty("cells")){
 				this.cells = [this.cells[0]]; // keep empty declared
