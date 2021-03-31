@@ -11,7 +11,7 @@ class StochasticCorrector extends Cell {
 	}
 
 	birth(parent){
-		super.birth(parent)
+		super.birth(parent) // sets ParentId
 		this.V  = parent.V
 		this.divideXY(parent) 
 	}

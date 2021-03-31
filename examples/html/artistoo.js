@@ -1714,17 +1714,30 @@ var CPM = (function (exports) {
 		}
 		
 		/** Get the parameters of this constraint from the conf object. 
-		@param {CellId} cid -  specify the cell id of which the parameters are wanted , is only used if Cells are used in the simulation
 		@return {object} conf - configuration settings for this constraint, containing the
 		relevant parameters.
 		*/
-		parameters(cid){
+		get parameters(){
+			return this.conf
+		}
+
+		getConf(cid){
 			if (this.hasOwnProperty("C")){
 				if (this.C.hasOwnProperty("cells") && typeof cid === "number"){
 					return this.C.getParamsOfId(cid)
 				}
 			}
 			return this.conf
+		}
+
+		getParam(param, cid){
+			if ( typeof cid === "number"){
+				if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
+					return this.C.getParamsOfId(cid)[param][this.C.cellKind(cid)]
+				}
+				return this.conf[param][this.C.cellKind(cid)]
+			}
+			return this.conf[param]
 		}
 		/** The constructor of a constraint takes a configuration object.
 		This method is usually overwritten by the actual constraint so that the entries
@@ -2394,10 +2407,10 @@ var CPM = (function (exports) {
 		@return {number} the volume energy of this cell.
 		*/
 		volconstraint ( vgain, t ){
-			const k = this.C.cellKind(t), l = this.parameters(t)["LAMBDA_V"][k];
+			const k = this.C.cellKind(t), l = this.getConf(t)["LAMBDA_V"][k];
 			// the background "cell" has no volume constraint.
 			if( t == 0 || l == 0 ) return 0
-			const vdiff = this.parameters(t)["V"][k] - (this.C.getVolume(t) + vgain);
+			const vdiff = this.getConf(t)["V"][k] - (this.C.getVolume(t) + vgain);
 			return l*vdiff*vdiff
 		}
 	}
@@ -2811,10 +2824,11 @@ var CPM = (function (exports) {
 			if( src_type === tgt_type ){
 				return 0
 			}
-			const ts = this.C.cellKind(src_type);
-			const ls = this.conf["LAMBDA_P"][ts];
-			const tt = this.C.cellKind(tgt_type);
-			const lt = this.conf["LAMBDA_P"][tt];
+			// const ts = this.C.cellKind(src_type)
+			const ls = this.getParam("LAMBDA_P", src_type);
+			const lt = this.getParam("LAMBDA_P", tgt_type);
+			// const tt = this.C.cellKind(tgt_type)
+			// const lt = this.getConf(tgt_type)["LAMBDA_P"][tt]
 			if( !(ls>0) && !(lt>0) ){
 				return 0
 			}
@@ -2838,14 +2852,16 @@ var CPM = (function (exports) {
 			}
 			let r = 0.0;
 			if( ls > 0 ){
-				const pt = this.conf["P"][ts],
+				// const pt = this.getConf(src_type)["P"][ts],
+				const pt = this.getParam("P", src_type),
 					ps = this.cellperimeters[src_type];
 				const hnew = (ps+pchange[src_type])-pt,
 					hold = ps-pt;
 				r += ls*((hnew*hnew)-(hold*hold));
 			}
 			if( lt > 0 ){
-				const pt = this.conf["P"][tt],
+				// const pt = this.getConf(tgt_type)["P"][tt],
+				const pt = this.getParam("P", tgt_type),
 					ps = this.cellperimeters[tgt_type];
 				const hnew = (ps+pchange[tgt_type])-pt,
 					hold = ps-pt;
@@ -4723,7 +4739,7 @@ var CPM = (function (exports) {
 		}
 
 		birth(parent){
-			super.birth(parent);
+			super.birth(parent); // sets ParentId
 			this.V  = parent.V;
 			this.divideXY(parent); 
 		}
@@ -5975,9 +5991,9 @@ var CPM = (function (exports) {
 			}
 			for( let t of this.C.cellIDs() ){
 				const k = this.C.cellKind(t);
-				let ld = this.conf["LAMBDA_DIR"][k];
-				let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][k] ? 
-					this.conf["DELTA_T"][k] : 10;
+				let ld = this.getConf(t)["LAMBDA_DIR"][k];
+				let dt = this.getConf(t)["DELTA_T"] && this.getConf(t)["DELTA_T"][k] ? 
+					this.getConf(t)["DELTA_T"][k] : 10;
 				if( ld == 0 ){
 					delete this.cellcentroidlists[t];
 					delete this.celldirections[t];
@@ -6010,7 +6026,7 @@ var CPM = (function (exports) {
 						}
 					}
 					// apply angular diffusion to target direction if needed
-					let per = this.conf["PERSIST"][k];
+					let per = this.getConf(t)["PERSIST"][k];
 					if( per < 1 ){
 						this.normalize(dx);
 						this.normalize(this.celldirections[t]);
@@ -6069,7 +6085,7 @@ var CPM = (function (exports) {
 			
 			// Custom check for the attractionpoint
 			checker.confCheckPresenceOf( "DIR" );
-			let pt = this.conf["DIR"];
+			let pt = this.getConf()["DIR"];
 			if( !( pt instanceof Array ) ){
 				throw( "DIR must be an array with the start and end coordinate of the preferred direction vector!" )
 			}
@@ -6092,12 +6108,12 @@ var CPM = (function (exports) {
 		 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 		/* eslint-disable no-unused-vars*/
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
-			let l = this.conf["LAMBDA_DIR"][this.C.cellKind( src_type )];
+			let l = this.getConf(src_type)["LAMBDA_DIR"][this.C.cellKind( src_type )];
 			if( !l ){
 				return 0
 			}
 			let torus = this.C.conf.torus;
-			let dir = this.conf["DIR"][this.C.cellKind( src_type )];
+			let dir = this.getConf(src_type)["DIR"][this.C.cellKind( src_type )];
 			let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
 			// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
 			let r = 0.;
@@ -6932,7 +6948,7 @@ var CPM = (function (exports) {
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
-			let lambda = this.conf["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
+			let lambda = this.getConf(tgt_type)["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
 			
 			// connectedness of tgt cell
 			if( tgt_type != 0 && lambda > 0 ){
@@ -7111,8 +7127,8 @@ var CPM = (function (exports) {
 			checker.confCheckParameter( "LAMBDA_CONNECTIVITY", "KindArray", "NonNegative" );
 
 			//
-			if( "NBH_TYPE" in this.conf ){
-				let v = this.conf["NBH_TYPE"];
+			if( "NBH_TYPE" in this.getConf() ){
+				let v = this.getConf()["NBH_TYPE"];
 				let values = [ "Neumann", "Moore" ];
 				let found = false;
 				for( let val of values ){
@@ -7229,7 +7245,7 @@ var CPM = (function (exports) {
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
-			let lambda = this.conf["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
+			let lambda = this.getConf(tgt_type)["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
 			
 			// connectedness of tgt cell. Only check when the lambda is non-zero.
 			if( tgt_type != 0 && lambda > 0 ){

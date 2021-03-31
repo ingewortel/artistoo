@@ -153,9 +153,9 @@ class PersistenceConstraint extends SoftConstraint {
 		}
 		for( let t of this.C.cellIDs() ){
 			const k = this.C.cellKind(t)
-			let ld = this.conf["LAMBDA_DIR"][k]
-			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][k] ? 
-				this.conf["DELTA_T"][k] : 10
+			let ld = this.getConf(t)["LAMBDA_DIR"][k]
+			let dt = this.getConf(t)["DELTA_T"] && this.getConf(t)["DELTA_T"][k] ? 
+				this.getConf(t)["DELTA_T"][k] : 10
 			if( ld == 0 ){
 				delete this.cellcentroidlists[t]
 				delete this.celldirections[t]
@@ -188,7 +188,7 @@ class PersistenceConstraint extends SoftConstraint {
 					}
 				}
 				// apply angular diffusion to target direction if needed
-				let per = this.conf["PERSIST"][k]
+				let per = this.getConf(t)["PERSIST"][k]
 				if( per < 1 ){
 					this.normalize(dx)
 					this.normalize(this.celldirections[t])

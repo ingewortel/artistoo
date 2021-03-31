@@ -25,17 +25,30 @@ class Constraint {
 	}
 	
 	/** Get the parameters of this constraint from the conf object. 
-	@param {CellId} cid -  specify the cell id of which the parameters are wanted , is only used if Cells are used in the simulation
 	@return {object} conf - configuration settings for this constraint, containing the
 	relevant parameters.
 	*/
-	parameters(cid){
+	get parameters(){
+		return this.conf
+	}
+
+	getConf(cid){
 		if (this.hasOwnProperty("C")){
 			if (this.C.hasOwnProperty("cells") && typeof cid === "number"){
 				return this.C.getParamsOfId(cid)
 			}
 		}
 		return this.conf
+	}
+
+	getParam(param, cid){
+		if ( typeof cid === "number"){
+			if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
+				return this.C.getParamsOfId(cid)[param][this.C.cellKind(cid)]
+			}
+			return this.conf[param][this.C.cellKind(cid)]
+		}
+		return this.conf[param]
 	}
 	/** The constructor of a constraint takes a configuration object.
 	This method is usually overwritten by the actual constraint so that the entries
