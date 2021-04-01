@@ -42,7 +42,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		
 		// Custom check for the attractionpoint
 		checker.confCheckPresenceOf( "DIR" )
-		let pt = this.conf["DIR"]
+		let pt = this.getParam("DIR")
 		if( !( pt instanceof Array ) ){
 			throw( "DIR must be an array with the start and end coordinate of the preferred direction vector!" )
 		}
@@ -65,12 +65,12 @@ class PreferredDirectionConstraint extends SoftConstraint {
 	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	/* eslint-disable no-unused-vars*/
 	deltaH( src_i, tgt_i, src_type, tgt_type ){
-		let l = this.conf["LAMBDA_DIR"][this.C.cellKind( src_type )]
+		let l = this.getParam("LAMBDA_DIR", src_type)
 		if( !l ){
 			return 0
 		}
 		let torus = this.C.conf.torus
-		let dir = this.conf["DIR"][this.C.cellKind( src_type )]
+		let dir = this.getParam("DIR", src_type)
 		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i )
 		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
 		let r = 0.
