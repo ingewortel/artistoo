@@ -318,8 +318,8 @@ class CPM extends GridBasedModel {
 		return this.cells[t]
 	}
 
-	getParamsOfId(cid){
-		return this.cells[cid].params()
+	getParamsOfId(param, cid){
+		return this.cells[cid].getParam(param)
 	}
 	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */

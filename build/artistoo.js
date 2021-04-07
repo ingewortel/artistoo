@@ -1721,24 +1721,16 @@ var CPM = (function (exports) {
 			return this.conf
 		}
 
-		getConf(cid){
-			if (this.hasOwnProperty("C")){
-				if (this.C.hasOwnProperty("cells") && typeof cid === "number"){
-					return this.C.getParamsOfId(cid)
-				}
-			}
-			return this.conf
-		}
-
 		getParam(param, cid){
 			if ( typeof cid === "number"){
 				if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
-					return this.C.getParamsOfId(cid)[param][this.C.cellKind(cid)]
+					return this.C.getParamsOfId(param, cid)
 				}
 				return this.conf[param][this.C.cellKind(cid)]
 			}
 			return this.conf[param]
 		}
+		
 		/** The constructor of a constraint takes a configuration object.
 		This method is usually overwritten by the actual constraint so that the entries
 		of this object can be documented.
@@ -2407,10 +2399,10 @@ var CPM = (function (exports) {
 		@return {number} the volume energy of this cell.
 		*/
 		volconstraint ( vgain, t ){
-			const k = this.C.cellKind(t), l = this.getConf(t)["LAMBDA_V"][k];
+			const l = this.getParam("LAMBDA_V", t);
 			// the background "cell" has no volume constraint.
 			if( t == 0 || l == 0 ) return 0
-			const vdiff = this.getConf(t)["V"][k] - (this.C.getVolume(t) + vgain);
+			const vdiff = this.getParam("V", t) - (this.C.getVolume(t) + vgain);
 			return l*vdiff*vdiff
 		}
 	}
@@ -3003,26 +2995,25 @@ var CPM = (function (exports) {
 
 	/* eslint-disable no-unused-vars*/
 	class Cell {
-		/** 
-	    parentId
-	    own_conf Needs to deep copy :(
-	    kind
-	    */
 	    
 		constructor (conf, kind, id, mt){
 			this.parentId = 0;
 			this.id = id;
-			this.own_conf = JSON.parse(JSON.stringify(conf));
+			this.conf = conf;
 			this.kind = kind;
 			this.mt = mt; 
 		}
 
-		params(){
-			return this.own_conf
-		}
-
 		birth (parent){
 			this.parentId = parent.id; 
+		}
+
+		getParam(param){
+			if( this.hasOwnProperty(param)){
+				return this[param]
+			} else {
+				return this.conf[param][this.kind]
+			}
 		}
 	}
 
@@ -3339,8 +3330,8 @@ var CPM = (function (exports) {
 			return this.cells[t]
 		}
 
-		getParamsOfId(cid){
-			return this.cells[cid].params()
+		getParamsOfId(param, cid){
+			return this.cells[cid].getParam(param)
 		}
 		
 		/* ------------- COMPUTING THE HAMILTONIAN --------------- */
@@ -4752,8 +4743,8 @@ var CPM = (function (exports) {
 		divideXY(parent){
 			let prevX = parent.X;
 			let prevY = parent.Y;
-			let fluctX = this.own_conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
-			let fluctY = this.own_conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
+			let fluctX = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
+			let fluctY = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
 
 			if ((prevX / 2 - fluctX) < 0)
 				fluctX = prevX/2;
@@ -4767,13 +4758,13 @@ var CPM = (function (exports) {
 			parent.V = V/2;
 		}
 
-		get V() {
-			return this.own_conf["V"][this.kind]
-		}
+		// get V() {
+		// 	return this.conf["V"][this.kind]
+		// }
 
-		set V(V){
-			this.own_conf["V"][this.kind] = V;
-		}
+		// set V(V){
+		// 	this.conf["V"][this.kind] = V
+		// }
 	}
 
 	/**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 
@@ -6085,7 +6076,7 @@ var CPM = (function (exports) {
 			
 			// Custom check for the attractionpoint
 			checker.confCheckPresenceOf( "DIR" );
-			let pt = this.getConf()["DIR"];
+			let pt = this.getParam("DIR");
 			if( !( pt instanceof Array ) ){
 				throw( "DIR must be an array with the start and end coordinate of the preferred direction vector!" )
 			}
@@ -6108,12 +6099,12 @@ var CPM = (function (exports) {
 		 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 		/* eslint-disable no-unused-vars*/
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
-			let l = this.getConf(src_type)["LAMBDA_DIR"][this.C.cellKind( src_type )];
+			let l = this.getParam("LAMBDA_DIR", src_type);
 			if( !l ){
 				return 0
 			}
 			let torus = this.C.conf.torus;
-			let dir = this.getConf(src_type)["DIR"][this.C.cellKind( src_type )];
+			let dir = this.getParam("DIR", src_type);
 			let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
 			// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
 			let r = 0.;
@@ -6948,7 +6939,7 @@ var CPM = (function (exports) {
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
-			let lambda = this.getConf(tgt_type)["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
+			let lambda = this.getParam("LAMBDA_CONNECTIVITY", tgt_type);
 			
 			// connectedness of tgt cell
 			if( tgt_type != 0 && lambda > 0 ){
@@ -7127,8 +7118,8 @@ var CPM = (function (exports) {
 			checker.confCheckParameter( "LAMBDA_CONNECTIVITY", "KindArray", "NonNegative" );
 
 			//
-			if( "NBH_TYPE" in this.getConf() ){
-				let v = this.getConf()["NBH_TYPE"];
+			if( "NBH_TYPE" in this.conf ){
+				let v = this.getParam("NBH_TYPE");
 				let values = [ "Neumann", "Moore" ];
 				let found = false;
 				for( let val of values ){
@@ -7245,7 +7236,7 @@ var CPM = (function (exports) {
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
-			let lambda = this.getConf(tgt_type)["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
+			let lambda = this.getParam("LAMBDA_CONNECTIVITY", tgt_type);
 			
 			// connectedness of tgt cell. Only check when the lambda is non-zero.
 			if( tgt_type != 0 && lambda > 0 ){

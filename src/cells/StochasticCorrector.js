@@ -24,8 +24,8 @@ class StochasticCorrector extends Cell {
 	divideXY(parent){
 		let prevX = parent.X
 		let prevY = parent.Y
-		let fluctX = this.own_conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
-		let fluctY = this.own_conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
+		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
+		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
 
 		if ((prevX / 2 - fluctX) < 0)
 			fluctX = prevX/2
@@ -39,13 +39,13 @@ class StochasticCorrector extends Cell {
 		parent.V = V/2
 	}
 
-	get V() {
-		return this.own_conf["V"][this.kind]
-	}
+	// get V() {
+	// 	return this.conf["V"][this.kind]
+	// }
 
-	set V(V){
-		this.own_conf["V"][this.kind] = V
-	}
+	// set V(V){
+	// 	this.conf["V"][this.kind] = V
+	// }
 }
 
 export default StochasticCorrector

@@ -32,24 +32,16 @@ class Constraint {
 		return this.conf
 	}
 
-	getConf(cid){
-		if (this.hasOwnProperty("C")){
-			if (this.C.hasOwnProperty("cells") && typeof cid === "number"){
-				return this.C.getParamsOfId(cid)
-			}
-		}
-		return this.conf
-	}
-
 	getParam(param, cid){
 		if ( typeof cid === "number"){
 			if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
-				return this.C.getParamsOfId(cid)[param][this.C.cellKind(cid)]
+				return this.C.getParamsOfId(param, cid)
 			}
 			return this.conf[param][this.C.cellKind(cid)]
 		}
 		return this.conf[param]
 	}
+	
 	/** The constructor of a constraint takes a configuration object.
 	This method is usually overwritten by the actual constraint so that the entries
 	of this object can be documented.
