@@ -3,8 +3,8 @@ import Cell from "./Cell.js"
 
 class StochasticCorrector extends Cell {
 
-	constructor (conf, kind, id, mt, parent) {
-		super(conf, kind, id, mt, parent)
+	constructor (conf, kind, id, mt) {
+		super(conf, kind, id, mt)
 		this.X = conf["INIT_X"][kind]
 		this.Y = conf["INIT_Y"][kind]
 		this.V = conf["INIT_V"][kind]	
@@ -38,14 +38,6 @@ class StochasticCorrector extends Cell {
 		this.V = V/2
 		parent.V = V/2
 	}
-
-	// get V() {
-	// 	return this.conf["V"][this.kind]
-	// }
-
-	// set V(V){
-	// 	this.conf["V"][this.kind] = V
-	// }
 }
 
 export default StochasticCorrector
