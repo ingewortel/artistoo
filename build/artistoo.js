@@ -1728,7 +1728,7 @@ var CPM = (function (exports) {
 		 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 		@return {any} parameter - the requested parameter
 		*/
-		getParam(param, cid){
+		cellParameter(param, cid){
 			try{
 				// this is equal to {let cellspecific = this.C.cells[cid][param])}
 				// however, returns undefined if any of the called objects is not present
@@ -2411,10 +2411,10 @@ var CPM = (function (exports) {
 		@return {number} the volume energy of this cell.
 		*/
 		volconstraint ( vgain, t ){
-			const l = this.getParam("LAMBDA_V", t);
+			const l = this.cellParameter("LAMBDA_V", t);
 			// the background "cell" has no volume constraint.
 			if( t == 0 || l == 0 ) return 0
-			const vdiff = this.getParam("V", t) - (this.C.getVolume(t) + vgain);
+			const vdiff = this.cellParameter("V", t) - (this.C.getVolume(t) + vgain);
 			return l*vdiff*vdiff
 		}
 	}
@@ -2829,8 +2829,8 @@ var CPM = (function (exports) {
 				return 0
 			}
 			// const ts = this.C.cellKind(src_type)
-			const ls = this.getParam("LAMBDA_P", src_type);
-			const lt = this.getParam("LAMBDA_P", tgt_type);
+			const ls = this.cellParameter("LAMBDA_P", src_type);
+			const lt = this.cellParameter("LAMBDA_P", tgt_type);
 			// const tt = this.C.cellKind(tgt_type)
 			// const lt = this.getConf(tgt_type)["LAMBDA_P"][tt]
 			if( !(ls>0) && !(lt>0) ){
@@ -2857,7 +2857,7 @@ var CPM = (function (exports) {
 			let r = 0.0;
 			if( ls > 0 ){
 				// const pt = this.getConf(src_type)["P"][ts],
-				const pt = this.getParam("P", src_type),
+				const pt = this.cellParameter("P", src_type),
 					ps = this.cellperimeters[src_type];
 				const hnew = (ps+pchange[src_type])-pt,
 					hold = ps-pt;
@@ -2865,7 +2865,7 @@ var CPM = (function (exports) {
 			}
 			if( lt > 0 ){
 				// const pt = this.getConf(tgt_type)["P"][tt],
-				const pt = this.getParam("P", tgt_type),
+				const pt = this.cellParameter("P", tgt_type),
 					ps = this.cellperimeters[tgt_type];
 				const hnew = (ps+pchange[tgt_type])-pt,
 					hold = ps-pt;
@@ -3010,16 +3010,28 @@ var CPM = (function (exports) {
 		/** The constructor of class Cell.
 		 * @param {object} conf - configuration settings of the simulation, containing the
 		 * relevant parameters. Note: this should include all constraint parameters.
-		 * @param {}
+		 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
+		 * when parameters are not explicitly overwritten
+		 * @param {object} mt - the Mersenne Twister object of the CPM, to draw random 
+		 * numbers within the seeding of the entire simulation 
+		 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
 		 * */
 		constructor (conf, kind, id, mt){
-			this.parentId = 0;
-			this.id = id;
 			this.conf = conf;
 			this.kind = kind;
 			this.mt = mt; 
+			this.id = id;
+
+			/** The id of the parent cell, all seeded cells have parent -1, to overwrite this
+			 * this.birth(parent) needs to be called 
+			@type{number}*/
+			this.parentId = -1;
 		}
 
+		/** Adds parentId number, and can be overwritten to execute functionality on 
+		 * birth events. 
+		 @param {Cell} parent - the parent Cell object
+		 */
 		birth (parent){
 			this.parentId = parent.id; 
 		}
@@ -6020,7 +6032,7 @@ var CPM = (function (exports) {
 						}
 					}
 					// apply angular diffusion to target direction if needed
-					let per = this.getParam("PERSIST", t);
+					let per = this.cellParameter("PERSIST", t);
 					if( per < 1 ){
 						this.normalize(dx);
 						this.normalize(this.celldirections[t]);
@@ -6102,12 +6114,12 @@ var CPM = (function (exports) {
 		 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 		/* eslint-disable no-unused-vars*/
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
-			let l = this.getParam("LAMBDA_DIR", src_type);
+			let l = this.cellParameter("LAMBDA_DIR", src_type);
 			if( !l ){
 				return 0
 			}
 			let torus = this.C.conf.torus;
-			let dir = this.getParam("DIR", src_type);
+			let dir = this.cellParameter("DIR", src_type);
 			let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
 			// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
 			let r = 0.;
@@ -6942,7 +6954,7 @@ var CPM = (function (exports) {
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
-			let lambda = this.getParam("LAMBDA_CONNECTIVITY", tgt_type);
+			let lambda = this.cellParameter("LAMBDA_CONNECTIVITY", tgt_type);
 			
 			// connectedness of tgt cell
 			if( tgt_type != 0 && lambda > 0 ){
@@ -7122,7 +7134,7 @@ var CPM = (function (exports) {
 
 			//
 			if( "NBH_TYPE" in this.conf ){
-				let v = this.getParam("NBH_TYPE");
+				let v = this.cellParameter("NBH_TYPE");
 				let values = [ "Neumann", "Moore" ];
 				let found = false;
 				for( let val of values ){
@@ -7239,7 +7251,7 @@ var CPM = (function (exports) {
 		deltaH( src_i, tgt_i, src_type, tgt_type ){
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
-			let lambda = this.getParam("LAMBDA_CONNECTIVITY", tgt_type);
+			let lambda = this.cellParameter("LAMBDA_CONNECTIVITY", tgt_type);
 			
 			// connectedness of tgt cell. Only check when the lambda is non-zero.
 			if( tgt_type != 0 && lambda > 0 ){

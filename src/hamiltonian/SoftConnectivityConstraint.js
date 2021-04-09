@@ -304,7 +304,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	deltaH( src_i, tgt_i, src_type, tgt_type ){
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
-		let lambda = this.getParam("LAMBDA_CONNECTIVITY", tgt_type)
+		let lambda = this.cellParameter("LAMBDA_CONNECTIVITY", tgt_type)
 		
 		// connectedness of tgt cell
 		if( tgt_type != 0 && lambda > 0 ){

@@ -32,14 +32,14 @@ class Constraint {
 		return this.conf
 	}
 
-	/** Get a parameter for a constraint, decides whether to look for Cell-specific
-	 * parameters or to retrieve from conf
-	 * Assumes that parameter is a {@link KindArray} if cid is given 
+	/** Get a cellid or cellkind-specific parameter for a constraint, decides whether to look for Cell-specific
+	 * parameters or to retrieve from this.conf at postion of the Cellkind.
+	 * Assumes that parameter is an array of values per kind in conf
 	 * @param {string} param - name of parameter in conf object
 	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 	@return {any} parameter - the requested parameter
 	*/
-	getParam(param, cid){
+	cellParameter(param, cid){
 		try{
 			// this is equal to {let cellspecific = this.C.cells[cid][param])}
 			// however, returns undefined if any of the called objects is not present
