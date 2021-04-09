@@ -322,14 +322,6 @@ class CPM extends GridBasedModel {
 		return this.cells[t]
 	}
 
-	/** Get any conf parameter of the cell with {@link CellId};
-	 * Cell object checks if it has a cell-specific value, otherwise takes from conf
-	@param {string} param
-	@return {any} the cellkind. */
-	getParamsOfId(param, cid){
-		return this.cells[cid].getParam(param)
-	}
-	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
 	/** returns total change in hamiltonian for all registered soft constraints together.

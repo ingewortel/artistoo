@@ -42,7 +42,7 @@ class PreferredDirectionConstraint extends SoftConstraint {
 		
 		// Custom check for the attractionpoint
 		checker.confCheckPresenceOf( "DIR" )
-		let pt = this.getParam("DIR")
+		let pt = this.conf["DIR"]
 		if( !( pt instanceof Array ) ){
 			throw( "DIR must be an array with the start and end coordinate of the preferred direction vector!" )
 		}

@@ -1729,9 +1729,13 @@ var CPM = (function (exports) {
 		@return {any} parameter - the requested parameter
 		*/
 		getParam(param, cid){
-			try {
-				if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
-					return this.C.getParamsOfId(param, cid)
+			try{
+				// this is equal to {let cellspecific = this.C.cells[cid][param])}
+				// however, returns undefined if any of the called objects is not present
+				// this allows overwriting in Cell - all other variables are called from this.conf
+				let cellspecific = (((this || {}).C || {}).cells[cid] || {})[param];
+				if (cellspecific !== undefined){
+					return cellspecific
 				}
 				return this.conf[param][this.C.cellKind(cid)]
 			} catch (error){ // easier debugging, as the traceback no longer default spits out the value of param
@@ -3001,9 +3005,13 @@ var CPM = (function (exports) {
 		IS_BARRIER : BarrierConstraint
 	};
 
-	/* eslint-disable no-unused-vars*/
 	class Cell {
-	    
+		
+		/** The constructor of class Cell.
+		 * @param {object} conf - configuration settings of the simulation, containing the
+		 * relevant parameters. Note: this should include all constraint parameters.
+		 * @param {}
+		 * */
 		constructor (conf, kind, id, mt){
 			this.parentId = 0;
 			this.id = id;
@@ -3016,13 +3024,6 @@ var CPM = (function (exports) {
 			this.parentId = parent.id; 
 		}
 
-		getParam(param){
-			if( this.hasOwnProperty(param)){
-				return this[param]
-			} else {
-				return this.conf[param][this.kind]
-			}
-		}
 	}
 
 	/** The core CPM class. Can be used for two- or three-dimensional simulations.
@@ -3342,14 +3343,6 @@ var CPM = (function (exports) {
 			return this.cells[t]
 		}
 
-		/** Get any conf parameter of the cell with {@link CellId};
-		 * Cell object checks if it has a cell-specific value, otherwise takes from conf
-		@param {string} param
-		@return {any} the cellkind. */
-		getParamsOfId(param, cid){
-			return this.cells[cid].getParam(param)
-		}
-		
 		/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
 		/** returns total change in hamiltonian for all registered soft constraints together.
@@ -6086,7 +6079,7 @@ var CPM = (function (exports) {
 			
 			// Custom check for the attractionpoint
 			checker.confCheckPresenceOf( "DIR" );
-			let pt = this.getParam("DIR");
+			let pt = this.conf["DIR"];
 			if( !( pt instanceof Array ) ){
 				throw( "DIR must be an array with the start and end coordinate of the preferred direction vector!" )
 			}

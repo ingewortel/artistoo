@@ -40,9 +40,13 @@ class Constraint {
 	@return {any} parameter - the requested parameter
 	*/
 	getParam(param, cid){
-		try {
-			if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
-				return this.C.getParamsOfId(param, cid)
+		try{
+			// this is equal to {let cellspecific = this.C.cells[cid][param])}
+			// however, returns undefined if any of the called objects is not present
+			// this allows overwriting in Cell - all other variables are called from this.conf
+			let cellspecific = (((this || {}).C || {}).cells[cid] || {})[param]
+			if (cellspecific !== undefined){
+				return cellspecific
 			}
 			return this.conf[param][this.C.cellKind(cid)]
 		} catch (error){ // easier debugging, as the traceback no longer default spits out the value of param
