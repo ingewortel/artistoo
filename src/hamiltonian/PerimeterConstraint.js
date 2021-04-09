@@ -166,11 +166,8 @@ class PerimeterConstraint extends SoftConstraint {
 		if( src_type === tgt_type ){
 			return 0
 		}
-		// const ts = this.C.cellKind(src_type)
 		const ls = this.cellParameter("LAMBDA_P", src_type)
 		const lt = this.cellParameter("LAMBDA_P", tgt_type)
-		// const tt = this.C.cellKind(tgt_type)
-		// const lt = this.getConf(tgt_type)["LAMBDA_P"][tt]
 		if( !(ls>0) && !(lt>0) ){
 			return 0
 		}
@@ -194,7 +191,6 @@ class PerimeterConstraint extends SoftConstraint {
 		}
 		let r = 0.0
 		if( ls > 0 ){
-			// const pt = this.getConf(src_type)["P"][ts],
 			const pt = this.cellParameter("P", src_type),
 				ps = this.cellperimeters[src_type]
 			const hnew = (ps+pchange[src_type])-pt,
@@ -202,7 +198,6 @@ class PerimeterConstraint extends SoftConstraint {
 			r += ls*((hnew*hnew)-(hold*hold))
 		}
 		if( lt > 0 ){
-			// const pt = this.getConf(tgt_type)["P"][tt],
 			const pt = this.cellParameter("P", tgt_type),
 				ps = this.cellperimeters[tgt_type]
 			const hnew = (ps+pchange[tgt_type])-pt,

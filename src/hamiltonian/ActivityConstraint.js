@@ -102,20 +102,18 @@ class ActivityConstraint extends SoftConstraint {
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 
 		let deltaH = 0, maxact, lambdaact
-		const src_kind = this.C.cellKind( src_type )
-		const tgt_kind = this.C.cellKind( tgt_type )
 
 		// use parameters for the source cell, unless that is the background.
 		// In that case, use parameters of the target cell.
 		if( src_type != 0 ){
-			maxact = this.conf["MAX_ACT"][src_kind]
-			lambdaact = this.conf["LAMBDA_ACT"][src_kind]
+			maxact = this.cellParameter("MAX_ACT", src_type)
+			lambdaact = this.cellParameter("LAMBDA_ACT", src_type)
 		} else {
 			// special case: punishment for a copy attempt from background into
 			// an active cell. This effectively means that the active cell retracts,
 			// which is different from one cell pushing into another (active) cell.
-			maxact = this.conf["MAX_ACT"][tgt_kind]
-			lambdaact = this.conf["LAMBDA_ACT"][tgt_kind]
+			maxact = this.cellParameter("MAX_ACT", tgt_type)
+			lambdaact = this.cellParameter("LAMBDA_ACT", tgt_type)
 		}
 		if( !maxact || !lambdaact ){
 			return 0
@@ -226,8 +224,7 @@ class ActivityConstraint extends SoftConstraint {
 	/* eslint-disable no-unused-vars*/
 	postSetpixListener( i, t_old, t ){
 		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-		const k = this.C.cellKind( t )
-		this.cellpixelsact[i] = this.conf["MAX_ACT"][k]
+		this.cellpixelsact[i] = this.cellParameter("MAX_ACT", t)
 	}
 	
 	/** The postMCSListener of the ActivityConstraint ensures that pixel activities

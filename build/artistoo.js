@@ -1721,26 +1721,23 @@ var CPM = (function (exports) {
 			return this.conf
 		}
 
-		/** Get a parameter for a constraint, decides whether to look for Cell-specific
-		 * parameters or to retrieve from conf
-		 * Assumes that parameter is a {@link KindArray} if cid is given 
+		/** Get a cellid or cellkind-specific parameter for a constraint, decides whether to look for Cell-specific
+		 * parameters or to retrieve from this.conf at postion of the Cellkind.
+		 * Assumes that parameter is an array of values per kind in
 		 * @param {string} param - name of parameter in conf object
 		 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 		@return {any} parameter - the requested parameter
 		*/
 		cellParameter(param, cid){
-			try{
-				// this is equal to {let cellspecific = this.C.cells[cid][param])}
-				// however, returns undefined if any of the called objects is not present
-				// this allows overwriting in Cell - all other variables are called from this.conf
-				let cellspecific = (((this || {}).C || {}).cells[cid] || {})[param];
-				if (cellspecific !== undefined){
-					return cellspecific
-				}
-				return this.conf[param][this.C.cellKind(cid)]
-			} catch (error){ // easier debugging, as the traceback no longer default spits out the value of param
-				throw("Parameter: " + param + " of cellkind: " + this.C.cellKind(cid) + " cell: " + cid + " not found")
+			// this is equal to {let cellspecific = this.C.cells[cid][param])}
+			// however, returns undefined if any of the called objects is not present
+			// this allows overwriting in Cell - all other variables are called from this.conf
+			let cellspecific = ((((this || {}).C || {}).cells || {})[cid] || {})[param];
+			if (cellspecific !== undefined){
+				return cellspecific
 			}
+			// console.log(this.conf[param])
+			return this.conf[param][this.C.cellKind(cid)]
 		}
 		
 		/** The constructor of a constraint takes a configuration object.
@@ -2306,7 +2303,18 @@ var CPM = (function (exports) {
 		@private
 		*/
 		J( t1, t2 ){
-			return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+			console.log("--- in J(t1, t2) ----");
+			console.log(this.conf["J"], "J full");
+			console.log(this.conf["J"][0], "J 0 explicit");
+			console.log(this.conf["J"][1], "J 1 explicit");
+			console.log(this.cellParameter("J", 0), "J 0 param");
+			console.log(this.cellParameter("J", 1), "J 1 param");
+			console.log(this.cellParameter("J", this.C.cellKind(t1)), "J t1");
+			console.log(this.cellParameter("J", this.C.cellKind(t1))[1], "J 1");
+			console.log("t1 ", t1, "t2 ", t2);
+			console.log(this.cellParameter("J", this.C.cellKind(t1)), "cell parameter");
+			console.log("--- leaves J(t1, t2) ----");
+			return this.cellParameter("J", this.C.cellKind(t1))[this.C.cellKind(t2)]
 		}
 		/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
 		neighbors that belong to a different cellid.
@@ -2520,20 +2528,18 @@ var CPM = (function (exports) {
 		deltaH ( sourcei, targeti, src_type, tgt_type ){
 
 			let deltaH = 0, maxact, lambdaact;
-			const src_kind = this.C.cellKind( src_type );
-			const tgt_kind = this.C.cellKind( tgt_type );
 
 			// use parameters for the source cell, unless that is the background.
 			// In that case, use parameters of the target cell.
 			if( src_type != 0 ){
-				maxact = this.conf["MAX_ACT"][src_kind];
-				lambdaact = this.conf["LAMBDA_ACT"][src_kind];
+				maxact = this.cellParameter("MAX_ACT", src_type);
+				lambdaact = this.cellParameter("LAMBDA_ACT", src_type);
 			} else {
 				// special case: punishment for a copy attempt from background into
 				// an active cell. This effectively means that the active cell retracts,
 				// which is different from one cell pushing into another (active) cell.
-				maxact = this.conf["MAX_ACT"][tgt_kind];
-				lambdaact = this.conf["LAMBDA_ACT"][tgt_kind];
+				maxact = this.cellParameter("MAX_ACT", tgt_type);
+				lambdaact = this.cellParameter("LAMBDA_ACT", tgt_type);
 			}
 			if( !maxact || !lambdaact ){
 				return 0
@@ -2644,8 +2650,7 @@ var CPM = (function (exports) {
 		/* eslint-disable no-unused-vars*/
 		postSetpixListener( i, t_old, t ){
 			// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-			const k = this.C.cellKind( t );
-			this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
+			this.cellpixelsact[i] = this.cellParameter("MAX_ACT", t);
 		}
 		
 		/** The postMCSListener of the ActivityConstraint ensures that pixel activities
@@ -2828,11 +2833,8 @@ var CPM = (function (exports) {
 			if( src_type === tgt_type ){
 				return 0
 			}
-			// const ts = this.C.cellKind(src_type)
 			const ls = this.cellParameter("LAMBDA_P", src_type);
 			const lt = this.cellParameter("LAMBDA_P", tgt_type);
-			// const tt = this.C.cellKind(tgt_type)
-			// const lt = this.getConf(tgt_type)["LAMBDA_P"][tt]
 			if( !(ls>0) && !(lt>0) ){
 				return 0
 			}
@@ -2856,7 +2858,6 @@ var CPM = (function (exports) {
 			}
 			let r = 0.0;
 			if( ls > 0 ){
-				// const pt = this.getConf(src_type)["P"][ts],
 				const pt = this.cellParameter("P", src_type),
 					ps = this.cellperimeters[src_type];
 				const hnew = (ps+pchange[src_type])-pt,
@@ -2864,7 +2865,6 @@ var CPM = (function (exports) {
 				r += ls*((hnew*hnew)-(hold*hold));
 			}
 			if( lt > 0 ){
-				// const pt = this.getConf(tgt_type)["P"][tt],
 				const pt = this.cellParameter("P", tgt_type),
 					ps = this.cellperimeters[tgt_type];
 				const hnew = (ps+pchange[tgt_type])-pt,
@@ -2972,11 +2972,11 @@ var CPM = (function (exports) {
 		fulfilled( src_i, tgt_i, src_type, tgt_type ){
 		
 			// Fulfilled = false when either src or tgt pixel is of the barrier cellkind	
-			if( this.conf["IS_BARRIER"][this.C.cellKind( src_type ) ] ){
+			if( this.cellParameter("IS_BARRIER", src_type ) ){
 				return false
 			}
 
-			if( this.conf["IS_BARRIER"][this.C.cellKind( tgt_type ) ] ){
+			if( this.cellParameter("IS_BARRIER", tgt_type ) ){
 				return false
 			}
 
@@ -3942,8 +3942,6 @@ var CPM = (function (exports) {
 			}
 
 			let deltaH = 0, maxact, lambdaact;
-			const src_kind = this.C.cellKind( src_type );
-			const tgt_kind = this.C.cellKind( tgt_type );
 			let bgindex1 = 0, bgindex2 = 0;
 			
 			for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
@@ -3959,14 +3957,14 @@ var CPM = (function (exports) {
 			// use parameters for the source cell, unless that is the background.
 			// In that case, use parameters of the target cell.
 			if( src_type != 0 ){
-				maxact = this.conf["MAX_ACT"][src_kind];
-				lambdaact = this.conf["LAMBDA_ACT_MBG"][src_kind][bgindex1];
+				maxact = this.cellParameter("MAX_ACT", src_type);
+				lambdaact = this.cellParameter("LAMBDA_ACT_MBG", src_type)[bgindex1];
 			} else {
 				// special case: punishment for a copy attempt from background into
 				// an active cell. This effectively means that the active cell retracts,
 				// which is different from one cell pushing into another (active) cell.
-				maxact = this.conf["MAX_ACT"][tgt_kind];
-				lambdaact = this.conf["LAMBDA_ACT_MBG"][tgt_kind][bgindex2];
+				maxact = this.cellParameter("MAX_ACT", tgt_type);
+				lambdaact = this.cellParameter("LAMBDA_ACT_MBG", tgt_type)[bgindex2];
 			}
 			if( !maxact || !lambdaact ){
 				return 0
@@ -5996,10 +5994,9 @@ var CPM = (function (exports) {
 				centroids = this.C.getStat( Centroids );
 			}
 			for( let t of this.C.cellIDs() ){
-				const k = this.C.cellKind(t);
-				let ld = this.getConf(t)["LAMBDA_DIR"][k];
-				let dt = this.getConf(t)["DELTA_T"] && this.getConf(t)["DELTA_T"][k] ? 
-					this.getConf(t)["DELTA_T"][k] : 10;
+				let ld = this.cellParameter("LAMBDA_DIR", t);
+				let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][this.C.cellKind(t)] ? // cannot convert this call easily to cellParameter
+					this.cellParameter("DELTA_T", t) : 10;
 				if( ld == 0 ){
 					delete this.cellcentroidlists[t];
 					delete this.celldirections[t];
@@ -6238,7 +6235,7 @@ var CPM = (function (exports) {
 		deltaHCoarse( sourcei, targeti, src_type, tgt_type ){
 			let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti );
 			let delta = this.field.pixt( tp ) - this.field.pixt( sp );
-			let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)];
+			let lambdachem = this.cellParameter("LAMBDA_CH", this.C.cellKind(src_type));
 			return -delta*lambdachem
 		}
 
@@ -6340,7 +6337,7 @@ var CPM = (function (exports) {
 			// deltaH is only non-zero when the source pixel belongs to a cell with
 			// an attraction point, so it does not act on copy attempts where the
 			// background would invade the cell.
-			let l = this.conf["LAMBDA_ATTRACTIONPOINT"][this.C.cellKind( src_type )];
+			let l = this.cellParameter("LAMBDA_ATTRACTIONPOINT", src_type );
 			if( !l ){
 				return 0
 			}
@@ -6352,7 +6349,7 @@ var CPM = (function (exports) {
 
 			// tgt is the attraction point; p1 is the source location and p2 is
 			// the location of the target pixel.
-			let tgt = this.conf["ATTRACTIONPOINT"][this.C.cellKind( src_type )];
+			let tgt = this.cellParameter("ATTRACTIONPOINT", src_type );
 			let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
 
 			// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
@@ -6645,7 +6642,7 @@ var CPM = (function (exports) {
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
 			// connectedness of tgt cell
-			if( tgt_type != 0 && this.conf["CONNECTED"][this.C.cellKind(tgt_type)] ){
+			if( tgt_type != 0 && this.cellParameter("CONNECTED",tgt_type) ){
 				return this.checkConnected( tgt_i, src_type, tgt_type )
 			}
 			
@@ -7082,7 +7079,7 @@ var CPM = (function (exports) {
 			// connectedness of src cell cannot change if it was connected in the first place.
 			
 			// connectedness of tgt cell
-			if( tgt_type !== 0 && this.conf["CONNECTED"][this.C.cellKind(tgt_type)] ){
+			if( tgt_type !== 0 && this.cellParameter("CONNECTED",tgt_type) ){
 				return this.checkConnected( tgt_i, src_type, tgt_type )
 			}
 			
@@ -7134,7 +7131,7 @@ var CPM = (function (exports) {
 
 			//
 			if( "NBH_TYPE" in this.conf ){
-				let v = this.cellParameter("NBH_TYPE");
+				let v = this.conf["NBH_TYPE"];
 				let values = [ "Neumann", "Moore" ];
 				let found = false;
 				for( let val of values ){
@@ -7306,12 +7303,12 @@ var CPM = (function (exports) {
 		fulfilled( src_i, tgt_i, src_type, tgt_type ){
 			// volume gain of src cell
 			if( src_type != 0 && this.C.getVolume(src_type) + 1 > 
-				this.conf["LAMBDA_VRANGE_MAX"][this.C.cellKind(src_type)] ){
+				this.cellParameter("LAMBDA_VRANGE_MAX", src_type) ){
 				return false
 			}
 			// volume loss of tgt cell
 			if( tgt_type != 0 && this.C.getVolume(tgt_type) - 1 < 
-				this.conf["LAMBDA_VRANGE_MIN"][this.C.cellKind(tgt_type)] ){
+				this.cellParameter("LAMBDA_VRANGE_MIN",tgt_type) ){
 				return false
 			}
 			return true

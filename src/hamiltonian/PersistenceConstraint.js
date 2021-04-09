@@ -152,10 +152,9 @@ class PersistenceConstraint extends SoftConstraint {
 			centroids = this.C.getStat( Centroids )
 		}
 		for( let t of this.C.cellIDs() ){
-			const k = this.C.cellKind(t)
-			let ld = this.getConf(t)["LAMBDA_DIR"][k]
-			let dt = this.getConf(t)["DELTA_T"] && this.getConf(t)["DELTA_T"][k] ? 
-				this.getConf(t)["DELTA_T"][k] : 10
+			let ld = this.cellParameter("LAMBDA_DIR", t)
+			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][this.C.cellKind(t)] ? // cannot convert this call easily to cellParameter
+				this.cellParameter("DELTA_T", t) : 10
 			if( ld == 0 ){
 				delete this.cellcentroidlists[t]
 				delete this.celldirections[t]

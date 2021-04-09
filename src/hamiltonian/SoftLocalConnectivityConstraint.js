@@ -46,7 +46,7 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 
 		//
 		if( "NBH_TYPE" in this.conf ){
-			let v = this.cellParameter("NBH_TYPE")
+			let v = this.conf["NBH_TYPE"]
 			let values = [ "Neumann", "Moore" ]
 			let found = false
 			for( let val of values ){
