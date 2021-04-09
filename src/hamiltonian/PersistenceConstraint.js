@@ -188,7 +188,7 @@ class PersistenceConstraint extends SoftConstraint {
 					}
 				}
 				// apply angular diffusion to target direction if needed
-				let per = this.getConf(t)["PERSIST"][k]
+				let per = this.getParam("PERSIST", t)
 				if( per < 1 ){
 					this.normalize(dx)
 					this.normalize(this.celldirections[t])

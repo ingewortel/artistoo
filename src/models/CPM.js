@@ -218,6 +218,10 @@ class CPM extends GridBasedModel {
 	}
 
 
+	/** Adds Cell tracking to the simulation. This uses the {@link Cell} subclasses to track
+	 * inheritance and 
+	 @param {Constraint} t - the constraint object to add.
+	 */
 	addCells( conf ){
 		if (!this.hasOwnProperty("cells")){
 			this.cells = [new Cell(conf, 0, -1, this)]
@@ -318,6 +322,10 @@ class CPM extends GridBasedModel {
 		return this.cells[t]
 	}
 
+	/** Get any conf parameter of the cell with {@link CellId};
+	 * Cell object checks if it has a cell-specific value, otherwise takes from conf
+	@param {string} param
+	@return {any} the cellkind. */
 	getParamsOfId(param, cid){
 		return this.cells[cid].getParam(param)
 	}
@@ -498,11 +506,9 @@ class CPM extends GridBasedModel {
 	}
 
 	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
-	//  TODO: Rename or split so that it is clear that this no longer only makes a new ID
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
-	   for this cell in the relevant arrays (cellvolume, t2k).
+	   for this cell in the relevant arrays (cellvolume, t2k, cells (if these are tracked)).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
-	   @param {CellId} parentId - id of the parent, if this is birth
 	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind ){
 		const newid = ++ this.last_cell_id
@@ -514,6 +520,10 @@ class CPM extends GridBasedModel {
 		return newid
 	}
 
+	/** Calls a birth event in a new daughter Cell object, and hands 
+	 * the other daughter (as parent) on to the Cell.
+	   @param {CellId} childId - id of the newly created Cell object
+	   @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
 	birth (childId, parentId){
 		this.cells[childId].birth(this.cells[parentId] )
 	}

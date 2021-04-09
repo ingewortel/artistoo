@@ -32,6 +32,13 @@ class Constraint {
 		return this.conf
 	}
 
+	/** Get a parameter for a constraint, decides whether to look for Cell-specific
+	 * parameters or to retrieve from conf
+	 * Assumes that parameter is a {@link KindArray} if cid is given 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
 	getParam(param, cid){
 		try {
 			if ( typeof cid === "number"){
