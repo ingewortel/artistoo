@@ -41,19 +41,12 @@ class Constraint {
 	*/
 	getParam(param, cid){
 		try {
-			if ( typeof cid === "number"){
-				if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
-					return this.C.getParamsOfId(param, cid)
-				}
-				return this.conf[param][this.C.cellKind(cid)]
+			if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
+				return this.C.getParamsOfId(param, cid)
 			}
-			return this.conf[param]
-		} catch (error){
-			if ( typeof cid === "number"){
-				throw("Parameter: " + param + " of cellkind: " + this.C.cellKind(cid) + " cell: " + cid + " not found")
-			} else {
-				throw("Parameter: " + param + " not found")
-			}
+			return this.conf[param][this.C.cellKind(cid)]
+		} catch (error){ // easier debugging, as the traceback no longer default spits out the value of param
+			throw("Parameter: " + param + " of cellkind: " + this.C.cellKind(cid) + " cell: " + cid + " not found")
 		}
 	}
 	

@@ -1721,14 +1721,22 @@ var CPM = (function (exports) {
 			return this.conf
 		}
 
+		/** Get a parameter for a constraint, decides whether to look for Cell-specific
+		 * parameters or to retrieve from conf
+		 * Assumes that parameter is a {@link KindArray} if cid is given 
+		 * @param {string} param - name of parameter in conf object
+		 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+		@return {any} parameter - the requested parameter
+		*/
 		getParam(param, cid){
-			if ( typeof cid === "number"){
+			try {
 				if (this.hasOwnProperty("C") && this.C.hasOwnProperty("cells")){
 					return this.C.getParamsOfId(param, cid)
 				}
 				return this.conf[param][this.C.cellKind(cid)]
+			} catch (error){ // easier debugging, as the traceback no longer default spits out the value of param
+				throw("Parameter: " + param + " of cellkind: " + this.C.cellKind(cid) + " cell: " + cid + " not found")
 			}
-			return this.conf[param]
 		}
 		
 		/** The constructor of a constraint takes a configuration object.
@@ -3230,6 +3238,10 @@ var CPM = (function (exports) {
 		}
 
 
+		/** Adds Cell tracking to the simulation. This uses the {@link Cell} subclasses to track
+		 * inheritance and cellId-specific parameters and internal state
+		 @param {object} conf - the configuration object containing "CELLS".
+		 */
 		addCells( conf ){
 			if (!this.hasOwnProperty("cells")){
 				this.cells = [new Cell(conf, 0, -1, this)];
@@ -3330,6 +3342,10 @@ var CPM = (function (exports) {
 			return this.cells[t]
 		}
 
+		/** Get any conf parameter of the cell with {@link CellId};
+		 * Cell object checks if it has a cell-specific value, otherwise takes from conf
+		@param {string} param
+		@return {any} the cellkind. */
 		getParamsOfId(param, cid){
 			return this.cells[cid].getParam(param)
 		}
@@ -3510,11 +3526,9 @@ var CPM = (function (exports) {
 		}
 
 		/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
-		//  TODO: Rename or split so that it is clear that this no longer only makes a new ID
 		/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
-		   for this cell in the relevant arrays (cellvolume, t2k).
+		   for this cell in the relevant arrays (cellvolume, t2k, cells (if these are tracked)).
 		   @param {CellKind} kind - cellkind of the cell that has to be made.
-		   @param {CellId} parentId - id of the parent, if this is birth
 		   @return {CellId} of the new cell.*/
 		makeNewCellID ( kind ){
 			const newid = ++ this.last_cell_id;
@@ -3526,6 +3540,10 @@ var CPM = (function (exports) {
 			return newid
 		}
 
+		/** Calls a birth event in a new daughter Cell object, and hands 
+		 * the other daughter (as parent) on to the Cell.
+		   @param {CellId} childId - id of the newly created Cell object
+		   @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
 		birth (childId, parentId){
 			this.cells[childId].birth(this.cells[parentId] );
 		}
@@ -4722,8 +4740,8 @@ var CPM = (function (exports) {
 
 	class StochasticCorrector extends Cell {
 
-		constructor (conf, kind, id, mt, parent) {
-			super(conf, kind, id, mt, parent);
+		constructor (conf, kind, id, mt) {
+			super(conf, kind, id, mt);
 			this.X = conf["INIT_X"][kind];
 			this.Y = conf["INIT_Y"][kind];
 			this.V = conf["INIT_V"][kind];	
@@ -4757,14 +4775,6 @@ var CPM = (function (exports) {
 			this.V = V/2;
 			parent.V = V/2;
 		}
-
-		// get V() {
-		// 	return this.conf["V"][this.kind]
-		// }
-
-		// set V(V){
-		// 	this.conf["V"][this.kind] = V
-		// }
 	}
 
 	/**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 
@@ -6017,7 +6027,7 @@ var CPM = (function (exports) {
 						}
 					}
 					// apply angular diffusion to target direction if needed
-					let per = this.getConf(t)["PERSIST"][k];
+					let per = this.getParam("PERSIST", t);
 					if( per < 1 ){
 						this.normalize(dx);
 						this.normalize(this.celldirections[t]);

@@ -219,8 +219,8 @@ class CPM extends GridBasedModel {
 
 
 	/** Adds Cell tracking to the simulation. This uses the {@link Cell} subclasses to track
-	 * inheritance and 
-	 @param {Constraint} t - the constraint object to add.
+	 * inheritance and cellId-specific parameters and internal state
+	 @param {object} conf - the configuration object containing "CELLS".
 	 */
 	addCells( conf ){
 		if (!this.hasOwnProperty("cells")){
