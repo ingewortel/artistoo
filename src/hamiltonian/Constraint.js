@@ -44,7 +44,7 @@ class Constraint {
 			// this is equal to {let cellspecific = this.C.cells[cid][param])}
 			// however, returns undefined if any of the called objects is not present
 			// this allows overwriting in Cell - all other variables are called from this.conf
-			let cellspecific = (((this || {}).C || {}).cells[cid] || {})[param]
+			let cellspecific = ((this.C || {}).cells[cid] || {})[param]
 			if (cellspecific !== undefined){
 				return cellspecific
 			}
