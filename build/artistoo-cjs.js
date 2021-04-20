@@ -1530,7 +1530,6 @@ class Constraint {
 		if (cellspecific !== undefined){
 			return cellspecific
 		}
-		// console.log(this.conf[param])
 		return this.conf[param][this.C.cellKind(cid)]
 	}
 	
@@ -2097,18 +2096,8 @@ class Adhesion extends SoftConstraint {
 	@private
 	*/
 	J( t1, t2 ){
-		console.log("--- in J(t1, t2) ----");
-		console.log(this.conf["J"], "J full");
-		console.log(this.conf["J"][0], "J 0 explicit");
-		console.log(this.conf["J"][1], "J 1 explicit");
-		console.log(this.cellParameter("J", 0), "J 0 param");
-		console.log(this.cellParameter("J", 1), "J 1 param");
-		console.log(this.cellParameter("J", this.C.cellKind(t1)), "J t1");
-		console.log(this.cellParameter("J", this.C.cellKind(t1))[1], "J 1");
-		console.log("t1 ", t1, "t2 ", t2);
-		console.log(this.cellParameter("J", this.C.cellKind(t1)), "cell parameter");
-		console.log("--- leaves J(t1, t2) ----");
-		return this.cellParameter("J", this.C.cellKind(t1))[this.C.cellKind(t2)]
+		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+		// return this.cellParameter("J", this.C.cellKind(t1))[this.C.cellKind(t2)]
 	}
 	/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
 	neighbors that belong to a different cellid.
