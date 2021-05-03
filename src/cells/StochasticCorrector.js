@@ -3,8 +3,8 @@ import Cell from "./Cell.js"
 
 class StochasticCorrector extends Cell {
 
-	constructor (conf, kind, id, mt) {
-		super(conf, kind, id, mt)
+	constructor (conf, kind, id, C) {
+		super(conf, kind, id, C)
 		this.X = conf["INIT_X"][kind]
 		this.Y = conf["INIT_Y"][kind]
 		this.V = conf["INIT_V"][kind]	
@@ -24,8 +24,8 @@ class StochasticCorrector extends Cell {
 	divideXY(parent){
 		let prevX = parent.X
 		let prevY = parent.Y
-		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
-		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1)
+		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1)
+		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1)
 
 		if ((prevX / 2 - fluctX) < 0)
 			fluctX = prevX/2

@@ -2800,8 +2800,6 @@ let AutoAdderConfig = {
 	IS_BARRIER : BarrierConstraint
 };
 
-// import Cell from "../cells/Cell.js"
-
 /** The core CPM class. Can be used for two- or three-dimensional simulations.
 */
 class CPM extends GridBasedModel {
@@ -2899,7 +2897,6 @@ class CPM extends GridBasedModel {
 				this.add( new AutoAdderConfig[x]( conf ) );
 			} 
 		}
-		// if ("CELLS" in conf){this.addCells( conf )}
 	}
 
 	/** Completely reset; remove all cells and set time back to zero. Only the
@@ -2914,9 +2911,6 @@ class CPM extends GridBasedModel {
 		this.time = 0;
 		this.cellvolume = [];
 		this.stat_values = {};
-		// if (this.hasOwnProperty("cells")){
-		// 	this.cells = [this.cells[0]] // keep empty declared
-		// }
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 
@@ -3086,13 +3080,6 @@ class CPM extends GridBasedModel {
 		this.t2k[ t ] = k;
 	}
 	
-	// /** Get the {@link Cell} of the cell with {@link CellId} t. 
-	// @param {CellId} t - id of the cell to get kind of.
-	// @return {Cell} the cellkind. */
-	// getCell ( t ){
-	// 	return this.cells[t]
-	// }
-
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
 	/** returns total change in hamiltonian for all registered soft constraints together.
@@ -3211,9 +3198,6 @@ class CPM extends GridBasedModel {
 				delete this.cellvolume[t_old];
 				delete this.t2k[t_old];
 				this.nr_cells--;
-				// if (this.hasOwnProperty("cells")){
-				// 	delete this.cells[t_old]
-				// }
 			}
 		}
 		// update volume of the new cell and cellid of the pixel.
@@ -3270,7 +3254,7 @@ class CPM extends GridBasedModel {
 
 	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
-	   for this cell in the relevant arrays (cellvolume, t2k, cells (if these are tracked)).
+	   for this cell in the relevant arrays (cellvolume, t2k).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
 	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind ){
@@ -3279,14 +3263,6 @@ class CPM extends GridBasedModel {
 		this.setCellKind( newid, kind );
 		return newid
 	}
-
-	// /** Calls a birth event in a new daughter Cell object, and hands 
-	//  * the other daughter (as parent) on to the Cell.
-	//    @param {CellId} childId - id of the newly created Cell object
-	//    @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
-	// birth (childId, parentId){
-	// 	this.cells[childId].birth(this.cells[parentId] )
-	// }
 }
 
 /** This class encapsulates a lower-resolution grid and makes it
@@ -4487,10 +4463,10 @@ class Cell {
 	 * numbers within the seeding of the entire simulation 
 	 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
 	 * */
-	constructor (conf, kind, id, mt){
+	constructor (conf, kind, id, C){
 		this.conf = conf;
 		this.kind = kind;
-		this.mt = mt; 
+		this.C = C;
 		this.id = id;
 
 		/** The id of the parent cell, all seeded cells have parent -1, to overwrite this
@@ -4580,8 +4556,8 @@ class CPMEvol extends CPM {
 
 class StochasticCorrector extends Cell {
 
-	constructor (conf, kind, id, mt) {
-		super(conf, kind, id, mt);
+	constructor (conf, kind, id, C) {
+		super(conf, kind, id, C);
 		this.X = conf["INIT_X"][kind];
 		this.Y = conf["INIT_Y"][kind];
 		this.V = conf["INIT_V"][kind];	
@@ -4601,8 +4577,8 @@ class StochasticCorrector extends Cell {
 	divideXY(parent){
 		let prevX = parent.X;
 		let prevY = parent.Y;
-		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
-		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.mt.random() - 1);
+		let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
+		let fluctY = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
 
 		if ((prevX / 2 - fluctX) < 0)
 			fluctX = prevX/2;
