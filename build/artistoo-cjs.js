@@ -1515,28 +1515,45 @@ class Constraint {
 		return this.conf
 	}
 
-	/** Get a cellid or cellkind-specific parameter for a constraint, decides whether to look for Cell-specific
-	 * parameters or to retrieve from this.conf at postion of the Cellkind.
-	 * Assumes that parameter is an array of values per kind in
+	/** Get a cellid or cellkind-specific parameter for a constraint. 
+	 * This usually refers to @function paramOfKind, which returns
+	 * this.conf[param][cellkind], and thus assumes that the parameter is 
+	 * indexable by cellkind.
+	 * If CPMEvol is used this is redirected to @function paramOfCell
+	 * which looks whether the parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * 
 	 * @param {string} param - name of parameter in conf object
 	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 	@return {any} parameter - the requested parameter
 	*/
-	/* eslint-disable no-unused-vars*/
 	cellParameter(param, cid){
-		// note: This may be redefined when CPM is attached.
 		return this.paramOfKind(param, cid)
 	}
 
-	
+	/**
+	 * Get a cellId specific parameter, only used if CPMEvol is used: 
+	 * looks whether the requested parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
 	paramOfCell(param, cid){
-		let cellspecific = ((((this || {}).C || {}).cells || {})[cid] || {})[param];
-		if (cellspecific !== undefined){
-			return cellspecific
+		if (this.C.cells[cid][param] !== undefined){
+			return this.C.cells[cid][param]
 		}
 		return this.paramOfKind(param,cid)
 	}
 
+	/** Returns a cellKind specfic variable: 
+	 * Assumes that the parameter is indexable by cellkind.
+	 *
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
 	paramOfKind(param, cid){
 		return this.conf[param][this.C.cellKind(cid)]
 	}
@@ -1553,7 +1570,8 @@ class Constraint {
 		this.conf = conf;
 	}
 	/** This function attaches the relevant CPM to this constraint, so that information
-	about this cpm can be requested from the constraint. 
+	about this cpm can be requested from the constraint. If the cpm is of type CPMEvol,
+	the cellParameter call is redirected to check for CellId-specific parameters.
 	@todo Check why some constraints overwrite this? Because that disables the automatic
 	usage of a confChecker() when it is implemented. 
 	@param {CPM} C - the CPM to attach to this constraint.*/
@@ -4485,32 +4503,37 @@ class Cell {
 
 }
 
-/** The core CPM class. Can be used for two- or three-dimensional simulations.
+/** Extension of the CPM class that uses Cell objects to track internal state of Cells
+ * Cell objects can override conf parameters, and track their lineage. 
 */
 class CPMEvol extends CPM {
 
 	/** The constructor of class CA.
 	 * @param {GridSize} field_size - the size of the grid of the model.
-	 * @param {object} conf - configuration options; see below. In addition,
-	 * the conf object can have parameters to constraints added to the CPM.
-	 * See the different {@link Constraint} subclasses for options. For some
-	 * constraints, adding its parameter to the CPM conf object automatically
-	 * adds the constraint; see {@link AutoAdderConfig} to see for which
-	 * constraints this is supported.
-	 * @param {boolean[]} [conf.torus=[true,true,...]] - should the grid have
-	 * linked borders?
-	 * @param {number} [conf.T] - the temperature of this CPM. At higher
-	 * temperatures, unfavourable copy attempts are more likely to be accepted.
-	 * @param {number} [conf.seed] - seed for the random number generator. If
-	 * left unspecified, a random number from the Math.random() generator is
-	 * used to make one.
+	 * @param {object} conf - configuration options; see CPM base class.
+	 *  
+	 * @param {object[]} [conf.CELLS=[empty, CPM.Cell, CPM.StochasticCorrector]] - Array of objects of (@link Cell) 
+	 * subclasses attached to the CPM. These define the internal state of the cell objects that are tracked
 	 * */
 	constructor( field_size, conf ){
 		super( field_size, conf );
-		this.post_setpix_listeners.push(this.cellDeath.bind(this));
+
+		/** Store the {@Cell} of each cell on the grid. 
+		@example
+		this.cells[1] // cell object of cell with cellId 1
+		@type {Cell}
+		*/
 		this.cells =[new Cell(conf, 0, -1, this)];
-		
+
+		/** Store the constructor of each cellKind on the grid, in order
+		 * 0th index currently unused - but this is explicitly left open for 
+		 * further extension (granting background variable parameters through Cell)
+		@type {CellObject}
+		*/
 		this.cellclasses = conf["CELLS"];
+
+		/* adds cellDeath listener to record this if pixels change. */
+		this.post_setpix_listeners.push(this.cellDeath.bind(this));
 	}
 
 	/** Completely reset; remove all cells and set time back to zero. Only the
@@ -4520,6 +4543,13 @@ class CPMEvol extends CPM {
 		this.cells = [this.cells[0]]; // keep empty declared
 	}
 
+	/** The postSetpixListener of CPMEvol registers cell death.
+	 * @listens {CPM#setpixi}  as this records when cels no longer contain any pixels.
+	 * Note: CPM class already logs most of death, so it registers deleted entries.
+	 * @param {IndexCoordinate} i - the coordinate of the pixel that is changed.
+	 * @param {CellId} t_old - the cellid of this pixel before the copy
+	 * @param {CellId} t_new - the cellid of this pixel after the copy.
+	*/
 	/* eslint-disable no-unused-vars*/
 	cellDeath( i, t_old, t_new){
 		if (this.cellvolume[t_old] === undefined && t_old !== 0){
@@ -4529,16 +4559,16 @@ class CPMEvol extends CPM {
 
 	/** Get the {@link Cell} of the cell with {@link CellId} t. 
 	@param {CellId} t - id of the cell to get kind of.
-	@return {Cell} the cellkind. */
+	@return {Cell} the cell object. */
 	getCell ( t ){
 		return this.cells[t]
 	}
 
 	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
-	   for this cell in the relevant arrays (cellvolume, t2k, cells (if these are tracked)).
+	   for this cell in the relevant arrays. Overrides super to also add a new Cell object to track.
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
-	   @return {CellId} of the new cell.*/
+	   @return {CellId} newid of the new cell.*/
 	makeNewCellID ( kind ){
 		let newid = super.makeNewCellID(kind);
 		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt );
