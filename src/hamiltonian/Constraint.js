@@ -39,14 +39,22 @@ class Constraint {
 	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 	@return {any} parameter - the requested parameter
 	*/
+	/* eslint-disable no-unused-vars*/
 	cellParameter(param, cid){
-		// this is equal to {let cellspecific = this.C.cells[cid][param])}
-		// however, returns undefined if any of the called objects is not present
-		// this allows overwriting in Cell - all other variables are called from this.conf
+		// note: This may be redefined when CPM is attached.
+		return this.paramOfKind(param, cid)
+	}
+
+	
+	paramOfCell(param, cid){
 		let cellspecific = ((((this || {}).C || {}).cells || {})[cid] || {})[param]
 		if (cellspecific !== undefined){
 			return cellspecific
 		}
+		return this.paramOfKind(param,cid)
+	}
+
+	paramOfKind(param, cid){
 		return this.conf[param][this.C.cellKind(cid)]
 	}
 	
@@ -66,10 +74,15 @@ class Constraint {
 	@todo Check why some constraints overwrite this? Because that disables the automatic
 	usage of a confChecker() when it is implemented. 
 	@param {CPM} C - the CPM to attach to this constraint.*/
+	/*eslint-disable*/
 	set CPM(C){
 		/** CPM on which this constraint acts.
 		@type {CPM}*/
 		this.C = C
+		this.cellParameter = this.paramOfKind
+		if (C.constructor.name === "CPMEvol"){
+			this.cellParameter = this.paramOfCell
+		}
 		if( typeof this.confChecker === "function" ){
 			this.confChecker()
 		}

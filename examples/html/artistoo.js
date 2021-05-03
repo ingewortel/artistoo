@@ -1728,14 +1728,22 @@ var CPM = (function (exports) {
 		 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 		@return {any} parameter - the requested parameter
 		*/
+		/* eslint-disable no-unused-vars*/
 		cellParameter(param, cid){
-			// this is equal to {let cellspecific = this.C.cells[cid][param])}
-			// however, returns undefined if any of the called objects is not present
-			// this allows overwriting in Cell - all other variables are called from this.conf
+			// note: This may be redefined when CPM is attached.
+			return this.paramOfKind(param, cid)
+		}
+
+		
+		paramOfCell(param, cid){
 			let cellspecific = ((((this || {}).C || {}).cells || {})[cid] || {})[param];
 			if (cellspecific !== undefined){
 				return cellspecific
 			}
+			return this.paramOfKind(param,cid)
+		}
+
+		paramOfKind(param, cid){
 			return this.conf[param][this.C.cellKind(cid)]
 		}
 		
@@ -1755,10 +1763,15 @@ var CPM = (function (exports) {
 		@todo Check why some constraints overwrite this? Because that disables the automatic
 		usage of a confChecker() when it is implemented. 
 		@param {CPM} C - the CPM to attach to this constraint.*/
+		/*eslint-disable*/
 		set CPM(C){
 			/** CPM on which this constraint acts.
 			@type {CPM}*/
 			this.C = C;
+			this.cellParameter = this.paramOfKind;
+			if (C.constructor.name === "CPMEvol"){
+				this.cellParameter = this.paramOfCell;
+			}
 			if( typeof this.confChecker === "function" ){
 				this.confChecker();
 			}
@@ -2301,8 +2314,7 @@ var CPM = (function (exports) {
 		@return {number} adhesion between a pixel of t1 and one of t2.
 		@private
 		*/
-		J( t1, t2 ){
-			// return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+		J( t1, t2 ) {
 			return this.cellParameter("J", t1)[this.C.cellKind(t2)]
 		}
 		/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
@@ -2994,38 +3006,7 @@ var CPM = (function (exports) {
 		IS_BARRIER : BarrierConstraint
 	};
 
-	class Cell {
-		
-		/** The constructor of class Cell.
-		 * @param {object} conf - configuration settings of the simulation, containing the
-		 * relevant parameters. Note: this should include all constraint parameters.
-		 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
-		 * when parameters are not explicitly overwritten
-		 * @param {object} mt - the Mersenne Twister object of the CPM, to draw random 
-		 * numbers within the seeding of the entire simulation 
-		 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
-		 * */
-		constructor (conf, kind, id, mt){
-			this.conf = conf;
-			this.kind = kind;
-			this.mt = mt; 
-			this.id = id;
-
-			/** The id of the parent cell, all seeded cells have parent -1, to overwrite this
-			 * this.birth(parent) needs to be called 
-			@type{number}*/
-			this.parentId = -1;
-		}
-
-		/** Adds parentId number, and can be overwritten to execute functionality on 
-		 * birth events. 
-		 @param {Cell} parent - the parent Cell object
-		 */
-		birth (parent){
-			this.parentId = parent.id; 
-		}
-
-	}
+	// import Cell from "../cells/Cell.js"
 
 	/** The core CPM class. Can be used for two- or three-dimensional simulations.
 	*/
@@ -3124,7 +3105,7 @@ var CPM = (function (exports) {
 					this.add( new AutoAdderConfig[x]( conf ) );
 				} 
 			}
-			if ("CELLS" in conf){this.addCells( conf );}
+			// if ("CELLS" in conf){this.addCells( conf )}
 		}
 
 		/** Completely reset; remove all cells and set time back to zero. Only the
@@ -3139,9 +3120,9 @@ var CPM = (function (exports) {
 			this.time = 0;
 			this.cellvolume = [];
 			this.stat_values = {};
-			if (this.hasOwnProperty("cells")){
-				this.cells = [this.cells[0]]; // keep empty declared
-			}
+			// if (this.hasOwnProperty("cells")){
+			// 	this.cells = [this.cells[0]] // keep empty declared
+			// }
 		}
 
 		/* This is no different from the GridBasedModel function and can go. 
@@ -3239,32 +3220,6 @@ var CPM = (function (exports) {
 			}
 		}
 
-
-		/** Adds Cell tracking to the simulation. This uses the {@link Cell} subclasses to track
-		 * inheritance and cellId-specific parameters and internal state
-		 @param {object} conf - the configuration object containing "CELLS".
-		 */
-		addCells( conf ){
-			if (!this.hasOwnProperty("cells")){
-				this.cells = [new Cell(conf, 0, -1, this)];
-			}
-			if (!this.hasOwnProperty("cellclasses")){
-				this.cellclasses = ["EMPTY"]; //cell classes per kind - 0 is blank
-			}
-			let i = 1;
-			if ("CELLS" in conf){	
-				if (!this.hasOwnProperty("n_cell_kinds")){
-					this.n_cell_kinds = conf["CELLS"].length - 1;
-				} else if (this.n_cell_kinds !== conf["CELLS"].length -1 ) {
-					throw("Incorrect number of CELLS defined - do constraints and CELLS all contain the same number? CELLS expects some null value in index 0 for background ")
-				}
-				while (i <= this.n_cell_kinds && conf["CELLS"][i] !== "undefined"){
-					this.cellclasses.push(conf["CELLS"][i]);
-					i ++;
-				}
-			} 
-		}
-		
 		/** Get a {@link Constraint} object linked to this CPM by the name of its class.
 		By default, the first constraint found of this class is returned. It is possible
 		that there are multiple constraints of the same type on the CPM; in that case,
@@ -3337,12 +3292,12 @@ var CPM = (function (exports) {
 			this.t2k[ t ] = k;
 		}
 		
-		/** Get the {@link Cell} of the cell with {@link CellId} t. 
-		@param {CellId} t - id of the cell to get kind of.
-		@return {Cell} the cellkind. */
-		getCell ( t ){
-			return this.cells[t]
-		}
+		// /** Get the {@link Cell} of the cell with {@link CellId} t. 
+		// @param {CellId} t - id of the cell to get kind of.
+		// @return {Cell} the cellkind. */
+		// getCell ( t ){
+		// 	return this.cells[t]
+		// }
 
 		/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
@@ -3462,9 +3417,9 @@ var CPM = (function (exports) {
 					delete this.cellvolume[t_old];
 					delete this.t2k[t_old];
 					this.nr_cells--;
-					if (this.hasOwnProperty("cells")){
-						delete this.cells[t_old];
-					}
+					// if (this.hasOwnProperty("cells")){
+					// 	delete this.cells[t_old]
+					// }
 				}
 			}
 			// update volume of the new cell and cellid of the pixel.
@@ -3526,21 +3481,18 @@ var CPM = (function (exports) {
 		   @return {CellId} of the new cell.*/
 		makeNewCellID ( kind ){
 			const newid = ++ this.last_cell_id;
-			if (this.hasOwnProperty("cells")){
-				this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt );
-			}
 			this.cellvolume[newid] = 0;
 			this.setCellKind( newid, kind );
 			return newid
 		}
 
-		/** Calls a birth event in a new daughter Cell object, and hands 
-		 * the other daughter (as parent) on to the Cell.
-		   @param {CellId} childId - id of the newly created Cell object
-		   @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
-		birth (childId, parentId){
-			this.cells[childId].birth(this.cells[parentId] );
-		}
+		// /** Calls a birth event in a new daughter Cell object, and hands 
+		//  * the other daughter (as parent) on to the Cell.
+		//    @param {CellId} childId - id of the newly created Cell object
+		//    @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
+		// birth (childId, parentId){
+		// 	this.cells[childId].birth(this.cells[parentId] )
+		// }
 	}
 
 	/** This class encapsulates a lower-resolution grid and makes it
@@ -4727,6 +4679,108 @@ var CPM = (function (exports) {
 			value as value. The cache must be cleared when the grid changes!
 			@type {object} */
 			this.stat_values = {};
+		}
+	}
+
+	class Cell {
+		
+		/** The constructor of class Cell.
+		 * @param {object} conf - configuration settings of the simulation, containing the
+		 * relevant parameters. Note: this should include all constraint parameters.
+		 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
+		 * when parameters are not explicitly overwritten
+		 * @param {object} mt - the Mersenne Twister object of the CPM, to draw random 
+		 * numbers within the seeding of the entire simulation 
+		 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
+		 * */
+		constructor (conf, kind, id, mt){
+			this.conf = conf;
+			this.kind = kind;
+			this.mt = mt; 
+			this.id = id;
+
+			/** The id of the parent cell, all seeded cells have parent -1, to overwrite this
+			 * this.birth(parent) needs to be called 
+			@type{number}*/
+			this.parentId = -1;
+		}
+
+		/** Adds parentId number, and can be overwritten to execute functionality on 
+		 * birth events. 
+		 @param {Cell} parent - the parent Cell object
+		 */
+		birth (parent){
+			this.parentId = parent.id; 
+		}
+
+	}
+
+	/** The core CPM class. Can be used for two- or three-dimensional simulations.
+	*/
+	class CPMEvol extends CPM {
+
+		/** The constructor of class CA.
+		 * @param {GridSize} field_size - the size of the grid of the model.
+		 * @param {object} conf - configuration options; see below. In addition,
+		 * the conf object can have parameters to constraints added to the CPM.
+		 * See the different {@link Constraint} subclasses for options. For some
+		 * constraints, adding its parameter to the CPM conf object automatically
+		 * adds the constraint; see {@link AutoAdderConfig} to see for which
+		 * constraints this is supported.
+		 * @param {boolean[]} [conf.torus=[true,true,...]] - should the grid have
+		 * linked borders?
+		 * @param {number} [conf.T] - the temperature of this CPM. At higher
+		 * temperatures, unfavourable copy attempts are more likely to be accepted.
+		 * @param {number} [conf.seed] - seed for the random number generator. If
+		 * left unspecified, a random number from the Math.random() generator is
+		 * used to make one.
+		 * */
+		constructor( field_size, conf ){
+			super( field_size, conf );
+			this.post_setpix_listeners.push(this.cellDeath.bind(this));
+			this.cells =[new Cell(conf, 0, -1, this)];
+			
+			this.cellclasses = conf["CELLS"];
+		}
+
+		/** Completely reset; remove all cells and set time back to zero. Only the
+		 * constraints and empty cell remain. */
+		reset(){
+			super.reset();
+			this.cells = [this.cells[0]]; // keep empty declared
+		}
+
+		/* eslint-disable no-unused-vars*/
+		cellDeath( i, t_old, t_new){
+			if (this.cellvolume[t_old] === undefined && t_old !== 0){
+				delete this.cells[t_old];
+			} 
+		}
+
+		/** Get the {@link Cell} of the cell with {@link CellId} t. 
+		@param {CellId} t - id of the cell to get kind of.
+		@return {Cell} the cellkind. */
+		getCell ( t ){
+			return this.cells[t]
+		}
+
+		/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
+		/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
+		   for this cell in the relevant arrays (cellvolume, t2k, cells (if these are tracked)).
+		   @param {CellKind} kind - cellkind of the cell that has to be made.
+		   @return {CellId} of the new cell.*/
+		makeNewCellID ( kind ){
+			let newid = super.makeNewCellID(kind);
+			this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt );
+			return newid
+		}
+
+		/** Calls a birth event in a new daughter Cell object, and hands 
+		 * the other daughter (as parent) on to the Cell.
+		   @param {CellId} childId - id of the newly created Cell object
+		   @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
+		birth (childId, parentId){
+			this.cells[childId].birth(this.cells[parentId] );
 		}
 	}
 
@@ -6240,7 +6294,7 @@ var CPM = (function (exports) {
 		/* eslint-disable no-unused-vars*/
 		deltaH( sourcei, targeti, src_type, tgt_type  ){
 			let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei );
-			let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)];
+			let lambdachem = this.cellParameter("LAMBDA_CH",src_type);
 			return -delta*lambdachem
 		}
 	}
@@ -7572,12 +7626,16 @@ var CPM = (function (exports) {
 			
 			/** Make CPM object based on configuration settings and attach it.
 			@type {CPM} */
-			this.C = new CPM( config.field_size, config.conf );
+			if (((config || {}).conf || {})["CELLS"] !== undefined){
+				this.C = new CPMEvol( config.field_size, config.conf );
+			} else {
+				this.C = new CPM( config.field_size, config.conf );
+			}
 					
 			/** See if objects of class {@link Canvas} and {@link GridManipulator} already 
 			exist. These are added automatically when required. This will set
 			their values in helpClasses to 'true', so they don't have to be added again.
-			@type {object}*/
+			@type {object}*/ 
 			this.helpClasses = { gm: false, canvas: false };
 
 			/** Add additional constraints.
@@ -10737,6 +10795,7 @@ var CPM = (function (exports) {
 	exports.BorderPixelsByCell = BorderPixelsByCell;
 	exports.CA = CA;
 	exports.CPM = CPM;
+	exports.CPMEvol = CPMEvol;
 	exports.Canvas = Canvas;
 	exports.Cell = Cell;
 	exports.CellNeighborList = CellNeighborList;

@@ -15,6 +15,7 @@ module	no-export	src/DiceSet.js
 # models
 module	CA	src/models/CA.js
 module	CPM	src/models/CPM.js
+module	CPMEvol	src/models/CPMEvol.js
 module	GridBasedModel	src/models/GridBasedModel.js
 
 # cells 

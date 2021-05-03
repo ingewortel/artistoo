@@ -1,4 +1,5 @@
 import CPM from "../models/CPM.js"
+import CPMEvol from "../models/CPMEvol.js"
 import Canvas from "../Canvas.js"
 import GridManipulator from "../grid/GridManipulator.js"
 import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
@@ -135,12 +136,16 @@ class Simulation {
 		
 		/** Make CPM object based on configuration settings and attach it.
 		@type {CPM} */
-		this.C = new CPM( config.field_size, config.conf )
+		if (((config || {}).conf || {})["CELLS"] !== undefined){
+			this.C = new CPMEvol( config.field_size, config.conf )
+		} else {
+			this.C = new CPM( config.field_size, config.conf )
+		}
 				
 		/** See if objects of class {@link Canvas} and {@link GridManipulator} already 
 		exist. These are added automatically when required. This will set
 		their values in helpClasses to 'true', so they don't have to be added again.
-		@type {object}*/
+		@type {object}*/ 
 		this.helpClasses = { gm: false, canvas: false }
 
 		/** Add additional constraints.

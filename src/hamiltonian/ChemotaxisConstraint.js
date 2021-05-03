@@ -114,7 +114,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 	/* eslint-disable no-unused-vars*/
 	deltaH( sourcei, targeti, src_type, tgt_type  ){
 		let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei )
-		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)]
+		let lambdachem = this.cellParameter("LAMBDA_CH",src_type)
 		return -delta*lambdachem
 	}
 }

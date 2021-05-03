@@ -3,7 +3,7 @@
 import GridBasedModel from "./GridBasedModel.js"
 import DiceSet from "../DiceSet.js"
 import AutoAdderConfig from "../hamiltonian/AutoAdderConfig.js"
-import Cell from "../cells/Cell.js"
+// import Cell from "../cells/Cell.js"
 
 /** The core CPM class. Can be used for two- or three-dimensional simulations.
 */
@@ -102,7 +102,7 @@ class CPM extends GridBasedModel {
 				this.add( new AutoAdderConfig[x]( conf ) )
 			} 
 		}
-		if ("CELLS" in conf){this.addCells( conf )}
+		// if ("CELLS" in conf){this.addCells( conf )}
 	}
 
 	/** Completely reset; remove all cells and set time back to zero. Only the
@@ -117,9 +117,9 @@ class CPM extends GridBasedModel {
 		this.time = 0
 		this.cellvolume = []
 		this.stat_values = {}
-		if (this.hasOwnProperty("cells")){
-			this.cells = [this.cells[0]] // keep empty declared
-		}
+		// if (this.hasOwnProperty("cells")){
+		// 	this.cells = [this.cells[0]] // keep empty declared
+		// }
 	}
 
 	/* This is no different from the GridBasedModel function and can go. 
@@ -217,32 +217,6 @@ class CPM extends GridBasedModel {
 		}
 	}
 
-
-	/** Adds Cell tracking to the simulation. This uses the {@link Cell} subclasses to track
-	 * inheritance and cellId-specific parameters and internal state
-	 @param {object} conf - the configuration object containing "CELLS".
-	 */
-	addCells( conf ){
-		if (!this.hasOwnProperty("cells")){
-			this.cells = [new Cell(conf, 0, -1, this)]
-		}
-		if (!this.hasOwnProperty("cellclasses")){
-			this.cellclasses = ["EMPTY"] //cell classes per kind - 0 is blank
-		}
-		let i = 1
-		if ("CELLS" in conf){	
-			if (!this.hasOwnProperty("n_cell_kinds")){
-				this.n_cell_kinds = conf["CELLS"].length - 1
-			} else if (this.n_cell_kinds !== conf["CELLS"].length -1 ) {
-				throw("Incorrect number of CELLS defined - do constraints and CELLS all contain the same number? CELLS expects some null value in index 0 for background ")
-			}
-			while (i <= this.n_cell_kinds && conf["CELLS"][i] !== "undefined"){
-				this.cellclasses.push(conf["CELLS"][i])
-				i ++
-			}
-		} 
-	}
-	
 	/** Get a {@link Constraint} object linked to this CPM by the name of its class.
 	By default, the first constraint found of this class is returned. It is possible
 	that there are multiple constraints of the same type on the CPM; in that case,
@@ -315,12 +289,12 @@ class CPM extends GridBasedModel {
 		this.t2k[ t ] = k
 	}
 	
-	/** Get the {@link Cell} of the cell with {@link CellId} t. 
-	@param {CellId} t - id of the cell to get kind of.
-	@return {Cell} the cellkind. */
-	getCell ( t ){
-		return this.cells[t]
-	}
+	// /** Get the {@link Cell} of the cell with {@link CellId} t. 
+	// @param {CellId} t - id of the cell to get kind of.
+	// @return {Cell} the cellkind. */
+	// getCell ( t ){
+	// 	return this.cells[t]
+	// }
 
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
@@ -440,9 +414,9 @@ class CPM extends GridBasedModel {
 				delete this.cellvolume[t_old]
 				delete this.t2k[t_old]
 				this.nr_cells--
-				if (this.hasOwnProperty("cells")){
-					delete this.cells[t_old]
-				}
+				// if (this.hasOwnProperty("cells")){
+				// 	delete this.cells[t_old]
+				// }
 			}
 		}
 		// update volume of the new cell and cellid of the pixel.
@@ -504,21 +478,18 @@ class CPM extends GridBasedModel {
 	   @return {CellId} of the new cell.*/
 	makeNewCellID ( kind ){
 		const newid = ++ this.last_cell_id
-		if (this.hasOwnProperty("cells")){
-			this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt )
-		}
 		this.cellvolume[newid] = 0
 		this.setCellKind( newid, kind )
 		return newid
 	}
 
-	/** Calls a birth event in a new daughter Cell object, and hands 
-	 * the other daughter (as parent) on to the Cell.
-	   @param {CellId} childId - id of the newly created Cell object
-	   @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
-	birth (childId, parentId){
-		this.cells[childId].birth(this.cells[parentId] )
-	}
+	// /** Calls a birth event in a new daughter Cell object, and hands 
+	//  * the other daughter (as parent) on to the Cell.
+	//    @param {CellId} childId - id of the newly created Cell object
+	//    @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
+	// birth (childId, parentId){
+	// 	this.cells[childId].birth(this.cells[parentId] )
+	// }
 }
  
 export default CPM

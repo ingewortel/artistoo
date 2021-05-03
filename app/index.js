@@ -6,6 +6,7 @@ import Canvas from "../src/Canvas.js"
  
 import CA from "../src/models/CA.js" 
 import CPM from "../src/models/CPM.js" 
+import CPMEvol from "../src/models/CPMEvol.js" 
 import GridBasedModel from "../src/models/GridBasedModel.js" 
  
 import Cell from "../src/cells/Cell.js" 
@@ -58,6 +59,7 @@ export {
 	Canvas,
 	CA,
 	CPM,
+	CPMEvol,
 	GridBasedModel,
 	Cell,
 	StochasticCorrector,
