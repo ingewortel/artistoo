@@ -6,8 +6,7 @@ class Cell {
 	 * relevant parameters. Note: this should include all constraint parameters.
 	 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
 	 * when parameters are not explicitly overwritten
-	 * @param {object} mt - the Mersenne Twister object of the CPM, to draw random 
-	 * numbers within the seeding of the entire simulation 
+	 * @param {CPMEvol} C - the CPM - used among others to draw random numbers
 	 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
 	 * */
 	constructor (conf, kind, id, C){

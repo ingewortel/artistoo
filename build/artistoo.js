@@ -4683,8 +4683,7 @@ var CPM = (function (exports) {
 		 * relevant parameters. Note: this should include all constraint parameters.
 		 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
 		 * when parameters are not explicitly overwritten
-		 * @param {object} mt - the Mersenne Twister object of the CPM, to draw random 
-		 * numbers within the seeding of the entire simulation 
+		 * @param {CPMEvol} C - the CPM - used among others to draw random numbers
 		 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
 		 * */
 		constructor (conf, kind, id, C){
@@ -4794,23 +4793,29 @@ var CPM = (function (exports) {
 
 		constructor (conf, kind, id, C) {
 			super(conf, kind, id, C);
+
+			/** X quantity (in standard implementation: master RNA equation)
+			 * @type{number}*/
 			this.X = conf["INIT_X"][kind];
+
+			/** Y quantity (in standard implementation: mutant RNA equation)
+			 * @type{number}*/
 			this.Y = conf["INIT_Y"][kind];
+
+			/** Target Volume (overwrites V in volume constraint)
+			 * @type{number}*/
 			this.V = conf["INIT_V"][kind];	
 		}
 
+		/**
+		 *  On birth the X and Y products are divided between the two daughters
+		 * This is equal between daughters if 'NOISE ' is 0, otherwise increases in 
+		 * absolute quantities randomly with NOISE
+		 * @param {Cell} parent - the parent (or other daughter) cell
+		 */ 
 		birth(parent){
 			super.birth(parent); // sets ParentId
-			this.V  = parent.V;
-			this.divideXY(parent); 
-		}
-
-		setXY(X, Y){
-			this.X = Math.max(0, X);
-			this.Y = Math.max(0, Y);
-		}
-
-		divideXY(parent){
+			
 			let prevX = parent.X;
 			let prevY = parent.Y;
 			let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
@@ -4823,10 +4828,20 @@ var CPM = (function (exports) {
 
 			this.setXY(prevX/2+fluctX ,prevY/2 +fluctY );
 			parent.setXY(prevX/2 - fluctX,prevY/2 - fluctY);
-			let V = this.V;
+			let V = parent.V;
 			this.V = V/2;
 			parent.V = V/2;
 		}
+
+		/** sets x and y with minimum 0
+		 * @param {number} X - new X
+		 * @param {number} Y - new Y
+		 */
+		setXY(X, Y){
+			this.X = Math.max(0, X);
+			this.Y = Math.max(0, Y);
+		}
+
 	}
 
 	/**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 
