@@ -4776,7 +4776,7 @@ var CPM = (function (exports) {
 		   @return {CellId} newid of the new cell.*/
 		makeNewCellID ( kind ){
 			let newid = super.makeNewCellID(kind);
-			this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.mt );
+			this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.C );
 			return newid
 		}
 
@@ -4789,6 +4789,10 @@ var CPM = (function (exports) {
 		}
 	}
 
+	/**
+	 * Implements a basic holder for a model with two internal products,
+	 * where these can be stochastically divided between daughter cells. 
+	 */
 	class StochasticCorrector extends Cell {
 
 		constructor (conf, kind, id, C) {
