@@ -38,12 +38,14 @@ let config = {
 		torus : [false,false],				// Should the grid have linked borders?
 		seed : 5,							// Seed for random number generation.
 		T : 2,								// CPM temperature
+		
+		//This declaration of CELLS instantiates the CPMEvol model instead of the CPM model
+		CELLS : ["empty", CPM.StochasticCorrector, CPM.StochasticCorrector], //The cell internal classes
         
-        // used internally
+        // used internally by StochasticCorrector subclass
         INIT_X : [0, 40, 40],
         INIT_Y: [0, 40, 40],
 		INIT_V : [0, 150, 150],
-		CELLS : ["empty", CPM.StochasticCorrector, CPM.StochasticCorrector],
 		NOISE : [0,0,10],
 
         // only used in postMCSListener
@@ -136,25 +138,22 @@ function step(){
 	}
 }
 
-
-
 /* The following custom methods will be added to the simulation object*/
 function postMCSListener(){
 	
 	// add the initializer if not already there
 	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
 	
-	var C = this.C
-	this.C.cells.forEach(function (item) {
-		updateCell(C, item)
-	});
 	for( let i of this.C.cellIDs() ){
+		updateCell(this.C, this.C.cells[i])
 		if( this.C.getVolume(i) > this.C.conf.division_volume[this.C.cellKind(i)] ){
 			this.gm.divideCell(i)
 		}
 	}
 }
 
+// Models internal concentrations of RNA replicators, with a master sequence  (X) creating mutants (Y) with lower growth rate,
+//  Y population is necessary for vesicle to survive.
 function updateCell(C, cell){
 	if (cell.id < 0){return}
     let vol = C.getVolume(cell.id)
@@ -165,13 +164,11 @@ function updateCell(C, cell){
     }
     V -= C.conf.shrink_rate[cell.kind]
     cell.V = V
-    
+	
     let dy = C.conf.rY[cell.kind]*cell.Y*(vol-cell.X-cell.Y)/vol*C.conf.speed_internal_dynamics[cell.kind]
     let X = cell.X + (1-C.conf.Q[cell.kind])*dy+( C.conf.rX[cell.kind]*cell.X*(vol-cell.X-cell.Y)/vol - C.conf.d[cell.kind]*cell.X )*C.conf.speed_internal_dynamics[cell.kind]
     let Y = cell.Y + C.conf.Q[cell.kind]*dy - C.conf.d[cell.kind]*cell.Y*C.conf.speed_internal_dynamics[cell.kind]
-	cell.setXY(X,Y)
-	
-
+	cell.setXY(X,Y)	
 }
 
 function initializeGrid(){
@@ -205,6 +202,7 @@ function drawCanvas(){
 	// Clear canvas
 	this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" )
 	let nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
+	
 	let colfun = getColor.bind(this)
 	for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
 		this.Cim.drawCells( cellkind+1, colfun)
@@ -255,7 +253,7 @@ function changeColorBy(){
 	
 	</label>
 <p>
- Replicator and mutant RNA compete in vesicles
+ Replicator and mutant RNA compete in vesicles, showing how noise on division can create selection on the vesicle level. Orange has noise in the allocation of internal products upon division, red does not.
 </p>
 </body>
 </html>
