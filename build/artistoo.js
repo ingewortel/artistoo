@@ -2302,8 +2302,8 @@ var CPM = (function (exports) {
 		@private
 		*/
 		J( t1, t2 ){
-			return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
-			// return this.cellParameter("J", this.C.cellKind(t1))[this.C.cellKind(t2)]
+			// return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+			return this.cellParameter("J", t1)[this.C.cellKind(t2)]
 		}
 		/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
 		neighbors that belong to a different cellid.
