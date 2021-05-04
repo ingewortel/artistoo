@@ -71,7 +71,7 @@ class CPMEvol extends CPM {
 	   @return {CellId} newid of the new cell.*/
 	makeNewCellID ( kind ){
 		let newid = super.makeNewCellID(kind)
-		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this.C )
+		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this)
 		return newid
 	}
 
