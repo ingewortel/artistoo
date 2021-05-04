@@ -1,5 +1,4 @@
 let CPM = require("../../build/artistoo-cjs.js")
-let colormap = require("../../build/colormap-cjs.js")
 
 let config = {
 
@@ -190,17 +189,19 @@ function drawCanvas(){
 
 }
 
+const colors = new CPM.ColorMap({
+	colormap: 'viridis',
+	nshades: 300,
+	format: 'hex',
+	alpha: 1
+})
+
 function colorByY (Cim, cell) {
 	
 	if (cell.id < 0){
 		return
 	}
-	const colors = colormap({
-		colormap: 'viridis',
-		nshades: 300,
-		format: 'hex',
-		alpha: 1
-	})
+	
 	let c = Math.floor(cell.Y)
 	if (c > 300){
 		c = 300

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>CellDivision</title>
+<title>Stochastic Correction</title>
 <style type="text/css">
 body{
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
 		 Helvetica, Arial, "Lucida Grande", sans-serif;
 	 padding : 15px;
-}
+} 
 td {
 	 padding: 10px;
 	 vertical-align: top;
@@ -16,7 +16,6 @@ td {
 
 <script src="./artistoo.js"></script>
 <script src="./fpsmeter.min.js"></script>
-<script src="./colormap.js"></script>
 
 <script>
 "use strict"
@@ -100,8 +99,8 @@ let config = {
 		SAVEIMG : true,						// Should a png image of the grid be saved
 		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img/CellDivision",	// ... And save the image in this folder.
-		EXPNAME : "CellDivision",					// Used for the filename of output images.
+		SAVEPATH : "output/img/StochasticCorrection",	// ... And save the image in this folder.
+		EXPNAME : "StochasticCorrection",					// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?
@@ -212,10 +211,11 @@ function drawCanvas(){
 		}
 	}
 }
-const cmap = new ColorMap({
+
+const cmap = new CPM.ColorMap({
 		colormap: 'viridis',
 		nshades: 100,
-		format: 'hex',
+		format: 'hex', 
 		alpha: 1
 })
 
