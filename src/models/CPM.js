@@ -191,7 +191,7 @@ class CPM extends GridBasedModel {
 				i = this.hard_constraints.push( t )
 				
 				// Write this index to an array in the 
-				// this.hard_constraints_indices object, for lookup later. 
+				// this.hard_constraints_indices object, for lookup later.
 				if( !this.hard_constraints_indices.hasOwnProperty(tName) ){
 					this.hard_constraints_indices[tName] = []
 				}

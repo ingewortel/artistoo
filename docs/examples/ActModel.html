@@ -87,7 +87,7 @@ let config = {
 		EXPNAME : "ActModel",					// Used for the filename of output images.
 		
 		// Output stats etc
-		STATSOUT : { browser: true, node: true }, // Should stats be computed?
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
 		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
 
 	}
@@ -114,13 +114,13 @@ function step(){
 }
 
 
-// No custom methods.
 </script>
 </head>
 <body onload="initialize()">
 <h1>ActModel</h1>
 <p>
-Model of a migrating cell. 
+ 
+ Model of a migrating cell. 
 </p>
 </body>
 </html>

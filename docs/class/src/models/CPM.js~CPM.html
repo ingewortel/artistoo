@@ -321,7 +321,7 @@ padding-right:10px;
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-cellvolumes">cellvolumes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html#instance-member-cellvolume">cellvolume</a></span></span><span class="code" data-ice="signature">: <span><span>*</span><span>[]</span></span></span>
         </p>
       </div>
       <div>
@@ -2138,14 +2138,14 @@ used to make one.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-cellvolumes">
+  <h3 data-ice="anchor" id="instance-member-cellvolume">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">cellvolumes</span><span class="code" data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span><span>[]</span></span></span>
+    <span class="code" data-ice="name">cellvolume</span><span class="code" data-ice="signature">: <span><span>*</span><span>[]</span></span></span>
     <span class="right-info">
       
       
@@ -2156,9 +2156,12 @@ used to make one.</p>
   
   
   
-  
+  <div data-ice="description"><p>This tracks the volumes of all non-background cells on the grid.
+cellvolumes will be added with key = <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, value = volume.
+@type{number[]}</p>
+</div>
 
-  
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html#instance-member-cellvolume">GridBasedModel#cellvolume</a></span></div>
 
   <div data-ice="properties">
 </div>
