@@ -329,7 +329,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	};
 
-	this. = function () {
+	this.reset = function () {
 
 		_state = STATE.NONE;
 		_prevState = STATE.NONE;

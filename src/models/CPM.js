@@ -4,6 +4,7 @@ import GridBasedModel from "./GridBasedModel.js"
 import DiceSet from "../DiceSet.js"
 import AutoAdderConfig from "../hamiltonian/AutoAdderConfig.js"
 
+
 /** The core CPM class. Can be used for two- or three-dimensional simulations.
 */
 class CPM extends GridBasedModel {
@@ -39,8 +40,7 @@ class CPM extends GridBasedModel {
 		this.time = 0
 
 		// ---------- CPM specific stuff here
-
-
+		
 		/** Number of non-background cells currently on the grid.
 		@type{number}*/
 		this.nr_cells = 0
@@ -63,8 +63,6 @@ class CPM extends GridBasedModel {
 		*/
 		this.t2k = []	// cell type ("kind"). Example: this.t2k[1] is the cellKind of cell 1.
 		this.t2k[0] = 0	// Background cell; there is just one cell of this type.
-
-		
 
 		//  ---------- CPM constraints
 		/** Array of objects of (@link SoftConstraint) subclasses attached to the CPM.
@@ -99,7 +97,7 @@ class CPM extends GridBasedModel {
 		for( let x of Object.keys( conf ) ){
 			if( x in AutoAdderConfig ){
 				this.add( new AutoAdderConfig[x]( conf ) )
-			} 
+			}
 		}
 	}
 
@@ -197,7 +195,6 @@ class CPM extends GridBasedModel {
 				}
 				this.hard_constraints_indices[tName].push( i-1 )
 				break
-
 			}
 		}
 		if( typeof t["postSetpixListener"] === "function" ){
@@ -211,7 +208,7 @@ class CPM extends GridBasedModel {
 			t.postAdd()
 		}
 	}
-
+	
 	/** Get a {@link Constraint} object linked to this CPM by the name of its class.
 	By default, the first constraint found of this class is returned. It is possible
 	that there are multiple constraints of the same type on the CPM; in that case,
@@ -226,7 +223,7 @@ class CPM extends GridBasedModel {
 	@param {number} [num = 0] - if multiple constraints of this class are present, 
 	return the num-th one added to the CPM. 
 	*/
-	getConstraint( constraintname, num ) {
+	getConstraint( constraintname, num ){
 	
 		if( !num ){
 			num = 0
@@ -283,6 +280,7 @@ class CPM extends GridBasedModel {
 	setCellKind( t, k ){
 		this.t2k[ t ] = k
 	}
+	
 	
 	/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
@@ -457,6 +455,7 @@ class CPM extends GridBasedModel {
 	}
 
 	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
+
 	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
 	   for this cell in the relevant arrays (cellvolume, t2k).
 	   @param {CellKind} kind - cellkind of the cell that has to be made.
@@ -467,6 +466,7 @@ class CPM extends GridBasedModel {
 		this.setCellKind( newid, kind )
 		return newid
 	}
+
 }
- 
+
 export default CPM
