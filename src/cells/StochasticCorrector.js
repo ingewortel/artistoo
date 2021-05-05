@@ -3,7 +3,7 @@ import Cell from "./Cell.js"
 
 /**
  * Implements a basic holder for a model with two internal products,
- * where these can be stochastically divided between daughter cells. 
+ * which can be stochastically divided between daughter cells. 
  */
 class StochasticCorrector extends Cell {
 

@@ -47,7 +47,7 @@ let config = {
 		INIT_V : [0, 150, 150],
 		NOISE : [0,0,10],
 
-        // only used in postMCSListener
+		// only used in postMCSListener
         rX : [0, 1, 1],
         rY : [0, 0.8, 0.8],
         d : [0, 0.05, 0.05],
@@ -224,9 +224,6 @@ function getColor (cid) {
 		return this.conf["CELLCOLOR"][this.C.cellKind(cid)-1]
 	}
 	let cell = this.C.cells[cid]
-	if (cell.id < 0){
-		return
-	}
 	let c = Math.floor(cell.Y *3) 
 	if (c >= cmap.length){
 		c = cmap.length - 1
