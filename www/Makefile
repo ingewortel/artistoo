@@ -1,0 +1,17 @@
+.SECONDARY:
+.DELETE_ON_ERROR:
+
+all : public/index.html
+
+
+# we also need to have the 'sources' folder; but no re-building required with mustache
+# if the source files change.
+dependencies=data/site.json templates partials
+
+
+public: sources
+	mkdir -p $@ &&\
+	cp -r sources/* $@/
+
+public/index.html : index.js $(dependencies) | public
+	node $<

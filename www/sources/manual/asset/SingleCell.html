@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>SingleCell</title>
+<style type="text/css">
+body{
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 10px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [50,50],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		T : 20,								// CPM temperature
+		// Constraint parameters. Mostly these have the format of an array
+        // in which each element specifies the parameter value for one of
+        // the cellkinds on the grid. First value is always cellkind 0 (the
+        // background) and is often not used.
+				
+		// Adhesion parameters:
+		J: [[0,20], [20,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],				// VolumeConstraint importance per cellkind
+		V : [0,500]						// Target volume of each cellkind
+		
+
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1],					// Number of cells to seed for all
+                                        // non-background cellkinds.
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		zoom : 4,						// zoom in on canvas with this factor
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	sim = new CPM.Simulation( config, {} )
+
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+
+function step(){
+	sim.step()
+	meter.tick()
+	requestAnimationFrame( step )
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<h1>SingleCell</h1>
+<p>
+A single CPM cell with only adhesion and volume constraints.
+</p>
+</body>
+</html>

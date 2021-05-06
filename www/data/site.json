@@ -1,0 +1,68 @@
+{
+	"title": "Home | Artistoo",
+	"examples":[
+		{
+			"section":"CPM examples",
+			"desc": "Various processes simulated in a Cellular Potts Model (CPM). Mix and match elements from the examples to build your own simulations. Click to view.",
+			"subs": [
+				{
+					"head":"CPM: Back to Basic",
+					"desc":"Simple processes to get you started.",
+					"items": [
+						{
+							"name": "Inspiring Magnets",
+							"image": "./images/examples/IsingModel.gif",
+							"link": "./examples/IsingModel.html",
+							"desc": "This model of self-organising spins inspired the CPM.",
+							"learn": [ "basics", "initialisation" ]
+						},
+						{
+							"name": "Staying Single",
+							"image": "./images/examples/SingleCell.gif",
+							"link": "./examples/IsingModel.html",
+							"desc": "A simple CPM cell with only adhesion/volume constraints.",
+							"learn": [ "basics" ]
+						},
+						{
+							"name": "Just Keep Swimming",
+							"image": "./images/examples/RandomWalk.gif",
+							"link": "./examples/RandomWalk.html",
+							"desc": "A \"cell\" with modified volume constraint does a random walk.",
+							"learn": [ "basics", "adding constraints" ]
+						},
+						{
+							"name": "Back To The Classics",
+							"image": "./images/examples/cellsorting.gif",
+							"link": "./examples/CellSorting.html",
+							"desc": "The first CPM: cells sorting through differential adhesion.",
+							"learn": [ "basics", "initialisation", "multiple celltypes" ]
+						},
+						{
+							"name": "Let It Grow",
+							"image": "./images/examples/celldivision.gif",
+							"link": "./examples/CellDivision.html",
+							"desc": "A growing mass of proliferating cells.",
+							"learn": [ "basics", "additional processes", "cell division" ]
+						}
+					]
+				}				
+			]
+		}
+	],
+	"manual":[
+		{
+			"title":"Artistoo User Manual",
+			"tag":"index"
+		},
+		{
+			"title":"Getting Started",
+			"tag":"getting-started"
+		},
+		{
+			"title":"Your First Simulation",
+			"tag":"your-first-simulation"
+		}
+	]
+}
+
+	

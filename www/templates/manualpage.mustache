@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>{{title}}</title>
+    {{>head}}
+    
+    <style>
+
+		.wrapper {
+			width: 100vw;
+			max-width:100%;
+			margin: 0px;
+			/*position:fixed;
+			left: 10px;*/
+		}
+
+		
+		#sidebar {
+			min-width: 250px;
+			max-width: 250px;
+		}
+
+		#sidebar.active {
+			margin-left: -250px;
+		}
+		
+		#content.active {
+			margin-left: 0px;
+		}
+		#content{
+			margin-left: 250px;
+			transition: all 0.3s;
+			min-height: 80vh;
+		}
+
+		#sidebar {
+			width: 250px;
+			position: fixed;
+			top: 50px;
+			left: 0;
+			height: 100vh;
+			z-index: 999;
+			/*background: #7386D5;*/
+			/*color: #fff;*/
+			transition: all 0.3s;
+		}
+		
+		a[data-toggle="collapse"] {
+			position: relative;
+		}
+
+		.dropdown-toggle::after {
+			display: block;
+			position: absolute;
+			top: 50%;
+			right: 20px;
+			transform: translateY(-50%);
+		}
+		
+		
+		@media (max-width: 768px) {
+			#sidebar {
+				margin-left: -250px;
+			}
+			#sidebar.active {
+				margin-left: 0;
+			}
+			#content {
+				margin-left : 0px;
+			}
+			#content.active {
+				margin-left: 250px;
+			}
+		}
+		
+		#content h1 {
+			font-size:250%;
+		}
+		
+		#content h2 {
+			padding-top:20px;
+			font-size:200%;
+		}
+		
+		#content h3 {
+			font-size:150%;
+			padding:0px;
+			padding-top:20px;
+			border-bottom: solid 1px #ddd;
+		}
+		
+		#content iframe {
+			border:1px solid black;
+    		box-shadow: 0px 0px 15px #bbb8b8;
+    		max-width:100%;
+    		overflow:auto;
+		}
+		
+		#content .screen-shot-container {
+			max-width:100%;
+			overflow:auto;
+		}
+		
+		#content .screen-shot {
+			min-width:600px;
+		}
+		
+		.important-note {
+			background-color:#ffd5cf;
+			padding:7px;
+			padding-left:25px;
+			border-radius: 3px;
+		}
+		
+	
+		#sidebar a, a:hover, a:focus {
+			/*color: inherit;*/
+			color : #eee;
+			text-decoration: none;
+			transition: all 0.3s;
+		}
+
+		#sidebar {
+			/* don't forget to add all the previously mentioned styles here too */
+			/*color: #333;*/
+			transition: all 0.3s;
+		}
+
+		#sidebar .sidebar-header {
+			padding: 20px;
+			background: #6d7fcc;
+		}
+
+		#sidebar ul.components {
+			padding: 20px 0;
+		}
+
+		#sidebar ul p {
+			/*color: #fff;*/
+			padding: 10px;
+		}
+
+		#sidebar ul li a {
+			padding: 10px;
+			padding-top: 5px;
+			margin:0px;
+			padding-bottom: 5px;
+			font-size: 1em;
+			display: block;
+		}
+		#sidebar ul li a:hover {
+			color: #292b2c; /*#7386D5;*/
+			background: #fff;
+		}
+
+		#sidebar ul li.active > a, a[aria-expanded="true"] {
+			color:#292b2c;
+			background: #f7f7f7; /*#6d7fcc;*/
+		}
+		ul ul a {
+			font-size: 0.9em !important;
+			padding-left: 30px !important;
+			background: #292b2c; /*#6d7fcc;*/
+		}
+		
+		#sidebar ul ul li {
+			margin: 0px;
+		}
+
+    </style>
+    <link type="text/css" rel="stylesheet" href="{{navprefix}}css/prettify-tomorrow.css">
+    <script>
+    	$(document).ready(function () {
+
+			$('#sidebarCollapse').on('click', function () {
+				$('#sidebar').toggleClass('active');
+				$('#content').toggleClass('active');
+			});
+
+		});
+    </script>
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+{{>nav}}  
+
+
+
+
+	<div class="wrapper">
+		<!-- Sidebar -->
+		<nav id="sidebar" class="bg-dark">
+			<ul class="list-unstyled components">
+				{{#sideNav}}
+				{{#active}}
+				<li class="active">
+				{{/active}}
+				{{^active}}
+				<li>
+				{{/active}}
+					<a href="{{navprefix}}manual/{{tag}}.html">{{title}}</a>
+					<ul class="list-unstyled" id="{{tag}}-menu">
+						{{#nav}}
+						<li>
+							<a href="#{{id}}">{{subtitle}}</a>
+						</li>
+						{{/nav}}
+					</ul>
+				</li>
+				{{/sideNav}}
+				
+			</ul>
+		</nav>
+		
+		
+		<!-- Page Content -->
+		<div id="content">
+
+			
+			<div class="container-fluid">
+
+				<button type="button" id="sidebarCollapse" class="btn btn-info">
+					<i class="fas fa-align-left"></i>
+					<span>Toggle Sidebar</span>
+				</button>
+				
+			</div>
+			<div class="container-fluid">
+				<br>
+				<h1>{{title}}</h1>
+				
+{{>manual}}
+			</div>
+			
+		</div>
+	</div>
+
+	
+
+
+{{>footer}}
+
+
+</body>
+</html>

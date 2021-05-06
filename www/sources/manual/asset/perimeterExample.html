@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>SingleCell</title>
+<style type="text/css">
+body{
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 0px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	field_size : [100,70],
+
+	
+	// CPM parameters and configuration
+	conf : {
+
+		// Basic CPM parameters
+		T : 20,								// CPM temperature
+		// Constraint parameters. Mostly these have the format of an array
+        // in which each element specifies the parameter value for one of
+        // the cellkinds on the grid. First value is always cellkind 0 (the
+        // background) and is often not used.
+				
+		// Adhesion parameters:
+		J: [[0,20,20], [20,100,100],[20,100,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,30,30],				// VolumeConstraint importance per cellkind
+		V : [0,500,500],						// Target volume of each cellkind
+
+        LAMBDA_P : [0,2,2],
+        P : [0,240,320]
+		
+
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1,1],					// Number of cells to seed for all
+                                        // non-background cellkinds.
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+        CELLCOLOR: ["000000","AA0000"],
+		zoom : 2,						// zoom in on canvas with this factor
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	config.simsettings.parentElement = document.getElementById("simcontainer")
+	sim = new CPM.Simulation( config, {initializeGrid : initializeGrid } )
+
+	step()
+}
+
+
+function step(){
+	sim.step()
+	requestAnimationFrame( step )
+}
+
+function initializeGrid(){
+
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+
+    this.gm.seedCellAt( 1, [ Math.floor( this.C.grid.midpoint[0]/2 ), this.C.grid.midpoint[1] ])
+	this.gm.seedCellAt( 2, [ Math.floor( this.C.grid.midpoint[0]*1.5 ), this.C.grid.midpoint[1] ])
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<h3>Perimeter constraint</h3>
+
+<table>
+    <tr>
+        <td id="simcontainer" style="width:210px"></td>
+        <td style="font-size:80%!important">
+            Two CPM cellkinds with adhesion, volume, and perimeter constraints.
+            The cells have the same volume but a different perimeter.
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>IsingModel</title>
+<style type="text/css">
+body{
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 0px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [200,200],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],						// Should the grid have linked borders?
+		seed : 2,							// Seed for random number generation.
+		T : 0.01,								// CPM temperature
+		
+		// Constraint parameters. 	
+		// Adhesion parameters:
+		J : [ [NaN,20], [20,100] ]
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [3],					// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME : 1500,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["AA0000"],
+		ACTCOLOR : [false],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [false],				// Should cellborders be displayed?
+		zoom : 1,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : true,					// Should a png image of the grid be saved
+											// during the simulation?
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/IsingModel",	// ... And save the image in this folder.
+		EXPNAME : "IsingModel",					// Used for the filename of output images.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object.*/
+	 let custommethods = {
+	 	initializeGrid : initializeGrid,
+	 	logStats : logStats,
+	 	postMCSListener : postMCSListener
+	 }
+    config.simsettings.parentElement = document.getElementById("simcontainer")
+	sim = new CPM.Simulation( config, custommethods )
+
+	step()
+}
+
+
+function step(){
+	sim.step()
+	if( sim.conf["RUNTIME_BROWSER"] === "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+
+/* The following custom methods will be added to the simulation object*/
+function initializeGrid(){
+
+		// Create a cell (other than background)
+        if( typeof( this.cid ) == "undefined" ){
+			this.cid = this.C.makeNewCellID(1)
+        }
+		let cid = this.cid 
+		
+		// For all non-stromaborder pixels in the grid: assign it randomly
+		// to either background or cell.
+		for( let i = 1 ; i < this.C.extents[0] ; i ++ ){
+			for( let j = 1 ; j < this.C.extents[1] ; j ++ ){	
+				if( this.C.random() < 0.49 ){
+					this.C.setpix( [ i,j ], cid )
+				} else {
+					if( this.C.pixt( [i,j] ) ){
+						this.C.setpix( [i,j], 0 )
+					}
+				}
+			}
+		}
+	}
+	
+// Computing and logging stats.
+// Centroids are not really meaningful here so we'll log volume.
+function logStats(){
+		
+		// compute volume of all non-background		
+		for( let cid of this.C.cellIDs() ){
+		
+			let volume = this.C.getVolume( cid )
+			
+			// eslint-disable-next-line no-console
+			console.log( this.time + "\t" + cid + "\t" + 
+				this.C.cellKind(cid) + "\t" + volume )
+			
+		}
+	}
+
+// Add a postMCSListener to reinitialize the grid when one of the cells disappears
+function postMCSListener(){
+
+	    let reset = false, maxtime = this.conf.RUNTIME
+		for( let cid of this.C.cellIDs() ){
+			let vol = this.C.getVolume(cid)
+			if( vol<=5 || vol===(this.C.extents[0]-1)*(this.C.extents[1]-1) ){
+				reset = true
+			}
+		}
+		if( this.time >= maxtime ){
+            reset = true
+        }
+		if( reset ){
+			this.time = 0
+            this.initializeGrid()
+        }
+
+}
+
+</script>
+</head>
+<body onload="initialize()">
+
+<h3>Potts model</h3>
+
+<table>
+    <tr>
+        <td id="simcontainer" style="width:210px"></td>
+        <td style="font-size:80%!important">
+            The Potts model (a generalisation of the Ising model) describes the interaction
+            between spins on a crystalline lattice. Each grid point represents a spin
+            that can take on one of two values (here represented as red and white).
+            Spins interact through a global "Hamiltonian" or energy equation, which
+            puts an energetic penalty on every pair of neighboring pixels with
+            opposite spins - reflecting a "surface" or "adhesion" energy.
+            Minimisation of the global energy then causes spins to "flip", until
+            they form large patches of spins of the same type.
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
