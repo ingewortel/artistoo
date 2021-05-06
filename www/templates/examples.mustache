@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>{{title}}</title>
+    {{>head}}
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+{{>nav}}  
+
+
+<!-- TITLE AND TOP IMAGE -->
+<div class="mainimg" >
+	<div style="text-align: left; margin-left: 20px; padding-left: 10px; padding-top: 8em; color: white">
+	<h1>
+	  Example Gallery
+	</h1>
+	<h2>
+	  Coding examples in Artistoo.
+	</h2>        
+  </div>
+</div>
+
+
+
+<div class="container front-page">
+
+
+
+	
+	{{#examples}}
+	<h1>{{section}}</h1>
+	<p>{{desc}}</p>
+	
+	{{#subs}}
+	<h2>{{head}}</h2>
+	<p>{{desc}}</p>
+	
+	<div class="row">
+		{{#items}}
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href="{{link}}">
+				<img src="{{image}}" width="100%"></a>
+				<p class="example-tile-title">{{name}}</p>
+				<p class="example-tile-text">{{desc}}</p>
+			</div>
+		</div>
+		{{/items}}
+	</div>
+
+	{{/subs}}
+	</div>
+	{{/examples}}
+	
+	
+
+
+
+</div>
+
+
+{{>footer}}
+
+
+</body>
+</html>

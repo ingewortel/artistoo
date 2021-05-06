@@ -16,10 +16,6 @@
 
 html
 {
-  /*font-family: 'Source Sans Pro', 'Roboto', sans-serif;*/
-  /*font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, 
-			Arial, noto sans, sans-serif, apple color emoji, segoe ui emoji, 
-			segoe ui symbol, noto color emoji;*/
   overflow: auto;
   color: #555;
   background-color: #fff;
@@ -595,6 +591,7 @@ h3 .right-info {
   margin: 4px 0;
 }
 
+/* I think this is for the esdoc examples; check this.*/
 .content .detail h4 + .example-doc {
   margin: 6px 0;
 }
