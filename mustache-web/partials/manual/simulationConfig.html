@@ -1,0 +1,428 @@
+<p>
+Once you have written a <a href="./your-first-simulation.html">first simulation</a>, you can 
+adapt it by modifying parameters, 
+or you can increase the number of cells in your simulation and examine 
+interactions between different cell types.</p>
+
+<p>The <a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>
+allows you to make many of those changes by simply modifying  its
+<a href="./your-first-simulation.html#step-1--configure-the-CPM-and-simulation">configuration object</a>, 
+which will be the topic of this tutorial. 
+The next tutorial will show you how you can make even more advanced simulations 
+by writing custom functions &mdash; but for now we will focus on changes you can make
+through configuration only.</p>
+
+
+<p>We will start from this very simple simulation from the 
+<a href="./your-first-simulation.html">previous tutorial</a>:
+
+<div>
+<iframe src="./asset/SingleCell.html" width="350px" height="400px"> </iframe>
+</div>
+
+<p>
+This tutorial assumes you have completed the previous tutorial, and we will 
+examine the <code>config</code> object of the simulation you generated there in more detail:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+
+	// Grid settings
+	field_size : [100,100],
+	
+	// CPM parameters and configuration
+	conf : {
+		T : 20,				// CPM temperature
+				
+		// Adhesion parameters:
+		J: [[0,20], [20,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],		// VolumeConstraint importance per cellkind
+		V : [0,500]			// Target volume of each cellkind
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+		// Cells on the grid
+		NRCELLS : [1],			// Number of cells to seed for all
+						// non-background cellkinds.
+
+        RUNTIME : 500,                  	// Only used in node
+
+		CANVASCOLOR : "eaecef",
+		zoom : 4			// zoom in on canvas with this factor.
+	}
+}</code></code></pre>
+
+<p>We will now see how changes to this object can alter the simulation.</p>
+
+<h2 id="configuring-the-cpm-itself">Configuring the CPM itself</h2>
+
+<p>First, let's see how we can control the <a href="../class/src/models/CPM.js~CPM.html">
+CPM model class</a> itself. For this lesson, we recommend you start from the HTML version 
+of the simulation in the <a href="./your-first-simulation.html">previous tutorial</a>.
+This HTML version will allow you to
+see the effect of your changes more quickly than running a node script would.</p>
+
+
+<h3 id="changing-cpm-parameters">Changing CPM parameters</h3>
+
+<p>As we've seen before, the <code>config</code> object has three parts: the 
+<code>field_size</code>, the <code>conf</code>, and the <code>simsettings</code>. 
+We will now look at the <code>conf</code> part, which controls the CPM model itself.</p>
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+	conf : {
+		T : 20,					// CPM temperature
+				
+		// Adhesion parameters:
+		J: [[0,20], [20,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],			// VolumeConstraint importance per cellkind
+		V : [0,500]				// Target volume of each cellkind
+	},</code></code></pre>
+
+<p>The CPM shown here has only two constraints: the 
+<a href="../class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a> and
+<a href="../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">Volume</a>
+constraints. The <code>T</code> parameter belongs to the CPM itself and controls to
+what extent the model "listens" to the energy rules it gets. The higher T, the more likely
+the model is to misbehave. But if T is too low, the cell might get stuck in a state it
+can't get out of.
+</p>
+
+<blockquote class="exercise-block">
+<b>Exercise</b> : 
+
+<p>Try some different values for T here, and see what happens with your simulation.</p>
+</blockquote>
+
+<p>The other parameters here belong to the constraints. The <code>J</code> values form
+a matrix controlling the adhesion between cell and background. The $J_{00}$ value, which
+is here 0, is never used (the adhesion constraint only counts adhesion between pixels
+belonging to different cells, and since there is only one background "cell", there can
+be no background-background adhesion). The $J_{01}$ and $J_{10}$ values (here 20) are
+the adhesion between cell and background, and are important for this simulation. 
+The $J_{11}$ would be the adhesion between two different cells and is also not relevant
+yet, since there is only one cell.</p>
+
+<p>The <code>V</code> and <code>LAMBDA_V</code> parameters control the volume constraint,
+see its <a href="../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">documentation</a>. </p>
+
+<blockquote class="exercise-block">
+<b>Exercises</b> : 
+
+<ol>
+<li>Change the values in <code>J</code>, and try to make the cell fall apart. Do you
+understand why this happens?</li>
+<li>How would you make the cell twice as big? Try it.</li>
+</ol>
+</blockquote>
+
+<p>Finally, note that we can also add more different constraints to the model via the
+<code>conf</code> object. We'll do that in a later tutorial.</p>
+
+
+<h3 id="setting-a-random-seed">Setting a random seed</h3>
+
+<p>If you look at the simulation on the top of this page and then refresh a few times, 
+you should see that every simulation "run" goes a little differently. This happens because
+the CPM is stochastic. If you don't want this, because you want someone else to be able
+to reproduce exactly your results, you can try setting a random <code>seed</code>:</p>
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+	conf : {
+		T : 20,				// CPM temperature
+		seed : 1,
+				
+		// Adhesion parameters:
+		J: [[0,20], [20,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],		// VolumeConstraint importance per cellkind
+		V : [0,500]			// Target volume of each cellkind
+	},</code></code></pre>
+
+
+<blockquote class="exercise-block">
+<b>Exercise</b> :
+
+<p>Set a random seed in your simulation's HTML file. Refresh the page a few times
+and look what happens. What is different now?</p>
+</blockquote>
+
+<h2 id="configuring-the-grid"> Configuring the grid</h2>
+
+<h3 id="field-size"> Field size </h3>
+
+<p>Open your file <code>MyFirstSimulation.html</code> from the previous tutorial in the web
+browser. You should see a black cell floating inside a square gray area, which
+is the field or "grid" the simulation runs in.</p>
+
+<p> The size of this grid is controlled by <code>field_size</code> in the <code>config</code> 
+object. The entry </p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">// Grid settings
+field_size : [100,100],</code></code></pre>
+
+
+<p>
+ensures that the simulation is performed on a 100 x 100 pixel (2D) grid. We can change 
+the size of this grid by changing the numbers <code>x</code> and <code>y</code> between
+the square brackets: <code>[x,y]</code>, where <code>x</code> controls the grid's width 
+and <code>y</code> controls its height. For example, changing this setting to:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">// Grid settings
+field_size : [150,100], </code></code></pre>
+
+
+<p>makes the grid slightly broader, but equally high as before.</p>
+
+<blockquote class="exercise-block">
+<b>Exercise</b> : 
+
+<p>How would you make a grid with a width of 100 pixels and a
+height of 200 pixels? Open your file <code>MyFirstSimulation.html</code> in your 
+favourite text editor, change the <code>field_size</code> in the appropriate manner, 
+and save the file. Now open <code>MyFirstSimulation.html</code> in your web browser 
+(or just refresh the page if you had already done so). Did it work?</p>
+</blockquote>
+
+<h3 id="grid-boundaries"> Grid boundaries</h3>
+
+<p>Have a look at the following simulation:</p>
+
+<div>
+<iframe src="./asset/ActSmall.html" width="350px" height="300px"> </iframe>
+</div>
+
+<p> When the cell leaves the grid on the right, we see that it re-enters on the left.
+We call this a grid with <i>periodic boundaries</i>. Because grid boundaries are linked,
+the cell feels as though it is roaming an infinite space.</p>
+
+<p>In the <code>CPM</code> object, the grid boundary conditions can be set through the
+<code>torus</code> property in the configuration object like this:</p>
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+	conf : {
+		T : 20,				// CPM temperature
+		torus : [true,true],
+				
+		// Adhesion parameters:
+		J: [[0,20], [20,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],		// VolumeConstraint importance per cellkind
+		V : [0,500]			// Target volume of each cellkind
+	},</code></code></pre>
+
+<p>When <code>torus=true</code>, this means that the grid boundaries are linked as in the
+example above (this is also the default when we don't supply the <code>torus</code>
+property in the configuration settings). If we don't want linked boundaries, we can
+change this value to false:</p>
+
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">// CPM parameters and configuration
+	conf : {
+		T : 20,				// CPM temperature
+		torus : [false,false],
+				
+		// Adhesion parameters:
+		J: [[0,20], [20,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],		// VolumeConstraint importance per cellkind
+		V : [0,500]			// Target volume of each cellkind
+	},</code></code></pre>
+
+<p>However, what we get is not quite what we intended: </p>
+
+<div>
+<iframe src="./asset/ActSmall2.html" width="350px" height="300px"> </iframe>
+</div>
+
+<p>The problem here is that we can't just say that there are boundaries without telling
+the CPM how to deal with those boundaries. A pixel at the border of the grid will have 
+fewer neighboring pixels to contribute to its 
+<a href="../class/src/hamiltonian/Adhesion.js~Adhesion.html">adhesion</a> or 
+<a href="../class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">surface</a>
+energy, which will give artefacts. In reality, any physical boundary a cell might
+encounter <i>would</i> contribute to adhesion energy.</p>
+
+<p>To solve such problems, it is possible to create a layer of boundary pixels at the
+edges of the grid, to which the adhesion can be explicitly defined. See
+<a href="../examples/NoTorusDemo.html">this example</a> for details and implementation (once you see the simulation,
+right click on the page (outside of the simulation grid) and select "view page source" 
+to see code).</p>
+
+
+
+<h2 id="configuring-the-simulation-object">Configuring the Simulation object </h2>
+
+<p>The <a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation object</a> 
+automatically takes care of many aspects of the
+simulation, such as seeding cells on the grid, running the simulation for a number of 
+steps, drawing the output images and computing output statistics. We'll discuss how to
+tune some of these aspects here.</p>
+
+<p>Have a look at the documentation for the <code>constructor</code> of the simulation
+class <a href="../class/src/simulation/Simulation.js~Simulation.html#instance-constructor-constructor">here</a>. 
+All the options listed under <code>simsettings</code> here are options to configure the 
+simulation, which we will discuss here.</p>
+
+<h3 id="controlling-the-simulation">Controlling the simulation</h3>
+
+<p>Using the option <code>NRCELLS</code>, we can specify how many cells of each 
+<a href="../typedef/index.html#static-typedef-CellKind">CellKind</a> we want to seed
+on the grid at the beginning of the simulation. Note that this needs to be an array with
+one element for each non-background cellkind on the grid. This means this array is one
+element shorter than most typical CPM parameters (e.g. <code>LAMBDA_V</code>) which are
+specified for each cellkind <i>including</i> background. If the lengths of these 
+different arrays are not consistent with each other, the CPM will get confused about
+how many cellkinds you want on the grid. It will crash.</p>
+
+<p>By default, the simulation class seeds them in random positions. We'll discuss how 
+to seed cells in more customized locations in a later tutorial. But for now, try 
+modifying the <code>NRCELLS</code> property of your simulation and see what happens.</p>
+
+
+<p>The <code>RUNTIME</code> property determines for how many Monte Carlo Steps (MCS) the
+simulation will run. This property is actually only used by node simulations. 
+You can use the <code>RUNTIME_BROWSER</code> property in the browser, but then you must
+use that in your <code>step()</code> function like this: </p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function step(){
+	sim.step()
+	meter.tick()
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}</code></code></pre>
+
+<p>This way, the simulation will only keep running until <code>RUNTIME_BROWSER</code> is
+reached. If we wouldn't do this, the browser simulation would just keep running infinitely
+(or in practice, until your patience or your computer's battery runs out and you close 
+the browser window).</p>
+
+
+<h3 id="controlling-the-visualization">Controlling the visualization</h3>
+
+<p>The Simulation class contains a default method 
+<a href="../class/src/simulation/Simulation.js~Simulation.html#instance-method-drawCanvas"><code>drawCanvas()</code></a>
+that takes care of drawing the grid for you (if you follow the link, you can click "source"
+on the far right to see the code). You can control the way this function draws
+the grid via the <code>simsettings</code> object as well, by setting: </p>
+
+<ul>
+	<li><code>CANVASCOLOR</code>, the color code to draw the background in. If left
+	unspecified, this is white (<code>"FFFFFF""</code>).</li>
+	<li><code>CELLCOLOR</code>, the color code to draw the cells in. If left
+	unspecified, this is black (<code>"000000""</code>). If you do wish to specify it,
+	you must provide an array with a color for each <a href="../typedef/index.html#static-typedef-CellKind">CellKind</a>
+	just like we did for NRCELLS above. E.g. for one black and one red cell kind, that would
+	be <code>["000000","FF0000"]</code></li>
+	<li><code>ACTCOLOR</code>, whether or not to draw the activity gradient if the cells
+	have an <a href="../class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">
+	ActivityConstraint</a>. If left unspecified, this is set to <code>false</code> for 
+	each <a href="../typedef/index.html#static-typedef-CellKind">CellKind</a>. </li>
+	<li><code>SHOWBORDERS</code>, whether or not to draw the borders of each cell as well
+	as their area. This is <code>false</code> by default.</li>
+	<li><code>BORDERCOL</code>, the color to draw the cell borders in, once more specified
+	for each <a href="../typedef/index.html#static-typedef-CellKind">CellKind</a>. This
+	is only used whenever <code>SHOWBORDERS</code> is set to <code>true</code>.</li>
+	<li><code>zoom</code>the factor by which to enlarge the image (note that using a higher
+	zoom factor may slow down your simulation, since it takes more time to draw the grid
+	in a larger image. If a simulation is fast enough, this won't be an issue, but if
+	you notice your simulations being too slow you might want to adjust this factor).</li>
+</ul>
+
+<p>For all the options involving color, this online <a href="https://www.google.com/search?q=color+picker">
+color picker</a> may come in handy.</p>
+
+<blockquote class="exercise-block">
+<b>Exercise</b> :
+
+<p>Given all the information we have covered so far, can you reproduce a simulation that 
+looks roughly like the one below?</p>
+</blockquote>
+
+<div>
+<iframe src="./asset/ColorEx.html" width="450px" height="450px"> </iframe>
+</div>
+
+
+
+<h3 id="controlling-outputs">Controlling outputs</h3>
+
+<p>The simulation class helps you by generating outputs automatically. This happens inside
+the function <a href="../class/src/simulation/Simulation.js~Simulation.html#instance-method-createOutputs"><code>createOutputs()</code></a>, 
+which does two things:</p>
+
+<ol>
+	<li>Drawing things on the screen (browser version) or on an output PNG image (node version)</li>
+	<li>Computing and logging statistics to the console (both versions)</li>
+</ol>
+
+<p>In node, you can control the following aspects of the PNG images that are written:</p>
+
+<ul>
+	<li><code>SAVEIMG</code>, are any images saved at all? Defaults to <code>false</code>;</li>
+	<li><code>IMGFRAMERATE</code>, how often should an image be saved? Defaults to 
+		<code>1</code> (save an image every simulation step), but you might set it to e.g.
+		<code>10</code> to save an image only once every 10 steps. This may significantly
+		speed up your simulations since drawing images can be a speed bottleneck. Very often,
+		drawing every step is not necessary to get a smooth movie in the end;</li>
+	<li><code>SAVEPATH</code>, in which folder should images be stored? You have to make 
+		sure this folder exists, or you will get an error. Although this option is documented
+		as "optional", this is only true because you don't have to give it when 
+		<code>SAVEIMG=false</code>. If you set <code>SAVEIMG=true</code>, you must provide this
+		option.</li>
+	<li><code>EXPNAME</code>, a name used to generate the name of the output images. These
+		will be stored as <code>[SAVEPATH]/[EXPNAME]-t[STEP].png</code>. Defaults to
+		<code>"mysim"</code>.</li>
+</ul>
+
+<p>Note that the options above only apply to node, since the browser version does not support
+writing PNG images. If you want to make a movie from the browser version, just record your
+screen. If you wish to change the <code>IMGFRAMERATE</code> of your browser simulation,
+you can adjust your <code>step()</code> function (see also <a href="./your-first-simulation.html">
+this tutorial</a>) to something like this:
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function step(){
+	// Run IMGFRAMERATE simulation steps before rendering
+	for( let s = 0; s < config.simsettings.IMGFRAMERATE; s++ ){
+		sim.step()
+	}
+	requestAnimationFrame( step )
+}</code></code></pre>
+
+<p>Note that <a href="../class/src/simulation/Simulation.js~Simulation.html#instance-method-step">
+<code>sim.step()</code></a> will still call 
+<a href="../class/src/simulation/Simulation.js~Simulation.html#instance-method-drawCanvas">
+<code>drawCanvas()</code></a> every 
+step, but the grid will only be <i>rendered</i> once every <code>IMGFRAMERATE</code>
+steps. Since rendering is often the bottleneck, this will still speed up your simulation
+most of the times.</p>
+
+<p>The <a href="../class/src/simulation/Simulation.js~Simulation.html#instance-method-createOutputs"><code>createOutputs()</code></a>
+also takes care of logging statistics to the console. By default, it logs the simulation
+step, the <a href="../typedef/index.html#static-typedef-CellId">cellID</a>, the
+<a href="../typedef/index.html#static-typedef-CellKind">CellKind</a>, and the centroid
+of every cell on the grid. To adjust this, you can overwrite this method, which we will
+discuss in a later tutorial.</p>
+
+<p>Two settings in the <code>simsettings</code> object control the logging of statistics:</p>
+
+<ul>
+	<li><code>LOGSTATS</code>, specifying for browser and node separately whether statistics
+	should be logged to the console. Defaults to <code>{ browser: false, node: true }</code>;</li>
+	<li><code>LOGRATE</code>, specifying how often statistics are computed and logged. Defaults to 
+		<code>1</code> (log every simulation step), but you might set it to e.g.
+		<code>10</code> to log only once every 10 steps.</li>
+</ul>
+

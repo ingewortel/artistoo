@@ -1,0 +1,156 @@
+
+<p>This tutorial will take you through the HTML simulation template 
+step by step so you know which parts you may have to adapt when 
+you are building your own simulations.</p>
+
+<h2 id="an-html-template">An HTML template</h2>
+
+<p>We will build the following template:</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;!-- Page setup and title --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html;
+charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;style type="text/css"&gt; 
+body{
+    font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
+}
+&lt;/style&gt;
+
+&lt;!-- Sourcing the cpm build --&gt;
+&lt;script src="../../build/artistoo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+"use strict"
+
+            // Simulation code here.
+
+
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="initialize()"&gt;
+&lt;h1&gt;Your Page Title&lt;/h1&gt;
+&lt;p&gt;
+Description of your page.
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre>
+
+
+<p>We will now go through this step by step.</p>
+
+<h3 id="step-create-a-basic-html-page">Step 1 : Create a basic HTML page</h3>
+
+<p>A very simple HTML page looks like this:</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt; &lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre>
+
+<p>The <code>&lt;html&gt;</code> tag shows where the page starts, and <code>&lt;/html&gt;</code> shows where it ends.
+The page consists of a <b>header</b>, which starts at <code>&lt;head&gt;</code> and ends at <code>&lt;/head&gt;</code>,
+and a <b>body</b>, starting at <code>&lt;body&gt;</code> and ending at <code>&lt;/body&gt;</code>. (In general,
+anything you place in your HTML file starts with <code>&lt;something&gt;</code> and ends with
+<code>&lt;/something&gt;</code>).</p>
+
+<h3 id="step-2-configure-the-header">Step 2 : Configure the header</h3>
+
+
+<p>The header of the HTML page is the place that contains some meta-information
+about that page, and will also contain the simulation code.</p>
+
+<p>First, we will expand the header code above (between the <code>&lt;head&gt;&lt;/head&gt;</code> tags):</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;/head&gt;</code>
+</code></pre>
+
+<p>The additional code in the first line just includes some document settings into 
+the header that you will rarely need to change. The only thing you may want to 
+change is the second line, where you set the title that will be displayed
+in the open tab in your web browser when you open the page.</p>
+
+<h3 id="step-3-add-javascript">Step 3 : Add JavaScript</h3>
+
+<p>We will now add some JavaScript code to the header part of the page (again,
+between the <code>&lt;head&gt;&lt;/head&gt;</code> tags):</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html;charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;script src="path/to/artistoo/build/artistoo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+"use strict"
+// Simulation code will go here:
+
+&lt;/script&gt;
+&lt;/head&gt;</code>
+</code></pre>
+
+<p>The first script just loads the Artistoo package for HTML, which is stored in
+<code>artistoo/build/artistoo.js</code>. Please ensure that the path supplied here is the correct
+path from the folder where you stored <code>MyFirstSimulation.html</code> to the file
+<code>artistoo/build/artistoo.js</code>. If you have stored your simulation in 
+<code>artistoo/examples/html</code>,
+you can use the path <code>../../build/artistoo.js</code>.</p>
+
+
+<p>The second script is where your actual simulation code
+will go when you are <a href="./your-first-simulation.html#writing-your-simulation">Writing your simulation</a>.
+For now, we'll leave it empty.</p>
+
+<h3 id="step-4-write-the-body">Step 4: Write the body</h3>
+
+<p>Finally, we make some changes to the body of the page (between the <code>&lt;body&gt;&lt;/body&gt;</code> tags):</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;body onload="initialize()"&gt;
+&lt;h1&gt;Your Page Title&lt;/h1&gt;
+&lt;p&gt;
+Description of your page.
+&lt;/p&gt;
+&lt;/body&gt;</code>
+</code></pre>
+
+<p>In the first line, we tell the HTML page to run the JavaScript function 
+<code>intitialize()</code>, which we will define in 
+<a href="./your-first-simulation.html#writing-your-simulation">another tutorial</a> (between the 
+<code>&lt;script&gt;&lt;/script&gt;</code> tags of the page header we just set up).</p>
+
+<p>The rest of the code just adds a title and a description to the web page.
+The simulation will then be placed below (as in the example shown
+at the top of this page).</p>
+
+<h3 id="step-5-optional-add-css">Step 5 (optional): Add CSS</h3>
+
+
+<p>The code we have now added is sufficient to make the page work once we have
+<a href="./your-first-simulation.html#writing-your-simulation">added a simulation</a>, but to make it look better we
+may want to add some CSS styling code to the header of the page. The header now
+becomes:</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html;charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+
+&lt;style type="text/css"&gt; 
+body{
+font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
+}
+&lt;/style&gt;
+
+&lt;script src="path/to/artistoo/build/artistoo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+"use strict"
+// Simulation code will go here:
+
+&lt;/script&gt;
+&lt;/head&gt;</code>
+</code></pre>
+
+<p>To see the final result, have a look again at the complete
+ <a href="#an-html-template">template</a> again. You can now proceed with
+ <a href="./your-first-simulation.html#writing-your-simulation">adding your simulation</a> to this file.</p>

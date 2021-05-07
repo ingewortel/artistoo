@@ -1,0 +1,292 @@
+<p>
+This tutorial will show you how to build a simple simulation in the web browser
+or in a Node.js script. Choose either
+<a href="#set-up-a-simulation-in-the-web-browser">Set up a simulation in the web browser</a>
+or <a href="#set-up-a-simulation-in-nodejs">Set up a simulation in Node.js</a>
+required template code, and then see
+<a href="#writing-your-simulation">Writing your simulation</a> to start using Artistoo in the
+environment of your choice.</p>
+
+<p>The simulation we will build is a simple CPM cell:</p>
+
+<div>
+<iframe src="{{navprefix}}manual/asset/SingleCell.html" width="350px" height="400px"> </iframe>
+</div>
+
+<h2 id="set-up-a-simulation-in-the-web-browser">Set up a simulation in the web browser </h2>
+
+<p>One way to use Artistoo is to build a simulation in HTML, to open directly in
+your favourite web browser (as long as that favourite web browser is not
+Internet Explorer). The advantage of this method is that it allows you to
+visualize the simulation immediately, and that you can easily explore the
+effect of changing parameters in this manner. However, if you wish to run a
+simulation and store output to your computer, a simulation using Node.js may be
+more appropriate &mdash; see 
+<a href="#set-up-a-simulation-in-nodejs">Set up a simulation in Node.js</a>
+for details.</p>
+
+
+<h3 id="an-html-template-page">An HTML template page</h3>
+
+<p>Unfortunately, writing an HTML page requires quite some boilerplate code. You
+can mostly just copy-paste this for every simulation you build. For now,
+we will just copy-paste the following template so you can continue with
+<a href="#writing-your-simulation">building your simulation</a>. If you are unfamiliar with
+HTML, you may want to check out <a href="{{navprefix}}manual/htmlTemplate.html">this tutorial</a> later &mdash;
+it will guide you through the template 
+step by step so you know which parts you may have to adapt. </p>
+
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;!-- Page setup and title --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html;
+charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;style type="text/css"&gt; 
+body{
+    font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
+}
+&lt;/style&gt;
+
+&lt;!-- Sourcing the cpm build --&gt;
+&lt;script src="../../build/artistoo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+"use strict"
+
+            // Simulation code here.
+
+
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="initialize()"&gt;
+&lt;h1&gt;Your Page Title&lt;/h1&gt;
+&lt;p&gt;
+Description of your page.
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre>
+
+
+<p>Copy the above code into a file called <code>MyFirstSimulation.html</code>, which you can
+save in the <code>artistoo/examples/html/</code> folder for now. </p>
+
+
+<blockquote class="important-note"> ! <b>Important</b>: If you wish to save the file elsewhere, please read 
+<a href="./getting-started.html#additional-notes">these instructions</a> 
+first, and ensure that you include the correct path to the cpm build in
+the part <code>&lt;script src="../../build/artistoo.js"&gt;&lt;/script&gt;</code>.
+</blockquote>
+
+
+<p>You can now proceed with <a href="#writing-your-simulation">adding your simulation</a>
+ to this file.</p>
+
+
+<h2 id="set-up-a-simulation-in-nodejs">Set up a simulation in Node.js</h2>
+
+<p>Another way to use Artistoo &mdash; besides using HTML &mdash; is to use Node.js from the 
+console. This method of running Artistoo allows you to print statistics to the 
+console and store them in external files, as well as to save images of the 
+simulation to create a movie later. To set up a more interactive version 
+of your simulation with a live animation, an HTML version may be more 
+appropriate &mdash; see <a href="#set-up-a-simulation-in-the-web-browser">
+Set up a simulation in the web browser</a>.</p>
+
+<p>In contrast to a browser simulation, a Node.js simulation requires almost no 
+boilerplate code. </p>
+
+<p>To set up your first node simulation, just create a file `MyFirstSimulation.js`
+in the folder <code>artistoo/examples/node/</code>
+(or see <a href="{{navprefix}}manual/getting-started.html#additional-notes">these instructions</a>) to create it 
+elsewhere). Then add the following line of code to the (still empty) script to
+source the package:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">/* Source the CPM module (cpm-cjs version because this is a node script).*/
+let CPM = require("../../build/artistoo-cjs.js")</code>
+</code></pre>
+
+
+<p>Make sure that the path supplied to <code>require()</code> is the correct path from the
+location of <code>MyFirstSimulation.js</code> to <code>artistoo/build/artistoo-cjs.js</code>.</p>
+
+<p>You can now proceed with <a href="#writing-your-simulation">adding your simulation</a>.</p>
+
+<h2 id="writing-your-simulation">Writing your simulation</h2>
+
+<p>We are now ready to add some simulation code. The following code goes either
+in between the <code>&lt;script&gt;&lt;/script&gt;</code> tags of your HTML page (see the comment
+<code>// Simulation code here</code>), or at the bottom of your node script.</p>
+
+<p>The easiest way to build a simulation in Artistoo is to use the 
+<a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>.
+This class provides some default methods for running the simulation and 
+producing outputs, so we won't have to worry about this yet. </p>
+
+<h3 id="step-1--configure-the-CPM-and-simulation">Step 1 : Configure the CPM & Simulation</h3>
+
+<p>The first thing we need to do is supply a <code>config</code> object with all the required
+parameters and settings for the simulation. A configuration object for a simulation 
+should look something like this:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+
+	ndim : 2,
+	field_size : [50,50],
+	conf : {
+
+	},
+	simsettings : {
+	
+	}
+}</code>
+</code></pre>
+
+
+<p>Here, <code>ndim</code> is the number of dimensions of the grid, <code>field_size</code> is the 
+number of pixels in each dimension (in this case: 50 x 50 pixels), <code>conf</code> is 
+the configuration object parsed to the 
+<a href="../class/src/models/CPM.js~CPM.html">CPM class</a>, and <code>simsettings</code>
+contains configuration options used directly by the simulation class.</p>
+
+<p>First, we configure the CPM by setting values in the <code>conf</code> object:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">conf : {
+	T : 20,			// CPM temperature
+				
+	// Adhesion parameters:
+	J: [[0,20], [20,100]] ,
+		
+	// VolumeConstraint parameters
+	LAMBDA_V : [0,50],	// VolumeConstraint importance per cellkind
+	V : [0,500]		// Target volume of each cellkind
+		
+}</code>
+</code></pre>
+
+<p>The <code>T</code> parameter is the CPM temperature, which determines how strongly the 
+model "listens" to the energy constraints given in the CPM. We then add 
+an <a href="../class/src/hamiltonian/Adhesion.js~Adhesion.html">adhesion</a> and 
+<a href="../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">volume constraint</a>
+by supplying their parameters. In this case, we will have only one type of cell
+and the background, so parameters are arrays of length 2 (or a 2 by 2 matrix 
+for the adhesion parameters).</p>
+
+<p>Finally, we need to supply some settings for the simulation class itself in
+<code>simsettings</code>:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">simsettings : {
+	NRCELLS : [1],
+	RUNTIME : 500,
+	CANVASCOLOR : "eaecef",
+	zoom : 4
+}</code>
+</code></pre>
+
+<p>This ensures that one cell is seeded on the grid before the simulation, the
+simulation runs for 500 MCS (in Node.js; in the browser it will just keep running),
+the background of the grid is colored gray, and the grid is drawn at 4x zoom.</p>
+
+<p>The full <code>config</code> object becomes:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [100,100],
+	
+	// CPM parameters and configuration
+	conf : {
+		T : 20,			// CPM temperature
+				
+		// Adhesion parameters:
+		J: [[0,20], [20,100]] ,
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,50],	// VolumeConstraint importance per cellkind
+		V : [0,500]		// Target volume of each cellkind
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+		// Cells on the grid
+		NRCELLS : [1],		// Number of cells to seed for all
+					// non-background cellkinds.
+		RUNTIME : 500,                // Only used in node
+		CANVASCOLOR : "eaecef",
+		zoom : 4		// zoom in on canvas with this factor.
+	}
+}</code>
+</code></pre>
+
+<h3 id="step-2--create-a-simulation-object">Step 2: Create a simulation object</h3>
+
+<p>Once we have the configuration object, we can use it to construct a simulation.</p>
+
+<h4>In Node.js</h4>
+In Node.js, simply construct the simulation as follows:
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim = new CPM.Simulation( config )</code>
+</code></pre>
+
+<h4>In HTML</h4>
+
+<p>If you are writing an HTML page, you have to define an <code>initialize()</code> function &mdash;
+as this is the function that will be run when the page is loaded (see 
+<a href="htmlTemplate.html#step-4-write-the-body">this section</a>):</p>
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let sim
+function initialize(){
+    sim = new CPM.Simulation( config )
+}</code>
+</code></pre>
+
+
+<h3 id="step-3-tell-the-simulation-to-run">Step 3 : Tell the simulation to run</h3>
+
+<p>We are now almost ready; the only thing still missing is a command in the script
+that tells the simulation to start running. This works slightly differently in
+the browser- and Node.js versions.</p>
+
+<h4>In Node.js</h4>
+
+<p>In Node.js, getting the simulation to run is easy: just call the <code>run()</code> method
+of the simulation class after creating the simulation object. We get:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+    ...
+}
+let sim = new CPM.Simulation( config )
+sim.run()</code>
+</code></pre>
+
+<p>You are now ready to run your simulation. From your console, run the script with
+<code>node</code>:</p>
+
+<pre><code class="console-code"><code>node path/to/MyFirstSimulation.js</code>
+</code></pre>
+
+<h4>In HTML</h4>
+
+<p>In HTML, we create a function that runs a single step, and then make sure that
+this function is called from the <code>initialize()</code> function:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+    ...
+}
+let sim
+function initialize(){
+    sim = new CPM.Simulation( config )
+    step()
+}
+function step(){
+    sim.step()
+    requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+<p>To see your simulation, open your file MyFirstSimulation.html in the web 
+browser (any except Internet Explorer; but we recommend Chrome because it is fast).</p>

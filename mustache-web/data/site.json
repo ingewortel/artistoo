@@ -1,0 +1,273 @@
+{
+	"title": "Home | Artistoo",
+	"examples":[
+		{
+			"section":"CPM examples",
+			"secid": "cpm-examples",
+			"desc": "Various processes simulated in a Cellular Potts Model (CPM). Mix and match elements from the examples to build your own simulations. Click to view.",
+			"subs": [
+				{
+					"head":"CPM: Back to Basic",
+					"desc":"Simple processes to get you started.",
+					"items": [
+						{
+							"name": "Inspiring Magnets",
+							"image": "./image/examples/IsingModel.gif",
+							"link": "./examples/IsingModel.html",
+							"desc": "This model of self-organising spins inspired the CPM.",
+							"learn": [ "basics", "initialisation" ]
+						},
+						{
+							"name": "Staying Single",
+							"image": "./image/examples/SingleCell.gif",
+							"link": "./examples/IsingModel.html",
+							"desc": "A simple CPM cell with only adhesion/volume constraints.",
+							"learn": [ "basics" ]
+						},
+						{
+							"name": "Just Keep Swimming",
+							"image": "./image/examples/RandomWalk.gif",
+							"link": "./examples/RandomWalk.html",
+							"desc": "A \"cell\" with modified volume constraint does a random walk.",
+							"learn": [ "basics", "adding constraints" ]
+						},
+						{
+							"name": "Back To The Classics",
+							"image": "./image/examples/cellsorting.gif",
+							"link": "./examples/CellSorting.html",
+							"desc": "The first CPM: cells sorting through differential adhesion.",
+							"learn": [ "basics", "initialisation", "multiple celltypes" ]
+						},
+						{
+							"name": "Let It Grow",
+							"image": "./image/examples/celldivision.gif",
+							"link": "./examples/CellDivision.html",
+							"desc": "A growing mass of proliferating cells.",
+							"learn": [ "basics", "additional processes", "cell division" ]
+						},
+						{
+							"name": "Diffuse And Conquer",
+							"image": "./image/examples/Diffusion.gif",
+							"link": "./examples/Diffusion.html",
+							"desc": "A discrete approximation of Diffusion. ",
+							"learn": [ "simulating diffusion" ]
+						}
+					]
+				},
+				{
+					"head":"CPM: Models of Motion",
+					"desc":"Add migration, environmental structures, and custom visualisations.",
+					"items": [
+						{
+							"name": "Distrac(k)ted",
+							"image": "./image/examples/ManyCellsPrefDir.gif",
+							"link": "./examples/ManyCellsPrefDir.html",
+							"desc": "Cells aligning their preferred directions.",
+							"learn": [ "adding constraints", "multiple celltypes", "custom visualisation" ]
+						},
+						{
+							"name": "Dora the Explorer",
+							"image": "./image/examples/actmodel.gif",
+							"link": "./examples/ActModel.html",
+							"desc": "A cell migrating actively by forming membrane protrusions.",
+							"learn": [ "basics" ]
+						},
+						{
+							"name": "One-Lane Traffic",
+							"image": "./image/examples/microchannel.gif",
+							"link": "./examples/Microchannel.html",
+							"desc": "A migrating cell confined in a microchannel.",
+							"learn": [ "initialisation", "environmental structures" ]
+						},
+						{
+							"name": "Swirl",
+							"image": "./image/examples/ActOnMicroPattern.gif",
+							"link": "./examples/ActOnMicroPattern.html",
+							"desc": "Two cells rotating on a micropatterned surface.",
+							"learn": [ "adding constraints", "initialisation","environmental structures" ]
+						}
+					]
+				},
+				{
+					"head":"CPM: Directing Directions",
+					"desc":"Attract cells in (changing) directions, or simulate chemotaxis in presence of a diffusing chemokine.",
+					"items": [
+						{
+							"name": "A Choreographed Dance",
+							"image": "./image/examples/DirectedMotionLinear.gif",
+							"link": "./examples/DirectedMotionLinear.html",
+							"desc": "Cells move in a global direction that changes over time.",
+							"learn": [ "adding constraints", "multiple celltypes", "additional processes" ]
+						},
+						{
+							"name": "Attraction At First Sight",
+							"image": "./image/examples/DirectedMotionTargetPoint.gif",
+							"link": "./examples/DirectedMotionTargetPoint.html",
+							"desc": "Cells move towards a specified target point.",
+							"learn": [ "adding constraints", "initialisation" ]
+						},
+						
+						{
+							"name": "Bull's Eye",
+							"image": "./image/examples/chemotaxis.gif",
+							"link": "./examples/Chemotaxis.html",
+							"desc": "Cells moving up a chemokine gradient.",
+							"learn": [ "simulating diffusion", "initialisation","chemotaxis","communicating grids" ]
+						},
+						{
+							"name": "Catch Me If You Can!",
+							"image": "./image/examples/ManyCellsDiffusion.gif",
+							"link": "./examples/ManyCellsDiffusion.html",
+							"desc": "Cells attracting other cells through specific chemokines.",
+							"learn": [ "simulating diffusion", "chemotaxis","communicating grids", "multiple celltypes" ]
+						}
+					]
+				},
+				{
+					"head":"CPM: Towards Tissues",
+					"desc":"Build densely packed tissues of interacting cells.",
+					"items": [
+						{
+							"name": "Holding Tight",
+							"image": "./image/examples/Epidermis.gif",
+							"link": "./examples/Epidermis.html",
+							"desc": "A tightly packed layer of epidermal cells.",
+							"learn": [ "initialisation" ]
+						},
+						{
+							"name": "I'm Just Browsing",
+							"image": "./image/examples/EpidermisWithTCells.gif",
+							"link": "./examples/EpidermisWithTCells.html",
+							"desc": "T Cells patrolling in the epidermis.",
+							"learn": [ "initialisation", "multiple celltypes" ]
+						},
+						{
+							"name": "Licence To Kill?",
+							"image": "./image/examples/CancerInvasion.gif",
+							"link": "./examples/CancerInvasion.html",
+							"desc": "Immune cells invading (but not killing) a growing tumour.",
+							"learn": [ "initialisation", "multiple celltypes", "adding constraints" ]
+						}
+					]
+				}									
+			]
+		},
+		{
+			"section":"CA examples",
+			"secid": "ca-examples",
+			"desc": "Cellular Automata (CA) models are a slightly simpler class of grid-based models. Since a grid is implemented in Artistoo anyway, you can also use the framework to build CAs. Here are some examples.",
+			"subs": [
+				{
+					"head":"",
+					"desc":"",
+					"items": [
+						{
+							"name": "The Prequel",
+							"image": "./image/examples/GameOfLife.gif",
+							"link": "./examples/GameOfLife.html",
+							"desc": "Before Game of Thrones, there was Conway's Game of Life.",
+							"learn": [ "CA", "update rule" ]
+						},
+						{
+							"name": "Going Viral",
+							"image": "./image/examples/SIR.gif",
+							"link": "./examples/SIR.html",
+							"desc": "The SIR model of a spreading infection. ",
+							"learn": [ "CA", "update rule", "stochastic" ]
+						},
+						{
+							"name": "Crystal Clear",
+							"image": "./image/examples/DiffusionLimitedAggregation.gif",
+							"link": "./examples/DiffusionLimitedAggregation.html",
+							"desc": "A crystal growing through diffusion-limited aggregation.",
+							"learn": [ "CA", "update rule", "communicating grids" ]
+						}
+					]
+				}
+			]
+		},
+		{
+			"section":"Interactive examples",
+			"secid" : "interactive",
+			"desc": "Learn how to make your simulations interactive? Look at these examples for inspiration.",
+			"subs": [
+				{
+					"head":"",
+					"desc":"",
+					"items": [
+						{
+							"name": "Click Flick",
+							"image": "./image/examples/SIR.gif",
+							"link": "./examples/SIR.html",
+							"desc": "Stop and restart this simulation via a simple mouse click.",
+							"learn": [ "mouse click" ]
+						},
+						{
+							"name": "Playground Slide",
+							"image": "./image/examples/actmodel.gif",
+							"link": "./examples/ActModelInteractive.html",
+							"desc": "Control this migrating cell's parameters via input sliders.",
+							"learn": [ "parameter sliders" ]
+						},
+						{
+							"name": "Control Room",
+							"image": "./image/examples/CollectiveMigration.gif",
+							"link": "./examples/CollectiveMigration.html",
+							"desc": "Control many different parameters via input fields.",
+							"learn": [ "parameter input fields" ]
+						}
+					]
+				}
+			]
+		},
+		{
+			"section":"3D examples",
+			"secid" : "threedim",
+			"desc": "Be warned: things become difficult once you go 3D. But to get you started, have a look at the example code in the <code>examples/3D/</code> folder.",
+			"subs": [
+				{
+					"head":"",
+					"desc":"",
+					"items": [
+						{
+							"name": "More Dimensions For Dora To Explore!",
+							"image": "./image/examples/3D.png",
+							"link": "./examples/cpm3d.html",
+							"desc": "An example of a 3D CPM.",
+							"learn": [ "3D", "3D viz" ]
+						}
+					]
+				}
+			]
+		}
+	],
+	
+
+
+
+		
+	"manual":[
+		{
+			"title":"Artistoo User Manual",
+			"tag":"index"
+		},
+		{
+			"title":"Getting Started",
+			"tag":"getting-started"
+		},
+		{
+			"title":"Your First Simulation",
+			"tag":"your-first-simulation"
+		},
+		{
+			"title":"An HTML Template",
+			"tag": "htmlTemplate"
+		},
+		{
+			"title": "Configuring Simulations (1)",
+			"tag": "simulationConfig"
+		}
+	]
+}
+
+	

@@ -1,0 +1,85 @@
+<h2 id="set-up-artistoo-in-3-easy-steps">Set up Artistoo in 3 easy steps</h2>
+
+<h3 id="step-1-download-the-repository">Step 1: download the repository</h3>
+
+<h4>Via the Github website</h4>
+
+<p>Visit the <a href="https://github.com/ingewortel/artistoo">Github repository</a> and click on the
+green "clone or download" button, then select "Download ZIP":</p>
+
+<div class="screen-shot-container">
+<img class="screen-shot" src="./asset/github-repo2.png" width="80%">
+</div>
+
+<p>Save the zipped folder somewhere on your computer and unzip.</p>
+
+<h4>Via the command line</h4>
+
+<p>Alternatively, in the console, go to the folder where you want to save Artistoo,
+and clone the repository:</p>
+
+<pre><code class="console-code"><code>cd folder/to/save-into/
+git clone https://github.com/ingewortel/artistoo.git</code>
+</code></pre>
+
+<h3 id="step-2-install-node-dependencies">Step 2: install node dependencies</h3>
+
+<p>Most users will run Artistoo in browser simulations only and will not need to
+extend the software with custom modules. If that's you, you can skip this step.
+But if you plan to use Artistoo from the command line using node, or if you plan
+to write your own modules (such as hamiltonian terms), you will need to install
+some node dependencies.</p>
+
+<p>To do this, go to the <code>artistoo/</code> folder from the command line and install the
+required packages automatically using <code>npm</code>:</p>
+
+<pre><code class="console-code"><code>cd folder/containing/artistoo
+npm install</code>
+</code></pre>
+
+<p>If you do not have <i>Node.js</i> and its package manager <i>npm</i>, see
+<a href="https://nodejs.org/en/download/">this page</a> to install them first.</p>
+
+<h3 id="step-3-link-the-build-in-your-code">Step 3: link the build in your code</h3>
+
+<p>You can now use Artistoo! See this <a href="./your-first-simulation.html">tutorial</a> to build your first
+simulation, or start from one of the simulations in the <code>artistoo/examples/</code>
+folder. In these examples, you will see that the package can be loaded as
+follows:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src="path/to/artistoo/build/artistoo.js"&gt;&lt;/script&gt;</code>
+</code></pre>
+
+<p>for html, and</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">let CPM = require("path/to/artistoo/build/artistoo-cjs.js")</code>
+</code></pre>
+
+<p>for node scripts.</p>
+
+<p>When you include these lines in your own scripts, just make sure they contain
+the correct path from your simulation file to the <code>artistoo/build/</code> folder.</p>
+
+<h2 id="additional-notes">Additional notes</h2>
+
+<p>If you wish to build simulations in a different directory than the <code>artistoo</code>
+folder, it may be convenient to create a symbolic link to the <code>build</code> folder
+there:</p>
+
+<pre><code class="console-code"><code>cd path/to/my/simulations
+ln -s path/to/artistoo/build build</code>
+</code></pre>
+
+<p>You can then access the code using:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src="path/to/my/simulations/build/artistoo.js"&gt;&lt;/script&gt;</code>
+</code></pre>
+<p>or</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let CPM = require("path/to/my/simulations/build/artistoo-cjs.js")</code>
+</code></pre>
+
+<p>Finally, if you want to run Artistoo simulations with nodejs from this folder,
+you will need to create a link to the installed <code>node_modules</code> from step 2:</p>
+
+<pre><code class="console-code"><code>cd path/to/my/simulations
+ln -s path/to/artistoo/node_modules node_modules</code>
+</code></pre>

@@ -5,6 +5,13 @@
   var result = document.querySelector('.search-result');
   var selectedIndex = -1;
   var prevText;
+  
+  window.esdocSearchIndex.push( [
+    "example actmodel ActivityConstraint",
+    "examples/ActivityConstraint.html",
+    "<span>ActModel</span> <span class=\"search-result-import-path\">Artistoo/examples/html/ActModel.html</span>",
+    "examples"
+  ])
 
   // active search box and focus when mouse enter on search box.
   searchBox.addEventListener('mouseenter', function(){
@@ -24,7 +31,7 @@
     if (text === prevText) return;
     prevText = text;
 
-    var html = {class: [], method: [], member: [], function: [], variable: [], typedef: [], external: [], file: [], test: [], testFile: []};
+    var html = {class: [], method: [], member: [], function: [], variable: [], typedef: [], external: [], file: [], test: [], testFile: [], examples: []};
     var len = searchIndex.length;
     var kind;
     for (var i = 0; i < len; i++) {

@@ -25,8 +25,7 @@ app/index.js : app/automatic-index.bash app/include-list.txt
 docs/index.html : build/artistoo.js README.md spec $(shell find manual -type f) 
 	@echo  '...Writing documentation with ESDOC, please wait...' &&\
 	cp build/artistoo.js manual/asset/ &&\
-	node_modules/.bin/esdoc > docs/log.txt && bash misc/fix-docs.bash &&\
-	cp misc/index2.html docs/index.html
+	node_modules/.bin/esdoc > docs/log.txt 
 
 docs-examples : examples/html | docs/examples
 	@cp $</* docs/examples/ && \

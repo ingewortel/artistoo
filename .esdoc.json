@@ -11,20 +11,6 @@
           "includes": ["(spec|Spec|test|Test)\\.js$"],
           "excludes": ["\\.config\\.js$"]
         },
-        "manual": {
-          "index": "./manual/index.md",
-          "asset": "./manual/asset",
-          "files": [
-            "./manual/installation.md",
-            "./manual/quickstart.md",
-            "./manual/htmlTemplate.md",
-            "./manual/simulationConfig.html",
-            "./manual/addConstraints.html",
-            "./manual/simulationConfig2.html",
-            "./manual/sharingSimulations.html",
-            "./manual/custommodules.html"
-          ]
-        },
         "brand": {
           "repository": "https://github.com/ingewortel/artistoo"
         }
@@ -33,7 +19,7 @@
     {
     	"name": "esdoc-publish-html-plugin",
     	"option": {
-    		"template" : "mytemplate"
+    		"template" : "esdoc-template-artistoo"
     	}
     }]
 }
