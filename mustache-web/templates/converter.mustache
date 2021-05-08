@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>{{title}}</title>
+    {{>head}}
+    
+    
+    <script>
+		function setConverter( conv ){
+			switch(conv){
+				case "a2m":
+					document.getElementById('converter').src = './converter/artistoo2morpheus.html'
+					break
+				case "m2a":
+					document.getElementById('converter').src = './converter/morpheus2artistoo.html'
+					break
+			}
+		}
+	</script>
+    
+    
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+{{>nav}}  
+
+
+<!-- TITLE AND TOP IMAGE -->
+<div class="mainimg" >
+	<div class="mainimg-text">
+	<h1>
+	  Converter
+	</h1>
+	<h2>
+	 Convert models between Artistoo and other frameworks (prototype)
+	</h2>        
+  </div>
+</div>
+
+
+
+
+<div class="index-content">
+<div class="front-page">
+
+	<p>
+		Pick a conversion direction from the drop-down menu (note: this is a prototype;
+		at the moment only conversions to and from Morpheus are supported).
+	</p>
+	
+	<p> 
+		<label for="converterSelector">Choose a conversion direction:</label>
+
+		<select name="converterSelector" id="converterSelector" onchange="setConverter(this.value)">
+			<option value="empty">...Choose option</option>
+		  <option value="a2m" >Artistoo -> Morpheus</option>
+		  <option value="m2a" >Morpheus -> Artistoo</option>
+		</select>
+		
+	</p>
+
+	<iframe id = "converter" style="height:1500px;width:100%;border:none;overflow:hidden;"></iframe>
+
+
+</div>
+</div>
+
+
+
+{{>footer}}
+
+
+</body>
+</html>
