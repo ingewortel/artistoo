@@ -5,14 +5,11 @@
 	<title>{{title}}</title>
     {{>head}}
     
+    <script type="text/javascript" src="../script/jquery.touchSwipe.min.js"></script>
     <style>
 
 		.wrapper {
 			width: 98vw;
-			/*max-width:100%;
-			margin: 0px;*/
-			/*position:fixed;
-			left: 10px;*/
 		}
 		
 		#sidebar {
@@ -32,11 +29,7 @@
 			overflow-y: auto;
 			overflow-x: visible;
 		}
-		
-		#sidebar.active {
-			margin-left: -230px;
-		}
-		
+
 		#content{
 			margin-left: 250px;
 			padding-left: 20px;
@@ -45,7 +38,12 @@
 			margin-top:60px;
 		}
 		
-		#content.active {
+		/* closed state: shift to the left*/
+		#sidebar.closed {
+			margin-left: -230px;
+		}
+		
+		#content.closed {
 			margin-left: 20px;
 		}
 		
@@ -54,9 +52,10 @@
 			top:80px; 
 			left:255px;
 			transition: all 0.3s;
+			z-index:1100;
 		}
 		
-		#sidebarToggle.active{
+		#sidebarToggle.closed{
 			left: 25px;
 		}
 		
@@ -73,7 +72,7 @@
 		}
 		
 		
-		@media (max-width: 768px) {
+		/*@media (max-width: 768px) {
 			#sidebar {
 				margin-left: -230px;
 			}
@@ -92,7 +91,7 @@
 			#sidebarToggle.active{
 				left: 255px;
 			}
-		}
+		}*/
 		
 		#content h1 {
 			font-size:250%;
@@ -124,6 +123,15 @@
 		
 		#content .screen-shot {
 			min-width:600px;
+		}
+		
+		.swipe-area {
+			position: fixed;
+			width: 50px;
+			left: 0;
+			top: 0;
+			height: 100%;
+			z-index: 1000;
 		}
 		
 		.important-note {
@@ -213,46 +221,89 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
     	
-    	let currentScreen = "wide";
-     	$(window).resize(setButtonIcon)
+    	// breakpoint for whether sidebar should default to open or closed:
+    	const sidebarBreakPoint = '(max-width: 768px)'
     	
-    	function setButtonIcon(){
+    	// This variable will store whether the current screen is 'wide' (sidebar 
+    	// default open) or 'small' (sidebar default closed)
+    	let currentScreen = "wide";
+    	
+    	// Functions to close/open the sidebar used below:
+    	function closeSidebar(){
+			$('#sidebar').addClass('closed');
+			$('#content').addClass('closed');
+			$('#sidebarToggle').addClass('closed');
+			$('#sideButtonIcon').removeClass('fa-chevron-left')
+			$('#sideButtonIcon').addClass('fa-chevron-right')
+		}
+		
+		function openSidebar(){
+			$('#sidebar').removeClass('closed');
+			$('#content').removeClass('closed');
+			$('#sidebarToggle').removeClass('closed');
+			$('#sideButtonIcon').addClass('fa-chevron-left')
+			$('#sideButtonIcon').removeClass('fa-chevron-right')	
+		}
+    	
+    	
+    	
+    	// On resize, check if the screen has changed from wide <-> small and the sidebar
+    	// should change:
+     	$(window).resize(function (){
     	
     		// small screens: "active" when menu open (so active: chevron-left to close)
-    		if (window.matchMedia('(max-width: 768px)').matches)
+    		if (window.matchMedia(sidebarBreakPoint).matches)
 			{
 				if( currentScreen !== "small" ){
-					$('#sideButtonIcon').toggleClass('fa-chevron-left fa-chevron-right')
+					closeSidebar()
 					currentScreen = "small"
 				}
 			} else {
 				if( currentScreen !== "wide" ){
-					$('#sideButtonIcon').toggleClass('fa-chevron-left fa-chevron-right')
+					openSidebar()
 					currentScreen = "wide"
 				}
-			
 			}
-			
-			
-    	}
+    	});
     	
     	
     	$(document).ready(function () {
     	
-    		if (window.matchMedia('(max-width: 768px)').matches)
+    		// on load of the document, if small screen, close the sidebar.
+    		if (window.matchMedia(sidebarBreakPoint).matches)
 			{
-				$('#sideButtonIcon').toggleClass('fa-chevron-left fa-chevron-right')
+				closeSidebar()
 				currentScreen = "small"; 
-				
 			} 
 			
+			// listener for clicking the button
  			$('#sidebarToggle').on('click', function () {
-				$('#sidebar').toggleClass('active');
-				$('#content').toggleClass('active');
-				$('#sidebarToggle').toggleClass('active');
+				$('#sidebar').toggleClass('closed');
+				$('#content').toggleClass('closed');
+				$('#sidebarToggle').toggleClass('closed');
 				$('#sideButtonIcon').toggleClass('fa-chevron-left fa-chevron-right')
 			});
 		});
+		
+		// On the div with class swipe-area (see below), swiping can open/close the bar.
+		$(function() {      
+		  $(".swipe-area").swipe({
+			swipeStatus:function(event, phase, direction, distance, duration, fingers)
+				{
+					if (phase=="move" && direction =="right" ) {
+						openSidebar()
+						return false;
+					}
+					if (phase=="move" && direction =="left" ) {
+						closeSidebar()
+						return false;
+					}
+				}
+			});
+		});
+		
+		
+
     </script>
 </head>
 
@@ -294,6 +345,7 @@
 		
 		<!-- Page Content -->
 		<div id="content">
+			
 			<button type="button" id="sidebarToggle"  class="btn btn-side-toggle">
 				<span id="sideButtonIcon" class="fa fa-chevron-left"></span></button>
 			
@@ -312,7 +364,7 @@
 				
 {{>manual}}
 			</div>
-			
+			<div class="swipe-area"></div>
 		</div>
 	</div>
 
