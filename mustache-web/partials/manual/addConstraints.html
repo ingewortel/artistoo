@@ -1,0 +1,222 @@
+
+<p>
+One of the strengths of the CPM is that it can incorporate different processes of interest
+as separate "rules" given to the model. These rules can be mixed and matched to get a
+simulation of interest, making the CPM a very flexible framework. Artistoo implements
+a diverse set of model rules, called <a href="../identifiers.html#hamiltonian">Constraints</a>.
+This tutorial will walk you through how to use these constraints in your models.
+</p>
+
+
+<h2 id="constraint-types">Soft versus hard constraints</h2>
+
+<p>In Artistoo, we distinguish two types of constraints: <a href="#hard-constraints">"hard"
+</a> and <a href="#soft-constraints">"soft"</a> constraints.</p>
+
+
+<h3 id="soft-constraints">Soft constraints</h3>
+
+<p>"Soft" constraints are the classical CPM energy rules. They are the terms of the
+model's Hamiltonian, or energy equation. When a copy attempt would break such a rule,
+this becomes visible as an energetic penalty making that copy attempt <i>less likely</i>.
+But a soft constraint is more a guideline than an actual rule; the model will <i>mostly</i>
+adhere to it, but not always.</p>
+
+<p>For example, suppose we have a cell with a <a href="../class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">volume constraint</a>, and that
+cell is already larger than its target volume. A copy attempt that would add another pixel
+to that cell would be associated with a $&Delta;H_\text{vol} \gt 0$. However, that 
+does <i>not</i> mean that this copy attempt will always fail to go through. First, it may
+be that there are other constraints acting on the model for which this copy attempt <i>is</i>
+favourable, compensating for the volume penalty such that the <i>global</i> $&Delta;H$
+is still negative. Second, even if the global $&Delta;H$ is positive, a copy attempt may
+still be accepted with a chance $e^{-&Delta;H T}$. Thus, soft constraints make some changes
+more likely to happen than others, but they can balance each other out and are not always
+listened to.</p>
+
+<p>Most CPM constraints are soft constraints. But sometimes, there are things we would 
+like to <i>forbid</i> completely. For that, we can use a hard constraint.</p>
+
+
+<h3 id="hard-constraints">Hard constraints</h3>
+
+<p>Whereas soft constraints are more guidelines than rules, "hard" constraints are set
+in stone. Before the $&Delta;H$ of a copy attempt is even computed, Artistoo checks whether
+it violates one of the hard constraints. If it does, it won't go through &mdash; ever.</p>
+
+<p>Not many constraints are hard constraints, and in a typical CPM, you should be careful
+using them. But examples are the <a href="../class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">
+HardVolumeRangeConstraint</a>, the <a href="../class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a>, and the hard 
+<a href="../class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">
+ConnectivityConstraint</a>. See also this example of a 'particle' following a random walk,
+where we constrained the volume such that the cell can only be one or two pixels big:</p>
+
+<div>
+<iframe src="../examples/RandomWalk.html" width="100%" height="600px"> </iframe>
+</div>
+
+
+
+<h2 id="adding-constraints">Adding a constraint to a model</h2>
+
+<p>There are two ways of adding a constraint to your model, which we will explain here.</p>
+
+<h3 id="method-1-conf">Method 1: via the conf object</h3>
+
+<p> The first method is to add the relevant constraint parameters to the <code>conf</code>
+object. This is the easiest method to add a constraint, but it only works for a few of the 
+most used constraints (see <a href="../variable/index.html#static-variable-AutoAdderConfig"
+>this page</a> for a list of the constraints for which this works). </p>
+
+
+<p>For example: </p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let myCPM = new CPM.CPM(
+	[ 200, 200 ],
+	{
+		T : 20,
+		J : [[0,20],[20,0]],
+		V : [0,500],
+		LAMBDA_V: [ 0, 50]
+	}
+
+)</code></code></pre>
+
+<p>will automatically create a CPM with an adhesion and a volume constraint inside it.
+If we open the browser console from a page with an Artistoo simulation in it, e.g. 
+<a href="../examples/ActModel.html">this one</a>, we can check this. Go to the page, 
+right click anywhere on the page outside of the grid, select "inspect" and then "console". 
+Copy-paste the above code in the 
+console and hit enter. If you now type: </p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">myCPM.soft_constraints</code></code></pre>
+
+<p>and hit enter, you should see that there are two soft constraints in the model now:
+an <code>Adhesion</code> and a <code>VolumeConstraint</code>.</p>
+
+<p>This works the same if we use the 
+<a href="../class/src/simulation/Simulation.js~Simulation.html"><code>Simulation</code> class</a>,
+because the <code>config.conf</code> is passed along internally to the CPM constructor.
+So if we type:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let mySim = new CPM.Simulation(
+	{
+		field_size : [200,200],
+		conf : {
+			T : 20,
+			J : [[0,20],[20,0]],
+			V : [0,500],
+			LAMBDA_V: [ 0, 50]		
+		},
+		simsettings : {
+			NRCELLS : [1]
+		}
+	}
+
+)
+mySim.C.soft_constraints</code></code></pre>
+
+<p>we again see our two constraints appear.</p>
+
+
+<h3 id="method-2-add">Method 2: via the add() method</h3>
+
+<p>Note that, as mentioned, the first method does not work for all constraints. If we try to add
+an <a href="../class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">
+<code>AttractionPointConstraint</code></a> (another soft constraint) in this way:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let myCPM = new CPM.CPM(
+	[ 200, 200 ],
+	{
+		T : 20,
+		J : [[0,20],[20,0]],
+		V : [0,500],
+		LAMBDA_V: [ 0, 50],
+		LAMBDA_ATTRACTIONPOINT : [0,100],
+		ATTRACTIONPOINT: [[0,0],[100,100]]
+	}
+
+)</code></code></pre>
+
+
+<p>then if we type:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">myCPM.soft_constraints</code></code></pre>
+
+<p>we still only have our <code>Adhesion</code> and a <code>VolumeConstraint</code>.
+The <code>AttractionPointConstraint</code>has not been added.</p>
+
+<p>To add this constraint, we must use the <a href="../class/src/models/CPM.js~CPM.html#instance-method-add">
+<code>add()</code> method</a> of the CPM class. If we have already put the relevant parameters
+in the <code>conf</code> object, this is easy:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">//add constraint
+myCPM.add( new CPM.AttractionPointConstraint( myCPM.conf ) )
+myCPM.soft_constraints</code></code></pre>
+
+<p>you should now see an <code>AttractionPointConstraint</code> in the list of 
+soft constraints. We've given the entire <code>conf</code> object of the CPM to the
+constraint's constructor, but it will just ignore the parameters that are not relevant
+to this constraint. However, we can also just give it it's own <code>conf</code> object.
+For example, we might add a second attraction point like this:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">//add another constraint
+myCPM.add( new CPM.AttractionPointConstraint( {
+		LAMBDA_ATTRACTIONPOINT : [0,100],
+		ATTRACTIONPOINT: [[0,0],[150,150]]	
+} ) )
+myCPM.soft_constraints</code></code></pre>
+
+<p>You should now see two attraction point constraints in your list.</p>
+
+<p>A word of warning: when you add a new constraint, the model will use it. It won't check
+if another constraint of the same type was already present. For the example above, that's
+perfectly fine because we might <i>want</i> to have two different points of attraction.
+However, for other constraints such as the 
+<a href="../class/src/hamiltonian/Adhesion.js~Adhesion.html"><code>Adhesion</code></a>,
+this might not be what you want (basically, this will be the same as having only one
+adhesion constraint where the parameters are twice as large. But someone checking your 
+code may overlook your second adhesion constraint and think that the adhesion parameters 
+are set lower than they actually are...).</p>
+
+
+<h2 id="accessing-constraints">Accessing a constraint in your model</h2>
+
+<p>Once you've put a constraint in your model, you may want to access it from outside.
+The method <a href="../class/src/models/CPM.js~CPM.html#instance-method-getConstraint"><code>getConstraint()</code></a> allows you to do that. For
+example:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">//get volumeconstraint
+myCPM.getConstraint( "VolumeConstraint" )</code></code></pre>
+
+<p>will return the <code>VolumeConstraint</code> that is currently in your model.</p>
+
+<p>If there are multiple constraints of the same name in your model, this method
+automatically gives you the first one:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">//get the first attraction point constraint
+myCPM.getConstraint( "AttractionPointConstraint" )</code></code></pre>
+
+<p>This yields the first attraction point we added (from the browser console, you can 
+click the little triangle on the left to see more about the object. If you look at its
+<code>conf</code> object, you see that this is the settings we gave to our first 
+attraction point constraint).</p>
+
+<p>If we want to access the second attraction point, we can type:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">//get the second attraction point constraint
+myCPM.getConstraint( "AttractionPointConstraint", 1 )</code></code></pre>
+
+<p><i>(Note here that JavaScript uses zero-based indexing, so an element with number
+<code>1</code> is actually the second element)</i></p>
+
+
+
+<h2 id="implementation-details">Implementation details</h2>
+<p>Constraints in Artistoo are implemented as separate classes, of which an instance
+can be added to a <a href="../class/src/models/CPM.js~CPM.html">CPM model</a> 
+(See <a href="#adding-constraints">above</a> for an explanation how). The base
+<a href="../class/src/hamiltonian/Constraint.js~Constraint.html"><code>Constraint</code></a>
+class underlies all of them, and has two subclasses:  <a href="../class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html"><code>SoftConstraint</code></a> and
+<a href="../class/src/hamiltonian/HardConstraint.js~HardConstraint.html"><code>HardConstraint</code></a>.
+These are never used by themselves, but can be extended to create a constraint
+(see also <a href="./custommodules.html">this tutorial</a> to see how to develop custom modules).
+</p>

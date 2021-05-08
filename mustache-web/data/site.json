@@ -241,10 +241,6 @@
 			]
 		}
 	],
-	
-
-
-
 		
 	"manual":[
 		{
@@ -266,6 +262,10 @@
 		{
 			"title": "Configuring Simulations (1)",
 			"tag": "simulationConfig"
+		},
+		{
+			"title": "Adding CPM Constraints",
+			"tag": "addConstraints"
 		}
 	]
 }
