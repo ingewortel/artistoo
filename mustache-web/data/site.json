@@ -20,7 +20,7 @@
 						{
 							"name": "Staying Single",
 							"image": "./image/examples/SingleCell.gif",
-							"link": "./examples/IsingModel.html",
+							"link": "./examples/SingleCell.html",
 							"desc": "A simple CPM cell with only adhesion/volume constraints.",
 							"learn": [ "basics" ]
 						},
