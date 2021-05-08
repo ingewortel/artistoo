@@ -121,7 +121,7 @@ function mainNav(){
 /* ================				RENDERING 				===================== */
 
 // Step 1) Render the index.html page and the examples.html page.
-for( let p of ["index","examples","layout"] ){
+for( let p of ["index","examples","layout","converter"] ){
 	renderPage( p, view )
 }
 

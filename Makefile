@@ -24,22 +24,11 @@ app/index.js : app/automatic-index.bash app/include-list.txt
 
 docs/index.html : build/artistoo.js README.md spec $(shell find manual -type f) 
 	@echo  '...Writing documentation with ESDOC, please wait...' &&\
+	mkdir -p docs && \
 	cp build/artistoo.js manual/asset/ &&\
 	node_modules/.bin/esdoc > docs/log.txt 
 
-docs-examples : examples/html | docs/examples
-	@cp $</* docs/examples/ && \
-	cp examples/3D/cpm3d.html docs/examples/ && \
-	cp examples/3D/Canvas3D.js docs/examples/ && \
-	cp examples/3D/OrbitControls.js docs/examples/
-	
-docs/converter.html : misc/converter.html
-	cp $< $@ && cp -r converter-page docs/converter
-	
-docs/examples :
-	@mkdir -p $@
-
-docs : docs/index.html docs-examples docs/converter.html
+docs : docs/index.html
 
 #cat $< | sed 's:./examples:../examples:g' | sed 's:./docs:../docs:g' > docs/index2.html && \
 #mv docs/index2.html docs/index.html
