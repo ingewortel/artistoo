@@ -46,6 +46,11 @@ wish to do:
 			(the 'tag' must correspond to the name of the file in the partials.)
 		4.	Run make to build the site; this will automatically construct the manual
 			sidenav.
+			
+	* Update documentation of a class or method:
+	
+		1.	Adjust the doc block in the source code (under src/);
+		2.	Run make to build the site.
 	
 	* Adjust CSS styling:
 
