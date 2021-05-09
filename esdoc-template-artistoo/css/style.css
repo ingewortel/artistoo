@@ -271,11 +271,10 @@ pre.source-code.line-number li.error-line {
 .navigation {
   position: fixed;
   top: 78px;
-  height: calc(100% - 78px); /*subtract topnav*/
+  height: calc(100% - 78px); /*subtract topnav https://stackoverflow.com/questions/2434602/setting-width-height-as-percentage-minus-pixels*/
   left: 0;
   box-sizing: border-box;
   z-index:1000;
-  /*width: 250px;*/
   width: 250px;
   padding-top: 15px;
   padding-left: 15px;
@@ -283,7 +282,6 @@ pre.source-code.line-number li.error-line {
   margin-top:0px;
   overflow-y:auto;
   overflow-x:hidden;
-  /*overflow-x: scroll;*/
   box-shadow: rgba(255, 255, 255, 1) -1px 0 0 inset;
   border-right: 1px solid #ddd;
   background: #fff;
@@ -292,7 +290,6 @@ pre.source-code.line-number li.error-line {
 .navigation .nav-classname{
 	padding-left:40px;
 	max-width:100%;
-	/*word-break:break-word;*/
 	padding-right:15px;
 	/*-ms-hyphens: auto;
   	-moz-hyphens: auto;
@@ -303,7 +300,7 @@ pre.source-code.line-number li.error-line {
 @media (max-width: 992px) {
   .navigation {
   	top: 56px;
-  	height: calc(100% - 56px); /*subtract topnav*/
+  	height: calc(100% - 56px); /*subtract topnav https://stackoverflow.com/questions/2434602/setting-width-height-as-percentage-minus-pixels*/
   }
 }
 
@@ -559,6 +556,11 @@ table.params td {
 
 table.params td p {
   margin: 0;
+}
+
+/* margin required to ensure link target does not end up under topnav*/
+.content .detail .inner-link-active {
+	margin-top:80px;
 }
 
 .content .detail > * {
