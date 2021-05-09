@@ -559,6 +559,10 @@ table.params td p {
 }
 
 /* margin required to ensure link target does not end up under topnav*/
+.content .inner-link-active {
+	margin-top:50px;
+}
+
 .content .detail .inner-link-active {
 	margin-top : 80px;
 }
