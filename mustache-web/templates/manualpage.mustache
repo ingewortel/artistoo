@@ -8,26 +8,11 @@
     <script type="text/javascript" src="../script/jquery.touchSwipe.min.js"></script>
     <style>
 
-		.wrapper {
-			width: 98vw;
-		}
 		
 		#sidebar {
-			width: 250px;
-			position: fixed;
-			padding-top: 70px;
-			padding-bottom: 2em;
-			padding-right : 0px;
+			padding: 0px;
 			margin:0px;
-			left: 0;
-			top: 0;
-			height: 100%;
-			z-index: 999;
 			transition: all 0.3s;
-			min-width: 250px;
-			max-width: 250px;
-			overflow-y: auto;
-			overflow-x: visible;
 		}
 
 		#content{
@@ -35,7 +20,6 @@
 			padding-left: 20px;
 			transition: all 0.3s;
 			min-height: 60%;
-			margin-top:60px;
 		}
 		
 		/* closed state: shift to the left*/
@@ -47,6 +31,7 @@
 			margin-left: 20px;
 		}
 		
+		/* the little gray arrow to indicate whether sidebar is open or closed. */
 		#sidebarToggle{
 			position:fixed; 
 			top:80px; 
@@ -59,7 +44,7 @@
 			left: 25px;
 		}
 		
-		a[data-toggle="collapse"] {
+		/*a[data-toggle="collapse"] {
 			position: relative;
 		}
 
@@ -69,29 +54,8 @@
 			top: 50%;
 			right: 20px;
 			transform: translateY(-50%);
-		}
-		
-		
-		/*@media (max-width: 768px) {
-			#sidebar {
-				margin-left: -230px;
-			}
-			#sidebar.active {
-				margin-left: 0;
-			}
-			#content {
-				margin-left : 20px;
-			}
-			#content.active {
-				margin-left: 250px;
-			}
-			#sidebarToggle{
-				left:25px;
-			}
-			#sidebarToggle.active{
-				left: 255px;
-			}
 		}*/
+		
 		
 		#content h1 {
 			font-size:250%;
@@ -151,7 +115,7 @@
 		}
 		
 	
-		#sidebar a, a:hover, a:focus {
+		#sidebar a, #sidebar a:hover, #sidebar a:focus {
 			/*color: inherit;*/
 			color : #eee;
 			text-decoration: none;
@@ -318,7 +282,7 @@
 
 	<div class="wrapper">
 		<!-- Sidebar -->
-		<nav id="sidebar" class="bg-dark">
+		<nav id="sidebar" class="navigation bg-dark">
 			
 			<ul class="list-unstyled components">
 				{{#sideNav}}
@@ -349,15 +313,11 @@
 			<button type="button" id="sidebarToggle"  class="btn btn-side-toggle">
 				<span id="sideButtonIcon" class="fa fa-chevron-left"></span></button>
 			
-			<div class="container-fluid">
+			<!--<div class="container-fluid">
 				
-			
-				<!--<button type="button" id="sidebarCollapse" class="btn btn-info">
-					<i class="fas fa-align-left"></i>
-					<span>Toggle Sidebar</span>
-				</button>-->
+		
 				
-			</div>
+			</div>-->
 			<div class="container-fluid">
 				<br>
 				<h1>{{title}}</h1>

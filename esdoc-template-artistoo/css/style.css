@@ -6,6 +6,7 @@
 @import url(./identifiers.css);
 @import url(./github.css);
 @import url(./search.css);
+@import url(./examples.css);
 
 * {
   margin: 0;
@@ -15,22 +16,47 @@
 
 html
 {
-  /*font-family: 'Source Sans Pro', 'Roboto', sans-serif;*/
-  font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, 
-			Arial, noto sans, sans-serif, apple color emoji, segoe ui emoji, 
-			segoe ui symbol, noto color emoji;
   overflow: auto;
-  /*font-size: 14px;*/
-  /*color: #4d4e53;*/
-  /*color: rgba(0, 0, 0, .68);*/
   color: #555;
   background-color: #fff;
 }
 
+body {
+ 	font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  	font-size:100%;
+  	padding-top: 78px; /*for the topnav bar*/
+}
+@media (max-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+.mainimg-text{
+	text-align: left; 
+	margin-left: 20px; 
+	padding: 10px; 
+	padding-top: 8em; 
+	padding-bottom:1em; 
+	color: white;
+}
+
+.btn{
+	background-color : #555;
+	border: 0px;
+}
+.btn:hover{
+	background-color: #17a2b8;
+}
+  	
+
+
 a {
-  /*color: #0095dd;*/
-  /*color:rgb(37, 138, 175);*/
-  color: #039BE5;
+  color: #17a2b8; /*#039BE5;*/
+}
+
+a:hover {
+	color:#0e6875;
 }
 
 code a:hover {
@@ -50,16 +76,20 @@ ol li {
   margin: 4px 0;
 }
 
+h1,h2,h3 {
+	font-family:'Advent Pro';
+  	font-weight:1200;
+}
+
 h1 {
   margin-bottom: 10px;
   font-size: 34px;
   font-weight: 300;
-  border-bottom: solid 1px #ddd;
+  /*border-bottom: solid 1px #ddd;*/
 }
 
 h2 {
   margin-top: 24px;
-  margin-bottom: 10px;
   font-size: 20px;
   border-bottom: solid 1px #ddd;
   font-weight: 300;
@@ -68,9 +98,17 @@ h2 {
 h3 {
   position: relative;
   font-size: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   padding: 4px;
   font-weight: 300;
+}
+
+h4 {
+	font-size:100%;
+	font-style:oblique;
+	font-weight: 500;
+	margin-top:20px;
+	margin-bottom:5px;
 }
 
 details {
@@ -88,19 +126,32 @@ p {
 
 code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  overflow: scroll!important;
+  /*padding: 0.2em 0.5em;*/
+  margin: 0;
+  font-size: 85%;
+  border-radius: 3px;
 }
 
+
 pre > code {
+padding:7px;
   display: block;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
 }
 
 pre.prettyprint, pre > code {
-  padding: 4px;
+  /*padding: 4px;*/
   margin: 1em 0;
   background-color: #f5f5f5;
   border-radius: 3px;
-  font-size:14px!important;
+  /*font-size:14px!important;*/
+}
+
+pre .console-code {
+	background-color: #292b2c;
+	color: #f5f5f5;
 }
 
 pre.prettyprint > code {
@@ -109,11 +160,7 @@ pre.prettyprint > code {
 
 p > code,
 li > code {
-  padding: 0.2em 0.5em;
-  margin: 0;
-  font-size: 85%;
-  background-color: rgba(0,0,0,0.04);
-  border-radius: 3px;
+	background-color: rgba(0,0,0,0.04);
 }
 
 .code {
@@ -127,6 +174,62 @@ li > code {
   padding: 0;
   border: none;
   background: white;
+}
+
+pre.source-code {
+  padding: 4px;
+  font-size:12px;
+}
+
+pre.raw-source-code > code {
+  padding: 0;
+  margin: 0;
+  font-size: 1em;
+  background: #fff;
+  border: solid 1px #ddd;
+  line-height: 1.5;
+}
+
+pre.raw-source-code > code > ol {
+  counter-reset:number;
+  list-style:none;
+  margin:0;
+  padding:0;
+  /*overflow: hidden;*/
+}
+
+pre.raw-source-code > code > ol li:before {
+  counter-increment: number;
+  content: counter(number);
+  display: inline-block;
+  min-width: 3em;
+  color: #aaa;
+  text-align: right;
+  padding-right: 1em;
+}
+
+pre.source-code.line-number {
+  padding: 0;
+}
+
+pre.source-code ol {
+  background: #eee;
+  padding-left: 40px;
+}
+
+pre.source-code li {
+  background: white;
+  padding-left: 4px;
+  list-style: decimal;
+  margin: 0;
+}
+
+pre.source-code.line-number li.active {
+  background: rgb(255, 255, 150) !important;
+}
+
+pre.source-code.line-number li.error-line {
+  background: #ffb8bf;
 }
 
 .layout-container {
@@ -167,21 +270,41 @@ li > code {
 
 .navigation {
   position: fixed;
-  top: 0;
+  top: 78px;
+  height: calc(100% - 78px); /*subtract topnav*/
   left: 0;
   box-sizing: border-box;
+  z-index:1000;
   /*width: 250px;*/
   width: 250px;
-  height: 100%;
-  padding-top: 90px;
-  padding-left: 10px;
-  padding-bottom: 2em;
-  padding-right:10px;
-  overflow-x: auto;
-  overflow-y: auto;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  margin-top:0px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  /*overflow-x: scroll;*/
   box-shadow: rgba(255, 255, 255, 1) -1px 0 0 inset;
   border-right: 1px solid #ddd;
   background: #fff;
+}
+
+.navigation .nav-classname{
+	padding-left:40px;
+	max-width:100%;
+	/*word-break:break-word;*/
+	padding-right:15px;
+	/*-ms-hyphens: auto;
+  	-moz-hyphens: auto;
+  	-webkit-hyphens: auto;*/
+  	hyphens: manual;
+}
+
+@media (max-width: 992px) {
+  .navigation {
+  	top: 56px;
+  	height: calc(100% - 56px); /*subtract topnav*/
+  }
 }
 
 .navigation ul {
@@ -189,15 +312,16 @@ li > code {
 }
 
 .navigation li {
-  list-style: none!important;
+  list-style: none;
   margin: 4px 0;
-  white-space: nowrap;
-  font-size:90%;
+  /*white-space: nowrap;*/
 }
 
 .navigation li a {
-  color: #666;
+  color: #fff; /*#666;*/
+  font-size:90%;
 }
+
 
 .navigation .nav-dir-path {
   display: block;
@@ -213,6 +337,7 @@ li > code {
 .kind-variable,
 .kind-external {
   margin-left: 0.75em;
+  margin-top: 3px;
   width: 1.2em;
   height: 1.2em;
   display: inline-block;
@@ -222,6 +347,21 @@ li > code {
   font-weight: bold;
   line-height: 1.2em;
 }
+
+
+/* In the navbar: absolute positioning of the icons so that the class name
+can be displayed next to it and still behaves properly at word-break in the
+class name.*/
+.navigation .kind-class,
+.navigation .kind-interface,
+.navigation .kind-function,
+.navigation .kind-typedef,
+.navigation .kind-variable,
+.navigation .kind-external {
+  position:absolute;
+  left:10px;
+}
+
 
 .kind-class {
   color: #009800;
@@ -264,8 +404,13 @@ h1 .url a {
 }
 
 .content {
-  margin-top: 60px;
+  margin-top: 10px;
   margin-left: 250px;
+  padding: 10px 50px 10px 20px;
+}
+
+.index-content {
+  margin-left: 20px;
   padding: 10px 50px 10px 20px;
 }
 
@@ -506,6 +651,7 @@ h3 .right-info {
   margin: 4px 0;
 }
 
+/* I think this is for the esdoc examples; check this.*/
 .content .detail h4 + .example-doc {
   margin: 6px 0;
 }
@@ -532,9 +678,9 @@ footer, .file-footer {
   text-align: right;
   font-style: italic;
   font-weight: 100;
-  font-size: 60%;
+  font-size: 13px;
   margin-right: 50px;
-  margin-left: 270px;
+  /*margin-left: 270px;*/
   border-top: 1px solid #ddd;
   padding-top: 30px;
   margin-top: 20px;
@@ -550,61 +696,8 @@ footer img {
   opacity: 0.6;
 }
 
-pre.source-code {
-  padding: 4px;
-  font-size:14px;
-}
 
-pre.raw-source-code > code {
-  padding: 0;
-  margin: 0;
-  font-size: 14px;
-  background: #fff;
-  border: solid 1px #ddd;
-  line-height: 1.5;
-}
 
-pre.raw-source-code > code > ol {
-  counter-reset:number;
-  list-style:none;
-  margin:0;
-  padding:0;
-  overflow: hidden;
-}
-
-pre.raw-source-code > code > ol li:before {
-  counter-increment: number;
-  content: counter(number);
-  display: inline-block;
-  min-width: 3em;
-  color: #aaa;
-  text-align: right;
-  padding-right: 1em;
-}
-
-pre.source-code.line-number {
-  padding: 0;
-}
-
-pre.source-code ol {
-  background: #eee;
-  padding-left: 40px;
-}
-
-pre.source-code li {
-  background: white;
-  padding-left: 4px;
-  list-style: decimal;
-  margin: 0;
-}
-
-pre.source-code.line-number li.active {
-  background: rgb(255, 255, 150) !important;
-}
-
-pre.source-code.line-number li.error-line {
-  background: #ffb8bf;
-}
 
 .inner-link-active {
   /*background: rgb(255, 255, 150) !important;*/
@@ -617,6 +710,29 @@ pre.source-code.line-number li.error-line {
   color: inherit;
 }
 
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 12px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff;
+}
 
 /*.navigation .closebtn {
   position: absolute;
