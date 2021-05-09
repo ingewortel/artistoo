@@ -1,0 +1,472 @@
+
+<p>
+This tutorial will show you how to extend the Artistoo code with your
+own custom modules. More detailed information will follow in a later
+version of this manual, but for now we will show some examples of how
+you can develop your own custom stats. You can use the same principle
+to develop your own CPM energy constraints, or even grids (tutorials 
+will follow later).
+</p>
+
+<h2 id="a-custom-statistic">A custom statistic</h2>
+
+<p>In this tutorial, we will implement a custom 
+<a href="../class/src/stats/Stat.js~Stat.html">statistic</a> as an example of a 
+custom module. Suppose that in the ActModel example, we want to 
+record the percentage of the cell's pixels that have a non-zero activity.
+Since no such statistic currently exists in Artistoo, we'll have to develop
+a custom module. </p>
+
+<p>We'll build a simulation of a single migrating cell as in the following example:</p>
+
+<iframe src="../examples/ActModel.html" width="100%" height="600px"> </iframe>
+
+<p>We will extend this example with our custom statistic.</p>
+
+
+<p> We start from the code as written in the example. You can find the full code 
+<a href="../examples/ActModel.html">here</a> (once you follow the link the the simulation,
+right click and choose "view page source"),
+but focussing on the code between the <code><script></script></code> tags and leaving
+out the details in the <code>config</code> object, the simulation looks something like this:
+</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+			...
+	}
+}
+//	---------------------------------- 
+let sim, meter
+
+
+function initialize(){
+	sim = new CPM.Simulation( config, {} )
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+
+function step(){
+	sim.step()
+	meter.tick()
+	requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+</p>We will now make changes to this page to implement our custom statistic.</p>
+
+<h3 id="step-1-custom-stat-class">Step 1: Create a custom extension of the Stat class</h3>
+
+<p>We can write a custom statistic by coding a new class. In doing so, we will
+extend the base <a href="../class/src/stats/Stat.js~Stat.html">Stat class</a>.
+This base class takes care of things like attaching your stat to your model for you,
+so you don't need to worry about that. </p>
+
+<p>To implement a new class in the code, we must add it to the code from step 1:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+			...
+	}
+}
+// --------------------------
+let sim, meter
+
+
+function initialize(){
+	sim = new CPM.Simulation( config, {} )
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+class PercentageActive extends CPM.Stat {
+
+}
+
+
+function step(){
+	sim.step()
+	meter.tick()
+	requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+<p>This will create a new class for a statistic called <code>PercentageActive</code>,
+which will behave just like the other stats implemented in Artistoo. This means you can
+request its value by using <code>sim.C.getStat( PercentageActive )</code> somewhere,
+but we'll get to that later. For now, let's focus on what code should go between the now
+empty braces.</p>
+
+<h3 id="step-2-implement-a-compute-method"> Step 2: Implement a compute() method </h3>
+
+<p>
+Looking at the <a href="../class/src/stats/Stat.js~Stat.html">documentation for the Stat 
+class</a>, we see that the important method is the <code>compute()</code> method. In the
+base <code>Stat</code> class, this method throws an error, because it is something that 
+should be implemented separately for each stat. Let's add it inside our new class:
+</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">class PercentageActive extends CPM.Stat {
+	compute(){
+		return 0
+	}
+}</code>
+</code></pre>
+
+<p>
+Our code will no longer throw an error, but it is also not very useful yet. We can have a
+look at the code from an existing statistic to see how we can generate some useful output.
+Have a look at the <code>compute()</code> method from the <code>Connectedness</code>
+statistic (full code <a href="../file/src/stats/Connectedness.js.html">here</a>):</p>
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">
+	// The compute method of Connectedness creates an object with 
+	// connectedness of each cell on the grid.
+	// @return {CellObject} object with for each cell on the grid
+	// a connectedness value. 
+	compute(){
+		// initialize the object
+		let connectedness = { }
+		// The this.M.pixels() iterator returns coordinates and cellid for all 
+		// non-background pixels on the grid. See the appropriate Grid class for
+		// its implementation.
+		for( let ci of this.M.cellIDs() ){
+			connectedness[ci] = this.connectednessOfCell( ci )
+		}
+		return connectedness
+	}</code>
+</code></pre>
+
+
+<p>Let's look at what is happening here. Most statistics we want to compute are actually
+properties of individual cells, but we may have more than one of those in our simulation.
+This means we must compute the statistic for each cell. Statistics therefore typically 
+return an object, where each cell gets its own entry. The key of this entry is the cell's
+<a href="../typedef/index.html#static-typedef-CellId">cellID</a>, and the value is the 
+computed statistic <i>for that cell</i>.
+</p>
+
+<p>In the code above, this is also what happens. We first make the empty object <code>{}</code>,
+and then set an entry for each cellID on the grid in the loop. The actual values for each
+cell are computed by an additional method in the class called <code>connectednessOfCell()</code>,
+which takes the cellID as input argument.<p>
+
+<p>Let's apply the same structure to our own statistic. We get:</p>
+
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">class PercentageActive extends CPM.Stat {
+	
+	computePercentageOfCell( cid ){
+		return 0
+	}
+	
+	compute(){
+				
+		// Create an object for the output, then add stat for each cell in the loop.
+		let percentages = {}
+		for( let cid of this.M.cellIDs() ){
+			percentages[cid] = this.computePercentageOfCell( cid )
+		}
+		
+		return percentages
+		
+	}
+}</code>
+</code></pre>
+
+<h3 id="step-3-implement-a-computeforcell-method"> Step 3: Implement a computeForCell() method </h3>
+
+<p>Now, how do we get the method <code>computePercentageOfCell()</code> to return the
+correct percentage of active pixels? For that, we need to know two things of each cell:</p>
+<ol>
+	<li>The number of pixels of that cell currently active, and</li>
+	<li>The total number of pixels of that cell.</li>
+</ol>
+
+<p>If we had those, we could compute the percentage of active pixels like this:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">computePercentageOfCell( cid ){
+		
+	// divide by total number of pixels and multiply with 100 to get percentage
+	return ( 100 * activePixels / totalPixels )
+}</code>
+</code></pre>
+
+<p>To know how many pixels a cell has and how many of those are active, let's start by
+looking at which pixels actually are part of the cell. Luckily, there already is a
+statistic called <a href="../class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a>
+which does exactly that. Its return value is an object with a key for each cellID, and
+as a value an array with all pixels belonging to that cell (given as an 
+<a href="../typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a>).</p>
+
+<p>We first note that the length of this array equals the number of pixels belonging to
+that cell, which we can use directly inside the code for <code>computePercentageOfCell()</code>:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">computePercentageOfCell( cid ){
+
+	// Get the pixels of each cell:
+	// Note that we need the 'CPM.' prefix since we're accessing this from outside.
+	const cellpixels = this.M.getStat( CPM.PixelsByCell )
+	
+	// Get the array of pixels for this cell
+	const current_pixels = cellpixels[cid]
+	
+	// The length of this array tells us the number of pixels:
+	const totalPixels = current_pixels.length
+	
+	// divide by total number of pixels and multiply with 100 to get percentage
+	return ( 100 * activePixels / totalPixels )
+}</code>
+</code></pre>
+
+<p>Note here that <code>this.M</code> contains the current CPM model which we want to
+compute the statistic on. Models have a method <code>getStat</code>, which calls the
+<code>compute</code> method of the statistic given as an argument. Since we
+are accessing this from outside, we need the "CPM." prefix.</p>
+
+
+<p>Now, we just need the number of active pixels. We should be able to find that somewhere
+in our <a href="../class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">
+ActivityConstraint</a>, since it's used there to compute the Hamiltonian. We find that 
+there is a method <a href="../class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html#instance-method-pxact">
+pxact</a> that we can use, which takes the
+<a href="../typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a> of
+a pixel as argument and then returns its current activity value.</p>
+
+<p>Let's put that information to use. We write:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">computePercentageOfCell( cid ){
+	
+	
+		// Get the pixels of each cell:
+		// Note that we need the 'CPM.' prefix since we're accessing this from outside.
+		const cellpixels = this.M.getStat( CPM.PixelsByCell )
+	
+		// Get the array of pixels for this cell
+		const current_pixels = cellpixels[cid]
+	
+		// The length of this array tells us the number of pixels:
+		const totalPixels = current_pixels.length
+	
+		// Loop over pixels of the current cell and count the active ones:
+		let activePixels = 0
+		for( let i = 0; i < current_pixels.length; i++ ){
+			// PixelsByCell returns ArrayCoordinates, but we need to convert those
+			// to IndexCoordinates to look up the activity using the pxact() method.
+			const pos = this.M.grid.p2i( current_pixels[i] )
+			
+			// increase the counter if pxact() returns an activity > 0
+			if( this.M.getConstraint( "ActivityConstraint" ).pxact( pos ) > 0 ){
+				activePixels++
+			}
+		}
+		
+		// divide by total number of pixels and multiply with 100 to get percentage
+		return ( 100 * activePixels / totalPixels )
+		
+	}</code>
+</code></pre>
+
+<h3 id="step-4-clean-up">Step 4 (Optional): clean-up </h3>
+
+<p>Note: we now compute the <code>PixelsByCell</code> every time the 
+<code>computePercentageOfCell</code> method is called, even though it is one single
+object with pixels for all cells already in there. Ideally, we'd therefore only call
+it once. We clean up the code to compute <code>PixelsByCell</code> at the beginning
+of the <code>compute</code>method, and get the following complete code for the new class:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">class PercentageActive extends CPM.Stat {
+	
+	computePercentageOfCell( cid, cellpixels ){
+	
+		// Get the array of pixels for this cell
+		const current_pixels = cellpixels[cid]
+	
+		// The length of this array tells us the number of pixels:
+		const totalPixels = current_pixels.length
+	
+		// Loop over pixels of the current cell and count the active ones:
+		let activePixels = 0
+		for( let i = 0; i < current_pixels.length; i++ ){
+			// PixelsByCell returns ArrayCoordinates, but we need to convert those
+			// to IndexCoordinates to look up the activity using the pxact() method.
+			const pos = this.M.grid.p2i( current_pixels[i] )
+			
+			// increase the counter if pxact() returns an activity > 0
+			if( this.M.getConstraint( "ActivityConstraint" ).pxact( pos ) > 0 ){
+				activePixels++
+			}
+		}
+		
+		// divide by total number of pixels and multiply with 100 to get percentage
+		return ( 100 * activePixels / totalPixels )
+		
+	}
+	
+	compute(){
+		// Get object with arrays of pixels for each cell on the grid, and get
+		// the array for the current cell.
+		const cellpixels = this.M.getStat( CPM.PixelsByCell ) 
+				
+		// Create an object for the output, then add stat for each cell in the loop.
+		let percentages = {}
+		for( let cid of this.M.cellIDs() ){
+			percentages[cid] = this.computePercentageOfCell( cid, cellpixels )
+		}
+		
+		return percentages
+		
+	}
+}</code>
+</code></pre>
+
+
+<p><i>Note: In the current implementation of statistics in Artistoo this is not 
+really necessary, since statistics are actually cached when they are computed. Even if 
+the method is called many times, the stat is only computed once unless the grid changes.
+But let's do the cleanup step anyway since it is clearer from the code that way that the 
+object will only be computed once.</i></p>
+
+<p>We now have a custom statistic class that we can use. All that's left now is to make
+sure that this statistic is actually computed and reported somewhere in our simulation.</p>
+
+<h3 id="step-5-use-statistic">Step 5: Use statistic</h3>
+
+To use our new statistic, we will overwrite the <code>logStats()</code> method of
+the <a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>. 
+Rather than reporting the centroids as is done by default, we now log the percentage 
+active pixels as returned by our new stat: </p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function logStats() {
+		// compute percentages for all cells
+		const allpercentages = this.C.getStat( PercentageActive )
+				
+		for( let cid of this.C.cellIDs() ){
+		
+			let theperc = allpercentages[cid]
+			
+			console.log( this.time + "\t" + cid + "\t" + 
+				this.C.cellKind(cid) + "\t" + theperc )
+			
+		}
+
+}</code>
+</code></pre>
+
+<p>The full code becomes (where we pass our new <code>logStats</code> method along when
+we construct our simulation):</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+	field_size : [200,200],
+		conf : {
+		torus : [true,true],						
+		seed : 1,							
+		T : 10,								
+		J: [[0,10], [10,0]],
+		LAMBDA_V: [0,5],					
+		V: [0,500],
+		LAMBDA_P: [0,2],					
+		P : [0,260],						
+		LAMBDA_ACT : [0,300],			
+		MAX_ACT : [0,30],				
+		ACT_MEAN : "geometric"			
+	},
+	simsettings : {
+		NRCELLS : [1],						
+		BURNIN : 500,
+		RUNTIME : 1000,
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["000000"],
+		ACTCOLOR : [true],					
+		SHOWBORDERS : [false],			
+		zoom :2,
+		SAVEIMG : false,
+		
+		// Note that we set this to true for the browser to see the
+		// effect of our new stat:
+		
+		STATSOUT : { browser: true, node: true },
+		LOGRATE : 10						
+
+	}
+}
+
+let sim, meter
+
+
+function initialize(){
+	// our simulation gets the new logStats method to overwrite the old one:
+	sim = new CPM.Simulation( config, { logStats: logStats } )
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+class PercentageActive extends CPM.Stat {
+	computePercentageOfCell( cid, cellpixels ){
+	
+		const current_pixels = cellpixels[cid]
+		const totalPixels = current_pixels.length
+	
+		let activePixels = 0
+		for( let i = 0; i < current_pixels.length; i++ ){
+			const pos = this.M.grid.p2i( current_pixels[i] )
+			if( this.M.getConstraint( "ActivityConstraint" ).pxact( pos ) > 0 ){
+				activePixels++
+			}
+		}
+		
+		return ( 100 * activePixels / totalPixels )
+	}
+	
+	compute(){
+		const cellpixels = this.M.getStat( CPM.PixelsByCell ) 
+		let percentages = {}
+		for( let cid of this.M.cellIDs() ){
+			percentages[cid] = this.computePercentageOfCell( cid, cellpixels )
+		}
+		return percentages
+	}
+}
+
+function logStats() {
+		const allpercentages = this.C.getStat( PercentageActive )
+		for( let cid of this.C.cellIDs() ){
+			let theperc = allpercentages[cid]
+			console.log( this.time + "\t" + cid + "\t" + 
+				this.C.cellKind(cid) + "\t" + theperc )
+		}
+}
+
+function step(){
+	sim.step()
+	meter.tick()
+	requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+
+<p>The end result is this (right click inside the simulation, choose 'inspect' and then
+'console' to see the output):</p>
+
+
+<iframe src="../examples/ActModelCustomStat.html" width="100%" height="600px"> </iframe>
+
+
+<h2 id="a-custom-constraint">A custom constraint</h2>
+
+<p>Just like you might want to develop a custom statistic, you might also want to develop
+your own model constraints. A detailed tutorial will follow, but for now, you can try
+applying the same principle as described above for the statistics. But instead of the
+<a href="../class/src/stats/Stat.js~Stat.html"><code>Stat</code> class</a>, you will
+have to extend either the <a href="../class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html"><code>SoftConstraint</code></a> or
+the <a href="../class/src/hamiltonian/HardConstraint.js~HardConstraint.html"><code>HardConstraint</code></a>
+class (see also <a href="./addConstraints.html">this tutorial</a> for more information).
+Have a look at their code <a href="../file/src/hamiltonian/SoftConstraint.js.html">here</a> 
+and <a href="../file/src/hamiltonian/HardConstraint.js.html">here</a> to see which methods
+your class extension will have to overwrite. Of course, you can have a look at the code
+for one of the <a href="../file/src/hamiltonian/ActivityConstraint.js.html">existing constraints</a> 
+for inspiration as well. Once you have written your constraint inside your simulation file
+as explained for the custom statistics above, you can add it using the 
+ <a href="../class/src/models/CPM.js~CPM.html#instance-method-add"><code>add()</code> 
+ method</a> as explained <a href="./addConstraints.html#method-2-add">here</a>.
+</p>

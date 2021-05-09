@@ -1,0 +1,385 @@
+<p>
+In the <a href="./simulationConfig.html">previous tutorial on configuring simulations</a>, 
+we have discussed how you can customize some parts of the simulation directly by
+modifying the <code>config</code> object. However, you may wish to have more extensive
+customization options that are not possible through configuration only. The
+<a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a> 
+therefore contains the option of overwriting some of its methods. This allows you to
+customize some of them without requiring you to implement everything from scratch.</p>
+
+<p>
+In this tutorial, we will discuss how to use this option to customize different aspects
+of your simulation &mdash; including grid initialisation, drawing of the grid, computing
+statistics, or adding additional biological processes such as production and diffusion
+of soluble molecules, cell proliferation, or cell death.
+</p>
+
+
+<h2 id="overwriting-methods">Overwriting methods</h2>
+
+<p>To see how you can overwrite methods, consider the code from an <a href="./your-first-simulation.html">
+earlier tutorial</a>:
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+    ...
+}
+let sim
+function initialize(){
+    sim = new CPM.Simulation( config )
+    step()
+}
+function step(){
+    sim.step()
+    requestAnimationFrame( step )
+}</code>
+</code></pre>
+
+<p>(Here, note that the <code>...</code> inside the <code>config</code> object should 
+be replaced by its normal properties, but its contents are left out here for brevity.
+Have a look at this <a href="./simulationConfig.html">previous tutorial</a>)</p>
+
+
+<p>Now suppose that we want to overwrite the <code>initializeGrid</code> method.
+Normally, this method seeds the first cell at the midpoint of the grid, and then seeds
+any other cells at random locations. If we want more control over the location of cells
+on our grid, we can overwrite this method. We can do this by adapting the code as follows:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let config = {
+    ...
+}
+let sim
+function initialize(){
+	let custommethods = {
+	 	initializeGrid : initializeGrid
+	 }
+    sim = new CPM.Simulation( config, custommethods )
+    step()
+}
+function step(){
+    sim.step()
+    requestAnimationFrame( step )
+}
+function initializeGrid(){
+	// own initialization code here
+}</code>
+</code></pre>
+
+<p>There are two changes here. In the <code>initialze()</code> function, we now define
+an object <code>custommethods</code> which contains a key (before the colon) for the 
+methods we want to overwrite, and a value (after the colon) specifying which function we
+want to overwrite them with. We then pass this object along when we initialize the
+simulation (<code> sim = new CPM.Simulation(...)</code>). Since we have said here that
+we are going to replace the <code>initializeGrid</code> function of the Simulation class,
+we must also define its replacement somewhere in the code. That happens at the bottom of
+the above code fragment, where we define a new function <code>initializeGrid</code>.
+(Currently, this method is empty, so if you would run this code you would just see an 
+empty grid. We'll discuss below what you might want to put inside this replacement
+function). </p>
+
+<p>The <a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a>
+contains the following methods that you may wish to overwrite for your custom simulation:</p>
+
+<ul>
+	<li><code>initializeGrid</code>, overwrite this if you want more control over where
+	cells are placed, or if you want to add other objects/obstacles to the grid. See
+	below for examples;</li>
+	<li><code>drawCanvas</code>, overwrite this if you want more control over the
+	visualisation of your grid;</li>
+	<li><code>drawBelow</code> and <code>drawOnTop</code>, use this if you do want to use
+	the default visualisation methods from <code>drawCanvas</code>, but <i>also</i> want
+	to draw something else either below or on top;</li>
+	<li><code>logStats</code>, use if you want to log something other than cell centroids
+	to the console during your simulation;</li>
+	<li><code>postMCSListener</code>, use to add other processes (cell death, proliferation,
+	production/diffusion of chemokines, ...) to your simulation.</code>
+</ul>
+
+<p>We will now discuss use cases for each of these methods below.</p>
+
+
+<h2 id="custom-initialization">Custom initialisation</h2>
+
+<p>As mentioned in the example above, we can overwrite the <code>initializeGrid()</code>
+method to have more control over how the grid is initialized. For example, the following
+example uses this method to seed cells at regularly spaced positions instead of
+randomly:</p>
+
+
+<div>
+<iframe src="./asset/Epidermis.html" width="100%" height="280px"> </iframe>
+</div>
+
+<p> This example  overwrites the <code>initializeGrid()</code> method with the following
+function:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function initializeGrid(){
+
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+
+	// Seed epidermal cell layer
+	let step = 12
+	
+	for( let i = 1 ; i < this.C.extents[0] ; i += step ){
+		for( let j = 1 ; j < this.C.extents[1] ; j += step ){
+			this.gm.seedCellAt( 1, [i,j] )
+		}
+	}
+}</code>
+</code></pre>
+
+<p>Note that although we are writing this function in the HTML file, it will be called
+<i>from inside the Simulation object</i>. That means we have to refer to the simulation object
+as <code>this</code> rather than <code>sim</code> (e.g. <code>this.gm.seedCellAt</code>).
+If you attach a method to the Simulation object by adding it to the <code>custommethods</code>,
+use <code>this</code>. If you write a function inside your HTML file but don't attach
+it to the Simulation object, use <code>sim</code> (the variable name under which you stored
+your simulation).</p>
+
+<p>
+For full code, have a look at <a href="../examples/Epidermis.html">this page</a>
+(once you are on the page and it has loaded, right click anywhere outside the grid, 
+then select 'view page source').</p>
+
+<p>Another example is the following, where we overwrite the <code>initializeGrid()</code>
+to place microchannel walls:</p>
+
+<div>
+<iframe src="../examples/Microchannel.html" width="100%" height="200px"> </iframe>
+</div>
+
+<p> The custom functions look like this: </p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function initializeGrid(){
+	
+		// add the initializer if not already there
+		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	
+		let nrcells = this.conf["NRCELLS"], cellkind, i
+		this.buildChannel()
+		
+		// Seed the right number of cells for each cellkind
+		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+			
+			for( i = 0; i < nrcells[cellkind]; i++ ){
+				// first cell always at the midpoint. Any other cells
+				// randomly.				
+				if( i == 0 ){
+					this.gm.seedCellAt( cellkind+1, this.C.midpoint )
+				} else {
+					this.gm.seedCell( cellkind+1 )
+				}
+			}
+		}
+}
+	
+function buildChannel(){
+		
+	
+		this.channelvoxels = this.gm.makePlane( [], 1, 0 )
+		let gridheight = this.C.extents[1]
+		this.channelvoxels = this.gm.makePlane( this.channelvoxels, 1, gridheight-1 )
+		
+		this.C.add( new CPM.BorderConstraint({
+			BARRIER_VOXELS : this.channelvoxels
+		}) )
+		
+}</code>
+</code></pre>
+
+<p>This is pretty much the default <code>initializeGrid</code> code, except that it now
+calls a new function <code>this.buildChannel</code> first. That means that also the
+<code>buildChannel</code> method has to be defined, and passed along to the simulation
+object when you define the <code>custommethods</code> inside the <code>initialize()</code>
+function:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let custommethods = {
+	 	initializeGrid : initializeGrid,
+	 	buildChannel : buildChannel
+	 }</code>
+</code></pre>
+
+<blockquote class="important-note"> ! <b>Important</b>: 
+
+Note that the <code>simsettings</code> object inside the <code>config</code> object
+contains a property <code>NRCELLS</code>. This is an array that specifies how many cells
+of each type of cell have to be seeded on the grid. Normally, this is used by the
+<code>initializeGrid()</code> function of the Simulation class. If you overwrite this 
+function and don't use the <code>NRCELLS</code> inside your replacement code, the values
+you enter there will no longer influence the number of cells you get on the grid.
+However, <b>you must still have the <code>NRCELLS</code> inside your <code>simsettings</code>
+object!</b>. This property is used by other methods to know how many cells are on the grid,
+and these methods will crash if you don't have this array. So while its values may not matter, you
+must still ensure that an array of the right length (one element per non-background kind
+of cell on the grid) is present. 
+</blockquote>
+
+
+
+
+
+<h2 id="custom-drawing">Custom visualisation</h2>
+
+<p>Your simulation might also contain custom visualisation methods. For example, the 
+following <a href="../examples/ManyCellsPrefDir.html">example</a> uses custom 
+visualisation to draw a line indicating in which direction each cell is going:</p>
+
+<div>
+<iframe src="../examples/ManyCellsPrefDir.html" width="100%" height="550px"> </iframe>
+</div>
+
+<p>It does that by overwriting the <code>drawCanvas()</code> method:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function drawCanvas(){
+	
+	// This part is the normal drawing function
+	
+		// Add the canvas if required
+		if( !this.helpClasses["canvas"] ){ this.addCanvas() }
+	
+		// Clear canvas and draw stroma border
+		this.Cim.clear( this.conf["CANVASCOLOR"] )
+		
+		// Draw each cellkind appropriately
+		let cellcolor=this.conf["CELLCOLOR"], actcolor=this.conf["ACTCOLOR"], 
+			nrcells=this.conf["NRCELLS"], cellkind, cellborders = this.conf["SHOWBORDERS"]
+		for( cellkind = 0; cellkind < nrcells.length; cellkind ++ ){
+		
+			// draw the cells of each kind in the right color
+			if( cellcolor[ cellkind ] != -1 ){
+				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
+			}
+			
+			// Draw borders if required
+			if(  cellborders[ cellkind  ]  ){
+				this.Cim.drawCellBorders( cellkind+1, "000000" )
+			}
+		}
+		
+	// This part is for drawing the preferred directions 
+	let pdc = this.C.getConstraint( "PersistenceConstraint" )
+		let ctx = this.Cim.context(), zoom = this.conf["zoom"]
+		let prefdir = ( pdc.conf["LAMBDA_DIR"][ cellkind+1 ] > 0  ) || false
+		ctx.beginPath()
+		ctx.lineWidth = 2&ast;zoom
+
+		for( let i of this.C.cellIDs() ){
+		
+			// Only draw for cells that have a preferred direction.
+			//if( i == 0 ) continue
+			prefdir = ( pdc.conf["LAMBDA_DIR"][ this.C.cellKind( i ) ] > 0  ) || false
+			if( !prefdir ) continue
+			
+			ctx.moveTo( 
+				pdc.cellcentroidlists[i][0][0]&ast;zoom,
+				pdc.cellcentroidlists[i][0][1]&ast;zoom,
+		       	)
+			ctx.lineTo( (pdc.cellcentroidlists[i][0][0]+.1&ast;pdc.celldirections[i][0])&ast;zoom,
+				(pdc.cellcentroidlists[i][0][1]+.1&ast;pdc.celldirections[i][1])&ast;zoom,
+		       	)
+		}
+		ctx.stroke()		
+}</code>
+</code></pre>
+
+
+<p>Since only the second part of this method is actually new, we could also have just
+replaced the <code>drawOnTop</code> method (which is empty by default).</p>
+
+
+<blockquote class="exercise-block">
+<b>Exercise:</b>
+
+Open the <code>artistoo/examples/html/ManyCellsPrefDir.html</code> example in your
+favourite text editor, and try if you can do the same by overwriting <code>drawOnTop</code>
+rather than <code>drawCanvas</code>.
+
+</blockquote>
+
+
+
+<p>Another example is the <a href="../examples/Microchannel.html">microchannel</a>, 
+where we use the <code>drawBelow()</code> method
+to draw the microchannel walls before drawing the other cells:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function drawBelow(){
+	this.Cim.drawPixelSet( this.channelvoxels, "AAAAAA" ) 
+}</code>
+</code></pre>
+
+<p>That yields the following:</p>
+
+<div>
+<iframe src="../examples/Microchannel.html" width="100%" height="200px"> </iframe>
+</div>
+
+<p>Have a look at the <a href="../class/src/Canvas.js~Canvas.html"><code>Canvas</code> class</a> for 
+an overview of drawing methods you can use in your custom visualisations. This class
+uses the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">
+canvas framework</a>, with a syntax you can also use to define your own methods
+(for example, we did that to draw the lines in the first example of this section;
+have a look at <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes">
+this tutorial</a>).</p>
+
+
+
+<h2 id="custom-stat-logging">Custom logging</h2>
+
+<p>Artistoo's default is to log every cell's ID, cell kind, and centroid (along with the
+system time in MCS). Sometimes, you may wish to log other statistics. Consider the following
+example simulation:</p>
+
+
+<div>
+<iframe src="../examples/CellDivision.html" width="100%" height="600px"> </iframe>
+</div>
+
+<p>Suppose we just want to log the total number of cells on the grid every time. We can do
+this by overwriting the <code>logStats()</code> method:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function logStats(){
+	
+	// count the cell IDs currently on the grid:
+	let nrcells = 0
+	for( let i of this.C.cellIDs() ){
+		nrcells++
+	}
+	
+	console.log( this.time + "\t" + nrcells )
+	
+}</code>
+</code></pre>
+
+
+
+<h2 id="other-processes">Adding biological processes</h2>
+
+<p>Finally, we may wish to do other stuff in between the CPM steps. For example, the
+cell division example above allows cells to proliferate between steps. For this,
+the <a href="../class/src/simulation/Simulation.js~Simulation.html">Simulation class</a> 
+contains an (empty) function called the <code>postMCSListener()</code>, which can be
+overwritten. This function is called after every step. By default, it does nothing, but
+you can overwrite it with processes you wish to perform. For example, the cell division
+example uses it to let cells proliferate:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">function postMCSListener(){
+	
+		// methods for cell seeding and division are in the GridManipulator class, which
+		// is added to the simulation like this:
+		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	
+		// Loop over all the cells and let them proliferate with some probability, 
+		// but only if their volume is at least 95% of their target volume
+		for( let i of this.C.cellIDs() ){
+			if( this.C.getVolume(i) > this.C.conf.V[1]*0.95 && this.C.random() < 0.01 ){
+				this.gm.divideCell(i)
+			}
+		}
+}</code>
+</code></pre>
+
+<p>Also have a look at the <a href="../examples/CancerInvasion.html">cancer invasion
+</a> and <a href="../examples/Chemotaxis.html">chemotaxis</a> examples to see what
+you can do with the <code>postMCSListener()</code>.</p>
+
+

@@ -266,6 +266,18 @@
 		{
 			"title": "Adding CPM Constraints",
 			"tag": "addConstraints"
+		},
+		{
+			"title": "Configuring Simulations (2)",
+			"tag": "simulationConfig2"
+		},
+		{
+			"title": "Sharing Your Simulations",
+			"tag": "sharingSimulations"
+		},
+		{
+			"title": "Custom Modules",
+			"tag": "custommodules"		
 		}
 	]
 }

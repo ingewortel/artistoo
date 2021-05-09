@@ -1,0 +1,60 @@
+<p>
+This tutorial will describe how you can share your simulations in a zero-install setting.
+Note that this tutorial applies to the browser (HTML) simulations only, since command line
+(node) simulations <i>do</i> require installation of libraries and are therefore not
+zero-install.
+</p>
+
+<h2 id="step-1-create-directory">Step 1: Create a self-contained directory</h2>
+
+<p>For sharing, we will make a directory that contains all required components. Anyone
+who has that folder and opens your simulation in that folder will be able to see your
+model in its full glory, as long as they don't mess with the directory structure or 
+move/remove any files.</p>
+
+<p>Assuming you have created an empty directory <code>mySimulation</code>, now add the
+following files to it:</p>
+
+<ul>
+	<li><code>MySimulation.html</code>, the html file containing your simulation;</li>
+	<li><code>artistoo.js</code>, the script with the Artistoo code (don't just make a
+	link, but actually copy the code into this folder);</li>
+</ul>
+
+<p>If you're using the <code>fpsmeter</code>, you also need to add the 
+<code>fpsmeter.min.js</code> file from <a href="../examples/fpsmeter.min.js">here</a>
+(the same goes for any other scripts you are loading from your HTML file). </p>
+
+
+<h2 id="step-2-adjust-paths">Step 2: Adjust relative paths</h2>
+
+<p>In your HTML file <code>MySimulation.html</code>, adjust any paths to scripts you
+are loading so that they refer to the local copy in your self-contained folder.
+To check that it all works, open the HTML file in your browser &mdash; the simulation should
+run. If it doesn't, right click, select 'inspect' > 'console' to see any error messages
+that come up (if your simulation worked before you moved it, any error messages are
+probably due to a missing file or a path that needs updating).
+</p>
+
+<p>Just to be sure, move the directory to some other place on your computer and check if
+the simulation still runs. If it does, you're good to go.</p>
+
+
+
+<h2 id="step-3-share">Step 3: Share</h2>
+
+<h3 id="share-offline">Offline</h3>
+
+<p>Once you have a working simulation in a self-contained directory, you can zip that
+directory and send it to someone else. They can unpack the folder on their own computer
+and double click the HTML file to run in their own browser.</p> 
+
+<h3 id="share-online">Online</h3>
+
+<p>Alternatively, you can copy the folder to your own server and make your simulation 
+available via a URL. Another option is to set up a Github repository with
+<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site">Github Pages</a>. 
+To see an example, check out the small website we made to accompany the 
+Artistoo manuscript: <a href="https://github.com/ingewortel/artistoo-supplements">https://github.com/ingewortel/artistoo-supplements</a>
+ (from this repository, you can see the actual website through the link in the README).
+</p>
