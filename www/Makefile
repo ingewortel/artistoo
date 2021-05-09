@@ -10,8 +10,8 @@ restart :
 
 # Step 1 : Build main site with mustache
 
-../mustache-web/public/layout.html : always
-	@echo "		Building mustache website" && cd ../mustache-web && $(MAKE) -B
+../mustache-web/public/layout.html : restart
+	@echo "		Building mustache website" && cd ../mustache-web && $(MAKE)
 
 progress :
 	@mkdir -p $@
@@ -33,7 +33,8 @@ progress/step2 : ../esdoc-template-artistoo/layout.html | progress
 #	- link to github
 #	- search index of all the auto-generated pages.
 progress/step3 : progress/step2 
-		@echo "		Updating esdoc docs" && cd .. && $(MAKE) docs/index.html && cd www && touch $@
+		@echo "		Updating esdoc docs" && cd .. && $(MAKE) docs/index.html && \
+		cp esdoc-template-artistoo/css/* www/css/ && cd www && touch $@
 	
 
 # Step 4: copy all esdoc stuff into this folder:
@@ -48,22 +49,22 @@ progress/step5 : progress/step2 progress/step4
 	
 
 # Step 6: add extra files such as examples and manual assets
-converter :	../mustache-web/sources/converter progress/step3
+converter-files :	$(wildcard ../mustache-web/sources/converter/**/*) progress/step3
 	@echo "		Adding converter pages" && cp -r $< .
 	
 examples :
 	@mkdir -p $@
 
-example-files : ../examples/html progress/step3 | examples
-	@echo "		Adding example html files" && cp $</* examples/ && \
+example-files : $(wildcard ../examples/html/**/*) progress/step3 | examples
+	@echo "		Adding example html files" && cp ../examples/html/* examples/ && \
 	cp ../examples/3D/cpm3d.html examples/ && \
 	cp ../examples/3D/Canvas3D.js examples/ && \
 	cp ../examples/3D/OrbitControls.js examples/
 
-manual/asset : ../mustache-web/sources/manual/asset progress/step3 converter
-	@echo "		Adding manual asset files" &&  cp -r $< $@
+manual-asset : ../mustache-web/sources/manual/asset progress/step3 converter-files
+	@echo "		Adding manual asset files" &&  cp -r $< manual/asset
 
-progress/step6 : converter example-files manual/asset
+progress/step6 : converter-files example-files manual-asset
 	@touch $@
 
 
