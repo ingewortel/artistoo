@@ -22,8 +22,9 @@ misc/build.make: misc/build-makeout.bash app/include-list.txt
 app/index.js : app/automatic-index.bash app/include-list.txt
 	@bash $^ > $@
 
-docs/index.html : build/artistoo.js README.md spec $(shell find manual -type f) 
+docs/index.html : build/artistoo.js README.md $(shell find manual -type f) $(wildcard esdoc-template-artistoo/**/*.html) $(wildcard esdoc-template-artistoo/*.html) $(wildcard spec/**/* )
 	@echo  '		...Writing documentation with ESDOC, please wait...' &&\
+	rm -rf docs && \
 	mkdir -p docs && \
 	cp build/artistoo.js manual/asset/ &&\
 	node_modules/.bin/esdoc2 > docs/log.txt 

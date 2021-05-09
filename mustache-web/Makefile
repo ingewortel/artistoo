@@ -6,7 +6,7 @@ all : public/index.html
 
 # we also need to have the 'sources' folder; but no re-building required with mustache
 # if the source files change.
-dependencies=data/site.json templates partials
+dependencies=data/site.json $(wildcard templates/*.mustache) $(wildcard partials/**/* partials/*)
 
 
 public/manual: 
