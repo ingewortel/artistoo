@@ -560,7 +560,10 @@ table.params td p {
 
 /* margin required to ensure link target does not end up under topnav*/
 .content .detail .inner-link-active {
-	margin-top:80px;
+	margin-top : 80px;
+}
+.linenums .inner-link-active {
+	margin-top:30px;
 }
 
 .content .detail > * {
