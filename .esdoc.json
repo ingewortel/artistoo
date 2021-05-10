@@ -3,7 +3,7 @@
   "destination": "./docs",
   "plugins": [
     {
-      "name": "esdoc-standard-plugin",
+      "name": "esdoc2-standard-plugin",
       "option": {
         "test" : {
           "source" : "./spec/",
@@ -31,7 +31,7 @@
       }
     },
     {
-    	"name": "esdoc-publish-html-plugin",
+    	"name": "esdoc2-publish-html-plugin",
     	"option": {
     		"template" : "mytemplate"
     	}
