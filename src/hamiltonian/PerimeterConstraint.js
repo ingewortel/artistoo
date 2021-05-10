@@ -56,12 +56,8 @@ class PerimeterConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C
-
-		this.confChecker()
-
+		super.CPM = C
+		
 		// if C already has cells, initialize perimeters
 		if( C.cellvolume.length !== 0 ){
 			this.initializePerimeters()

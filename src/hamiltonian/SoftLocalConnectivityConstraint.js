@@ -26,15 +26,11 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 	/** The set CPM method attaches the CPM to the constraint. It checks whether the
 	CPM is 2D or 3D, because this constraint is currently only tested in 2D. */
 	set CPM(C){
-		/** CPM on which this constraint acts.
-		@type {CPM}*/
-		this.C = C
+		super.CPM = C
 		
 		if( this.C.ndim != 2 ){
 			throw("You are trying to add a SoftLocalConnectivityConstraint to a 3D CPM, but this constraint is currently only supported in 2D!")
 		}
-		
-		this.confChecker()
 	}
 	
 	/** This method checks that all required parameters are present in the object supplied to

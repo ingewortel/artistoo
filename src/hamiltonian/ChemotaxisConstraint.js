@@ -35,11 +35,8 @@ class ChemotaxisConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C
+		super.CPM = C
 		
-		this.confChecker()
 		this.checkField()
 	}
 	

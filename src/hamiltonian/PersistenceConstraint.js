@@ -37,13 +37,12 @@ class PersistenceConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-	
+		
 		/** @ignore */
 		this.halfsize = new Array(C.ndim).fill(0)
 		
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C
+		super.CPM = C
+		
 		for( let i = 0 ; i < C.ndim ; i ++ ){
 			this.halfsize[i] = C.extents[i]/2
 		}
