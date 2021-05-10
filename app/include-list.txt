@@ -20,7 +20,7 @@ module	GridBasedModel	src/models/GridBasedModel.js
 
 # cells 
 module Cell src/cells/Cell.js
-module StochasticCorrector src/cells/StochasticCorrector.js
+module Divider src/cells/Divider.js
 
 # stats
 module	Stat	src/stats/Stat.js

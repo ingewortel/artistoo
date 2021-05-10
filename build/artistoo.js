@@ -1439,7 +1439,6 @@ var CPM = (function (exports) {
 			cellvolumes will be added with key = {@link CellId}, value = volume.
 			@type{number[]}*/
 			this.cellvolume = [];
-
 			/** Tracks the elapsed time in MCS
 			@type {number}*/
 			this.time = 0;
@@ -1722,19 +1721,22 @@ var CPM = (function (exports) {
 		}
 
 		/** Get a cellid or cellkind-specific parameter for a constraint. 
-		 * This usually refers to @function paramOfKind, which returns
-		 * this.conf[param][cellkind], and thus assumes that the parameter is 
-		 * indexable by cellkind.
-		 * If CPMEvol is used this is redirected to @function paramOfCell
+		 * This function is here to document its functionality, but it is 
+		 * always overwritten by the constructor (via "set CPM") to point
+		 * to another function. This is normally  @function  paramOfKind,
+		 * which retrieves the parameter from the conf object for the current {@link cellKind}.
+		 * If CPMEvol is used this is instead redirected to @function  paramOfCell,
 		 * which looks whether the parameter is overwritten in an @object Cell
 		 * and otherwise returns @function paramOfKind
+		 * @abstract
 		 * 
 		 * @param {string} param - name of parameter in conf object
 		 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 		@return {any} parameter - the requested parameter
 		*/
+		/* eslint-disable no-unused-vars */
 		cellParameter(param, cid){
-			return this.paramOfKind(param, cid)
+			throw( "this is a template function that should never actually be called as it is overwritten to point to paramOfCell() or paramOfKind().")
 		}
 
 		/**
@@ -2742,12 +2744,8 @@ var CPM = (function (exports) {
 		/** Set the CPM attached to this constraint.
 		@param {CPM} C - the CPM to attach.*/
 		set CPM(C){
-			/** The CPM this constraint acts on.
-			@type {CPM}*/
-			this.C = C;
-
-			this.confChecker();
-
+			super.CPM = C;
+			
 			// if C already has cells, initialize perimeters
 			if( C.cellvolume.length !== 0 ){
 				this.initializePerimeters();
@@ -3059,8 +3057,7 @@ var CPM = (function (exports) {
 			this.time = 0;
 
 			// ---------- CPM specific stuff here
-
-
+			
 			/** Number of non-background cells currently on the grid.
 			@type{number}*/
 			this.nr_cells = 0;
@@ -3083,8 +3080,6 @@ var CPM = (function (exports) {
 			*/
 			this.t2k = [];	// cell type ("kind"). Example: this.t2k[1] is the cellKind of cell 1.
 			this.t2k[0] = 0;	// Background cell; there is just one cell of this type.
-
-			
 
 			//  ---------- CPM constraints
 			/** Array of objects of (@link SoftConstraint) subclasses attached to the CPM.
@@ -3119,7 +3114,7 @@ var CPM = (function (exports) {
 			for( let x of Object.keys( conf ) ){
 				if( x in AutoAdderConfig ){
 					this.add( new AutoAdderConfig[x]( conf ) );
-				} 
+				}
 			}
 		}
 
@@ -3217,7 +3212,6 @@ var CPM = (function (exports) {
 					}
 					this.hard_constraints_indices[tName].push( i-1 );
 					break
-
 				}
 			}
 			if( typeof t["postSetpixListener"] === "function" ){
@@ -3231,7 +3225,7 @@ var CPM = (function (exports) {
 				t.postAdd();
 			}
 		}
-
+		
 		/** Get a {@link Constraint} object linked to this CPM by the name of its class.
 		By default, the first constraint found of this class is returned. It is possible
 		that there are multiple constraints of the same type on the CPM; in that case,
@@ -3246,7 +3240,7 @@ var CPM = (function (exports) {
 		@param {number} [num = 0] - if multiple constraints of this class are present, 
 		return the num-th one added to the CPM. 
 		*/
-		getConstraint( constraintname, num ) {
+		getConstraint( constraintname, num ){
 		
 			if( !num ){
 				num = 0;
@@ -3303,6 +3297,7 @@ var CPM = (function (exports) {
 		setCellKind( t, k ){
 			this.t2k[ t ] = k;
 		}
+		
 		
 		/* ------------- COMPUTING THE HAMILTONIAN --------------- */
 
@@ -3477,6 +3472,7 @@ var CPM = (function (exports) {
 		}
 
 		/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
+
 		/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
 		   for this cell in the relevant arrays (cellvolume, t2k).
 		   @param {CellKind} kind - cellkind of the cell that has to be made.
@@ -3487,6 +3483,7 @@ var CPM = (function (exports) {
 			this.setCellKind( newid, kind );
 			return newid
 		}
+
 	}
 
 	/** This class encapsulates a lower-resolution grid and makes it
@@ -4497,7 +4494,6 @@ var CPM = (function (exports) {
 		 *
 		 * */
 		drawCellsOfId( id, col ){
-			
 			if( !col ){
 				col = "000000";
 			}
@@ -4605,9 +4601,7 @@ var CPM = (function (exports) {
 		 * If left unspecified, it gets the default value of black ("000000").
 		 * col can also be a function that returns a hex value for a cell id.
 		 * */
-
 		drawPixelSet( pixelarray, col ){
-		
 			if( ! col ){
 				col = "000000";
 			}
@@ -4814,25 +4808,21 @@ var CPM = (function (exports) {
 	}
 
 	/**
-	 * Implements a basic holder for a model with two internal products,
+	 * Implements a basic holder for a model with internal products,
 	 * which can be stochastically divided between daughter cells. 
 	 */
-	class StochasticCorrector extends Cell {
+	class Divider extends Cell {
 
 		constructor (conf, kind, id, C) {
 			super(conf, kind, id, C);
 
-			/** X quantity (in standard implementation: master RNA equation)
-			 * @type{number}*/
-			this.X = conf["INIT_X"][kind];
-
-			/** Y quantity (in standard implementation: mutant RNA equation)
-			 * @type{number}*/
-			this.Y = conf["INIT_Y"][kind];
+			/** Arbitrary internal products
+			 * @type{Array}*/
+			this.products = conf["INIT_PRODUCTS"][kind-1];
 
 			/** Target Volume (overwrites V in volume constraint)
-			 * @type{number}*/
-			this.V = conf["INIT_V"][kind];	
+			 * @type{Number}*/
+			this.V = conf["INIT_V"][kind-1];	
 		}
 
 		/**
@@ -4843,33 +4833,21 @@ var CPM = (function (exports) {
 		 */ 
 		birth(parent){
 			super.birth(parent); // sets ParentId
-			
-			let prevX = parent.X;
-			let prevY = parent.Y;
-			let fluctX = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
-			let fluctY = this.conf["NOISE"][this.kind] * (2  *this.C.random() - 1);
-
-			if ((prevX / 2 - fluctX) < 0)
-				fluctX = prevX/2;
-			if ((prevY / 2 - fluctY) < 0)
-				fluctY = prevY/2;
-
-			this.setXY(prevX/2+fluctX ,prevY/2 +fluctY );
-			parent.setXY(prevX/2 - fluctX,prevY/2 - fluctY);
+			for (const [ix, product] of parent.products.entries()){
+				let fluct =  this.conf["NOISE"][this.kind-1] * (2  *this.C.random() - 1);
+				if ((product/2 - Math.abs(fluct)) < 0){
+					fluct = product/2; 
+					if ( this.C.random() < 0.5){
+						fluct *= -1;
+					}
+				}
+				this.products[ix] = Math.max(0, product/2 - fluct);
+				parent.products[ix] = Math.max(0, product/2 + fluct);
+			}
 			let V = parent.V;
 			this.V = V/2;
 			parent.V = V/2;
 		}
-
-		/** sets x and y with minimum 0
-		 * @param {number} X - new X
-		 * @param {number} Y - new Y
-		 */
-		setXY(X, Y){
-			this.X = Math.max(0, X);
-			this.Y = Math.max(0, Y);
-		}
-
 	}
 
 	/**	This Stat creates a {@link CellArrayObject} with the border cellpixels of each cell on the grid. 
@@ -5971,13 +5949,12 @@ var CPM = (function (exports) {
 		/** Set the CPM attached to this constraint.
 		@param {CPM} C - the CPM to attach.*/
 		set CPM(C){
-		
+			
 			/** @ignore */
 			this.halfsize = new Array(C.ndim).fill(0);
 			
-			/** The CPM this constraint acts on.
-			@type {CPM}*/
-			this.C = C;
+			super.CPM = C;
+			
 			for( let i = 0 ; i < C.ndim ; i ++ ){
 				this.halfsize[i] = C.extents[i]/2;
 			}
@@ -6264,11 +6241,8 @@ var CPM = (function (exports) {
 		/** Set the CPM attached to this constraint.
 		@param {CPM} C - the CPM to attach.*/
 		set CPM(C){
-			/** The CPM this constraint acts on.
-			@type {CPM}*/
-			this.C = C;
+			super.CPM = C;
 			
-			this.confChecker();
 			this.checkField();
 		}
 		
@@ -6515,9 +6489,7 @@ var CPM = (function (exports) {
 		
 		/** The set CPM method attaches the CPM to the constraint. */
 		set CPM(C){
-			/** CPM on which this constraint acts.
-			@type {CPM}*/
-			this.C = C;
+			super.CPM = C;
 			
 			/** Private property used by {@link updateBorderPixels} to track borders. 
 			@private
@@ -6767,9 +6739,7 @@ var CPM = (function (exports) {
 		
 		/** The set CPM method attaches the CPM to the constraint. */
 		set CPM(C){
-			/** CPM on which this constraint acts.
-			@type {CPM}*/
-			this.C = C;
+			super.CPM = C;
 			
 			/** Private property used by {@link updateBorderPixels} to track borders. 
 			@private
@@ -7203,15 +7173,11 @@ var CPM = (function (exports) {
 		/** The set CPM method attaches the CPM to the constraint. It checks whether the
 		CPM is 2D or 3D, because this constraint is currently only tested in 2D. */
 		set CPM(C){
-			/** CPM on which this constraint acts.
-			@type {CPM}*/
-			this.C = C;
+			super.CPM = C;
 			
 			if( this.C.ndim != 2 ){
 				throw("You are trying to add a SoftLocalConnectivityConstraint to a 3D CPM, but this constraint is currently only supported in 2D!")
 			}
-			
-			this.confChecker();
 		}
 		
 		/** This method checks that all required parameters are present in the object supplied to
@@ -11091,6 +11057,7 @@ var CPM = (function (exports) {
 	exports.ConnectedComponentsByCell = ConnectedComponentsByCell;
 	exports.Connectedness = Connectedness;
 	exports.ConnectivityConstraint = ConnectivityConstraint;
+	exports.Divider = Divider;
 	exports.Grid = Grid;
 	exports.Grid2D = Grid2D;
 	exports.Grid3D = Grid3D;
@@ -11111,7 +11078,6 @@ var CPM = (function (exports) {
 	exports.SoftConstraint = SoftConstraint;
 	exports.SoftLocalConnectivityConstraint = SoftLocalConnectivityConstraint;
 	exports.Stat = Stat;
-	exports.StochasticCorrector = StochasticCorrector;
 	exports.VolumeConstraint = VolumeConstraint;
 
 	return exports;

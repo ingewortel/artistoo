@@ -10,7 +10,7 @@ import CPMEvol from "../src/models/CPMEvol.js"
 import GridBasedModel from "../src/models/GridBasedModel.js" 
  
 import Cell from "../src/cells/Cell.js" 
-import StochasticCorrector from "../src/cells/StochasticCorrector.js" 
+import Divider from "../src/cells/Divider.js" 
  
 import Stat from "../src/stats/Stat.js" 
 import PixelsByCell from "../src/stats/PixelsByCell.js" 
@@ -64,7 +64,7 @@ export {
 	CPMEvol,
 	GridBasedModel,
 	Cell,
-	StochasticCorrector,
+	Divider,
 	Stat,
 	PixelsByCell,
 	BorderPixelsByCell,
