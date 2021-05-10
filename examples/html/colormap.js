@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 var ColorMap = (function () {
 	"use strict"
 
@@ -233,5 +233,3 @@ var ColorMap = (function () {
 	return colormap
 
 }())
-
-export default ColorMap

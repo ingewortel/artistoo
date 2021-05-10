@@ -55,7 +55,6 @@ import ArtistooWriter from "../src/converter/ArtistooWriter.js"
 import MorpheusWriter from "../src/converter/MorpheusWriter.js" 
 import ArtistooImport from "../src/converter/ArtistooImport.js" 
  
-import ColorMap from "../src/accessories/colormap.js" 
  
 export {
 	Canvas,
@@ -101,6 +100,5 @@ export {
 	MorpheusImport,
 	ArtistooWriter,
 	MorpheusWriter,
-	ArtistooImport,
-	ColorMap
+	ArtistooImport
 }

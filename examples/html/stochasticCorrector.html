@@ -16,6 +16,7 @@ td {
 
 <script src="./artistoo.js"></script>
 <script src="./fpsmeter.min.js"></script>
+<script src="./colormap.js"></script>
 
 <script>
 "use strict"
@@ -209,7 +210,7 @@ function drawCanvas(){
 	}
 }
 
-const cmap = new CPM.ColorMap({
+const cmap = new ColorMap({
 		colormap: 'viridis',
 		nshades: 100,
 		format: 'hex', 
