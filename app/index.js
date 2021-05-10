@@ -6,7 +6,11 @@ import Canvas from "../src/Canvas.js"
  
 import CA from "../src/models/CA.js" 
 import CPM from "../src/models/CPM.js" 
+import CPMEvol from "../src/models/CPMEvol.js" 
 import GridBasedModel from "../src/models/GridBasedModel.js" 
+ 
+import Cell from "../src/cells/Cell.js" 
+import Divider from "../src/cells/Divider.js" 
  
 import Stat from "../src/stats/Stat.js" 
 import PixelsByCell from "../src/stats/PixelsByCell.js" 
@@ -51,11 +55,15 @@ import ArtistooWriter from "../src/converter/ArtistooWriter.js"
 import MorpheusWriter from "../src/converter/MorpheusWriter.js" 
 import ArtistooImport from "../src/converter/ArtistooImport.js" 
  
+ 
 export {
 	Canvas,
 	CA,
 	CPM,
+	CPMEvol,
 	GridBasedModel,
+	Cell,
+	Divider,
 	Stat,
 	PixelsByCell,
 	BorderPixelsByCell,

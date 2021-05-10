@@ -56,12 +56,8 @@ class PerimeterConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C
-
-		this.confChecker()
-
+		super.CPM = C
+		
 		// if C already has cells, initialize perimeters
 		if( C.cellvolume.length !== 0 ){
 			this.initializePerimeters()
@@ -166,10 +162,8 @@ class PerimeterConstraint extends SoftConstraint {
 		if( src_type === tgt_type ){
 			return 0
 		}
-		const ts = this.C.cellKind(src_type)
-		const ls = this.conf["LAMBDA_P"][ts]
-		const tt = this.C.cellKind(tgt_type)
-		const lt = this.conf["LAMBDA_P"][tt]
+		const ls = this.cellParameter("LAMBDA_P", src_type)
+		const lt = this.cellParameter("LAMBDA_P", tgt_type)
 		if( !(ls>0) && !(lt>0) ){
 			return 0
 		}
@@ -193,14 +187,14 @@ class PerimeterConstraint extends SoftConstraint {
 		}
 		let r = 0.0
 		if( ls > 0 ){
-			const pt = this.conf["P"][ts],
+			const pt = this.cellParameter("P", src_type),
 				ps = this.cellperimeters[src_type]
 			const hnew = (ps+pchange[src_type])-pt,
 				hold = ps-pt
 			r += ls*((hnew*hnew)-(hold*hold))
 		}
 		if( lt > 0 ){
-			const pt = this.conf["P"][tt],
+			const pt = this.cellParameter("P", tgt_type),
 				ps = this.cellperimeters[tgt_type]
 			const hnew = (ps+pchange[tgt_type])-pt,
 				hold = ps-pt

@@ -83,7 +83,7 @@ class AttractionPointConstraint extends SoftConstraint {
 		// deltaH is only non-zero when the source pixel belongs to a cell with
 		// an attraction point, so it does not act on copy attempts where the
 		// background would invade the cell.
-		let l = this.conf["LAMBDA_ATTRACTIONPOINT"][this.C.cellKind( src_type )]
+		let l = this.cellParameter("LAMBDA_ATTRACTIONPOINT", src_type )
 		if( !l ){
 			return 0
 		}
@@ -95,7 +95,7 @@ class AttractionPointConstraint extends SoftConstraint {
 
 		// tgt is the attraction point; p1 is the source location and p2 is
 		// the location of the target pixel.
-		let tgt = this.conf["ATTRACTIONPOINT"][this.C.cellKind( src_type )]
+		let tgt = this.cellParameter("ATTRACTIONPOINT", src_type )
 		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i )
 
 		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.

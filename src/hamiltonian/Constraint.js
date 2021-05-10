@@ -31,6 +31,53 @@ class Constraint {
 	get parameters(){
 		return this.conf
 	}
+
+	/** Get a cellid or cellkind-specific parameter for a constraint. 
+	 * This function is here to document its functionality, but it is 
+	 * always overwritten by the constructor (via "set CPM") to point
+	 * to another function. This is normally  @function  paramOfKind,
+	 * which retrieves the parameter from the conf object for the current {@link cellKind}.
+	 * If CPMEvol is used this is instead redirected to @function  paramOfCell,
+	 * which looks whether the parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * @abstract
+	 * 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	/* eslint-disable no-unused-vars */
+	cellParameter(param, cid){
+		throw( "this is a template function that should never actually be called as it is overwritten to point to paramOfCell() or paramOfKind().")
+	}
+
+	/**
+	 * Get a cellId specific parameter, only used if CPMEvol is used: 
+	 * looks whether the requested parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	paramOfCell(param, cid){
+		if (this.C.cells[cid][param] !== undefined){
+			return this.C.cells[cid][param]
+		}
+		return this.paramOfKind(param,cid)
+	}
+
+	/** Returns a cellKind specfic variable: 
+	 * Assumes that the parameter is indexable by cellkind.
+	 *
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	paramOfKind(param, cid){
+		return this.conf[param][this.C.cellKind(cid)]
+	}
+	
 	/** The constructor of a constraint takes a configuration object.
 	This method is usually overwritten by the actual constraint so that the entries
 	of this object can be documented.
@@ -43,14 +90,20 @@ class Constraint {
 		this.conf = conf
 	}
 	/** This function attaches the relevant CPM to this constraint, so that information
-	about this cpm can be requested from the constraint. 
+	about this cpm can be requested from the constraint. If the cpm is of type CPMEvol,
+	the cellParameter call is redirected to check for CellId-specific parameters.
 	@todo Check why some constraints overwrite this? Because that disables the automatic
 	usage of a confChecker() when it is implemented. 
 	@param {CPM} C - the CPM to attach to this constraint.*/
+	/*eslint-disable*/
 	set CPM(C){
 		/** CPM on which this constraint acts.
 		@type {CPM}*/
 		this.C = C
+		this.cellParameter = this.paramOfKind
+		if (C.constructor.name === "CPMEvol"){
+			this.cellParameter = this.paramOfCell
+		}
 		if( typeof this.confChecker === "function" ){
 			this.confChecker()
 		}

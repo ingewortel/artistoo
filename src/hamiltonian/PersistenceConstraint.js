@@ -37,13 +37,12 @@ class PersistenceConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-	
+		
 		/** @ignore */
 		this.halfsize = new Array(C.ndim).fill(0)
 		
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C
+		super.CPM = C
+		
 		for( let i = 0 ; i < C.ndim ; i ++ ){
 			this.halfsize[i] = C.extents[i]/2
 		}
@@ -152,10 +151,9 @@ class PersistenceConstraint extends SoftConstraint {
 			centroids = this.C.getStat( Centroids )
 		}
 		for( let t of this.C.cellIDs() ){
-			const k = this.C.cellKind(t)
-			let ld = this.conf["LAMBDA_DIR"][k]
-			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][k] ? 
-				this.conf["DELTA_T"][k] : 10
+			let ld = this.cellParameter("LAMBDA_DIR", t)
+			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][this.C.cellKind(t)] ? // cannot convert this call easily to cellParameter
+				this.cellParameter("DELTA_T", t) : 10
 			if( ld == 0 ){
 				delete this.cellcentroidlists[t]
 				delete this.celldirections[t]
@@ -188,7 +186,7 @@ class PersistenceConstraint extends SoftConstraint {
 					}
 				}
 				// apply angular diffusion to target direction if needed
-				let per = this.conf["PERSIST"][k]
+				let per = this.cellParameter("PERSIST", t)
 				if( per < 1 ){
 					this.normalize(dx)
 					this.normalize(this.celldirections[t])
