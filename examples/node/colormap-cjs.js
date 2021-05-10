@@ -1,3 +1,9 @@
+/* original code hosted on  https://www.npmjs.com/package/colormap 
+    written by Ben Postlethwaite; inspired by matplotlib, cmocean, cosine gradients and others
+    comes closer to perceptual uniform colormaps for javascript, but are not guaranteed to be fully
+    perceptually uniform
+*/
+
 'use strict';
 
 var colorScale={
