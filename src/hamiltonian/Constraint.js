@@ -33,19 +33,22 @@ class Constraint {
 	}
 
 	/** Get a cellid or cellkind-specific parameter for a constraint. 
-	 * This usually refers to @function paramOfKind, which returns
-	 * this.conf[param][cellkind], and thus assumes that the parameter is 
-	 * indexable by cellkind.
-	 * If CPMEvol is used this is redirected to @function paramOfCell
+	 * This function is here to document its functionality, but it is 
+	 * always overwritten by the constructor (via "set CPM") to point
+	 * to another function. This is normally  @function  paramOfKind,
+	 * which retrieves the parameter from the conf object for the current {@link cellKind}.
+	 * If CPMEvol is used this is instead redirected to @function  paramOfCell,
 	 * which looks whether the parameter is overwritten in an @object Cell
 	 * and otherwise returns @function paramOfKind
+	 * @abstract
 	 * 
 	 * @param {string} param - name of parameter in conf object
 	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
 	@return {any} parameter - the requested parameter
 	*/
+	/* eslint-disable no-unused-vars */
 	cellParameter(param, cid){
-		return this.paramOfKind(param, cid)
+		throw( "this is a template function that should never actually be called as it is overwritten to point to paramOfCell() or paramOfKind().")
 	}
 
 	/**
