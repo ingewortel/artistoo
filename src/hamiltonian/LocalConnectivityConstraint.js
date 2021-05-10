@@ -120,7 +120,7 @@ class LocalConnectivityConstraint extends HardConstraint {
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
 		// connectedness of tgt cell
-		if( tgt_type !== 0 && this.conf["CONNECTED"][this.C.cellKind(tgt_type)] ){
+		if( tgt_type !== 0 && this.cellParameter("CONNECTED",tgt_type) ){
 			return this.checkConnected( tgt_i, src_type, tgt_type )
 		}
 		

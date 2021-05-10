@@ -28,9 +28,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	
 	/** The set CPM method attaches the CPM to the constraint. */
 	set CPM(C){
-		/** CPM on which this constraint acts.
-		@type {CPM}*/
-		this.C = C
+		super.CPM = C
 		
 		/** Private property used by {@link updateBorderPixels} to track borders. 
 		@private
@@ -304,7 +302,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	deltaH( src_i, tgt_i, src_type, tgt_type ){
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
-		let lambda = this.conf["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)]
+		let lambda = this.cellParameter("LAMBDA_CONNECTIVITY", tgt_type)
 		
 		// connectedness of tgt cell
 		if( tgt_type != 0 && lambda > 0 ){

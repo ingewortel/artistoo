@@ -1513,6 +1513,53 @@ class Constraint {
 	get parameters(){
 		return this.conf
 	}
+
+	/** Get a cellid or cellkind-specific parameter for a constraint. 
+	 * This function is here to document its functionality, but it is 
+	 * always overwritten by the constructor (via "set CPM") to point
+	 * to another function. This is normally  @function  paramOfKind,
+	 * which retrieves the parameter from the conf object for the current {@link cellKind}.
+	 * If CPMEvol is used this is instead redirected to @function  paramOfCell,
+	 * which looks whether the parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * @abstract
+	 * 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	/* eslint-disable no-unused-vars */
+	cellParameter(param, cid){
+		throw( "this is a template function that should never actually be called as it is overwritten to point to paramOfCell() or paramOfKind().")
+	}
+
+	/**
+	 * Get a cellId specific parameter, only used if CPMEvol is used: 
+	 * looks whether the requested parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	paramOfCell(param, cid){
+		if (this.C.cells[cid][param] !== undefined){
+			return this.C.cells[cid][param]
+		}
+		return this.paramOfKind(param,cid)
+	}
+
+	/** Returns a cellKind specfic variable: 
+	 * Assumes that the parameter is indexable by cellkind.
+	 *
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	paramOfKind(param, cid){
+		return this.conf[param][this.C.cellKind(cid)]
+	}
+	
 	/** The constructor of a constraint takes a configuration object.
 	This method is usually overwritten by the actual constraint so that the entries
 	of this object can be documented.
@@ -1525,14 +1572,20 @@ class Constraint {
 		this.conf = conf;
 	}
 	/** This function attaches the relevant CPM to this constraint, so that information
-	about this cpm can be requested from the constraint. 
+	about this cpm can be requested from the constraint. If the cpm is of type CPMEvol,
+	the cellParameter call is redirected to check for CellId-specific parameters.
 	@todo Check why some constraints overwrite this? Because that disables the automatic
 	usage of a confChecker() when it is implemented. 
 	@param {CPM} C - the CPM to attach to this constraint.*/
+	/*eslint-disable*/
 	set CPM(C){
 		/** CPM on which this constraint acts.
 		@type {CPM}*/
 		this.C = C;
+		this.cellParameter = this.paramOfKind;
+		if (C.constructor.name === "CPMEvol"){
+			this.cellParameter = this.paramOfCell;
+		}
 		if( typeof this.confChecker === "function" ){
 			this.confChecker();
 		}
@@ -2075,8 +2128,8 @@ class Adhesion extends SoftConstraint {
 	@return {number} adhesion between a pixel of t1 and one of t2.
 	@private
 	*/
-	J( t1, t2 ){
-		return this.conf["J"][this.C.cellKind(t1)][this.C.cellKind(t2)]
+	J( t1, t2 ) {
+		return this.cellParameter("J", t1)[this.C.cellKind(t2)]
 	}
 	/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
 	neighbors that belong to a different cellid.
@@ -2181,10 +2234,10 @@ class VolumeConstraint extends SoftConstraint {
 	@return {number} the volume energy of this cell.
 	*/
 	volconstraint ( vgain, t ){
-		const k = this.C.cellKind(t), l = this.conf["LAMBDA_V"][k];
+		const l = this.cellParameter("LAMBDA_V", t);
 		// the background "cell" has no volume constraint.
 		if( t == 0 || l == 0 ) return 0
-		const vdiff = this.conf["V"][k] - (this.C.getVolume(t) + vgain);
+		const vdiff = this.cellParameter("V", t) - (this.C.getVolume(t) + vgain);
 		return l*vdiff*vdiff
 	}
 }
@@ -2290,20 +2343,18 @@ class ActivityConstraint extends SoftConstraint {
 	deltaH ( sourcei, targeti, src_type, tgt_type ){
 
 		let deltaH = 0, maxact, lambdaact;
-		const src_kind = this.C.cellKind( src_type );
-		const tgt_kind = this.C.cellKind( tgt_type );
 
 		// use parameters for the source cell, unless that is the background.
 		// In that case, use parameters of the target cell.
 		if( src_type != 0 ){
-			maxact = this.conf["MAX_ACT"][src_kind];
-			lambdaact = this.conf["LAMBDA_ACT"][src_kind];
+			maxact = this.cellParameter("MAX_ACT", src_type);
+			lambdaact = this.cellParameter("LAMBDA_ACT", src_type);
 		} else {
 			// special case: punishment for a copy attempt from background into
 			// an active cell. This effectively means that the active cell retracts,
 			// which is different from one cell pushing into another (active) cell.
-			maxact = this.conf["MAX_ACT"][tgt_kind];
-			lambdaact = this.conf["LAMBDA_ACT"][tgt_kind];
+			maxact = this.cellParameter("MAX_ACT", tgt_type);
+			lambdaact = this.cellParameter("LAMBDA_ACT", tgt_type);
 		}
 		if( !maxact || !lambdaact ){
 			return 0
@@ -2414,8 +2465,7 @@ class ActivityConstraint extends SoftConstraint {
 	/* eslint-disable no-unused-vars*/
 	postSetpixListener( i, t_old, t ){
 		// After setting a pixel, it gets the MAX_ACT value of its cellkind.
-		const k = this.C.cellKind( t );
-		this.cellpixelsact[i] = this.conf["MAX_ACT"][k];
+		this.cellpixelsact[i] = this.cellParameter("MAX_ACT", t);
 	}
 	
 	/** The postMCSListener of the ActivityConstraint ensures that pixel activities
@@ -2488,12 +2538,8 @@ class PerimeterConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C;
-
-		this.confChecker();
-
+		super.CPM = C;
+		
 		// if C already has cells, initialize perimeters
 		if( C.cellvolume.length !== 0 ){
 			this.initializePerimeters();
@@ -2598,10 +2644,8 @@ class PerimeterConstraint extends SoftConstraint {
 		if( src_type === tgt_type ){
 			return 0
 		}
-		const ts = this.C.cellKind(src_type);
-		const ls = this.conf["LAMBDA_P"][ts];
-		const tt = this.C.cellKind(tgt_type);
-		const lt = this.conf["LAMBDA_P"][tt];
+		const ls = this.cellParameter("LAMBDA_P", src_type);
+		const lt = this.cellParameter("LAMBDA_P", tgt_type);
 		if( !(ls>0) && !(lt>0) ){
 			return 0
 		}
@@ -2625,14 +2669,14 @@ class PerimeterConstraint extends SoftConstraint {
 		}
 		let r = 0.0;
 		if( ls > 0 ){
-			const pt = this.conf["P"][ts],
+			const pt = this.cellParameter("P", src_type),
 				ps = this.cellperimeters[src_type];
 			const hnew = (ps+pchange[src_type])-pt,
 				hold = ps-pt;
 			r += ls*((hnew*hnew)-(hold*hold));
 		}
 		if( lt > 0 ){
-			const pt = this.conf["P"][tt],
+			const pt = this.cellParameter("P", tgt_type),
 				ps = this.cellperimeters[tgt_type];
 			const hnew = (ps+pchange[tgt_type])-pt,
 				hold = ps-pt;
@@ -2739,11 +2783,11 @@ class BarrierConstraint extends HardConstraint {
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 	
 		// Fulfilled = false when either src or tgt pixel is of the barrier cellkind	
-		if( this.conf["IS_BARRIER"][this.C.cellKind( src_type ) ] ){
+		if( this.cellParameter("IS_BARRIER", src_type ) ){
 			return false
 		}
 
-		if( this.conf["IS_BARRIER"][this.C.cellKind( tgt_type ) ] ){
+		if( this.cellParameter("IS_BARRIER", tgt_type ) ){
 			return false
 		}
 
@@ -3624,8 +3668,6 @@ class ActivityMultiBackground extends ActivityConstraint {
 		}
 
 		let deltaH = 0, maxact, lambdaact;
-		const src_kind = this.C.cellKind( src_type );
-		const tgt_kind = this.C.cellKind( tgt_type );
 		let bgindex1 = 0, bgindex2 = 0;
 		
 		for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
@@ -3641,14 +3683,14 @@ class ActivityMultiBackground extends ActivityConstraint {
 		// use parameters for the source cell, unless that is the background.
 		// In that case, use parameters of the target cell.
 		if( src_type != 0 ){
-			maxact = this.conf["MAX_ACT"][src_kind];
-			lambdaact = this.conf["LAMBDA_ACT_MBG"][src_kind][bgindex1];
+			maxact = this.cellParameter("MAX_ACT", src_type);
+			lambdaact = this.cellParameter("LAMBDA_ACT_MBG", src_type)[bgindex1];
 		} else {
 			// special case: punishment for a copy attempt from background into
 			// an active cell. This effectively means that the active cell retracts,
 			// which is different from one cell pushing into another (active) cell.
-			maxact = this.conf["MAX_ACT"][tgt_kind];
-			lambdaact = this.conf["LAMBDA_ACT_MBG"][tgt_kind][bgindex2];
+			maxact = this.cellParameter("MAX_ACT", tgt_type);
+			lambdaact = this.cellParameter("LAMBDA_ACT_MBG", tgt_type)[bgindex2];
 		}
 		if( !maxact || !lambdaact ){
 			return 0
@@ -4443,6 +4485,162 @@ class CA extends GridBasedModel {
 		value as value. The cache must be cleared when the grid changes!
 		@type {object} */
 		this.stat_values = {};
+	}
+}
+
+class Cell {
+	
+	/** The constructor of class Cell.
+	 * @param {object} conf - configuration settings of the simulation, containing the
+	 * relevant parameters. Note: this should include all constraint parameters.
+	 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
+	 * when parameters are not explicitly overwritten
+	 * @param {CPMEvol} C - the CPM - used among others to draw random numbers
+	 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
+	 * */
+	constructor (conf, kind, id, C){
+		this.conf = conf;
+		this.kind = kind;
+		this.C = C;
+		this.id = id;
+
+		/** The id of the parent cell, all seeded cells have parent -1, to overwrite this
+		 * this.birth(parent) needs to be called 
+		@type{number}*/
+		this.parentId = -1;
+	}
+
+	/** Adds parentId number, and can be overwritten to execute functionality on 
+	 * birth events. 
+	 @param {Cell} parent - the parent Cell object
+	 */
+	birth (parent){
+		this.parentId = parent.id; 
+	}
+
+}
+
+/** Extension of the CPM class that uses Cell objects to track internal state of Cells
+ * Cell objects can override conf parameters, and track their lineage. 
+*/
+class CPMEvol extends CPM {
+
+	/** The constructor of class CA.
+	 * @param {GridSize} field_size - the size of the grid of the model.
+	 * @param {object} conf - configuration options; see CPM base class.
+	 *  
+	 * @param {object[]} [conf.CELLS=[empty, CPM.Cell, CPM.StochasticCorrector]] - Array of objects of (@link Cell) 
+	 * subclasses attached to the CPM. These define the internal state of the cell objects that are tracked
+	 * */
+	constructor( field_size, conf ){
+		super( field_size, conf );
+
+		/** Store the {@Cell} of each cell on the grid. 
+		@example
+		this.cells[1] // cell object of cell with cellId 1
+		@type {Cell}
+		*/
+		this.cells =[new Cell(conf, 0, -1, this)];
+
+		/** Store the constructor of each cellKind on the grid, in order
+		 * 0th index currently unused - but this is explicitly left open for 
+		 * further extension (granting background variable parameters through Cell)
+		@type {CellObject}
+		*/
+		this.cellclasses = conf["CELLS"];
+
+		/* adds cellDeath listener to record this if pixels change. */
+		this.post_setpix_listeners.push(this.cellDeath.bind(this));
+	}
+
+	/** Completely reset; remove all cells and set time back to zero. Only the
+	 * constraints and empty cell remain. */
+	reset(){
+		super.reset();
+		this.cells = [this.cells[0]]; // keep empty declared
+	}
+
+	/** The postSetpixListener of CPMEvol registers cell death.
+	 * @listens {CPM#setpixi}  as this records when cels no longer contain any pixels.
+	 * Note: CPM class already logs most of death, so it registers deleted entries.
+	 * @param {IndexCoordinate} i - the coordinate of the pixel that is changed.
+	 * @param {CellId} t_old - the cellid of this pixel before the copy
+	 * @param {CellId} t_new - the cellid of this pixel after the copy.
+	*/
+	/* eslint-disable no-unused-vars*/
+	cellDeath( i, t_old, t_new){
+		if (this.cellvolume[t_old] === undefined && t_old !== 0){
+			delete this.cells[t_old];
+		} 
+	}
+
+	/** Get the {@link Cell} of the cell with {@link CellId} t. 
+	@param {CellId} t - id of the cell to get kind of.
+	@return {Cell} the cell object. */
+	getCell ( t ){
+		return this.cells[t]
+	}
+
+	/* ------------- MANIPULATING CELLS ON THE GRID --------------- */
+	/** Initiate a new {@link CellId} for a cell of {@link CellKind} "kind", and create elements
+	   for this cell in the relevant arrays. Overrides super to also add a new Cell object to track.
+	   @param {CellKind} kind - cellkind of the cell that has to be made.
+	   @return {CellId} newid of the new cell.*/
+	makeNewCellID ( kind ){
+		let newid = super.makeNewCellID(kind);
+		this.cells[newid] =new this.cellclasses[kind](this.conf, kind, newid, this);
+		return newid
+	}
+
+	/** Calls a birth event in a new daughter Cell object, and hands 
+	 * the other daughter (as parent) on to the Cell.
+	   @param {CellId} childId - id of the newly created Cell object
+	   @param {CellId} parentId - id of the other daughter (that kept the parent id)*/
+	birth (childId, parentId){
+		this.cells[childId].birth(this.cells[parentId] );
+	}
+}
+
+/**
+ * Implements a basic holder for a model with internal products,
+ * which can be stochastically divided between daughter cells. 
+ */
+class Divider extends Cell {
+
+	constructor (conf, kind, id, C) {
+		super(conf, kind, id, C);
+
+		/** Arbitrary internal products
+		 * @type{Array}*/
+		this.products = conf["INIT_PRODUCTS"][kind-1];
+
+		/** Target Volume (overwrites V in volume constraint)
+		 * @type{Number}*/
+		this.V = conf["INIT_V"][kind-1];	
+	}
+
+	/**
+	 *  On birth the X and Y products are divided between the two daughters
+	 * This is equal between daughters if 'NOISE ' is 0, otherwise increases in 
+	 * absolute quantities randomly with NOISE
+	 * @param {Cell} parent - the parent (or other daughter) cell
+	 */ 
+	birth(parent){
+		super.birth(parent); // sets ParentId
+		for (const [ix, product] of parent.products.entries()){
+			let fluct =  this.conf["NOISE"][this.kind-1] * (2  *this.C.random() - 1);
+			if ((product/2 - Math.abs(fluct)) < 0){
+				fluct = product/2; 
+				if ( this.C.random() < 0.5){
+					fluct *= -1;
+				}
+			}
+			this.products[ix] = Math.max(0, product/2 - fluct);
+			parent.products[ix] = Math.max(0, product/2 + fluct);
+		}
+		let V = parent.V;
+		this.V = V/2;
+		parent.V = V/2;
 	}
 }
 
@@ -5474,10 +5672,14 @@ class GridManipulator {
 			x1 = L2 - byy;
 			y1 = bxy;
 		}
-
+		// console.log( id )
 		// create a new ID for the second cell
-		let nid = C.makeNewCellID( C.cellKind( id ) );
-
+		
+		let nid = C.makeNewCellID( C.cellKind( id ));
+		if (C.hasOwnProperty("cells")){
+			C.birth( nid, id );
+		}
+		
 		// Loop over the pixels belonging to this cell
 		//let sidea = 0, sideb = 0
 		//let pix_id = []
@@ -5541,13 +5743,12 @@ class PersistenceConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-	
+		
 		/** @ignore */
 		this.halfsize = new Array(C.ndim).fill(0);
 		
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C;
+		super.CPM = C;
+		
 		for( let i = 0 ; i < C.ndim ; i ++ ){
 			this.halfsize[i] = C.extents[i]/2;
 		}
@@ -5656,10 +5857,9 @@ class PersistenceConstraint extends SoftConstraint {
 			centroids = this.C.getStat( Centroids );
 		}
 		for( let t of this.C.cellIDs() ){
-			const k = this.C.cellKind(t);
-			let ld = this.conf["LAMBDA_DIR"][k];
-			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][k] ? 
-				this.conf["DELTA_T"][k] : 10;
+			let ld = this.cellParameter("LAMBDA_DIR", t);
+			let dt = this.conf["DELTA_T"] && this.conf["DELTA_T"][this.C.cellKind(t)] ? // cannot convert this call easily to cellParameter
+				this.cellParameter("DELTA_T", t) : 10;
 			if( ld == 0 ){
 				delete this.cellcentroidlists[t];
 				delete this.celldirections[t];
@@ -5692,7 +5892,7 @@ class PersistenceConstraint extends SoftConstraint {
 					}
 				}
 				// apply angular diffusion to target direction if needed
-				let per = this.conf["PERSIST"][k];
+				let per = this.cellParameter("PERSIST", t);
 				if( per < 1 ){
 					this.normalize(dx);
 					this.normalize(this.celldirections[t]);
@@ -5774,12 +5974,12 @@ class PreferredDirectionConstraint extends SoftConstraint {
 	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
 	/* eslint-disable no-unused-vars*/
 	deltaH( src_i, tgt_i, src_type, tgt_type ){
-		let l = this.conf["LAMBDA_DIR"][this.C.cellKind( src_type )];
+		let l = this.cellParameter("LAMBDA_DIR", src_type);
 		if( !l ){
 			return 0
 		}
 		let torus = this.C.conf.torus;
-		let dir = this.conf["DIR"][this.C.cellKind( src_type )];
+		let dir = this.cellParameter("DIR", src_type);
 		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
 		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
 		let r = 0.;
@@ -5835,11 +6035,8 @@ class ChemotaxisConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C;
+		super.CPM = C;
 		
-		this.confChecker();
 		this.checkField();
 	}
 	
@@ -5898,7 +6095,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 	deltaHCoarse( sourcei, targeti, src_type, tgt_type ){
 		let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti );
 		let delta = this.field.pixt( tp ) - this.field.pixt( sp );
-		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)];
+		let lambdachem = this.cellParameter("LAMBDA_CH", this.C.cellKind(src_type));
 		return -delta*lambdachem
 	}
 
@@ -5914,7 +6111,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 	/* eslint-disable no-unused-vars*/
 	deltaH( sourcei, targeti, src_type, tgt_type  ){
 		let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei );
-		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)];
+		let lambdachem = this.cellParameter("LAMBDA_CH",src_type);
 		return -delta*lambdachem
 	}
 }
@@ -6000,7 +6197,7 @@ class AttractionPointConstraint extends SoftConstraint {
 		// deltaH is only non-zero when the source pixel belongs to a cell with
 		// an attraction point, so it does not act on copy attempts where the
 		// background would invade the cell.
-		let l = this.conf["LAMBDA_ATTRACTIONPOINT"][this.C.cellKind( src_type )];
+		let l = this.cellParameter("LAMBDA_ATTRACTIONPOINT", src_type );
 		if( !l ){
 			return 0
 		}
@@ -6012,7 +6209,7 @@ class AttractionPointConstraint extends SoftConstraint {
 
 		// tgt is the attraction point; p1 is the source location and p2 is
 		// the location of the target pixel.
-		let tgt = this.conf["ATTRACTIONPOINT"][this.C.cellKind( src_type )];
+		let tgt = this.cellParameter("ATTRACTIONPOINT", src_type );
 		let p1 = this.C.grid.i2p( src_i ), p2 = this.C.grid.i2p( tgt_i );
 
 		// To bias a copy attempt p1 -> p2 in the direction of vector 'dir'.
@@ -6086,9 +6283,7 @@ class ConnectivityConstraint extends HardConstraint {
 	
 	/** The set CPM method attaches the CPM to the constraint. */
 	set CPM(C){
-		/** CPM on which this constraint acts.
-		@type {CPM}*/
-		this.C = C;
+		super.CPM = C;
 		
 		/** Private property used by {@link updateBorderPixels} to track borders. 
 		@private
@@ -6305,7 +6500,7 @@ class ConnectivityConstraint extends HardConstraint {
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
 		// connectedness of tgt cell
-		if( tgt_type != 0 && this.conf["CONNECTED"][this.C.cellKind(tgt_type)] ){
+		if( tgt_type != 0 && this.cellParameter("CONNECTED",tgt_type) ){
 			return this.checkConnected( tgt_i, src_type, tgt_type )
 		}
 		
@@ -6338,9 +6533,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	
 	/** The set CPM method attaches the CPM to the constraint. */
 	set CPM(C){
-		/** CPM on which this constraint acts.
-		@type {CPM}*/
-		this.C = C;
+		super.CPM = C;
 		
 		/** Private property used by {@link updateBorderPixels} to track borders. 
 		@private
@@ -6614,7 +6807,7 @@ class SoftConnectivityConstraint extends SoftConstraint {
 	deltaH( src_i, tgt_i, src_type, tgt_type ){
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
-		let lambda = this.conf["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
+		let lambda = this.cellParameter("LAMBDA_CONNECTIVITY", tgt_type);
 		
 		// connectedness of tgt cell
 		if( tgt_type != 0 && lambda > 0 ){
@@ -6742,7 +6935,7 @@ class LocalConnectivityConstraint extends HardConstraint {
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
 		// connectedness of tgt cell
-		if( tgt_type !== 0 && this.conf["CONNECTED"][this.C.cellKind(tgt_type)] ){
+		if( tgt_type !== 0 && this.cellParameter("CONNECTED",tgt_type) ){
 			return this.checkConnected( tgt_i, src_type, tgt_type )
 		}
 		
@@ -6774,15 +6967,11 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 	/** The set CPM method attaches the CPM to the constraint. It checks whether the
 	CPM is 2D or 3D, because this constraint is currently only tested in 2D. */
 	set CPM(C){
-		/** CPM on which this constraint acts.
-		@type {CPM}*/
-		this.C = C;
+		super.CPM = C;
 		
 		if( this.C.ndim != 2 ){
 			throw("You are trying to add a SoftLocalConnectivityConstraint to a 3D CPM, but this constraint is currently only supported in 2D!")
 		}
-		
-		this.confChecker();
 	}
 	
 	/** This method checks that all required parameters are present in the object supplied to
@@ -6911,7 +7100,7 @@ class SoftLocalConnectivityConstraint extends SoftConstraint {
 	deltaH( src_i, tgt_i, src_type, tgt_type ){
 		// connectedness of src cell cannot change if it was connected in the first place.
 		
-		let lambda = this.conf["LAMBDA_CONNECTIVITY"][this.C.cellKind(tgt_type)];
+		let lambda = this.cellParameter("LAMBDA_CONNECTIVITY", tgt_type);
 		
 		// connectedness of tgt cell. Only check when the lambda is non-zero.
 		if( tgt_type != 0 && lambda > 0 ){
@@ -6966,12 +7155,12 @@ class HardVolumeRangeConstraint extends HardConstraint {
 	fulfilled( src_i, tgt_i, src_type, tgt_type ){
 		// volume gain of src cell
 		if( src_type != 0 && this.C.getVolume(src_type) + 1 > 
-			this.conf["LAMBDA_VRANGE_MAX"][this.C.cellKind(src_type)] ){
+			this.cellParameter("LAMBDA_VRANGE_MAX", src_type) ){
 			return false
 		}
 		// volume loss of tgt cell
 		if( tgt_type != 0 && this.C.getVolume(tgt_type) - 1 < 
-			this.conf["LAMBDA_VRANGE_MIN"][this.C.cellKind(tgt_type)] ){
+			this.cellParameter("LAMBDA_VRANGE_MIN",tgt_type) ){
 			return false
 		}
 		return true
@@ -7246,12 +7435,16 @@ class Simulation {
 		
 		/** Make CPM object based on configuration settings and attach it.
 		@type {CPM} */
-		this.C = new CPM( config.field_size, config.conf );
+		if (((config || {}).conf || {})["CELLS"] !== undefined){
+			this.C = new CPMEvol( config.field_size, config.conf );
+		} else {
+			this.C = new CPM( config.field_size, config.conf );
+		}
 				
 		/** See if objects of class {@link Canvas} and {@link GridManipulator} already 
 		exist. These are added automatically when required. This will set
 		their values in helpClasses to 'true', so they don't have to be added again.
-		@type {object}*/
+		@type {object}*/ 
 		this.helpClasses = { gm: false, canvas: false };
 
 		/** Add additional constraints.
@@ -10411,7 +10604,9 @@ exports.BorderConstraint = BorderConstraint;
 exports.BorderPixelsByCell = BorderPixelsByCell;
 exports.CA = CA;
 exports.CPM = CPM;
+exports.CPMEvol = CPMEvol;
 exports.Canvas = Canvas;
+exports.Cell = Cell;
 exports.CellNeighborList = CellNeighborList;
 exports.Centroids = Centroids;
 exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
@@ -10420,6 +10615,7 @@ exports.CoarseGrid = CoarseGrid;
 exports.ConnectedComponentsByCell = ConnectedComponentsByCell;
 exports.Connectedness = Connectedness;
 exports.ConnectivityConstraint = ConnectivityConstraint;
+exports.Divider = Divider;
 exports.Grid = Grid;
 exports.Grid2D = Grid2D;
 exports.Grid3D = Grid3D;
