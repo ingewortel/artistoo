@@ -1,23 +1,23 @@
 {
 	"name": "Artistoo",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"dependencies": {
 		"braces": "^3.0.2",
 		"canvas": "^2.6.0",
 		"colormap": "^2.3.2",
-		"esdoc": "^1.1.0",
-		"esdoc-standard-plugin": "^1.0.0",
-		"eslint": "^5.16.0",
 		"fs": "0.0.1-security",
 		"mathjs": "^5.8.0",
 		"mersenne-twister": "^1.1.0",
-		"rollup": "^1.2.3",
-		"rollup-plugin-eslint": "^5.0.0",
 		"websocket": "^1.0.28"
 	},
 	"devDependencies": {
+		"esdoc": "^1.1.0",
+		"esdoc-standard-plugin": "^1.0.0",
+		"eslint": "^5.16.0",
 		"jasmine": "^3.5.0",
+		"rollup": "^1.2.3",
 		"rollup-plugin-commonjs": "^9.2.0",
+		"rollup-plugin-eslint": "^5.0.0",
 		"rollup-plugin-node-resolve": "^4.0.0"
 	}
 }

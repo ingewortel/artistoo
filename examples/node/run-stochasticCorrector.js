@@ -1,5 +1,5 @@
 let CPM = require("../../build/artistoo-cjs.js")
-let ColorMap = require("./colormap-cjs.js")
+let ColorMap = require("../node/colormap-cjs.js")
 
 let config = {
 
@@ -71,8 +71,8 @@ let config = {
 		SAVEIMG : true,						// Should a png image of the grid be saved
 		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img/StochasticCorrection",	// ... And save the image in this folder.
-		EXPNAME : "StochasticCorrection",					// Used for the filename of output images.
+		SAVEPATH : "output/img/StochasticCorrector",	// ... And save the image in this folder.
+		EXPNAME : "StochasticCorrector",					// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?
