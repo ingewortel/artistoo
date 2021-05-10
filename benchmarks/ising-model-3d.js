@@ -1,4 +1,4 @@
-/** Run a basic 2D Ising model. 
+/** Run a basic 3D Ising model. 
  * 
  * This is just for benchmarking, so does not 
  * log anything or draw any images. */
@@ -16,9 +16,9 @@ C.add( new CPM.Adhesion( { J:[ [NaN,1], [1,1] ] } ) )
 let cid = C.makeNewCellID(1)
 // For all non-stromaborder pixels in the grid: assign it randomly
 // to either background or cell.
-for( let i = 0 ; i < C.field_size.x ; i ++ ){
-	for( let j = 0 ; j < C.field_size.y ; j ++ ){
-		for( let k = 0 ; k < C.field_size.z ; k ++ ){
+for( let i = 0 ; i < C.extents[0] ; i ++ ){
+	for( let j = 0 ; j < C.extents[1] ; j ++ ){
+		for( let k = 0 ; k < C.extents[2] ; k ++ ){
 			if( C.random() <= 0.5 ){
 				C.setpix( [i, j, k], cid )
 			}

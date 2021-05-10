@@ -17,7 +17,7 @@ C = new CPM.CPM( [w,w], {
 C.add( new CPM.Adhesion(C.conf) )
 C.add( new CPM.VolumeConstraint(C.conf) )
 
-let Ci = new CPM.GridInitializer(C)
+let Ci = new CPM.GridManipulator(C)
 let i = 8820
 while( i-- > 0 ){
 	Ci.seedCell(1)
