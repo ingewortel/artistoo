@@ -6102,14 +6102,21 @@ var CPM = (function (exports) {
 					if( per < 1 ){
 						this.normalize(dx);
 						this.normalize(this.celldirections[t]);
-						for( let j = 0 ; j < dx.length ; j ++ ){
-							dx[j] = (1-per)*dx[j] + per*this.celldirections[t][j];
+						for (let j = 0; j < dx.length; j++) {
+							dx[j] = (1 - per) * dx[j] + per * this.celldirections[t][j];
 						}
 						this.normalize(dx);
-						for( let j = 0 ; j < dx.length ; j ++ ){
-							dx[j] *= ld;
+						// this may lead to NaNs if the displacement was zero. If that's the case,
+						// the cell hasn't moved and has lost its persistent "memory", so we give it
+						// a new random direction.
+						if( dx.some( d => Number.isNaN(d) ) ){
+							this.celldirections[t] = this.randDir(this.C.ndim);
+						} else {
+							for (let j = 0; j < dx.length; j++) {
+								dx[j] *= ld;
+							}
+							this.celldirections[t] = dx;
 						}
-						this.celldirections[t] = dx;
 					}
 				}
 			}
