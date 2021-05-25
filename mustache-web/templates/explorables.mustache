@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>{{title}}</title>
+    {{>head}}
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+{{>nav}}  
+
+
+<!-- TITLE AND TOP IMAGE -->
+<div class="mainimg" >
+	<div class="mainimg-text">
+	<h1>
+	  Explorables
+	</h1>
+	<h2>
+	  Interactive models and their explanations&puncsp;.
+	</h2>        
+  </div>
+</div>
+
+
+<div class="index-content">
+<div class="front-page">
+
+
+	<h1>Explorables</h1>
+	<p>These explorables serve as inspiration for how to share your models with an audience.
+	They combine interactive simulations with explanatory text to help readers explore
+	a model. Happy exploring!<br></p>
+	
+	<div class="row">
+		{{#explorables}}
+		<div class="col-4 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="explorable-tile">
+				<a href="{{link}}">
+				<img src="{{image}}" width="100%"></a>
+			</div>
+		</div>
+		<div class="col-8 col-sm-8 col-md-9 col-lg-4 col-xl-4 explorable-desc">
+			<div>
+				<a href="{{link}}">
+				<h2>{{title}}</h2></a>
+				<p class="explorable-desc">{{desc}}</p>
+			</div>
+		</div>
+		{{/explorables}}
+	</div>
+
+	
+
+
+</div>
+</div>
+
+
+
+{{>footer}}
+
+
+</body>
+</html>

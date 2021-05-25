@@ -33,8 +33,10 @@ progress/step2 : ../esdoc-template-artistoo/layout.html | progress
 #	- link to github
 #	- search index of all the auto-generated pages.
 progress/step3 : progress/step2 
-		@echo "		Updating esdoc docs" && cd .. && $(MAKE) docs/index.html && \
-		cp esdoc-template-artistoo/css/* www/css/ && cd www && touch $@
+		@echo "		Updating esdoc docs" 
+		#&& \
+		#cd .. && $(MAKE) docs/index.html && \
+		#cp esdoc-template-artistoo/css/* www/css/ && cd www && touch $@
 	
 
 # Step 4: copy all esdoc stuff into this folder:
@@ -54,17 +56,26 @@ converter-files :	$(wildcard ../mustache-web/sources/converter/**/*) progress/st
 	
 examples :
 	@mkdir -p $@
+	
+explorables :
+	@mkdir -p $@
 
 example-files : $(wildcard ../examples/html/**/*) progress/step3 | examples
 	@echo "		Adding example html files" && cp ../examples/html/* examples/ && \
 	cp ../examples/3D/cpm3d.html examples/ && \
 	cp ../examples/3D/Canvas3D.js examples/ && \
 	cp ../examples/3D/OrbitControls.js examples/
+	
+#explorable-files : $(wildcard ../explorables/*) progress/step3 | explorables
+#	@echo "		Adding explorable files" && cp -r ../explorables/* explorables/
 
 manual-asset : ../mustache-web/sources/manual/asset progress/step3 converter-files
 	@echo "		Adding manual asset files" &&  cp -r $< manual/asset
+	
+explorable-asset : ../mustache-web/sources/explorable-assets
+	@echo "		Adding explorable asset files" &&  rm -rf explorables/asset && cp -r $< explorables/asset
 
-progress/step6 : converter-files example-files manual-asset
+progress/step6 : converter-files example-files manual-asset 
 	@touch $@
 
 

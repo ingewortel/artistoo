@@ -1,0 +1,303 @@
+<p style="font-size:120%">This tutorial walks through the 
+ Cellular Potts Model (CPM) in its basic form. It requires no upfront knowledge on the CPM and
+contains interactive components to illustrate how the algorithm works.
+</p>
+<p style="font-size:90%;font-style:italic">This explorable was published in: 
+Wortel & Textor (2020). eLife 2021;10:e61288. 
+doi:<a href="https://doi.org/10.7554/eLife.61288">10.7554/eLife.61288</a>.</p>
+
+<h2>1. Framework Basics</h2>
+
+<h3>1.1 The CPM in Space: The Grid</h3>
+
+<p>The Cellular Potts Model (CPM) is what we call <i>discrete</i> in space: it 
+essentially describes space like a photograph,
+zoomed in far enough that you can see the individual pixels. Each pixel $p$ belongs 
+to either the empty "background" or to a "cell" on that surface:
+<div class="mathjaxcontainer">$$ \text{cell}(p) = \begin{cases}
+0 & \text{background} \\
+1 & \text{cell with ID = 1} \\
+2 & \text{cell with ID = 2} \\
+... & etc
+\end{cases}$$</div>
+
+The entire space described by our model is then called the CPM "grid" or "lattice". 
+For example, a grid with two square cells could look like this:
+
+<div>
+	<iframe src="./asset/frame-gridstate.html" width="100%" height="200px"></iframe>
+</div>
+
+
+These pixel identities vary in both space (different pixels have different identities) 
+and time (pixels can switch their cell identity over time):
+
+$$\text{cell} = f(p,t)$$ 
+
+For example :
+
+<div>
+	<iframe src="./asset/frame-gridstate-dynamic.html" width="100%" height="200px"></iframe>
+</div>
+
+Now, let's explore where these identity changes come from.</p>
+
+<h3>1.2 Physical Laws in the CPM World: Energies and the Hamiltonian</h3>
+
+<p> CPM cells move because they continuously try to "conquer" pixels from other cells
+(or from the background). This is why the grid state $\text{cell} (p,t)$ changes over 
+time. These changes are stochastic but not completely random: in their competition for 
+pixels, cells try to minimize the global <i>energy</i> of the system, defined by the 
+<i>Hamiltonian</i> $H$. (Mostly, this minimization does not actually "work" in the sense
+that the model never reaches a steady state, but it <i>does</i> guide behaviour in the model).
+</p>
+
+<p> How these energies are computed depends on the exact model
+	and will be discussed in more detail below; but the idea is that this general 
+	mechanism allows us to define a set of "rules" or "physical laws". The CPM cells
+	tend to follow these in their dynamic game of conquering pixels. 
+</p>
+
+<p>The question remains: how does this energy minimization work? </p>
+
+<h3>1.3 The CPM in Time: Dynamics and the Metropolis Algorithm</h3>
+
+<p>The CPM controls its global energy $H$ through the so-called Metropolis algorithm:</p>
+<ol>
+	<li>Pick a random pixel on the grid as the "source" pixel $p_s$;</li>
+	<li>Pick a random neighbor of $s$ as the "target" pixel $p_t$; (here, we use 
+	the <a href ="https://en.wikipedia.org/wiki/Moore_neighborhood">Moore neighborhood</a> 
+	where each pixel has 8 neighbors: top, right, bottom, left, and the 4 diagonal pixels)</li>
+	<li>If $\text{cell}(p_s,t) \neq \text{cell}(p_t, t)$ (i.e., the pixels do
+	not belong to the same cell), then 
+	let $p_s$ try to "copy" itself into $p_t$ such that 
+	<div class="mathjaxcontainer">$$\text{cell}(p_t,t+1) \stackrel{?}{=} \text{cell}(p_s,t)$$</div>
+	Note the "try" in the previous sentence; this so-called "copy attempt" only 
+	succeeds with chance
+	<div class="mathjaxcontainer">$$P_\text{copy} = \begin{cases}
+	e^{-\Delta H/T} & \Delta H \gt 0\\
+	1 & \Delta H \leq 0 \end{cases}$$</div>
+	Here, $\Delta H$ is the energetic effect the copy attempt, if successful, would have:
+	$\Delta H \leq 0$ indicates an "energetically favourable" change, while 
+	$\Delta H \gt 0$ indicates an unfavourable change. Note that "favourable" changes
+	always succeed: $P_\text{copy} = 1 $. The temperature $T$ is a model 
+	parameter that controls noise: the higher the temperature, the more likely that
+	energetically unfavourable copy attempts will succeed. 
+	<li>Repeat steps 1-3 $N$ times, where $N$ equals the total number of
+	pixels on the grid. After those $N$ copy attempts (whether they succeed or
+	not), the model time progresses with one <i>Monte Carlo Step (MCS)</i>, the time
+	unit of the CPM)</li>
+</ol> 
+
+<p>You can walk through these dynamics below; click "step" to perform the next step
+of the algorithm manually, or click the play symbol to automatically perform the 
+steps at a faster pace. (Don't worry about the value of &Delta;H for now; that is
+discussed in the next section.)</p>
+
+<div>
+	<iframe src="./asset/frame-metropolis.html" width="100%" height="330px"></iframe>
+</div>
+
+
+<h2>2. Constructing the Hamiltonian</h2>
+
+<p> We have already talked briefly about the <i>Hamiltonian</i> $H$, the global 
+energy that the system tries to minimize. Typically, this Hamiltonian contains
+different terms to encourage different processes. For example:</p>
+
+<ol>
+	<li><b>Adhesion</b>: Pixels belonging to the same cell try to stick together; 
+	essentially, we put a penalty on every black pixel next to a gray pixel.</li>
+	<li><b>Maintaining size and shape</b>: Cells have a target volume and/or perimeter. 
+	They can deviate a little from that value by stretching or compressing, but they
+	more or less maintain their size and membrane.</li>
+</ol>
+
+<p>This would give the following Hamiltonian:
+<div class="mathjaxcontainer">$$H_\text{tot} = H_\text{adhesion} + H_\text{volume} + H_\text{perimeter}$$</div>
+
+However, note that we never really use $H$ itself; we only ever look at $\Delta H$, 
+the <i>change</i> in energy that would occur if the copy attempt were to succeed:
+<div class="mathjaxcontainer">
+$$\Delta H_\text{tot} = \Delta H_\text{adhesion} + \Delta H_\text{volume} + \Delta H_\text{perimeter}$$</div></p>
+
+
+
+<p>In the following, we'll see what these terms look like.
+</p>
+
+
+
+<h3>2.1 Adhesion</h3>
+
+<p>The adhesive energy is a <i>contact energy</i> that ensures that pixels from the
+same cell stay together. For a CPM with a single cell, where there are only two
+identities (0 for the background, 1 for the cell), this is defined as:
+	<div class="mathjaxcontainer">
+	$$H_\text{adhesion} = \sum_{\substack{\text{neighbors } i,j \\ \text{cell}(i) \neq \text{cell}(j)}} J$$</div>
+where we sum over pairs of <i>neighboring</i> pixels $i,j$ on the grid (using the
+<a href ="https://en.wikipedia.org/wiki/Moore_neighborhood">Moore neighborhood</a>, 
+which includes diagonal neighbors). 
+In other words: we assign a positive energy (i.e. a penalty) to every pair of 
+neighboring pixels that do not belong to the same cell. The parameter $J$ controls
+the strength of this penalty. 
+</p>
+<p>
+To get $\Delta H$ for a proposed copy attempt, we then compute:
+<div class="mathjaxcontainer">$$\Delta H_\text{adhesion} = H_\text{adhesion,after copy} - H_\text{adhesion, now}$$</div>
+</p>
+
+<p>Below, these contacts are visualized; click "step()" to complete an MCS in the
+grid and to see the adhesion energy after the changes (note that every pair is counted
+twice). </p>
+
+<div>
+	<iframe src="./asset/frame-adhesion-basic.html" width="100%" height="330px"></iframe>
+</div>
+
+<p>Note that the simulation start with random assignment of pixels to the "cell" or
+"background". Over time, pixels with the same identity tend to cluster together in space.
+This happens because the system tries to minimize its energy, 
+and therefore its number of interfaces: the number of different cell contacts (and thus
+the energetic penalty) decreases when pixels of the same cell cluster together. 
+Finally, as time progresses, the grid has only one identity left (it is then either empty, 
+or completely filled with one cell)&mdash;after all, the best way to minimize contact
+energy is to have no interfaces at all! </p>
+
+
+<p>The same principle applies when there is more than one cell, except now we have to define
+<i>multiple</i> contact energies $J$: the interface between two different cells
+gets a different energy $(J_\text{cell,cell})$ than the interface between 
+one of the cells and the background $(J_\text{cell,bg})$:</p>
+
+<div>
+	<iframe src="./asset/frame-adhesion-multi.html" width="100%" height="360px"></iframe>
+</div>
+
+<p>Again, after enough time passes, the grid ends up homogeneous because it is 
+energetically beneficial to remove all the interfaces. With the tendency
+of the CPM to minimize the global energy, we eventually end up in this minimum energy,
+steady state scenario. If we wish to have real cells that don't just disappear, 
+we need to expand our Hamiltonian.
+</p>
+
+
+
+<h3>2.2 Volume</h3>
+
+<p>To describe units that look more like cells, the Hamiltonian of  a Cellular Potts 
+Model (CPM) typically contains a volume term that ensures that cells roughly maintain 
+their size (measured in number of pixels):
+<div class="mathjaxcontainer">$$H_\text{volume} =  \sum_{i \in \text{cells}} \lambda_\text{volume}(V_i - V_t)^2$$</div>
+For every cell, this terms assigns an energetic penalty that depends quadratically 
+on how much its current volume $V_i$ deviates from 
+some target value $V_t$ (which is a model parameter). A second parameter, 
+$\lambda_\text{volume}$, is used to further scale this energy.
+</p>
+
+<p>Once again, what we actually use is the energy difference:
+<div class="mathjaxcontainer">$$\Delta H_\text{volume} = H_\text{volume,after copy} - H_\text{volume, now}$$</div>
+</p>
+
+<p>This result in an elastic-like behavior. There is no complete conservation of mass
+because cells <i>can</i> deviate from their target volume by stretching or compressing a 
+little, but these deviations remain small due to the quadratic penalty they carry with
+them. If a cell is already too large, it won't easily gain more pixels. And vice versa,
+if it is too small, it won't easily lose them.</p>
+
+<p>The following example illustrates this for a simple cell with a target volume of 9
+pixels and &lambda;<sub>volume</sub> = 20:</p>
+
+<div>
+	<iframe src="./asset/frame-volume.html" width="100%" height="400px"></iframe>
+</div>
+
+<p>(Note here that the grid has a periodic boundary, such that a cell leaving on the 
+right enters the grid on the left.)</p>
+
+<h3>2.3 Perimeter</h3>
+
+<p>To control the cell shape, we can add another term to the Hamiltonian that constrains
+the cells "perimeter" or circumference in a similar way as we did with the volume constraint:
+<div class="mathjaxcontainer">$$H_\text{perimeter} =  \sum_{i \in \text{cells}} \lambda_\text{perimeter}(P_i - P_t)^2$$</div>
+Again, this terms assigns an energetic penalty for each cell that depends quadratically 
+on how much its current perimeter $P_i$ deviates from 
+some target value $P_t$ (a model parameter). Here, the "perimeter" is measured in the 
+same way as adhesion contacts earlier: for every one of the cell's border pixels, we count
+the number of neighbor pixels belonging to a different cell.
+</p>
+
+<p>We then use the energy difference to bias copy attempts:
+<div class="mathjaxcontainer">$$\Delta H_\text{perimeter} = H_\text{perimeter,after copy} - H_\text{perimeter, now}$$</div>
+</p>
+
+<p>This result in an elastic-like behavior of the cell's perimeter or "membrane". Cells 
+with a small perimeter (compared to their volume) tend to stay round, while cells with 
+a large perimeter have more flexible borders and a more dynamic cell shape.</p>
+
+<p>The following example illustrates this for a simple cell with a target volume of 4
+pixels, a target perimeter of 15 and &lambda;<sub>perimeter</sub> = 1:</p>
+
+<div>
+	<iframe src="./asset/frame-perimeter.html" width="100%" height="400px"></iframe>
+</div>
+
+<p>(Note here that the grid has a periodic boundary, such that the left-right and top-bottom
+of the grid are linked; thus, a pixel at the border of the cell on the far right of
+the grid can have pixels on the far left contributing to its perimeter.)</p>
+
+<h3>2.4 Combining constraints</h3>
+
+<p>Combining the different constraints in one Hamiltonian, we get:
+
+<div class="mathjaxcontainer">
+$$\Delta H_\text{tot} = \Delta H_\text{adhesion} + \Delta H_\text{volume} + \Delta H_\text{perimeter}$$</div></p>
+
+Note here that the different terms may oppose each other. For example, we have seen that
+for the adhesion term it is most favourable to let all but one cell disappear completely
+(thus eliminating all cell-cell contact interfaces). By contrast, the volume constraint 
+actually prevents cells from disappearing. Thus, the final outcome is always the result of 
+a <i>balance</i> between these different energies. We'll explore in the next part how these
+components interact.
+</p>
+
+<h2>3 Try It Yourself</h2>
+
+<p>Below, you can explore the basic CPM rules by toggling the different rules (adhesion,
+maintaining volume, and maintaining perimeter). You can also set the size of the volume or
+perimeter the cell tries to maintain. </p>
+
+<div>
+	<iframe src="./asset/frame-singlecell.html" width="100%" height="400px"></iframe>
+</div>
+
+<p>Suggestions to try:</p>
+<ul>
+	<li>Toggle both perimeter and volume off so that the only rule is "adhesion". You
+	should see the cell disappear (after all, the best way to have no black pixels next
+	to gray ones is to have no black pixels at all!)</li>
+	<li>Get your cell back by clicking reset. Now disable "adhesion" while leaving
+	volume and perimeter intact. Not much should happen; the perimeter by itself is
+	already keeping the cells together. Now also disable the perimeter, leaving only
+	the volume 'on'. The cell should fall apart.</li>
+	<li>Turn adhesion back on (you should now have volume and adhesion) until the cell
+	reforms; if it doesn't, click reset. Switch the perimeter back on and play with 
+	the perimeter setting. If you set it very low, the cell should become quite round
+	and rigid. If you set the perimeter large, it should have a strongly fluctuating 
+	border.</li>
+	<li>Increase the volume. Note that to keep the same shape, you also have to increase
+	the perimeter somewhat.</li>
+</ul>
+
+<h2>Summary</h2>
+
+<p>All in all, we have seen here how the CPM consists of a discrete grid combined with 
+energy-based kinetics. The energy "rules" like <b>adhesion</b>, <b>volume</b> and
+<b>perimeter</b> <i>interact</i> to yield cell behaviour. Even the three basic terms 
+discussed here already allow us to model interesting behaviours such as 
+<a href = "InteractiveS4-CellSorting.html">cell sorting</a>, and we can make even more 
+complex models by inventing new kinds of energy terms. For example, the cell we have
+simulated here has dynamic borders and
+can kind of float around (especially if you give it a large perimeter), but there is no
+real "active" motion; that is the topic of a 
+<a href="Explorable-ActModel.html">later tutorial</a>.</p>

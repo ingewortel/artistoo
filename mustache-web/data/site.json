@@ -7,8 +7,8 @@
 			"desc": "Various processes simulated in a Cellular Potts Model (CPM). Mix and match elements from the examples to build your own simulations. Click to view.",
 			"subs": [
 				{
-					"head":"CPM: Back to Basic",
-					"desc":"Simple processes to get you started.",
+					"head":"",
+					"desc":"",
 					"items": [
 						{
 							"name": "Inspiring Magnets",
@@ -28,7 +28,7 @@
 							"name": "Just Keep Swimming",
 							"image": "./image/examples/RandomWalk.gif",
 							"link": "./examples/RandomWalk.html",
-							"desc": "A \"cell\" with modified volume constraint does a random walk.",
+							"desc": "A \"cell\" with modified volume constraint goes for a random walk.",
 							"learn": [ "basics", "adding constraints" ]
 						},
 						{
@@ -51,13 +51,7 @@
 							"link": "./examples/Diffusion.html",
 							"desc": "A discrete approximation of Diffusion. ",
 							"learn": [ "simulating diffusion" ]
-						}
-					]
-				},
-				{
-					"head":"CPM: Models of Motion",
-					"desc":"Add migration, environmental structures, and custom visualisations.",
-					"items": [
+						},
 						{
 							"name": "Distrac(k)ted",
 							"image": "./image/examples/ManyCellsPrefDir.gif",
@@ -85,13 +79,7 @@
 							"link": "./examples/ActOnMicroPattern.html",
 							"desc": "Two cells rotating on a micropatterned surface.",
 							"learn": [ "adding constraints", "initialisation","environmental structures" ]
-						}
-					]
-				},
-				{
-					"head":"CPM: Directing Directions",
-					"desc":"Attract cells in (changing) directions, or simulate chemotaxis in presence of a diffusing chemokine.",
-					"items": [
+						},
 						{
 							"name": "A Choreographed Dance",
 							"image": "./image/examples/DirectedMotionLinear.gif",
@@ -120,13 +108,7 @@
 							"link": "./examples/ManyCellsDiffusion.html",
 							"desc": "Cells attracting other cells through specific chemokines.",
 							"learn": [ "simulating diffusion", "chemotaxis","communicating grids", "multiple celltypes" ]
-						}
-					]
-				},
-				{
-					"head":"CPM: Towards Tissues",
-					"desc":"Build densely packed tissues of interacting cells.",
-					"items": [
+						},
 						{
 							"name": "Holding Tight",
 							"image": "./image/examples/Epidermis.gif",
@@ -278,6 +260,43 @@
 		{
 			"title": "Custom Modules",
 			"tag": "custommodules"		
+		}
+	],
+	"explorables":[
+		{
+			"title":"Introduction to the CPM",
+			"image": "./image/examples/algorithm.gif",
+			"link": "./explorables/Explorable-CPM.html",
+			"desc": "This explorable explains the algorithm and dynamics behind the CPM.",
+			"tag": "Explorable-CPM"
+		},
+		{
+			"title":"A CPM of Cell Migration",
+			"image": "./image/examples/actmodel.gif",
+			"link": "./explorables/Explorable-ActModel.html",
+			"desc": "This explorable describes a CPM extension that lets cells migrate actively.",
+			"tag": "Explorable-ActModel"
+		},
+		{
+			"title":"Game of Life",
+			"image": "./image/examples/GameOfLife.gif",
+			"link": "./explorables/Explorable-GameOfLife.html",
+			"desc": "Learn all about the 'Game of Life', a classic model by John Conway that is surprisingly interesting despite its simple rules.",
+			"tag": "Explorable-GameOfLife"
+		},
+		{
+			"title":"Back to the Classics: Cell Sorting",
+			"image": "./image/examples/CellSorting.gif",
+			"link": "./explorables/Explorable-CellSorting.html",
+			"desc": "In this explorable, we go back to the classics: the very first CPM that was designed by Graner and Glazier as a model for cell sorting.",
+			"tag": "Explorable-CellSorting"
+		},
+		{
+			"title":"Divide and Conquer: A Simple Spatial Model of Cell Division",
+			"image": "./image/examples/CellDivision.gif",
+			"link": "./explorables/Explorable-CellDivision.html",
+			"desc": "This explorable shows what happens when we link the CPM spatial dynamics and cell shapes to other processes, like cell division.",
+			"tag": "Explorable-CellDivision"
 		}
 	]
 }

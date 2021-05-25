@@ -4,271 +4,7 @@
 <head>
 	<title>{{title}}</title>
     {{>head}}
-    
-    <script type="text/javascript" src="../script/jquery.touchSwipe.min.js"></script>
-    <style>
-
-		
-		#sidebar {
-			padding: 0px;
-			margin:0px;
-			transition: all 0.3s;
-		}
-
-		#content{
-			margin-left: 250px;
-			padding-left: 20px;
-			transition: all 0.3s;
-			min-height: 60%;
-		}
-		
-		/* closed state: shift to the left*/
-		#sidebar.closed {
-			margin-left: -230px;
-		}
-		
-		#content.closed {
-			margin-left: 20px;
-		}
-		
-		/* the little gray arrow to indicate whether sidebar is open or closed. */
-		#sidebarToggle{
-			position:fixed; 
-			top:80px; 
-			left:255px;
-			transition: all 0.3s;
-			z-index:1100;
-		}
-		
-		#sidebarToggle.closed{
-			left: 25px;
-		}
-		
-		/*a[data-toggle="collapse"] {
-			position: relative;
-		}
-
-		.dropdown-toggle::after {
-			display: block;
-			position: absolute;
-			top: 50%;
-			right: 20px;
-			transform: translateY(-50%);
-		}*/
-		
-		
-		#content h1 {
-			font-size:250%;
-		}
-		
-		#content h2 {
-			padding-top:20px;
-			font-size:200%;
-		}
-		
-		#content h3 {
-			font-size:150%;
-			padding:0px;
-			padding-top:20px;
-			border-bottom: solid 1px #ddd;
-		}
-		
-		#content iframe {
-			border:1px solid black;
-    		box-shadow: 0px 0px 15px #bbb8b8;
-    		max-width:100%;
-    		overflow:auto;
-		}
-		
-		#content .screen-shot-container {
-			max-width:100%;
-			overflow:auto;
-		}
-		
-		#content .screen-shot {
-			min-width:600px;
-		}
-		
-		.swipe-area {
-			position: fixed;
-			width: 50px;
-			left: 0;
-			top: 0;
-			height: 100%;
-			z-index: 1000;
-		}
-		
-		.important-note {
-			background-color:#ffd5cf;
-			padding:7px;
-			padding-left:25px;
-			padding-right:25px;
-			border-radius: 3px;
-		}
-		
-		.exercise-block {
-			background-color:#d3edf5;
-			padding:7px;
-			padding-left:25px;
-			padding-right:25px;
-			border-radius: 3px;
-		}
-		
-	
-		#sidebar a, #sidebar a:hover, #sidebar a:focus {
-			/*color: inherit;*/
-			color : #eee;
-			text-decoration: none;
-			transition: all 0.3s;
-		}
-
-		
-		#sidebar .sidebar-header {
-			padding: 20px;
-			background: #6d7fcc;
-		}
-
-		#sidebar ul.components {
-			padding: 20px 0;
-		}
-
-		#sidebar ul p {
-			/*color: #fff;*/
-			padding: 10px;
-			padding-right:20px;
-		}
-
-		#sidebar ul li a {
-			padding: 10px;
-			padding-right:20px;
-			padding-top: 5px;
-			margin:0px;
-			padding-bottom: 5px;
-			font-size: 1em;
-			display: block;
-		}
-		#sidebar ul li a:hover {
-			color: #292b2c; /*#7386D5;*/
-			background: #fff;
-		}
-
-		#sidebar ul li.active > a, a[aria-expanded="true"] {
-			color:#292b2c;
-			background: #f7f7f7; /*#6d7fcc;*/
-		}
-		ul ul a {
-			font-size: 0.9em !important;
-			padding-left: 30px !important;
-			background: #292b2c; /*#6d7fcc;*/
-		}
-		
-		#sidebar ul ul li {
-			margin: 0px;
-		}
-		
-	
-						
-		.btn-side-toggle{
-			margin:0px;
-			padding:0px;
-			position:absolute;
-			left:255px;
-			top:75px;
-			color: #b7b7b7;
-			background: none;
-			font-size:150%;
-		}
-				
-		
-    </style>
-    <link type="text/css" rel="stylesheet" href="{{navprefix}}css/prettify-tomorrow.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script>
-    	
-    	// breakpoint for whether sidebar should default to open or closed:
-    	const sidebarBreakPoint = '(max-width: 768px)'
-    	
-    	// This variable will store whether the current screen is 'wide' (sidebar 
-    	// default open) or 'small' (sidebar default closed)
-    	let currentScreen = "wide";
-    	
-    	// Functions to close/open the sidebar used below:
-    	function closeSidebar(){
-			$('#sidebar').addClass('closed');
-			$('#content').addClass('closed');
-			$('#sidebarToggle').addClass('closed');
-			$('#sideButtonIcon').removeClass('fa-chevron-left')
-			$('#sideButtonIcon').addClass('fa-chevron-right')
-		}
-		
-		function openSidebar(){
-			$('#sidebar').removeClass('closed');
-			$('#content').removeClass('closed');
-			$('#sidebarToggle').removeClass('closed');
-			$('#sideButtonIcon').addClass('fa-chevron-left')
-			$('#sideButtonIcon').removeClass('fa-chevron-right')	
-		}
-    	
-    	
-    	
-    	// On resize, check if the screen has changed from wide <-> small and the sidebar
-    	// should change:
-     	$(window).resize(function (){
-    	
-    		// small screens: "active" when menu open (so active: chevron-left to close)
-    		if (window.matchMedia(sidebarBreakPoint).matches)
-			{
-				if( currentScreen !== "small" ){
-					closeSidebar()
-					currentScreen = "small"
-				}
-			} else {
-				if( currentScreen !== "wide" ){
-					openSidebar()
-					currentScreen = "wide"
-				}
-			}
-    	});
-    	
-    	
-    	$(document).ready(function () {
-    	
-    		// on load of the document, if small screen, close the sidebar.
-    		if (window.matchMedia(sidebarBreakPoint).matches)
-			{
-				closeSidebar()
-				currentScreen = "small"; 
-			} 
-			
-			// listener for clicking the button
- 			$('#sidebarToggle').on('click', function () {
-				$('#sidebar').toggleClass('closed');
-				$('#content').toggleClass('closed');
-				$('#sidebarToggle').toggleClass('closed');
-				$('#sideButtonIcon').toggleClass('fa-chevron-left fa-chevron-right')
-			});
-		});
-		
-		// On the div with class swipe-area (see below), swiping can open/close the bar.
-		$(function() {      
-		  $(".swipe-area").swipe({
-			swipeStatus:function(event, phase, direction, distance, duration, fingers)
-				{
-					if (phase=="move" && direction =="right" ) {
-						openSidebar()
-						return false;
-					}
-					if (phase=="move" && direction =="left" ) {
-						closeSidebar()
-						return false;
-					}
-				}
-			});
-		});
-		
-		
-
-    </script>
+           
 </head>
 
 
@@ -282,7 +18,7 @@
 
 	<div class="wrapper">
 		<!-- Sidebar -->
-		<nav id="sidebar" class="navigation bg-dark">
+		<nav id="sidebar" class="navigation bg-dark manual-sidenav">
 			
 			<ul class="list-unstyled components">
 				{{#sideNav}}
@@ -308,7 +44,7 @@
 		
 		
 		<!-- Page Content -->
-		<div id="content">
+		<div id="content" class="content">
 			
 			<button type="button" id="sidebarToggle"  class="btn btn-side-toggle">
 				<span id="sideButtonIcon" class="fa fa-chevron-left"></span></button>
@@ -318,7 +54,7 @@
 		
 				
 			</div>-->
-			<div class="container-fluid">
+			<div class="container-fluid manual-page">
 				<br>
 				<h1>{{title}}</h1>
 				

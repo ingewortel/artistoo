@@ -1,0 +1,211 @@
+
+<p style="font-size:120%">How do cells move, and how do they deform along the
+way? This explorable contains a Cellular Potts Model (CPM) of cell migration. 
+It first briefly explains how a relatively simple model allows for cell migration and
+realistic cell shapes, and ends with an interactive simulation to illustrate how the 
+parameters work.
+</p>
+
+<p style="font-size:90%;font-style:italic">This explorable was published in: 
+Wortel & Textor (2020). eLife 2021;10:e61288. 
+doi:<a href="https://doi.org/10.7554/eLife.61288">10.7554/eLife.61288</a>.</p>
+
+<h2>Modelling Cell Motion</h2>
+
+<p>The model of cell migration we will examine is a version of a Cellular Potts Model (CPM) 
+(<a href = "#graner">Graner and Glazier, 1992</a>,<a href = "#maree">Mar&eacute;e, 2007</a>). You can find a 
+more detailed description of the CPM in <a href="Explorable-CPM.html">another tutorial</a>, 
+but we'll briefly revisit the basics here.</p>
+
+<h3>Cellular Potts Model</h3>
+
+<p>Here is an example of a very simple CPM model:</p>
+
+<div>
+	<iframe src="./asset/frame-basic.html" width="100%" height="200px"></iframe>
+</div>
+
+<p>The basic mechanism is as follows: </p>
+<ul>
+	<li>Space is represented as a discrete grid of pixels (like those in a blurry image)</li>
+	<li>Each pixel belongs to a cell (black) or to the background (gray); we call this 
+	its "identity". These identities can change over time as cells
+	continuously try to "conquer" pixels from each other </li>
+	<li>Such conquests are stochastic but not random: the system tries to minimize 
+	a global <i>energy</i>, defined by the Hamiltonian $H$ (an equation defined by 
+	the modeller). Attempted conquests are more likely to succeed when they
+	are energetically favourable such that: 
+	<div class="mathjaxcontainer">$$\Delta H_\text{attempt} = H_\text{before} - H_\text{after} \lt 0 $$</div></li>
+	<li>This global energy $H$ differs per model, but in general it defines the
+	"physical laws" followed by the cell. A typical $H$ contains energy terms that
+	reward:
+		<ul>
+			<li><b>Adhesion</b>: Pixels belonging to the same cell try to stick together; 
+			essentially, we put an energetic penalty on every black pixel next to a gray pixel.
+			As you can see above, this ensures that the black cell stays intact, and 
+			that black pixels are not just
+			scattered all over the grid.</li>
+			<li><b>Maintaining size and shape</b>: Cells have a target volume and/or perimeter. 
+			They can deviate a little from that value by stretching or compressing, but they
+			more or less maintain their size and membrane. As you can see above, the cell
+			fluctuates at its borders but roughly maintains its size and circumference.</li>
+		</ul>
+	</li>
+</ul>
+
+
+<p>These rules yield a cell with dynamic borders that can kind of float around, but there is no
+real "active" motion&mdash;for that, we'll need to add a new "rule" to the system.</p>
+
+<h3>Active Migration in the Act-CPM</h3>
+
+<p>As we have seen so far, cells in a basic CPM can move, but do not actively
+<i>migrate</i> like a real cell would. We here consider the Act-CPM
+(<a href = "#actmodel">Niculescu, 2015</a>, <a href = "#ucsp">Wortel, 2020</a>), 
+an extension of
+the CPM that lets cells migrate actively:</p>
+
+<div>
+	<iframe src="./asset/frame-actbasic.html" width="100%" height="200px"></iframe>
+</div>
+
+<p>Real cells migrate by manipulating their inner "cytoskeleton", which is made of 
+so-called actin fibers. These actin fibers extend at the front of the cell and push
+against the cell membrane (like the wheels pushing against the caterpillar track of a 
+tank, <a href = "#tank">Elosegui-Artola and Roca-Cusachs, 2017</a>). This force 
+causes the membrane to "protrude" outward, and eventually allow the
+cell to drag itself forward. Importantly, the actin fiber extension process is subject 
+to positive feedback: once a cell is
+<i>polarized</i> and is extending actin on one side, further extensions become more likely
+on that side. This lets the cell move and stabilizes its polarity, which then 
+promotes further actin extension at the front.</p>
+
+<p>On top of the basic CPM rules described above, we now add a positive feedback mechanism.
+Put simply: when a cell protrudes, it gains an active pixel, which is then more
+likely to protrude again. In more detail:</p>
+
+<ul>
+	<li>If a pixel is newly added to a cell at time $t = t^*$, we say that the cell has <b>protruded</b>
+	to gain that pixel. It then gets a "protrusive activity": 
+	<div class="mathjaxcontainer">$$A(t^*) = \text{max}_\text{act}$$</div>
+	(with $\text{max}_\text{act}$ a model parameter). The colored pixels in the 
+	simulation above represent "active" pixels; </li>
+	<li>Over time, this activity decreases again with a point
+	per time step (until it hits zero): 
+	<div class="mathjaxcontainer">$$A(t+1) = \begin{cases} A(t) - 1 & A(t) \geq 1\\
+	0 & A(t) = 0 \end{cases}$$</div>
+	This is visible in the color gradient of the pixels in the simulation above; 
+	pixels gradually change from red to green as their activity drops, until they 
+	become black when their activity is completely gone. 
+	Thus, the parameter  max<sub>act</sub> represents an activity <b>memory</b>.</li>
+	<li>Meanwhile, the activity feeds back on cell behavior because we add a term to the global
+	energy equation:
+		<div class="mathjaxcontainer">
+		$$\Delta H_\text{act} (p_s \rightarrow p_t) = -\frac{\lambda_\text{act}}{\text{max}_\text{act}} (\text{GM}_\text{act}(p_s) - \text{GM}_\text{act}(p_t))$$
+		</div>
+	Here, we consider an attempt of pixel $p_s$ to copy its identity into pixel $p_t$,
+	and we assign an energetic reward if $p_s$ is in a more active local area than $p_t$.
+	(This local activity is represented by the geometric mean $\text{GM}_\text{act}(p)$
+	of the activities in the <a href="https://en.wikipedia.org/wiki/Moore_neighborhood">
+	Moore neighborhood</a> of pixel $p$). The parameter $\lambda_\text{act}$ controls
+	the strength of the energetic reward (or cost).
+	</li>
+</ul>
+
+
+<h2>Try It Yourself</h2>
+
+
+
+<p>
+Below, you can explore the model and the effects of its two main parameters: 
+&lambda;<sub>act</sub> and max<sub>act</sub>.
+</p>
+
+<div>
+	<iframe src="./asset/frame-actfull.html" width="100%" height="650px"></iframe>
+</div>
+
+<p>Suggestions:</p>
+<ul>
+	<li>Set max<sub>act</sub> to zero; you should see that the cell becomes black and
+	stops moving. A zero max<sub>act</sub> means that pixels do not remember their 
+	protrusive activity, and thus there is no positive feedback so that $\Delta H_\text{act} = 0$</li>
+	<li>Reset max<sub>act</sub> to a non-zero value and now set &lambda;<sub>act</sub> to zero.
+	Again, the cell stops moving. It has some colored (active) pixels at its border, but
+	these activities do not result in an energetic benefit because $\Delta H_\text{act} = 0$.</li>
+	<li>Set max<sub>act</sub> = 20 and &lambda;<sub>act</sub> = 400. The cell should form
+	small protrusions which can also decay after some time in "stop-and-go" motion. 
+	Protrusions don't extend far into the cell, but there can be multiple, competing 
+	protrusions. The cell isn't very consistent in its direction.</li>
+	<li>Keep max<sub>act</sub> = 20 the same and increase &lambda;<sub>act</sub>. The cell 
+	should become faster. Protrusions may also become somewhat broader and more stable
+	(although still not very stable).</li>
+	<li>Set max<sub>act</sub> = 60 and &lambda;<sub>act</sub> = 100. The larger activity
+	memory means that the protrusion extends further into the cell; the cell shape also
+	becomes broader. Protrusion hardly ever die out, and the cell hardly ever turns.</li>
+</ul>
+
+<h2>Obstacle Course</h2>
+
+<p>The nice thing about the CPM is that interactions between cells and their environment
+arise naturally, because pixels can only ever belong to one cell. For example, we can now
+explore what happens when the cell's internal protrusion dynamics start interacting
+with environmental obstacles: </p>
+
+<div>
+	<iframe src="./asset/frame-obstacles.html" width="100%" height="450px"></iframe>
+</div>
+
+<h2>Summary</h2>
+
+<p>A very simple encoding of actin-inspired dynamics in the CPM is <i>sufficient</i> to
+reproduce active cell migration and realistic cell shapes. Note that shape changes are
+not encoded in the model explicitly, but emerge spontaneously from the dynamics of local
+positive feedback (from the protrusive activity) and global negative feedback (from the
+area/membrane elasticity). 
+
+<h2>References</h2>
+
+<div id = "tanks" class="ref">
+	<span class="author">Elosegui-Artola and Roca-Cusachs.</span>
+	<cite><a href="https://doi.org/10.1016/j.bpj.2017.05.020">
+		Amoebae as Mechanosensitive Tanks</a></cite>.
+	<span class="journal">Biophysical Journal,</span>
+	<span class="year">2017</span>. 
+</div>
+
+<div id = "graner" class="ref">
+	<span class="author">Graner and Glazier.</span>
+	<cite><a href="https://doi.org/10.1103/PhysRevLett.69.2013">
+		Simulation of Biological Cell Sorting Using a Two-Dimensional Extended Potts Model</a></cite>.
+	<span class="journal">Physical Review Letters,</span>
+	<span class="year">1992</span>. 
+</div>
+
+<div id = "maree" class="ref">
+	<span class="author">Mar&eacute;e, Grieneisen, and Hogeweg.</i></span>
+	<cite><a href="https://doi.org/10.1007/978-3-7643-8123-3_5">
+		The Cellular Potts Model and Biophysical Properties of Cells, Tissues and Morphogenesis</a></cite>.
+	<span class="journal">Single-Cell-Based Models in Biology and Medicine. Mathematics and Biosciences in Interaction,</span>
+	<span class="year">2007</span>. 
+</div>
+
+<div id = "actmodel" class="ref">
+	<span class="author">Niculescu <i>et al.</i></span>
+	<cite><a href="https://doi.org/10.1371/journal.pcbi.1004280">
+		Crawling and Gliding: A Computational Model for Shape-Driven Cell Migration</a></cite>.
+	<span class="journal">PLoS Computational Biology,</span>
+	<span class="year">2015</span>. 
+</div>
+
+<div id = "ucsp" class="ref">
+	<span class="author">Wortel <i>et al.</i></span>
+	<cite><a href="https://doi.org/10.1101/338459">
+		Actin-Inspired Feedback Couples Speed and Persistence in a Cellular Potts Model of Cell Migration</a></cite>.
+	<span class="journal">bioRxiv,</span>
+	<span class="year">2020</span>. 
+</div>
+
+
+</div>

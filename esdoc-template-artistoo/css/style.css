@@ -1,13 +1,32 @@
+/* ============= Main stylesheet ============= */
+
+/* OLD, NO LONGER USED: 
+
+CSS for esdoc manual:
+@import url(./github.css);
+@import url(./manual.css);
+
+Old fonts:
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700);
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,600,700);
-@import url(./manual.css);
-@import url(./source.css);
-@import url(./test.css);
-@import url(./identifiers.css);
-@import url(./github.css);
-@import url(./search.css);
-@import url(./examples.css);
 
+*/
+/* This somewhat resembles helvetica light but is online, so more safe */
+/*@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
+
+@import url(./source.css);			/* front page of the 'src' */
+@import url(./test.css);			/* front page of the 'tests' */
+@import url(./identifiers.css);		/* front page of the detailed 'docs' */
+@import url(./search.css); 			/* search window in topnav */
+@import url(./examples.css);		/* 'examples' page */
+@import url(./manual-page.css);
+@import url(./explorable.css);
+
+
+/* *************************** Page setup */
+
+/* all elements */
 * {
   margin: 0;
   padding: 0;
@@ -22,62 +41,21 @@ html
 }
 
 body {
- 	font-family:"HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+ 	font-family: Roboto, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
   	font-size:100%;
   	padding-top: 78px; /*for the topnav bar*/
 }
+
+
+/* Adjust top padding for smaller screens (below lg breakpoint), as the topnav is smaller there */
 @media (max-width: 992px) {
   body {
-    padding-top: 56px;
+    padding-top: 56px;	
   }
 }
 
-.mainimg-text{
-	text-align: left; 
-	margin-left: 20px; 
-	padding: 10px; 
-	padding-top: 8em; 
-	padding-bottom:1em; 
-	color: white;
-}
-
-.btn{
-	background-color : #555;
-	border: 0px;
-}
-.btn:hover{
-	background-color: #17a2b8;
-}
-  	
-
-
-a {
-  color: #17a2b8; /*#039BE5;*/
-}
-
-a:hover {
-	color:#0e6875;
-}
-
-code a:hover {
-  text-decoration: underline;
-}
-
-ul, ol {
-  padding-left: 20px;
-}
-
-ul li {
-  /*list-style: disc;*/
-  margin: 4px 0;
-}
-
-ol li {
-  margin: 4px 0;
-}
-
 h1,h2,h3 {
-	font-family:'Advent Pro';
+	font-family:'Advent Pro', Roboto,  "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
   	font-weight:1200;
 }
 
@@ -111,6 +89,60 @@ h4 {
 	margin-bottom:5px;
 }
 
+p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+
+/* *************************** Artistoo image header (only some pages) */
+
+.mainimg-text{
+	text-align: left; 
+	margin-left: 20px; 
+	padding: 10px; 
+	padding-top: 8em; 
+	padding-bottom:1em; 
+	color: white;
+}
+
+/* *************************** General stuff */
+
+.btn{
+	background-color : #555;
+	border: 0px;
+}
+.btn:hover{
+	background-color: #17a2b8;
+}
+  	
+
+a {
+  color: #17a2b8; /*#039BE5;*/
+}
+
+a:hover {
+	color:#0e6875;
+}
+
+code a:hover {
+  text-decoration: underline;
+}
+
+ul, ol {
+  padding-left: 20px;
+}
+
+ul li {
+  /*list-style: disc;*/
+  margin: 4px 0;
+}
+
+ol li {
+  margin: 4px 0;
+}
+
+
 details {
   cursor: pointer;
 }
@@ -119,10 +151,7 @@ del {
   text-decoration: line-through;
 }
 
-p {
-  margin-bottom: 15px;
-  line-height: 1.5;
-}
+
 
 code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
@@ -285,6 +314,44 @@ pre.source-code.line-number li.error-line {
   box-shadow: rgba(255, 255, 255, 1) -1px 0 0 inset;
   border-right: 1px solid #ddd;
   background: #fff;
+  transition: all 0.3s;
+}
+
+.navigation.closed {
+	margin-left: -230px;
+	overflow: hidden;
+}
+
+.swipe-area {
+	position: fixed;
+	width: 50px;
+	left: 0;
+	top: 0;
+	height: 100%;
+	z-index: 1000;
+}
+
+/* the little gray arrow to indicate whether sidebar is open or closed. */
+#sidebarToggle{
+	position:fixed; 
+	top:80px; 
+	left:255px;
+	transition: all 0.3s;
+	z-index:1100;
+}
+
+#sidebarToggle.closed{
+	left: 25px;
+}
+.btn-side-toggle{
+	margin:0px;
+	padding:0px;
+	position:absolute;
+	left:255px;
+	top:75px;
+	color: #b7b7b7;
+	background: none;
+	font-size:150%;
 }
 
 .navigation .nav-classname{
@@ -315,7 +382,7 @@ pre.source-code.line-number li.error-line {
 }
 
 .navigation li a {
-  color: #fff; /*#666;*/
+  color: #666;
   font-size:90%;
 }
 
@@ -403,7 +470,18 @@ h1 .url a {
 .content {
   margin-top: 10px;
   margin-left: 250px;
-  padding: 10px 50px 10px 20px;
+  padding: 10px 50px 10px 40px;
+  transition: all 0.3s;
+  
+}
+
+.myclass {
+	width: 100%;
+}
+
+.content.closed{
+	margin-left: 0px;
+	padding-left : 60px; /* normal 40 + 20 for nav*/
 }
 
 .index-content {
@@ -470,11 +548,26 @@ table.summary {
   border-spacing: 0;
   border: 0;
   border-collapse: collapse;
+  display: block;
 }
 
 table.summary thead {
   background: #fafafa;
+  /*max-width:100%;*/
+  /*display: block;*/
 }
+/*table.summary tbody{
+	display: block;
+}*/
+
+/*table.summary span.code{
+	
+}*/
+
+table.summary tr {
+  max-width:90%;
+}
+
 
 table.summary td {
   border: solid 1px #ddd;
@@ -689,6 +782,7 @@ footer, .file-footer {
   font-weight: 100;
   font-size: 13px;
   margin-right: 50px;
+  margin-left: 20px;
   /*margin-left: 270px;*/
   border-top: 1px solid #ddd;
   padding-top: 30px;
@@ -720,6 +814,7 @@ footer img {
 }
 
 
+/* stuff needed to ensure the scrollbars are correctly styled on mobile */
 ::-webkit-scrollbar {
     -webkit-appearance: none;
 }
@@ -742,28 +837,3 @@ footer img {
     border-radius: 10px;
     background-color: #ffffff;
 }
-
-/*.navigation .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-.openbtn {
-  font-size: 20px;
-  cursor: pointer;
-  background-color: #fff;
-  color: #aaaaaa;
-  padding: 10px 15px;
-  border: 0px solid;
-}
-
-.openbtn:hover {
-  background-color: #444;
-}
-
-.openbtn:focus {
-  outline: none;
-  box-shadow: none;
-}*/

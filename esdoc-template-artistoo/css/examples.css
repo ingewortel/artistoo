@@ -1,0 +1,101 @@
+
+	
+	
+	.example-card img{
+		width:80%;
+		margin:auto;
+	}
+	
+	.example-tile{
+		padding-top:5px;
+		padding-bottom:5px;
+	}
+	
+	/* styling of the main example tiles */
+	.example-tile img{
+		margin: 0px;
+		padding: 0px;
+		width:100%;
+	}
+	
+	.example-tile-text{
+ 		font-size:90%;
+ 		max-width:80%;
+ 		text-align:center;
+ 		margin:auto;
+ 		/*font-family: 'Advent Pro';*/
+ 		padding-top:0px;
+	}
+ 
+	.example-tile-title{
+		text-align:center;
+		font-weight:bold;
+		font-family: 'Amatic SC';
+		font-size:150%;
+		padding-bottom:0px;
+		margin-bottom:0px;
+	}
+	
+	/* styling of the slick carousel */
+	.slick-slide
+	{
+		display: block;
+		opacity : 0.3;
+	}
+	
+	.center .slick-center{
+		opacity: 1;
+	}
+	
+	.center .slick-center img{
+		width: 100%;
+	}
+	
+	.slick-prev:before,
+	.slick-next:before
+	{
+		font-family: 'slick';
+		font-size: 20px;
+		line-height: 1;
+
+		opacity: .75;
+		color: gray;
+
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+	
+	
+	
+	/*For the examples in the slick carousel*/
+	.bullet:not(:last-child):after {
+  		content: " \2022 ";
+	}
+	
+	.example-learn{
+ 		font-size:120%;
+ 		max-width:80%;
+ 		text-align:center;
+ 		margin:auto;
+ 		font-family: 'Advent Pro';
+ 		padding-top:0px;
+ 		color:gray;
+	}
+	
+	.example-text{
+ 		font-size:120%;
+ 		max-width:80%;
+ 		text-align:center;
+ 		margin:auto;
+ 		font-family: 'Advent Pro';
+ 		padding-top:0px;
+	}
+ 
+	.example-title{
+		text-align:center;
+		font-weight:bold;
+		font-family: 'Amatic SC';
+		font-size:300%;
+		padding-bottom:0px;
+		margin-bottom:0px;
+	}

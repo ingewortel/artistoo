@@ -1,0 +1,141 @@
+<p style="font-size:120%">Cellular Potts Models (CPMs) are spatial models. 
+In this explorable, we combine a 
+simple CPM with stochastic cell divisions to show how spatial interactions can modify an 
+otherwise exponential growth curve.
+</p>
+
+<h2>Modelling Cell Division</h2>
+
+<h3>Exponential Growth</h3>
+
+<p>Suppose we start with $N(0)$ cells, which each have a chance $p_\text{div}$ to 
+divide during each time interval of $\Delta t = 1$. This leads to the following
+differential equation:
+
+$$\frac{dN}{dt} = p_\text{div} \cdot N(t)$$
+
+For this equation, the standard solution is 
+<a href="https://en.wikipedia.org/wiki/Exponential_growth">exponential growth</a>, where 
+the expected number of cells
+at any time $t$ is given by:
+
+$$N(t) = N(0) \cdot e^{p_\text{div}t}$$
+
+Note that these equations do not consider any spatial variables. What happens if we put
+this model in space?
+</p>
+
+
+<h3>Growth in a  Cellular Potts Model</h3>
+
+<p>The main problem with the exponential growth model is that $N(t)$ keeps 
+growing indefinitely as $t$ increases. When we consider the growth of cells in 
+space (say, on a petri dish), this is obviously not realistic: at some point, 
+the finite space will be filled and growth will stop.</p>
+
+<p>In this explorable we'll see what happens when we build these growth dynamics into
+a simple CPM model, which <i>does</i> consider space and therefore prohibits
+unlimited growth.</p>
+
+<p>We'll start with a basic CPM where each cell:</p>
+
+<ul>
+	<li>tries to stay together (adhesion)</li>
+	<li>tries to maintain its size (volume constraint)</li>
+	<li>tries to maintain its perimeter (perimeter constraint)</li>
+</ul>
+
+<p>For model details, see this <a href="Explorable-CPM.html">earlier tutorial</a>; for now,
+we'll just assume that we have a CPM model of interacting cells in space.</p>
+
+<p>The CPM describes how cells interact in space, but by default, it does not allow for
+processes like cell proliferation. To include (stochastic) division in our model, we 
+perform the following <i>between</i> the time steps of the CPM model (i.e., between 
+Monte Carlo Steps, MCS):</p>
+
+<ol>
+	<li>Loop over all cells currently present in the model</li>
+	<li>With probability $p_\text{div}$, attempt a division event:
+		<ul>
+			<li>If some conditions of our choice are met (see below), then</li>
+			<li>Draw a line (perpendicular to the cell's longest axis) that divides the
+			cell into two equal parts, and</li>
+			<li>Assign the pixels on one side of this line to a new cell.</li>
+		</ul>
+	</li>
+</ol>
+
+
+<p>Thus, after a division event, we have two cells instead of one. They will be too small
+(only half their original size), but will rapidly grow because of the volume constraint.</p>
+
+<p>The question is now: how do we encode information about space availability in this model?
+There are multiple ways to accomplish this.
+In the simulation below, we have chosen a relatively simple method: we set a condition that
+cells can only divide if they have a minimum size of:
+				$$V_\text{min} = f_\text{min} \cdot V_\text{target}$$
+with $V_\text{target}$ the target volume  and
+				$f_\text{min}$ a fraction we can choose.</p>
+				
+<p>As we'll see below, this interaction between the CPM volume and the division automatically
+puts an upper bound on the number of cells: when the grid is full, newly divided cells 
+will not be able to grow into their target size; eventually, all cells on the grid will
+be smaller than $V_\text{min}$ and division will stop. This simple rule is of course not
+the only way to solve the infinite growth problem. Other possibilities would include:</p>
+<ul>
+	<li>Letting $p_\text{div}$ depend on the fraction of the cell's interface that is
+	in contact with "free" background space, rather than other cells</li>
+	<li>Letting cells compete for resources by letting a nutrient diffuse during the 
+	simulation, which is consumed by the cells. The local nutrient concentration then 
+	determines the division rate $p_\text{div}$</li>
+	<li>...etc.</li>
+</ul>
+
+<p>However, for simplicity, we'll stick with the simple rule for now. Below, we will 
+explore how this changes the behaviour from the original exponential growth.</p>
+
+
+<h2>Try It Yourself</h2>
+<p>
+An interactive version of a CPM with cell division is shown below. Start/stop the 
+simulation via the play/pause button, and reset it any time using "reset". 
+Use the sliders to adjust the proliferation rate $p_\text{div}$ and the minimum volume
+fraction $f_\text{min}$. Cells that are currently too small to divide are shown in gray.
+Below the simulation, the graph shows $N(t)$ of the simulation ("CPM") compared to the
+theoretical "exponential" model.
+</p>
+
+
+<div>
+	<iframe src="./asset/frame-division.html" width="100%" height="1000px"></iframe>
+</div>
+
+
+<p>Suggestions:</p>
+<ol>
+	<li>Click start and watch the cells divide for a while. You should see that as time
+	progresses, new cells appear faster: this is because <i>each cell</i> has a fixed 
+	chance to divide, so the more cells there already are, the bigger the chance of a 
+	division event. (In the differential equation, we see that $dN/dt$ increases
+	linearly with $N(t)$).</li>
+	<li>Click reset and watch again for a while. Repeat this a number of times. Note that
+	in some cases, the CPM simulation may grow a little faster than the theoretical model, 
+	whereas in others, it is somewhat slower. This is normal: we are looking at a stochastic
+	model, and the theoretical predicted value is only the <i>average</i> you would get
+	from running it many times.</li>
+	<li>Now watch the simulation for longer, until the entire grid is filled. You should
+	see that once the grid is full, the exponential model keeps growing whereas the 
+	spatial CPM model stabilizes.</li>
+	<li>Set $f_\text{min} = 0$ and $p_\text{div}$ to its maximum value. You should see
+	that cells keep dividing even when the grid is full, and eventually lose their nice shape;
+	this happens because they no longer "sense" their lack of space.</li>
+	
+</ol>
+
+<h2>Summary</h2>
+
+<p>The "basic" dynamics of the CPM can be extended with other dynamic processes, like cell
+division. By linking these to the spatial characteristics of the cell, we can allow 
+spatial interactions to take place in the model. This can also change the dynamics of the
+process we are simulating: for example, in the case of cell division, linking it to 
+cell volume will ensure that growth ceases once cells run out of space.</p>

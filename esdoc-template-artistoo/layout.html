@@ -121,7 +121,9 @@
 				<li class="nav-item" style="list-style-type: none!important;">
 				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
 				</li>
-
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="explorables.html"><span>Explorables</span></a>
+				</li>
 				<li class="nav-item">
 				  <a class="nav-link" href="manual/index.html"><span>Manual</span></a>
 				</li>
@@ -161,9 +163,14 @@
 </div>-->
 
 
-<nav class="navigation bg-dark" data-ice="nav" id="mySidepanel"></nav>
+<nav class="navigation" data-ice="nav" id="mySidepanel"></nav>
 
-<div class="content" data-ice="content" id="mainContent"></div>
+<div class="content" data-ice="content" id="mainContent">
+	<button type="button" id="sidebarToggle"  class="btn btn-side-toggle">
+		<span id="sideButtonIcon" class="fa fa-chevron-left"></span>
+	</button>
+	<div class="swipe-area"></div>
+</div>
 
 
 
@@ -179,6 +186,11 @@
 <script src="script/test-summary.js"></script>
 <script src="script/inner-link.js"></script>
 <script src="script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="script/jquery.touchSwipe.min.js"></script>
+<script src="script/swipe-nav.js"></script>
+
 
 <script>
 document.getElementById("date").innerHTML = Date();

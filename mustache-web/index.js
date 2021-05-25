@@ -121,7 +121,7 @@ function mainNav(){
 /* ================				RENDERING 				===================== */
 
 // Step 1) Render the index.html page and the examples.html page.
-for( let p of ["index","examples","layout","converter"] ){
+for( let p of ["index","examples","explorables","layout","converter"] ){
 	renderPage( p, view )
 }
 
@@ -167,3 +167,29 @@ for( let p of view.manual ){
 	// go to next manual page.
 	pageIndex++
 }
+
+
+// Loop over the manual pages as they are defined in site.json:
+for( let p of view.explorables ){
+
+	// contents of the manual can be specified in a partial; we'll overwrite this later.
+	partials.explorable = ""
+	
+	// the filename of the partial belonging to this explorable page
+	let mypartial = "partials/explorables/"+p.tag+".html"
+	
+	// typically for a manual this page exists, so this will be executed:
+	if( fs.existsSync(mypartial) ){
+		partials.explorable = fs.readFileSync( mypartial ).toString()
+	}
+	
+	// this is so that each template knows the path to the "root" index.html page of the website.
+	p.navprefix="../"
+	
+	// write the file from the template, using the partials.
+	fs.writeFileSync( "public/explorables/"+p.tag+".html",
+		Mustache.render(fs.readFileSync("templates/explorablepage.mustache").toString(), p, partials)
+	)
+
+}
+
