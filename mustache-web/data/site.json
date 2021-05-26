@@ -34,7 +34,7 @@
 						{
 							"name": "Back To The Classics",
 							"image": "./image/examples/cellsorting.gif",
-							"link": "./examples/CellSorting.html",
+							"link": "./examples/Cellsorting.html",
 							"desc": "The first CPM: cells sorting through differential adhesion.",
 							"learn": [ "basics", "initialisation", "multiple celltypes" ]
 						},
@@ -322,14 +322,14 @@
 		},
 		{
 			"title":"Back to the Classics: Cell Sorting",
-			"image": "./image/examples/CellSorting.gif",
+			"image": "./image/examples/Cellsorting.gif",
 			"link": "./explorables/Explorable-CellSorting.html",
 			"desc": "In this explorable, we go back to the classics: the very first CPM that was designed by Graner and Glazier as a model for cell sorting.",
 			"tag": "Explorable-CellSorting"
 		},
 		{
 			"title":"Divide and Conquer: A Simple Spatial Model of Cell Division",
-			"image": "./image/examples/CellDivision.gif",
+			"image": "./image/examples/celldivision.gif",
 			"link": "./explorables/Explorable-CellDivision.html",
 			"desc": "This explorable shows what happens when we link the CPM spatial dynamics and cell shapes to other processes, like cell division.",
 			"tag": "Explorable-CellDivision"
