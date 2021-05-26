@@ -18368,7 +18368,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\n\t\"name\": \"Artistoo\",\n\t\"version\": \"1.2.0\",\n\t\"dependencies\": {\n\t\t\"braces\": \"^3.0.2\",\n\t\t\"canvas\": \"^2.6.0\",\n\t\t\"fs\": \"0.0.1-security\",\n\t\t\"mersenne-twister\": \"^1.1.0\",\n\t\t\"websocket\": \"^1.0.28\"\n\t},\n\t\"devDependencies\": {\n\t\t\"esdoc2\": \"^2.1.5\",\n\t\t\"esdoc2-standard-plugin\": \"^2.1.2\",\n\t\t\"eslint\": \"^5.16.0\",\n\t\t\"jasmine\": \"^3.5.0\",\n\t\t\"jsdom\": \"^7.2.2\",\n\t\t\"mustache\": \"^4.2.0\",\n\t\t\"rollup\": \"^1.2.3\",\n\t\t\"rollup-plugin-commonjs\": \"^9.2.0\",\n\t\t\"rollup-plugin-eslint\": \"^5.0.0\",\n\t\t\"rollup-plugin-node-resolve\": \"^4.0.0\"\n\t}\n}\n",
+    "content": "{\n\t\"name\": \"Artistoo\",\n\t\"version\": \"1.2.0\",\n\t\"dependencies\": {\n\t\t\"braces\": \"^3.0.2\",\n\t\t\"canvas\": \"^2.6.0\",\n\t\t\"fs\": \"0.0.1-security\",\n\t\t\"mersenne-twister\": \"^1.1.0\",\n\t\t\"websocket\": \"^1.0.28\"\n\t},\n\t\"devDependencies\": {\n\t\t\"esdoc2\": \"^2.1.5\",\n\t\t\"esdoc2-standard-plugin\": \"^2.1.2\",\n\t\t\"eslint\": \"^5.16.0\",\n\t\t\"jasmine\": \"^3.5.0\",\n\t\t\"rollup\": \"^1.2.3\",\n\t\t\"rollup-plugin-commonjs\": \"^9.2.0\",\n\t\t\"rollup-plugin-eslint\": \"^5.0.0\",\n\t\t\"rollup-plugin-node-resolve\": \"^4.0.0\"\n\t}\n}\n",
     "longname": "/Users/ingewortel/Documents/projects/Github/artistoo/package.json",
     "name": "package.json",
     "static": true,
