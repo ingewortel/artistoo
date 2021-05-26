@@ -1,8 +1,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Simulation of a tightly packed monolayer of epidermal cells. These cells have
- * adhesion and volume constraints, as well as a perimeter constraint to increase their stiffness. 
+ * <h1>Epidermis</h1>
+ * <p>Simulation of a tightly packed monolayer of epidermal cells. These cells have
+ * adhesion and volume constraints, as well as a perimeter constraint to increase their stiffness. <p>
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

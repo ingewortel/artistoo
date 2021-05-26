@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+
+let config = {
+	field_size : [6,6],
+	
+	conf : {
+		T : 10,
+		J : [[0,10],[10,0]],
+		V : [0,9],
+		LAMBDA_V : [0,20]
+	},
+	
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 10,
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["AAAAAA"],
+		zoom : 30,							// zoom in on canvas with this factor.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true } // Should stats be computed?
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter, current_vol = 0, vol_diff = 0, H_vol = 0
+
+let custommethods = {
+		drawCanvas : drawCanvas,
+		drawPixBorders : drawPixBorders
+	}
+
+function initialize(){
+	sim = new CPM.Simulation( config, custommethods )
+	// Set the canvas manually so it can go in a defined <div></div> container.
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	requestAnimationFrame( step )
+}
+
+
+function step(){
+	sim.drawCanvas()
+	checkVolume()
+	requestAnimationFrame( step )
+}
+
+function next(){
+	sim.step()
+}
+
+
+function drawCanvas(){
+	this.Cim.clear( this.conf.CANVASCOLOR )
+	this.Cim.drawCells( 1, "AAAAAA")
+}
+
+function checkVolume(){
+	const cid = sim.C.cellIDs().next().value
+	current_vol = sim.C.getVolume(cid)
+	document.getElementById("vol").innerHTML = current_vol
+	vol_diff = ( sim.C.conf.V[1] - current_vol )
+	if( vol_diff >= 0 ){
+		document.getElementById("voldiff").innerHTML = "+" + vol_diff
+	} else {
+		document.getElementById("voldiff").innerHTML = vol_diff
+	}
+	H_vol = sim.C.conf.LAMBDA_V[1] * vol_diff*vol_diff
+	document.getElementById("hvol").innerHTML = "&lambda;<sub>volume</sub> x (V - V<sub>t</sub>)<sup>2</sup> " +
+		"<br>= " + sim.C.conf.LAMBDA_V[1] + " x " + Math.abs(vol_diff) + "<sup>2</sup> = " + H_vol
+}
+
+function drawBorderNodes(){
+	let ctx = this.Cim.ctx
+	this.Cim.col("000000")
+	const zoom = this.Cim.zoom
+	for( let i of this.C.cellBorderPixels() ){
+		const p = i[0], cid = i[1]
+		for( let n of this.C.neigh(p) ){
+			const cid2 = this.C.pixt(n)
+			if( cid2 < cid ){
+				ctx.beginPath()
+				ctx.arc( (p[0]+0.5)*zoom, (p[1]+0.5)*zoom, 0.15*zoom, 2*Math.PI, false )
+				ctx.fill()
+				ctx.beginPath()
+				ctx.arc( (n[0]+0.5)*zoom, (n[1]+0.5)*zoom, 0.15*zoom, 2*Math.PI, false )
+				ctx.fill()
+			}
+		}
+	}
+
+}
+
+function setNum(nc){
+	document.getElementById("nc").innerHTML = nc
+	document.getElementById("nc1").innerHTML = nc
+}
+
+function drawPixBorders(){
+	this.Cim.col( "FFFFFF" )
+	this.Cim.getImageData()
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			this.Cim.pxdrawr( [x,y] )
+			this.Cim.pxdrawd( [x,y] )
+		}
+	}
+	this.Cim.putImageData()
+}
+
+</script>
+</head>
+<body onload="initialize()">
+
+<div class="container">
+
+
+<div id="simcontainer" class="simcontainer">
+<p>Current volume: <span style="color:gray" id="vol"></span> (<span style="color:gray" id="voldiff"></span>)<br>
+H<sub>volume</sub> = <span id="hvol"></span>
+</p>
+<button onclick="next()">step</button><button onclick="window.location.reload()">reset</button><br><br>
+</div>
+
+</div>
+</body>
+</html>

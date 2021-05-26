@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Home | Artistoo</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl">
+      	  
+      	
+      	<script src="script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" 
+        		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        		crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    	<link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
+    	<link href='https://fonts.googleapis.com/css?family=Amatic SC' rel='stylesheet'>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xf09b;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    </div>
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+<!-- TITLE AND TOP IMAGE -->
+<div class="mainimg" >
+	<div class="mainimg-text">
+	<h1>
+	  Example Gallery
+	</h1>
+	<h2>
+	  Coding examples in Artistoo&puncsp;.
+	</h2>        
+  </div>
+</div>
+
+
+<div class="index-content">
+<div class="front-page">
+
+
+
+	
+	<h1 id=cpm-examples>CPM examples</h1>
+	<p>Various processes simulated in a Cellular Potts Model (CPM). Mix and match elements from the examples to build your own simulations. Click to view.</p>
+	
+		
+	
+	<div class="row">
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;IsingModel.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;IsingModel.gif" width="100%"></a>
+				<p class="example-tile-title">Inspiring Magnets</p>
+				<p class="example-tile-text">This model of self-organising spins inspired the CPM.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;SingleCell.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;SingleCell.gif" width="100%"></a>
+				<p class="example-tile-title">Staying Single</p>
+				<p class="example-tile-text">A simple CPM cell with only adhesion&#x2F;volume constraints.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;RandomWalk.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;RandomWalk.gif" width="100%"></a>
+				<p class="example-tile-title">Just Keep Swimming</p>
+				<p class="example-tile-text">A &quot;cell&quot; with modified volume constraint goes for a random walk.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;CellSorting.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;cellsorting.gif" width="100%"></a>
+				<p class="example-tile-title">Back To The Classics</p>
+				<p class="example-tile-text">The first CPM: cells sorting through differential adhesion.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;CellDivision.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;celldivision.gif" width="100%"></a>
+				<p class="example-tile-title">Let It Grow</p>
+				<p class="example-tile-text">A growing mass of proliferating cells.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;Diffusion.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;Diffusion.gif" width="100%"></a>
+				<p class="example-tile-title">Diffuse And Conquer</p>
+				<p class="example-tile-text">A discrete approximation of Diffusion. </p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;ManyCellsPrefDir.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;ManyCellsPrefDir.gif" width="100%"></a>
+				<p class="example-tile-title">Distrac(k)ted</p>
+				<p class="example-tile-text">Cells aligning their preferred directions.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;ActModel.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;actmodel.gif" width="100%"></a>
+				<p class="example-tile-title">Dora the Explorer</p>
+				<p class="example-tile-text">A cell migrating actively by forming membrane protrusions.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;Microchannel.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;microchannel.gif" width="100%"></a>
+				<p class="example-tile-title">One-Lane Traffic</p>
+				<p class="example-tile-text">A migrating cell confined in a microchannel.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;ActOnMicroPattern.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;ActOnMicroPattern.gif" width="100%"></a>
+				<p class="example-tile-title">Swirl</p>
+				<p class="example-tile-text">Two cells rotating on a micropatterned surface.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;DirectedMotionLinear.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;DirectedMotionLinear.gif" width="100%"></a>
+				<p class="example-tile-title">A Choreographed Dance</p>
+				<p class="example-tile-text">Cells move in a global direction that changes over time.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;DirectedMotionTargetPoint.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;DirectedMotionTargetPoint.gif" width="100%"></a>
+				<p class="example-tile-title">Attraction At First Sight</p>
+				<p class="example-tile-text">Cells move towards a specified target point.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;Chemotaxis.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;Chemotaxis.gif" width="100%"></a>
+				<p class="example-tile-title">Bull&#39;s Eye</p>
+				<p class="example-tile-text">Cells moving up a chemokine gradient.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;ManyCellsDiffusion.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;ManyCellsDiffusion.gif" width="100%"></a>
+				<p class="example-tile-title">Catch Me If You Can!</p>
+				<p class="example-tile-text">Cells attracting other cells through specific chemokines.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;stochasticCorrector.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;StochasticCorrector.gif" width="100%"></a>
+				<p class="example-tile-title">50 Shades Of RNA</p>
+				<p class="example-tile-text">Stochastic corrector model in the CPM.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;Epidermis.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;Epidermis.gif" width="100%"></a>
+				<p class="example-tile-title">Holding Tight</p>
+				<p class="example-tile-text">A tightly packed layer of epidermal cells.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;EpithelialSheet.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;EpithelialSheet.gif" width="100%"></a>
+				<p class="example-tile-title">So Pushy...</p>
+				<p class="example-tile-text">A layer of crammed cells expands over time.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;EpidermisWithTCells.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;EpidermisWithTCells.gif" width="100%"></a>
+				<p class="example-tile-title">I&#39;m Just Browsing</p>
+				<p class="example-tile-text">T Cells patrolling in the epidermis.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;CancerInvasion.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;CancerInvasion.gif" width="100%"></a>
+				<p class="example-tile-title">Licence To Kill?</p>
+				<p class="example-tile-text">Immune cells invading (but not killing) a growing tumour.</p>
+			</div>
+		</div>
+	</div>
+
+	
+	<h1 id=ca-examples>CA examples</h1>
+	<p>Cellular Automata (CA) models are a slightly simpler class of grid-based models. Since a grid is implemented in Artistoo anyway, you can also use the framework to build CAs. Here are some examples.</p>
+	
+		
+	
+	<div class="row">
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;GameOfLife.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;GameOfLife.gif" width="100%"></a>
+				<p class="example-tile-title">The Prequel</p>
+				<p class="example-tile-text">Before Game of Thrones, there was Conway&#39;s Game of Life.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;SIR.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;SIR.gif" width="100%"></a>
+				<p class="example-tile-title">Going Viral</p>
+				<p class="example-tile-text">The SIR model of a spreading infection. </p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;DiffusionLimitedAggregation.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;DiffusionLimitedAggregation.gif" width="100%"></a>
+				<p class="example-tile-title">Crystal Clear</p>
+				<p class="example-tile-text">A crystal growing through diffusion-limited aggregation.</p>
+			</div>
+		</div>
+	</div>
+
+	
+	<h1 id=interactive>Tips and Tricks</h1>
+	<p>There's more you can do with Artistoo! Look below for inspiration on how to make your simulations interactive, or to customize your outputs. The sky is the limit!</p>
+	
+		
+	
+	<div class="row">
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;SIR.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;SIR.gif" width="100%"></a>
+				<p class="example-tile-title">Click Flick</p>
+				<p class="example-tile-text">Stop and restart this simulation via a simple mouse click.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;ActModelInteractive.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;actmodel.gif" width="100%"></a>
+				<p class="example-tile-title">Playground Slide</p>
+				<p class="example-tile-text">Control this migrating cell&#39;s parameters via input sliders.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;CollectiveMigration.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;CollectiveMigration.gif" width="100%"></a>
+				<p class="example-tile-title">Control Room</p>
+				<p class="example-tile-text">Control many different parameters via input fields.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;ActModelCustomStat.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;actmodel.gif" width="100%"></a>
+				<p class="example-tile-title">Measure At Leisure</p>
+				<p class="example-tile-text">Define your own statistic.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;NoTorusDemo.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;microchannel.gif" width="100%"></a>
+				<p class="example-tile-title">It&#39;s a wrap?</p>
+				<p class="example-tile-text">Understanding boundary conditions.</p>
+			</div>
+		</div>
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;FakeMicroscopy.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;FakeMicroscopy.png" width="100%"></a>
+				<p class="example-tile-title">You&#39;re a Viz-art, Harry!</p>
+				<p class="example-tile-text">Painting pretty pictures... with a CPM.</p>
+			</div>
+		</div>
+	</div>
+
+	
+	<h1 id=threedim>3D examples</h1>
+	<p>Be warned: things become difficult once you go 3D. But to get you started, have a look at the example code in the <code>examples/3D/</code> folder.</p>
+	
+		
+	
+	<div class="row">
+		<div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2">
+			<div class="example-tile">
+				<a href=".&#x2F;examples&#x2F;cpm3d.html">
+				<img src=".&#x2F;image&#x2F;examples&#x2F;3D.png" width="100%"></a>
+				<p class="example-tile-title">More Dimensions For Dora To Explore!</p>
+				<p class="example-tile-text">An example of a 3D CPM.</p>
+			</div>
+		</div>
+	</div>
+
+	
+	</div>
+	
+
+
+</div>
+</div>
+
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="script/jquery.touchSwipe.min.js"></script>
+<script src="script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

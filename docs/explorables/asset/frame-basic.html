@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [200,80],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],						// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 10,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+				
+		// Adhesion parameters:
+		J: [[0,10], [10,0]],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V: [0,5],					// VolumeConstraint importance per cellkind
+		V: [0,500],							// Target volume of each cellkind
+		
+		// PerimeterConstraint parameters
+		LAMBDA_P: [0,2],						// PerimeterConstraint importance per cellkind
+		P : [0,260]						// Target perimeter of each cellkind
+	
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 500,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["000000"],
+		ACTCOLOR : [false],					// Should pixel activity values be displayed?
+		SHOWBORDERS : [false],				// Should cellborders be displayed?
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	sim = new CPM.Simulation( config, {} )
+	// Set the canvas manually so it can go in a defined <div></div> container.
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer1")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	step()
+}
+
+
+function step(){
+	sim.step()
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+
+// No custom methods.
+</script>
+</head>
+<body onload="initialize()">
+
+<div class="container">
+
+<div id="simcontainer1" class="simcontainer"></div>
+
+</div>
+</body>
+</html>

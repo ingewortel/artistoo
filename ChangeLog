@@ -3,6 +3,25 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2021-05-12 Inge Wortel <ingewortel@gmail.com>
+	* spec/hamiltonian/PersistenceConstraintSpec.js : added test for bug
+	where celldirections became NaN if the cell didn't move (due to
+	normalization on length = 0). This inactivated the
+	PersistenceConstraint for that cell for all future steps.
+	* src/hamiltonian/PersistenceConstraint.js : fixed abovementioned bug;
+	new version checks for NaN cell directions and assigns cells a new
+	random direction whenever this occurs (i.e.: when the cell has a
+	displacement of zero, it has stopped and also has lost its persistent
+	memory so it can take a new direction).
+
+2021-05-10 Inge Wortel <ingewortel@gmail.com>
+	* merged PR from Oane Gros to allow simulations of evolutionary CPMs.
+	This adds a new model class CPMEvol, which extends the CPM and tracks cells 
+	explicitly using a new class "Cell". Demonstrated in the stochasticCorrector example.
+	* bumped version number up to reflect this addition.
+	* restructured the 'benchmarks/' directory (see its Makefile) to allow easy comparison
+	in performance between two versions of the artistoo-cjs.js file.
+
 2021-03-26 Inge Wortel <ingewortel@gmail.com>
     * Updated docs with an example of how to color cells by cellID
     * src/models/CPM.js : reset() fixed bug in resetting cellvolume property.

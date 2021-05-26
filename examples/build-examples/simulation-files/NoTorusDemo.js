@@ -1,6 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file 
+<h1>Demo: the torus property</h1>
+<p>
 The torus property of the Grid class allows you to choose if the grid boundaries are
 linked, but setting them to false may give artifacts if not done properly. Cells will
 stick to the border because at the border, they have fewer neighbors to get adhesion and/or
@@ -17,7 +19,8 @@ torus setting is important for some internal computations (such as computing cen
 Especially if the grid is small (as it is here in the y dimension), these computations
 can go wrong if torus is not properly specified. It is therefore best practice to always
 set torus to false if cells cannot cross the grid border.
- * */
+</p>
+ **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 

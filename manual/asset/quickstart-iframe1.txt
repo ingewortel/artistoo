@@ -1,1 +1,0 @@
-<iframe src="asset/IsingModel.html"; width="400px"; height="500px"></iframe>

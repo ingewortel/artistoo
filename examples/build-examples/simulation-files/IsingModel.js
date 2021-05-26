@@ -1,9 +1,10 @@
 /* 	================= DESCRIPTION ===================== */
 /** @file
- * The Ising model: a classic example of a CPM with only one "cell",
+ * <h1>Ising Model</h1>
+ * <p> The Ising model: a classic example of a CPM with only one "cell",
  * and only an adhesion constraint. Because there is no volume constraint,
  * the cell eventually either disappears or takes over the entire grid -
- * because that minimizes the adhesion penalty.
+ * because that minimizes the adhesion penalty. </p>
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

@@ -3,10 +3,11 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Motility wave propagation in cell migration as described 
+ * <h1>Epithelial sheet dynamics</h1>
+ * <p> Motility wave propagation in cell migration as described 
  * in <a href="https://doi.org/10.1038/s41598-020-63506-6">10.1038/s41598-020-63506-6:</a>.
  * Cells start in a space where they are tightly squeezed together, and will push each
- * other outwards to the right as the simulation progresses.
+ * other outwards to the right as the simulation progresses.</p>
  * */
 
 "use strict"
@@ -60,8 +61,8 @@ function setup(){
 
 // Place something on the grid
 function initializeGrid(){
-	for( let i = 5 ; i < 500 ; i += 10 ){
-		for( let j = 5 ; j < 300 ; j += 10 ){
+	for( let i = 5 ; i < C.extents[0]/2 ; i += 8 ){
+		for( let j = 5 ; j < C.extents[1]; j += 8 ){
 			C.setpix( [i,j], C.makeNewCellID(1) )
 		}
 	}
@@ -73,10 +74,12 @@ function initializeGrid(){
 function step(){
 	if( !running ) return
 	C.timeStep()
-	Cim.clear( "EEEEEE" )
-	Cim.drawCells( 1, "000000" )
-	Cim.drawCellBorders( 1, "FFFFFF" )
-	output() 
+	if( t % 5 == 0 ){
+		Cim.clear( "EEEEEE" )
+		Cim.drawCells( 1, "000000" )
+		Cim.drawCellBorders( 1, "FFFFFF" )
+		output()
+	}
 	t++
 }
 

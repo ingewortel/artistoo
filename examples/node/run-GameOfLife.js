@@ -3,8 +3,10 @@ let CPM = require("../../build/artistoo-cjs.js")
 
 
 /**
- * @file Conway's <i>Game of Life</i>
- * with random initial conditions.
+ * @file 
+ * <h1>Game of Life</h1>
+ * <p>Conway's <i>Game of Life</i>
+ * with random initial conditions.</p>
  */
 
 "use strict"

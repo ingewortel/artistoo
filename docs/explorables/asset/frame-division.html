@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Growth</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js" integrity="sha512-opAQpVko4oSCRtt9X4IgpmRkINW9JFIV3An2bZWeFwbsVvDxEkl4TEDiQ2vyhO2TDWfk/lC+0L1dzC5FxKFeJw==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.css" integrity="sha512-QG68tUGWKc1ItPqaThfgSFbubTc+hBv4OW/4W1pGi0HHO5KmijzXzLEOlEbbdfDtVT7t7mOohcOrRC5mxKuaHA==" crossorigin="anonymous" />
+
+
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+<script src="../../examples/sliders.js"></script>
+<script src="../../examples/artistoo.js"></script>
+
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [300,200],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [false,false],				// Should the grid have linked borders?
+		T : 10,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+
+		
+		// Adhesion parameters:
+		J : [ 
+		 	[0,0],
+			[0,-4]
+		],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0,5],				// VolumeConstraint importance per cellkind
+		V : [0,500],					// Target volume of each cellkind
+		
+		LAMBDA_P : [0,1],
+		P : [0,240]
+		
+	},
+	
+	// Simulation setup and configuration: this controls stuff like grid initialization,
+	// runtime, and what the output should look like.
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 50,
+		
+		// Visualization
+		CANVASCOLOR : "EEEEEE",
+		CELLCOLOR : ["000000"],
+		SHOWBORDERS : [true],				// Should cellborders be displayed?
+		BORDERCOL : ["FFFFFF"],				// color of the cell borders
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : false,						// Should a png image of the grid be saved
+											// during the simulation?
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 100							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter, prate = 10e-5, N0 = 5, minFrac = 0.95, ncells = N0
+
+let plotData = [], graph, rates = [{ rate: prate, time: 0, start: N0}]
+plotData.push([1,5,5])
+
+function initialize(){
+	let custommethods = {
+		postMCSListener : postMCSListener,
+		initializeGrid : initializeGrid,
+		updateGraphG : updateGraphG,
+		expGrowth : expGrowth,
+		drawCanvas : drawCanvas
+	}
+	sim = new CPM.Simulation( config, custommethods )
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	graph = new Dygraph(document.getElementById("div_graph"), plotData,
+	  {
+		drawPoints: false,
+		showRoller: false,
+		title: 'Growth',
+		xlabel: 'Simulation time (MCS)',
+		ylabel: '# cells',
+		strokeWidth: 2,
+		legend: 'always',
+		colors: ['#0000FF','#FF0000'],
+		labels: ['Time (MCS)','exponential', 'CPM' ]
+	  })
+	  sim.drawCanvas()
+	sim.toggleRunning()
+	step()
+}
+
+function postMCSListener(){
+	
+		// add the initializer if not already there
+		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	
+		//prolif rate 
+		ncells = 0
+		let interval = 1
+		if( this.time % interval == 0 ){
+			for( let i of this.C.cellIDs() ){
+				ncells++
+				if( this.C.getVolume(i) > this.C.conf.V[1]*minFrac ){
+					if( this.C.random() < prate*interval ){
+						this.gm.divideCell(i)
+						ncells++
+						this.C.stats=[]
+					} 				
+				} 
+			}
+			this.updateGraphG(ncells)
+		}
+		
+		
+		
+}
+
+function updateGraphG(value){
+ 	  const x = this.time 
+      //const y = arr.reduce((cum,val) => cum + val, 0) / arr.length; // reduces array to single thing by applying a function to all elements, with an initial value (0)
+      const predicted = this.expGrowth()
+      plotData.push([x, predicted, value ])
+      if( this.time % 100 == 0 ){
+      	graph.updateOptions( {'file': plotData } )
+      }
+
+}
+
+function drawCanvas(){
+		
+		// Clear canvas 
+		this.Cim.clear( this.conf["CANVASCOLOR"] || "FFFFFF" )
+		let C = this.C
+		let colByVolume = function(cid){
+			if( C.getVolume(cid) > C.conf.V[1]*minFrac ){
+				return config.simsettings.CELLCOLOR[0]
+			} else {
+				return "AAAAAA"
+			}
+		}
+		this.Cim.drawCells( 1, colByVolume )
+		this.Cim.drawCellBorders( 1, config.simsettings.BORDERCOL[0] )
+		
+		
+		
+}
+	
+function initializeGrid(){
+	
+		// add the GridManipulator if not already there and if you need it
+		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	
+		this.gm.seedCellsInCircle( 1, N0, this.C.midpoint, 35 )
+
+}
+
+function expGrowth(){
+	const t = this.time
+	
+	const currentRate = rates[ rates.length - 1 ]
+	const rate = currentRate.rate
+	const start = currentRate.start
+	const dt = t - currentRate.time
+	
+	return start * Math.exp( rate * dt )
+	
+}
+
+function step(){
+	for( let i = 0; i < 10; i++ ){
+		sim.step()
+	}
+
+	requestAnimationFrame( step )
+
+}
+
+function setSliders(){
+	document.getElementById("prate").value = prate*1000000
+	document.getElementById("minFrac").value = minFrac //*100
+}
+
+function setRate( rate ){
+	const lastPredicted = plotData[ plotData.length - 1 ][1]
+	// Store rate changes; we need this to compute the theoretical exponential growth 
+	// correctly
+	rates.push({
+		rate: rate, 
+		time: sim.time, 
+		start: lastPredicted
+	})
+	prate = rate
+}
+
+function reset(){
+	sim.toggleRunning()
+	for( let cid of sim.C.cellIDs() ){
+		sim.gm.killCell(cid)
+	}
+	sim.initializeGrid()
+	sim.time=0
+	plotData = []
+	plotData.push( [1,5,5])
+	
+	graph.updateOptions( {'file': plotData } )
+	sim.toggleRunning()
+}
+
+// No custom methods.
+</script>
+</head>
+<body onload="initialize();setSliders();initializeSliders()">
+
+<div class="simcontainer" id ="simcontainer">
+<table>
+<tr width="100%">
+	<td style="width:20%">p<sub>div</sub></td>
+	<td style="width:5%">0</td>
+	<td style="width:50%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="500" id="prate" oninput="setRate(parseFloat(this.value/1000000))">
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:20%">500x10<sup>-6</sup></td>
+</tr>
+<tr width="100%">
+	<td style="width:20%">f<sub>min</sub></td>
+	<td style="width:5%">0</td>
+	<td style="width:50%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="1" step="0.01" id="minFrac" oninput="minFrac = parseFloat(this.value)">
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:20%">1</td>
+</tr>
+</table>
+<br>
+<p><button onclick="sim.toggleRunning()">play/pause</button>
+<button onclick="reset()">reset</button></p>
+
+
+</div>
+
+<div id="div_graph" style="background-color:#FFF; height: 250px;"></div><br>
+
+
+</body>
+</html>

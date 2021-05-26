@@ -35,11 +35,8 @@ class ChemotaxisConstraint extends SoftConstraint {
 	/** Set the CPM attached to this constraint.
 	@param {CPM} C - the CPM to attach.*/
 	set CPM(C){
-		/** The CPM this constraint acts on.
-		@type {CPM}*/
-		this.C = C
+		super.CPM = C
 		
-		this.confChecker()
 		this.checkField()
 	}
 	
@@ -98,7 +95,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 	deltaHCoarse( sourcei, targeti, src_type, tgt_type ){
 		let sp = this.C.grid.i2p( sourcei ), tp = this.C.grid.i2p( targeti )
 		let delta = this.field.pixt( tp ) - this.field.pixt( sp )
-		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)]
+		let lambdachem = this.cellParameter("LAMBDA_CH", src_type)
 		return -delta*lambdachem
 	}
 
@@ -114,7 +111,7 @@ class ChemotaxisConstraint extends SoftConstraint {
 	/* eslint-disable no-unused-vars*/
 	deltaH( sourcei, targeti, src_type, tgt_type  ){
 		let delta = this.field.pixt( targeti ) - this.field.pixt( sourcei )
-		let lambdachem = this.conf["LAMBDA_CH"][this.C.cellKind(src_type)]
+		let lambdachem = this.cellParameter("LAMBDA_CH",src_type)
 		return -delta*lambdachem
 	}
 }

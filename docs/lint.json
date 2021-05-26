@@ -1,0 +1,74 @@
+[
+  {
+    "name": "GridManipulator#makePlane",
+    "filePath": "src/grid/GridManipulator.js",
+    "lines": [
+      {
+        "lineNumber": 244,
+        "line": "\t/** Deprecated method, please use {@link makeLine} instead. Old method"
+      },
+      {
+        "lineNumber": 245,
+        "line": "\t * just links to the new method for backwards-compatibility."
+      },
+      {
+        "lineNumber": 246,
+        "line": "\t *"
+      },
+      {
+        "lineNumber": 247,
+        "line": "\t * @param {number} dim - the dimension to fix the coordinate of:"
+      },
+      {
+        "lineNumber": 248,
+        "line": "\t * 0 = x, 1 = y, 2 = z. (E.g. for a straight vertical line, we fix the"
+      },
+      {
+        "lineNumber": 249,
+        "line": "\t * x-coordinate)."
+      },
+      {
+        "lineNumber": 250,
+        "line": "\t * @param {number} coordinateValue - the value of the coordinate in the"
+      },
+      {
+        "lineNumber": 251,
+        "line": "\t * fixed dimension; location of the plane. (E.g. for our straight vertical"
+      },
+      {
+        "lineNumber": 252,
+        "line": "\t * line, the x-value where the line should be placed)."
+      },
+      {
+        "lineNumber": 253,
+        "line": "\t * @param {ArrayCoordinate[]} [pixels] - (Optional) existing array of pixels;"
+      },
+      {
+        "lineNumber": 254,
+        "line": "\t * if given, the line will be added to this set."
+      },
+      {
+        "lineNumber": 255,
+        "line": "\t * @return {ArrayCoordinate[]} the updated array of pixels."
+      },
+      {
+        "lineNumber": 256,
+        "line": " \t */"
+      },
+      {
+        "lineNumber": 257,
+        "line": "\tmakePlane( pixels, dim, coordinateValue ){"
+      }
+    ],
+    "codeParams": [
+      "pixels",
+      "dim",
+      "coordinateValue"
+    ],
+    "docParams": [
+      "dim",
+      "coordinateValue",
+      "pixels"
+    ]
+  }
+]

@@ -3,6 +3,7 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
+ * <h1>SIR model of infection epidemiology</h1>
  * <p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to interrupt/restart simulation.</p>
  * <p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
  * <p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>

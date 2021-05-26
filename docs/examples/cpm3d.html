@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>3D CPM</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	body{
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+			 Helvetica, Arial, "Lucida Grande", sans-serif;
+		 padding : 15px;
+	}
+	td {
+		 padding: 10px;
+		 vertical-align: top;
+	}
+	</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
+<script type="text/javascript" src="./OrbitControls.js"></script>
+<script type="text/javascript" src="./Canvas3D.js"></script>
+<script type="text/javascript">
+
+
+
+// Some parameters and global variables
+let mesh_step = 150, ncells = 1, stopit = 0, w = 100
+let C,meter,Gi, Cim, runtime =50000, zoom = 2, TAKE_SHOT=0
+
+let config = {
+	gridsize : [w,w,w],
+	conf : {
+		T : 7,
+  		torus : [true,true,true],
+  		J: [[0,5], [5,15]],
+  		V: [0,1800],
+  		LAMBDA_V: [0,25],
+  		P : [0,8600],
+  		LAMBDA_P: [0,0.01],
+  		LAMBDA_ACT : [0,38],
+  		MAX_ACT : [0,40],
+  		ACT_MEAN : "geometric"
+	}
+}
+
+function initialize(){
+	
+	// Make the CPM with correct grid size and parameters;
+	// constraints are automatically added.
+	C = new CPM.CPM( config.gridsize, config.conf)
+	
+	// Add the postMCSListener, which ensures the grid is drawn
+	// after every MCS.
+	C.add( { postMCSListener : postMCSListener } )
+	
+	// Make a gridmanipulator and use it to seed a cell.
+	Gi = new CPM.GridManipulator(C)
+  	for( let i = 0 ; i < ncells ; i ++ ){
+  		Gi.seedCell(1)
+  	}
+  	
+  	meter = new FPSMeter({left:"auto", right:"5px"})	
+	initializeControls()
+	
+	Cim = new Canvas3D( C, {})
+	
+	// Start simulation
+	//init3d( 500, 500, C )
+}
+
+function postMCSListener(){
+	// After an MCS, do a 3D rendering step and ensure the controls are updated.
+	Cim.clear()
+	Cim.drawGrid()
+	Cim.drawCells( 1 )
+	Cim.drawActivityValues( 1, C.getConstraint("ActivityConstraint" ) )
+	Cim.render()
+	Cim.controls.update()
+	//controls && controls.update()
+	
+	// Ensure the
+  	if( C.time > runtime ){
+  		stopit = 1
+  		C.time = 0
+  	}
+  	
+  	// Capture frame if the video capture is on
+  	if( typeof TAKE_SHOT !== "undefined" && TAKE_SHOT==1 ){
+		let x = Cim.renderer.domElement.toDataURL()
+		if( frameCaptureSocket.readyState==1 ){
+			frameCaptureSocket.send( x )
+		}
+		// TAKE_SHOT = 0
+	}
+  	
+	// If the simulation is running, call the mainloop to call a simulation step.
+	// After the simulation step, the postMCSListener will automatically be called.
+	// If the simulation is paused, call the emptyloop to keep running 
+	// only the postMCSListener without actually performing a timestep on the CPM.
+	// This ensures that you can view and rotate the cell without running the simulation.
+  	if( !stopit  ){
+		// Tick the meter to see simulation speed
+		meter.tick()
+  		requestAnimationFrame( mainloop )
+  	} else {
+  		requestAnimationFrame( emptyloop )
+  	}
+
+}
+
+// Simulate a step (after which postMCSListener will be called again)
+function mainloop(){
+	C.monteCarloStep()
+}
+// just call the postMCSListener to render, but don't actually simulate a step.
+function emptyloop(){
+	postMCSListener()
+}
+
+// Set the values of the input fields.
+function initializeControls(){
+	document.getElementById("lact").value = C.getConstraint('ActivityConstraint').conf.LAMBDA_ACT[1]
+	document.getElementById("mact").value = C.getConstraint('ActivityConstraint').conf.MAX_ACT[1]
+}
+
+// Controller functions for the buttons
+function startanim(){
+	stopit=0
+	requestAnimationFrame( mainloop )
+}
+function stopanim(){
+	stopit=1
+}
+
+// Remove all cells from the grid
+function killCells(){
+	let pix = C.getStat( CPM.PixelsByCell )
+	for( let i of C.cellIDs() ){
+		if( C.cellKind(i) == 1 ){
+			let cellpix = pix[i]
+			for( let p of cellpix ){
+				C.setpixi( C.grid.p2i(p), 0 )
+			}
+		}
+	}
+	
+}
+
+function toggleGrid(){
+	Cim.drawgrid = (!Cim.drawgrid)
+}
+
+</script>
+</head>
+<body onload="initialize();startanim()">
+<div style="width:600px; margin:auto">
+<p></p>
+
+<div>
+	<!-- Input fields for the parameters-->
+	<div frame="box">
+		<table frame="box">
+			<tr>
+				<td>&lambda;<sub>act</sub></td><td>
+					<input type="text" value="500" id="lact" oninput="C.getConstraint('ActivityConstraint').conf.LAMBDA_ACT[1]=parseFloat(this.value)">
+				</td>
+				<td>max<sub>act</sub></td><td>
+					<input type="text" value="40" id="mact" oninput="C.getConstraint('ActivityConstraint').conf.MAX_ACT[1]=parseFloat(this.value)">
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<p>Example of a 3D cell with active protrusions. Scroll to zoom, rotate by holding
+		the left mouse button, or shift by holding the right mouse button.</p>
+	</div>
+
+	<!-- Buttons to control the simulation -->
+	<div>
+	  <button onclick="startanim()">start </button>
+	  <button onclick="stopanim()">stop </button>
+	  <button onclick="requestAnimationFrame( mainloop )">step simulation</button>
+	  <button onclick="killCells();Gi.seedCell(1)">reset cell</button>
+	  <button onclick="toggleGrid()">grid on/off</button>
+	</div>
+
+	<!-- This is the div in which the simulation will be placed.-->
+	<div id="stage"></div>
+
+</div>
+
+</body>
+</html>

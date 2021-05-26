@@ -1,7 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Cells sorting themselves through differential adhesion.
+ * <h1>Cell Sorting</h1>
+ * <p>The Graner and Glazier CPM: cells sorting themselves through differential adhesion.</p>
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

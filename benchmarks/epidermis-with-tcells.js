@@ -24,7 +24,7 @@ C.add( new CPM.ActivityConstraint({MAX_ACT: [0,0,30],
 	ACT_MEAN: "geometric" }) )
 
 
-let Ci = new CPM.GridInitializer(C)
+let Ci = new CPM.GridManipulator(C)
 let i = 8720*(w/1000)
 while( i-- > 0 ){
 	Ci.seedCell(1)

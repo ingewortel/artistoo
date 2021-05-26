@@ -1,7 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Proliferating cells.
+ * <h1>Cell Division</h1>
+ * <p>A CPM is coupled to stochastic cell division in between Monte Carlo Steps. </p>
  */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

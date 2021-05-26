@@ -4,8 +4,9 @@
 /* This text is printed on the HTML page. */
 
 /** @file
- * Simulation of a random walk using the hard volume constraint.
- * The cell must always have either 1 or 2 pixels.
+ * <h1>Random walk</h1>
+ * <p>Simulation of a random walk using the hard volume constraint.
+ * The cell must always have either 1 or 2 pixels.</p>
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

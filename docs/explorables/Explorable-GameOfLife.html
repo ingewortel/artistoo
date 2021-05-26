@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Game of Life</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl">
+      	  
+      	
+      	<script src="..&#x2F;script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" 
+        		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        		crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    	<link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
+    	<link href='https://fonts.googleapis.com/css?family=Amatic SC' rel='stylesheet'>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="..&#x2F;css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="..&#x2F;css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+           
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="..&#x2F;index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="..&#x2F;manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xf09b;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    </div>
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+
+<div class="container-fluid">
+<div class="explorable-page">
+	<br>
+	<h1>Game of Life</h1>
+	
+<p style="font-size:120%">Can we predict the future? This explorable contains a famous Cellular Automaton (CA):
+John Conway's "Game of Life". This is an excellent example of how even very simple
+model "rules" can yield complex behaviours when units interact spatially, making it
+hard to predict what will happen next.
+</p>
+
+<p style="font-size:90%;font-style:italic">This explorable was published in: 
+Wortel & Textor (2020). eLife 2021;10:e61288. 
+doi:<a href="https://doi.org/10.7554/eLife.61288">10.7554/eLife.61288</a>.</p>
+
+
+
+<h2>About the Model</h2>
+<h3>Cellular Automata</h3>
+
+<p>Like Cellular Potts Models (CPMs), Cellular Automata (CAs) are discrete-space 
+models that "live" on a grid; although CA cells typically occupy only a single grid 
+point where CPMs describe cell shape at higher resolutions by letting cells occupy 
+multiple, adjacent grid points. Still, just like in the CPM, the changes of the CA
+grid are defined by a set of rules.</p>
+
+<h3>Game of Life: Rules</h3>
+
+<p>The CA we will consider here is a relatively simple one called the 
+<a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+Game of Life</a>, designed in 1970s by mathematician John Conway.
+Conway wanted to build a Cellular Automaton that yielded "interesting" behaviours
+that are not easy to predict. He succeeded (as we'll see below). Nevertheless,
+the rules underlying these non-trivial outcomes are surprisingly simple:
+</p>
+<ul>
+	<li>Each pixel $p$ on the grid can be in one of two states: "empty" ($p=0$), or "occupied" ($p=1$).</li>
+	<li>At every time point $t$, we evaluate each pixel's 
+		<a href ="https://en.wikipedia.org/wiki/Moore_neighborhood">Moore neighborhood</a> 
+		(its 8 neighbors, including diagonal neighbors) to determine its state at time $t+1$: 
+		<div class="mathjaxcontainer">
+		$$p(t+1) = \begin{cases}
+			0 & \text{if } p(t) = 1, \# \text{occupied neighbors} \leq 1 \\
+			0 & \text{if } p(t) = 1, \# \text{occupied neighbors} \geq 4 \\
+			1 & \text{if } p(t) = 0, \# \text{occupied neighbors exactly }  3 \\
+			p(t) & \text{otherwise}
+		\end{cases}$$</div>
+	</li>
+</ul>
+
+<p>That's it! You can see the rules in action below, where we always predict the change of the
+middle pixel:</p>
+<div>
+	<iframe src="./asset/frame-gol.html" width="100%px" height="350px"></iframe>
+</div>
+
+<p>Note that the Game of Life is <i>deterministic</i>: when we know the current
+state of the grid, we always know exactly what it will look like in the next step;
+there is no chance involved. Nevertheless, as we'll see below, the outcomes over time
+can be quite unpredictable...</p>
+
+<h3>Game of Life: The Winner Is...</h3>
+
+<p>
+As the Game of Life is deterministic, its outcome depends solely on the initial
+configuration of the grid. Nevertheless, it is not easy to predict from such an 
+initial setting what its long-term outcome will be.
+</p>
+
+<p>
+The Game of Life is quite rich in the types of patterns it allows, such as:
+</p>
+
+<ul>
+	<li><b>Static patterns</b>: these are "stable" configurations, in which 
+	each pixel's neighborhood satisfies the fourth condition of the rules 
+	described above such that $p(t) = p(t+1)$;</li>
+	<li><b>Periodic patterns</b>: these configurations <i>do</i>
+	change, but do so in such a way that they eventually return where they
+	started. They can keep going endlessly; </li>
+	<li><b>Moving patterns</b>: these configurations don't just oscillate,
+	but also translate actively across the grid.</li>
+</ul>
+
+
+<h2>Try It Yourself</h2>
+
+<p>Below, you can explore the different types of patterns that occur in the
+Game of Life.</p>
+
+<div>
+	<iframe src="./asset/frame-gol2.html" width="100%" height="500px"></iframe>
+</div>
+
+<p>Suggestions: </p>
+<ol>
+	<li>Set the initial settings to "static". Nothing should happen. Verify for
+	yourself that every pixel satisfies the fourth rule, such that 
+	$p(t+1)=p(t)$</li>
+	<li>Now choose "periodic" in the dropdown menu. You'll see three different
+	periodic patterns. Note that it can take quite a few steps before a periodic
+	pattern returns to its initial state: this is what happens in the blue example
+	on the right. Can you count its "period" (the number of steps it takes to 
+	return its initial value)?</li>
+	<li>If you are ready for some action, now is the time to try one of the "Moving"
+	configurations. You should see that these patterns are also periodic, but unlike
+	before their center of mass now changes along the way. Can you count their period?
+	What happens when the moving unit reaches the grid border?
+	</li>
+	<li>Now start from the "Random" initial settings and observe (you can do this
+	multiple times by clicking "reset" when you are ready). You should note that 
+	some settings rapidly go to a stable configuration, while others keep moving. 
+	Also note that "static" and "periodic" patterns may arise temporarily on the grid,
+	only to decay again when they are "hit" by a moving unit. Which of the patterns
+	described above can you spot? </li>
+</ol>
+
+<h2>Scaling Up</h2>
+
+<p>To conclude, here's an example with a larger grid, running at a somewhat faster
+pace: </p>
+
+<div>
+	<iframe src="./asset/frame-gol-large.html" width="100%" height="600px"></iframe>
+</div>
+
+<p>Hit reset and try to predict what the end result
+	will be. Can you?</p>
+
+<h2>Summary</h2>
+<p>Even a relatively simple model (with just a few deterministic rules) can 
+produce complex behaviours and spatial patterns. Just imagine what that means for
+biology, where even the rules themselves already are complicated...</p>
+</div>
+</div>
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="..&#x2F;script/search_index.js"></script>
+<script src="..&#x2F;script/search.js"></script>
+<script src="..&#x2F;script/pretty-print.js"></script>
+<script src="..&#x2F;script/inherited-summary.js"></script>
+<script src="..&#x2F;script/test-summary.js"></script>
+<script src="..&#x2F;script/inner-link.js"></script>
+<script src="..&#x2F;script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="..&#x2F;script/jquery.touchSwipe.min.js"></script>
+<script src="..&#x2F;script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [200,200],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],						// Should the grid have linked borders?
+		T : 20,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+				
+		// Adhesion parameters:
+		J: [[0,140], [140,0]],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V: [0,50],					// VolumeConstraint importance per cellkind
+		V: [0,2500],							// Target volume of each cellkind
+		
+		// PerimeterConstraint parameters
+		LAMBDA_P: [0,5],						// PerimeterConstraint importance per cellkind
+		P : [0,650],						// Target perimeter of each cellkind
+		
+		// ActivityConstraint parameters
+		LAMBDA_ACT : [0,80],				// ActivityConstraint importance per cellkind
+		MAX_ACT : [0,200],					// Activity memory duration per cellkind
+		ACT_MEAN : "geometric"				// Is neighborhood activity computed as a
+											// "geometric" or "arithmetic" mean?
+
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [0],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME : 15001,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["000000"],
+		ACTCOLOR : [true],					// Should pixel activity values be displayed?
+		SHOWBORDERS : [false],				// Should cellborders be displayed?
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : false,					// Should a png image of the grid be saved
+											// during the simulation?
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	let custommethods = {
+			initializeGrid : initializeGrid,
+			buildChannel : buildChannel,
+			drawBelow : drawBelow
+		 }
+
+	sim = new CPM.Simulation( config, custommethods )
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("sim")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	step()
+}
+
+
+function step(){
+	for( let i = 0; i < 5; i++ ){
+		sim.step()
+	}
+	
+
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+function drawBelow(){
+	this.Cim.drawPixelSet( this.channelvoxels, "AAAAAA" ) 
+}
+
+function initializeGrid(){
+	
+		// add the initializer if not already there
+		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+		this.buildChannel()
+		this.gm.seedCellAt( 1, [50,50] )
+}
+	
+function buildChannel(){
+		
+	
+		this.channelvoxels = []
+		
+		
+		const xOffset = 30, yOffset = 30
+		const dx = Math.floor( this.C.extents[0]/3 ), dy = Math.floor( this.C.extents[1]/3 )
+		const radius = 10 
+		
+		for( let x = xOffset; x < this.C.extents[0]; x+= dx ){
+			for( let y = yOffset; y < this.C.extents[1]; y+= dy ){
+				const center = [x,y]
+				
+				for( let xx = center[0]-radius; xx <= center[0]+radius; xx++ ){
+					for( let yy = center[1]-radius; yy <= center[1]+radius; yy++){
+						let dx = Math.abs( xx-center[0] ), dy = Math.abs( yy-center[1] )
+						if( Math.sqrt( dx*dx + dy*dy ) < radius ){
+							this.channelvoxels.push( [xx,yy] )
+						}	
+					}
+				}
+				
+			}
+		}
+		
+		
+		
+		this.C.add( new CPM.BorderConstraint({
+			BARRIER_VOXELS : this.channelvoxels
+		}) )
+		
+}
+
+
+// No custom methods.
+</script>
+</head>
+<body onload="initialize()">
+
+<div class="container">
+
+<div id="sim" class="simcontainer"></div>
+
+</div>
+</body>
+</html>

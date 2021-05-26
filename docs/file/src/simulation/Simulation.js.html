@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Artistoo | Artistoo</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl" href="../../../">
+      	  
+      	
+      	<script src="script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css">
+    	<link href="https://fonts.googleapis.com/css?family=Advent Pro" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Amatic SC" rel="stylesheet">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xF09B;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+<nav class="navigation" data-ice="nav" id="mySidepanel"><div>
+  <ul>
+    
+  <li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cells">cells</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Cell.js~Cell.html">Cell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Divider.js~Divider.html">Divider</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-variable">V</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPMEvol.js~CPMEvol.html">CPMEvol</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></div>
+    </li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent"><button type="button" id="sidebarToggle" class="btn btn-side-toggle">
+		<span id="sideButtonIcon" class="fa fa-chevron-left"></span>
+	</button>
+	<div class="swipe-area"></div>
+
+<h1 data-ice="title">src/simulation/Simulation.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import CPM from &quot;../models/CPM.js&quot;
+import CPMEvol from &quot;../models/CPMEvol.js&quot;
+import Canvas from &quot;../Canvas.js&quot;
+import GridManipulator from &quot;../grid/GridManipulator.js&quot;
+import CentroidsWithTorusCorrection from &quot;../stats/CentroidsWithTorusCorrection.js&quot;
+import Centroids from &quot;../stats/Centroids.js&quot;
+
+/** 
+This class provides some boilerplate code for creating simulations easily.
+It comes with defaults for seeding cells, drawing, logging of statistics, saving output
+images, and running the simulation. Each of these default methods can be overwritten
+by the user while keeping the other default methods intact. See the {@link Simulation#constructor}
+for details on how to configure a simulation.
+@see ../examples
+*/
+class Simulation {
+	/** The constructor of class Simulation takes two arguments.
+		@param {object} config - overall configuration settings. This is an object
+		with multiple entries, see below.
+		@param {GridSize} config.field_size - size of the CPM to build.
+	 	@param {Constraint[]} config.constraints - array of additional
+	 		constraints to add to the CPM model.
+		@param {object} config.conf - configuration settings for the CPM;
+		see its {@link CPM#constructor} for details.
+		@param {object} simsettings - configuration settings for the simulation 
+		itself and for controlling the outputs. See the parameters below for details.
+		@param {number[]} simsettings.NRCELLS - array with number of cells to seed for
+			every non-background {@link CellKind}.
+		@param {number} simsettings.BURNIN - number of MCS to run before the actual
+			simulation starts (let cells get their target volume before starting).
+		@param {number} simsettings.RUNTIME - number of MCS the simulation should run.
+			Only necessary if you plan to use the {@link run} method.
+		@param {number} [ simsettings.IMGFRAMERATE = 1 ]- draw the grid every [x] MCS.
+		@param {number} [ simsettings.LOGRATE = 1 ] - log stats every [x] MCS.
+		@param {object} [ simsettings.LOGSTATS = {browser:false,node:true} ] - 
+			whether stats should be logged in browser and node.
+		@param {boolean} [ simsettings.SAVEIMG = false ] - should images be saved? (node only).
+		@param {string} [ simsettings.SAVEPATH ] - where should images be saved? You only have
+			to give this argument when SAVEIMG = true. 
+		@param {string} [ simsettings.EXPNAME = &quot;myexp&quot; ] - string used to construct the
+			filename of any saved image. 
+		@param {HexColor} [ simsettings.CANVASCOLOR = &quot;FFFFFF&quot; ] - color to draw the background in; defaults to white.
+		@param {HexColor[]} [ simsettings.CELLCOLOR ] - color to draw each non-background 
+			{@link CellKind} in. If left unspecified, the {@link Canvas} will use black.
+		@param {boolean[]} [simsettings.ACTCOLOR ] - should activities of the {@link ActivityConstraint}
+			be drawn for each {@link CellKind}? If left unspecified, these are not drawn.
+		@param {boolean[]} [simsettings.SHOWBORDERS = false] - should borders of each {@link CellKind}
+			be drawn? Defaults to false.
+		@param {HexColor[]} [simsettings.BORDERCOL = &quot;000000&quot;] - color to draw cellborders of
+			each {@link CellKind} in. Defaults to black. 
+		*/
+	constructor( config, custommethods ){
+
+		/** To check from outside if an object is a Simulation; doing this with
+		 * instanceof doesn&apos;t work in some cases. Any other object will
+		 * not have this variable and return &apos;undefined&apos;, which in an
+		 * if-statement equates to a &apos;false&apos;.
+		 * @type{boolean}*/
+		this.isSimulation = true
+
+		// ========= configuration and custom methods
+
+		/** Custom methods added to / overwriting the default Simulation class.
+		 * These are stored so that the ArtistooImport can check them.
+		@type {object}*/
+		this.custommethods = custommethods || {}
+	
+		// overwrite default method if methods are supplied in custommethods
+		// these can be initializeGrid(), drawCanvas(), logStats(),
+		// postMCSListener().
+		for( let m of Object.keys( this.custommethods ) ){
+		
+			/** Any function suplied in the custommethods argument to
+			the {@link constructor} is bound to the object. */
+			this[m] = this.custommethods[m]
+		}
+		
+		/** Configuration of the simulation environment 
+		@type {object}*/
+		this.conf = config.simsettings
+		
+		// ========= controlling outputs
+		
+		/** Draw the canvas every [rate] MCS.
+		@type {number}*/
+		this.imgrate = this.conf[&quot;IMGFRAMERATE&quot;] || 1
+		
+		/** Log stats every [rate] MCS.
+		@type {number}*/
+		this.lograte = this.conf[&quot;LOGRATE&quot;] || 1
+		
+		/** See if code is run in browser or via node, which will be used
+			below to determine what the output should be.
+			@type {string}*/
+		this.mode = &quot;node&quot;
+		if( typeof window !== &quot;undefined&quot; &amp;&amp; typeof window.document !== &quot;undefined&quot; ){
+			
+			this.mode = &quot;browser&quot;
+		} 
+		
+		/** Log stats or not.
+		@type {boolean}*/
+		this.logstats = false
+		
+		/** Log stats or not, specified for both browser and node mode.
+		@type {object} */
+		this.logstats2 = this.conf[&quot;STATSOUT&quot;] || { browser: false, node: true }
+		
+		
+		this.logstats = this.logstats2[this.mode]
+		
+		/** Saving images or not.
+		@type {boolean}*/
+		this.saveimg = this.conf[&quot;SAVEIMG&quot;] || false
+		/** Where to save images.
+		@type {string}*/
+		this.savepath = this.conf[&quot;SAVEPATH&quot;] || &quot;undefined&quot;
+		
+		if( this.saveimg &amp;&amp; this.savepath === &quot;undefined&quot; ){
+			throw( &quot;You need to specify the SAVEPATH option in the configuration object of your simulation!&quot;)
+		}
+		
+		// ========= tracking simulation progress
+		
+		/** Track the time of the simulation. 
+		@type {number}*/
+		this.time = 0
+		
+		/** Should the simulation be running? Change this to pause;
+		see the {@link toggleRunning} method.
+		@private
+		@type {boolean}*/
+		this.running = true
+		
+		// ========= Attached objects
+		
+		/** Make CPM object based on configuration settings and attach it.
+		@type {CPM} */
+		if (((config || {}).conf || {})[&quot;CELLS&quot;] !== undefined){
+			this.C = new CPMEvol( config.field_size, config.conf )
+		} else {
+			this.C = new CPM( config.field_size, config.conf )
+		}
+				
+		/** See if objects of class {@link Canvas} and {@link GridManipulator} already 
+		exist. These are added automatically when required. This will set
+		their values in helpClasses to &apos;true&apos;, so they don&apos;t have to be added again.
+		@type {object}*/ 
+		this.helpClasses = { gm: false, canvas: false }
+
+		/** Add additional constraints.
+		 * @type {Constraint[]}
+		 * */
+		this.constraints = config.constraints || []
+		this.addConstraints()
+
+		// ========= Begin.
+		// Initialize the grid and run the burnin.
+		this.initializeGrid()
+		this.runBurnin()
+		
+	}
+
+	/** Adds a {@link GridManipulator} object when required. */
+	addGridManipulator(){
+		/** Attached {@link GridManipulator} object.
+		@type {GridManipulator}*/
+		this.gm = new GridManipulator( this.C )
+		this.helpClasses[ &quot;gm&quot; ] = true
+	}
+	
+	/** Adds a {@link Canvas} object when required. */
+	addCanvas(){
+		//let zoom = this.conf.zoom || 2
+		/** Attached {@link Canvas} object.
+		@type {Canvas}*/
+		this.Cim = new Canvas( this.C, this.conf )
+		this.helpClasses[ &quot;canvas&quot; ] = true
+	}
+
+	/** Add additional constraints to the model before running; this
+	 * method is automatically called and adds constraints given in
+	 * the config object. */
+	addConstraints(){
+		for( let constraint of this.constraints ){
+			this.C.add( constraint )
+		}
+	}
+	
+	/** Method to initialize the Grid should be implemented in each simulation. 
+	The default method checks in the simsettings.NRCELLS array how many cells to
+	seed for each {@CellKind}, and does this (at random positions). 
+	
+	Often you&apos;ll want to do other things here. In that case you can use the 
+	custommethods argument of the {@link constructor} to overwrite this with your
+	own initializeGrid method.
+	*/
+	initializeGrid(){
+	
+		// add the initializer if not already there
+		if( !this.helpClasses[&quot;gm&quot;] ){ this.addGridManipulator() }
+
+		// reset C and clear cache (important if this method is called
+		// again later in the sim).
+		this.C.reset()
+
+		let nrcells = this.conf[&quot;NRCELLS&quot;], cellkind, i
+		
+		// Seed the right number of cells for each cellkind
+		for( cellkind = 0; cellkind &lt; nrcells.length; cellkind ++ ){
+			
+			for( i = 0; i &lt; nrcells[cellkind]; i++ ){
+				// first cell always at the midpoint. Any other cells
+				// randomly.				
+				
+				this.gm.seedCell( cellkind+1 )
+				
+			}
+		}
+
+
+	}
+	
+	/** Run the brunin period as defined by simsettings.BURNIN : run this number
+	of MCS before the {@link time} of this simulation object starts ticking, and 
+	before we start drawing etc. 
+	*/	
+	runBurnin(){
+		// Simulate the burnin phase
+		let burnin = this.conf[&quot;BURNIN&quot;] || 0
+		for( let i = 0; i &lt; burnin; i++ ){
+			this.C.monteCarloStep()
+		}
+	}
+
+	
+	/** Method to draw the canvas.
+	The default method draws the canvas, cells, cellborders, and activityvalues
+	as specified in the simsettings object (see the {@link constructor} for details).
+	
+	This will be enough for most scenarios, but if you want to draw more complicated stuff,
+	you can use the custommethods argument of the {@link constructor} to overwrite 
+	this with your own drawCanvas method.
+	*/
+	drawCanvas(){
+	
+		// Add the canvas if required
+		if( !this.helpClasses[&quot;canvas&quot;] ){ this.addCanvas() }
+	
+		// Clear canvas and draw stroma border
+		this.Cim.clear( this.conf[&quot;CANVASCOLOR&quot;] || &quot;FFFFFF&quot; )
+
+
+		// Call the drawBelow method for if it is defined. 
+		this.drawBelow()
+
+		// Draw each cellkind appropriately
+		let cellcolor=( this.conf[&quot;CELLCOLOR&quot;] || [] ), actcolor=this.conf[&quot;ACTCOLOR&quot;], 
+			nrcells=this.conf[&quot;NRCELLS&quot;], cellkind, cellborders = this.conf[&quot;SHOWBORDERS&quot;]
+		for( cellkind = 0; cellkind &lt; nrcells.length; cellkind ++ ){
+		
+			// draw the cells of each kind in the right color
+			if( cellcolor[ cellkind ] !== -1 ){
+				this.Cim.drawCells( cellkind+1, cellcolor[cellkind] )
+			}
+			
+			// Draw borders if required
+			if(  this.conf.hasOwnProperty(&quot;SHOWBORDERS&quot;) &amp;&amp; cellborders[ cellkind  ] ){
+				let bordercol = &quot;000000&quot;
+				if( this.conf.hasOwnProperty(&quot;BORDERCOL&quot;) ){
+					bordercol = this.conf[&quot;BORDERCOL&quot;][cellkind] || &quot;000000&quot;
+				}
+				this.Cim.drawCellBorders( cellkind+1, bordercol )
+			}
+			
+			// if there is an activity constraint, draw activity values depending on color.
+			if( this.C.conf[&quot;LAMBDA_ACT&quot;] !== undefined &amp;&amp; this.C.conf[&quot;LAMBDA_ACT&quot;][ cellkind + 1 ] &gt; 0 ){ //this.constraints.hasOwnProperty( &quot;ActivityConstraint&quot; ) ){
+				let colorAct
+				if( typeof actcolor !== &quot;undefined&quot; ){
+					colorAct = actcolor[ cellkind ] || false
+				} else {
+					colorAct = false
+				}
+				if( ( colorAct ) ){
+					this.Cim.drawActivityValues( cellkind + 1 )//, this.constraints[&quot;ActivityConstraint&quot;] )
+				}			
+			}
+
+		}
+		
+		// Call the drawOnTop() method for if it is defined. 
+		this.drawOnTop()
+		
+	}
+	
+	/** Methods drawBelow and {@link drawOnTop} allow you to draw extra stuff below and
+	on top of the output from {@link drawCanvas}, respectively. You can use them if you
+	wish to visualize additional properties but don&apos;t want to remove the standard visualization.
+	They are called at the beginning and end of {@link drawCanvas}, so they do not work
+	if you overwrite this method. 
+	*/
+	drawBelow(){
+	
+	}
+	
+	/** Methods drawBelow and {@link drawOnTop} allow you to draw extra stuff below and
+	on top of the output from {@link drawCanvas}, respectively. You can use them if you
+	wish to visualize additional properties but don&apos;t want to remove the standard visualization.
+	They are called at the beginning and end of {@link drawCanvas}, so they do not work
+	if you overwrite this method. 
+	*/
+	drawOnTop(){
+	
+	}
+	
+	
+	/** Method to log statistics.
+	The default method logs time, {@link CellId}, {@link CellKind}, and the 
+	{@ArrayCoordinate} of the cell&apos;s centroid to the console.
+	
+	If you want to compute other stats (see subclasses of {@link Stat} for options)
+	you can use the custommethods argument of the {@link constructor} to overwrite 
+	this with your own drawCanvas method.
+	*/
+	logStats(){
+		
+		// compute centroids for all cells
+		let allcentroids 
+		let torus = false
+		for( let d = 0; d &lt; this.C.grid.ndim; d++ ){
+			if( this.C.grid.torus[d] ){
+				torus = true
+			}
+		}
+		if( torus ){
+			allcentroids = this.C.getStat( CentroidsWithTorusCorrection )
+		} else {
+			allcentroids = this.C.getStat( Centroids )
+		} 
+		
+		for( let cid of this.C.cellIDs() ){
+		
+			let thecentroid = allcentroids[cid]
+			
+			// eslint-disable-next-line no-console
+			console.log( this.time + &quot;\t&quot; + cid + &quot;\t&quot; + 
+				this.C.cellKind(cid) + &quot;\t&quot; + thecentroid.join(&quot;\t&quot;) )
+			
+		}
+
+	}
+	
+	/** Listener for something that needs to be done after every monte carlo step.
+	This method is empty but can be overwritten via the custommethods 
+	argument of the {@link constructor}.*/
+	postMCSListener(){
+	
+	}
+	
+	/** This automatically creates all outputs (images and logged stats) at the correct
+	rates. See the {@link constructor} documentation for options on how to control these
+	outputs. */
+	createOutputs(){
+		// Draw the canvas every IMGFRAMERATE steps
+		if( this.imgrate &gt; 0 &amp;&amp; this.time % this.imgrate == 0 ){
+			
+			if( this.mode == &quot;browser&quot; ){
+				this.drawCanvas()
+			}
+			
+			// Save the image if required and if we&apos;re in node (not possible in browser)
+			if( this.mode == &quot;node&quot; &amp;&amp; this.saveimg ){
+				this.drawCanvas()
+				let outpath = this.conf[&quot;SAVEPATH&quot;], expname = this.conf[&quot;EXPNAME&quot;] || &quot;mysim&quot;
+				this.Cim.writePNG( outpath +&quot;/&quot; + expname + &quot;-t&quot;+this.time+&quot;.png&quot; )
+			}
+		}
+		
+		// Log stats every LOGRATE steps
+		if( this.logstats &amp;&amp; this.time % this.lograte == 0 ){
+			this.logStats()
+		}
+	}
+	
+	/** Run a montecarlostep, produce outputs if required, run any {@link postMCSListener},
+	and update the time. */
+	step(){
+		if( this.running ){
+			this.C.monteCarloStep()
+			this.postMCSListener()
+			this.createOutputs()
+			this.time++
+		}
+	}
+	
+	/** Use this to pause or restart the simulation from an HTML page. */
+	toggleRunning(){
+		this.running = !this.running
+	}
+	
+	/** Run the entire simulation. This function is meant for nodejs, as you&apos;ll
+	want to perform individual {@link step}s in a requestAnimationFrame for an 
+	animation in a HTML page. */
+	run(){
+		while( this.time &lt; this.conf[&quot;RUNTIME&quot;] ){
+		
+			this.step()
+			
+		}
+	}
+	
+}
+
+
+export default Simulation</code></pre>
+
+</div>
+
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="script/jquery.touchSwipe.min.js"></script>
+<script src="script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+<script>
+
+	// insert "shy hyphens" in between parts of the camel-cased word; these appear only
+	// when the word needs to break. 
+	function camelWrap(node) {
+	  camelWrapUnicode(node);
+	  node.innerHTML = node.innerHTML.replace(/\u200B/g, "&shy;"); // <wbr>
+	}
+	function camelWrapUnicode(node) {
+	  for (node = node.firstChild; node; node = node.nextSibling) {
+		if (node.nodeType==Node.TEXT_NODE) {
+		  node.nodeValue = node.nodeValue.replace(/[\w:]{18,}/g, function(str) {
+			return str.replace(/([a-z])([A-Z])/g, "$1\u00AD$2"); // 
+		  });
+		} else {
+		  camelWrapUnicode(node);
+		}
+	  }
+	}
+	
+	// insert the shy hyphens for all the class names in the sidenav.
+	$(document).ready(function () {
+    	
+    		camelWrap( document.getElementById("mySidepanel"))
+			
+	});
+	
+	document.getElementById( "autoFooter" ).innerHTML = 'Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion"></span><i>Last updated: <span id="date"></span></i></a>'
+	document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

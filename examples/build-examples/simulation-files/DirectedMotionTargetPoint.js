@@ -3,7 +3,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- *  Cell moving towards a target point.
+ * <h1>Target point</h1>
+ * <p> Cells moving towards a target point.</p>
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

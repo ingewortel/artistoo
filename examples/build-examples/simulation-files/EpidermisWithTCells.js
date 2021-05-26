@@ -1,9 +1,10 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * A tightly packed monolayer of epidermal cells, with migrating T cells
+ * <h1>Epidermis with T cells </h1>
+ * <p>A tightly packed monolayer of epidermal cells, with migrating T cells
  * in between. This is basically a combination of the examples "Epidermis"
- * and "ActModel".
+ * and "ActModel". </p>
  **/
 
 

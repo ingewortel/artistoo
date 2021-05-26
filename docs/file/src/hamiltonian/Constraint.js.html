@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Artistoo | Artistoo</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl" href="../../../">
+      	  
+      	
+      	<script src="script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css">
+    	<link href="https://fonts.googleapis.com/css?family=Advent Pro" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Amatic SC" rel="stylesheet">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xF09B;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+<nav class="navigation" data-ice="nav" id="mySidepanel"><div>
+  <ul>
+    
+  <li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cells">cells</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Cell.js~Cell.html">Cell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Divider.js~Divider.html">Divider</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-variable">V</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPMEvol.js~CPMEvol.html">CPMEvol</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></div>
+    </li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent"><button type="button" id="sidebarToggle" class="btn btn-side-toggle">
+		<span id="sideButtonIcon" class="fa fa-chevron-left"></span>
+	</button>
+	<div class="swipe-area"></div>
+
+<h1 data-ice="title">src/hamiltonian/Constraint.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** This base class defines a general CPM constraint and provides methods that do not 
+depend on the specific constraint used. This class is never used on its own, 
+as it does not yet contain the actual definition of a constraint (such as a deltaH method).
+
+In general, we distinguish between two types of constraint:
+
+- a {@link HardConstraint} is a hard rule that *must* be fulfilled in order for a copy
+attempt to succeed;
+- a {@link SoftConstraint} is an energy term in the Hamiltonian that can make a copy 
+attempt either more or less energetically favourable, but does not by itself determine
+whether a copy attempt will succeed. An unfavourable outcome may be outbalanced by 
+favourable energies from other terms, and even a copy attempt net unfavourable 
+energy (deltaH &gt; 0) may succeed with a success chance P = exp(-DeltaH/T). 
+
+See the subclasses {@link SoftConstraint} and {@link HardConstraint} for details. Each
+implemented constraint is in turn a subclass of one of these two.
+*/
+class Constraint {
+
+	/** This method is actually implemented in the subclass.
+	@abstract
+	*/
+	get CONSTRAINT_TYPE() {
+		throw(&quot;You need to implement the &apos;CONSTRAINT_TYPE&apos; getter for this constraint!&quot;)
+	}
+	
+	/** Get the parameters of this constraint from the conf object. 
+	@return {object} conf - configuration settings for this constraint, containing the
+	relevant parameters.
+	*/
+	get parameters(){
+		return this.conf
+	}
+
+	/** Get a cellid or cellkind-specific parameter for a constraint. 
+	 * This function is here to document its functionality, but it is 
+	 * always overwritten by the constructor (via &quot;set CPM&quot;) to point
+	 * to another function. This is normally  @function  paramOfKind,
+	 * which retrieves the parameter from the conf object for the current {@link cellKind}.
+	 * If CPMEvol is used this is instead redirected to @function  paramOfCell,
+	 * which looks whether the parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * @abstract
+	 * 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	/* eslint-disable no-unused-vars */
+	cellParameter(param, cid){
+		throw( &quot;this is a template function that should never actually be called as it is overwritten to point to paramOfCell() or paramOfKind().&quot;)
+	}
+
+	/**
+	 * Get a cellId specific parameter, only used if CPMEvol is used: 
+	 * looks whether the requested parameter is overwritten in an @object Cell
+	 * and otherwise returns @function paramOfKind
+	 * 
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	paramOfCell(param, cid){
+		if (this.C.cells[cid][param] !== undefined){
+			return this.C.cells[cid][param]
+		}
+		return this.paramOfKind(param,cid)
+	}
+
+	/** Returns a cellKind specfic variable: 
+	 * Assumes that the parameter is indexable by cellkind.
+	 *
+	 * @param {string} param - name of parameter in conf object
+	 * @param {CellId} cid - Cell Id of cell in question, if id-specific parameter is not present, cellkind of cid is used
+	@return {any} parameter - the requested parameter
+	*/
+	paramOfKind(param, cid){
+		return this.conf[param][this.C.cellKind(cid)]
+	}
+	
+	/** The constructor of a constraint takes a configuration object.
+	This method is usually overwritten by the actual constraint so that the entries
+	of this object can be documented.
+	@param {object} conf - configuration settings for this constraint, containing the
+	relevant parameters.
+	@abstract*/
+	constructor( conf ){
+		/** Configuration object for this constraint.
+		@type {object}*/
+		this.conf = conf
+	}
+	/** This function attaches the relevant CPM to this constraint, so that information
+	about this cpm can be requested from the constraint. If the cpm is of type CPMEvol,
+	the cellParameter call is redirected to check for CellId-specific parameters.
+	@todo Check why some constraints overwrite this? Because that disables the automatic
+	usage of a confChecker() when it is implemented. 
+	@param {CPM} C - the CPM to attach to this constraint.*/
+	/*eslint-disable*/
+	set CPM(C){
+		/** CPM on which this constraint acts.
+		@type {CPM}*/
+		this.C = C
+		this.cellParameter = this.paramOfKind
+		if (C.constructor.name === &quot;CPMEvol&quot;){
+			this.cellParameter = this.paramOfCell
+		}
+		if( typeof this.confChecker === &quot;function&quot; ){
+			this.confChecker()
+		}
+	}
+	/** The optional confChecker method should verify that all the required conf parameters
+	are actually present in the conf object and have the right format. It is implemented in
+	the subclass that specifies the actual constraint.
+	@abstract */
+	confChecker( ){
+	}
+
+}
+
+export default Constraint
+</code></pre>
+
+</div>
+
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="script/jquery.touchSwipe.min.js"></script>
+<script src="script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+<script>
+
+	// insert "shy hyphens" in between parts of the camel-cased word; these appear only
+	// when the word needs to break. 
+	function camelWrap(node) {
+	  camelWrapUnicode(node);
+	  node.innerHTML = node.innerHTML.replace(/\u200B/g, "&shy;"); // <wbr>
+	}
+	function camelWrapUnicode(node) {
+	  for (node = node.firstChild; node; node = node.nextSibling) {
+		if (node.nodeType==Node.TEXT_NODE) {
+		  node.nodeValue = node.nodeValue.replace(/[\w:]{18,}/g, function(str) {
+			return str.replace(/([a-z])([A-Z])/g, "$1\u00AD$2"); // 
+		  });
+		} else {
+		  camelWrapUnicode(node);
+		}
+	  }
+	}
+	
+	// insert the shy hyphens for all the class names in the sidenav.
+	$(document).ready(function () {
+    	
+    		camelWrap( document.getElementById("mySidepanel"))
+			
+	});
+	
+	document.getElementById( "autoFooter" ).innerHTML = 'Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion"></span><i>Last updated: <span id="date"></span></i></a>'
+	document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

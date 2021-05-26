@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Back to the Classics: Cell Sorting</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl">
+      	  
+      	
+      	<script src="..&#x2F;script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" 
+        		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        		crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    	<link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
+    	<link href='https://fonts.googleapis.com/css?family=Amatic SC' rel='stylesheet'>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="..&#x2F;css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="..&#x2F;css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+           
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="..&#x2F;index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="..&#x2F;manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xf09b;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    </div>
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+
+<div class="container-fluid">
+<div class="explorable-page">
+	<br>
+	<h1>Back to the Classics: Cell Sorting</h1>
+	
+<p style="font-size:120%">
+How do cells orient themselves into organised structures while a tissue grows?
+This explorable describes the very first 
+Cellular Potts Model (CPM): the cell sorting model of 
+Fran&ccedil;ois Graner and James Glazier. After a bit of history, the interactive
+model will illustrate how 
+cells can sort themselves into ordered spatial patterns&mdash;a key ability for processes 
+like embryogenesis and tissue development.
+</p>
+
+<p style="font-size:90%;font-style:italic">This explorable was published in: 
+Wortel & Textor (2020). eLife 2021;10:e61288. 
+doi:<a href="https://doi.org/10.7554/eLife.61288">10.7554/eLife.61288</a>.</p>
+
+<h2>A Brief History of the CPM</h2>
+
+<p>The first version of a CPM was developed in the early nineties by 
+Fran&ccedil;ois Graner and James Glazier (<a href = "#graner">Graner and Glazier, 1992</a>). 
+At the time, developmental biologists had found that when two different types of embryonic 
+cells were mixed, they would sort into large, homogeneous same-cell 
+patches&mdash;spontaneously! Experimental studies suggested that this sorting process 
+arose from differences in adhesion between the cell types.
+To understand how this might work, Graner and Glazier wanted to model the
+phenomenon and see if they could indeed reproduce sorting based on such
+"differential adhesion" alone (in other words: they wanted to test the so-called
+<i>differential adhesion hypothesis</i>).</p>
+
+<h3>Inspiring Magnets</h3>
+<p>Their model was an extension of the existing  
+<a href="https://en.wikipedia.org/wiki/Potts_model"><i>Potts model</i></a>,
+originally developed by physicists to simulate magnets. The Potts model 
+simulates the interaction between so-called "spins" on a 
+crystalline lattice. </p>
+
+<p>
+The idea is simple: we have a grid with a bunch of pixels, representing points
+on the crystal lattice. These points all have a property called their <i>spin</i>, 
+which can be either "down" (0) or "up" (1). They then interact as follows:</p>
+
+<ul>
+<li> we assign an energetic <i>penalty</i> to each pair of neighbor pixels 
+with differing spin;</li> 
+<li> pixels continuously try to change (or "flip") their spin, but... </li>
+<li> they are more likely to succeed if this is energetically favourable (i.e. if
+the flip decreases the number of opposite-spin neighbors).</li> 
+</ul>
+
+<p>For more details on the model, see
+<a href="Explorable-CPM.html">this tutorial</a>; the model below is essentially the
+model from that tutorial with Adhesion only. For now though, let's just look at the
+result (with red and gray representing the "up" and "down" spins):</p>
+
+
+<div>
+	<iframe src="./asset/frame-ising.html" width="100%" height="280px"></iframe>
+</div>
+
+<p>
+
+While the Potts model does not much look like a cell, Graner and Glazier
+noticed that it does have an interesting property: the spins on the lattice 
+<i>automatically sort</i> into large patches of same-spin sites. And even the
+mechanism somewhat resembled their differential adhesion hypothesis: the energetic
+cost for having adjacent pixels with opposite spin could be interpreted as a 
+"contact energy" or "adhesion". Could they apply 
+a similar principle to the cell sorting question? </p>
+
+<h3>The Cellular Potts Model</h3>
+
+<p> A problem with the Potts model is that pixels can only have one of two 
+states, since magnetic spins can only be "up" or "down". While you could 
+interpret this as "cell" or "empty background" instead, Graner and 
+Glazier needed to model <i>many</i> different cells for
+their differential adhesion simulation&mdash;not just a single cell on an
+empty background. Their model replaced the binary spin 
+property with a "cell identity", a number indicating
+the cell to which a grid point belonged. (The trick here is that in contrast to
+the spin, the cell identity number could be any integer $\geq$0 rather than
+only 0 or 1&mdash;allowing the co-existence of multiple cells on the same grid).</p>
+
+<p>
+A second problem is that the patches formed in the Potts model can be of any 
+size and shape, unlike cells. Graner and Glazier therefore extended the 
+energy equations so that "cells" would roughly keep the 
+same size (number of grid points), by assigning energetic penalties for any
+deviations from this "target volume" (see <a href="Explorable-CPM.html">this tutorial</a>
+for details; <a href = "#graner">Graner and Glazier, 1992</a>, 
+<a href = "#cpm-history">Glazier <i>et al</i>, 2007</a>). </p>
+
+<p> They then used this to model their differential adhesion hypothesis.
+They did this in a similar way as the original Potts model described earlier,
+but now:</p>
+
+<ul>
+	<li>Instead of the binary "spin" property (0 or 1), pixels can now have
+	a value $v$ in the range of 0-$n$, where $n$ is the number of cells</li>
+	<li>Each cell tries to maintain its size as described above </li>
+	<li>Each pixel also has a <i>second</i> property $k$, describing the kind
+	of "cell" it belongs to: the empty background (0) or one of the two self-sorting 
+	cell types 1 and 2</li>
+	<li>Like with the spins, we assign a penalty $J$ to each pair of neighbor pixels 
+	that do not belong to the same cell (i.e. have different $v$). But now the 
+	size of this penalty depends on the <i>kind</i> $k$ of the contacting pixels:
+	we have $J_{\text{bg,kind 1}}$, $J_{\text{bg,kind 2}}$,
+	$J_{\text{kind 1, kind 1}}$, $J_{\text{kind 2, kind 2}}$, 
+	$J_{\text{kind 1, kind 2}}$, and</li>
+	<li>To encode the "differential adhesion": 
+	<div class="mathjaxcontainer">$$J_{\text{kind 1, kind 1}}, J_{\text{kind 2, kind 2}} \lt J_{\text{kind 1, kind 2}}$$ </div>
+	(i.e., assign a larger penalty to cell contacts if the cells belong to different types)</li>
+</ul>
+
+<p>
+The result was pretty magical: </p>
+
+<div style="width:100%;text-align:center">
+	<img src="../image/examples/CellSorting.gif" style="width:100%;max-width:400px">
+</div>
+
+<p>Here, the black and gray cells start out randomly mixed, but automatically
+sort themselves into large, same-cell patches. This simulation supported the differential
+adhesion hypothesis: apparently, cells could find each other based on adhesion alone, 
+because this model contained no other mechanism for cells to find each other.</p>
+
+
+
+<p>Let's now explore the cell sorting behaviour in more detail, using an interactive
+model.</p>
+
+
+<h2>Try It Yourself</h2>
+<p>Below, you'll find Graner and Glaziers model of cells sorting through 
+differential adhesion. You can adjust the different adhesion parameters 
+using the sliders below.
+</p>
+
+<div>
+	<iframe src="./asset/frame-sorting.html" width="100%" height=800px"></iframe>
+</div>
+
+
+<p>Suggestions:</p>
+
+<ol>
+	<li>Click play (&#9658;) and let the simulation run for a while. You should see
+	that most of the cells on the outside of the "blob" are red; this is because the
+	gray cells have a higher contact penalty with the background than the red cells do,
+	so the gray cells prefer to "hide" behind the red ones.</li>
+	<li>Set J<sub>bg,gray</sub> to 6 and J<sub>bg,red</sub> to 12. What happens and why?</li>
+	<li>Now increase J<sub>bg,red</sub> further, to 30. You'll see that the gray cells on the 
+	outside stretch out; preventing the red cells from contacting the background becomes
+	more important than preventing the gray cells from falling apart.</li>
+	<li>Set both J<sub>bg,red</sub> and J<sub>bg,gray</sub> to 8, and increase
+	J<sub>gray,red</sub> to 12. You should see that cells start sorting. Once they have,
+	you can click on "blender" to see them do it again (just to make sure it wasn't a fluke...)</li>
+	<li>What happens when you set J<sub>gray,red</sub> to its maximum value? </li>
+	<li>Now set both J<sub>bg,red</sub> and J<sub>bg,gray</sub> 
+	to 8, J<sub>red,red</sub> and J<sub>gray,gray</sub> to 14, and J<sub>red,gray</sub>
+	to 6. What do you see?</li>
+</ol>
+
+
+<h2>Summary</h2>
+
+<p>The CPM was developed in the nineties as an extension of
+an existing model of magnetism, in which dynamics arise from an energetic optimization
+process. The model of Graner and Glazier considered only energies associated with 
+cell-cell <i>adhesion</i> and with cell <i>size</i>, and was designed to answer a 
+specific question: can cells of different types sort themselves in space based on 
+"differential adhesion" alone? Indeed, spatial patterning arose spontaneously in the 
+Graner-Glazier model, showing that differential adhesion was <i>sufficient</i> to 
+explain the cell sorting process.</p>
+
+<p>
+This was the first "cellular" Potts model, or CPM. After Graner and Glazier
+showed how the central energy equation of the original Potts model could be extended to 
+incorporate processes relevant to cells, others quickly followed with their own 
+variations to the cellular Potts model. In particular, Paulien Hogeweg developed 
+important extensions to generalize the CPM&mdash;which is why it is also 
+referred to as the Glazier-Graner-Hogeweg (GGH) model 
+(<a href = "#cpm-history">Glazier <i>et al</i>, 2007</a>).</p>
+
+
+<h2>References</h2>
+<div id = "graner" class="ref">
+	<span class="author">Graner and Glazier.</i></span>
+	<cite><a href="https://doi.org/10.1103/PhysRevLett.69.2013">
+		Simulation of Biological Cell Sorting Using a Two-Dimensional Extended Potts Model</a></cite>.
+	<span class="journal">Physical Review Letters,</span>
+	<span class="year">1992</span>. 
+</div>
+
+<div id = "cpm-history" class="ref">
+	<span class="author">Glazier, Balter, Poplawski.</i></span>
+	<cite><a href="https://link.springer.com/chapter/10.1007/978-3-7643-8123-3_4">
+		Magnetization to Morphogenesis: A Brief History of the 
+        Glazier-Graner-Hogeweg Model.</a></cite>.
+	<span class="journal">Single-Cell-Based Models in Biology and Medicine. Mathematics and Biosciences in Interaction,</span>
+	<span class="year">2007</span>. 
+</div>
+</div>
+</div>
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="..&#x2F;script/search_index.js"></script>
+<script src="..&#x2F;script/search.js"></script>
+<script src="..&#x2F;script/pretty-print.js"></script>
+<script src="..&#x2F;script/inherited-summary.js"></script>
+<script src="..&#x2F;script/test-summary.js"></script>
+<script src="..&#x2F;script/inner-link.js"></script>
+<script src="..&#x2F;script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="..&#x2F;script/jquery.touchSwipe.min.js"></script>
+<script src="..&#x2F;script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>An HTML Template</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl">
+      	  
+      	
+      	<script src="..&#x2F;script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" 
+        		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        		crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    	<link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
+    	<link href='https://fonts.googleapis.com/css?family=Amatic SC' rel='stylesheet'>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="..&#x2F;css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="..&#x2F;css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+           
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="..&#x2F;index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="..&#x2F;manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xf09b;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    </div>
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+
+
+	<div class="wrapper">
+		<!-- Sidebar -->
+		<nav id="sidebar" class="navigation bg-dark manual-sidenav">
+			
+			<ul class="list-unstyled components">
+				<li>
+					<a href="..&#x2F;manual/index.html">Artistoo User Manual</a>
+					<ul class="list-unstyled" id="index-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/getting-started.html">Getting Started</a>
+					<ul class="list-unstyled" id="getting-started-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/your-first-simulation.html">Your First Simulation</a>
+					<ul class="list-unstyled" id="your-first-simulation-menu">
+					</ul>
+				</li>
+				<li class="active">
+					<a href="..&#x2F;manual/htmlTemplate.html">An HTML Template</a>
+					<ul class="list-unstyled" id="htmlTemplate-menu">
+						<li>
+							<a href="#an-html-template">An HTML template</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/simulationConfig.html">Configuring Simulations (1)</a>
+					<ul class="list-unstyled" id="simulationConfig-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/addConstraints.html">Adding CPM Constraints</a>
+					<ul class="list-unstyled" id="addConstraints-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/simulationConfig2.html">Configuring Simulations (2)</a>
+					<ul class="list-unstyled" id="simulationConfig2-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/sharingSimulations.html">Sharing Your Simulations</a>
+					<ul class="list-unstyled" id="sharingSimulations-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/custommodules.html">Custom Modules</a>
+					<ul class="list-unstyled" id="custommodules-menu">
+					</ul>
+				</li>
+				
+			</ul>
+		</nav>
+		
+		
+		<!-- Page Content -->
+		<div id="content" class="content">
+			
+			<button type="button" id="sidebarToggle"  class="btn btn-side-toggle">
+				<span id="sideButtonIcon" class="fa fa-chevron-left"></span></button>
+			
+			<!--<div class="container-fluid">
+				
+		
+				
+			</div>-->
+			<div class="container-fluid manual-page">
+				<br>
+				<h1>An HTML Template</h1>
+				
+
+<p>This tutorial will take you through the HTML simulation template 
+step by step so you know which parts you may have to adapt when 
+you are building your own simulations.</p>
+
+<h2 id="an-html-template">An HTML template</h2>
+
+<p>We will build the following template:</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;!-- Page setup and title --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html;
+charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;style type="text/css"&gt; 
+body{
+    font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
+}
+&lt;/style&gt;
+
+&lt;!-- Sourcing the cpm build --&gt;
+&lt;script src="../../build/artistoo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+"use strict"
+
+            // Simulation code here.
+
+
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="initialize()"&gt;
+&lt;h1&gt;Your Page Title&lt;/h1&gt;
+&lt;p&gt;
+Description of your page.
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre>
+
+
+<p>We will now go through this step by step.</p>
+
+<h3 id="step-create-a-basic-html-page">Step 1 : Create a basic HTML page</h3>
+
+<p>A very simple HTML page looks like this:</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt; &lt;/head&gt;
+&lt;body&gt; &lt;/body&gt;
+&lt;/html&gt;</code>
+</code></pre>
+
+<p>The <code>&lt;html&gt;</code> tag shows where the page starts, and <code>&lt;/html&gt;</code> shows where it ends.
+The page consists of a <b>header</b>, which starts at <code>&lt;head&gt;</code> and ends at <code>&lt;/head&gt;</code>,
+and a <b>body</b>, starting at <code>&lt;body&gt;</code> and ending at <code>&lt;/body&gt;</code>. (In general,
+anything you place in your HTML file starts with <code>&lt;something&gt;</code> and ends with
+<code>&lt;/something&gt;</code>).</p>
+
+<h3 id="step-2-configure-the-header">Step 2 : Configure the header</h3>
+
+
+<p>The header of the HTML page is the place that contains some meta-information
+about that page, and will also contain the simulation code.</p>
+
+<p>First, we will expand the header code above (between the <code>&lt;head&gt;&lt;/head&gt;</code> tags):</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;/head&gt;</code>
+</code></pre>
+
+<p>The additional code in the first line just includes some document settings into 
+the header that you will rarely need to change. The only thing you may want to 
+change is the second line, where you set the title that will be displayed
+in the open tab in your web browser when you open the page.</p>
+
+<h3 id="step-3-add-javascript">Step 3 : Add JavaScript</h3>
+
+<p>We will now add some JavaScript code to the header part of the page (again,
+between the <code>&lt;head&gt;&lt;/head&gt;</code> tags):</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html;charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+&lt;script src="path/to/artistoo/build/artistoo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+"use strict"
+// Simulation code will go here:
+
+&lt;/script&gt;
+&lt;/head&gt;</code>
+</code></pre>
+
+<p>The first script just loads the Artistoo package for HTML, which is stored in
+<code>artistoo/build/artistoo.js</code>. Please ensure that the path supplied here is the correct
+path from the folder where you stored <code>MyFirstSimulation.html</code> to the file
+<code>artistoo/build/artistoo.js</code>. If you have stored your simulation in 
+<code>artistoo/examples/html</code>,
+you can use the path <code>../../build/artistoo.js</code>.</p>
+
+
+<p>The second script is where your actual simulation code
+will go when you are <a href="./your-first-simulation.html#writing-your-simulation">Writing your simulation</a>.
+For now, we'll leave it empty.</p>
+
+<h3 id="step-4-write-the-body">Step 4: Write the body</h3>
+
+<p>Finally, we make some changes to the body of the page (between the <code>&lt;body&gt;&lt;/body&gt;</code> tags):</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;body onload="initialize()"&gt;
+&lt;h1&gt;Your Page Title&lt;/h1&gt;
+&lt;p&gt;
+Description of your page.
+&lt;/p&gt;
+&lt;/body&gt;</code>
+</code></pre>
+
+<p>In the first line, we tell the HTML page to run the JavaScript function 
+<code>intitialize()</code>, which we will define in 
+<a href="./your-first-simulation.html#writing-your-simulation">another tutorial</a> (between the 
+<code>&lt;script&gt;&lt;/script&gt;</code> tags of the page header we just set up).</p>
+
+<p>The rest of the code just adds a title and a description to the web page.
+The simulation will then be placed below (as in the example shown
+at the top of this page).</p>
+
+<h3 id="step-5-optional-add-css">Step 5 (optional): Add CSS</h3>
+
+
+<p>The code we have now added is sufficient to make the page work once we have
+<a href="./your-first-simulation.html#writing-your-simulation">added a simulation</a>, but to make it look better we
+may want to add some CSS styling code to the header of the page. The header now
+becomes:</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">&lt;head&gt;&lt;meta http-equiv="Content-Type" content="text/html;charset=UTF-8"&gt;
+&lt;title&gt;PageTitle&lt;/title&gt;
+
+&lt;style type="text/css"&gt; 
+body{
+font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
+}
+&lt;/style&gt;
+
+&lt;script src="path/to/artistoo/build/artistoo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+"use strict"
+// Simulation code will go here:
+
+&lt;/script&gt;
+&lt;/head&gt;</code>
+</code></pre>
+
+<p>To see the final result, have a look again at the complete
+ <a href="#an-html-template">template</a> again. You can now proceed with
+ <a href="./your-first-simulation.html#writing-your-simulation">adding your simulation</a> to this file.</p>			</div>
+			<div class="swipe-area"></div>
+		</div>
+	</div>
+
+	
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="..&#x2F;script/search_index.js"></script>
+<script src="..&#x2F;script/search.js"></script>
+<script src="..&#x2F;script/pretty-print.js"></script>
+<script src="..&#x2F;script/inherited-summary.js"></script>
+<script src="..&#x2F;script/test-summary.js"></script>
+<script src="..&#x2F;script/inner-link.js"></script>
+<script src="..&#x2F;script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="..&#x2F;script/jquery.touchSwipe.min.js"></script>
+<script src="..&#x2F;script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

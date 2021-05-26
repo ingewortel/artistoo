@@ -1,7 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Model of a migrating cell. 
+ * <h1>The Act-CPM</h1>
+ * <p>Model of a migrating cell.</p> 
  */
 
 

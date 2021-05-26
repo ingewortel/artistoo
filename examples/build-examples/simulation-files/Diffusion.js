@@ -4,7 +4,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Diffusion on a coarse grid.
+<h1>Diffusion</h1>
+<p>
+ * Diffusion on a coarse grid. </p>
  * */
 
 

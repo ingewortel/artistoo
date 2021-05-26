@@ -3,6 +3,8 @@ let CPM = require("../../build/artistoo-cjs.js")
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
+ * <h1>Diffusion-limited aggregation</h1>
+ * <p>
  * In this example, we see freely diffusing particles (blue) aggregate into a crystal (white). 
  * This is implemented as two communicating grids: one CPM (blue) and one CA (white).<br><br> 
  * The "diffusion" is implemented as a Cellular Potts Model (CPM) with a hard volume range constraint, such that 
@@ -23,6 +25,7 @@ let CPM = require("../../build/artistoo-cjs.js")
  *		</ul>
  * 	</li>
  * </ol>
+ * </p>
  */ 
 
 "use strict"

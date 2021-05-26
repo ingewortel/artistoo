@@ -3,7 +3,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Many moving cells attracted by a chemokine gradient.
+ * <h1>Communicating cells</h1>
+ * <p>
+ * Many moving cells attracted by a chemokine gradient. </p>
  * */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

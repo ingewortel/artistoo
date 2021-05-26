@@ -1,19 +1,18 @@
 {
 	"name": "Artistoo",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"dependencies": {
 		"braces": "^3.0.2",
 		"canvas": "^2.6.0",
 		"fs": "0.0.1-security",
-		"mathjs": "^5.8.0",
 		"mersenne-twister": "^1.1.0",
 		"websocket": "^1.0.28"
 	},
 	"devDependencies": {
 		"esdoc2": "^2.1.5",
 		"esdoc2-standard-plugin": "^2.1.2",
+		"eslint": "^5.16.0",
 		"jasmine": "^3.5.0",
-		"jquery-touchswipe": "^1.6.19",
 		"rollup": "^1.2.3",
 		"rollup-plugin-commonjs": "^9.2.0",
 		"rollup-plugin-eslint": "^5.0.0",

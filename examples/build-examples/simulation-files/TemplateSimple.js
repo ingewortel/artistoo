@@ -1,7 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- *  Diffusion on a coarse grid.
+* <h1>Template File</h1>
+ * <p>HTML code for the page here.</p>
  *  */
 
 "use strict"

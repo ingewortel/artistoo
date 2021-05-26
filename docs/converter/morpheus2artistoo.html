@@ -1,0 +1,157 @@
+<html>
+  <head>
+    <title>Morpheus2Artistoo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" 
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+		crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://goessner.net/download/prj/jsonxml/xml2json.js"></script>
+    <script src="../examples/artistoo.js"></script>
+   <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+  	<h1>Morpheus2Artistoo Converter</h1>
+  	
+  
+  	<div class="desc" style="text-align:justify">
+  	  	<p> This is a beta-version of a converter to import Morpheus models into Artistoo.
+  	  	Procedure:<br>
+  	  	</p>
+  	  	<ol>
+  	  		<li>Copy-paste the morpheus XML code into the corresponding window.</li>
+  	  		<li>Click convert.</li>
+  	  		<li>Copy-paste the converted HTML from the output field and save it on your computer;
+  	  		you can run it from your web browser, but you may have to adjust the paths 
+  	  		of the scripts included in the HTML header.</li>
+  	  		<li>Carefully check the "Conversion log" to see to what extent the 
+  	  		conversion was successful.</li>
+  	  	</ol>
+  	  	<p>Important notes: </p>
+  	  	<ul>
+  	  		<li>Morpheus often specifies relevant parameters as symbols defined elsewhere,
+  	  		or with references like 'size.x' to indicate the grid dimensions. The converter
+  	  		currently does not yet support this (we're working on it). If you don't get an 
+  	  		output, carefully check your XML file and convert such references to numbers 
+  	  		to help the conversion process. </li>
+  	  		<li>The converter will try to always produce an output, even if your simulation
+  	  		contains components that are not supported in both frameworks. <b>Always</b> check the
+  	  		conversion log carefully, it will indicate points where the converted model 
+  	  		may differ from the original; you may have to further modify it manually. </li>
+  	  	</ul>
+  	  	
+  	  
+  	</div>
+  
+  
+  	<div class="app">
+  	<h2>App</h2>
+  	<div class="row">
+  	
+		<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+			<div class="row">
+				<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<h3>Morpheus xml</h3>
+					<textarea id="xml" class="input" placeholder="Paste Morpheus XML code here"></textarea>
+					<div><button onclick=convert()>Convert</button></div>
+				</div>
+				<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+					<h3>Converted HTML</h3>
+					<textarea id="html" class = "output" placeholder="The closest Artistoo Model will appear here"></textarea>
+					<div><button onclick=upPreview()>Update preview</button></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<br>
+					<h3>Conversion log</h3>
+					<textarea id="logger" class="logger" placeholder="There were no warnings"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+			<h3>Preview</h3>
+			<div id="simulationContainer">
+				<iframe id="simulation"></iframe>
+			</div>
+		</div>
+  	</div>
+  	</div>
+  
+  
+  
+  	<script type="text/javascript">
+  	
+  		let parser = new DOMParser()
+  		let xmlCode = document.getElementById( "xml" )
+  		let xmlString = xmlCode.value.toString()
+  		let xmlDoc = parser.parseFromString(xmlString,"text/xml")
+  		
+  		let htmlField = document.getElementById( "html" )
+  		let modeldesc, code
+
+		let button = document. createElement("button")
+		button.innerHTML = "Click me"
+  		
+  		convert = function(){
+  			document.getElementById( "simulationContainer" ).innerHTML= "<iframe " +
+  				"id='simulation'></iframe>"
+  			
+  			
+  			xmlString = document.getElementById( "xml" ).value.toString()
+			//htmlField.textContent = xmlString
+			xmlDoc = parser.parseFromString(xmlString,"text/xml").children[0]
+			//document.getElementById("logger").innerHTML = xmlDoc.getElementsByTagName("Title")[0].childNodes[0].nodeValue
+		
+			modeldesc = new CPM.MorpheusImport( {
+				xml: xmlDoc
+			})
+			
+			artistooOut = new CPM.ArtistooWriter( modeldesc, {
+				target : htmlField,
+				browserLibrary : "../examples/artistoo.js",
+				warningBox : document.getElementById( "logger" )
+ 			})
+			artistooOut.write()
+			
+			
+			code=document.getElementById("simulation").contentWindow.document
+			code.open()
+			code.writeln(htmlField.value)
+			code.close()
+  		}
+  		
+  		upPreview = function(){
+  			document.getElementById( "simulationContainer" ).innerHTML= "<iframe " +
+  				"id='simulation'></iframe>"
+  			code=document.getElementById("simulation").contentWindow.document
+			code.open()
+			code.writeln(htmlField.value)
+			code.close()
+  		}
+  		  	  	
+  		
+		
+		getModel = function(){
+			let simframe = document.getElementById("simulation")
+			let doc = simframe.contentDocument? simframe.contentDocument: simframe.contentWindow.document
+			
+			doc.body.addEventListener('onload',
+			function(){
+				console.log("hi")
+			})
+		}
+		
+		
+
+		
+  		
+  	
+  	</script>
+  	
+  	 <!--<script type="text/javascript" src="app.js"></script>-->
+  </body>
+</html>

@@ -1,7 +1,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- *  Cells moving up a gradient of a diffusing chemokine, which is produced in the center. 
+ * <h1>Chemotaxis</h1>
+ * <p>
+ *  Cells moving up a gradient of a diffusing chemokine, which is produced in the center. </p>
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

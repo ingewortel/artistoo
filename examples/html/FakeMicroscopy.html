@@ -1,0 +1,253 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+		<script src="artistoo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    </head>
+    <style type="text/css">
+	body{
+			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
+			 Helvetica, Arial, "Lucida Grande", sans-serif;
+		 padding : 15px;
+		 max-width:600px;
+		 margin:auto;
+	}
+	td {
+		 padding: 10px;
+		 vertical-align: top;
+	}
+	</style>
+    
+    <body onload="initialize()">
+    
+    	<h1>Simulated Microscopy</h1>
+    	
+    	<p><i>Contributed by Shabaz Sultan</i></p>
+    
+    	<p>A 3D CPM "tissue", sliced and visualized as a microscopy image. CPM cells are
+    	just 3D cells with as "nucleus" another cell with a very high background adhesion
+    	(forcing it to stay inside). Image will show up when the simulation is done 
+    	running; this may take some time. Note: this uses tensorflow.</p>
+    
+    	<div id="cim"></div>
+       
+           <script>
+        
+        	// settings: x/y dimension and zoom to draw at. z-dim = fixed (32pix)
+        	const gsize = 256, zoom = 2
+        
+        	// variables to store objects: CPM, its GridManipulator (Gi) and a drawing canvas 'canv'
+        	let C, Gi, canv
+        	let nrOfCells = 0 // counter that will track the number of cells in the CPM
+        	
+        	
+        	// This function is run when the page is loaded and sets up the model    
+           	function initialize(){
+        		
+        		// Make a CPM and a GridManipulator
+        		C = new CPM.CPM([gsize,gsize, 32],{
+					T : 20,
+					torus : [true,true,true],
+					V : [ 0,  140*7*9, 90*9],
+					J : [ [0,5,1000], [5,5,5], [1000,5,5] ], 
+					LAMBDA_V : [0,25,500]
+					});		
+        		Gi = new CPM.GridManipulator( C )
+        		
+        		// Create a drawing canvas and make sure it is shown on the page, by
+        		// attaching it to the <div> element with id="cim" defined in the page body
+        		// on line 12.
+        		canv = document.createElement('canvas');
+				document.getElementById("cim").appendChild(canv)
+				// set canvas size
+				canv.width = zoom*C.extents[0];
+				canv.height = zoom*C.extents[1];
+        		
+        		// Seed cells on the grid, then run the model.
+        		seedGrid2()
+        		run()
+        	}
+
+
+			// You can adapt this, but this just checks if the cells lie in some 
+			// predefined region (in this case: a circle around the midpoint)
+			function checkInSeedingRegion(x, y, thresh = 256/2) {
+			  const dx = x - C.midpoint[0]
+			  const dy = y - C.midpoint[1]
+			  const dist = Math.sqrt( dx*dx + dy*dy )
+			  return dist < Math.floor( 0.6*gsize/2 )
+			}
+			
+			// Seed the cells
+			function seedGrid2(){
+			
+				// Take x and y coordinates in a grid with spacing (dx,dy)
+				const dx = 20, dy = 20
+				for( let xx = 0; xx < C.extents[0]; xx += dx ){
+					for( let yy = 0; yy < C.extents[1]; yy+= dy ){
+					
+						// Seed only within the seeding region and with some probability
+						if( checkInSeedingRegion( xx, yy )   && C.random() < 0.8 ){
+						
+							// z-coordinate is random within a slice of 8 pixels around
+							// the middle
+							const z = Math.floor( (C.random() - 0.5) * 8 + C.extents[2]/2 );
+							
+							// only seed if pixel is currently unoccupied, and if the
+							// sphere of radius 8 around the current coordinate is
+							// unoccupied as well.
+							if( C.pixt([xx,yy,z]) == 0 ){
+								// (3D 'circle' is actually a sphere, radius 8)
+								const circ = Gi.makeCircle( [xx,yy,z ], 8 )
+								let overlap = 0
+								for( let pc of circ ){
+									if( C.pixt(pc) > 0 ) overlap++
+									
+								}
+								// if unoccupied, make a new cell of ID = 1 and up the cellcounter
+								if( overlap == 0 ){
+									Gi.assignCellPixels( circ, 1 )
+									nrOfCells++
+								}
+								
+							}
+						}
+					}
+				}
+				
+				// Each cell gets a nucleus, seeded at its centroid, of cellKind 2
+				// (this cellkind has a very high adhesion with the background, so it
+				// will stay inside the cell)
+				const centroids = C.getStat( CPM.CentroidsWithTorusCorrection )
+				for( let cid of C.cellIDs() ){
+					Gi.seedCellAt( 2, centroids[cid].map( x => Math.floor(x) ))
+				}
+				
+			}
+			
+			// Run 20 steps, then render
+			function run(){
+				for( let t = 0; t < 20; t++ ){
+					console.log(t)
+					C.timeStep()
+				}
+				render()
+			}
+			
+			// This produces the final visualization and draws it on the canvas.
+			function render(){
+				
+				// thickness of the 'slice' to image, and scale intensity
+				const thickness = 4, signalStrength = 0.7
+				
+				// easier names
+				const dimension = C.extents[0], zdimension = C.extents[2] 
+   	        	
+   	        	// convert the CPM pixel array to a 3D matrix in tensorflow
+   	        	let tensor = tf.tensor(Int32Array.from( 
+					C.grid._pixelArray.slice(0, dimension*dimension*zdimension)), 
+					[dimension, dimension, zdimension]);
+
+				// Take a slice to image
+				tensor = tensor.slice( [0,0,zdimension/2-thickness], [dimension,dimension,thickness*2] )
+
+				// Find the nuclei: cellID > nrOfCells (because nuclei were seeded after
+				// cells, so 1..n are the cells, and n+1...2n are the nuclei).
+				// project onto xy-plane and divide by slice thickness to average,
+				// power transform 0.6 for viz.
+				let nuclei = tensor.greater( tf.scalar( nrOfCells, "int32" ) ).sum( 2 ).div( thickness*2 ).pow( 0.6 ) //.sum().pow(0.6)
+				
+				// nuclei are blue with 'signalStrength' intensity
+				let [r,g,b] = [0,0,255] 
+            	let red = nuclei.mul(r * signalStrength),
+                	green = nuclei.mul(g * signalStrength),
+                	blue = nuclei.mul(b * signalStrength)
+
+				// pre-allocate some arrays for each color
+				let r_membranePixelArray = new Int32Array( dimension*dimension*zdimension ),
+					g_membranePixelArray = new Int32Array( dimension*dimension*zdimension ),
+					b_membranePixelArray = new Int32Array( dimension*dimension*zdimension )
+
+				// the cells themselves get randomly divided into 5 cell'types' with each
+				// a different color
+				let celltypes = {}
+				// only visualize the cell borders; i is the coordinate, t the ID of the cell
+				for( let [i,t] of C.cellBorderPixelIndices() ){
+					// cellID > nrOfCells is the nucleus, which we've already colored
+					if( t <= nrOfCells ){
+					
+						// randomly assign to a cell type
+						let assignRandomCelltype = () => {
+							const r = Math.random()
+							if( r < 0.1 ) return 1
+							else if( r < 0.3 ) return 2
+							else if( r < 0.7 ) return 3
+							else if( r < 0.9 ) return 4
+							else return 5
+						}
+						if( !celltypes[t] ){
+							celltypes[t] = assignRandomCelltype() //Math.floor( Math.random() * 5 ) + 1
+						}
+						
+						// set colors at this position depending on cell type
+						for( let ni of C.neighi( i ) ){
+							let tni = C.pixti( ni ) 
+							if( tni != t && tni <= nrOfCells  ){
+								switch( celltypes[t] ){
+									case 1 : 
+										g_membranePixelArray[i] = 1 ; 
+									break
+									case 2 : 
+										r_membranePixelArray[i] = 1 ; b_membranePixelArray[i] = 1 ; 
+									break
+									case 3 : r_membranePixelArray[i] = 1 ; break
+									case 4 : 
+										r_membranePixelArray[i] = 1 ; g_membranePixelArray[i] = 1 ; 
+									break
+									case 5 : 
+										g_membranePixelArray[i] = 1 ; b_membranePixelArray[i] = 1 ; 
+									break
+								}
+								break
+							}
+						}
+					}
+				}
+
+				// function to convert r/g/b array to a tensor and transform for viz
+				let compact = (a) => tf.tensor( a,
+					[dimension, dimension, zdimension] ).
+					slice( [0,0,zdimension/2-thickness], [dimension,dimension,thickness*2] ).
+					sum(2).
+					div( thickness * 2 ).
+					pow( 0.6 ).
+					mul( 255 * signalStrength )
+
+				// add to the picture of the nuclei
+				red = red.add( compact( r_membranePixelArray ) )
+				blue = blue.add( compact( b_membranePixelArray ) )
+   		        green = green.add( compact( g_membranePixelArray ) )
+
+
+				// set transparency, create image
+				let alpha = tf.ones([dimension, dimension],"int32").mul( tf.scalar( 255, "int32" ) );
+	            let image = tf.stack([tf.cast(red,"int32"), tf.cast(green,"int32"), tf.cast(blue,"int32"), alpha], 2);
+    	        let im = new ImageData(Uint8ClampedArray.from(image.dataSync()), dimension, dimension);
+	
+				// draw image on canvas		
+				var ctx = canv.getContext("2d");
+				ctx.putImageData(im, 0, 0);
+				ctx.scale(zoom,zoom);
+				ctx.drawImage(canv, 0, 0);
+
+
+			}
+			
+			
+
+        </script>
+
+    </body>
+
+</html>

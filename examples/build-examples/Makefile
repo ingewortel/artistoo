@@ -3,7 +3,7 @@
 
 all : node-examples html-examples
 
-EXAMPLES=DiffusionLimitedAggregation ActModelCustomStat NoTorusDemo CancerInvasion ManyCellsDiffusion CollectiveMigration SIR ActOnMicroPattern GameOfLife Chemotaxis Diffusion DirectedMotionTargetPoint DirectedMotionLinear CellDivision SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis Cellsorting ActModel Microchannel EpithelialSheet
+EXAMPLES=StochasticCorrector DiffusionLimitedAggregation ActModelCustomStat NoTorusDemo CancerInvasion ManyCellsDiffusion CollectiveMigration SIR ActOnMicroPattern GameOfLife Chemotaxis Diffusion DirectedMotionTargetPoint DirectedMotionLinear CellDivision SingleCell RandomWalk ManyCellsPrefDir IsingModel EpidermisWithTCells Epidermis Cellsorting ActModel Microchannel EpithelialSheet
 
 
 ../node/output/img/% :

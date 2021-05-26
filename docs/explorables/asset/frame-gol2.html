@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+<script src="../../examples/sliders.js"></script>
+<script src="../../examples/artistoo.js"></script>
+
+<script>
+"use strict"
+
+
+let conf = {
+	gsize : [20,20],		// dimensions of the grid to build
+	zoom : 20,				// zoom for displaying the grid
+	torus: [true,true],			// Should grid boundaries be connected?
+	runtime : 5000
+}
+
+let C, Cim, cid=0, meter, t = 0, ready = true
+
+
+// Setup the grid and needed objects
+function setup(){
+		C = new CPM.CA( [conf.gsize[0],conf.gsize[1]], 
+		{ "UPDATE_RULE": updateRule } )
+	Cim = new CPM.Canvas( C, {zoom:conf.zoom, parentElement:document.getElementById("sim")} )
+}
+
+function updateRule(p,N){
+	let nalive = 0, typealive = 1
+	for( let pn of N ){
+		if( this.pixt(pn)!= 0 ){
+			nalive++
+			typealive = this.pixt(pn)
+		}
+		//nalive += (this.pixt(pn)!=0)
+	}	
+	if( this.pixt(p) != 0 ){
+		if( nalive == 2 || nalive == 3 ){
+			return typealive
+		}
+	} else {
+		if( nalive == 3 ) return typealive
+	}
+	return 0
+}
+
+// Place something on the grid
+function initializeGrid(){
+
+	const mode = document.getElementById("init").value
+	switch(mode){
+		case "random" :
+			initRandom()
+			break
+		case "static" : 
+			initStatic()
+			break
+		case "periodic" :
+			initPeriodic()
+			break
+		case "moving1" :
+			initMoving("glider")
+			break
+		case "moving2" :
+			initMoving("space1")
+			break
+	}
+
+	
+}
+
+function initStatic(){
+	// empty the grid to begin with
+	for( let p of C.pixels() ){
+		if( p[1] > 0 ){
+			C.setpix( p[0], 0 )
+		}
+	}
+	
+	// set some structures
+	let structures = []
+	structures.push( shiftPixels( staticShape("block"), [2,2] ) )
+	structures.push( shiftPixels( staticShape("beehive"), [14,2] ) )
+	structures.push( shiftPixels( staticShape("tub"), [2,15] ) )
+	structures.push( shiftPixels( staticShape("boat"), [15,15] ) )
+	for( let s of structures ){
+		for( let p of s ){
+			C.setpix( p, 1 )
+		}
+	}
+	
+		
+}
+
+function staticShape( shape ){
+	switch(shape){
+		case "beehive":
+			return [[0,1], [1,0], [2,0], [3,1], [2,2], [1,2]]
+			break
+		case "block":
+			return [[0,0],[1,0],[0,1],[1,1]]
+			break
+		case "tub":
+			return [[1,0],[0,1],[2,1],[1,2]]
+			break
+		case "boat":
+			return [[1,0],[0,1],[2,1],[1,2],[0,0]]
+			break
+	}
+}
+
+function initPeriodic(){
+
+	// empty the grid to begin with
+	for( let p of C.pixels() ){
+		if( p[1] > 0 ){
+			C.setpix( p[0], 0 )
+		}
+	}
+	
+	// set some structures
+	let structures = []
+	structures.push( shiftPixels( oscillator("blinker"), [2,2] ) )
+	structures.push( shiftPixels( oscillator("toad"), [2,16] ) )
+	structures.push( shiftPixels( oscillator("pentadecathlon"), [12,5] ) )
+	let k = 1
+	for( let s of structures ){
+		for( let p of s ){
+			C.setpix( p, k )
+		}
+		k++
+	}
+	
+}
+
+function initMoving(name){
+	// empty the grid to begin with
+	for( let p of C.pixels() ){
+		if( p[1] > 0 ){
+			C.setpix( p[0], 0 )
+		}
+	}
+	
+	// set some structures
+	let structures = []
+	structures.push( shiftPixels( moving(name), C.grid.midpoint ) )
+	
+	for( let s of structures ){
+		for( let p of s ){
+			C.setpix( p, 1 )
+		}
+	}
+}
+
+
+function moving( shape ){
+	switch( shape ){
+		case "glider" : 
+			return [ [0,2],[1,2],[2,2],[2,1],[1,0]]
+			break
+		case "space1":
+			return [[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2],
+				[3,0],[3,1],[3,3],[4,1],[4,2],[4,3],[5,2]]
+	}
+
+}
+
+function oscillator( shape ){
+	switch( shape ){
+		case "blinker":
+			return[[0,1],[1,1],[2,1]]
+			break
+		case "toad":
+			return[[0,1],[1,1],[2,1],[1,0],[2,0],[3,0]]
+			break
+		case "pentadecathlon" :
+			return[[2,0],[1,1],[3,1],[0,2],[4,2],
+				[0,3],[4,3],[0,4],[4,4],[0,5],[4,5], [0,6],[4,6],
+				[0,7],[4,7],[1,8],[3,8],[2,9]]
+	
+	}
+}
+
+
+function shiftPixels( pixArr, shift ){
+	let shifted = []
+
+	for( let p of pixArr ){
+		p[0] += shift[0]
+		p[1] += shift[1]
+		shifted.push(p)
+	}
+	return shifted
+}
+
+
+function initRandom(){
+
+	for( let x = 0 ; x < conf.gsize[0] ; x ++ ){
+		for( let y = 0 ; y < conf.gsize[1] ; y ++ ){
+			if( C.random() < 0.5 ){
+				C.setpix( [x,y], 1 )
+			} else {
+				C.setpix( [x,y], 0 )
+			}
+		}
+	}
+}
+
+
+// Produce output, like drawing on the canvas and logging stats
+function output(){
+	// Clear the canvas (in the backgroundcolor white), and redraw:
+	Cim.clear( "eaecef" )
+	// The cell in red
+	Cim.drawCellsOfId( 1, "CC0000" )
+	Cim.drawCellsOfId( 2, "CC00CC" )
+	Cim.drawCellsOfId( 3, "0000CC" )
+	
+	
+}
+
+// Run everything needed for a single step (output and computation),
+// and update the current time
+function step(){
+
+
+	if( ready ){
+		C.timeStep() 
+		output()
+		ready = false
+		setTimeout( function(){	ready = true }, 250 )
+	}
+	requestAnimationFrame( step )
+
+}
+
+// Starts up the simulation
+function initialize(){
+	setup()
+	initializeGrid()
+	step()
+}
+
+
+
+// No custom methods.
+</script>
+</head>
+<body onload="initialize();step()">
+
+
+<div class= "simcontainer">
+	<button onclick="initializeGrid()">reset</button>
+
+	<label for="init">Choose initial settings:</label>
+
+	<select name="init" id="init" onchange=initializeGrid()>
+	  <option value="static">Static</option>
+	  <option value="periodic">Periodic</option>
+	  <option value="moving1">Moving 1</option>
+	  <option value="moving2">Moving 2</option>
+	  <option value="random">Random</option>
+	</select>
+
+	<div id="sim"></div>
+</div>
+
+
+</body>
+</html>

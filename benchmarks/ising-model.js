@@ -19,8 +19,8 @@ C.add( new CPM.Adhesion( { J:[ [NaN,1], [1,1] ] } ) )
 let cid = C.makeNewCellID(1)
 // For all non-stromaborder pixels in the grid: assign it randomly
 // to either background or cell.
-for( let i = 0 ; i < C.field_size.x ; i ++ ){
-	for( let j = 0 ; j < C.field_size.y ; j ++ ){
+for( let i = 0 ; i < C.extents[0] ; i ++ ){
+	for( let j = 0 ; j < C.extents[1] ; j ++ ){
 		if( C.random() <= 0.5 ){
 			C.setpix( [i, j], cid )
 		}

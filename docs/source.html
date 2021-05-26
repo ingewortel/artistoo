@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Artistoo | Artistoo</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl" href>
+      	  
+      	
+      	<script src="script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css">
+    	<link href="https://fonts.googleapis.com/css?family=Advent Pro" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Amatic SC" rel="stylesheet">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xF09B;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+<nav class="navigation" data-ice="nav" id="mySidepanel"><div>
+  <ul>
+    
+  <li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cells">cells</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Cell.js~Cell.html">Cell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Divider.js~Divider.html">Divider</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-variable">V</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPMEvol.js~CPMEvol.html">CPMEvol</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></div>
+    </li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent">
+	<button type="button" id="sidebarToggle" class="btn btn-side-toggle">
+		<span id="sideButtonIcon" class="fa fa-chevron-left"></span>
+	</button>
+	<div class="swipe-area"></div>
+<h1>Source <span data-ice="totalCoverageCount" class="total-coverage-count"></span></h1>
+
+<table class="files-summary" data-ice="files" data-use-coverage="false">
+  <thead>
+    <tr>
+      <td>File</td>
+      <td>Identifier</td>
+      <td class="coverage">Document</td>
+      <td style="display: none;">Size</td>
+      <td style="display: none;">Lines</td>
+      <td style="display: none;">Updated</td>
+    </tr>
+  </thead>
+  <tbody>
+    
+  <tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/Canvas.js.html">src/Canvas.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">20983 byte</td>
+      <td style="display: none;" data-ice="lines">736</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/DiceSet.js.html">src/DiceSet.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3252 byte</td>
+      <td style="display: none;" data-ice="lines">112</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/cells/Cell.js.html">src/cells/Cell.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/cells/Cell.js~Cell.html">Cell</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1035 byte</td>
+      <td style="display: none;" data-ice="lines">41</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/cells/Divider.js.html">src/cells/Divider.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/cells/Divider.js~Divider.html">Divider</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1259 byte</td>
+      <td style="display: none;" data-ice="lines">46</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/ArtistooImport.js.html">src/converter/ArtistooImport.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">7986 byte</td>
+      <td style="display: none;" data-ice="lines">263</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/ArtistooWriter.js.html">src/converter/ArtistooWriter.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">12712 byte</td>
+      <td style="display: none;" data-ice="lines">412</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/ModelDescription.js.html">src/converter/ModelDescription.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">4547 byte</td>
+      <td style="display: none;" data-ice="lines">244</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/MorpheusImport.js.html">src/converter/MorpheusImport.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">31768 byte</td>
+      <td style="display: none;" data-ice="lines">1114</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/MorpheusWriter.js.html">src/converter/MorpheusWriter.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">22311 byte</td>
+      <td style="display: none;" data-ice="lines">705</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/converter/Writer.js.html">src/converter/Writer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">4356 byte</td>
+      <td style="display: none;" data-ice="lines">163</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/grid/CoarseGrid.js.html">src/grid/CoarseGrid.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">5977 byte</td>
+      <td style="display: none;" data-ice="lines">170</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/grid/Grid.js.html">src/grid/Grid.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">19012 byte</td>
+      <td style="display: none;" data-ice="lines">506</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/grid/Grid2D.js.html">src/grid/Grid2D.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">12770 byte</td>
+      <td style="display: none;" data-ice="lines">422</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/grid/Grid3D.js.html">src/grid/Grid3D.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">6769 byte</td>
+      <td style="display: none;" data-ice="lines">220</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/grid/GridManipulator.js.html">src/grid/GridManipulator.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">17483 byte</td>
+      <td style="display: none;" data-ice="lines">533</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/grid/grid-typedef.js.html">src/grid/grid-typedef.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1242 byte</td>
+      <td style="display: none;" data-ice="lines">30</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/ActivityConstraint.js.html">src/hamiltonian/ActivityConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">8979 byte</td>
+      <td style="display: none;" data-ice="lines">247</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/ActivityMultiBackground.js.html">src/hamiltonian/ActivityMultiBackground.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">7109 byte</td>
+      <td style="display: none;" data-ice="lines">181</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/Adhesion.js.html">src/hamiltonian/Adhesion.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3069 byte</td>
+      <td style="display: none;" data-ice="lines">81</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/AttractionPointConstraint.js.html">src/hamiltonian/AttractionPointConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">6055 byte</td>
+      <td style="display: none;" data-ice="lines">150</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/AutoAdderConfig.js.html">src/hamiltonian/AutoAdderConfig.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1337 byte</td>
+      <td style="display: none;" data-ice="lines">30</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/BarrierConstraint.js.html">src/hamiltonian/BarrierConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">2566 byte</td>
+      <td style="display: none;" data-ice="lines">78</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/BorderConstraint.js.html">src/hamiltonian/BorderConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">4687 byte</td>
+      <td style="display: none;" data-ice="lines">141</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/ChemotaxisConstraint.js.html">src/hamiltonian/ChemotaxisConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">4705 byte</td>
+      <td style="display: none;" data-ice="lines">119</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html">src/hamiltonian/ConnectivityConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">8765 byte</td>
+      <td style="display: none;" data-ice="lines">253</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/Constraint.js.html">src/hamiltonian/Constraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">4907 byte</td>
+      <td style="display: none;" data-ice="lines">120</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/HardConstraint.js.html">src/hamiltonian/HardConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1277 byte</td>
+      <td style="display: none;" data-ice="lines">36</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/HardVolumeRangeConstraint.js.html">src/hamiltonian/HardVolumeRangeConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">2220 byte</td>
+      <td style="display: none;" data-ice="lines">59</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/LocalConnectivityConstraint.js.html">src/hamiltonian/LocalConnectivityConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3862 byte</td>
+      <td style="display: none;" data-ice="lines">131</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/ParameterChecker.js.html">src/hamiltonian/ParameterChecker.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">16365 byte</td>
+      <td style="display: none;" data-ice="lines">459</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/PerimeterConstraint.js.html">src/hamiltonian/PerimeterConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">6130 byte</td>
+      <td style="display: none;" data-ice="lines">209</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/PersistenceConstraint.js.html">src/hamiltonian/PersistenceConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">7434 byte</td>
+      <td style="display: none;" data-ice="lines">214</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/PreferredDirectionConstraint.js.html">src/hamiltonian/PreferredDirectionConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3529 byte</td>
+      <td style="display: none;" data-ice="lines">98</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/SoftConnectivityConstraint.js.html">src/hamiltonian/SoftConnectivityConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">10497 byte</td>
+      <td style="display: none;" data-ice="lines">316</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/SoftConstraint.js.html">src/hamiltonian/SoftConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1204 byte</td>
+      <td style="display: none;" data-ice="lines">30</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/SoftLocalConnectivityConstraint.js.html">src/hamiltonian/SoftLocalConnectivityConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">5462 byte</td>
+      <td style="display: none;" data-ice="lines">176</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/VolumeConstraint.js.html">src/hamiltonian/VolumeConstraint.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3037 byte</td>
+      <td style="display: none;" data-ice="lines">86</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/hamiltonian/constraint-typedef.js.html">src/hamiltonian/constraint-typedef.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1868 byte</td>
+      <td style="display: none;" data-ice="lines">45</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/models/CA.js.html">src/models/CA.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1920 byte</td>
+      <td style="display: none;" data-ice="lines">65</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/models/CPM.js.html">src/models/CPM.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">16227 byte</td>
+      <td style="display: none;" data-ice="lines">472</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/models/CPMEvol.js.html">src/models/CPMEvol.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/models/CPMEvol.js~CPMEvol.html">CPMEvol</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3247 byte</td>
+      <td style="display: none;" data-ice="lines">87</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/models/GridBasedModel.js.html">src/models/GridBasedModel.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">8126 byte</td>
+      <td style="display: none;" data-ice="lines">238</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/models/model-typedefs.js.html">src/models/model-typedefs.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1034 byte</td>
+      <td style="display: none;" data-ice="lines">22</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/simulation/Simulation.js.html">src/simulation/Simulation.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">14130 byte</td>
+      <td style="display: none;" data-ice="lines">414</td>
+      <td style="display: none;" data-ice="updated">2021-05-04 18:00:10 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/BorderPixelsByCell.js.html">src/stats/BorderPixelsByCell.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1885 byte</td>
+      <td style="display: none;" data-ice="lines">60</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/CellNeighborList.js.html">src/stats/CellNeighborList.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3374 byte</td>
+      <td style="display: none;" data-ice="lines">106</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/Centroids.js.html">src/stats/Centroids.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">3980 byte</td>
+      <td style="display: none;" data-ice="lines">122</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/CentroidsWithTorusCorrection.js.html">src/stats/CentroidsWithTorusCorrection.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">4443 byte</td>
+      <td style="display: none;" data-ice="lines">137</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/ConnectedComponentsByCell.js.html">src/stats/ConnectedComponentsByCell.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">2654 byte</td>
+      <td style="display: none;" data-ice="lines">87</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/ConnectedComponentsByCellBorder.js.html">src/stats/ConnectedComponentsByCellBorder.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">2838 byte</td>
+      <td style="display: none;" data-ice="lines">87</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/Connectedness.js.html">src/stats/Connectedness.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1817 byte</td>
+      <td style="display: none;" data-ice="lines">68</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/PixelsByCell.js.html">src/stats/PixelsByCell.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1427 byte</td>
+      <td style="display: none;" data-ice="lines">49</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/Stat.js.html">src/stats/Stat.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1409 byte</td>
+      <td style="display: none;" data-ice="lines">41</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/stats/stat-typedef.js.html">src/stats/stat-typedef.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">426 byte</td>
+      <td style="display: none;" data-ice="lines">9</td>
+      <td style="display: none;" data-ice="updated">2021-05-05 16:48:48 (UTC)</td>
+    </tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="script/jquery.touchSwipe.min.js"></script>
+<script src="script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+<script>
+
+	// insert "shy hyphens" in between parts of the camel-cased word; these appear only
+	// when the word needs to break. 
+	function camelWrap(node) {
+	  camelWrapUnicode(node);
+	  node.innerHTML = node.innerHTML.replace(/\u200B/g, "&shy;"); // <wbr>
+	}
+	function camelWrapUnicode(node) {
+	  for (node = node.firstChild; node; node = node.nextSibling) {
+		if (node.nodeType==Node.TEXT_NODE) {
+		  node.nodeValue = node.nodeValue.replace(/[\w:]{18,}/g, function(str) {
+			return str.replace(/([a-z])([A-Z])/g, "$1\u00AD$2"); // 
+		  });
+		} else {
+		  camelWrapUnicode(node);
+		}
+	  }
+	}
+	
+	// insert the shy hyphens for all the class names in the sidenav.
+	$(document).ready(function () {
+    	
+    		camelWrap( document.getElementById("mySidepanel"))
+			
+	});
+	
+	document.getElementById( "autoFooter" ).innerHTML = 'Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion"></span><i>Last updated: <span id="date"></span></i></a>'
+	document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

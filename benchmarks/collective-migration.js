@@ -1,4 +1,7 @@
-let CPM = require("../build/artistoo-cjs.js")
+const artistooBuild = process.argv[2]
+
+let CPM = require(artistooBuild)
+//let CPM = require("../build/artistoo-cjs.js")
 console.log("1000x1000 model, collective migration large Act cells, torus, 100 MCS")
 
 
@@ -22,7 +25,7 @@ C.add( new CPM.ActivityConstraint({MAX_ACT: [0,20],
 	ACT_MEAN: "geometric" }) )
 
 
-let Ci = new CPM.GridInitializer(C)
+let Ci = new CPM.GridManipulator(C)
 let i = 500
 while( i-- > 0 ){
 	Ci.seedCell(1)

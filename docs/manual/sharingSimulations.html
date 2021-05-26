@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Sharing Your Simulations</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl">
+      	  
+      	
+      	<script src="..&#x2F;script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" 
+        		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        		crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    	<link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
+    	<link href='https://fonts.googleapis.com/css?family=Amatic SC' rel='stylesheet'>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="..&#x2F;css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="..&#x2F;css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+           
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="..&#x2F;index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="..&#x2F;manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xf09b;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    </div>
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+
+
+	<div class="wrapper">
+		<!-- Sidebar -->
+		<nav id="sidebar" class="navigation bg-dark manual-sidenav">
+			
+			<ul class="list-unstyled components">
+				<li>
+					<a href="..&#x2F;manual/index.html">Artistoo User Manual</a>
+					<ul class="list-unstyled" id="index-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/getting-started.html">Getting Started</a>
+					<ul class="list-unstyled" id="getting-started-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/your-first-simulation.html">Your First Simulation</a>
+					<ul class="list-unstyled" id="your-first-simulation-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/htmlTemplate.html">An HTML Template</a>
+					<ul class="list-unstyled" id="htmlTemplate-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/simulationConfig.html">Configuring Simulations (1)</a>
+					<ul class="list-unstyled" id="simulationConfig-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/addConstraints.html">Adding CPM Constraints</a>
+					<ul class="list-unstyled" id="addConstraints-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/simulationConfig2.html">Configuring Simulations (2)</a>
+					<ul class="list-unstyled" id="simulationConfig2-menu">
+					</ul>
+				</li>
+				<li class="active">
+					<a href="..&#x2F;manual/sharingSimulations.html">Sharing Your Simulations</a>
+					<ul class="list-unstyled" id="sharingSimulations-menu">
+						<li>
+							<a href="#step-1-create-directory">Step 1: Create a self-contained directory</a>
+						</li>
+						<li>
+							<a href="#step-2-adjust-paths">Step 2: Adjust relative paths</a>
+						</li>
+						<li>
+							<a href="#step-3-share">Step 3: Share</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/custommodules.html">Custom Modules</a>
+					<ul class="list-unstyled" id="custommodules-menu">
+					</ul>
+				</li>
+				
+			</ul>
+		</nav>
+		
+		
+		<!-- Page Content -->
+		<div id="content" class="content">
+			
+			<button type="button" id="sidebarToggle"  class="btn btn-side-toggle">
+				<span id="sideButtonIcon" class="fa fa-chevron-left"></span></button>
+			
+			<!--<div class="container-fluid">
+				
+		
+				
+			</div>-->
+			<div class="container-fluid manual-page">
+				<br>
+				<h1>Sharing Your Simulations</h1>
+				
+<p>
+This tutorial will describe how you can share your simulations in a zero-install setting.
+Note that this tutorial applies to the browser (HTML) simulations only, since command line
+(node) simulations <i>do</i> require installation of libraries and are therefore not
+zero-install.
+</p>
+
+<h2 id="step-1-create-directory">Step 1: Create a self-contained directory</h2>
+
+<p>For sharing, we will make a directory that contains all required components. Anyone
+who has that folder and opens your simulation in that folder will be able to see your
+model in its full glory, as long as they don't mess with the directory structure or 
+move/remove any files.</p>
+
+<p>Assuming you have created an empty directory <code>mySimulation</code>, now add the
+following files to it:</p>
+
+<ul>
+	<li><code>MySimulation.html</code>, the html file containing your simulation;</li>
+	<li><code>artistoo.js</code>, the script with the Artistoo code (don't just make a
+	link, but actually copy the code into this folder);</li>
+</ul>
+
+<p>If you're using the <code>fpsmeter</code>, you also need to add the 
+<code>fpsmeter.min.js</code> file from <a href="../examples/fpsmeter.min.js">here</a>
+(the same goes for any other scripts you are loading from your HTML file). </p>
+
+
+<h2 id="step-2-adjust-paths">Step 2: Adjust relative paths</h2>
+
+<p>In your HTML file <code>MySimulation.html</code>, adjust any paths to scripts you
+are loading so that they refer to the local copy in your self-contained folder.
+To check that it all works, open the HTML file in your browser &mdash; the simulation should
+run. If it doesn't, right click, select 'inspect' > 'console' to see any error messages
+that come up (if your simulation worked before you moved it, any error messages are
+probably due to a missing file or a path that needs updating).
+</p>
+
+<p>Just to be sure, move the directory to some other place on your computer and check if
+the simulation still runs. If it does, you're good to go.</p>
+
+
+
+<h2 id="step-3-share">Step 3: Share</h2>
+
+<h3 id="share-offline">Offline</h3>
+
+<p>Once you have a working simulation in a self-contained directory, you can zip that
+directory and send it to someone else. They can unpack the folder on their own computer
+and double click the HTML file to run in their own browser.</p> 
+
+<h3 id="share-online">Online</h3>
+
+<p>Alternatively, you can copy the folder to your own server and make your simulation 
+available via a URL. Another option is to set up a Github repository with
+<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site">Github Pages</a>. 
+To see an example, check out the small website we made to accompany the 
+Artistoo manuscript: <a href="https://github.com/ingewortel/artistoo-supplements">https://github.com/ingewortel/artistoo-supplements</a>
+ (from this repository, you can see the actual website through the link in the README).
+</p>			</div>
+			<div class="swipe-area"></div>
+		</div>
+	</div>
+
+	
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="..&#x2F;script/search_index.js"></script>
+<script src="..&#x2F;script/search.js"></script>
+<script src="..&#x2F;script/pretty-print.js"></script>
+<script src="..&#x2F;script/inherited-summary.js"></script>
+<script src="..&#x2F;script/test-summary.js"></script>
+<script src="..&#x2F;script/inner-link.js"></script>
+<script src="..&#x2F;script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="..&#x2F;script/jquery.touchSwipe.min.js"></script>
+<script src="..&#x2F;script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

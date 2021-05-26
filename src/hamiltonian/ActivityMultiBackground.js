@@ -140,8 +140,6 @@ class ActivityMultiBackground extends ActivityConstraint {
 		}
 
 		let deltaH = 0, maxact, lambdaact
-		const src_kind = this.C.cellKind( src_type )
-		const tgt_kind = this.C.cellKind( tgt_type )
 		let bgindex1 = 0, bgindex2 = 0
 		
 		for( let bgkind = 0; bgkind < this.bgvoxels.length; bgkind++ ){
@@ -157,14 +155,14 @@ class ActivityMultiBackground extends ActivityConstraint {
 		// use parameters for the source cell, unless that is the background.
 		// In that case, use parameters of the target cell.
 		if( src_type != 0 ){
-			maxact = this.conf["MAX_ACT"][src_kind]
-			lambdaact = this.conf["LAMBDA_ACT_MBG"][src_kind][bgindex1]
+			maxact = this.cellParameter("MAX_ACT", src_type)
+			lambdaact = this.cellParameter("LAMBDA_ACT_MBG", src_type)[bgindex1]
 		} else {
 			// special case: punishment for a copy attempt from background into
 			// an active cell. This effectively means that the active cell retracts,
 			// which is different from one cell pushing into another (active) cell.
-			maxact = this.conf["MAX_ACT"][tgt_kind]
-			lambdaact = this.conf["LAMBDA_ACT_MBG"][tgt_kind][bgindex2]
+			maxact = this.cellParameter("MAX_ACT", tgt_type)
+			lambdaact = this.cellParameter("LAMBDA_ACT_MBG", tgt_type)[bgindex2]
 		}
 		if( !maxact || !lambdaact ){
 			return 0

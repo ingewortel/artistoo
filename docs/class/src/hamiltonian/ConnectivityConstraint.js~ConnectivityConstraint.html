@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Artistoo | Artistoo</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl" href="../../../">
+      	  
+      	
+      	<script src="script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css">
+    	<link href="https://fonts.googleapis.com/css?family=Advent Pro" rel="stylesheet">
+    	<link href="https://fonts.googleapis.com/css?family=Amatic SC" rel="stylesheet">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xF09B;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+<nav class="navigation" data-ice="nav" id="mySidepanel"><div>
+  <ul>
+    
+  <li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-MersenneTwister">MersenneTwister</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-uniqueID">uniqueID</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#cells">cells</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Cell.js~Cell.html">Cell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/cells/Divider.js~Divider.html">Divider</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">converter</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooImport.js~ArtistooImport.html">ArtistooImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ArtistooWriter.js~ArtistooWriter.html">ArtistooWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/ModelDescription.js~ModelDescription.html">ModelDescription</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusImport.js~MorpheusImport.html">MorpheusImport</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/MorpheusWriter.js~MorpheusWriter.html">MorpheusWriter</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/converter/Writer.js~Writer.html">Writer</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#grid">grid</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/CoarseGrid.js~CoarseGrid.html">CoarseGrid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid.js~Grid.html">Grid</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid2D.js~Grid2D.html">Grid2D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/Grid3D.js~Grid3D.html">Grid3D</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html">GridManipulator</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-Pixel">Pixel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-updatePixelFunction">updatePixelFunction</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-GridSize">GridSize</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#hamiltonian">hamiltonian</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityConstraint.js~ActivityConstraint.html">ActivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ActivityMultiBackground.js~ActivityMultiBackground.html">ActivityMultiBackground</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Adhesion.js~Adhesion.html">Adhesion</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/AttractionPointConstraint.js~AttractionPointConstraint.html">AttractionPointConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BarrierConstraint.js~BarrierConstraint.html">BarrierConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/BorderConstraint.js~BorderConstraint.html">BorderConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html">ChemotaxisConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html">ConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/HardVolumeRangeConstraint.js~HardVolumeRangeConstraint.html">HardVolumeRangeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/LocalConnectivityConstraint.js~LocalConnectivityConstraint.html">LocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/ParameterChecker.js~ParameterChecker.html">ParameterChecker</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PerimeterConstraint.js~PerimeterConstraint.html">PerimeterConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PersistenceConstraint.js~PersistenceConstraint.html">PersistenceConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/PreferredDirectionConstraint.js~PreferredDirectionConstraint.html">PreferredDirectionConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConnectivityConstraint.js~SoftConnectivityConstraint.html">SoftConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftConstraint.js~SoftConstraint.html">SoftConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/SoftLocalConnectivityConstraint.js~SoftLocalConnectivityConstraint.html">SoftLocalConnectivityConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/hamiltonian/VolumeConstraint.js~VolumeConstraint.html">VolumeConstraint</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-variable">V</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="variable/index.html#static-variable-AutoAdderConfig">AutoAdderConfig</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindArray">KindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-KindMatrix">KindMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-SingleValue">SingleValue</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKindInteractionMatrix">CellKindInteractionMatrix</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindArray">PerKindArray</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindNonNegative">PerKindNonNegative</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-PerKindProb">PerKindProb</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#models">models</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CA.js~CA.html">CA</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPM.js~CPM.html">CPM</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/CPMEvol.js~CPMEvol.html">CPMEvol</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/models/GridBasedModel.js~GridBasedModel.html">GridBasedModel</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#simulation">simulation</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/simulation/Simulation.js~Simulation.html">Simulation</a></span></div>
+    </li>
+<li data-ice="doc">
+    	<a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#stats">stats</a>
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/BorderPixelsByCell.js~BorderPixelsByCell.html">BorderPixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CellNeighborList.js~CellNeighborList.html">CellNeighborList</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Centroids.js~Centroids.html">Centroids</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/CentroidsWithTorusCorrection.js~CentroidsWithTorusCorrection.html">CentroidsWithTorusCorrection</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCell.js~ConnectedComponentsByCell.html">ConnectedComponentsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/ConnectedComponentsByCellBorder.js~ConnectedComponentsByCellBorder.html">ConnectedComponentsByCellBorder</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Connectedness.js~Connectedness.html">Connectedness</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/PixelsByCell.js~PixelsByCell.html">PixelsByCell</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-class">C</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="class/src/stats/Stat.js~Stat.html">Stat</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellArrayObject">CellArrayObject</a></span></div>
+    </li>
+<li data-ice="doc">
+    	
+    	<div data-ice="kind" class="kind-typedef">T</div>
+    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></div>
+    </li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content" id="mainContent">
+<button type="button" id="sidebarToggle" class="btn btn-side-toggle">
+		<span id="sideButtonIcon" class="fa fa-chevron-left"></span>
+	</button>
+	<div class="swipe-area"></div>
+
+<div class="header-notice">
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import ConnectivityConstraint from &apos;<span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber11">Artistoo/src/hamiltonian/ConnectivityConstraint.js</a></span>&apos;</code></pre></div>
+  <span data-ice="access">public</span>
+  <span data-ice="kind">class</span>
+  
+  
+  
+  <span data-ice="source">| <span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber11">source</a></span></span>
+</div>
+
+<div class="self-detail detail">
+  <h1 data-ice="name">ConnectivityConstraint</h1>
+
+  
+
+  
+  
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span> &#x2192; <span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span> &#x2192; ConnectivityConstraint</div></div>
+  
+  
+  
+  
+  
+  
+
+  
+  <div class="experimental" data-ice="experimental">this class is experimental.</div>
+  <div class="description" data-ice="description"><p>This constraint enforces that cells stay &apos;connected&apos; throughout any copy attempts.
+Copy attempts that break the cell into two parts are therefore forbidden. To speed things
+up, this constraint only checks if the borderpixels of the cells stay connected.</p>
+</div>
+  
+
+  
+
+  
+
+  
+
+  
+</div>
+
+
+
+<div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(conf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The constructor of the ConnectivityConstraint requires a conf object with one parameter.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-set-CPM">CPM</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The set CPM method attaches the CPM to the constraint.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-member-borderpixelsbycell">borderpixelsbycell</a></span></span><span class="code" data-ice="signature">: <span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Object tracking the borderpixels of each cell.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Private Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-member-_neighbours">_neighbours</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Private property used by <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-updateBorderPixels">updateBorderPixels</a></span> to track borders.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-checkConnected">checkConnected</a></span></span><span class="code" data-ice="signature">(tgt_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, src_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, tgt_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>This method checks if the connectivity still holds after pixel tgt_i is changed from
+tgt_type to src_type.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-confChecker">confChecker</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>This method checks that all required parameters are present in the object supplied to
+the constructor, and that they are of the right format.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-connectedComponentsOf">connectedComponentsOf</a></span></span><span class="code" data-ice="signature">(pixelobject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Get the connected components of a set of pixels.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-connectedComponentsOfCellBorder">connectedComponentsOfCellBorder</a></span></span><span class="code" data-ice="signature">(cellid: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Get the connected components of the borderpixels of the current cell.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-fulfilled">fulfilled</a></span></span><span class="code" data-ice="signature">(src_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, tgt_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, src_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, tgt_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Method for hard constraints to compute whether the copy attempt fulfills the rule.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-localConnected">localConnected</a></span></span><span class="code" data-ice="signature">(tgt_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, tgt_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>To speed things up: first check if a pixel change disrupts the local connectivity
+in its direct neighborhood.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-postSetpixListener">postSetpixListener</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, t_old: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, t: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The postSetpixListener of the ConnectivityConstraint updates the internally
+tracked borderpixels after every copy.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-updateBorderPixels">updateBorderPixels</a></span></span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, t_old: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, t_new: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Update the borderpixels when pixel i changes from t_old into t_new.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<div class="inherited-summary" data-ice="inheritedSummary"><h2>Inherited Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/hamiltonian/Constraint.js~Constraint.html">Constraint</a></span></td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-get-CONSTRAINT_TYPE">CONSTRAINT_TYPE</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>This method is actually implemented in the subclass.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-set-CPM">CPM</a></span></span><span class="code" data-ice="signature">(C: <span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM">CPM</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>This function attaches the relevant CPM to this constraint, so that information
+about this cpm can be requested from the constraint.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-get-parameters">parameters</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Get the parameters of this constraint from the conf object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-member-C">C</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/hamiltonian/ChemotaxisConstraint.js~ChemotaxisConstraint.html#instance-set-CPM">CPM</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>CPM on which this constraint acts.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-member-conf">conf</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Configuration object for this constraint.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-cellParameter">cellParameter</a></span></span><span class="code" data-ice="signature">(param: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, cid: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span>any</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Get a cellid or cellkind-specific parameter for a constraint.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confChecker">confChecker</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The optional confChecker method should verify that all the required conf parameters
+are actually present in the conf object and have the right format.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-paramOfCell">paramOfCell</a></span></span><span class="code" data-ice="signature">(param: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, cid: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span>any</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Get a cellId specific parameter, only used if CPMEvol is used: 
+looks whether the requested parameter is overwritten in an @object Cell
+and otherwise returns @function paramOfKind</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-paramOfKind">paramOfKind</a></span></span><span class="code" data-ice="signature">(param: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, cid: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span>any</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns a cellKind specfic variable: 
+Assumes that the parameter is indexable by cellkind.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html">HardConstraint</a></span></td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html#instance-get-CONSTRAINT_TYPE">CONSTRAINT_TYPE</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Let the CPM know that this is a soft constraint, so return &apos;soft&apos;.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      <span class="abstract" data-ice="abstract">abstract</span>
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html#instance-method-fulfilled">fulfilled</a></span></span><span class="code" data-ice="signature">(src_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, tgt_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, src_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, tgt_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Hard constraints must have a &apos;fulfilled&apos; method to compute whether the copy attempt fulfills the rule.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+
+
+<div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-constructor-constructor">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(conf: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber17">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The constructor of the ConnectivityConstraint requires a conf object with one parameter.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-constructor-constructor">Constraint#constructor</a></span></div>
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">conf</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>parameter object for this constraint.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">conf.CONNECTED</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-PerKindBoolean">PerKindBoolean</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>should the cellkind be connected or not?</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-CPM">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">CPM</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber27">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The set CPM method attaches the CPM to the constraint.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-set-CPM">Constraint#CPM</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-borderpixelsbycell">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">borderpixelsbycell</span><span class="code" data-ice="signature">: <span><a href="typedef/index.html#static-typedef-CellObject">CellObject</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber23">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Object tracking the borderpixels of each cell. This is kept up to date after
+every copy attempt.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<h2 data-ice="title">Private Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-_neighbours">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">_neighbours</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array">Uint16Array</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber33">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Private property used by <span><a href="class/src/hamiltonian/ConnectivityConstraint.js~ConnectivityConstraint.html#instance-method-updateBorderPixels">updateBorderPixels</a></span> to track borders. </p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-checkConnected">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">checkConnected</span><span class="code" data-ice="signature">(tgt_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, src_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, tgt_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber203">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>This method checks if the connectivity still holds after pixel tgt_i is changed from
+tgt_type to src_type. </p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">tgt_i</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the pixel to change</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">src_type</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the new cell for this pixel.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">tgt_type</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the cell the pixel belonged to previously.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>*</span></td>
+          
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-confChecker">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">confChecker</span><span class="code" data-ice="signature">()</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber39">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>This method checks that all required parameters are present in the object supplied to
+the constructor, and that they are of the right format. It throws an error when this
+is not the case.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/hamiltonian/Constraint.js~Constraint.html#instance-method-confChecker">Constraint#confChecker</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-connectedComponentsOf">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">connectedComponentsOf</span><span class="code" data-ice="signature">(pixelobject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber126">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Get the connected components of a set of pixels.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">pixelobject</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>an object with as keys the <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>s of the pixels to check.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>an array with an element for every connected component, which is in
+turn an array of the <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>s of the pixels belonging to that component.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-connectedComponentsOfCellBorder">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">connectedComponentsOfCellBorder</span><span class="code" data-ice="signature">(cellid: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber108">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Get the connected components of the borderpixels of the current cell.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">cellid</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>cell to check the connected components of.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>an array with an element for every connected component, which is in
+turn an array of the <span><a href="typedef/index.html#static-typedef-ArrayCoordinate">ArrayCoordinate</a></span>s of the pixels belonging to that component.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-fulfilled">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">fulfilled</span><span class="code" data-ice="signature">(src_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, tgt_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, src_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, tgt_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber241">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Method for hard constraints to compute whether the copy attempt fulfills the rule.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/hamiltonian/HardConstraint.js~HardConstraint.html#instance-method-fulfilled">HardConstraint#fulfilled</a></span></div>
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">src_i</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>coordinate of the source pixel that tries to copy.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">tgt_i</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>coordinate of the target pixel the source is trying
+to copy into.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">src_type</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>cellid of the source pixel.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">tgt_type</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>cellid of the target pixel.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>whether the copy attempt satisfies the constraint.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-localConnected">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">localConnected</span><span class="code" data-ice="signature">(tgt_i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, tgt_type: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber177">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>To speed things up: first check if a pixel change disrupts the local connectivity
+in its direct neighborhood. If local connectivity is not disrupted, we don&apos;t have to
+check global connectivity at all. This currently only works in 2D, so it returns 
+false for 3D (ensuring that connectivity is checked globally).</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">tgt_i</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the pixel to change</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">tgt_type</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the cell the pixel belonged to before the copy attempt.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>does the local neighborhood remain connected if this pixel changes?</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-postSetpixListener">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">postSetpixListener</span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, t_old: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, t: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber165">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The postSetpixListener of the ConnectivityConstraint updates the internally
+tracked borderpixels after every copy.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">i</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the pixel to change</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">t_old</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the cell the pixel belonged to previously</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">t</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the cell the pixel belongs to now.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-updateBorderPixels">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">updateBorderPixels</span><span class="code" data-ice="signature">(i: <span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span>, t_old: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>, t_new: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/hamiltonian/ConnectivityConstraint.js.html#lineNumber48">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Update the borderpixels when pixel i changes from t_old into t_new.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">i</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-IndexCoordinate">IndexCoordinate</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the pixel to change</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">t_old</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the cell the pixel belonged to previously</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">t_new</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the cell the pixel belongs to now.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+</div>
+
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="script/jquery.touchSwipe.min.js"></script>
+<script src="script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+<script>
+
+	// insert "shy hyphens" in between parts of the camel-cased word; these appear only
+	// when the word needs to break. 
+	function camelWrap(node) {
+	  camelWrapUnicode(node);
+	  node.innerHTML = node.innerHTML.replace(/\u200B/g, "&shy;"); // <wbr>
+	}
+	function camelWrapUnicode(node) {
+	  for (node = node.firstChild; node; node = node.nextSibling) {
+		if (node.nodeType==Node.TEXT_NODE) {
+		  node.nodeValue = node.nodeValue.replace(/[\w:]{18,}/g, function(str) {
+			return str.replace(/([a-z])([A-Z])/g, "$1\u00AD$2"); // 
+		  });
+		} else {
+		  camelWrapUnicode(node);
+		}
+	  }
+	}
+	
+	// insert the shy hyphens for all the class names in the sidenav.
+	$(document).ready(function () {
+    	
+    		camelWrap( document.getElementById("mySidepanel"))
+			
+	});
+	
+	document.getElementById( "autoFooter" ).innerHTML = 'Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion"></span><i>Last updated: <span id="date"></span></i></a>'
+	document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

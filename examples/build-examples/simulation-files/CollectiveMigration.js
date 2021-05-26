@@ -4,6 +4,7 @@
 
 /* This text is printed on the HTML page. */
 /** @file 
+<h1> Collective Migration</h1>
 <br>
 <button onclick="startsim()">start</button>
 <button onclick="stopsim()">stop</button>

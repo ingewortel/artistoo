@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Getting Started</title>
+      	<meta charset="utf-8">
+      	<!-- width=devide-width, name - viewport, user-scalable=no required so that position:fixed
+      	for the sidenav still works on mobile devices. -->
+      	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+      	<base data-ice="baseUrl">
+      	  
+      	
+      	<script src="..&#x2F;script/prettify/prettify.js"></script>
+
+      	<link rel="stylesheet" 
+        		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        		crossorigin="anonymous">
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    	<link href='https://fonts.googleapis.com/css?family=Advent Pro' rel='stylesheet'>
+    	<link href='https://fonts.googleapis.com/css?family=Amatic SC' rel='stylesheet'>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    	
+    	<link type="text/css" rel="stylesheet" href="..&#x2F;css/style.css">     		
+        <link type="text/css" rel="stylesheet" href="..&#x2F;css/prettify-tomorrow.css">		
+        		
+    	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    	
+    	<!-- mathjax -->
+    	<script>
+    	MathJax = {
+    		tex: {
+    			inlineMath: [['$', '$']]
+    		}
+    	};
+    	</script>
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      	
+    <style>
+    	/*.li {
+    		list-style-type: none!important;
+    	}*/
+
+    	.navbar{
+    	padding-left:10px;
+    	padding-right:10px;
+    	
+    	}
+    	
+    	.nav-item {
+    		line-height: 2;
+    	}
+    	
+    	.nav-link span {
+    	 font-family: 'Advent Pro';
+    	 font-size:120%;
+    	}
+    	
+    	.mainimg {
+    		min-height: 21em;
+    		background-color: #666;
+    		margin:0px 0px!important; padding:0px!important;
+    		padding-bottom:10px;
+    		background-position: center;
+    		background-image:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), 
+    		url('./image/general/cpm-01.jpg');
+    	}
+    	.mainimg h1 {
+    	  margin-bottom: 10px;
+    	  font-size: 34px;
+    	  font-weight: 300;
+    	  border-bottom: solid 0px #ddd;
+    	  text-align: center;
+    	  font-size: 500%;
+    	  font-family: 'Amatic SC';
+    	}
+
+    	.mainimg h2 {
+    		text-align: center;
+    		font-size:200%;
+    		border-bottom: solid 0px;
+    	}
+
+    	.front-page h1 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		margin-bottom:20px;
+    	}
+
+    	.front-page h2 {
+    		border-bottom: solid 0px;
+    		margin-top:30px;
+    		font-size:170%!important;
+    	}
+
+
+    	.bottom {
+    	  display: block;
+    	  position: absolute;
+    	   bottom: 0;
+    	}
+    </style>
+           
+</head>
+
+
+<body class="layout-container" data-ice="rootContainer">
+
+
+<nav class="navbar navbar-toggleable navbar-expand-lg fixed-top navbar-light bg-light" id="navbar-main">
+    <div class="container" style="margin-left:0px;max-width:100%">
+        <a class="navbar-brand" href="..&#x2F;index.html">Home</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+    	<div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav mr-auto">
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;examples.html"><span>Examples</span></a>
+				</li>
+				<li class="nav-item" style="list-style-type: none!important;">
+				  <a class="nav-link" href="..&#x2F;explorables.html"><span>Explorables</span></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="..&#x2F;manual/index.html"><span>Manual</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;converter.html"><span>Converter</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;identifiers.html"><span>Docs</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;source.html"><span>Src</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="..&#x2F;test.html"><span>Tests</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="https://github.com/ingewortel/artistoo">
+						<i class="fa" style="font-size:200%">&#xf09b;</i></a>
+				</li>
+			</ul>
+			<div class="search-box">
+				  <span>
+					<i class="fa fa-search" style="font-size:200%; color:rgba(0,0,0,.5);"></i>
+					<span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+				  </span>
+					<ul class="search-result"></ul>
+				  </div>
+			</div>
+			  
+    	</div>
+    </div>
+</nav>
+
+
+<!--<div class="container mb-5">
+&nbsp;
+</div>-->
+
+
+
+
+	<div class="wrapper">
+		<!-- Sidebar -->
+		<nav id="sidebar" class="navigation bg-dark manual-sidenav">
+			
+			<ul class="list-unstyled components">
+				<li>
+					<a href="..&#x2F;manual/index.html">Artistoo User Manual</a>
+					<ul class="list-unstyled" id="index-menu">
+					</ul>
+				</li>
+				<li class="active">
+					<a href="..&#x2F;manual/getting-started.html">Getting Started</a>
+					<ul class="list-unstyled" id="getting-started-menu">
+						<li>
+							<a href="#set-up-artistoo-in-3-easy-steps">Set up Artistoo in 3 easy steps</a>
+						</li>
+						<li>
+							<a href="#additional-notes">Additional notes</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/your-first-simulation.html">Your First Simulation</a>
+					<ul class="list-unstyled" id="your-first-simulation-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/htmlTemplate.html">An HTML Template</a>
+					<ul class="list-unstyled" id="htmlTemplate-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/simulationConfig.html">Configuring Simulations (1)</a>
+					<ul class="list-unstyled" id="simulationConfig-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/addConstraints.html">Adding CPM Constraints</a>
+					<ul class="list-unstyled" id="addConstraints-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/simulationConfig2.html">Configuring Simulations (2)</a>
+					<ul class="list-unstyled" id="simulationConfig2-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/sharingSimulations.html">Sharing Your Simulations</a>
+					<ul class="list-unstyled" id="sharingSimulations-menu">
+					</ul>
+				</li>
+				<li>
+					<a href="..&#x2F;manual/custommodules.html">Custom Modules</a>
+					<ul class="list-unstyled" id="custommodules-menu">
+					</ul>
+				</li>
+				
+			</ul>
+		</nav>
+		
+		
+		<!-- Page Content -->
+		<div id="content" class="content">
+			
+			<button type="button" id="sidebarToggle"  class="btn btn-side-toggle">
+				<span id="sideButtonIcon" class="fa fa-chevron-left"></span></button>
+			
+			<!--<div class="container-fluid">
+				
+		
+				
+			</div>-->
+			<div class="container-fluid manual-page">
+				<br>
+				<h1>Getting Started</h1>
+				
+<h2 id="set-up-artistoo-in-3-easy-steps">Set up Artistoo in 3 easy steps</h2>
+
+<h3 id="step-1-download-the-repository">Step 1: download the repository</h3>
+
+<h4>Via the Github website</h4>
+
+<p>Visit the <a href="https://github.com/ingewortel/artistoo">Github repository</a> and click on the
+green "clone or download" button, then select "Download ZIP":</p>
+
+<div class="screen-shot-container">
+<img class="screen-shot" src="./asset/github-repo2.png" width="80%">
+</div>
+
+<p>Save the zipped folder somewhere on your computer and unzip.</p>
+
+<h4>Via the command line</h4>
+
+<p>Alternatively, in the console, go to the folder where you want to save Artistoo,
+and clone the repository:</p>
+
+<pre><code class="console-code"><code>cd folder/to/save-into/
+git clone https://github.com/ingewortel/artistoo.git</code>
+</code></pre>
+
+<h3 id="step-2-install-node-dependencies">Step 2: install node dependencies</h3>
+
+<p>Most users will run Artistoo in browser simulations only and will not need to
+extend the software with custom modules. If that's you, you can skip this step.
+But if you plan to use Artistoo from the command line using node, or if you plan
+to write your own modules (such as hamiltonian terms), you will need to install
+some node dependencies.</p>
+
+<p>To do this, go to the <code>artistoo/</code> folder from the command line and install the
+required packages automatically using <code>npm</code>:</p>
+
+<pre><code class="console-code"><code>cd folder/containing/artistoo
+npm install</code>
+</code></pre>
+
+<p>If you do not have <i>Node.js</i> and its package manager <i>npm</i>, see
+<a href="https://nodejs.org/en/download/">this page</a> to install them first.</p>
+
+<h3 id="step-3-link-the-build-in-your-code">Step 3: link the build in your code</h3>
+
+<p>You can now use Artistoo! See this <a href="./your-first-simulation.html">tutorial</a> to build your first
+simulation, or start from one of the simulations in the <code>artistoo/examples/</code>
+folder. In these examples, you will see that the package can be loaded as
+follows:</p>
+
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src="path/to/artistoo/build/artistoo.js"&gt;&lt;/script&gt;</code>
+</code></pre>
+
+<p>for html, and</p>
+
+<pre><code class="lang-$xslt"><code class="prettyprint">let CPM = require("path/to/artistoo/build/artistoo-cjs.js")</code>
+</code></pre>
+
+<p>for node scripts.</p>
+
+<p>When you include these lines in your own scripts, just make sure they contain
+the correct path from your simulation file to the <code>artistoo/build/</code> folder.</p>
+
+<h2 id="additional-notes">Additional notes</h2>
+
+<p>If you wish to build simulations in a different directory than the <code>artistoo</code>
+folder, it may be convenient to create a symbolic link to the <code>build</code> folder
+there:</p>
+
+<pre><code class="console-code"><code>cd path/to/my/simulations
+ln -s path/to/artistoo/build build</code>
+</code></pre>
+
+<p>You can then access the code using:</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">&lt;script src="path/to/my/simulations/build/artistoo.js"&gt;&lt;/script&gt;</code>
+</code></pre>
+<p>or</p>
+<pre><code class="lang-$xslt"><code class="source-code prettyprint">let CPM = require("path/to/my/simulations/build/artistoo-cjs.js")</code>
+</code></pre>
+
+<p>Finally, if you want to run Artistoo simulations with nodejs from this folder,
+you will need to create a link to the installed <code>node_modules</code> from step 2:</p>
+
+<pre><code class="console-code"><code>cd path/to/my/simulations
+ln -s path/to/artistoo/node_modules node_modules</code>
+</code></pre>
+			</div>
+			<div class="swipe-area"></div>
+		</div>
+	</div>
+
+	
+
+
+<!-- for the pages written by esdoc, this is changed. -->
+<footer class="footer" id="autoFooter">
+  <p><i>Last updated: <span id="date"></span></i></p>
+</footer>
+
+<script src="..&#x2F;script/search_index.js"></script>
+<script src="..&#x2F;script/search.js"></script>
+<script src="..&#x2F;script/pretty-print.js"></script>
+<script src="..&#x2F;script/inherited-summary.js"></script>
+<script src="..&#x2F;script/test-summary.js"></script>
+<script src="..&#x2F;script/inner-link.js"></script>
+<script src="..&#x2F;script/patch-for-local.js"></script>
+
+<!-- https://onextrapixel.com/creating-a-swipeable-side-menu-for-the-web/ -->
+<script type="text/javascript" src="..&#x2F;script/jquery.touchSwipe.min.js"></script>
+<script src="..&#x2F;script/swipe-nav.js"></script>
+
+
+<script>
+document.getElementById("date").innerHTML = Date();
+</script>
+
+</body>
+</html>

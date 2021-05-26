@@ -138,7 +138,7 @@ describe("LocalConnectivityConstraint", function () {
 				conn = new CPM.LocalConnectivityConstraint({
 					CONNECTED: [false, true]
 				})
-				conn.C = C
+				conn.CPM = C
 				C.getConstraint.and.callFake( function() {return conn})
 				C.pixti.and.callFake(function(i){
 					if( i === 0 || i === 1 || i === 2 ){

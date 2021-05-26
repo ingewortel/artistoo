@@ -14,6 +14,8 @@ echo 'body{'
 echo -e '\t	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",'
 echo -e '\t\t Helvetica, Arial, "Lucida Grande", sans-serif;'
 echo -e '\t padding : 15px;'
+echo -e '\t max-width: 600px;'
+echo -e '\t margin: auto;'
 echo "}"
 echo "td {"
 echo -e '\t padding: 10px;'
@@ -23,6 +25,7 @@ echo '</style>'
 echo -e "\n"
 echo '<script src="./artistoo.js"></script>'
 echo '<script src="./fpsmeter.min.js"></script>'
+awk -f extract-require.awk $templatefile | grep "#html" | awk -F "::" '{gsub(/ /, "", $2); print "<script src=\"" $2 "\"></script>"}'
 echo '<script>'
 echo '"use strict"'
 echo -e "\n"
@@ -69,9 +72,6 @@ sed -e '1,/START METHODS DEFINITION/d' -e '/END METHODS DEFINITION/,$d' $templat
 echo "</script>"
 echo "</head>"
 echo '<body onload="initialize()">'
-echo '<h1>'$examplename'</h1>'
-echo '<p>'
 awk -f extract-description.awk $templatefile
-echo '</p>'
 echo "</body>"
 echo "</html>"

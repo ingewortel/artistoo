@@ -1,5 +1,0 @@
-
-
-<p>
-$$H_\text{Potts} = \sum_{\substack{\text{neighbors} \\ (i,j) | s_i \neq s_j } } J$$
-</p>

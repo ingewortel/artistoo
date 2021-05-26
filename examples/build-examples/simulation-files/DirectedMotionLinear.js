@@ -3,7 +3,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Cell following a linear direction gradient that slowly changes over time.
+ * <h1>Motion is directed by a time-varying gradient</h1>
+ * <p>
+ * Cell following a linear direction gradient that slowly changes over time. </p>
  * */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

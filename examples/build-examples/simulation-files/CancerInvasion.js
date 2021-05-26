@@ -3,7 +3,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * T cells infiltrating a growing tumor.
+ * <h1>Cancer Invasion</h1>
+ * <p>T cells (red) infiltrating a growing tumor (black) in an epidermal monolayer (gray).</p>
  **/
 
 
