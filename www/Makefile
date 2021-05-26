@@ -33,10 +33,9 @@ progress/step2 : ../esdoc-template-artistoo/layout.html | progress
 #	- link to github
 #	- search index of all the auto-generated pages.
 progress/step3 : progress/step2 
-		@echo "		Updating esdoc docs" 
-		#&& \
-		#cd .. && $(MAKE) docs/index.html && \
-		#cp esdoc-template-artistoo/css/* www/css/ && cd www && touch $@
+		@echo "		Updating esdoc docs" && \
+		cd .. && $(MAKE) docs/index.html && \
+		cp esdoc-template-artistoo/css/* www/css/ && cd www && touch $@
 	
 
 # Step 4: copy all esdoc stuff into this folder:

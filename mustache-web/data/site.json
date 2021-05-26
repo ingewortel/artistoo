@@ -97,7 +97,7 @@
 						
 						{
 							"name": "Bull's Eye",
-							"image": "./image/examples/chemotaxis.gif",
+							"image": "./image/examples/Chemotaxis.gif",
 							"link": "./examples/Chemotaxis.html",
 							"desc": "Cells moving up a chemokine gradient.",
 							"learn": [ "simulating diffusion", "initialisation","chemotaxis","communicating grids" ]
@@ -110,11 +110,26 @@
 							"learn": [ "simulating diffusion", "chemotaxis","communicating grids", "multiple celltypes" ]
 						},
 						{
+							"name" : "50 Shades Of RNA",
+							"image" : "./image/examples/StochasticCorrector.gif",
+							"link" : "./examples/stochasticCorrector.html",
+							"desc": "Stochastic corrector model in the CPM.",
+							"learn": ["evolutionary CPM", "color maps"]
+						
+						},
+						{
 							"name": "Holding Tight",
 							"image": "./image/examples/Epidermis.gif",
 							"link": "./examples/Epidermis.html",
 							"desc": "A tightly packed layer of epidermal cells.",
 							"learn": [ "initialisation" ]
+						},
+						{
+							"name": "So Pushy...",
+							"image": "./image/examples/EpithelialSheet.gif",
+							"link": "./examples/EpithelialSheet.html",
+							"desc": "A layer of crammed cells expands over time.",
+							"learn": [ "basics" ]
 						},
 						{
 							"name": "I'm Just Browsing",
@@ -169,9 +184,9 @@
 			]
 		},
 		{
-			"section":"Interactive examples",
+			"section":"Tips and Tricks",
 			"secid" : "interactive",
-			"desc": "Learn how to make your simulations interactive? Look at these examples for inspiration.",
+			"desc": "There's more you can do with Artistoo! Look below for inspiration on how to make your simulations interactive, or to customize your outputs. The sky is the limit!",
 			"subs": [
 				{
 					"head":"",
@@ -197,6 +212,27 @@
 							"link": "./examples/CollectiveMigration.html",
 							"desc": "Control many different parameters via input fields.",
 							"learn": [ "parameter input fields" ]
+						},
+						{
+							"name": "Measure At Leisure",
+							"image": "./image/examples/actmodel.gif",
+							"link": "./examples/ActModelCustomStat.html",
+							"desc": "Define your own statistic.",
+							"learn": [ "custom stat" ]
+						},
+						{
+							"name": "It's a wrap?",
+							"image": "./image/examples/microchannel.gif",
+							"link": "./examples/NoTorusDemo.html",
+							"desc": "Understanding boundary conditions.",
+							"learn": [ "boundary" ]
+						},
+						{
+							"name": "You're a Viz-art, Harry!",
+							"image": "./image/examples/FakeMicroscopy.png",
+							"link": "./examples/FakeMicroscopy.html",
+							"desc": "Painting pretty pictures... with a CPM.",
+							"learn": [ "custom visualization" ]
 						}
 					]
 				}
