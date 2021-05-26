@@ -322,7 +322,7 @@
 		},
 		{
 			"title":"Back to the Classics: Cell Sorting",
-			"image": "./image/examples/Cellsorting.gif",
+			"image": "./image/examples/cellsorting.gif",
 			"link": "./explorables/Explorable-CellSorting.html",
 			"desc": "In this explorable, we go back to the classics: the very first CPM that was designed by Graner and Glazier as a model for cell sorting.",
 			"tag": "Explorable-CellSorting"
