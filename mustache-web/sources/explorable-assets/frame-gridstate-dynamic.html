@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+
+let config = {
+	field_size : [6,6],
+	conf : {T : 10},
+	
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [2],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME_BROWSER : 0,
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["AAAAAA"],
+		SHOWBORDERS : [true],				// Should cellborders be displayed?
+		zoom : 30,							// zoom in on canvas with this factor.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true } // Should stats be computed?
+
+	}
+}
+/*	---------------------------------- */
+let sim, t = 0, cid1, cid2
+
+let custommethods = {
+		initializeGrid : set0,
+		set0 : set0,
+		set1 : set1,
+		set2 : set2,
+		drawCanvas : drawCanvas,
+		drawPixBorders : drawPixBorders,
+		logTime : logTime
+	}
+
+
+
+function initialize(){
+	sim = new CPM.Simulation( config, custommethods )
+	// Set the canvas manually so it can go in a defined <div></div> container.
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	cid1 = sim.C.makeNewCellID(1)
+	cid2 = sim.C.makeNewCellID(1)
+		
+	requestAnimationFrame( step )
+}
+
+
+function step(){
+	sim.C.stat_values = {}
+	
+	switch( t ){
+		case 0:
+			sim.set0()
+			break
+		case 1:
+			sim.set1()
+			break
+		case 2:
+			sim.set2()
+			break
+	}
+	sim.drawCanvas()
+	if( t === 2 ){ t = 0 } else { t ++ }
+	setTimeout( function(){	requestAnimationFrame( step ) }, 1000 )
+}
+
+function set0(){
+
+	const cell1Pix = [ [1,1], [1,2], [2,1], [2,2] ]
+	const cell2Pix = [ [3,3], [3,4], [4,3], [4,4] ]
+	let cell1 = {}, cell2 = {}
+	for( let p of cell1Pix ){ cell1[ p.toString() ] = true }
+	for( let p of cell2Pix ){ cell2[ p.toString() ] = true }
+
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			const pName = [x,y].toString()
+			if( cell1.hasOwnProperty( pName ) ){
+				this.C.setpix( [x,y], cid1 )
+			} else if ( cell2.hasOwnProperty( pName ) ) {
+				this.C.setpix( [x,y], cid2 )
+			} else {
+				this.C.setpix( [x,y], 0 )
+			}
+		}
+	}
+		
+}
+
+function set1(){
+	this.C.setpix( [1,1], 0 )
+	this.C.setpix( [3,2], cid1 )
+	
+}
+
+function set2(){
+	this.C.setpix( [4,5], cid2 )
+	
+}
+
+function drawCanvas(){
+	this.Cim.clear( this.conf.CANVASCOLOR )
+	
+	this.drawPixBorders()
+	this.Cim.drawCells( 1, this.conf.CELLCOLOR[0])
+	this.Cim.drawCellBorders(1)
+	this.logTime()
+}
+
+function drawPixBorders(){
+	this.Cim.col( "FFFFFF" )
+	this.Cim.getImageData()
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			this.Cim.pxdrawr( [x,y] )
+			this.Cim.pxdrawd( [x,y] )
+		}
+	}
+	this.Cim.putImageData()
+}
+
+function logTime(){
+	this.Cim.ctx.font = "20px Arial"
+	this.Cim.ctx.textAlign = "left"
+	this.Cim.ctx.textBaseline = "middle"
+	const zoom = this.conf.zoom
+	this.Cim.ctx.fillText( "t = "+(t), zoom*(0+0.5), zoom*(0+0.5) )
+	
+}
+
+</script>
+</head>
+<body onload="initialize()">
+
+
+
+<div class= "simcontainer" id="simcontainer" ></div> 
+
+
+</body>
+</html>

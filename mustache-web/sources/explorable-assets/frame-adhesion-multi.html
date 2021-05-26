@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+
+let config = {
+	field_size : [6,6],
+	
+	conf : {
+		T : 15,
+		J : [[0,10],[10,20]],
+		torus : [false,false]
+	},
+	
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [2],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME_BROWSER : 0,
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		zoom : 30,							// zoom in on canvas with this factor.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true } // Should stats be computed?
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter, nc = 0, cid, cid2, nc2 = 0
+
+let custommethods = {
+		initializeGrid : initializeGrid,
+		drawCanvas : drawCanvas,
+		drawPixBorders : drawPixBorders,
+		drawContacts : drawContacts,
+		drawBorderNodes : drawBorderNodes
+	}
+
+function initialize(){
+	sim = new CPM.Simulation( config, custommethods )
+	// Set the canvas manually so it can go in a defined <div></div> container.
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	requestAnimationFrame( step )
+}
+
+
+function step(){
+	sim.drawCanvas()
+	requestAnimationFrame( step )
+}
+
+function next(){
+	sim.step()
+}
+
+function initializeGrid(){
+	if( typeof cid === "undefined"){
+		cid = this.C.makeNewCellID(1)
+	}
+	if( typeof cid2 === "undefined"){
+		cid2 = this.C.makeNewCellID(1)
+	}
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			if( Math.random() < 0.33){
+				this.C.setpix( [x,y], cid )
+			} else if( Math.random() < 0.67 ){
+				this.C.setpix( [x,y], cid2 )
+			}
+		}
+	}
+}
+
+function drawCanvas(){
+	this.Cim.clear( this.conf.CANVASCOLOR )
+	this.drawPixBorders()
+	this.Cim.drawCells( 1, function(cid){
+		if( cid == 1 ){
+			return "AAAAAA"
+		} else {
+			return "CCCCCC"
+		}
+	})
+	this.drawContacts()
+	this.drawBorderNodes()
+}
+
+function drawContacts(){
+	let ctx = this.Cim.ctx
+	const zoom = this.Cim.zoom
+	ctx.lineWidth = .05*zoom
+	
+	// cell-bg contacts
+	ctx.strokeStyle = "#0000FF"
+	ctx.beginPath()
+	nc = 0
+	for( let i of this.C.cellBorderPixels() ){
+		const p = i[0], cid = i[1]
+		for( let n of this.C.neigh(p) ){
+			const cid2 = this.C.pixt(n)
+			if( cid2 != cid && ( cid == 0 | cid2 == 0)){
+				ctx.moveTo( (p[0]+0.5)*zoom, (p[1]+0.5)*zoom )
+				ctx.lineTo( (n[0]+0.5)*zoom, (n[1]+0.5)*zoom )
+				nc+=2
+			}
+		}
+	}
+	ctx.stroke()
+	
+	// cell-cell contacts
+	ctx.strokeStyle = "#FF0000"
+	ctx.beginPath()
+	nc2 = 0
+	for( let i of this.C.cellBorderPixels() ){
+		const p = i[0], cid = i[1]
+		for( let n of this.C.neigh(p) ){
+			const cid2 = this.C.pixt(n)
+			if( cid2 != cid && ( cid > 0 && cid2 > 0)){
+				ctx.moveTo( (p[0]+0.5)*zoom, (p[1]+0.5)*zoom )
+				ctx.lineTo( (n[0]+0.5)*zoom, (n[1]+0.5)*zoom )
+				nc2++
+			}
+		}
+	}
+	ctx.stroke()
+	setNum(nc,nc2)
+
+}
+
+function drawBorderNodes(){
+	let ctx = this.Cim.ctx
+	this.Cim.col("000000")
+	const zoom = this.Cim.zoom
+	for( let i of this.C.cellBorderPixels() ){
+		const p = i[0], cid = i[1]
+		for( let n of this.C.neigh(p) ){
+			const cid2 = this.C.pixt(n)
+			if( cid2 < cid ){
+				ctx.beginPath()
+				ctx.arc( (p[0]+0.5)*zoom, (p[1]+0.5)*zoom, 0.15*zoom, 2*Math.PI, false )
+				ctx.fill()
+				ctx.beginPath()
+				ctx.arc( (n[0]+0.5)*zoom, (n[1]+0.5)*zoom, 0.15*zoom, 2*Math.PI, false )
+				ctx.fill()
+			}
+		}
+	}
+
+}
+
+function setNum(nc){
+	document.getElementById("nc").innerHTML = nc
+	document.getElementById("ncb").innerHTML = nc
+	document.getElementById("nc1").innerHTML = nc2
+	document.getElementById("nc1b").innerHTML = nc2
+}
+
+function drawPixBorders(){
+	this.Cim.col( "FFFFFF" )
+	this.Cim.getImageData()
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			this.Cim.pxdrawr( [x,y] )
+			this.Cim.pxdrawd( [x,y] )
+		}
+	}
+	this.Cim.putImageData()
+}
+
+</script>
+</head>
+<body onload="initialize()">
+
+<div class="container">
+
+
+<div id="simcontainer" class="simcontainer">
+<p># Contacts<sub>cell-bg</sub>: <span style="color:blue" id="nc"></span><br>
+<p># Contacts<sub>cell-cell</sub>: <span style="color:red" id="nc1"></span><br>
+H<sub>adhesion</sub> = J<sub>cell-bg</sub> x <span style="color:blue" id="ncb"></span>
++ J<sub>cell-cell</sub> x <span style="color:red" id="nc1b">
+</p>
+<button onclick="next()">step</button><button onclick="window.location.reload()">reset</button><br><br>
+</div>
+
+</div>
+</body>
+</html>

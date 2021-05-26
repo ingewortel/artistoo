@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+<script src="../../examples/sliders.js"></script>
+<script src="../../examples/artistoo.js"></script>
+
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [200,200],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],						// Should the grid have linked borders?
+		T : 20, //15,								// CPM temperature
+
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+		
+		// Adhesion parameters:
+		J : [ [NaN, 12, 6], [12, 6, 6], [6, 6, 6] ],
+		
+		// VolumeConstraint parameters
+			// VolumeConstraint importance per cellkind
+			// Target volume of each cellkind
+		LAMBDA_V : [0,1,1], //2 2
+		V : [0,200,200]		//25 25
+
+		
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [60,40],					// Number of cells to seed for all
+											// non-background cellkinds.
+	
+		// Runtime etc
+		BURNIN : 30,
+		RUNTIME : 2000,
+		RUNTIME_BROWSER : 20000,
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["444444","CC0000"],
+		ACTCOLOR : [true,false],			// Should pixel activity values be displayed?
+		SHOWBORDERS : [true,true],				// Should cellborders be displayed?
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : false,					// Should a png image of the grid be saved
+											// during the simulation?
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	let custommethods = {
+		initializeGrid : initializeGrid
+	}
+	sim = new CPM.Simulation( config, custommethods )
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("sim")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	sim.drawCanvas()
+	sim.toggleRunning()
+	step()
+}
+
+
+function step(){
+	sim.step()
+	sim.step()
+
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+/* The following custom methods will be added to the simulation object
+below. */
+function initializeGrid(){
+	
+		// add the GridManipulator if not already there and if you need it
+		if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	
+		this.gm.seedCellsInCircle( 1, this.conf.NRCELLS[0], this.C.midpoint, this.C.extents[0]/3 )
+		this.gm.seedCellsInCircle( 2, this.conf.NRCELLS[1], this.C.midpoint, this.C.extents[0]/3 )
+
+}
+
+function setSliders(){
+	document.getElementById("j01").value = config.conf.J[0][1]
+	document.getElementById("j02").value = config.conf.J[0][2]
+	document.getElementById("j11").value = config.conf.J[1][1]
+	document.getElementById("j22").value = config.conf.J[2][2]
+	document.getElementById("j12").value = config.conf.J[2][1]
+	//document.getElementById("lact").value = config.conf.LAMBDA_ACT[1]
+}
+
+function homogenize(){
+	for( let cid of sim.C.cellIDs() ){
+		if( Math.random() < 0.6 ){
+			sim.C.setCellKind( cid, 1 )
+		} else {
+			sim.C.setCellKind( cid, 2 )
+		}
+	}
+}
+
+function playPause(){
+	sim.toggleRunning()
+	if( sim.running ){
+		document.getElementById( "playbtn" ).innerHTML = "&#9612;&#9612;"
+	} else {
+		document.getElementById( "playbtn" ).innerHTML = "&#9658;"
+	}
+
+}
+
+
+// No custom methods.
+</script>
+</head>
+
+<body onload="initialize();setSliders();initializeSliders()">
+
+
+
+
+<div class = "simcontainer">
+<div id="sim"><button id="playbtn" onclick="playPause()">&#9658;</button>
+<button onclick="homogenize()">Blender</button><br></div>
+
+<table>
+<tr>
+	<td style="width:20%">J<sub>bg,<span style="color:#333333">gray</span></sub></td>
+	<td style="width:5%">0</td>
+	<td style="width:70%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="30" id="j01" oninput="sim.C.conf.J[0][1]=parseInt(this.value);sim.C.conf.J[1][0]=parseInt(this.value)" >
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:5%">30</td>
+</tr>
+<tr>
+	<td style="width:20%">J<sub>bg,<span style="color:#cc0000">red</span></sub></td>
+	<td style="width:5%">0</td>
+	<td style="width:70%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="30" id="j02" oninput="sim.C.conf.J[0][2]=parseInt(this.value);sim.C.conf.J[2][0]=parseInt(this.value)" >
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:5%">30</td>
+</tr>
+<tr>
+	<td style="width:20%">J<sub><span style="color:#333333">gray,gray</span></sub></td>
+	<td style="width:5%">0</td>
+	<td style="width:70%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="30" id="j11" oninput="sim.C.conf.J[1][1]=parseInt(this.value)" >
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:5%">30</td>
+</tr>
+<tr>
+	<td style="width:20%">J<sub><span style="color:#cc0000">red,red</span></sub></td>
+	<td style="width:5%">0</td>
+	<td style="width:70%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="30" id="j22" oninput="sim.C.conf.J[2][2]=parseInt(this.value)" >
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:5%">30</td>
+</tr>
+<tr>
+	<td style="width:20%">J<sub><span style="color:#333333">gray</span>,<span style="color:#cc0000">red</span></sub></td>
+	<td style="width:5%">0</td>
+	<td style="width:70%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="30" id="j12" oninput="sim.C.conf.J[1][2]=parseInt(this.value);sim.C.conf.J[2][1]=parseInt(this.value)" >
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:5%">30</td>
+</tr>
+</table>
+<br>
+
+
+
+</div>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>GOL</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+
+
+let C, Cim
+
+
+// Setup the grid and needed objects
+function setup(){
+		C = new CPM.CA( [5,5], 
+		{ "UPDATE_RULE": updateRule } )
+		Cim = new CPM.Canvas( C, {zoom:40, parentElement: document.getElementById("simcontainer")} )
+		initialize()
+}
+
+function updateRule(p,N){
+	let nalive = 0, typealive = 1
+	for( let pn of N ){
+		if( this.pixt(pn)!= 0 ){
+			nalive++
+			typealive = this.pixt(pn)
+		}
+		//nalive += (this.pixt(pn)!=0)
+	}	
+	if( this.pixt(p) != 0 ){
+		if( nalive == 2 || nalive == 3 ){
+			return typealive
+		}
+	} else {
+		if( nalive == 3 ) return typealive
+	}
+	return 0
+}
+
+function initialize(){
+	for( let x = 0; x < C.extents[0]; x++ ){
+		for( let y = 0; y < C.extents[1]; y++ ){
+			let k = 0
+			if( Math.random() < 0.5 ){
+				k = 1
+			} 
+			C.setpix( [x,y], k )
+		}
+	}
+	draw()
+}
+
+function next(){
+	C.timeStep()
+	draw()
+}
+
+function draw(){
+	Cim.clear( "eaecef" )
+	Cim.drawCellsOfId( 1, "AA0000" )
+	
+	drawHighlights()
+	drawIDs()
+	report()
+}
+
+function drawIDs(){
+	Cim.ctx.font = "20px Arial"
+	Cim.ctx.textAlign = "center"
+	Cim.ctx.textBaseline = "middle"
+	const zoom = Cim.zoom
+	const textcols = [ "BBBBBB", "ffffff" ]
+	for( let x = 0; x < C.extents[0]; x++ ){
+		for( let y = 0; y < C.extents[1]; y++ ){
+			const cid = C.pixt( [x,y] )
+			Cim.col( textcols[cid])
+			Cim.ctx.fillText( cid, zoom*(x+0.5), zoom*(y+0.5) )
+		}
+	}
+
+}
+
+function report(){
+	const pval = C.pixt( C.grid.midpoint )
+	const N = C.neigh( C.grid.midpoint )
+	let neigh = 0
+	for( let pn of N ){ neigh += (C.pixt(pn)!=0) }
+	const out = C.updateRule( C.grid.midpoint, N )
+
+	document.getElementById( "pval" ).innerHTML = pval
+	document.getElementById( "neigh" ).innerHTML = neigh
+	document.getElementById( "out" ).innerHTML = out
+}
+
+function drawHighlights(){
+	const zoom = Cim.zoom
+	Cim.ctx.strokeStyle = "#000000"
+	Cim.ctx.lineWidth = 8
+	Cim.ctx.beginPath()
+	Cim.ctx.rect( zoom*C.grid.midpoint[0], zoom*C.grid.midpoint[1], zoom, zoom )
+	Cim.ctx.stroke()
+	Cim.ctx.strokeStyle = "#0000FF"
+	Cim.ctx.beginPath()
+	Cim.ctx.rect( zoom*(C.grid.midpoint[0]-1), zoom*(C.grid.midpoint[1]-1), 3*zoom, 3*zoom )
+	Cim.ctx.stroke()
+}
+
+function step() {
+	requestAnimationFrame( step )
+}
+
+
+// No custom methods.
+</script>
+</head>
+<body onload="setup(); step()">
+
+<div id = "simcontainer" class = "simcontainer">
+
+
+<p>
+	p(t) = <span id="pval"></span><br>
+	Occupied neighbors: <span id="neigh"></span><br>
+	p(t+1) = <span id="out"></span>
+</p>
+<button onclick="next()">step</button>
+<button onclick="initialize()">reset</button><br>
+
+</div>
+</body>
+</html>

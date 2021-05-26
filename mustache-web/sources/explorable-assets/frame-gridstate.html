@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+
+let config = {
+	field_size : [6,6],
+	conf : {T : 10},
+	
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [2],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME_BROWSER : 0,
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["AAAAAA"],
+		SHOWBORDERS : [true],				// Should cellborders be displayed?
+		zoom : 30,							// zoom in on canvas with this factor.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true } // Should stats be computed?
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+let custommethods = {
+		initializeGrid : initializeGrid,
+		drawCanvas : drawCanvas,
+		drawPixBorders : drawPixBorders,
+		drawIDs : drawIDs
+	}
+
+function initialize(){
+	sim = new CPM.Simulation( config, custommethods )
+	// Set the canvas manually so it can go in a defined <div></div> container.
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	requestAnimationFrame( step )
+}
+
+
+function step(){
+	sim.drawCanvas()
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+function initializeGrid(){
+	let cid1 = this.C.makeNewCellID(1)
+	this.C.setpix( [1,1], cid1 )
+	this.C.setpix( [1,2], cid1 )
+	this.C.setpix( [2,1], cid1 )
+	this.C.setpix( [2,2], cid1 )
+	let cid2 = this.C.makeNewCellID(1)
+	this.C.setpix( [3,3], cid2 )
+	this.C.setpix( [3,4], cid2 )
+	this.C.setpix( [4,3], cid2 )
+	this.C.setpix( [4,4], cid2 )
+	
+}
+
+function drawCanvas(){
+	this.Cim.clear( this.conf.CANVASCOLOR )
+	this.drawPixBorders()
+	this.Cim.drawCells( 1, this.conf.CELLCOLOR[0])
+	this.Cim.drawCellBorders(1)
+	this.drawIDs()
+}
+
+function drawIDs(){
+	this.Cim.ctx.font = "20px Arial"
+	this.Cim.ctx.textAlign = "center"
+	this.Cim.ctx.textBaseline = "middle"
+	const zoom = this.conf.zoom
+	const textcols = [ "BBBBBB", "555555" ]
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			const cid = this.C.pixt( [x,y] )
+			const ck = this.C.cellKind(cid)
+			this.Cim.col( textcols[ck])
+			this.Cim.ctx.fillText( cid, zoom*(x+0.5), zoom*(y+0.5) )
+		}
+	}
+
+}
+
+function drawPixBorders(){
+	this.Cim.col( "FFFFFF" )
+	this.Cim.getImageData()
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			this.Cim.pxdrawr( [x,y] )
+			this.Cim.pxdrawd( [x,y] )
+		}
+	}
+	this.Cim.putImageData()
+}
+
+</script>
+</head>
+<body onload="initialize()">
+
+<div class="container">
+
+<div id="simcontainer" class="simcontainer"></div>
+
+</div>
+</body>
+</html>

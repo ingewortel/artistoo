@@ -22,17 +22,16 @@ misc/build.make: misc/build-makeout.bash app/include-list.txt
 app/index.js : app/automatic-index.bash app/include-list.txt
 	@bash $^ > $@
 
-docs/index.html : build/artistoo.js README.md $(shell find manual -type f) $(wildcard esdoc-template-artistoo/**/*.html) $(wildcard esdoc-template-artistoo/*.html) $(wildcard spec/**/* )
+# Esdoc documentation is used for, but not the sole basis of, the website;
+# See the Makefile in the 'docs' folder to build the entire website
+esdocs/index.html : build/artistoo.js README.md $(shell find manual -type f) $(wildcard esdoc-template-artistoo/**/*.html) $(wildcard esdoc-template-artistoo/*.html) $(wildcard spec/**/* )
 	@echo  '		...Writing documentation with ESDOC, please wait...' &&\
-	rm -rf docs && \
-	mkdir -p docs && \
+	rm -rf esdocs && \
+	mkdir -p esdocs && \
 	cp build/artistoo.js manual/asset/ &&\
-	node_modules/.bin/esdoc2 > docs/log.txt 
+	node_modules/.bin/esdoc2 > esdocs/log.txt 
 
-docs : docs/index.html
-
-#cat $< | sed 's:./examples:../examples:g' | sed 's:./docs:../docs:g' > docs/index2.html && \
-#mv docs/index2.html docs/index.html
+esdocs : esdocs/index.html
 
 
 # testing:

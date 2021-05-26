@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/sliders.js"></script>
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+const lv = 5, lp = 2, v0 = 500, p0 = 260, J0 = 10
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [200,80],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],						// Should the grid have linked borders?
+		seed : 1,							// Seed for random number generation.
+		T : 10,								// CPM temperature
+		
+		// Constraint parameters. 
+		// Mostly these have the format of an array in which each element specifies the
+		// parameter value for one of the cellkinds on the grid.
+		// First value is always cellkind 0 (the background) and is often not used.
+				
+		// Adhesion parameters:
+		J: [[0,J0], [J0,0]],
+		
+		// VolumeConstraint parameters
+		LAMBDA_V: [0,lv],					// VolumeConstraint importance per cellkind
+		V: [0,v0],							// Target volume of each cellkind
+		
+		// PerimeterConstraint parameters
+		LAMBDA_P: [0,lp],						// PerimeterConstraint importance per cellkind
+		P : [0,p0]						// Target perimeter of each cellkind
+	
+	},
+	
+	// Simulation setup and configuration
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 500,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["000000"],
+		ACTCOLOR : [false],					// Should pixel activity values be displayed?
+		SHOWBORDERS : [false],				// Should cellborders be displayed?
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+
+function initialize(){
+	sim = new CPM.Simulation( config, {} )
+	// Set the canvas manually so it can go in a defined <div></div> container.
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer1")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	step()
+}
+
+
+function step(){
+	sim.step()
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+function setSliders(){
+	document.getElementById("Vt").value = v0
+	document.getElementById("Pt").value = p0
+	config.conf.V[1] = v0
+	config.conf.P[1] = p0
+	initializeSliders()
+}
+
+function toggleAdhesion(){
+	if( document.getElementById("checkAdhesion").checked ){
+		config.conf.J[1][0] = 10
+		config.conf.J[0][1] = 10
+	} else {
+		config.conf.J[1][0] = 0
+		config.conf.J[0][1] = 0
+	}
+}
+
+function toggleVolume(){
+	if( document.getElementById("checkVolume").checked ){
+		config.conf.LAMBDA_V[1] = lv
+	} else {
+		config.conf.LAMBDA_V[1] = 0
+	}
+}
+
+function togglePerimeter(){
+	if( document.getElementById("checkPerimeter").checked ){
+		config.conf.LAMBDA_P[1] = lp
+	} else {
+		config.conf.LAMBDA_P[1] = 0
+	}
+}
+
+function reset(){
+	for( let cid of sim.C.cellIDs()){
+		sim.gm.killCell(cid)
+	}
+	sim.gm.seedCell(1)
+	document.getElementById("checkVolume").checked = true
+	document.getElementById("checkPerimeter").checked = true
+	config.conf.LAMBDA_V[1] = lv
+	config.conf.LAMBDA_P[1] = lp
+	config.conf.J[1][0] = J0
+	config.conf.J[0][1] = J0
+	setSliders()
+}
+
+// No custom methods.
+</script>
+</head>
+<body onload="initialize();setSliders();initializeSliders()">
+
+<div class="container">
+
+<div class="sliders">
+<table>
+<tr>
+	<td style="width:25%">
+		<input type="checkbox" id="checkAdhesion" name="checkAdhesion" checked
+		onchange="toggleAdhesion()">
+		<label for="checkAdhesion">Adhesion</label>
+	</td>
+</tr>
+<tr>
+	<td style="width:25%">
+		<input type="checkbox" id="checkVolume" name="checkVolume" checked
+		onchange="toggleVolume()">
+		<label for="checkVolume">Volume</label>
+	</td>
+	<td style="width:5%">0</td>
+	<td style="width:65%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="1000" id="Vt" oninput="sim.C.getConstraint('VolumeConstraint').conf.V[1]=parseInt(this.value)" >
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:5%">1000</td>
+</tr>
+<tr>
+	<td style="width:25%">
+		<input type="checkbox" id="checkPerimeter" name="checkPerimeter" checked
+		onchange="togglePerimeter()">
+		<label for="checkPerimeter">Perimeter</label>
+	</td>
+	<td style="width:5%">0</td>
+	<td style="width:65%"> 
+		<div class="range-wrap">
+		  <input type="range" class="range" min="0" max="400" id="Pt" oninput="sim.C.getConstraint('PerimeterConstraint').conf.P[1]=parseInt(this.value)">
+		  <output class="bubble"></output>
+		</div>
+	</td>
+	<td style="width:5%">400</td>
+</tr>
+</table></div>
+<button onclick="reset()">reset</button><br><br>
+
+<div id="simcontainer1" class="simcontainer"></div>
+
+</div>
+</body>
+</html>

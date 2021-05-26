@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ActModel</title>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="../../css/explorable.css">
+<style type="text/css">
+body{
+	 padding-left : 5px;
+	 padding-right: 5px;
+	 padding-top: 0px;
+	 margin: 0px;
+}
+
+</style>
+
+<script src="../../examples/artistoo.js"></script>
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+
+let config = {
+	field_size : [6,6],
+	conf : {
+		T : 20,
+		J : [[0,10],[10,0]],
+		V : [0,4],
+		LAMBDA_V : [0,20]
+	},
+	
+	simsettings : {
+	
+		// Cells on the grid
+		NRCELLS : [1],						// Number of cells to seed for all
+											// non-background cellkinds.
+		// Runtime etc
+		BURNIN : 0,
+		
+		// Visualization
+		CANVASCOLOR : "eaecef",
+		CELLCOLOR : ["AAAAAA"],
+		zoom : 30,							// zoom in on canvas with this factor.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true } // Should stats be computed?
+
+	}
+}
+/*	---------------------------------- */
+let sim, t = 0, cid1, cid2, attempt = 1, phase = 0, source = [1,1], target = [0,0]
+let play = false, ready = false
+
+// trick for the demo, to ensure not too many "useless" same-cell copy attempts in a row
+const maxUseless = 2
+let useless=0
+
+let custommethods = {
+		drawCanvas : drawCanvas,
+		drawPixBorders : drawPixBorders,
+		initializeGrid : initializeGrid
+	}
+
+function initializeGrid(){
+	const cid = this.C.makeNewCellID(1)
+	this.C.setpix( [2,2], cid )
+	this.C.setpix( [2,4], cid )
+	this.C.setpix( [4,2], cid )
+	this.C.setpix( [3,1], cid )
+}
+
+function initialize(){
+	sim = new CPM.Simulation( config, custommethods )
+	// Set the canvas manually so it can go in a defined <div></div> container.
+	sim.Cim = new CPM.Canvas( sim.C, {
+		zoom:sim.conf.zoom, 
+		parentElement : document.getElementById("simcontainer")
+	} )
+	sim.helpClasses[ "canvas" ] = true
+	sim.drawCanvas()
+	requestAnimationFrame( step )
+}
+
+
+function next(){
+	
+	switch( phase ){
+		case 0: {
+			target = randomPixel()
+			source = randomNeighbor( target )
+			
+			drawSource()
+			break
+		}
+		case 1: {
+			drawSource()
+			drawTarget()
+			break
+		}
+		case 2 :{
+			drawSource()
+			drawTarget()
+			break
+		}
+			
+	}
+	instruct()
+	
+}
+
+function randomPixel(){
+	/*const x = Math.floor( Math.random( ) * sim.C.extents[0] )
+	const y = Math.floor( Math.random( ) * sim.C.extents[1] )
+	return [x,y]*/
+	const pi = sim.C.borderpixels.sample()
+	return sim.C.grid.i2p(pi)
+}
+
+function randomNeighbor(p){
+	const Ni = sim.C.grid.neigh( p )
+	let nn = Ni[sim.C.ran(0,Ni.length-1)]
+	
+	if( useless === maxUseless ){
+		while( sim.C.pixt(nn) == sim.C.pixt(target) ){
+			nn = Ni[sim.C.ran(0,Ni.length-1)]
+			useless=0
+		}
+	} else {
+		if( sim.C.pixt(nn) == sim.C.pixt(target) ){ 
+			useless++ 
+		} else {
+			useless= 0
+		}
+	}
+	
+	return nn
+}
+
+function manualStep(){
+	sim.drawCanvas()
+	logTime()
+	logAttempt()
+	next()
+	
+}
+
+function step(){
+
+	if( play && ready ){
+		manualStep()
+		ready = false
+		setTimeout( function(){	ready = true }, 500 )
+	}
+	requestAnimationFrame( step )
+
+}
+
+
+function drawCanvas(){
+	this.C.stat_values = {}
+	this.Cim.clear( this.conf.CANVASCOLOR )
+	this.Cim.drawCells( 1, this.conf.CELLCOLOR[0])
+}
+
+function drawSource(){
+	sim.Cim.ctx.lineWidth = 1
+	const zoom = sim.conf.zoom
+	sim.Cim.ctx.strokeStyle= "#"+ "0000FF" 
+	sim.Cim.ctx.strokeRect( zoom*source[0], zoom*source[1], zoom, zoom )
+}
+
+function drawTarget(){
+	sim.Cim.ctx.lineWidth = 1
+	const zoom = sim.conf.zoom
+	sim.Cim.ctx.strokeStyle= "#"+ "FF0000" 
+	sim.Cim.ctx.strokeRect( zoom*target[0], zoom*target[1], zoom, zoom )
+}
+
+function drawPixBorders(){
+	this.Cim.col( "FFFFFF" )
+	this.Cim.getImageData()
+	for( let x = 0; x < this.C.extents[0]; x++ ){
+		for( let y = 0; y < this.C.extents[1]; y++ ){
+			this.Cim.pxdrawr( [x,y] )
+			this.Cim.pxdrawd( [x,y] )
+		}
+	}
+	this.Cim.putImageData()
+}
+
+function logTime(){
+	document.getElementById("timelogger").innerHTML = t
+}
+
+function logAttempt(){
+	document.getElementById("attemptlogger").innerHTML = attempt + "/" + sim.C.extents[0]*sim.C.extents[1]
+}
+
+function instruct(){
+	switch( phase ){
+		case 0: 
+			document.getElementById("instructions").innerHTML = 
+				"Select random source <span style='color:blue'>p<sub>s</sub></span>"
+			break
+		
+		case 1:
+			document.getElementById("instructions").innerHTML = 
+				"Select random target <span style='color:red'>p<sub>t</sub></span>"
+			break
+		case 2:{
+			if( sim.C.pixt(source) === sim.C.pixt(target) ){
+				document.getElementById("instructions").innerHTML = 
+				"Cell(<span style='color:red'>p<sub>t</sub></span>) = Cell(<span style='color:blue'>p<sub>s</sub></span>)<br>No change."
+			} else {
+				const dH = sim.C.deltaH ( sim.C.grid.p2i(source), sim.C.grid.p2i(target), sim.C.pixt(source), sim.C.pixt(target) )
+				let instr = "&Delta;H = " + dH 
+				if( dH < 0 ){
+					 instr += " < 0<br>P<sub>copy</sub> = 1;<br>Success!"
+					 sim.C.setpixi( sim.C.grid.p2i(target), sim.C.pixt(source) )
+					 sim.drawCanvas(); drawSource(); drawTarget
+				} else if ( dH == 0 ){
+					instr += "<br>P<sub>copy</sub> = 1;<br>Success!"
+					sim.C.setpixi( sim.C.grid.p2i(target), sim.C.pixt(source) )
+					sim.drawCanvas(); drawSource(); drawTarget
+				} else {
+					instr += " > 0<br>P<sub>copy</sub> = " + Math.exp( -dH / sim.C.conf.T ).toPrecision(3)
+					if( sim.C.docopy(dH) ){
+						instr += "<br>Success!"
+						sim.C.setpixi( sim.C.grid.p2i(target), sim.C.pixt(source) )
+					 	sim.drawCanvas(); drawSource(); drawTarget
+					} else {
+						instr += "<br>No change."
+					}
+				}
+				
+				document.getElementById("instructions").innerHTML = instr
+					
+				
+			}
+			break
+		}
+	}
+	
+	if( phase === 2 ){ 
+		if( attempt === sim.C.extents[0]*sim.C.extents[1] ){
+			t++
+			attempt = 1
+		} else {
+			attempt++
+		}
+		phase = 0
+	} else { 
+		phase++ 
+	}
+}
+
+function togglePlay(){
+	play = !play
+	if( play ){
+		ready = true
+		document.getElementById( "playbtn" ).innerHTML = "&#9612;&#9612;"
+	} else {
+		document.getElementById( "playbtn" ).innerHTML = "&#9658;"
+	}
+}
+
+</script>
+</head>
+<body onload="initialize()">
+
+
+<div class= "simcontainer">
+t = <span id="timelogger"></span> MCS, attempt <span id="attemptlogger"></span> <br>
+<div id="simcontainer" ></div>
+
+<div style="height:80px">
+<span id = "instructions"></span>
+</div>
+
+<button onclick="manualStep()">step</button>
+<button id = "playbtn" onclick="togglePlay()">&#9658;</button>
+
+</div>
+
+
+
+
+
+</body>
+</html>
