@@ -10,11 +10,14 @@ dependencies=data/site.json $(wildcard templates/*.mustache) $(wildcard partials
 
 
 public/manual: 
+	mkdir -p $@
+	
+public/explorables: 
 	mkdir -p $@ 
 	
 #cp -r sources/* $@/
 
-public/index.html : index.js $(dependencies) | public/manual
+public/index.html : index.js $(dependencies) | public/manual public/explorables
 	node $<
 
 	

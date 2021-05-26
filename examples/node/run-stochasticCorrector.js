@@ -1,6 +1,11 @@
 let CPM = require("../../build/artistoo-cjs.js")
-let ColorMap = require("../node/colormap-cjs.js")
 
+
+let ColorMap = require( "../node/colormap-cjs.js" ) 
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
 let config = {
 
 	// Grid settings
@@ -14,37 +19,36 @@ let config = {
 		seed : 5,							// Seed for random number generation.
 		T : 2,								// CPM temperature
 		
-			//This declaration of CELLS instantiates the CPMEvol model instead of the CPM model
-			CELLS : ["empty", CPM.Divider, CPM.Divider], //The cell internal classes
+		//This declaration of CELLS instantiates the CPMEvol model instead of the CPM model
+		CELLS : ["empty", CPM.Divider, CPM.Divider], //The cell internal classes
         
-			// used internally by StochasticCorrector subclass
-			INIT_PRODUCTS : [ [40,40],
-											   [40,40] ],
-			INIT_V : [150, 150],
-			NOISE : [0,10], 
-	
-			// only used in postMCSListener
-			rX : [0, 1, 1],
-			rY : [0, 0.8, 0.8],
-			d : [0, 0.05, 0.05],
-			speed_internal_dynamics : [0, 0.15, 0.15],
-			Q : [0, 0.8, 0.8],
-	
-			division_volume : [0, 250, 250],
-			shrink_rate : [0, 10, 10],
-			y_growth_contribution : [0, 35, 35],
-	
-			
-			// Adhesion parameters:
-			 J: [ [15,15,15], 
-				[15,15,15], 
-				[15,15,15] ],
-			
-			
-			// VolumeConstraint parameters
-			LAMBDA_V : [0, 1, 1],				// VolumeConstraint importance per cellkind
-			V : [0,152, 152]					// Unused - are backup.
-			
+        // used internally by StochasticCorrector subclass
+		INIT_PRODUCTS : [ [40,40],
+										   [40,40] ],
+		INIT_V : [150, 150],
+		NOISE : [0,10], 
+
+		// only used in postMCSListener
+        rX : [0, 1, 1],
+        rY : [0, 0.8, 0.8],
+        d : [0, 0.05, 0.05],
+        speed_internal_dynamics : [0, 0.15, 0.15],
+        Q : [0, 0.8, 0.8],
+
+        division_volume : [0, 250, 250],
+        shrink_rate : [0, 10, 10],
+        y_growth_contribution : [0, 35, 35],
+
+        
+        // Adhesion parameters:
+         J: [ [15,15,15], 
+			[15,15,15], 
+			[15,15,15] ],
+		
+		
+		// VolumeConstraint parameters
+		LAMBDA_V : [0, 1, 1],				// VolumeConstraint importance per cellkind
+		V : [0,152, 152]					// Unused - are backup.
 		
 	},
 	
@@ -81,16 +85,15 @@ let config = {
 	}
 }
 /*	---------------------------------- */
-let sim, showYcolors
 
-let custommethods = {
-	postMCSListener : postMCSListener,
-	initializeGrid : initializeGrid,
-	drawCanvas : drawCanvas
-}
-sim = new CPM.Simulation( config, custommethods )
 
-showYcolors = true
+let sim = new CPM.Simulation( config, {} )
+
+sim.showYcolors = false
+
+
+
+
 
 
 /* The following custom methods will be added to the simulation object*/
@@ -178,7 +181,7 @@ const cmap = new ColorMap({
 })
 
 function getColor (cid) {
-	if (!showYcolors){
+	if (!this.showYcolors){
 		return this.conf["CELLCOLOR"][this.C.cellKind(cid)-1]
 	}
 	let cell = this.C.cells[cid]
@@ -190,6 +193,13 @@ function getColor (cid) {
 	}
 	return cmap[c].substring(1)
 }
+
+function changeColorBy(){
+	sim.showYcolors = !sim.showYcolors
+}
+
+	
+
 
 
 sim.run()

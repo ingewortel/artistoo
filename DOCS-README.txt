@@ -9,6 +9,9 @@
 Quick Start
 =========================
 
+Before you start, go to mustache-web and type 'npm install' there; this will install dependencies
+that are necessary for the website only.
+
 The website is built from this folder by typing "make". Here's a few things you might
 wish to do:
 

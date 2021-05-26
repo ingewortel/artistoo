@@ -72,7 +72,7 @@ example-files : $(wildcard ../examples/html/**/*) progress/step5 | examples
 	cp ../examples/3D/OrbitControls.js examples/
 	
 manual-asset : ../mustache-web/sources/manual/asset progress/step5 converter-files
-	@echo "		Adding manual asset files" &&  cp -r $< manual/asset
+	@echo "		Adding manual asset files" &&  rm -rf manual/asset && cp -r $< manual/asset
 	
 explorable-asset : ../mustache-web/sources/explorable-assets progress/step5
 	@echo "		Adding explorable asset files" &&  rm -rf explorables/asset && cp -r $< explorables/asset

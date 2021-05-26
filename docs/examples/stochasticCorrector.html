@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Stochastic Correction</title>
+<title>StochasticCorrector</title>
 <style type="text/css">
 body{
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
 		 Helvetica, Arial, "Lucida Grande", sans-serif;
 	 padding : 15px;
-} 
+	 max-width: 600px;
+	 margin: auto;
+}
 td {
 	 padding: 10px;
 	 vertical-align: top;
@@ -17,7 +19,6 @@ td {
 <script src="./artistoo.js"></script>
 <script src="./fpsmeter.min.js"></script>
 <script src="./colormap.js"></script>
-
 <script>
 "use strict"
 
@@ -95,8 +96,8 @@ let config = {
 		SAVEIMG : true,						// Should a png image of the grid be saved
 		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img/StochasticCorrection",	// ... And save the image in this folder.
-		EXPNAME : "StochasticCorrection",					// Used for the filename of output images.
+		SAVEPATH : "output/img/StochasticCorrector",	// ... And save the image in this folder.
+		EXPNAME : "StochasticCorrector",					// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?
@@ -105,7 +106,8 @@ let config = {
 	}
 }
 /*	---------------------------------- */
-let sim, meter, showYcolors
+let sim, meter
+
 
 function initialize(){
 	 /* 	The following functions are defined below and will be added to
@@ -113,12 +115,14 @@ function initialize(){
 	 	this object is ignored and not used in the html/node files. */
 	 let custommethods = {
 	 	postMCSListener : postMCSListener,
-		initializeGrid : initializeGrid,
-		drawCanvas : drawCanvas
-	 }
+	 	initializeGrid : initializeGrid,
+	 	drawCanvas : drawCanvas
+	  }
 	sim = new CPM.Simulation( config, custommethods )
 
-	showYcolors = false
+sim.showYcolors = false
+
+
 
 	meter = new FPSMeter({left:"auto", right:"5px"})
 	step()
@@ -132,6 +136,8 @@ function step(){
 		requestAnimationFrame( step )
 	}
 }
+
+
 
 /* The following custom methods will be added to the simulation object*/
 function postMCSListener(){
@@ -218,7 +224,7 @@ const cmap = new ColorMap({
 })
 
 function getColor (cid) {
-	if (!showYcolors){
+	if (!this.showYcolors){
 		return this.conf["CELLCOLOR"][this.C.cellKind(cid)-1]
 	}
 	let cell = this.C.cells[cid]
@@ -232,23 +238,27 @@ function getColor (cid) {
 }
 
 function changeColorBy(){
-	showYcolors = !showYcolors
+	sim.showYcolors = !sim.showYcolors
 }
 
+	
 
 </script>
 </head>
 <body onload="initialize()">
-<h1>Stochastic Correction</h1>
+ 
+ <h1>Stochastic Correction</h1>
 
-<label class="switch">
+ <p><i>Contributed by: Oane Gros</i></p>
+
+ <p>
+ Replicator and mutant RNA compete in vesicles, showing how noise on division can create selection on the vesicle level. Orange has noise in the allocation of internal products upon division, red does not.
+ </p>
+ <p><label class="switch">
 		<input type="checkbox" name="colorby" oninput="changeColorBy()"  unchecked>
 		<span class="slider round"></span>
 		<label for="colorby"> Show Y amount</label>
 	
-	</label>
-<p>
- Replicator and mutant RNA compete in vesicles, showing how noise on division can create selection on the vesicle level. Orange has noise in the allocation of internal products upon division, red does not.
-</p>
+	</label></p>
 </body>
 </html>
