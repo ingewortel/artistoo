@@ -3,6 +3,10 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2021-05-26 Inge Wortel <ingewortel@gmail.com>
+	* major overhaul of the way the website is built; see DOCS-README
+	* update in how examples are generated.
+
 2021-05-12 Inge Wortel <ingewortel@gmail.com>
 	* spec/hamiltonian/PersistenceConstraintSpec.js : added test for bug
 	where celldirections became NaN if the cell didn't move (due to
