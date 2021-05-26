@@ -1,7 +1,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. You can use HTML tags. */
 /** @file
- * <i>Act</i> cells moving in a microchannnel.
+ * <h1>Template File</h1>
+ * <p>HTML code for the page here.</p>
  * */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

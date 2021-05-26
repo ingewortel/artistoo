@@ -3,7 +3,11 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * An example implementation of a custom statistic.
+ * <h1>Implementing a custom statistic</h1>
+ * <p>An example implementation of a custom statistic: loggin the percentage of 
+ * active pixels in the ActivityConstraint. (To see the output: right click
+ * somewhere outside of the simulation, and select 'inspect'; then go to the 
+ * 'console' tab).</p> 
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */

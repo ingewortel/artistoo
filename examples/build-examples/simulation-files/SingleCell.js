@@ -1,7 +1,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * A single CPM cell with only adhesion and volume constraints.
+ * <h1>Single cell </h1>
+ * <p>
+ * A single CPM cell with only adhesion and volume constraints.</p>
  **/
 
 

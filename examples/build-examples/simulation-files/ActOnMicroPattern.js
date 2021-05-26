@@ -1,19 +1,18 @@
 /* 	================= DESCRIPTION ===================== */
-/* This text is printed on the HTML page. */
-/* START DESCRIPTION Do not remove this line */
-Act cell on a patterned substrate, where part of the background (dark gray) has better
-adhesion and therefore a larger &lambda;<sub>act</sub> (adhesion to the substrate
-is needed to generate the friction forces needed for actin-driven cell migration). 
-The simulation shows an act cell on a patterned line, and the rotation observed when 
-two cells are placed together on a small patterned square.
-/* END DESCRIPTION Do not remove this line */
+/** @file
+ * <h1>Migrating on a micro-patterned surface</h1>
+ * <p> Act cell on a patterned substrate, where part of the background (dark gray) has better
+ * adhesion and therefore a larger &lambda;<sub>act</sub> (adhesion to the substrate
+ * is needed to generate the friction forces needed for actin-driven cell migration). 
+ * The simulation shows an act cell on a patterned line, and the rotation observed when 
+ * two cells are placed together on a small patterned square. 
+ * </p> 
+ **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 /* 	If no custom methods are defined, the drawing/initialisation/output 
 	functions of the CPM.Simulation class are used. */
 
-// Are any custom methods defined here?
-Custom-methods: true
 
 /* START METHODS OBJECT Do not remove this line */
 /* 	The following functions are defined below and will be added to

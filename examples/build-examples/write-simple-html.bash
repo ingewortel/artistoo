@@ -13,6 +13,8 @@ body{
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
 	Helvetica, Arial, "Lucida Grande", sans-serif;
 	padding : 15px;
+	max-width: 600px;
+	margin: auto;
 }
 td {
 	padding: 10px; vertical-align: top;
@@ -37,12 +39,10 @@ cat <<END
 </script>
 </head>
 <body onload="initialize()">
-<h1>$examplename</h1>
-<p>
+
 END
 awk -f extract-description.awk $templatefile
 cat <<END
-</p>
 </body>
 </html>
 END

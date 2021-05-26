@@ -6,6 +6,8 @@ body{
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
 	Helvetica, Arial, "Lucida Grande", sans-serif;
 	padding : 15px;
+	max-width: 600px;
+	margin: auto;
 }
 td {
 	padding: 10px; vertical-align: top;
@@ -19,6 +21,8 @@ td {
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
+ * <h1>Diffusion-limited aggregation</h1>
+ * <p>
  * In this example, we see freely diffusing particles (blue) aggregate into a crystal (white). 
  * This is implemented as two communicating grids: one CPM (blue) and one CA (white).<br><br> 
  * The "diffusion" is implemented as a Cellular Potts Model (CPM) with a hard volume range constraint, such that 
@@ -39,6 +43,7 @@ td {
  *		</ul>
  * 	</li>
  * </ol>
+ * </p>
  */ 
 
 "use strict"
@@ -200,9 +205,10 @@ function run(){
 </script>
 </head>
 <body onload="initialize()">
-<h1>DiffusionLimitedAggregation</h1>
-<p>
+
  
+ <h1>Diffusion-limited aggregation</h1>
+ <p>
  In this example, we see freely diffusing particles (blue) aggregate into a crystal (white). 
  This is implemented as two communicating grids: one CPM (blue) and one CA (white).<br><br> 
  The "diffusion" is implemented as a Cellular Potts Model (CPM) with a hard volume range constraint, such that 
@@ -223,6 +229,6 @@ function run(){
 		</ul>
  	</li>
  </ol>
-</p>
+ </p>
 </body>
 </html>

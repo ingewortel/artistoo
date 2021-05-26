@@ -3,7 +3,8 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Act cells moving in a microchannel.
+ * <h1>Microchannel</h1>
+ * <p>Act cells moving in a microchannel.</p>
  **/
 
 /* ================= DECLARE CUSTOM METHODS ===================== */

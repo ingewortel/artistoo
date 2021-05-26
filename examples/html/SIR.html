@@ -6,6 +6,8 @@ body{
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue",
 	Helvetica, Arial, "Lucida Grande", sans-serif;
 	padding : 15px;
+	max-width: 600px;
+	margin: auto;
 }
 td {
 	padding: 10px; vertical-align: top;
@@ -19,6 +21,7 @@ td {
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
+ * <h1>SIR model of infection epidemiology</h1>
  * <p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to interrupt/restart simulation.</p>
  * <p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
  * <p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>
@@ -113,13 +116,12 @@ function run(){
 </script>
 </head>
 <body onload="initialize()">
-<h1>SIR</h1>
-<p>
+
  
+ <h1>SIR model of infection epidemiology</h1>
  <p>Susceptible-Infected-Resistant (SIR) model. Click on canvas to interrupt/restart simulation.</p>
  <p>Infection rate: <input type="text" value="0.1" size="4" maxlength="4" onkeyup="r_i=parseFloat(this.value)||0.1"/></p>
  <p>Recovery rate: <input type="text" value="0.01" size="4" maxlength="4" onkeyup="r_r=parseFloat(this.value)||0.01"/></p>
  <p><button onclick="initialize()">run</button></p>
-</p>
 </body>
 </html>

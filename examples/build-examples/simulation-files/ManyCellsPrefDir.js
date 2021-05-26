@@ -3,7 +3,9 @@
 /* 	================= DESCRIPTION ===================== */
 /* This text is printed on the HTML page. */
 /** @file
- * Many moving cells with an imposed persistence constraint.
+ * <h1>Persistent directions</h1>
+ * <p>
+ * Many moving cells with an imposed persistence constraint. </p>
  **/
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
