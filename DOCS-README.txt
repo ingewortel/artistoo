@@ -18,7 +18,7 @@ wish to do:
 	* Add an example to the example gallery: 
 		
 		1.	Create a gif or png (square aspect ratio) and put it in 
-		   	../esdoc-template-artistoo/image/examples
+		   	../mustache-web/sources/images/examples
 		2.	Make sure an html page "MySimulation.html" of the example exists in the main 
 			artistoo/examples/html folder (it will automatically be copied into the
 			'examples' folder of the main website);
@@ -63,7 +63,7 @@ wish to do:
 			folder because this will be overwritten).
 
 
-To push to the website: TODO.
+To push to the website: from the root of the repository: git push ourserver.
 
 For a detailed overview, read on.
 
@@ -153,6 +153,8 @@ of the website files are generated where:
 		because the mustache "index.html" overwrites the esdoc "index.html".
 		
 	4. ADD OTHER PAGES
+		
+		TODO : finish this section.
 		
 		Several other pages are copied at the end:
 		- html pages from artistoo/examples/html (and also additional stuff like
