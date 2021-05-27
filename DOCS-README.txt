@@ -63,6 +63,10 @@ wish to do:
 			folder because this will be overwritten).
 
 
+Before updating the website, make sure the version number in site.json is updated;
+this prevents problems with browsers caching scripts and stylesheets from previous 
+website versions.
+
 To push to the website: from the root of the repository: git push ourserver.
 
 For a detailed overview, read on.
