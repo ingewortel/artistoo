@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Supercells</title>
+<style type="text/css">
+body{
+		font-family: "MS Comic Sans", "Helvetica Neue Light", "Helvetica Neue",
+		 Helvetica, Arial, "Lucida Grande", sans-serif;
+	 padding : 15px;
+}
+td {
+	 padding: 10px;
+	 vertical-align: top;
+}
+</style>
+
+
+<script src="./artistoo.js"></script>
+<script src="./fpsmeter.min.js"></script>
+<script src="./colormap.js"></script>
+
+<script>
+"use strict"
+
+
+/*	----------------------------------
+	CUSTOM CLASSES
+	----------------------------------
+	NOTE: these could be moved to src/cells and src/hamiltonian if used more often
+	Due to the point that these classes are very dependent on each other, they are currrently
+	kept separated to this example.
+*/
+
+/** A class encoding a host cell capable of holding @class SubCell cells
+ *  Intended to be used with SubCell and SubCellConstraint
+ */
+class SuperCell extends CPM.Cell {
+
+	/** The constructor of class SuperCell.
+	 * @param {object} conf - configuration settings of the simulation, containing the
+	 * relevant parameters. Note: this should include all constraint parameters.
+	 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
+	 * when parameters are not explicitly overwritten
+	 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
+	 *  @param {CPMEvol} C - the CPM - used among others to draw random numbers
+	 * */
+	constructor (conf, kind, id, C) {
+		super(conf, kind, id, C)
+
+		/** the variable that is checked against subcells
+		 * @type{Number}
+		 */
+		this.host = this.id
+
+		/** holds the Supercell's @class{SubCell} SubCell objects 
+		 * @type{Array}
+		*/
+		this.subcells = []
+
+		/** encode cell-specific target volume for a simple growth algorithm such that the V can be halved after division
+		 * @type{Number}
+		*/
+		this.V = this.conf["V"][kind]
+	}
+
+
+	/**
+	 *  Halves target volume as post-division volume pressure can lead to artefacts
+	 * (with supercells specifically, the supercell can kill subcells through volume pressure if this is left out)
+	 * @param {Cell} parent - the parent (or other daughter) cell
+	 */ 
+	birth(parent){
+		super.birth(parent)
+		this.V /= 2
+		parent.V /=2
+	}
+
+	/**
+	 * Private function for SubCell, watch out when calling this. 
+	 * Adds a SubCell to the subcells array. 
+	 * @param {Cell} cell - the subcell to track from the supercell
+	 */ 
+	addSubCell(cell){
+		if (!this.subcells.includes(cell)){
+			this.subcells.push(cell)
+		} else {
+			throw("Tried to add subcell when already in subcells", this, cell)
+		}
+	}
+
+	/**
+	 * Private function for SubCell, watch out when calling this. 
+	 * Removes a SubCell to the subcells array. 
+	 * @param {Cell} cell - the subcell to stop tracking from the supercell
+	 */ 
+	removeSubCell(cell){
+		let ix =  this.subcells.indexOf(cell)
+		if (ix !==-1){
+			this.subcells.splice(ix, 1)
+		} else {
+			throw("Tried to remove subcell that was not tracked by this host", this, cell)
+		}
+	}
+
+	/**
+	 * Computes torus-enabled centroid for the pixels handed to it
+	 * Direct copy from Stat CentroidsWithTorusCorrection, but expects pixels instead of cellId
+	 * @param {Array} pixels for host and subcells
+	 * @return {ArrayCoordinate}  centroid of complete host+subcells space
+	 */ 
+	computeHostCentroid(pixels){
+		// copied Torus corrected centroid, but now you can hand all pixels of host+subcells
+		let halfsize = new Array( this.C.ndim).fill(0)
+		for( let i = 0 ; i < this.C.ndim ; i ++ ){
+			halfsize[i] = this.C.extents[i]/2
+		}
+		let cvec = new Array(this.C.ndim).fill(0)
+		for( let dim = 0 ; dim <this.C.ndim ; dim ++ ){
+			let mi = 0.
+			const hsi = halfsize[dim], si = this.C.extents[dim]
+			for( let j = 0 ; j < pixels.length ; j ++ ){
+				let dx = pixels[j][dim] - mi
+				if( this.C.grid.torus[dim] && j > 0 ){
+					if( dx > hsi ){
+						dx -= si
+					} else if( dx < -hsi ){
+						dx += si
+					}
+				}
+				mi += dx/(j+1)
+			}
+			if( mi < 0 ){
+				mi += si
+			} else if( mi > si ){
+				mi -= si
+			}
+			cvec[dim] = mi
+		}
+		return cvec
+	}
+
+	/**
+	 * Let this cell compute a dividing line perpendicular to the longest axis
+	 * Divides the host and all subcells on this line
+	 * Sets new host id for all subcells in new daughter
+	 * 
+	 * @return {Number}  New host CellId
+	 */ 
+	divideHostCell(){
+		let C = this.C
+		if( C.ndim != 2 ){
+			throw("The divideCell method is only implemented for 2D lattices yet!")
+		}
+		let pix = C.getStat( CPM.PixelsByCell )
+		let ids = [this.id], cp = pix[this.id]
+		for (let subcell of C.cells[this.id].subcells){
+			console.log(subcell.id)
+			ids = [...ids, subcell.id]
+			console.log(pix[subcell.id], Object.keys(pix))
+			cp = [...cp, ...pix[subcell.id]]
+		}
+		let com = this.computeHostCentroid(cp)
+		let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2
+
+		// Loop over the pixels belonging to this cell
+		let si = this.C.extents, pixdist = {}, c = new Array(2)
+		for (let id of ids){
+			pixdist[id] = {}
+			for( let j = 0 ; j < pix[id].length ; j ++ ){
+				for ( let dim = 0 ; dim < 2 ; dim ++ ){
+					c[dim] = pix[id][j][dim] - com[dim]
+					if( C.conf.torus[dim] && j > 0 ){
+						// If distance is greater than half the grid size, correct the
+						// coordinate.
+						if( c[dim] > si[dim]/2 ){
+							c[dim] -= si[dim]
+						} else if( c[dim] < -si[dim]/2 ){
+							c[dim] += si[dim]
+						}
+					}
+				}
+				pixdist[id][j] = [...c]
+				bxx += c[0]*c[0]
+				bxy += c[0]*c[1]
+				byy += c[1]*c[1]
+			}
+		}
+		// This code computes a "dividing line", which is perpendicular to the longest
+		// axis of the cell.
+		if( bxy == 0 ){
+			x0 = 0
+			y0 = 0
+			x1 = 1
+			y1 = 0
+		} else {
+			T = bxx + byy
+			D = bxx*byy - bxy*bxy
+			//L1 = T/2 + Math.sqrt(T*T/4 - D)
+			L2 = T/2 - Math.sqrt(T*T/4 - D)
+			x0 = 0
+			y0 = 0
+			x1 = L2 - byy
+			y1 = bxy
+		}
+		let newhost =  C.makeNewCellID( C.cellKind( this.id ) )
+		for (let j = 0; j < pix[this.id].length; j++){
+			if( x1*pixdist[this.id][j][1]-pixdist[this.id][j][0]*y1 > 0 ){
+				C.setpix( pix[this.id][j], newhost) 
+			}
+		}
+		C.birth(newhost, this.id)
+		
+		for (let id of ids){
+			if (id === this.id ){
+				continue
+			}
+			let newpix = []
+			for (let j = 0; j < pix[id].length; j++){
+				if( x1*pixdist[id][j][1]-pixdist[id][j][0]*y1 > 0 ){
+					newpix = [...newpix, pix[id][j]]
+				}
+			}
+			if (newpix.length == pix[id].length){
+				C.cells[id].host = newhost
+			} else if (newpix.length > 0){
+				let nid = C.makeNewCellID( C.cellKind( id ) )
+				for (let pix of newpix){
+					C.setpix(pix, nid)
+				}
+				C.birth(nid, id, newpix.length/pix[id].length)
+				C.cells[nid].host = newhost
+			}
+		}
+		
+		C.stat_values = {} // remove cached stats or this will crash!!!
+		return newhost
+	}
+}
+
+/** A class encoding a subcell capable of being part of a SuperCell
+ *  Intended to be used with SuperCell and SubCellConstraint
+ */
+class SubCell extends CPM.Cell {
+
+	/** The constructor of class SuperCell.
+	 * @param {object} conf - configuration settings of the simulation, containing the
+	 * relevant parameters. Note: this should include all constraint parameters.
+	 * @param {CellKind} kind - the cellkind of this cell, the parameters of kind are used 
+	 * when parameters are not explicitly overwritten
+	 * @param {CellId} id - the CellId of this cell (its key in the CPM.cells), unique identifier
+	 *  @param {CPMEvol} C - the CPM - used among others to draw random numbers
+	 * */
+	constructor (conf, kind, id, C) {
+		super(conf, kind, id, C)
+
+		/** encode cell-specific target volume for a simple growth algorithm such that the V can be altered upon division
+		 * @type{Number}
+		*/
+		this.V = this.conf["V"][kind]
+
+		/** The SuperCell id this cell belongs to. Note that this needs to be explicitly set during seeding.
+		 * HostId is private, use getter and setter 'host' to access this variable
+		 * @type{Number}
+		*/
+		this.hostId = NaN
+	}
+
+	/** 
+	* Birth of the cell, edit the target volume based on the fraction of the mother it has gotten
+	 * @param {Cell} parent - the other daughter/parent cell
+	 * @param {Number} partition -  the fraction of the pixels this daughter has gotten
+	*/
+	birth(parent, partition=0.5){
+		super.birth(parent) // sets ParentId
+		this.host = parent.host
+		this.V = parent.V * partition
+        parent.V *= (1-partition)
+	}
+
+	/**
+	 * Pixlistener for death of the cell. Removes itself from supercell tracking when dead
+	 */
+	death(){
+		this.removeFromHost()
+	}
+
+	/**
+	 * Remove this cell from supercell
+	 */
+	removeFromHost(){
+		if (this.C.cells.hasOwnProperty(this.hostId)){
+			this.C.cells[this.hostId].removeSubCell(this)
+		}
+	}
+
+	/**
+	 * Setter for host, removes itself from the current supercell and adds itself to the new supercell
+	 * @param {Number} newHost - the CellId of the new supercell 
+	 */
+	set host(newHost){
+		this.removeFromHost()
+		this.hostId = newHost
+		if (this.C.cells.hasOwnProperty(this.hostId)){
+			this.C.cells[newHost].addSubCell(this)
+		}
+	}
+
+	/**
+	 * Getter for private variable hostId (necessary for shielding setting)
+	 * @return {Number} the id of the current supercell
+	 */
+	get host(){
+		return this.hostId
+	}
+}
+
+/** A constraint that splits adhesion based on a cellId specific 'host' parameter
+ * If cells belong to the same host the array J_INT is used, if cells belong to different hosts, the array J_EXT is used
+ */
+class SubCellConstraint extends CPM.SoftConstraint {
+
+	/** The constructor of the SubCellConstraint requires a conf object with parameters.
+	@param {object} conf - parameter object for this constraint
+	*/
+	constructor(conf){
+		super(conf)
+	}
+	
+	/** This method checks that all required parameters are present in the object supplied to
+	the constructor, and that they are of the right format. It throws an error when this
+	is not the case.*/
+	confChecker(){
+		let checker = new CPM.ParameterChecker( this.conf, this.C )
+		checker.confCheckParameter( "J_INT", "KindMatrix", "Number" )
+		checker.confCheckParameter( "J_EXT", "KindMatrix", "Number" )
+	}
+
+	/**  Returns the Hamiltonian around a pixel i with cellid tp by checking all its
+	neighbors that belong to a different cellid.
+	@param {IndexCoordinate} i - coordinate of the pixel to evaluate hamiltonian at.
+	@param {CellId} tp - cellid of this pixel.
+	@return {number} sum over all neighbors of internal and external adhesion energies (only non-zero for neighbors belonging to a different cellid).	
+	@private
+	 */
+	H( i, tp ){
+		let r = 0, tn
+		/* eslint-disable */
+		const N = this.C.grid.neighi( i )
+		for( let j = 0 ; j < N.length ; j ++ ){
+			tn = this.C.pixti( N[j] )
+			if( tn != tp ){ 
+				if (tn == 0 || tp == 0 || this.cellParameter("host", tn) != this.cellParameter("host", tp)){
+					r += this.conf["J_EXT"][this.C.cellKind(tn)][this.C.cellKind(tp)]
+				} else {
+					// r -= this.conf["J"][this.C.cellKind(tn)][this.C.cellKind(tp)]
+					r += this.conf["J_INT"][this.C.cellKind(tn)][this.C.cellKind(tp)]
+				}
+			}
+		}
+		return r
+	}
+	
+	/** Method to compute the Hamiltonian for this constraint. 
+	 @param {IndexCoordinate} src_i - coordinate of the source pixel that tries to copy.
+	 @param {IndexCoordinate} tgt_i - coordinate of the target pixel the source is trying
+	 to copy into.
+	 @param {CellId} src_type - cellid of the source pixel.
+	 @param {CellId} tgt_type - cellid of the target pixel. This argument is not actually
+	 used but is given for consistency with other soft constraints; the CPM always calls
+	 this method with four arguments.
+	 @return {number} the change in Hamiltonian for this copy attempt and this constraint.*/ 
+	/* eslint-disable no-unused-vars*/
+	deltaH( src_i, tgt_i, src_type, tgt_type ){
+		return this.H( tgt_i, src_type ) - this.H( src_i, tgt_type )
+	}
+}
+
+/*	----------------------------------
+	CONFIGURATION SETTINGS
+	----------------------------------
+*/
+
+let config = {
+
+	// Grid settings
+	ndim : 2,
+	field_size : [250,250],
+	
+	// CPM parameters and configuration
+	conf : {
+		// Basic CPM parameters
+		torus : [true,true],				// Should the grid have linked borders?
+		seed : 5,							// Seed for random number generation.
+		T : 20,								// CPM temperature
+        
+	
+		// Give the Cell class per kind - in this way you can also implement different subclasses of super- and subcell within the same simulation
+		CELLS : ["empty", SuperCell, SubCell],
+		
+		// Internal adhesion (within host) all interacting with background can be NaN
+        J_INT:  [ [NaN, NaN, NaN],
+						[NaN, 15,15], 
+            			[NaN, 15,150] ],
+
+		// External adhesion. High penalties for not encapsulating subcells are preferable
+        J_EXT:  [ [15,15,1500], 
+						[15,15,1500], 
+            			[1500, 1500,1500] ],
+
+		// Some volume parameters. Cells detect that they can grow if the target volume-current volume is within VOLCHANGE_THRESHOLD range
+		VOLCHANGE_THRESHOLD : 10,
+		// Cells increase their volume if they can grow by VOLSTEP amount
+		VOLSTEP : [0, 1, 10],
+		
+		LAMBDA_V : [0, 1, 1],				// VolumeConstraint importance per cellkind
+		V : [0,902, 400],					// Initialization target V
+
+		division_volume: [100, 1100, 500]
+	},
+	
+	// Simulation setup and configuration: this controls stuff like grid initialization,
+	// runtime, and what the output should look like.
+	simsettings : { 
+	
+		// Cells on the grid
+		NRCELLS : [15, 5],						// Number of supercells, and number of subcells per supercell to seed 
+		// non-background cellkinds. 
+		// Runtime etc
+		BURNIN : 0,
+		RUNTIME : 1000,
+		RUNTIME_BROWSER : "Inf",
+		
+		// Visualization
+		CANVASCOLOR : "EEEEEE",
+		CELLCOLOR : ["9E60BE", "FFAAEA"],
+		SHOWBORDERS : [true, true],				// Should cellborders be displayed?
+		BORDERCOL : ["CCCCCC", "444444"],				// color of the cell borders
+		zoom : 2,							// zoom in on canvas with this factor.
+		
+		// Output images
+		SAVEIMG : true,						// Should a png image of the grid be saved
+		// during the simulation?
+		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
+		SAVEPATH : "output/img/CellDivision",	// ... And save the image in this folder.
+		EXPNAME : "CellDivision",					// Used for the filename of output images.
+		
+		// Output stats etc
+		STATSOUT : { browser: false, node: true }, // Should stats be computed?
+		LOGRATE : 10							// Output stats every <LOGRATE> MCS.
+
+	}
+}
+/*	---------------------------------- */
+let sim, meter
+
+function initialize(){
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object. If Custom-methods above is set to false,
+	 	this object is ignored and not used in the html/node files. */
+	 let custommethods = {
+	 	postMCSListener : postMCSListener,
+		initializeGrid : initializeGrid,
+	 }
+	sim = new CPM.Simulation( config, custommethods )
+
+    sim.C.add( new SubCellConstraint( config["conf"] ) )
+
+	meter = new FPSMeter({left:"auto", right:"5px"})
+	step()
+}
+
+/** Step also calls the seeding of subcells at t=100,
+ * this is done as subcells are preferentially seeded inside supercells.
+ */
+function step(){
+    sim.step()
+    meter.tick()
+    if (sim.time == 100){
+        seedSubCells()
+    }
+	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
+		requestAnimationFrame( step )
+	}
+}
+
+/** Seeds the subcells (not an extendable function currently as it assumes that subcells are only celltype 1)
+ */
+function seedSubCells(){
+    let nrcells = sim.conf["NRCELLS"][1], i
+    if (!sim.gm){
+        sim.addGridManipulator()
+    } 
+    let cellpixelsbyid = sim.C.getStat(CPM.PixelsByCell)
+    for (let cid of Object.keys(cellpixelsbyid)) {
+        if (sim.C.cellKind(cid) == 1){
+            for (let i =0; i < sim.conf["NRCELLS"][1]; i++){
+                let coord = cellpixelsbyid[cid][Math.floor(sim.C.mt.random()*cellpixelsbyid[cid].length)]
+                let nid = sim.gm.seedCellAt( 2, coord )
+				sim.C.cells[nid].host = cid
+            }
+        }
+    }
+
+}
+
+/** computes target volume algorithm and triggers cell division
+*/
+function postMCSListener(){
+	if (this.time < 200){
+		// extra burnin time for seeding subcells
+		return
+	}
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+	for( let cid of this.C.cellIDs() ){
+		let cell = this.C.cells[cid]
+
+		if (cell.V-cell.vol < this.C.conf["VOLCHANGE_THRESHOLD"]){
+			cell.V += this.C.conf["VOLSTEP"][cell.kind]
+		} 
+		if( this.C.getVolume(cid) > this.C.conf.division_volume[this.C.cellKind(cid)] && sim.time > 200){
+			if (cell instanceof SuperCell){
+				cell.divideHostCell()
+			} else{
+				let nid = this.gm.divideCell(cid)
+			}
+		}
+	}
+}
+
+/** Seeds SuperCells*/
+function initializeGrid(){
+	// add the initializer if not already there
+	if( !this.helpClasses["gm"] ){ this.addGridManipulator() }
+
+    let nrcells = this.conf["NRCELLS"][0], i
+    for( i = 0; i < nrcells; i++ ){			
+        if( i == 0 ){
+            this.gm.seedCellAt( 1, [this.C.midpoint[0]/2, this.C.midpoint[1] ] )
+        } else {
+            this.gm.seedCell(1)
+        }
+    }
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<h1>Supercells</h1>
+
+
+<p>
+ This simulation simulates subcells or organelles by splitting the J adhesion parameter into a J_INT and J_EXT array, called for cells that share the same host or different hosts, respectively. <br>
+ Both the super- and subcells grow and divide to fill the field.  <br>
+ This utilizes the CPMEvol model to encode which hosts a cell belongs to. 
+</p>
+</body>
+</html>
