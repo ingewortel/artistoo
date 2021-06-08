@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Supercells</title>
-<style type="text/css">
-body{
-		font-family: "MS Comic Sans", "Helvetica Neue Light", "Helvetica Neue",
-		 Helvetica, Arial, "Lucida Grande", sans-serif;
-	 padding : 15px;
-}
-td {
-	 padding: 10px;
-	 vertical-align: top;
-}
-</style>
-
-
-<script src="./artistoo.js"></script>
-<script src="./fpsmeter.min.js"></script>
-<script src="./colormap.js"></script>
-
-<script>
-"use strict"
-
+let CPM = require("../../build/artistoo-cjs.js")
 
 /*	----------------------------------
 	SUB/SUPERCELL CLASSES
@@ -440,8 +418,8 @@ let config = {
 		SAVEIMG : true,						// Should a png image of the grid be saved
 		// during the simulation?
 		IMGFRAMERATE : 1,					// If so, do this every <IMGFRAMERATE> MCS.
-		SAVEPATH : "output/img/CellDivision",	// ... And save the image in this folder.
-		EXPNAME : "CellDivision",					// Used for the filename of output images.
+		SAVEPATH : "output/img/SuperCells",	// ... And save the image in this folder.
+		EXPNAME : "SuperCells",					// Used for the filename of output images.
 		
 		// Output stats etc
 		STATSOUT : { browser: false, node: true }, // Should stats be computed?
@@ -450,42 +428,19 @@ let config = {
 	}
 }
 /*	---------------------------------- */
-let sim, meter
 
-function initialize(){
-	 /* 	The following functions are defined below and will be added to
-	 	the simulation object. If Custom-methods above is set to false,
-	 	this object is ignored and not used in the html/node files. */
-	 let custommethods = {
-	 	postMCSListener : postMCSListener,
-		initializeGrid : initializeGrid,
-	 }
-	sim = new CPM.Simulation( config, custommethods )
-
-    sim.C.add( new SubCellConstraint( config["conf"] ) )
-
-	meter = new FPSMeter({left:"auto", right:"5px"})
-	step()
+let custommethods = {
+    postMCSListener : postMCSListener,
+    initializeGrid : initializeGrid
 }
 
-/** Step also calls the seeding of subcells at t=100,
- * this is done as subcells are preferentially seeded inside supercells.
- */
-function step(){
-    sim.step()
-    meter.tick()
-    if (sim.time == 100){
-        seedSubCells()
-    }
-	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
-		requestAnimationFrame( step )
-	}
-}
+let sim = new CPM.Simulation( config, custommethods )
+
+sim.C.add( new SubCellConstraint( config["conf"] ) )
 
 /** Seeds the subcells (not an extendable function currently as it assumes that subcells are only celltype 1)
  */
 function seedSubCells(){
-    let nrcells = sim.conf["NRCELLS"][1], i
     if (!sim.gm){
         sim.addGridManipulator()
     } 
@@ -499,13 +454,16 @@ function seedSubCells(){
             }
         }
     }
-	sim.C.stat_values = {} // remove cached stats or this will crash!!!
+    sim.C.stat_values = {} // remove cached stats or this will crash!!!
 }
 
 /** computes target volume algorithm and triggers cell division
 */
 function postMCSListener(){
-	if (this.time < 200){
+    if (sim.time == 100){
+        seedSubCells()
+    }
+	if (sim.time < 200){
 		// extra burnin time for seeding subcells
 		return
 	}
@@ -541,17 +499,4 @@ function initializeGrid(){
     }
 }
 
-
-</script>
-</head>
-<body onload="initialize()">
-<h1>Supercells</h1>
-
-
-<p>
- This simulation simulates subcells or organelles by splitting the J adhesion parameter into a J_INT and J_EXT array, called for cells that share the same host or different hosts, respectively. <br>
- Both the super- and subcells grow and divide to fill the field.  <br>
- This utilizes the CPMEvol model to encode which hosts a cell belongs to. 
-</p>
-</body>
-</html>
+sim.run()
