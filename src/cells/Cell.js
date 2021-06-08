@@ -29,6 +29,20 @@ class Cell {
 		this.parentId = parent.id 
 	}
 
+	/**
+	 * This is called upon death events. Can be redefined in subclasses
+	 */
+	death () {
+	}
+
+	/**
+	 * Get the current volume of this cell
+	 * @return {Number} volume of this cell
+	 */
+	get vol(){
+		return this.C.getVolume(this.id)
+	}
+
 }
 
 export default Cell
