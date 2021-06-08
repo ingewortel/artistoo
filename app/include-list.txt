@@ -40,10 +40,13 @@ module	GridManipulator	src/grid/GridManipulator.js
 module	CoarseGrid	src/grid/CoarseGrid.js
 module	no-export	src/grid/Grid.js
 
-# constraints: soft constraints
+# constraints: auxiliary files
 module	no-export	src/hamiltonian/Constraint.js
-module	SoftConstraint src/hamiltonian/SoftConstraint.js
 module	no-export	src/hamiltonian/AutoAdderConfig.js
+module ParameterChecker src/hamiltonian/ParameterChecker.js
+
+# constraints: soft constraints
+module	SoftConstraint src/hamiltonian/SoftConstraint.js
 module	Adhesion	src/hamiltonian/Adhesion.js
 module	VolumeConstraint	src/hamiltonian/VolumeConstraint.js
 module	PerimeterConstraint	src/hamiltonian/PerimeterConstraint.js
