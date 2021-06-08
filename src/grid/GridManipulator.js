@@ -1,7 +1,7 @@
 
 
 import PixelsByCell from "../stats/PixelsByCell.js"
-import Centroids from "../stats/Centroids.js"
+import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
 import Grid2D from "./Grid2D.js"
 import Grid3D from "./Grid3D.js"
 
@@ -450,24 +450,34 @@ class GridManipulator {
 		* // Check which pixels belong to which cell. Should be roughly half half.
 		* C.getStat( PixelsByCell )
 	 */
+	/* eslint-disable */
 	divideCell( id ){
 		let C = this.C
-		let torus = C.conf.torus.indexOf(true) >= 0
-		if( C.ndim != 2 || torus ){
-			throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
+		if( C.ndim != 2 ){
+			throw("The divideCell method is only implemented for 2D lattices yet!")
 		}
-		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id]
+		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( CentroidsWithTorusCorrection )[id]
 		let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2
 
 		// Loop over the pixels belonging to this cell
+	 	let si = this.C.extents, pixdist = {}, c = new Array(2)
 		for( let j = 0 ; j < cp.length ; j ++ ){
-			cx = cp[j][0] - com[0] // x position rel to centroid
-			cy = cp[j][1] - com[1] // y position rel to centroid
-
-			// sum of squared distances:
-			bxx += cx*cx
-			bxy += cx*cy
-			byy += cy*cy
+			for ( let dim = 0 ; dim < 2 ; dim ++ ){
+				c[dim] = cp[j][dim] - com[dim]
+				if( C.conf.torus[dim] && j > 0 ){
+					// If distance is greater than half the grid size, correct the
+					// coordinate.
+					if( c[dim] > si[dim]/2 ){
+						c[dim] -= si[dim]
+					} else if( c[dim] < -si[dim]/2 ){
+						c[dim] += si[dim]
+					}
+				}
+			}
+			pixdist[j] = [...c]
+			bxx += c[0]*c[0]
+			bxy += c[0]*c[1]
+			byy += c[1]*c[1]
 		}
 
 		// This code computes a "dividing line", which is perpendicular to the longest
@@ -489,44 +499,28 @@ class GridManipulator {
 		}
 		// console.log( id )
 		// create a new ID for the second cell
+		let nid = C.makeNewCellID( C.cellKind( id ) )
 		
-		let nid = C.makeNewCellID( C.cellKind( id ))
-		if (C.hasOwnProperty("cells")){
-			C.birth( nid, id )
-		}
-		
-		// Loop over the pixels belonging to this cell
-		//let sidea = 0, sideb = 0
-		//let pix_id = []
-		//let pix_nid = []
-		//let sidea = 0, sideb=0
-
 		for( let j = 0 ; j < cp.length ; j ++ ){
-			// coordinates of current cell relative to center of mass
-			x2 = cp[j][0]-com[0]
-			y2 = cp[j][1]-com[1]
-
-			// Depending on which side of the dividing line this pixel is,
-			// set it to the new type
-			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0)
-			if( side > 0 ){
-				//sidea++
+			//  x0 and y0 can be omitted as the div line is relative to the centroid (0, 0)
+			if( x1*pixdist[j][1]-pixdist[j][0]*y1 > 0 ){
 				C.setpix( cp[j], nid ) 
-				// console.log( cp[j] + " " + C.cellKind( id ) )
-				//pix_nid.push( cp[j] )
-			} else {
-				//pix_id.push( cp[j] )
-				//sideb++
-
 			}
 		}
-		//console.log( "3 " + C.cellKind( id ) )
-		//cp[id] = pix_id
-		//cp[nid] = pix_nid
+		
+		if (C.hasOwnProperty("cells")){
+			C.birth(nid, id)
+		}
+		// console.log()
+		
+		
 		C.stat_values = {} // remove cached stats or this will crash!!!
 		return nid
 	}
+
 }
+
+
 
 
 export default GridManipulator 
