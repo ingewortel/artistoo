@@ -423,7 +423,7 @@ class GridManipulator {
 		this.assignCellPixels( voxels, cellkind, newid )
 	}
 
-	/** Let cell "id" divide by splitting it along a line perpendicular to
+		/** Let cell "id" divide by splitting it along a line perpendicular to
 	 * its major axis. 
 	 
 	 @param {CellId} id - the id of the cell that needs to divide.
@@ -450,8 +450,114 @@ class GridManipulator {
 		* // Check which pixels belong to which cell. Should be roughly half half.
 		* C.getStat( PixelsByCell )
 	 */
-	/* eslint-disable */
 	divideCell( id ){
+		let C = this.C
+		let torus = C.conf.torus.indexOf(true) >= 0
+		if( C.ndim != 2 || torus ){
+			throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
+		}
+		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id]
+		let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2
+
+		// Loop over the pixels belonging to this cell
+		for( let j = 0 ; j < cp.length ; j ++ ){
+			cx = cp[j][0] - com[0] // x position rel to centroid
+			cy = cp[j][1] - com[1] // y position rel to centroid
+
+			// sum of squared distances:
+			bxx += cx*cx
+			bxy += cx*cy
+			byy += cy*cy
+		}
+
+		// This code computes a "dividing line", which is perpendicular to the longest
+		// axis of the cell.
+		if( bxy == 0 ){
+			x0 = 0
+			y0 = 0
+			x1 = 1
+			y1 = 0
+		} else {
+			T = bxx + byy
+			D = bxx*byy - bxy*bxy
+			//L1 = T/2 + Math.sqrt(T*T/4 - D)
+			L2 = T/2 - Math.sqrt(T*T/4 - D)
+			x0 = 0
+			y0 = 0
+			x1 = L2 - byy
+			y1 = bxy
+		}
+		// console.log( id )
+		// create a new ID for the second cell
+		
+		let nid = C.makeNewCellID( C.cellKind( id ))
+		if (C.hasOwnProperty("cells")){
+			C.birth( nid, id )
+		}
+		
+		// Loop over the pixels belonging to this cell
+		//let sidea = 0, sideb = 0
+		//let pix_id = []
+		//let pix_nid = []
+		//let sidea = 0, sideb=0
+
+		for( let j = 0 ; j < cp.length ; j ++ ){
+			// coordinates of current cell relative to center of mass
+			x2 = cp[j][0]-com[0]
+			y2 = cp[j][1]-com[1]
+
+			// Depending on which side of the dividing line this pixel is,
+			// set it to the new type
+			side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0)
+			if( side > 0 ){
+				//sidea++
+				C.setpix( cp[j], nid ) 
+				// console.log( cp[j] + " " + C.cellKind( id ) )
+				//pix_nid.push( cp[j] )
+			} else {
+				//pix_id.push( cp[j] )
+				//sideb++
+
+			}
+		}
+		//console.log( "3 " + C.cellKind( id ) )
+		//cp[id] = pix_id
+		//cp[nid] = pix_nid
+		C.stat_values = {} // remove cached stats or this will crash!!!
+		return nid
+	}
+
+	/** @experimental 
+	 * Let cell "id" divide by splitting it along a line perpendicular to
+	 * its major axis, with Torus enabled. Watch out that this can give
+	 * rise to weird artefacts when cells span more than half the grid in
+	 * a wrapped direction.
+	 
+	 @param {CellId} id - the id of the cell that needs to divide.
+	 @return {CellId} the id of the newly generated daughter cell.
+	   
+		@example
+		* let C = new CPM.CPM( [10,10], {
+		* 	T:20, 
+		*	J:[[0,20],[20,10]], 
+		*	V:[0,200], 
+		*	LAMBDA_V:[0,2] 
+		* })
+		* let gm = new CPM.GridManipulator( C )
+		*
+		* // Seed a single cell
+		* gm.seedCell( 1 )
+		* 
+		* // Perform some Monte Carlo Steps before dividing the cell
+		* for( let t = 0; t < 100; t++ ){
+		* 	C.timeStep()
+		* }
+		* gm.divideCell( 1 )
+		* 
+		* // Check which pixels belong to which cell. Should be roughly half half.
+		* C.getStat( PixelsByCell )
+	 */
+	divideCellTorus( id ){
 		let C = this.C
 		if( C.ndim != 2 ){
 			throw("The divideCell method is only implemented for 2D lattices yet!")
@@ -517,7 +623,6 @@ class GridManipulator {
 		C.stat_values = {} // remove cached stats or this will crash!!!
 		return nid
 	}
-
 }
 
 
