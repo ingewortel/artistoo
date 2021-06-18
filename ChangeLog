@@ -3,6 +3,21 @@ yyyy-mm-dd Your Name <your@email.com>
 	* file ( method in file ) : changes.
 ###
 
+2021-06-18 Inge Wortel <ingewortel@gmail.com>
+	* examples/build-examples/simulation-files/SuperCell.js : fixed it so that custom classes are
+	properly handled;
+	* examples/build-examples/simulation-files/Template.js : now contains a section
+	for custom classes;
+	* examples/build-examples/write-html.bash : handles custom class section
+	* examples/build-examples/write-node.bash : handles custom class section
+
+2021-06-18 Inge Wortel <ingewortel@gmail.com>
+	Merged PR from Oane Gros, changes including:
+	* src/grid/GridManipulator.js : new method divideCellTorus for cell division on a
+	torus grid; tests still need to be written.
+	* examples/build-examples/SuperCell.js : new example with several custom classes
+	implementing a cell with several subcells.
+
 2021-05-26 Inge Wortel <ingewortel@gmail.com>
 	* major overhaul of the way the website is built; see DOCS-README
 	* update in how examples are generated.
