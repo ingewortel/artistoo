@@ -4,6 +4,14 @@
  * <h1>Template File</h1>
  * <p>HTML code for the page here.</p>
  * */
+ 
+ /* 	================= DECLARE CUSTOM CLASSES ===================== */
+/* 	If no custom classes are defined, you can remove the part 
+    from START CLASS DEFINITION to END CLASS DEFINITION below.
+*/
+
+/* START CLASS DEFINITION Do not remove this line */
+/* END CLASS DEFINITION Do not remove this line */
 
 /* 	================= DECLARE CUSTOM METHODS ===================== */
 /* 	If no custom methods are defined, the drawing/initialisation/output 

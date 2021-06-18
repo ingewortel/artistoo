@@ -30,7 +30,11 @@ echo '<script>'
 echo '"use strict"'
 echo -e "\n"
 
+sed -e '1,/START CLASS DEFINITION/d' -e '/END CLASS DEFINITION/,$d' $templatefile
+
 sed -e '1,/START CONFIGURATION/d' -e '/END CONFIGURATION/,$d' $templatefile
+
+
 
 echo let sim, meter
 echo -e "\n"

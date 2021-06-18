@@ -9,6 +9,7 @@ echo 'let CPM = require("../../build/artistoo-cjs.js")'
 echo -e '\n'
 awk -f extract-require.awk $templatefile | grep "#node" | awk -F "::" '{gsub(/ /, "", $2); print "let" $3 " = require( \"" $2 "\" ) "}'
 
+sed -e '1,/START CLASS DEFINITION/d' -e '/END CLASS DEFINITION/,$d' $templatefile
 
 sed -e '1,/START CONFIGURATION/d' -e '/END CONFIGURATION/,$d' $templatefile
 echo -e '\n'

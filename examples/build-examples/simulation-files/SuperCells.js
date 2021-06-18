@@ -16,6 +16,8 @@
  
  
 
+/* START CLASS DEFINITION Do not remove this line */
+
 /*	----------------------------------
 	SUB/SUPERCELL CLASSES
 	----------------------------------
@@ -369,11 +371,13 @@ class SubCellConstraint extends CPM.SoftConstraint {
 }
 
 
+/* END CLASS DEFINITION Do not remove this line */
+
 /*	---------------------------------- */
 
 
 
- /* 	================= DECLARE CUSTOM METHODS ===================== */
+/* 	================= DECLARE CUSTOM METHODS ===================== */
 
 /* START METHODS OBJECT Do not remove this line */
 let custommethods = {
