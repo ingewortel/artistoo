@@ -27,6 +27,8 @@ import Grid3D from "../src/grid/Grid3D.js"
 import GridManipulator from "../src/grid/GridManipulator.js" 
 import CoarseGrid from "../src/grid/CoarseGrid.js" 
  
+import ParameterChecker from "../src/hamiltonian/ParameterChecker.js" 
+ 
 import SoftConstraint from "../src/hamiltonian/SoftConstraint.js" 
 import Adhesion from "../src/hamiltonian/Adhesion.js" 
 import VolumeConstraint from "../src/hamiltonian/VolumeConstraint.js" 
@@ -77,6 +79,7 @@ export {
 	Grid3D,
 	GridManipulator,
 	CoarseGrid,
+	ParameterChecker,
 	SoftConstraint,
 	Adhesion,
 	VolumeConstraint,

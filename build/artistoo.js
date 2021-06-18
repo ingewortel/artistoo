@@ -4724,6 +4724,20 @@ var CPM = (function (exports) {
 			this.parentId = parent.id; 
 		}
 
+		/**
+		 * This is called upon death events. Can be redefined in subclasses
+		 */
+		death () {
+		}
+
+		/**
+		 * Get the current volume of this cell
+		 * @return {Number} volume of this cell
+		 */
+		get vol(){
+			return this.C.getVolume(this.id)
+		}
+
 	}
 
 	/** Extension of the CPM class that uses Cell objects to track internal state of Cells
@@ -4776,6 +4790,7 @@ var CPM = (function (exports) {
 		/* eslint-disable no-unused-vars*/
 		cellDeath( i, t_old, t_new){
 			if (this.cellvolume[t_old] === undefined && t_old !== 0){
+				this.cells[t_old].death();
 				delete this.cells[t_old];
 			} 
 		}
@@ -5841,31 +5856,39 @@ var CPM = (function (exports) {
 			* // Check which pixels belong to which cell. Should be roughly half half.
 			* C.getStat( PixelsByCell )
 		 */
+		/* eslint-disable */
 		divideCell( id ){
 			let C = this.C;
-			let torus = C.conf.torus.indexOf(true) >= 0;
-			if( C.ndim != 2 || torus ){
-				throw("The divideCell methods is only implemented for 2D non-torus lattices yet!")
+			if( C.ndim != 2 ){
+				throw("The divideCell method is only implemented for 2D lattices yet!")
 			}
-			let cp = C.getStat( PixelsByCell )[id], com = C.getStat( Centroids )[id];
-			let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2;
+			let cp = C.getStat( PixelsByCell )[id], com = C.getStat( CentroidsWithTorusCorrection )[id];
+			let bxx = 0, bxy = 0, byy=0, T, D, x1, y1, L2;
 
 			// Loop over the pixels belonging to this cell
+		 	let si = this.C.extents, pixdist = {}, c = new Array(2);
 			for( let j = 0 ; j < cp.length ; j ++ ){
-				cx = cp[j][0] - com[0]; // x position rel to centroid
-				cy = cp[j][1] - com[1]; // y position rel to centroid
-
-				// sum of squared distances:
-				bxx += cx*cx;
-				bxy += cx*cy;
-				byy += cy*cy;
+				for ( let dim = 0 ; dim < 2 ; dim ++ ){
+					c[dim] = cp[j][dim] - com[dim];
+					if( C.conf.torus[dim] && j > 0 ){
+						// If distance is greater than half the grid size, correct the
+						// coordinate.
+						if( c[dim] > si[dim]/2 ){
+							c[dim] -= si[dim];
+						} else if( c[dim] < -si[dim]/2 ){
+							c[dim] += si[dim];
+						}
+					}
+				}
+				pixdist[j] = [...c];
+				bxx += c[0]*c[0];
+				bxy += c[0]*c[1];
+				byy += c[1]*c[1];
 			}
 
 			// This code computes a "dividing line", which is perpendicular to the longest
 			// axis of the cell.
 			if( bxy == 0 ){
-				x0 = 0;
-				y0 = 0;
 				x1 = 1;
 				y1 = 0;
 			} else {
@@ -5873,46 +5896,30 @@ var CPM = (function (exports) {
 				D = bxx*byy - bxy*bxy;
 				//L1 = T/2 + Math.sqrt(T*T/4 - D)
 				L2 = T/2 - Math.sqrt(T*T/4 - D);
-				x0 = 0;
-				y0 = 0;
 				x1 = L2 - byy;
 				y1 = bxy;
 			}
 			// console.log( id )
 			// create a new ID for the second cell
+			let nid = C.makeNewCellID( C.cellKind( id ) );
 			
-			let nid = C.makeNewCellID( C.cellKind( id ));
-			if (C.hasOwnProperty("cells")){
-				C.birth( nid, id );
-			}
-			
-			// Loop over the pixels belonging to this cell
-			//let sidea = 0, sideb = 0
-			//let pix_id = []
-			//let pix_nid = []
-			//let sidea = 0, sideb=0
-
 			for( let j = 0 ; j < cp.length ; j ++ ){
-				// coordinates of current cell relative to center of mass
-				x2 = cp[j][0]-com[0];
-				y2 = cp[j][1]-com[1];
-
-				// Depending on which side of the dividing line this pixel is,
-				// set it to the new type
-				side = (x1 - x0)*(y2 - y0) - (x2 - x0)*(y1 - y0);
-				if( side > 0 ){
-					//sidea++
+				//  x0 and y0 can be omitted as the div line is relative to the centroid (0, 0)
+				if( x1*pixdist[j][1]-pixdist[j][0]*y1 > 0 ){
 					C.setpix( cp[j], nid ); 
-					// console.log( cp[j] + " " + C.cellKind( id ) )
-					//pix_nid.push( cp[j] )
 				}
 			}
-			//console.log( "3 " + C.cellKind( id ) )
-			//cp[id] = pix_id
-			//cp[nid] = pix_nid
+			
+			if (C.hasOwnProperty("cells")){
+				C.birth(nid, id);
+			}
+			// console.log()
+			
+			
 			C.stat_values = {}; // remove cached stats or this will crash!!!
 			return nid
 		}
+
 	}
 
 	/**
@@ -10840,6 +10847,7 @@ var CPM = (function (exports) {
 	exports.ModelDescription = ModelDescription;
 	exports.MorpheusImport = MorpheusImport;
 	exports.MorpheusWriter = MorpheusWriter;
+	exports.ParameterChecker = ParameterChecker;
 	exports.PerimeterConstraint = PerimeterConstraint;
 	exports.PersistenceConstraint = PersistenceConstraint;
 	exports.PixelsByCell = PixelsByCell;

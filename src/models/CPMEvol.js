@@ -53,6 +53,7 @@ class CPMEvol extends CPM {
 	/* eslint-disable no-unused-vars*/
 	cellDeath( i, t_old, t_new){
 		if (this.cellvolume[t_old] === undefined && t_old !== 0){
+			this.cells[t_old].death()
 			delete this.cells[t_old]
 		} 
 	}
