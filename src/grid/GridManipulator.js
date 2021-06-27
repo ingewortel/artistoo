@@ -2,6 +2,7 @@
 
 import PixelsByCell from "../stats/PixelsByCell.js"
 import CentroidsWithTorusCorrection from "../stats/CentroidsWithTorusCorrection.js"
+import Centroids from "../stats/Centroids.js"
 import Grid2D from "./Grid2D.js"
 import Grid3D from "./Grid3D.js"
 
@@ -423,7 +424,7 @@ class GridManipulator {
 		this.assignCellPixels( voxels, cellkind, newid )
 	}
 
-		/** Let cell "id" divide by splitting it along a line perpendicular to
+	/** Let cell "id" divide by splitting it along a line perpendicular to
 	 * its major axis. 
 	 
 	 @param {CellId} id - the id of the cell that needs to divide.
@@ -563,10 +564,10 @@ class GridManipulator {
 			throw("The divideCell method is only implemented for 2D lattices yet!")
 		}
 		let cp = C.getStat( PixelsByCell )[id], com = C.getStat( CentroidsWithTorusCorrection )[id]
-		let bxx = 0, bxy = 0, byy=0, cx, cy, x2, y2, side, T, D, x0, y0, x1, y1, L2
+		let bxx = 0, bxy = 0, byy=0, T, D, x1, y1, L2
 
 		// Loop over the pixels belonging to this cell
-	 	let si = this.C.extents, pixdist = {}, c = new Array(2)
+		let si = this.C.extents, pixdist = {}, c = new Array(2)
 		for( let j = 0 ; j < cp.length ; j ++ ){
 			for ( let dim = 0 ; dim < 2 ; dim ++ ){
 				c[dim] = cp[j][dim] - com[dim]
@@ -589,8 +590,6 @@ class GridManipulator {
 		// This code computes a "dividing line", which is perpendicular to the longest
 		// axis of the cell.
 		if( bxy == 0 ){
-			x0 = 0
-			y0 = 0
 			x1 = 1
 			y1 = 0
 		} else {
@@ -598,8 +597,6 @@ class GridManipulator {
 			D = bxx*byy - bxy*bxy
 			//L1 = T/2 + Math.sqrt(T*T/4 - D)
 			L2 = T/2 - Math.sqrt(T*T/4 - D)
-			x0 = 0
-			y0 = 0
 			x1 = L2 - byy
 			y1 = bxy
 		}

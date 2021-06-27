@@ -5074,7 +5074,7 @@ var CPM = (function (exports) {
 		*
 		* C.getStat( CPM.Centroids ) 
 	*/
-	class Centroids$1 extends Stat {
+	class Centroids extends Stat {
 
 		/** The set model method of class CentroidsWithTorusCorrection.
 		@param {GridBasedModel} M - the model to compute centroids on. */
@@ -5829,7 +5829,7 @@ var CPM = (function (exports) {
 			this.assignCellPixels( voxels, cellkind, newid );
 		}
 
-			/** Let cell "id" divide by splitting it along a line perpendicular to
+		/** Let cell "id" divide by splitting it along a line perpendicular to
 		 * its major axis. 
 		 
 		 @param {CellId} id - the id of the cell that needs to divide.
@@ -5968,7 +5968,7 @@ var CPM = (function (exports) {
 			let bxx = 0, bxy = 0, byy=0, T, D, x1, y1, L2;
 
 			// Loop over the pixels belonging to this cell
-		 	let si = this.C.extents, pixdist = {}, c = new Array(2);
+			let si = this.C.extents, pixdist = {}, c = new Array(2);
 			for( let j = 0 ; j < cp.length ; j ++ ){
 				for ( let dim = 0 ; dim < 2 ; dim ++ ){
 					c[dim] = cp[j][dim] - com[dim];
@@ -6168,7 +6168,7 @@ var CPM = (function (exports) {
 			if( this.C.conf.torus ){
 				centroids = this.C.getStat( CentroidsWithTorusCorrection );
 			} else {
-				centroids = this.C.getStat( Centroids$1 );
+				centroids = this.C.getStat( Centroids );
 			}
 			for( let t of this.C.cellIDs() ){
 				let ld = this.cellParameter("LAMBDA_DIR", t);
@@ -7955,7 +7955,7 @@ var CPM = (function (exports) {
 			if( torus ){
 				allcentroids = this.C.getStat( CentroidsWithTorusCorrection );
 			} else {
-				allcentroids = this.C.getStat( Centroids$1 );
+				allcentroids = this.C.getStat( Centroids );
 			} 
 			
 			for( let cid of this.C.cellIDs() ){
@@ -10929,7 +10929,7 @@ var CPM = (function (exports) {
 	exports.Canvas = Canvas;
 	exports.Cell = Cell;
 	exports.CellNeighborList = CellNeighborList;
-	exports.Centroids = Centroids$1;
+	exports.Centroids = Centroids;
 	exports.CentroidsWithTorusCorrection = CentroidsWithTorusCorrection;
 	exports.ChemotaxisConstraint = ChemotaxisConstraint;
 	exports.CoarseGrid = CoarseGrid;
