@@ -529,13 +529,13 @@
 	<div class="swipe-area"></div>
 
 <div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import GridManipulator from &apos;<span><a href="file/src/grid/GridManipulator.js.html#lineNumber23">Artistoo/src/grid/GridManipulator.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import GridManipulator from &apos;<span><a href="file/src/grid/GridManipulator.js.html#lineNumber24">Artistoo/src/grid/GridManipulator.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/grid/GridManipulator.js.html#lineNumber23">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/grid/GridManipulator.js.html#lineNumber24">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -751,6 +751,37 @@ cellID.</p>
         <div data-ice="description"><p>Let cell &quot;id&quot; divide by splitting it along a line perpendicular to
 its major axis.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-divideCellTorus">divideCellTorus</a></span></span><span class="code" data-ice="signature">(id: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        <div class="experimental" data-ice="experimental">this method is experimental. Let cell &quot;id&quot; divide by splitting it along a line perpendicular to
+its major axis, with Torus enabled. Watch out that this can give
+rise to weird artefacts when cells span more than half the grid in
+a wrapped direction.</div>
+        
       </div>
     </td>
     <td>
@@ -1018,7 +1049,7 @@ circle surrounding &quot;center&quot; with radius &quot;radius&quot;.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
@@ -1087,7 +1118,7 @@ the <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber37">source</a></span></span>
     </span>
   </h3>
 
@@ -1134,7 +1165,7 @@ the <span><a href="class/src/grid/GridManipulator.js~GridManipulator.html#instan
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber412">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber413">source</a></span></span>
     </span>
   </h3>
 
@@ -1224,7 +1255,7 @@ cellID.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber422">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber423">source</a></span></span>
     </span>
   </h3>
 
@@ -1296,7 +1327,7 @@ cellID.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber453">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber454">source</a></span></span>
     </span>
   </h3>
 
@@ -1306,6 +1337,107 @@ cellID.</p>
   <div data-ice="description"><p>Let cell &quot;id&quot; divide by splitting it along a line perpendicular to
 its major axis. </p>
 </div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">id</td>
+      <td data-ice="type" class="code"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>the id of the cell that needs to divide.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>the id of the newly generated daughter cell.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">let C = new CPM.CPM( [10,10], {
+	T:20, 
+J:[[0,20],[20,10]], 
+V:[0,200], 
+LAMBDA_V:[0,2] 
+})
+let gm = new CPM.GridManipulator( C )
+
+// Seed a single cell
+gm.seedCell( 1 )
+
+// Perform some Monte Carlo Steps before dividing the cell
+for( let t = 0; t &lt; 100; t++ ){
+	C.timeStep()
+}
+gm.divideCell( 1 )
+
+// Check which pixels belong to which cell. Should be roughly half half.
+C.getStat( PixelsByCell )</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-divideCellTorus">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">divideCellTorus</span><span class="code" data-ice="signature">(id: <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span>): <span><a href="typedef/index.html#static-typedef-CellId">CellId</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber561">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  <div class="experimental" data-ice="experimental">this method is experimental. Let cell &quot;id&quot; divide by splitting it along a line perpendicular to
+its major axis, with Torus enabled. Watch out that this can give
+rise to weird artefacts when cells span more than half the grid in
+a wrapped direction.</div>
+  
 
   
 
@@ -1396,7 +1528,7 @@ C.getStat( PixelsByCell )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber42">source</a></span></span>
     </span>
   </h3>
 
@@ -1461,7 +1593,7 @@ C.getStat( PixelsByCell )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber288">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber289">source</a></span></span>
     </span>
   </h3>
 
@@ -1571,7 +1703,7 @@ gm.assignCellPixels( rect, 1 )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber354">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber355">source</a></span></span>
     </span>
   </h3>
 
@@ -1680,7 +1812,7 @@ gm.assignCellPixels( circ, 1 )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber214">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber215">source</a></span></span>
     </span>
   </h3>
 
@@ -1793,7 +1925,7 @@ gm.assignCellPixels( myLine, 1 )</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber258">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -1887,7 +2019,7 @@ if given, the line will be added to this set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber87">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber88">source</a></span></span>
     </span>
   </h3>
 
@@ -1996,7 +2128,7 @@ for( let p of C.pixels() ){
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
@@ -2105,7 +2237,7 @@ for( let p of C.pixels() ){
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber164">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/grid/GridManipulator.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 

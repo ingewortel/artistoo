@@ -1752,6 +1752,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/cells/cell.js~cell#death",
+    "class/src/cells/Cell.js~Cell.html#instance-method-death",
+    "src/cells/Cell.js~Cell#death",
+    "method"
+  ],
+  [
     "src/cells/cell.js~cell#id",
     "class/src/cells/Cell.js~Cell.html#instance-member-id",
     "src/cells/Cell.js~Cell#id",
@@ -1767,6 +1773,12 @@ window.esdocSearchIndex = [
     "src/cells/cell.js~cell#parentid",
     "class/src/cells/Cell.js~Cell.html#instance-member-parentId",
     "src/cells/Cell.js~Cell#parentId",
+    "member"
+  ],
+  [
+    "src/cells/cell.js~cell#vol",
+    "class/src/cells/Cell.js~Cell.html#instance-get-vol",
+    "src/cells/Cell.js~Cell#vol",
     "member"
   ],
   [
@@ -3123,6 +3135,12 @@ window.esdocSearchIndex = [
     "src/grid/gridmanipulator.js~gridmanipulator#dividecell",
     "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-divideCell",
     "src/grid/GridManipulator.js~GridManipulator#divideCell",
+    "method"
+  ],
+  [
+    "src/grid/gridmanipulator.js~gridmanipulator#dividecelltorus",
+    "class/src/grid/GridManipulator.js~GridManipulator.html#instance-method-divideCellTorus",
+    "src/grid/GridManipulator.js~GridManipulator#divideCellTorus",
     "method"
   ],
   [

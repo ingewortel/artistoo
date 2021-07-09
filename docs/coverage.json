@@ -1,7 +1,7 @@
 {
-  "coverage": "72.52%",
-  "expectCount": 615,
-  "actualCount": 446,
+  "coverage": "72.65%",
+  "expectCount": 618,
+  "actualCount": 449,
   "files": {
     "src/Canvas.js": {
       "expectCount": 41,
@@ -14,8 +14,8 @@
       "undocumentLines": []
     },
     "src/cells/Cell.js": {
-      "expectCount": 8,
-      "actualCount": 3,
+      "expectCount": 10,
+      "actualCount": 5,
       "undocumentLines": [
         2,
         13,
@@ -246,8 +246,8 @@
       ]
     },
     "src/grid/GridManipulator.js": {
-      "expectCount": 14,
-      "actualCount": 14,
+      "expectCount": 15,
+      "actualCount": 15,
       "undocumentLines": []
     },
     "src/hamiltonian/ActivityConstraint.js": {

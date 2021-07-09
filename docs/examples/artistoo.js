@@ -4724,6 +4724,20 @@ var CPM = (function (exports) {
 			this.parentId = parent.id; 
 		}
 
+		/**
+		 * This is called upon death events. Can be redefined in subclasses
+		 */
+		death () {
+		}
+
+		/**
+		 * Get the current volume of this cell
+		 * @return {Number} volume of this cell
+		 */
+		get vol(){
+			return this.C.getVolume(this.id)
+		}
+
 	}
 
 	/** Extension of the CPM class that uses Cell objects to track internal state of Cells
@@ -4776,6 +4790,7 @@ var CPM = (function (exports) {
 		/* eslint-disable no-unused-vars*/
 		cellDeath( i, t_old, t_new){
 			if (this.cellvolume[t_old] === undefined && t_old !== 0){
+				this.cells[t_old].death();
 				delete this.cells[t_old];
 			} 
 		}
@@ -5910,6 +5925,99 @@ var CPM = (function (exports) {
 			//console.log( "3 " + C.cellKind( id ) )
 			//cp[id] = pix_id
 			//cp[nid] = pix_nid
+			C.stat_values = {}; // remove cached stats or this will crash!!!
+			return nid
+		}
+
+		/** @experimental 
+		 * Let cell "id" divide by splitting it along a line perpendicular to
+		 * its major axis, with Torus enabled. Watch out that this can give
+		 * rise to weird artefacts when cells span more than half the grid in
+		 * a wrapped direction.
+		 
+		 @param {CellId} id - the id of the cell that needs to divide.
+		 @return {CellId} the id of the newly generated daughter cell.
+		   
+			@example
+			* let C = new CPM.CPM( [10,10], {
+			* 	T:20, 
+			*	J:[[0,20],[20,10]], 
+			*	V:[0,200], 
+			*	LAMBDA_V:[0,2] 
+			* })
+			* let gm = new CPM.GridManipulator( C )
+			*
+			* // Seed a single cell
+			* gm.seedCell( 1 )
+			* 
+			* // Perform some Monte Carlo Steps before dividing the cell
+			* for( let t = 0; t < 100; t++ ){
+			* 	C.timeStep()
+			* }
+			* gm.divideCell( 1 )
+			* 
+			* // Check which pixels belong to which cell. Should be roughly half half.
+			* C.getStat( PixelsByCell )
+		 */
+		divideCellTorus( id ){
+			let C = this.C;
+			if( C.ndim != 2 ){
+				throw("The divideCell method is only implemented for 2D lattices yet!")
+			}
+			let cp = C.getStat( PixelsByCell )[id], com = C.getStat( CentroidsWithTorusCorrection )[id];
+			let bxx = 0, bxy = 0, byy=0, T, D, x1, y1, L2;
+
+			// Loop over the pixels belonging to this cell
+			let si = this.C.extents, pixdist = {}, c = new Array(2);
+			for( let j = 0 ; j < cp.length ; j ++ ){
+				for ( let dim = 0 ; dim < 2 ; dim ++ ){
+					c[dim] = cp[j][dim] - com[dim];
+					if( C.conf.torus[dim] && j > 0 ){
+						// If distance is greater than half the grid size, correct the
+						// coordinate.
+						if( c[dim] > si[dim]/2 ){
+							c[dim] -= si[dim];
+						} else if( c[dim] < -si[dim]/2 ){
+							c[dim] += si[dim];
+						}
+					}
+				}
+				pixdist[j] = [...c];
+				bxx += c[0]*c[0];
+				bxy += c[0]*c[1];
+				byy += c[1]*c[1];
+			}
+
+			// This code computes a "dividing line", which is perpendicular to the longest
+			// axis of the cell.
+			if( bxy == 0 ){
+				x1 = 1;
+				y1 = 0;
+			} else {
+				T = bxx + byy;
+				D = bxx*byy - bxy*bxy;
+				//L1 = T/2 + Math.sqrt(T*T/4 - D)
+				L2 = T/2 - Math.sqrt(T*T/4 - D);
+				x1 = L2 - byy;
+				y1 = bxy;
+			}
+			// console.log( id )
+			// create a new ID for the second cell
+			let nid = C.makeNewCellID( C.cellKind( id ) );
+			
+			for( let j = 0 ; j < cp.length ; j ++ ){
+				//  x0 and y0 can be omitted as the div line is relative to the centroid (0, 0)
+				if( x1*pixdist[j][1]-pixdist[j][0]*y1 > 0 ){
+					C.setpix( cp[j], nid ); 
+				}
+			}
+			
+			if (C.hasOwnProperty("cells")){
+				C.birth(nid, id);
+			}
+			// console.log()
+			
+			
 			C.stat_values = {}; // remove cached stats or this will crash!!!
 			return nid
 		}
@@ -10840,6 +10948,7 @@ var CPM = (function (exports) {
 	exports.ModelDescription = ModelDescription;
 	exports.MorpheusImport = MorpheusImport;
 	exports.MorpheusWriter = MorpheusWriter;
+	exports.ParameterChecker = ParameterChecker;
 	exports.PerimeterConstraint = PerimeterConstraint;
 	exports.PersistenceConstraint = PersistenceConstraint;
 	exports.PixelsByCell = PixelsByCell;
