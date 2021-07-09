@@ -119,6 +119,14 @@
 						
 						},
 						{
+							"name" : "Cell-ception",
+							"image" : "./image/examples/SuperCells.gif",
+							"link" : "./examples/SuperCells.html",
+							"desc": "Cells... with other cells inside.",
+							"learn": ["evolutionary CPM", "multiple celltypes"]
+						
+						},
+						{
 							"name": "Holding Tight",
 							"image": "./image/examples/Epidermis.gif",
 							"link": "./examples/Epidermis.html",
