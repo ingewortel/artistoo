@@ -149,9 +149,9 @@ class SuperCell extends CPM.Cell {
 		let pix = C.getStat( CPM.PixelsByCell )
 		let ids = [this.id], cp = pix[this.id]
 		for (let subcell of C.cells[this.id].subcells){
-			console.log(subcell.id)
+			//console.log(subcell.id)
 			ids = [...ids, subcell.id]
-			console.log(pix[subcell.id], Object.keys(pix))
+			//console.log(pix[subcell.id], Object.keys(pix))
 			cp = [...cp, ...pix[subcell.id]]
 		}
 		let com = this.computeHostCentroid(cp)
@@ -404,9 +404,7 @@ sim.C.add( new SubCellConstraint( config["conf"] ) )
 function step(){
     sim.step()
     meter.tick()
-    if (sim.time == 100){
-        seedSubCells()
-    }
+    
 	if( sim.conf["RUNTIME_BROWSER"] == "Inf" | sim.time+1 < sim.conf["RUNTIME_BROWSER"] ){
 		requestAnimationFrame( step )
 	}
@@ -436,6 +434,10 @@ function seedSubCells(){
 */
 function postMCSListener(){
 	if (this.time < 200){
+	
+		if (this.time == 100){
+			seedSubCells()
+		}
 		// extra burnin time for seeding subcells
 		return
 	}
