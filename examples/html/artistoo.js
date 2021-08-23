@@ -3478,7 +3478,18 @@ var CPM = (function (exports) {
 		   @param {CellKind} kind - cellkind of the cell that has to be made.
 		   @return {CellId} of the new cell.*/
 		makeNewCellID ( kind ){
-			const newid = ++ this.last_cell_id;
+			if (this.nr_cells >= 65533){
+				// here you know that there are indices available in the Uint16 range for new cellIds
+				throw("Max amount of living cells exceeded!")
+			}
+			let newid;
+			do{
+				newid = ++this.last_cell_id;
+				if (newid >= 65534){
+					this.last_cell_id = 1;
+					newid = 1;
+				}
+			}  while (this.cellvolume.hasOwnProperty(newid))
 			this.cellvolume[newid] = 0;
 			this.setCellKind( newid, kind );
 			return newid
