@@ -9,7 +9,7 @@
   "author": "Inge Wortel",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jsdom": "^16.5.3",
     "mongodb": "^3.5.7",
     "mustache": "^4.1.0"
