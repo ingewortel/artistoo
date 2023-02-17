@@ -433,7 +433,11 @@ let config = {
 /*	---------------------------------- */
 
 
-let sim = new CPM.Simulation( config, {} )
+	 let custommethods = {
+	 	postMCSListener : postMCSListener,
+	 	initializeGrid : initializeGrid,
+	 }
+	let sim = new CPM.Simulation( config, custommethods )
 
 sim.C.add( new SubCellConstraint( config["conf"] ) )
 

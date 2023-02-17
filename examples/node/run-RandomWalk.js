@@ -61,7 +61,7 @@ let config = {
 /*	---------------------------------- */
 
 
-let sim = new CPM.Simulation( config, {} )
+	let sim = new CPM.Simulation( config, {} )
 
 let hardvolconstraint = new CPM.HardVolumeRangeConstraint( sim.C.conf )
 sim.C.add( hardvolconstraint )

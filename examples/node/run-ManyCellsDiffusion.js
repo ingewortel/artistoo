@@ -76,7 +76,14 @@ let config = {
 /*	---------------------------------- */
 
 
-let sim = new CPM.Simulation( config, {} )
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object. If Custom-methods above is set to false,
+	 	this object is ignored and not used in the html/node files. */
+	 let custommethods = {
+	 	drawCanvas : drawCanvas,
+	 	postMCSListener : postMCSListener
+	 }
+	let sim = new CPM.Simulation( config, custommethods )
 sim.g1 = new CPM.Grid2D([sim.C.extents[0]/10,sim.C.extents[1]/10], config.torus, "Float32")
 sim.gi1 = new CPM.CoarseGrid( sim.g1, 10 )
 //sim.g1 = new CPM.Grid2D([sim.C.extents[0],sim.C.extents[1]], config.torus, "Float32")

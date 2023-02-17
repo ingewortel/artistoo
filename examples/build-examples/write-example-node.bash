@@ -14,11 +14,12 @@ sed -e '1,/START CLASS DEFINITION/d' -e '/END CLASS DEFINITION/,$d' $templatefil
 sed -e '1,/START CONFIGURATION/d' -e '/END CONFIGURATION/,$d' $templatefile
 echo -e '\n'
 
-if [[ $( cat $templatefile | grep "Custom-methods:" | grep "true" | wc -l) -eq 0 ]] ; then 
-	echo 'let sim = new CPM.Simulation( config, {} )'
+if [[ $( cat $templatefile | grep "START METHODS OBJECT" | wc -l) -eq 0 ]] ; then 
+	echo -e '\tlet sim = new CPM.Simulation( config, {} )'
 else
-	sed -e '1,/START METHODS OBJECT/d' -e '/END METHODS OBJECT/,$d' $templatefile 
-	echo  'let sim = new CPM.Simulation( config, custommethods )'
+	sed -e '1,/START METHODS OBJECT/d' -e '/END METHODS OBJECT/,$d' $templatefile | \
+		awk '{print "\t",$0}'
+	echo -e '\tlet sim = new CPM.Simulation( config, custommethods )'
 fi
 sed -e '1,/START ADDCONSTRAINTS/d' -e '/END ADDCONSTRAINTS/,$d' $templatefile
 echo -e "\n"

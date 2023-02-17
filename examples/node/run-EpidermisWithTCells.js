@@ -78,7 +78,12 @@ let config = {
 /*	---------------------------------- */
 
 
-let sim = new CPM.Simulation( config, {} )
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object.*/
+	 let custommethods = {
+	 	initializeGrid : initializeGrid
+	 }
+	let sim = new CPM.Simulation( config, custommethods )
 
 
 

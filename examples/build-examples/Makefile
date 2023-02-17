@@ -25,7 +25,7 @@ testscripts-examples :  $(foreach e, $(EXAMPLES), ../node-tests/test-$(e).js )
 	bash $< $* > $@
 
 ../node-tests/test-%.js : ../node/run-%.js | ../node-tests
-	cat $< | sed -E 's/RUNTIME([\s ]*):([\s ]*)([0-9]+)/RUNTIME : 100/g' |\
+	@cat $< | sed -E 's/RUNTIME([\s ]*):([\s ]*)([0-9]+)/RUNTIME : 100/g' |\
 	sed -E 's/BURNIN([\s ]*):([\s ]*)([0-9]+)/BURNIN : 10/g' |\
 	sed -E 's/SAVEIMG([\s ]*):([\s ]*)true/SAVEIMG : false/g' |\
 	sed -E 's/LOGRATE([\s ]*):([\s ]*)([0-9]+)/LOGRATE : 200/g' > $@

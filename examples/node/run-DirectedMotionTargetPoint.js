@@ -72,7 +72,13 @@ let config = {
 /*	---------------------------------- */
 
 
-let sim = new CPM.Simulation( config, {} )
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object. If Custom-methods above is set to false,
+	 	this object is ignored and not used in the html/node files. */
+	 let custommethods = {
+	 	initializeGrid : initializeGrid
+	 }
+	let sim = new CPM.Simulation( config, custommethods )
 let Cdir = new CPM.AttractionPointConstraint({
 	LAMBDA_ATTRACTIONPOINT : [0,100],
 	ATTRACTIONPOINT : [[0,0], [sim.C.extents[0]/2,sim.C.extents[1]/2] ] 

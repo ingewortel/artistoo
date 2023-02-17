@@ -71,7 +71,14 @@ let config = {
 /*	---------------------------------- */
 
 
-let sim = new CPM.Simulation( config, {} )
+	 /* 	The following functions are defined below and will be added to
+	 	the simulation object. If Custom-methods above is set to false,
+	 	this object is ignored and not used in the html/node files. */
+	 let custommethods = {
+	 	initializeGrid : initializeGrid,
+	 	postMCSListener : postMCSListener
+	 }
+	let sim = new CPM.Simulation( config, custommethods )
 let Cdir =  new CPM.PreferredDirectionConstraint({
 	LAMBDA_DIR : [0,50], 
 	DIR : [[0,0],[1,1]]

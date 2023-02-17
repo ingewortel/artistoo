@@ -77,7 +77,7 @@ let config = {
 /*	---------------------------------- */
 
 
-let sim = new CPM.Simulation( config, {} )
+	let sim = new CPM.Simulation( config, {} )
 
 
 
