@@ -11,7 +11,7 @@
 	"devDependencies": {
 		"esdoc2": "^2.1.5",
 		"esdoc2-standard-plugin": "^2.1.2",
-		"eslint": "^8.1.0",
+		"eslint": "^8.34.0",
 		"jasmine": "^3.5.0",
 		"rollup": "^1.2.3",
 		"rollup-plugin-commonjs": "^9.2.0",
