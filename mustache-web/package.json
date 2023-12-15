@@ -11,7 +11,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "jsdom": "^16.5.3",
-    "mongodb": "^3.5.7",
+    "mongodb": "^3.6.10",
     "mustache": "^4.1.0"
   }
 }
