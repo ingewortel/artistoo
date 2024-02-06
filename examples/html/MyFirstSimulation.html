@@ -1,0 +1,62 @@
+<!-- Page setup and title -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html;
+charset=UTF-8">
+<title>PageTitle</title>
+<style type="text/css"> 
+body{
+    font-family: "HelveticaNeue-Light", sans-serif; padding : 15px;
+}
+</style>
+
+<!-- Sourcing the cpm build -->
+<script src="../../build/artistoo.js"></script>
+<script>
+"use strict"
+let config = {
+    ndim: 2,
+    field_size: [100,100],
+    conf: {
+        T: 20,
+        J: [[0,100,20], 
+            [100,75,100], 
+            [20,100,300]],
+        LAMBDA_V: [0,100,60],
+        V: [0,250,300],
+        LAMBDA_P: [0,10,0],
+        P: [0, 65, 100],
+        MAX_ACT: [0,0,40],
+        LAMBDA_ACT: [0,0,100],
+        ACT_MEAN: 'geometric'
+    },
+    simsettings: {
+        NRCELLS: [4,6],
+        CELLCOLOR: ["000000", "FF0000"],
+        RUNTIME: 50,
+        CANVASCOLOR: "eaecef",
+        zoom: 4
+    }
+}
+
+let sim
+function initialize(){
+    sim = new CPM.Simulation( config )
+    step()
+}
+
+function step(){
+    sim.step()
+    requestAnimationFrame( step )
+}
+
+
+</script>
+</head>
+<body onload="initialize()">
+<h1>Your Page Title</h1>
+<p>
+Description of your page.
+</p>
+</body>
+</html>
