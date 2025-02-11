@@ -13,7 +13,7 @@
 		"esdoc2-standard-plugin": "^2.1.2",
 		"eslint": "^8.34.0",
 		"jasmine": "^3.5.0",
-		"rollup": "^1.2.3",
+		"rollup": "^4.22.4",
 		"rollup-plugin-commonjs": "^9.2.0",
 		"rollup-plugin-eslint": "^4.0.0",
 		"rollup-plugin-node-resolve": "^4.0.0"
