@@ -3,7 +3,7 @@
 	"version": "1.2.0",
 	"dependencies": {
 		"braces": "^3.0.3",
-		"canvas": "^2.11.0",
+		"canvas": "^3.0.0",
 		"fs": "0.0.1-security",
 		"mersenne-twister": "^1.1.0",
 		"websocket": "^1.0.28"
@@ -13,7 +13,7 @@
 		"esdoc2-standard-plugin": "^2.1.2",
 		"eslint": "^8.34.0",
 		"jasmine": "^3.5.0",
-		"rollup": "^1.2.3",
+		"rollup": "^4.22.4",
 		"rollup-plugin-commonjs": "^9.2.0",
 		"rollup-plugin-eslint": "^4.0.0",
 		"rollup-plugin-node-resolve": "^4.0.0"
