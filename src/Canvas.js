@@ -9,6 +9,8 @@ import PixelsByCell from "./stats/PixelsByCell.js"
 import ActivityConstraint from "./hamiltonian/ActivityConstraint.js"
 import ActivityMultiBackground from "./hamiltonian/ActivityMultiBackground.js"
 
+import { createRequire } from "module";
+
 /**
  * Class for taking a CPM grid and displaying it in either browser or with
  *  nodejs.
@@ -107,7 +109,8 @@ class Canvas {
 			let parent_element = (options && options.parentElement) || document.body
 			parent_element.appendChild( this.el )
 		} else {
-			const {createCanvas} = require("canvas")
+			const require = createRequire(import.meta.url);
+			const { createCanvas } = require( /* @vite-ignore */ "canvas");
 			/** @ignore */
 			this.el = createCanvas( this.width*this.zoom,
 				this.height*this.zoom )
