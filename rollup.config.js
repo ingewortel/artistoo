@@ -1,6 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import { eslint } from 'rollup-plugin-eslint';
+//import { eslint } from 'rollup-plugin-eslint';
+import eslint from 'rollup-plugin-eslint';
 
 export default [{
   input: 'app/index.js',

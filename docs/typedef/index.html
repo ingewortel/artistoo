@@ -33,7 +33,7 @@
     		}
     	};
     	</script>
-    	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    	<!--<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>-->
     	<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
       	
@@ -635,7 +635,7 @@ corresponding value at that key is an array with some values for that cell.</p>
       <div>
         
         
-        <div data-ice="description"><p>A unique identifier number of a cell on the grid.</p>
+        <div data-ice="description"><p>A semi-unique identifier number of a cell on the grid.</p>
 </div>
       </div>
     </td>
@@ -1305,10 +1305,11 @@ arrays do not have to be of the same length.</p>
   
   
   
-  <div data-ice="description"><p>A unique identifier number of a cell on the grid. In classic CPM language, this is often
+  <div data-ice="description"><p>A semi-unique identifier number of a cell on the grid. In classic CPM language, this is often
 referred to as &apos;type&apos;, but we use cellid to prevent confusion with the biological meaning
 of &apos;celltype&apos; (which we call <span><a href="typedef/index.html#static-typedef-CellKind">CellKind</a></span> to prevent confusion).</p>
-<p>The cellid must be a positive integer. The number 0 is reserved for the background.</p>
+<p>The cellid must be a positive integer. The number 0 is reserved for the background. 
+The cellid cannot exceed 2^16; once this is reached, a search is done for available (deleted) cellids.</p>
 </div>
 
   

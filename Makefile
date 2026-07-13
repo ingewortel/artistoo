@@ -28,7 +28,7 @@ esdocs/index.html : build/artistoo.js README.md $(shell find manual -type f) $(w
 	@echo  '		...Writing documentation with ESDOC, please wait...' &&\
 	rm -rf esdocs && \
 	mkdir -p esdocs && \
-	node_modules/.bin/esdoc2 > esdocs/log.txt 
+	node --stack-size=10000 node_modules/.bin/esdoc2 > esdocs/log.txt 
 #cp build/artistoo.js manual/asset/ &&\
 
 esdocs : esdocs/index.html

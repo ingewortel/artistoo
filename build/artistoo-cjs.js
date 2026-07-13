@@ -1,10 +1,6 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var MersenneTwister = _interopDefault(require('mersenne-twister'));
+var MersenneTwister = require('mersenne-twister');
 
 /** This base class defines a general grid and provides grid methods that do
  * not depend on the coordinate system used. This class is never used on its
@@ -5939,7 +5935,7 @@ class PersistenceConstraint extends SoftConstraint {
 	sampleNorm (mu=0, sigma=1) {
 		let u1 = this.C.random();
 		let u2 = this.C.random();
-		let z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(Math.PI*2 * u2);
+		let z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(Math.PI*2 * u2);
 		return z0 * sigma + mu
 	}
 	/** This function samples a random direction vector with length 1
