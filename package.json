@@ -9,13 +9,13 @@
 		"websocket": "^1.0.28"
 	},
 	"devDependencies": {
+		"@rollup/plugin-eslint": "^9.2.0",
 		"esdoc2": "^2.1.5",
 		"esdoc2-standard-plugin": "^2.1.2",
-		"eslint": "^8.34.0",
+		"eslint": "^8.57.1",
 		"jasmine": "^3.5.0",
 		"rollup": "^4.59.0",
 		"rollup-plugin-commonjs": "^9.2.0",
-		"rollup-plugin-eslint": "^4.0.0",
 		"rollup-plugin-node-resolve": "^4.0.0"
 	}
 }

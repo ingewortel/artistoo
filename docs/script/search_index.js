@@ -78,12 +78,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "artistoo/src/canvas.js~canvas",
-    "class/src/Canvas.js~Canvas.html",
-    "<span>Canvas</span> <span class=\"search-result-import-path\">Artistoo/src/Canvas.js</span>",
-    "class"
-  ],
-  [
     "artistoo/src/cells/cell.js~cell",
     "class/src/cells/Cell.js~Cell.html",
     "<span>Cell</span> <span class=\"search-result-import-path\">Artistoo/src/cells/Cell.js</span>",
@@ -954,7 +948,7 @@ window.esdocSearchIndex = [
     "test"
   ],
   [
-    "canvas src/canvas.js~canvas,canvas",
+    "canvas canvas,canvas",
     "test-file/spec/CanvasSpec.js.html#lineNumber4",
     "Some tests for drawing methods in the Canvas class.",
     "test"
@@ -1516,144 +1510,6 @@ window.esdocSearchIndex = [
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
     "src/.external-ecmascript.js~undefined",
     "external"
-  ],
-  [
-    "src/canvas.js",
-    "file/src/Canvas.js.html",
-    "src/Canvas.js",
-    "file"
-  ],
-  [
-    "src/canvas.js~canvas#c",
-    "class/src/Canvas.js~Canvas.html#instance-member-C",
-    "src/Canvas.js~Canvas#C",
-    "member"
-  ],
-  [
-    "src/canvas.js~canvas#clear",
-    "class/src/Canvas.js~Canvas.html#instance-method-clear",
-    "src/Canvas.js~Canvas#clear",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#constructor",
-    "class/src/Canvas.js~Canvas.html#instance-constructor-constructor",
-    "src/Canvas.js~Canvas#constructor",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#context",
-    "class/src/Canvas.js~Canvas.html#instance-method-context",
-    "src/Canvas.js~Canvas#context",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawactivityvalues",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawActivityValues",
-    "src/Canvas.js~Canvas#drawActivityValues",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawcellborders",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawCellBorders",
-    "src/Canvas.js~Canvas#drawCellBorders",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawcells",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawCells",
-    "src/Canvas.js~Canvas#drawCells",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawcellsofid",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawCellsOfId",
-    "src/Canvas.js~Canvas#drawCellsOfId",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawfield",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawField",
-    "src/Canvas.js~Canvas#drawField",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawfieldcontour",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawFieldContour",
-    "src/Canvas.js~Canvas#drawFieldContour",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawoncellborders",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawOnCellBorders",
-    "src/Canvas.js~Canvas#drawOnCellBorders",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#drawpixelset",
-    "class/src/Canvas.js~Canvas.html#instance-method-drawPixelSet",
-    "src/Canvas.js~Canvas#drawPixelSet",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#extents",
-    "class/src/Canvas.js~Canvas.html#instance-member-extents",
-    "src/Canvas.js~Canvas#extents",
-    "member"
-  ],
-  [
-    "src/canvas.js~canvas#grid",
-    "class/src/Canvas.js~Canvas.html#instance-member-grid",
-    "src/Canvas.js~Canvas#grid",
-    "member"
-  ],
-  [
-    "src/canvas.js~canvas#height",
-    "class/src/Canvas.js~Canvas.html#instance-member-height",
-    "src/Canvas.js~Canvas#height",
-    "member"
-  ],
-  [
-    "src/canvas.js~canvas#setcanvasid",
-    "class/src/Canvas.js~Canvas.html#instance-method-setCanvasId",
-    "src/Canvas.js~Canvas#setCanvasId",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#width",
-    "class/src/Canvas.js~Canvas.html#instance-member-width",
-    "src/Canvas.js~Canvas#width",
-    "member"
-  ],
-  [
-    "src/canvas.js~canvas#wrap",
-    "class/src/Canvas.js~Canvas.html#instance-member-wrap",
-    "src/Canvas.js~Canvas#wrap",
-    "member"
-  ],
-  [
-    "src/canvas.js~canvas#writepng",
-    "class/src/Canvas.js~Canvas.html#instance-method-writePNG",
-    "src/Canvas.js~Canvas#writePNG",
-    "method"
-  ],
-  [
-    "src/canvas.js~canvas#zoom",
-    "class/src/Canvas.js~Canvas.html#instance-member-zoom",
-    "src/Canvas.js~Canvas#zoom",
-    "member"
-  ],
-  [
-    "src/canvas.js~canvas.canvasrenderingcontext2d",
-    "typedef/index.html#static-typedef-CanvasRenderingContext2D",
-    "src/Canvas.js~Canvas.CanvasRenderingContext2D",
-    "typedef"
-  ],
-  [
-    "src/canvas.js~canvas.hexcolor",
-    "typedef/index.html#static-typedef-HexColor",
-    "src/Canvas.js~Canvas.HexColor",
-    "typedef"
   ],
   [
     "src/diceset.js",

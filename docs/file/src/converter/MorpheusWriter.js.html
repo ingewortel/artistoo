@@ -166,22 +166,7 @@
   <li data-ice="doc">
     	
     	<div data-ice="kind" class="kind-class">C</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-class">C</div>
     	<div class="nav-classname" data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-typedef">T</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-typedef">T</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></div>
     </li>
 <li data-ice="doc">
     	
@@ -548,7 +533,7 @@ class MorpheusWriter extends Writer {
 	}
 
 	write(){
-		if( typeof this.target !== undefined ){
+		if( typeof this.target !== &quot;undefined&quot; ){
 			this.target.innerHTML = this.writeXML()
 		} else {
 			//eslint-disable-next-line no-console

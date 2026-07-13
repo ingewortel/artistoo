@@ -1044,13 +1044,13 @@ class MorpheusImport extends ModelDescription {
 
 		// Two other params specified in morpheus
 		let protrude = constraintXML.getAttribute( "protrusion" )
-		if( typeof protrude === undefined ){
+		if( typeof protrude === "undefined" || protrude === null  ){
 			protrude = true
 		} else {
 			protrude = ( protrude === "true" )
 		}
 		let retract = constraintXML.getAttribute( "retraction" )
-		if( typeof retract === undefined ){
+		if( typeof retract === "undefined" || retract === null ){
 			retract = false
 		} else {
 			retract = ( retract === "true" )
@@ -1088,13 +1088,13 @@ class MorpheusImport extends ModelDescription {
 
 		// Two other params specified in morpheus
 		let retract = constraintXML.getAttribute( "retraction" )
-		if( typeof retract === undefined ){
+		if( typeof retract === "undefined" || retract === null ){
 			retract = false
 		} else {
 			retract = ( retract === "true" )
 		}
 		let protrude = constraintXML.getAttribute( "protrusion" )
-		if( typeof protrude === undefined ){
+		if(  typeof protrude === "undefined" || protrude === null){
 			protrude = true
 		} else {
 			protrude = ( protrude === "true" )

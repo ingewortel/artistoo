@@ -1,7 +1,9 @@
 'use strict';
 
 var MersenneTwister = require('mersenne-twister');
+var module$1 = require('module');
 
+var _documentCurrentScript = typeof document !== 'undefined' ? document.currentScript : null;
 /** This base class defines a general grid and provides grid methods that do
  * not depend on the coordinate system used. This class is never used on its
  * own, as it does not yet contain methods for neighborhood computation etc
@@ -3811,12 +3813,13 @@ class Canvas {
 			let parent_element = (options && options.parentElement) || document.body;
 			parent_element.appendChild( this.el );
 		} else {
-			const {createCanvas} = require("canvas");
+			const require$1 = module$1.createRequire((typeof document === 'undefined' ? require('u' + 'rl').pathToFileURL(__filename).href : (_documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === 'SCRIPT' && _documentCurrentScript.src || new URL('artistoo-cjs.js', document.baseURI).href)));
+			const { createCanvas } = require$1( /* @vite-ignore */ "canvas");
 			/** @ignore */
 			this.el = createCanvas( this.width*this.zoom,
 				this.height*this.zoom );
 			/** @ignore */
-			this.fs = require("fs");
+			this.fs = require$1("fs");
 		}
 
 		/** @ignore */
@@ -9114,13 +9117,13 @@ class MorpheusImport extends ModelDescription {
 
 		// Two other params specified in morpheus
 		let protrude = constraintXML.getAttribute( "protrusion" );
-		if( typeof protrude === undefined ){
+		if( typeof protrude === "undefined" || protrude === null  ){
 			protrude = true;
 		} else {
 			protrude = ( protrude === "true" );
 		}
 		let retract = constraintXML.getAttribute( "retraction" );
-		if( typeof retract === undefined ){
+		if( typeof retract === "undefined" || retract === null ){
 			retract = false;
 		} else {
 			retract = ( retract === "true" );
@@ -9158,13 +9161,13 @@ class MorpheusImport extends ModelDescription {
 
 		// Two other params specified in morpheus
 		let retract = constraintXML.getAttribute( "retraction" );
-		if( typeof retract === undefined ){
+		if( typeof retract === "undefined" || retract === null ){
 			retract = false;
 		} else {
 			retract = ( retract === "true" );
 		}
 		let protrude = constraintXML.getAttribute( "protrusion" );
-		if( typeof protrude === undefined ){
+		if(  typeof protrude === "undefined" || protrude === null){
 			protrude = true;
 		} else {
 			protrude = ( protrude === "true" );
@@ -9291,9 +9294,9 @@ class Writer {
 			if ( typeof obj[k] == "object" && obj[k] !== null && !Array.isArray( obj[k] ) )
 				this.recursiveArrayStringFix(obj[k]);
 			else
-			if( Array.isArray( obj[k] ) ){
-				obj[k] = JSON.stringify( obj[k]);
-			}
+				if( Array.isArray( obj[k] ) ){
+					obj[k] = JSON.stringify( obj[k]);
+				}
 		}
 
 		return(obj)
@@ -9770,7 +9773,7 @@ class MorpheusWriter extends Writer {
 	}
 
 	write(){
-		if( typeof this.target !== undefined ){
+		if( typeof this.target !== "undefined" ){
 			this.target.innerHTML = this.writeXML();
 		} else {
 			//eslint-disable-next-line no-console

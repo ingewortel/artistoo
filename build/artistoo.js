@@ -1,6 +1,7 @@
-var CPM = (function (exports) {
+var CPM = (function (exports, module$1) {
 	'use strict';
 
+	var _documentCurrentScript = typeof document !== 'undefined' ? document.currentScript : null;
 	/*
 	  https://github.com/banksean wrapped Makoto Matsumoto and Takuji Nishimura's code in a namespace
 	  so it's better encapsulated. Now you can have multiple random number generators
@@ -4021,7 +4022,8 @@ var CPM = (function (exports) {
 				let parent_element = (options && options.parentElement) || document.body;
 				parent_element.appendChild( this.el );
 			} else {
-				const {createCanvas} = require("canvas");
+				const require = module$1.createRequire((_documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === 'SCRIPT' && _documentCurrentScript.src || new URL('artistoo.js', document.baseURI).href));
+				const { createCanvas } = require( /* @vite-ignore */ "canvas");
 				/** @ignore */
 				this.el = createCanvas( this.width*this.zoom,
 					this.height*this.zoom );
@@ -9324,13 +9326,13 @@ var CPM = (function (exports) {
 
 			// Two other params specified in morpheus
 			let protrude = constraintXML.getAttribute( "protrusion" );
-			if( typeof protrude === undefined ){
+			if( typeof protrude === "undefined" || protrude === null  ){
 				protrude = true;
 			} else {
 				protrude = ( protrude === "true" );
 			}
 			let retract = constraintXML.getAttribute( "retraction" );
-			if( typeof retract === undefined ){
+			if( typeof retract === "undefined" || retract === null ){
 				retract = false;
 			} else {
 				retract = ( retract === "true" );
@@ -9368,13 +9370,13 @@ var CPM = (function (exports) {
 
 			// Two other params specified in morpheus
 			let retract = constraintXML.getAttribute( "retraction" );
-			if( typeof retract === undefined ){
+			if( typeof retract === "undefined" || retract === null ){
 				retract = false;
 			} else {
 				retract = ( retract === "true" );
 			}
 			let protrude = constraintXML.getAttribute( "protrusion" );
-			if( typeof protrude === undefined ){
+			if(  typeof protrude === "undefined" || protrude === null){
 				protrude = true;
 			} else {
 				protrude = ( protrude === "true" );
@@ -9501,9 +9503,9 @@ var CPM = (function (exports) {
 				if ( typeof obj[k] == "object" && obj[k] !== null && !Array.isArray( obj[k] ) )
 					this.recursiveArrayStringFix(obj[k]);
 				else
-				if( Array.isArray( obj[k] ) ){
-					obj[k] = JSON.stringify( obj[k]);
-				}
+					if( Array.isArray( obj[k] ) ){
+						obj[k] = JSON.stringify( obj[k]);
+					}
 			}
 
 			return(obj)
@@ -9980,7 +9982,7 @@ var CPM = (function (exports) {
 		}
 
 		write(){
-			if( typeof this.target !== undefined ){
+			if( typeof this.target !== "undefined" ){
 				this.target.innerHTML = this.writeXML();
 			} else {
 				//eslint-disable-next-line no-console
@@ -10973,4 +10975,4 @@ var CPM = (function (exports) {
 
 	return exports;
 
-})({});
+})({}, (typeof module !== 'undefined' ? module : { exports: {} }));

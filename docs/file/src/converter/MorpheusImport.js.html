@@ -166,22 +166,7 @@
   <li data-ice="doc">
     	
     	<div data-ice="kind" class="kind-class">C</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-class">C</div>
     	<div class="nav-classname" data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-typedef">T</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-typedef">T</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></div>
     </li>
 <li data-ice="doc">
     	
@@ -1574,13 +1559,13 @@ class MorpheusImport extends ModelDescription {
 
 		// Two other params specified in morpheus
 		let protrude = constraintXML.getAttribute( &quot;protrusion&quot; )
-		if( typeof protrude === undefined ){
+		if( typeof protrude === &quot;undefined&quot; || protrude === null  ){
 			protrude = true
 		} else {
 			protrude = ( protrude === &quot;true&quot; )
 		}
 		let retract = constraintXML.getAttribute( &quot;retraction&quot; )
-		if( typeof retract === undefined ){
+		if( typeof retract === &quot;undefined&quot; || retract === null ){
 			retract = false
 		} else {
 			retract = ( retract === &quot;true&quot; )
@@ -1618,13 +1603,13 @@ class MorpheusImport extends ModelDescription {
 
 		// Two other params specified in morpheus
 		let retract = constraintXML.getAttribute( &quot;retraction&quot; )
-		if( typeof retract === undefined ){
+		if( typeof retract === &quot;undefined&quot; || retract === null ){
 			retract = false
 		} else {
 			retract = ( retract === &quot;true&quot; )
 		}
 		let protrude = constraintXML.getAttribute( &quot;protrusion&quot; )
-		if( typeof protrude === undefined ){
+		if(  typeof protrude === &quot;undefined&quot; || protrude === null){
 			protrude = true
 		} else {
 			protrude = ( protrude === &quot;true&quot; )

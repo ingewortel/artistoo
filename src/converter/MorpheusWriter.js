@@ -18,7 +18,7 @@ class MorpheusWriter extends Writer {
 	}
 
 	write(){
-		if( typeof this.target !== undefined ){
+		if( typeof this.target !== "undefined" ){
 			this.target.innerHTML = this.writeXML()
 		} else {
 			//eslint-disable-next-line no-console

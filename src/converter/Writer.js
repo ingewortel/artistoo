@@ -109,9 +109,9 @@ class Writer {
 			if ( typeof obj[k] == "object" && obj[k] !== null && !Array.isArray( obj[k] ) )
 				this.recursiveArrayStringFix(obj[k])
 			else
-			if( Array.isArray( obj[k] ) ){
-				obj[k] = JSON.stringify( obj[k])
-			}
+				if( Array.isArray( obj[k] ) ){
+					obj[k] = JSON.stringify( obj[k])
+				}
 		}
 
 		return(obj)

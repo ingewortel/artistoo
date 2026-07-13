@@ -34,7 +34,7 @@ class ConnectedComponentsByCellBorder extends Stat {
 	
 		/* Note that to get connected components, we only need to look at cellborderpixels. */
 		let cbp = this.M.getStat( BorderPixelsByCell )
-		cbpi = cbp[cellid]
+		let cbpi = cbp[cellid]
 	
 	
 		let visited = {}, k=0, pixels = []

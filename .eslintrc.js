@@ -7,10 +7,11 @@ module.exports = {
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 2015,
+        "ecmaVersion": 2020,
         "sourceType": "module"
     },
     "rules": {
+    	"no-prototype-builtins": "off", 
         "indent": [
             "error",
             "tab"

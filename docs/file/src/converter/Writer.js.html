@@ -166,22 +166,7 @@
   <li data-ice="doc">
     	
     	<div data-ice="kind" class="kind-class">C</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="class/src/Canvas.js~Canvas.html">Canvas</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-class">C</div>
     	<div class="nav-classname" data-ice="name"><span><a href="class/src/DiceSet.js~DiceSet.html">DiceSet</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-typedef">T</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-CanvasRenderingContext2D">CanvasRenderingContext2D</a></span></div>
-    </li>
-<li data-ice="doc">
-    	
-    	<div data-ice="kind" class="kind-typedef">T</div>
-    	<div class="nav-classname" data-ice="name"><span><a href="typedef/index.html#static-typedef-HexColor">HexColor</a></span></div>
     </li>
 <li data-ice="doc">
     	
@@ -639,9 +624,9 @@ class Writer {
 			if ( typeof obj[k] == &quot;object&quot; &amp;&amp; obj[k] !== null &amp;&amp; !Array.isArray( obj[k] ) )
 				this.recursiveArrayStringFix(obj[k])
 			else
-			if( Array.isArray( obj[k] ) ){
-				obj[k] = JSON.stringify( obj[k])
-			}
+				if( Array.isArray( obj[k] ) ){
+					obj[k] = JSON.stringify( obj[k])
+				}
 		}
 
 		return(obj)
